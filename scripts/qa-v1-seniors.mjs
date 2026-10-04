@@ -22,7 +22,7 @@ add('Senior navigation includes About, Clubs, Events, Gallery, Leadership and Co
   main.includes("['About','/about']")&&main.includes("['Clubs','/clubs']")&&main.includes("['Events','/events']")&&main.includes("['Gallery','/gallery']")&&main.includes("['Leadership','/team']")&&main.includes("['Contact','/contact']"));
 add('Leadership canonical route exists',main.includes("clean==='/team'||clean==='/leadership'")||main.includes("clean==='/team'?'team':clean==='/leadership'?'team'")&&main.includes("'/leadership':'JYC 128 Leadership"));
 add('Event Calendar canonical alias exists',main.includes("clean==='/calendar'||clean==='/event-calendar'")&&main.includes("'/event-calendar':'JYC 128 Event Calendar"));
-add('Join JYC coming-soon destination exists',main.includes("clean==='/join-jyc'")&&main.includes('function JoinJYC')&&main.includes('Join JYC · Coming Soon'));
+add('Join JYC recruitment CTA is clear',main.includes("nav('/recruitment')")&&main.includes('Join JYC ↗'));
 add('Home hero has required participation CTAs',main.includes("nav('/events')")&&main.includes("nav('/clubs')")&&main.includes('heroPrimaryCta'));
 add('Home hero uses senior-approved statement',main.includes('THE VOICE. THE TALENT. THE SPIRIT.'));
 add('JYC 128 scope is explicit',main.includes('JIIT · SECTOR 128 · NOIDA')&&main.includes('JIIT YOUTH CLUB'));

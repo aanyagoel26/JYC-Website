@@ -8,7 +8,7 @@ const {JYC_SOURCE_ARCHIVE_CATALOG}=await import('../src/source-archive-index.js'
 const rawSite=(process.env.VITE_SITE_URL||process.env.SITE_URL||process.env.VERCEL_PROJECT_PRODUCTION_URL||'https://www.jiityouthclub128.in').trim();
 const site=(rawSite?(/^[a-z]+:\/\//i.test(rawSite)?rawSite:`https://${rawSite}`):'').replace(/\/$/,'');
 const out=path.join(root,'public','sitemap.xml');
-const core=['/','/about','/history','/clubs','/events','/fests','/gallery','/team','/contact','/calendar','/announcements','/updates','/achievements','/join-jyc','/events/agentic-ai-2026','/events/ride-hack-2026','/events/converge-2026','/events/drono-o-war-2026','/events/codeai-hackathon'];
+const core=['/','/about','/history','/clubs','/events','/fests','/gallery','/team','/contact','/calendar','/announcements','/updates','/achievements','/events/agentic-ai-2026','/events/ride-hack-2026','/events/converge-2026','/events/drono-o-war-2026','/events/codeai-hackathon'];
 const dynamicDates=new Map();
 const sourceHubNames=JYC_HUB_SOURCE_REGISTRY.map(item=>item.name);
 const slug=value=>String(value||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
@@ -44,8 +44,7 @@ async function loadDynamic(){
 
 if(!site) throw new Error('SEO sitemap: production origin could not be resolved.');
 await loadDynamic();
-const fallbackDate=new Date().toISOString().slice(0,10);
-// Use content timestamps when available; otherwise fall back to the build date.
+// Only emit lastmod when a real content timestamp is available; build time is not a content-change timestamp.
 try{
   const supabaseUrl=(process.env.VITE_SUPABASE_URL||'').replace(/\/$/,'');
   const key=process.env.VITE_SUPABASE_PUBLISHABLE_KEY||process.env.VITE_SUPABASE_ANON_KEY||'';
@@ -60,7 +59,7 @@ const xml=`<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sit
   if(u==='/gallery') imgs=[...imageUrls];
   else if(u.startsWith('/clubs/')) imgs=slugToHubImages.get(u.split('/').pop())||[];
   const imageXml=imgs.map(img=>`<image:image><image:loc>${site}${img}</image:loc></image:image>`).join('');
-  return `  <url><loc>${site}${u}</loc><lastmod>${dynamicDates.get(u)||fallbackDate}</lastmod>${imageXml}</url>`;
+  const lastmod=dynamicDates.get(u);const lastmodXml=lastmod?`<lastmod>${lastmod}</lastmod>`:'';return `  <url><loc>${site}${u}</loc>${lastmodXml}${imageXml}</url>`;
 }).join('\n')}\n</urlset>\n`;
 fs.writeFileSync(out,xml);
 const robots=path.join(root,'public','robots.txt');

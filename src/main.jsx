@@ -693,7 +693,7 @@ function Home({data}){
    <div className="v40-hero-rule"/>
    <h4>{h.heroSubtitle||'JIIT YOUTH CLUB'}</h4>
    <p>{h.heroLead||'The student-led ecosystem connecting communities, events, creativity, technology, sport and campus spirit at JIIT Sector 128.'}</p>
-   <div className="hero-actions v40-hero-actions"><Button onClick={()=>nav('/clubs')}>Explore JYC ↗</Button><Button secondary onClick={()=>nav('/events')}>What’s next →</Button><button className="btn hero-join-soon" type="button" onClick={()=>nav('/recruitment')} title="JYC recruitment">Join JYC · Coming Soon</button></div>
+   <div className="hero-actions v40-hero-actions"><Button onClick={()=>nav('/clubs')}>Explore JYC ↗</Button><Button secondary onClick={()=>nav('/events')}>What’s next →</Button><button className="btn hero-join-soon" type="button" onClick={()=>nav('/recruitment')} title="JYC recruitment">Join JYC ↗</button></div>
    <div className="v40-hero-micro"><span>01 <b>COMMUNITIES</b></span><span>02 <b>EXPERIENCES</b></span><span>03 <b>MEMORIES</b></span></div>
    <HeroStats communities={clubs.length} families={JYC_HUB_FAMILIES.length} programmes={PDF_HUB_PROGRAMME.length} campus="128"/>
   </div>
