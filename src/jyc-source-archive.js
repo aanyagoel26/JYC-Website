@@ -1,5 +1,5 @@
 // Source inventory reconciled from the five user-supplied JYC image archives on 2026-10-04.
-// Archive scope: 873 files total; 873 image assets (514 PNG, 302 JPEG, 56 JPG, 1 SVG); 813 unique SHA-256 hashes after exact-duplicate reconciliation. The archive is an inventory/source layer, not an automatic publication set.
+// Archive scope: 873 files total; 872 image assets (514 PNG, 302 JPEG, 56 JPG, 1 SVG; one non-image file); 813 unique SHA-256 hashes after exact-duplicate reconciliation. The archive is an inventory/source layer, not an automatic publication set.
 // Production publication remains source/provenance gated: archive inventory is not the same thing as current official publication.
 export const JYC_SOURCE_ARCHIVE_STATS={
   rawFiles:873,
