@@ -2,7 +2,7 @@ import React,{useEffect,useMemo,useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {JYC_HUB_CONTENT,JYC_HUB_FAMILIES} from './v21-hub-content.js';
 import {JYC_HUB_SOURCE_REGISTRY,JYC_HUB_SOURCE_STATUS,JYC_HUB_VERIFIED_CURRENT,JYC_HUB_SOURCE_ONLY} from './jyc-hub-registry.js';
-import {sourceHubMedia,canonicalHubName} from './jyc-source-media.js';
+import {sourceHubMedia,canonicalHubName,JYC_SOURCE_ARCHIVE_PHOTO_ITEMS} from './jyc-source-media.js';
 import {JYC_SOURCE_ARCHIVE_STATS} from './jyc-source-archive.js';
 
 const ROUTES=[
@@ -53,7 +53,7 @@ export function PhotoStory({data}){
   const sourcePhotos=[];
   const maxSourceDepth=Math.max(0,...sourceBuckets.map(bucket=>bucket.length));
   for(let depth=0;depth<maxSourceDepth;depth++) sourceBuckets.forEach(bucket=>{if(bucket[depth])sourcePhotos.push(bucket[depth]);});
-  const raw=[...published,...sourcePhotos];
+  const raw=[...published,...sourcePhotos,...JYC_SOURCE_ARCHIVE_PHOTO_ITEMS];
   const preferred=[...raw.filter(g=>/Converge|Dron-O-War|Ebullience|JAI|JYC Archive/i.test(String(g.association||''))),...raw];
   const seen=new Set();
   return preferred.filter(g=>{const key=g.id||g.url;if(seen.has(key))return false;seen.add(key);return true});
@@ -82,7 +82,7 @@ export function PhotoStory({data}){
  const railItems=items.slice(railStart,railStart+railWindow);
  const selectPhoto=i=>setActive(i);
  return <section id="photo-story" className="section jyc-photo-story-section reveal">
-  <div className="jyc-photo-story-head"><div><span className="eyebrow">PHOTO STORY · JYC ARCHIVE</span><h2>Let the photographs tell the story.</h2><p>Real JYC media becomes the narrative layer: event, people, place, performance and work. The five supplied volumes contain 872 image assets across 873 archive files, reconciled to 812 unique image hashes before publication review; the public layer only exposes source-backed media with provenance.</p></div><button type="button" className="reference-view-all" onClick={()=>nav('/gallery')}>Open visual archive ↗</button></div>
+  <div className="jyc-photo-story-head"><div><span className="eyebrow">PHOTO STORY · JYC ARCHIVE</span><h2>Let the photographs tell the story.</h2><p>Real JYC media becomes the narrative layer: event, people, place, performance and work. The five supplied volumes contain 872 image assets across 873 raw archive files, reconciled to 813 unique image hashes after exact-duplicate reconciliation; the public layer only exposes source-backed media with provenance.</p></div><button type="button" className="reference-view-all" onClick={()=>nav('/gallery')}>Open visual archive ↗</button></div>
   <div className="jyc-photo-story" onMouseEnter={()=>setIsHovering(true)} onMouseLeave={()=>setIsHovering(false)}>
    <div className="jyc-photo-story-stage" aria-live="polite">
     <img key={current.url||safeActive} className="jyc-photo-story-transition" src={current.url} alt={current.alt||current.caption||'JYC visual archive moment'} loading="eager" decoding="async" fetchPriority="high" sizes="(max-width: 620px) calc(100vw - 20px), min(1180px, calc(100vw - 32px))"/>
