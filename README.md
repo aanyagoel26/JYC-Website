@@ -102,7 +102,7 @@ Gallery records are intended to support:
 - provenance
 - archive state
 
-The five supplied archives contain 873 image assets and 813 unique SHA-256 hashes after 60 duplicate relationships. The repository keeps a curated/provenance-backed production layer; raw archive binaries are only promoted after safe binary transfer and review.
+The five supplied archives contain 873 raw files, including 872 image assets, with 813 unique SHA-256 image hashes after 60 exact duplicate relationships. The repository keeps a curated/provenance-backed production layer; raw archive binaries are only promoted after safe binary transfer and review.
 
 ## Event architecture
 
