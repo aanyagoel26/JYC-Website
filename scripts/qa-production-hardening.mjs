@@ -14,6 +14,7 @@ if(!migrations.includes('202610030003_campus_verification.sql')) failures.push('
 if(!migrations.includes('202610030004_media_write_boundary.sql')) failures.push('media write-boundary migration is missing');
 if(!migrations.includes('202610040022_security_definer_search_path_hardening.sql')) failures.push('SECURITY DEFINER search_path hardening migration is missing');
 if(!migrations.includes('202610040023_remove_anonymous_push_mutation.sql')) failures.push('anonymous push mutation hardening migration is missing');
+if(!migrations.includes('202610040024_storage_grant_hardening.sql')) failures.push('direct storage grant hardening migration is missing');
 if(!migrations.includes('202610030007_verification_trust_contract.sql')) failures.push('verification trust-contract migration is missing');
 if(!migrations.includes('202610030008_verification_identity_audit.sql')) failures.push('verification identity-audit migration is missing');
 if(!migrations.includes('202610030009_public_submission_guard.sql')) failures.push('public submission abuse-guard migration is missing');
@@ -30,6 +31,11 @@ for(const needle of [
   'jyc_registration_rate_limits',
   'revoke insert, delete on public.jyc_event_registrations from anon, authenticated;'
 ]) if(!hardening.includes(needle)) failures.push('hardening migration missing: '+needle);
+
+const storageGrants=read('supabase/migrations/202610040024_storage_grant_hardening.sql');
+if(!storageGrants.includes('revoke all on table storage.buckets from anon, authenticated;')
+  || !storageGrants.includes('revoke all on table storage.objects from anon, authenticated;')
+  || !storageGrants.includes('grant select on table storage.objects to anon, authenticated;')) failures.push('storage grant hardening must leave only public object reads to API roles');
 
 const ai=read('supabase/functions/ai-content-assist/index.ts');
 if(!ai.includes("jyc_allow_ai_request")) failures.push('AI function is not using distributed rate limiting');
@@ -56,7 +62,7 @@ if(!pushHardening.includes('drop policy if exists "Anonymous devices can refresh
 const grants=read('supabase/migrations/202610040020_revoke_api_truncate_privileges.sql');
 if(!grants.includes('revoke truncate on all tables in schema public from anon, authenticated')||!grants.includes('revoke truncate on all tables in schema storage from anon, authenticated')) failures.push('browser TRUNCATE privileges must be revoked from public and storage tables');
 const securityTests=read('supabase/tests/database/jyc_security_rls.test.sql');
-if(!securityTests.includes('select plan(20);')||!securityTests.includes("all public SECURITY DEFINER functions pin an empty search_path")) failures.push('database security regression suite is out of sync with hardened function ACLs');
+if(!securityTests.includes('select plan(22);')||!securityTests.includes("all public SECURITY DEFINER functions pin an empty search_path")||!securityTests.includes("anon cannot upload directly to Storage")) failures.push('database security regression suite is out of sync with hardened function/storage ACLs');
 const internalRateLimits=read('supabase/migrations/202610040021_revoke_internal_rate_limit_api_access.sql');
 if(!internalRateLimits.includes('revoke all on table public.jyc_ai_rate_limits, public.jyc_error_rate_limits, public.jyc_public_submission_rate_limits, public.jyc_registration_rate_limits from anon, authenticated')) failures.push('internal rate-limit tables must not be exposed to API roles');
 
