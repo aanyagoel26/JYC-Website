@@ -8,6 +8,7 @@ const html=read('index.html');
 const robots=read('public/robots.txt');
 const llms=read('public/llms.txt');
 const meta=read('src/extra-features.jsx');
+const sitemap=read('scripts/generate-sitemap.mjs');
 const main=read('src/main.jsx');
 add('Homepage title targets JIIT Youth Club + clubs/events/fests',html.includes('JIIT Youth Club 128') && main.includes('Clubs, Events & Fests'));
 add('hub image sitemap uses canonical source media',sitemap.includes('sourceHubMedia')&&sitemap.includes('JYC_HUB_SOURCE_REGISTRY')&&sitemap.includes('urls.slice(0,12)'));
