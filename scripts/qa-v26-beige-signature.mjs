@@ -36,7 +36,7 @@ check('light/dark theme contracts are explicit',css.includes('html[data-theme="l
 check('public text has explicit secondary contrast',css.includes('.public-app p,.public-app li{color:var(--jyc-muted-live)!important}'));
 check('homepage hierarchy and motion layer are present',css.includes('.home .hero{')&&css.includes('text-align:center!important')&&css.includes('@keyframes jycLogoFloat'));
 check('latest updates are part of homepage',main.includes('home-latest-updates')&&main.includes('LATEST UPDATES'));
-check('Join JYC Coming Soon destination exists',main.includes("clean==='/join-jyc'")&&main.includes('function JoinJYC')&&main.includes('Join JYC · Coming Soon'));
+check('Join JYC CTA is clear',main.includes("nav('/recruitment')")&&main.includes('Join JYC ↗'));
 check('Team hierarchy is explicit',main.includes('Faculty → Apex → Core → Clubs & Hubs')&&main.includes('team-command-strip')&&main.includes('JYC Apex'));
 check('About exposes requested principles',main.includes('WHAT WE STAND FOR')&&main.includes('about-principles-v33'));
 check('Gallery supports year discovery',extra.includes('gallery-years')&&extra.includes("const years=['All'"));
