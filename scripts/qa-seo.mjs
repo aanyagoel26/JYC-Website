@@ -20,13 +20,15 @@ add('Event schema uses source images and full campus address',meta.includes('sou
 add('Event structured data',meta.includes("'@type':'Event'") && meta.includes('startDate'));
 add('Breadcrumb structured data',meta.includes("'@type':'BreadcrumbList'") && meta.includes('itemListElement'));
 add('Dynamic canonical URLs',meta.includes('canonical') && meta.includes('VITE_SITE_URL') && meta.includes('jiityouthclub128.in'));
-add('Open Graph image',meta.includes("og:image") && meta.includes("og:image:alt") && html.includes('og:image'));
+add('Open Graph image',meta.includes("og:image") && meta.includes("og:image:alt") && meta.includes('canonicalUrl') && meta.includes('imageType') && html.includes('og:image'));
 add('Private route noindex',main.includes("clean.startsWith('/qr/')") && meta.includes("noindex,nofollow"));
 add('Robots allows public crawling',robots.includes('Allow: /') && robots.includes('Disallow: /admin'));
 add('Robots publishes canonical sitemap',robots.includes('Sitemap: https://www.jiityouthclub128.in/sitemap.xml'));
 add('Sitemap generator includes maintained source hubs',fs.readFileSync(path.join(root,'scripts/generate-sitemap.mjs'),'utf8').includes('jyc-hub-registry.js')&&fs.readFileSync(path.join(root,'scripts/generate-sitemap.mjs'),'utf8').includes('/clubs/${slug(name)}'));
 add('Sitemap carries maintained hub photography',fs.readFileSync(path.join(root,'scripts/generate-sitemap.mjs'),'utf8').includes('slugToHubImages')&&fs.readFileSync(path.join(root,'scripts/generate-sitemap.mjs'),'utf8').includes('xmlns:image'));
 add('LLMs discovery file',llms.includes('JIIT Youth Club') && llms.includes('/clubs') && llms.includes('/events'));
+add('Sitemap excludes permanent redirect /join-jyc',!sitemap.includes("'/join-jyc'"));
+add('Sitemap does not fabricate build-date lastmod values',!sitemap.includes('fallbackDate')&&!sitemap.includes('dynamicDates.get(u)||fallbackDate'));
 add('Flagship event URLs are seeded into sitemap',fs.readFileSync(path.join(root,'scripts/generate-sitemap.mjs'),'utf8').includes('/events/agentic-ai-2026')&&fs.readFileSync(path.join(root,'scripts/generate-sitemap.mjs'),'utf8').includes('/events/ride-hack-2026')&&fs.readFileSync(path.join(root,'scripts/generate-sitemap.mjs'),'utf8').includes('/events/converge-2026')&&fs.readFileSync(path.join(root,'scripts/generate-sitemap.mjs'),'utf8').includes('/events/drono-o-war-2026')&&fs.readFileSync(path.join(root,'scripts/generate-sitemap.mjs'),'utf8').includes('/events/codeai-hackathon'));
 add('Sitemap generator exists',fs.existsSync(path.join(root,'scripts/generate-sitemap.mjs')));
 add('SEO pages have useful route metadata',main.includes('JIIT Clubs & Student Communities') && main.includes('JIIT Events & Campus Activities') && main.includes('About JIIT Youth Club') && main.includes('JIIT Fests & Flagship Events'));
