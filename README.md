@@ -1,6 +1,6 @@
 # JIIT Youth Club 128 — Official Website
 
-> **Current release: V56.5 — source-first visual archive and production-hardening pass**
+> **Current release: V56.6 — source-depth, media-integrity and publication-boundary pass**
 
 The official public website for **JIIT Youth Club (JYC), JIIT Wish Town Campus, Sector 128, Noida**.
 
@@ -102,7 +102,7 @@ Gallery records are intended to support:
 - provenance
 - archive state
 
-The remaining media-ingestion step is deliberately kept separate from the code release when the binary archive cannot be safely extracted in the development runtime.
+The five supplied archives contain 873 image assets and 813 unique SHA-256 hashes after 60 duplicate relationships. The repository keeps a curated/provenance-backed production layer; raw archive binaries are only promoted after safe binary transfer and review.
 
 ## Event architecture
 
@@ -188,7 +188,7 @@ npm run qa
 npm run qa:browser
 ```
 
-The static QA suite includes source integrity, security, SEO, build preflight, production contracts, accessibility, architecture, logo/theme checks, club experience checks, final product checks, visual/media checks, source-photo integrity and final hygiene checks.
+The static QA suite includes source integrity, security, SEO, build preflight, production contracts, accessibility, architecture, logo/theme checks, hub-registry consistency, club experience checks, final product checks, visual/media checks, source-photo integrity and final hygiene checks.
 
 ## Official identity
 
