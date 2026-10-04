@@ -89,6 +89,24 @@ export function mergeSourceGallery(gallery){
   return [...map.values()];
 }
 
+const ARCHIVE_CATEGORY_ASSOCIATIONS={
+  'clubs/abhivyakti':'Abhivyakti','clubs/arcadia':'Arcadia','clubs/aura':'Aura','clubs/bds':'BDS','clubs/cicr':'CICR',
+  'clubs/cine-film':'Cinekala','clubs/cypherx':'CypherX','clubs/dronotics':'Dronotics','clubs/eloquence':'Eloquence',
+  'clubs/innovation':'Innovation Club','clubs/jodc':'JODC','clubs/jsa':'JSA','clubs/neural-nexus':'Neural Nexus',
+  'clubs/panache':'Panache','clubs/prismatic':'Prismatic','clubs/rph':'RPH','clubs/vamunique':'VamUnique','clubs/zencoders':'Zencoders',
+  'festivals/aakriti':'Aakriti','sports':'JSA','gallery/campus-events':'JYC Archive','archive/presentation-assets':'JYC Archive','design-assets':'JYC Archive'
+};
+export const JYC_SOURCE_ARCHIVE_PHOTO_ITEMS=JYC_SOURCE_ARCHIVE_CATALOG
+  .filter(item=>item.mediaKind==='photo')
+  .map((item,index)=>{
+    const association=ARCHIVE_CATEGORY_ASSOCIATIONS[item.category]||item.association||'JYC Archive';
+    return {
+      id:item.id,url:item.url,association,year:item.year||'',caption:item.caption||`${association} · source archive photograph`,
+      alt:item.alt||`${association} source archive photograph ${index+1}`,
+      mediaKind:'photo',role:association==='JYC Archive'?'archive':'club',
+      sourceType:'source-archive',sourceLabel:'Five-volume JYC source archive',sourcePath:item.sourcePath||'',published:true
+    };
+  });
 const EVENT_ALIASES={
   'Converge':['Converge','Converge 2026'],
   'Ebullience':['Ebullience',"Ebullience '25",'Ebullience’25'],
