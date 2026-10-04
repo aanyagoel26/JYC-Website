@@ -13,5 +13,6 @@ const checks=[
  [!api.includes('eyJ')&&!api.includes('EAAC'),'social tokens are not hard-coded'],
  [fs.existsSync('supabase/V47-JYC-NOW.sql'),'aggregation schema migration exists'],
  [now.includes("const sourceCount=JYC_HUB_SOURCE_REGISTRY.length")&&now.includes("named community sources"),'JYC Now community source count uses the maintained registry'],
+ [api.includes("X-Content-Type-Options")&&api.includes("if(sync)res.setHeader('Cache-Control','no-store"),'JYC Now API hardens response headers and sync caching'],
 ];
 let failed=false;for(const [ok,label] of checks){console.log(ok?'PASS':'FAIL',label);if(!ok)failed=true}process.exit(failed?1:0);

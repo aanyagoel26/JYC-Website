@@ -16,7 +16,7 @@ const corsHeaders = (origin: string | null) => ({
   'Vary': 'Origin'
 })
 const reply = (body: unknown, status = 200, origin: string | null = null) =>
-  new Response(JSON.stringify(body), { status, headers: { ...corsHeaders(origin), 'Content-Type': 'application/json' } })
+  new Response(JSON.stringify(body), { status, headers: { ...corsHeaders(origin), 'Content-Type': 'application/json', 'Cache-Control': 'no-store, no-cache, must-revalidate, max-age=0', 'X-Content-Type-Options': 'nosniff' } })
 
 Deno.serve(async req => {
   const origin = req.headers.get('Origin')
@@ -46,7 +46,10 @@ Deno.serve(async req => {
     if (!publicKey || !privateKey) return reply({ error: 'VAPID secrets are not configured on the Edge Function.' }, 500, origin)
     webpush.setVapidDetails(subject, publicKey, privateKey)
 
-    const body = await req.json()
+    const raw = await req.text()
+    if (new TextEncoder().encode(raw).byteLength > 12000) return reply({ error: 'Request is too large.' }, 413, origin)
+    let body: any
+    try { body = JSON.parse(raw) } catch { return reply({ error: 'Invalid JSON request.' }, 400, origin) }
     const payload = JSON.stringify({
       title: String(body.title || 'JYC Update').slice(0, 80),
       body: String(body.message || 'A new JYC update is available.').slice(0, 240),

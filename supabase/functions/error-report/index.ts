@@ -19,7 +19,7 @@ const json=(body:unknown,status=200,origin:string|null=null)=>new Response(JSON.
     'Access-Control-Allow-Headers':'content-type',
     'Access-Control-Allow-Methods':'POST, OPTIONS',
     'Vary':'Origin',
-    'Content-Type':'application/json'
+    'Content-Type':'application/json', 'Cache-Control':'no-store, no-cache, must-revalidate, max-age=0', 'X-Content-Type-Options':'nosniff'
   }
 });
 

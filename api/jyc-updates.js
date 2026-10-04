@@ -68,10 +68,13 @@ async function dbWrite(items){
  await fetchWithTimeout(u,{method:'POST',headers:{apikey:key,Authorization:'Bearer '+key,'Content-Type':'application/json',Prefer:'resolution=merge-duplicates'},body:JSON.stringify(items.map(x=>({external_id:x.externalId,title:x.title,summary:x.summary||'',image_url:x.image||'',post_url:x.url,published_at:x.publishedAt||null,content_type:x.type||'Update',hub_name:x.hub,platform:x.platform,verified:true,published:true,updated_at:new Date().toISOString()})))});
 }
 export default async function handler(req,res){
+ res.setHeader('X-Content-Type-Options','nosniff');
+ res.setHeader('Referrer-Policy','no-referrer');
  if(req.method!=='GET'){res.status(405).json({error:'Method not allowed'});return}
  const sync=req.query?.sync==='1';
  if(sync&&!process.env.JYC_SYNC_SECRET){res.status(503).json({error:'Sync is not configured'});return}
 if(sync&&req.headers['x-jyc-sync-secret']!==process.env.JYC_SYNC_SECRET){res.status(401).json({error:'Unauthorized'});return}
+ if(sync)res.setHeader('Cache-Control','no-store, no-cache, must-revalidate, max-age=0');
  if(!sync&&memory.items.length&&Date.now()-memory.at<CACHE_MS){res.setHeader('Cache-Control','s-maxage=900, stale-while-revalidate=1800');res.status(200).json({items:memory.items,live:true,cached:true});return}
  try{
   let items=await collect();
