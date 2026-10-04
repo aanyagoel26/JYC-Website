@@ -5,6 +5,7 @@
 import {JYC_HUB_CONTENT} from './v21-hub-content.js';
 import {PDF_HUB_GALLERY,PDF_HUB_STORIES,HUB_PHOTO_MAP} from './pdf-hub-content.js';
 import {PDF_HUB_EXTRA_GALLERY} from './pdf-hub-extra.js';
+import {JYC_SOURCE_ARCHIVE_CATALOG,JYC_SOURCE_ARCHIVE_STATS} from './source-archive-index.js';
 
 const normalise=v=>String(v||'').trim().toLowerCase().replace(/[^a-z0-9]+/g,'');
 const HUB_ALIASES={
@@ -20,6 +21,7 @@ export const canonicalHubName=name=>{
   return Object.keys(JYC_HUB_CONTENT).find(k=>normalise(k)===normalise(raw))||raw;
 };
 const SOURCE_GALLERY=[...PDF_HUB_GALLERY,...PDF_HUB_EXTRA_GALLERY];
+const ARCHIVE_GALLERY=JYC_SOURCE_ARCHIVE_CATALOG.map(item=>({...item,sourceType:'source-archive',sourceLabel:'JYC supplied image archive',role:item.association?'club':'archive',caption:item.association?item.association+' · supplied archive image':item.category.replaceAll('/',' · '),alt:item.association?item.association+' · JYC supplied archive image':'JIIT Youth Club 128 supplied archive image'}));
 
 const QUALITY_OVERRIDES={
   Aakriti:['/assets/hub-photos-extra/aakriti-01.webp','/assets/hub-photos-extra/aakriti-02.webp','/assets/hub-photos-extra/aakriti-04.webp','/assets/hub-photos-extra/aakriti-05.webp','/assets/hub-photos-extra/aakriti-06.webp'],
@@ -48,6 +50,7 @@ export function sourceHubMedia(name){
   const label=canonical||name;
   const quality=QUALITY_BY_KEY.get(normalise(label))||[];
   const mapped=HUB_PHOTO_MAP[label]||[];
+  const archiveGallery=ARCHIVE_GALLERY.filter(g=>g.association&&normalise(canonicalHubName(g.association))===key).map(enrichMediaItem).filter(Boolean);
   const gallery=SOURCE_GALLERY.filter(g=>normalise(canonicalHubName(g.association))===key).map(enrichMediaItem).filter(Boolean);
   const story=storyByKey.get(key)||storyByKey.get(normalise(name));
   const storyImage=story?.image?[story.image]:[];
@@ -55,6 +58,7 @@ export function sourceHubMedia(name){
     ...quality.map((url,i)=>({url,association:label,mediaKind:'photo',caption:`${label} · ${JYC_HUB_CONTENT[label]?.focus||'community story'} · archive photograph ${String(i+1).padStart(2,'0')}`,alt:`${label} ${JYC_HUB_CONTENT[label]?.focus||'community'} JYC photograph ${i+1}`,sourceLabel:'JYC supplied hub archive'})),
     ...mapped.map((url,i)=>({url,association:label,mediaKind:'photo',caption:`${label} · supplied archive photograph ${String(i+1).padStart(2,'0')}`,alt:`${label} supplied JYC photograph ${i+1}`,sourceLabel:'JYC supplied hub archive'})),
     ...gallery.map(item=>({...item,association:label})),
+    ...archiveGallery.map(item=>({...item,association:label})),
     ...storyImage.map(url=>({url,association:label,mediaKind:'artwork',sourceLabel:'JYC supplied hub story'}))
   ].filter(x=>x.url);
   const uniqueMedia=[...new Map(media.filter(x=>x?.url).map(x=>[String(x.url),x])).values()];
@@ -63,6 +67,9 @@ export function sourceHubMedia(name){
   const visuals=uniqueMedia.map(x=>x.url);
   return {name:label,family:JYC_HUB_CONTENT[label]?.family||story?.family||'',photoItems,visuals,focus:JYC_HUB_CONTENT[label]?.focus||story?.focus||'',summary:JYC_HUB_CONTENT[label]?.summary||'',detail:JYC_HUB_CONTENT[label]?.detail||story?.text||'',story:story||null,photos};
 }
+
+export const JYC_SOURCE_ARCHIVE_GALLERY=ARCHIVE_GALLERY;
+export const JYC_SOURCE_ARCHIVE_CATALOG_STATS=JYC_SOURCE_ARCHIVE_STATS;
 
 export function enrichSourceClub(club){
   const media=sourceHubMedia(club?.name);
@@ -77,6 +84,7 @@ export function mergeSourceGallery(gallery){
   const map=new Map();
   const put=(item)=>{const enriched=enrichMediaItem(item);if(enriched?.url)map.set(String(enriched.url),enriched)};
   SOURCE_GALLERY.forEach(put);
+  ARCHIVE_GALLERY.forEach(put);
   (Array.isArray(gallery)?gallery:[]).forEach(put);
   return [...map.values()];
 }
