@@ -26,6 +26,7 @@ export const JYC_HUB_DETAILS = {
   },
   Panache:{
     label:'Fashion and performance',
+    sourceHighlights:['The supplied material describes Panache as a platform for fashion talent, teamwork, confidence and exposure','Students create props and present them through modelling and stage work','Fashion is treated as a learning and collaborative experience, not only a performance'],
     activities:['Fashion designing','Photowalks','Makeup and face paint','Cosplay','Flashmobs','Stage performances'],
     experience:'The supplied Panache material describes fashion as a platform for talent, teamwork, confidence and exposure, extending from styling and modelling to performance and creative production.',
     signature:['Vogue-IIT Roorkee prelim winner · 2024','Mosaic IITM awards · 2026']
@@ -119,6 +120,7 @@ export const JYC_HUB_DETAILS = {
   },
   Prismatic:{
     label:'Graphic design and visual communication',
+    sourceHighlights:['Official Graphic Design Society of JIIT in the supplied hub material','Creative thinkers, visual storytellers and aspiring designers work through collaboration','Hands-on projects, workshops and real-world experiences turn ideas into meaningful visual communication'],
     activities:['Graphic design','Visual storytelling','Hands-on projects','Workshops','Creative collaboration','Real-world design experience'],
     experience:'The supplied Prismatic material describes the official Graphic Design Society as a community of creative thinkers and visual storytellers who use design to communicate ideas, solve problems and inspire change.',
     signature:['Projects','Workshops','Visual systems','Purposeful communication']
