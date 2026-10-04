@@ -70,7 +70,7 @@ html[data-theme="dark"] body{
   --text-muted:var(--jyc-muted-live)!important;
   --border-tech:var(--jyc-border)!important;
   --accent-gold:var(--jyc-champagne)!important;
-  --accent-red:var(--accent-red,#a82420)!important;
+  --accent-red:#a82420!important;
   --club-red:var(--accent-red,#a82420)!important;
   --club-gold:var(--jyc-champagne)!important;
   color:var(--jyc-text)!important;
