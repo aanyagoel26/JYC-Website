@@ -16,11 +16,13 @@ export const JYC_HUB_DETAILS = {
     label:'Dance community',
     activities:['College performances','Cultural festivals','Inter-college competitions','Workshops and practice sessions'],
     experience:'The supplied BDS material presents the society as a performance community built around dance, cultural festivals, competitions, workshops, practice and team building.',
-    signature:['Freshers’ Induction','Ethnic Day Showcase','Annual Fest Performance']
+    sourceHighlights:['The supplied BDS material emphasises college performances, cultural festivals and inter-college competitions','The community describes itself as more than a dance team: a family built through shared preparation and performance','Interactive workshops combine hands-on learning, team building and skill development'],
+    signature:['Freshers’ Induction','Ethnic Day Showcase','Annual Fest Performance','Interactive workshops']
   },
   VamUnique:{
     label:'Dance and choreography',
-    activities:['Hip hop','Contemporary','Bollywood','Classical','Performances','Workshops and flashmobs'],
+    sourceHighlights:['The supplied 2026–27 induction material presents VamUnique as the official college dance community','Genres shown include hip hop, contemporary, Bollywood and classical','The presentation frames dance as both a shared passion and a team/family experience'],
+    activities:['Hip hop','Contemporary','Bollywood','Classical','Performances','Induction','Workshops and flashmobs'],
     experience:'The supplied 2026–27 material presents VamUnique as a dance community where multiple styles share one stage, with performances, induction activity, workshops, flashmobs and a strong team culture.',
     signature:['Induction','Stage performances','Workshops','Flashmobs']
   },
@@ -73,6 +75,7 @@ export const JYC_HUB_DETAILS = {
   },
   Arcadia:{
     label:'Esports and gaming',
+    sourceHighlights:['The supplied material presents Arcadia as an esports/gaming community built around competition and connection','The AR/VR Lab is used for interactive gaming experiences','Featured formats include mobile games, PC games, Flappy Bird and Aim Labs'],
     activities:['Gaming tournaments','Gaming challenges','Community events','Competitive esports','AR/VR experiences','Teamwork and networking'],
     experience:'The supplied Arcadia material presents gaming as both competition and community, with tournaments, challenges, networking and interactive AR/VR Lab experiences.',
     signature:['Mobile Games','PC Games','Flappy Bird','Aim Labs']
@@ -98,7 +101,8 @@ export const JYC_HUB_DETAILS = {
   },
   Aakriti:{
     label:'Fine arts and visual craft',
-    activities:['Art of the Week','Best out of Waste','Campus decoration','Exhibitions and competitions','Inter-college participation','Event installations'],
+    sourceHighlights:['The supplied Aakriti material documents Art of the Week and Best out of Waste','Aakriti decorates campus spaces for Converge and creates art from waste materials','The society participates in inter-college fests and competitions and records trophies, medals and prizes','Farewell and Ebullience are described as major visual-production moments for the society'],
+    activities:['Art of the Week','Best out of Waste','Campus decoration','Exhibitions and competitions','Inter-college participation','Event installations','Farewell decor','Ebullience decor'],
     experience:'The supplied Aakriti material shows the Fine Arts Society shaping campus spaces and events through art, props, installations, competitions and creative reuse of materials.',
     signature:['Art of the Week','Best out of Waste','Converge','Ebullience','Farewell']
   },
@@ -106,7 +110,7 @@ export const JYC_HUB_DETAILS = {
     label:'Photography and visual storytelling',
     activities:['Campus event coverage','Lectures and workshops','Photo walks','Profile photography','Photography competitions'],
     experience:'The supplied Aura material focuses on photography as an art and a practical skill, covering campus events, lectures, workshops, photo walks and competitions while building professional experience.',
-    signature:['Photo Walk 2025/26','Converge','Synergy’25','Panache × Aura']
+    signature:['Photo Walk 2025/26','Converge','Synergy’25','Panache × Aura','Old Delhi Photography Workshop']
   },
   Cinekala:{
     label:'Film and visual storytelling',
