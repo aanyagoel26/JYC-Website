@@ -39,11 +39,12 @@ const ARCHIVE_PHOTO_EXCLUSIONS={
   'clubs/prismatic':new Set(['p5-showcase-1','p5-showcase-2','p5-showcase-3','p5-showcase-4']),
   'clubs/vamunique':new Set(['p5-showcase-2','p5-showcase-3','p5-showcase-4'])
 };
+const ARCHIVE_SHOWCASE_PHOTOS=new Set(['clubs/aura/p5-showcase-2','clubs/aura/p5-showcase-3','clubs/bds/p5-showcase-1','clubs/bds/p5-showcase-2','clubs/vamunique/p5-showcase-1']);
 const archivePhotoKind=item=>{
   const cat=String(item.category||'');
   const stem=String(item.sourcePath||item.url||'').split('/').pop().replace(/\.[^.]+$/,'');
   if(/^archive\/presentation-assets|^design-assets/.test(cat))return 'visual';
-  if(/^p5-showcase-/i.test(stem))return ARCHIVE_PHOTO_EXCLUSIONS[cat]?.has(stem)?'visual':'visual';
+  if(/^p5-showcase-/i.test(stem))return ARCHIVE_SHOWCASE_PHOTOS.has(cat+'/'+stem)?'photo':'visual';
   if(/(?:logo|banner|qr)/i.test(stem))return 'visual';
   if(ARCHIVE_PHOTO_EXCLUSIONS[cat]?.has(stem))return 'visual';
   return cat.startsWith('clubs/')||cat==='festivals/aakriti'||cat==='gallery/campus-events'||cat==='sports'?'photo':(item.mediaKind||'visual');
