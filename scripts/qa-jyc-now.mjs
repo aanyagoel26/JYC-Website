@@ -2,7 +2,7 @@ import fs from 'node:fs';
 const read=p=>fs.readFileSync(p,'utf8');
 const main=read('src/main.jsx'),now=read('src/jyc-now.jsx'),api=read('api/jyc-updates.js'),pkg=JSON.parse(read('package.json'));
 const checks=[
- [pkg.version==='56.5.0','package is V56.5'],
+ [pkg.version==='56.6.0','package is V56.6'],
  [main.includes("from './jyc-now.jsx'")&&main.includes('<JYCNowStrip data={data}/>'),'JYC Now homepage layer is mounted'],
  [main.includes("clean==='/updates'")&&main.includes('<JYCNowPage data={data}/>'),'JYC Now route is public and wired'],
  [main.includes("['/updates','JYC Now'"),'JYC Now is discoverable in More navigation'],
