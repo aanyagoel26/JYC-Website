@@ -746,6 +746,7 @@ function About({data}){
    <div className="about-hero-copy"><span className="eyebrow">ABOUT JYC · JIIT 128</span><h1>The student ecosystem behind campus life.</h1><p>{h.aboutText||'JIIT Youth Club connects students, communities, leadership and campus experiences across JIIT Sector 128.'}</p><div className="about-hero-actions"><Button onClick={()=>nav('/clubs')}>Find your community ↗</Button><Button secondary onClick={()=>nav('/events')}>See what is happening →</Button></div></div>
    <div className="about-hero-mark"><div><LogoImage alt="JIIT Youth Club"/></div><span>VOICE · TALENT · SPIRIT</span></div>
   </div>
+  <JYCBrandEditorial compact/>
   <section className="v40-about-snapshot reveal" aria-label="JYC at a glance">
    <div className="v40-about-snapshot-intro"><span className="eyebrow">JYC AT A GLANCE</span><h2>One coordinating body. A whole campus ecosystem.</h2><p>JYC connects faculty guidance, student leadership, communities, volunteers and experiences so students can move from discovering an interest to actually participating.</p></div>
    <div className="v40-about-metrics"><article><strong>{JYC_HUB_FAMILIES.length}</strong><span>community families</span></article><article><strong>{Object.keys(JYC_HUB_CONTENT).length}</strong><span>named communities</span></article><article><strong>{PDF_HUB_PROGRAMME.length}</strong><span>programme strands</span></article><article><strong>{data.team.filter(m=>m.published===true).length}</strong><span>published people</span></article></div>
