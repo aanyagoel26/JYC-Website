@@ -927,3 +927,6 @@
   .gallery-story-overlay strong{font-size:13px}
   .gallery-story-overlay small,.gallery-story-overlay em{font-size:8px}
 }
+
+.public-app .gallery-load-more{display:grid;justify-items:center;gap:10px;margin:28px auto 0;text-align:center;color:var(--jyc-muted,#665f56)}
+.public-app .gallery-load-more span{font-size:12px;letter-spacing:.08em;text-transform:uppercase}
