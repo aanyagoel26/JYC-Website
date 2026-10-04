@@ -2,13 +2,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const root=process.cwd();
+const {JYC_HUB_SOURCE_REGISTRY}=await import('../src/jyc-hub-registry.js');
+const {sourceHubMedia}=await import('../src/jyc-source-media.js');
 const rawSite=(process.env.VITE_SITE_URL||process.env.SITE_URL||process.env.VERCEL_PROJECT_PRODUCTION_URL||'https://www.jiityouthclub128.in').trim();
 const site=(rawSite?(/^[a-z]+:\/\//i.test(rawSite)?rawSite:`https://${rawSite}`):'').replace(/\/$/,'');
 const out=path.join(root,'public','sitemap.xml');
 const core=['/','/about','/history','/clubs','/events','/fests','/gallery','/team','/contact','/calendar','/announcements','/updates','/achievements','/join-jyc','/events/agentic-ai-2026','/events/ride-hack-2026','/events/converge-2026','/events/drono-o-war-2026','/events/codeai-hackathon'];
 const dynamicDates=new Map();
-const sourceRegistry=fs.readFileSync(path.join(root,'src','jyc-hub-registry.js'),'utf8');
-const sourceHubNames=[...sourceRegistry.matchAll(/\{name:'([^']+)'/g)].map(m=>m[1]);
+const sourceHubNames=JYC_HUB_SOURCE_REGISTRY.map(item=>item.name);
 const slug=value=>String(value||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 const urls=new Set([...core,...sourceHubNames.map(name=>`/clubs/${slug(name)}`)]);
 const imageUrls=new Set();
@@ -20,12 +21,9 @@ for(const source of ['src/jyc-source-media.js','src/pdf-hub-content.js']){
   }catch{}
 }
 try{
-  const sourceText=fs.readFileSync(path.join(root,'src','jyc-source-media.js'),'utf8');
-  const blockRx=/([A-Za-z][A-Za-z0-9 &'’.-]*):\{[\s\S]*?photos:\[([\s\S]*?)\]\}/g;
-  for(const m of sourceText.matchAll(blockRx)){
-    const name=m[1].trim();
-    const urls=[...m[2].matchAll(/['\"](\/assets\/[^'\"]+\.(?:webp|png|jpe?g|avif))['\"]/gi)].map(x=>x[1]);
-    if(urls.length) hubImages.set(name,urls.slice(0,4));
+  for(const meta of JYC_HUB_SOURCE_REGISTRY){
+    const urls=sourceHubMedia(meta.name).photoItems.map(item=>item.url).filter(Boolean);
+    if(urls.length) hubImages.set(meta.name,urls.slice(0,12));
   }
 }catch{}
 
