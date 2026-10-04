@@ -4,6 +4,7 @@ import path from 'node:path';
 const root=process.cwd();
 const {JYC_HUB_SOURCE_REGISTRY}=await import('../src/jyc-hub-registry.js');
 const {sourceHubMedia}=await import('../src/jyc-source-media.js');
+const {JYC_SOURCE_ARCHIVE_CATALOG}=await import('../src/source-archive-index.js');
 const rawSite=(process.env.VITE_SITE_URL||process.env.SITE_URL||process.env.VERCEL_PROJECT_PRODUCTION_URL||'https://www.jiityouthclub128.in').trim();
 const site=(rawSite?(/^[a-z]+:\/\//i.test(rawSite)?rawSite:`https://${rawSite}`):'').replace(/\/$/,'');
 const out=path.join(root,'public','sitemap.xml');
@@ -14,6 +15,7 @@ const slug=value=>String(value||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'
 const urls=new Set([...core,...sourceHubNames.map(name=>`/clubs/${slug(name)}`)]);
 const imageUrls=new Set();
 const hubImages=new Map();
+for(const item of JYC_SOURCE_ARCHIVE_CATALOG) if(item?.url) imageUrls.add(item.url);
 for(const source of ['src/jyc-source-media.js','src/pdf-hub-content.js']){
   try{
     const text=fs.readFileSync(path.join(root,source),'utf8');
