@@ -82,13 +82,19 @@ export function mergeSourceGallery(gallery){
 }
 
 const EVENT_ALIASES={
-  'Converge':['Converge'],
-  'Ebullience':['Ebullience'],
-  'Dron-O-War':['Dron-O-War'],
+  'Converge':['Converge','Converge 2026'],
+  'Ebullience':['Ebullience',"Ebullience '25",'Ebullience’25'],
+  'Dron-O-War':['Dron-O-War','DRONO-O-WAR 1.0','Drono War'],
   'Induction':['Induction','orientation'],
   'Ethnic Day':['Ethnic Day'],
   'Farewell':['Farewell'],
-  'Hackathons':['Hackathons','hackathon']
+  'Hackathons':['Hackathons','hackathon'],
+  "JAI 2026":["JAI 2026","JAI 2026 · Jaypee Agentic AI Hackathon","Jaypee Agentic AI International Summit"],
+  "RIDE Hack'26":["RIDE Hack'26","RIDE Hack 26","RIDE Hack"],
+  'CodeAI Hackathon':['CodeAI Hackathon','CodeAI'],
+  'Code Clash 25.1':['Code Clash 25.1','Code Clash 25.1 · RPH'],
+  'Code Clash 25.2':['Code Clash 25.2','Code Clash 25.2 · RPH'],
+  'TechTonic 2.0':['TechTonic 2.0','TechTonic']
 };
 const token=v=>normalise(v);
 const EVENT_ASSOCIATIONS=new Map(Object.entries(EVENT_ALIASES).flatMap(([event,aliases])=>aliases.map(alias=>[normalise(alias),event])));
