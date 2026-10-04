@@ -34,6 +34,10 @@ for(const [key,value] of [['x-content-type-options','nosniff'],['x-frame-options
 }
 add('CSP blocks inline script attributes',String(headerMap.get('content-security-policy')||'').includes("script-src-attr 'none'"));
 add('CSP has frame-ancestors protection',String(headerMap.get('content-security-policy')||'').includes("frame-ancestors 'none'"));
+const adminNoindex=vercel.headers?.find(x=>x.source==='/admin/:path*')?.headers?.find(x=>x.key.toLowerCase()==='x-robots-tag')?.value||'';
+add('Private admin route is not indexable',adminNoindex.includes('noindex')&&adminNoindex.includes('nofollow'));
+const loginNoindex=vercel.headers?.find(x=>x.source==='/login')?.headers?.find(x=>x.key.toLowerCase()==='x-robots-tag')?.value||'';
+add('Login route is not indexable',loginNoindex.includes('noindex'));
 add('Service worker only caches same-origin runtime assets',/new URL\(request\.url\)\.origin === self\.location\.origin/.test(read(path.join(root,'public/sw.js'))));
 add('Service worker bypasses same-origin API responses',read(path.join(root,'public/sw.js')).includes("pathname.startsWith('/api/')")&&/pathname\.startsWith\('\/api\/'\)\) return;/.test(read(path.join(root,'public/sw.js'))));
 add('Public JSON CMS table is not directly readable',!read(path.join(root,'supabase/PRODUCTION-BOOTSTRAP-ALL.sql')).includes('create policy "Public can read published site data"') && read(path.join(root,'supabase/PRODUCTION-BOOTSTRAP-ALL.sql')).includes('create policy "Admins can read site data"'));
