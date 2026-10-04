@@ -1,5 +1,5 @@
 /* JYC SENIOR LOGO SYSTEM · 2026-10-03
-   V56.5 FINAL VISUAL QA CONTRACT · centered composition, readable typography, overflow safety and image-led presentation.
+   V56.6 FINAL VISUAL QA CONTRACT · centered composition, readable typography, overflow safety and image-led presentation.
    Final visual contract derived from the supplied senior-approved emblem.
    Palette: JYC paper beige / near-black / restrained red / gold.
    This is the final public override layer; historical CSS remains for reference.
@@ -716,7 +716,7 @@ html[data-theme="dark"] .public-app .card:hover,html[data-theme="dark"] .public-
 }
 
 
-/* V56.5 FINAL VISUAL QA CONTRACT — alignment, readable type, overflow safety and image-led event presentation. */
+/* V56.6 FINAL VISUAL QA CONTRACT — alignment, readable type, overflow safety and image-led event presentation. */
 *,*::before,*::after{box-sizing:border-box}
 .public-app,.public-app *{min-width:0}
 .public-app{overflow-wrap:anywhere}
