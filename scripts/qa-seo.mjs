@@ -12,6 +12,7 @@ const sitemap=read('scripts/generate-sitemap.mjs');
 const main=read('src/main.jsx');
 add('Homepage title targets JIIT Youth Club + clubs/events/fests',html.includes('JIIT Youth Club 128') && main.includes('Clubs, Events & Fests'));
 add('hub image sitemap uses canonical source media',sitemap.includes('sourceHubMedia')&&sitemap.includes('JYC_HUB_SOURCE_REGISTRY')&&sitemap.includes('urls.slice(0,12)'));
+add('full source archive is included in image discovery',sitemap.includes('JYC_SOURCE_ARCHIVE_CATALOG')&&sitemap.includes('for(const item of JYC_SOURCE_ARCHIVE_CATALOG)'));
 add('Organization structured data',meta.includes("'@type':'Organization'") && meta.includes('sameAs') && meta.includes('areaServed') && meta.includes('contactPoint'));
 add('Club collection structured data',meta.includes("'@type':'CollectionPage'")&&meta.includes('ItemList')&&meta.includes('JYC Clubs & Communities'));
 add('Gallery collection structured data',meta.includes("'@type':'CollectionPage'")&&meta.includes('JYC Visual Archive'));
