@@ -9,6 +9,8 @@ check((registry.match(/status:'source-material'/g)||[]).length===6,'6 source-mat
 check(!registry.includes("verified-current"),'stale verified-current status present');
 check(media.includes('QUALITY_OVERRIDES')&&media.includes('sourceHubMedia'),'source media quality/lookup layer missing');
 check(main.includes('hub-source-photo-strip')&&main.includes('photoItems?.length'),'club source photography rail not wired');
+check(source.includes('JYC_SOURCE_ARCHIVE_PHOTO_ITEMS')&&source.match(/mediaKind==='photo'/),'full source-archive photography pool is exposed');
+check(extra.includes('visibleCount')&&extra.includes('Load 60 more'),'large gallery is progressively rendered');
 check(main.includes('sourceEventMedia(e)'),'event source-media preference missing');
 check(extra.includes("image:images")&&extra.includes('eventImages.length?eventImages'),'entity JSON-LD image depth missing');
 check(system.includes('--jyc-final-bg: #0f0e11')&&system.includes('--jyc-final-surface: #18161d'),'official dark theme tokens missing');
