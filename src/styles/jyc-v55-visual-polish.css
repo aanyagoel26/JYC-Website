@@ -930,3 +930,113 @@
 
 .public-app .gallery-load-more{display:grid;justify-items:center;gap:10px;margin:28px auto 0;text-align:center;color:var(--jyc-muted,#665f56)}
 .public-app .gallery-load-more span{font-size:12px;letter-spacing:.08em;text-transform:uppercase}
+
+/* V56.8 source-led brand editorial: desktop follows the supplied left-copy / right-emblem composition. */
+.public-app .jyc-brand-editorial{
+  width:var(--jyc-content);
+  max-width:1180px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);
+  gap:clamp(28px,5vw,76px);
+  align-items:center;
+  padding:clamp(28px,5vw,64px);
+  box-sizing:border-box;
+  border:1px solid var(--jyc-line);
+  border-radius:30px;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--jyc-card) 97%,transparent),color-mix(in srgb,var(--jyc-paper) 70%,var(--jyc-card)));
+  box-shadow:var(--jyc-shadow);
+  overflow:hidden;
+}
+html[data-theme="dark"] .public-app .jyc-brand-editorial{
+  background:linear-gradient(135deg,#18161d,#211e20);
+  box-shadow:var(--jyc-shadow-dark);
+}
+.public-app .jyc-brand-editorial-copy{text-align:left}
+.public-app .jyc-brand-editorial-copy h2{
+  max-width:18ch;
+  margin:8px 0 14px;
+  font-size:clamp(32px,4.2vw,62px);
+  line-height:.98;
+  letter-spacing:-.035em;
+}
+.public-app .jyc-brand-editorial-copy>p{
+  max-width:64ch;
+  margin:0 0 22px;
+  line-height:1.7;
+}
+.public-app .jyc-brand-editorial-points{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px 20px;
+  margin:20px 0 24px;
+}
+.public-app .jyc-brand-editorial-points div{
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+  padding:10px 0;
+  border-top:1px solid var(--jyc-line);
+}
+.public-app .jyc-brand-editorial-points b{font-size:10px;letter-spacing:.12em;color:var(--jyc-gold)}
+.public-app .jyc-brand-editorial-points span{font-size:13px;line-height:1.45;color:var(--jyc-ink)}
+html[data-theme="dark"] .public-app .jyc-brand-editorial-points span{color:var(--jyc-text)}
+.public-app .jyc-brand-editorial-actions{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.public-app .jyc-brand-editorial-mark{
+  min-height:330px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  border-left:1px solid var(--jyc-line);
+  padding-left:clamp(24px,4vw,56px);
+}
+.public-app .jyc-brand-editorial-logo{
+  width:min(270px,70%);
+  aspect-ratio:1;
+  display:grid;
+  place-items:center;
+  margin-bottom:20px;
+}
+.public-app .jyc-brand-editorial-logo img{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+  display:block;
+  filter:drop-shadow(0 22px 30px rgba(40,31,21,.16));
+}
+html[data-theme="dark"] .public-app .jyc-brand-editorial-logo img{filter:drop-shadow(0 22px 30px rgba(0,0,0,.45))}
+.public-app .jyc-brand-editorial-rule{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  color:var(--jyc-bronze);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:.18em;
+}
+.public-app .jyc-brand-editorial-rule i{display:block;width:34px;height:1px;background:var(--jyc-gold)}
+.public-app .jyc-brand-editorial-mark strong{margin-top:9px;font-size:10px;letter-spacing:.22em}
+.public-app .jyc-brand-editorial-mark small{margin-top:6px;font-size:8px;letter-spacing:.18em;color:var(--jyc-muted)}
+.public-app .jyc-brand-editorial.is-compact{padding-block:clamp(24px,4vw,46px)}
+.public-app .jyc-brand-editorial.is-compact .jyc-brand-editorial-logo{width:min(220px,64%)}
+.public-app .jyc-brand-editorial.is-compact .jyc-brand-editorial-mark{min-height:280px}
+@media(max-width:760px){
+  .public-app .jyc-brand-editorial{
+    grid-template-columns:1fr;
+    padding:24px 18px;
+    gap:22px;
+    text-align:center;
+  }
+  .public-app .jyc-brand-editorial-copy{text-align:center}
+  .public-app .jyc-brand-editorial-copy h2{max-width:100%;margin-inline:auto}
+  .public-app .jyc-brand-editorial-copy>p{margin-inline:auto}
+  .public-app .jyc-brand-editorial-points{grid-template-columns:1fr;text-align:left}
+  .public-app .jyc-brand-editorial-actions{justify-content:center}
+  .public-app .jyc-brand-editorial-mark{border-left:0;border-top:1px solid var(--jyc-line);padding:24px 0 0;min-height:0}
+}
+@media(prefers-reduced-motion:reduce){
+  .public-app .jyc-brand-editorial-logo img{transition:none}
+}
