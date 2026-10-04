@@ -1,4 +1,3 @@
-html{color-scheme:light dark;}
 /* JYC 128 public design system
    The visual stack is intentionally preserved while the legacy CSS generations are
    consolidated behind one stable entry point. Delete a legacy layer only after
@@ -14,6 +13,8 @@ html{color-scheme:light dark;}
 @import './jyc-next-experience.css';
 @import './jyc-v55-visual-polish.css';
 @import './jyc-v56-final-system.css';
+
+html{color-scheme:light dark;}
 
 :root {
   color-scheme: light;
