@@ -5,7 +5,7 @@ const main=read('src/main.jsx');
 const next=read('src/jyc-next-experience.jsx');
 const sourceMedia=read('src/jyc-source-media.js');
 const checks=[
- ['V56.6 polish is imported',read('src/styles/public-system.css').includes("./jyc-v55-visual-polish.css")],
+ ['V56.7 polish is imported',read('src/styles/public-system.css').includes("./jyc-v55-visual-polish.css")],
  ['public content has centered width contract',css.includes('--jyc-content')&&css.includes('margin-inline:auto')],
  ['global text overflow is guarded',css.includes('overflow-wrap:anywhere')],
  ['public sections are centered',css.includes('.public-app .section,.public-app .page')],
@@ -29,4 +29,4 @@ const checks=[
 let failed=0;
 for(const [name,ok] of checks){console.log((ok?'PASS':'FAIL')+': '+name);if(!ok)failed++}
 if(failed)process.exit(1);
-console.log('V56.6 visual QA: '+checks.length+'/'+checks.length+' checks passed.');
+console.log('V56.7 visual QA: '+checks.length+'/'+checks.length+' checks passed.');
