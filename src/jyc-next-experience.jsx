@@ -29,6 +29,27 @@ function RouteCard({route,clubs,onOpen}){
  </article>
 }
 
+
+export function JYCBrandEditorial({compact=false}){
+ const nav=useNavigate();
+ const points=['Organize college events','Connect students & clubs','Develop leadership skills','Promote talent & creativity','Industry & alumni interaction','Build teamwork & responsibility'];
+ return <section className={`section jyc-brand-editorial ${compact?'is-compact':''} reveal`} aria-labelledby={compact?'jyc-brand-editorial-compact':'jyc-brand-editorial-title'}>
+  <div className="jyc-brand-editorial-copy">
+   <span className="eyebrow">JYC · READY TO SOAR</span>
+   <h2 id={compact?'jyc-brand-editorial-compact':'jyc-brand-editorial-title'}>A student body built around participation.</h2>
+   <p>JYC is presented in the supplied 2026–27 orientation material as a student-governed organisation: a coordinating layer for clubs, events, talent, leadership and shared campus experiences at JIIT Wish Town, Sector 128.</p>
+   <div className="jyc-brand-editorial-points">{points.map((point,i)=><div key={point}><b>{String(i+1).padStart(2,'0')}</b><span>{point}</span></div>)}</div>
+   <div className="jyc-brand-editorial-actions"><button type="button" className="btn" onClick={()=>nav('/about')}>Read the JYC story ↗</button><button type="button" className="text-link" onClick={()=>nav('/clubs')}>Explore communities →</button></div>
+  </div>
+  <div className="jyc-brand-editorial-mark" aria-label="JIIT Youth Club official identity">
+   <div className="jyc-brand-editorial-logo"><img src="/jyc-logo-official.webp" alt="JIIT Youth Club official emblem" loading={compact?'lazy':'eager'} decoding="async"/></div>
+   <span className="jyc-brand-editorial-rule"><i/>JYC 128<i/></span>
+   <strong>VOICE · TALENT · SPIRIT</strong>
+   <small>JIIT WISH TOWN CAMPUS</small>
+  </div>
+ </section>
+}
+
 export function ChooseYourRoute({data}){
  const nav=useNavigate();
  const [active,setActive]=useState('build');
