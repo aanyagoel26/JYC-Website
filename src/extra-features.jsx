@@ -145,7 +145,7 @@ export function RegistrationPage({data,id,session}){const event=data.events.find
  const [filtersOpen,setFiltersOpen]=useState(()=>typeof window!=='undefined'?window.innerWidth>900:false); const [albums,setAlbums]=useState([]);
  useEffect(()=>{let alive=true;supabase.from('jyc_media_albums').select('id,name,slug,cover_url').eq('is_published',true).order('created_at',{ascending:false}).then(({data:rows})=>{if(alive)setAlbums(rows||[])});return()=>{alive=false}},[]);
  const sourcePhotoItems=useMemo(()=>Object.keys(JYC_HUB_CONTENT).flatMap(name=>sourceHubMedia(name).photoItems.map((item,i)=>({id:`source-gallery-${name}-${i}-${String(item.url).replace(/[^a-z0-9]/gi,'').slice(-12)}`,url:item.url,association:name,year:item.year||'',caption:item.caption||item.title||`${name} · source photography`,alt:item.alt||item.caption||`${name} supplied JYC source photograph`,mediaKind:'photo',sourceType:item.sourceType||'presentation-export',sourceLabel:item.sourceLabel||'JYC supplied hub archive',credit:item.credit||'',published:true}))),[]);
- const galleryInput=useMemo(()=>[...(Array.isArray(data.gallery)?data.gallery:[]),...sourcePhotoItems,...JYC_SOURCE_ARCHIVE_PHOTO_ITEMS],[data.gallery,sourcePhotoItems]);
+ const galleryInput=useMemo(()=>[...(Array.isArray(data.gallery)?data.gallery:[]),...sourcePhotoItems],[data.gallery,sourcePhotoItems]);
  const manifest=useMemo(()=>buildJycMediaManifest(galleryInput),[galleryInput]);
  const collectionOf=g=>{const association=String(g?.association||'').trim().toLowerCase();const hub=Object.keys(JYC_HUB_CONTENT).find(name=>association===name.toLowerCase()||association.includes(name.toLowerCase()));return hub?JYC_HUB_CONTENT[hub].family:''};
  const associations=manifest.communities;
