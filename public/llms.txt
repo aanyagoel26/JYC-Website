@@ -76,7 +76,7 @@ Public website: Home, About, History, Clubs, Events, Event Calendar, Fests, Gall
 
 ## Release boundary
 
-V56.5 is a club-first public website. Academic calendars are informational only; student accounts, attendance, passes, certificates, campus utilities and student-help workflows are outside the public product. Current official records are published only through authorised JYC editorial workflows.
+V56.6 is a club-first public website. Academic calendars are informational only; student accounts, attendance, passes, certificates, campus utilities and student-help workflows are outside the public product. Current official records are published only through authorised JYC editorial workflows.
 
 ## Source-backed community detail
 
