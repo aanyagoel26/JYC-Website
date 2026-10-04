@@ -19,4 +19,4 @@ for(const h of hubs)check(llms.includes(h),`llms.txt missing community vocabular
 check(sitemap.includes('jyc-hub-registry.js')&&sitemap.includes('/events/agentic-ai-2026')&&sitemap.includes('xmlns:image'),'sitemap depth contract missing');
 check(fallbacks.includes("name:'Harisha'")&&fallbacks.includes("role:'Creative Head'")&&fallbacks.includes("name:'Dhruv Choudhary'")&&fallbacks.includes("role:'Management Head'"),'source-backed leadership depth missing');
 if(fail.length){fail.forEach(x=>console.error('FAIL:',x));process.exit(1)}
-console.log('PASS: V56.6 source/content/depth/theme/SEO contract');
+console.log('PASS: V56.7 source/content/depth/theme/SEO contract');
