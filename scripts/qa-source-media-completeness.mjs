@@ -26,7 +26,7 @@ console.log('PASS: '+unique.length+' referenced source-media paths resolved.');
 console.log('PASS: '+assetFiles.length+' committed hub media files scanned.');
 const archiveIndex=read('src/source-archive-index.js');
 const archiveMatch=archiveIndex.match(/JYC_SOURCE_ARCHIVE_CATALOG=([\\s\\S]*?);\\nexport const/);
-if(!archiveMatch){console.error('FAIL: source archive catalog export missing');fail++}else{try{const catalog=JSON.parse(archiveMatch[1]);const expected=873; if(catalog.length!==expected){console.error(`FAIL: source archive catalog expected ${expected} entries, found ${catalog.length}`);fail++} else console.log(`PASS: complete source archive catalog indexed (${catalog.length} images).`); }catch(error){console.error('FAIL: source archive catalog is not valid JSON',error.message);fail++}}
+if(!archiveMatch){console.error('FAIL: source archive catalog export missing');fail++}else{try{const catalog=JSON.parse(archiveMatch[1]);const expected=873; if(catalog.length!==expected){console.error(`FAIL: source archive catalog expected ${expected} entries, found ${catalog.length}`);fail++} else console.log(`PASS: complete source archive catalog indexed (${catalog.length} source assets).`); }catch(error){console.error('FAIL: source archive catalog is not valid JSON',error.message);fail++}}
 const archiveUrls=[...source.matchAll(/[\"'](\/assets\/source-archive\/[^\"']+)[\"']/g)].map(m=>m[1]);
 console.log('PASS: '+archiveUrls.length+' source-archive references are wired through source media code.');
 if(fail)process.exit(1);
