@@ -9,6 +9,8 @@ const missing=gallery.filter(x=>!x.url||!x.association||!x.alt||!x.role||!x.sour
 const presentationWithoutPage=gallery.filter(x=>x.sourceType==='presentation-export'&&!x.page);
 const event=sourceEventMedia('Ebullience');
 const induction=sourceEventMedia('Induction');
+const normalizedEvents=['Converge 2026','JAI 2026 · Jaypee Agentic AI Hackathon',"RIDE Hack'26",'DRONO-O-WAR 1.0','CodeAI Hackathon','Code Clash 25.1','Code Clash 25.2','TechTonic 2.0'];
+const normalizedEventMappings=normalizedEvents.map(name=>[name,sourceEventMedia(name).collection]);
 const eventUrls=new Set(event.items.map(x=>x.url));
 const inductionUrls=new Set(induction.items.map(x=>x.url));
 assert('source gallery has maintained communities',JYC_SOURCE_MEDIA_STATS.maintainedCommunities>0);
@@ -21,5 +23,6 @@ assert('Ebullience maps to its own source collection',event.items.length>0);
 assert('Induction does not inherit Ebullience photography',[...inductionUrls].every(url=>!eventUrls.has(url)));
 assert('manifest exposes visual roles',manifest.roles.includes('club')&&manifest.roles.includes('event')&&manifest.roles.includes('archive'));
 assert('manifest exposes source types',manifest.sourceTypes.includes('presentation-export')&&manifest.sourceTypes.includes('maintained-jyc-media'));
+assert('normalized event names resolve to deterministic collections',normalizedEventMappings.every(([name,collection])=>collection&&collection!=='JYC Archive'),JSON.stringify(normalizedEventMappings));
 if(process.exitCode)process.exit(1);
 console.log('Photo integrity QA: all checks passed.');
