@@ -1,6 +1,6 @@
 begin;
 
-select plan(19);
+select plan(20);
 
 select ok(not has_table_privilege('anon','public.jyc_site_data','INSERT'),'anon cannot insert into jyc_site_data');
 select ok(not has_table_privilege('authenticated','public.jyc_site_data','INSERT'),'authenticated cannot insert into jyc_site_data');
