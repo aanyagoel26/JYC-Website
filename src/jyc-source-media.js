@@ -21,7 +21,34 @@ export const canonicalHubName=name=>{
   return Object.keys(JYC_HUB_CONTENT).find(k=>normalise(k)===normalise(raw))||raw;
 };
 const SOURCE_GALLERY=[...PDF_HUB_GALLERY,...PDF_HUB_EXTRA_GALLERY];
-const ARCHIVE_GALLERY=JYC_SOURCE_ARCHIVE_CATALOG.map(item=>({...item,sourceType:'source-archive',sourceLabel:'JYC supplied image archive',role:item.association?'club':'archive',caption:item.association?item.association+' · supplied archive image':item.category.replaceAll('/',' · '),alt:item.association?item.association+' · JYC supplied archive image':'JIIT Youth Club 128 supplied archive image'}));
+
+// The five archives were visually audited before publication. The archive intentionally contains
+// posters, slides, logos, QR codes, textures and other graphics alongside real photographs.
+// These conservative exclusions keep the default photography stream editorial rather than
+// treating every binary as a photograph. All excluded assets remain available in the full archive.
+const ARCHIVE_PHOTO_EXCLUSIONS={
+  'clubs/cicr':new Set(['p3-image611','p3-image612','p3-image613','p3-image614','p3-image615','p3-image616','p3-image617','p3-image618','p3-image619','p3-image620','p3-image621','p3-image622','p3-image623','p3-image624','p3-image625','p3-image626','p3-image627','p3-image628','p3-image629','p3-image630','p3-image631','p3-image632','p5-logo']),
+  'clubs/cine-film':new Set(['p2-image440','p2-image441','p2-image442','p2-image443','p2-image444','p2-image445','p2-image446','p2-image447']),
+  'clubs/jodc':new Set(['p3-image634','p3-image635','p3-image636','p3-image637','p3-image638','p3-image639','p3-image640','p3-image642','p3-image643','p3-image645','p3-image650','p3-image651','p3-image652','p3-image656','p3-image661','p3-image662']),
+  'clubs/innovation':new Set(['p3-image701','p3-image702','p4-image703','p4-image704','p4-image705','p4-image706','p4-image707','p4-image708','p4-image709','p4-image710','p4-image711','p4-image712','p4-image713','p4-image714','p5-showcase-1','p5-showcase-2','p5-showcase-3','p5-showcase-4']),
+  'sports':new Set(['p2-image381','p2-image382','p2-image383','p2-image388','p2-image389','p2-image390','p2-image428','p2-image429','p2-image430']),
+  'clubs/aura':new Set(['p5-showcase-1','p5-showcase-4']),
+  'clubs/bds':new Set(['p5-showcase-3','p5-showcase-4']),
+  'clubs/eloquence':new Set(['p5-showcase-1','p5-showcase-2','p5-showcase-3','p5-showcase-4']),
+  'clubs/jsa':new Set(['p5-showcase-1','p5-showcase-2','p5-showcase-3','p5-showcase-4']),
+  'clubs/prismatic':new Set(['p5-showcase-1','p5-showcase-2','p5-showcase-3','p5-showcase-4']),
+  'clubs/vamunique':new Set(['p5-showcase-2','p5-showcase-3','p5-showcase-4'])
+};
+const archivePhotoKind=item=>{
+  const cat=String(item.category||'');
+  const stem=String(item.sourcePath||item.url||'').split('/').pop().replace(/\.[^.]+$/,'');
+  if(/^archive\/presentation-assets|^design-assets/.test(cat))return 'visual';
+  if(/^p5-showcase-/i.test(stem))return ARCHIVE_PHOTO_EXCLUSIONS[cat]?.has(stem)?'visual':'visual';
+  if(/(?:logo|banner|qr)/i.test(stem))return 'visual';
+  if(ARCHIVE_PHOTO_EXCLUSIONS[cat]?.has(stem))return 'visual';
+  return cat.startsWith('clubs/')||cat==='festivals/aakriti'||cat==='gallery/campus-events'||cat==='sports'?'photo':(item.mediaKind||'visual');
+};
+const ARCHIVE_GALLERY=JYC_SOURCE_ARCHIVE_CATALOG.map(item=>({...item,mediaKind:archivePhotoKind(item),sourceType:'source-archive',sourceLabel:'JYC supplied image archive',role:item.association?'club':'archive',caption:item.association?item.association+' · supplied archive image':item.category.replaceAll('/',' · '),alt:item.association?item.association+' · JYC supplied archive image':'JIIT Youth Club 128 supplied archive image'}));
 
 const QUALITY_OVERRIDES={
   Aakriti:['/assets/hub-photos-extra/aakriti-01.webp','/assets/hub-photos-extra/aakriti-02.webp','/assets/hub-photos-extra/aakriti-04.webp','/assets/hub-photos-extra/aakriti-05.webp','/assets/hub-photos-extra/aakriti-06.webp'],
