@@ -19,8 +19,8 @@ The supplied specification requires the public top navigation (Home, About, Hubs
 - Homepage hub photo wall now draws from the complete maintained 23-community source registry rather than only the brochure-verified subset.
 - Event media aliases now cover normalized production event names including JAI 2026, RIDE Hack'26, DRONO-O-WAR 1.0, CodeAI Hackathon, Code Clash 25.1/25.2 and TechTonic 2.0.
 - Photo integrity QA now verifies deterministic collection resolution for those normalized event names.
-- Source photography remains provenance-gated; review-stage media is not silently published.
-- Archive inventory is explicitly 873 raw files / 872 image assets / 813 unique image hashes / 60 exact duplicate relationships.
+- Source photography remains provenance-gated for the normalized CMS layer; the committed source archive is also available as a public, clearly labelled archive layer and is progressively rendered so the full 748-photo pool can be browsed without loading hundreds of images into the DOM at once.
+- Archive inventory is explicitly 873 raw source assets / 872 image assets plus one SVG / 813 unique image hashes / 60 exact duplicate relationships; the 873 source assets are committed under public/assets/source-archive.
 
 ### Content depth
 - Panache now exposes source-backed highlights about fashion talent, teamwork, confidence, exposure, props and stage presentation.
@@ -62,7 +62,7 @@ Google Search Central guidance also favours original, substantial, accurate, peo
 
 ## External boundaries
 
-Raw archive binaries that are not already part of the maintained repository asset layer are not fabricated or referenced with guessed paths. The source archive inventory remains the authoritative manifest until those binaries can be safely transferred through an actual binary upload path.
+The supplied source archive binaries are already committed under public/assets/source-archive. The generated source-archive catalog contains 873 source assets, including 748 classified photographs, and the site now uses that pool in the Gallery, Photo Story and image sitemap.
 
 Vercel production certification remains dependent on authorization to the JYC Vercel project scope. Supabase Auth leaked-password protection remains a dashboard-level setting.
 
