@@ -15,6 +15,7 @@ const eventUrls=new Set(event.items.map(x=>x.url));
 const inductionUrls=new Set(induction.items.map(x=>x.url));
 assert('source gallery has maintained communities',JYC_SOURCE_MEDIA_STATS.maintainedCommunities>0);
 assert('source gallery is non-empty',gallery.length>0);
+assert('complete supplied archive is represented',manifest.total>=873,`manifest=${manifest.total}`);
 assert('manifest total matches merged source gallery',manifest.total===gallery.length);
 assert('source gallery has no duplicate URLs',duplicateUrls.length===0,duplicateUrls.slice(0,3).join(', '));
 assert('every published media item has provenance and alt metadata',missing.length===0,missing.slice(0,3).map(x=>x.id||x.url).join(', '));
