@@ -11,13 +11,14 @@ const sourceMedia=read('src/jyc-source-media.js');
 const gallery=read('src/extra-features.jsx');
 const hubContent=read('src/v21-hub-content.js');
 const checks=[
+ ['brand editorial module exists',next.includes('export function JYCBrandEditorial')&&main.includes('brandEditorial:<JYCBrandEditorial/>')],
  ['next experience module exists',next.includes('export function ChooseYourRoute')&&next.includes('export function PhotoStory')&&next.includes('export function PhotoChapters')&&next.includes('export function HubSignalRail')],
  ['homepage imports next experience',main.includes("from './jyc-next-experience.jsx'")],
  ['route discovery is mounted',main.includes('routes:<ChooseYourRoute data={data}/>')],
  ['photo story is mounted',main.includes('photoStory:<PhotoStory data={data}/>')],
  ['photo chapters are mounted',main.includes('photoChapters:<PhotoChapters/>')&&visualPolish.includes('jyc-photo-chapters-section')],
  ['hub signal rail is mounted',main.includes('hubSignal:<HubSignalRail data={data}/>')],
- ['homepage ordering is route-first',main.includes("const ordered=['intro','ecosystem','routes','hubSignal','updates','live','photoStory','photoChapters','agentic'")],
+ ['homepage ordering is route-first',main.includes("const ordered=['intro','brandEditorial','ecosystem','routes','hubSignal','updates','live','photoStory','photoChapters','agentic'")],
  ['bot context labels exist',bot.includes('Explore hubs')&&bot.includes('Find an event')&&bot.includes('Explore archive')],
  ['bot stays above mobile dock',bot.includes('bottom:calc(78px + env(safe-area-inset-bottom))')],
  ['assistant quick routes are contextual',assistant.includes("context==='clubs'")&&assistant.includes("context==='events'")&&assistant.includes("context==='gallery'")],
