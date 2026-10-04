@@ -1,6 +1,6 @@
 # JIIT Youth Club 128 — Official Website
 
-> **Current release: V56.7 — source-depth, media-integrity, team-read-model and publication-boundary pass**
+> **Current release: V56.8 — source-depth, editorial identity, photography and CMS-layout pass**
 
 The official public website for **JIIT Youth Club (JYC), JIIT Wish Town Campus, Sector 128, Noida**.
 
@@ -176,7 +176,7 @@ Stale or unsupported information should not remain visually dominant.
 
 ## Repository map
 
-For a concise explanation of the active runtime, source/content hierarchy, SEO, media, 3D bot and QA boundaries, see `docs/ARCHITECTURE-V56.1.md`.
+For a concise explanation of the active runtime, source/content hierarchy, SEO, media, 3D bot and QA boundaries, see `docs/ARCHITECTURE-V56.1.md`. The latest source/research pass is documented in `docs/JYC-V56.8-DEEP-RESEARCH-2026-10-05.md`.
 
 ## Local development
 
