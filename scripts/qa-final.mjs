@@ -7,7 +7,7 @@ const nextExperience=fs.readFileSync(path.join(root,'src/jyc-next-experience.jsx
 const css=fs.readFileSync(path.join(root,'src/styles/public-system.css'),'utf8');
 const pkg=JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8'));
 const checks=[
- ['release version is current V56.6 line',pkg.version==='56.6.0'],
+ ['release version is current V56.7 line',pkg.version==='56.7.0'],
  ['visible breadcrumbs component exists',main.includes('function Breadcrumbs')&&main.includes('aria-label="Breadcrumb"')],
  ['public home has closing CTA contract',main.includes('key="cta"')&&main.includes('READY TO SOAR')],
  ['Club navigation links include clubs/events/team/contact',main.includes("nav('/clubs')")&&main.includes("nav('/events')")&&main.includes("nav('/team')")&&main.includes("nav('/contact')")],
@@ -16,7 +16,7 @@ const checks=[
  ['detail canonical URLs use slugs',main.includes('const canonicalPath=club?`/clubs/${slug(club.name)}`')&&main.includes('`/events/${slug(event.title)}'),],
  ['breadcrumb styling exists',main.includes('className="visible-breadcrumbs reveal"')],
  ['SEO topic link styling exists',main.includes('.search-topic-links')],
- ['service worker cache matches V56.6 release',fs.readFileSync(path.join(root,'public/sw.js'),'utf8').includes('jyc-cache-v56-6-0')],
+ ['service worker cache matches V56.7 release',fs.readFileSync(path.join(root,'public/sw.js'),'utf8').includes('jyc-cache-v56-7-0')],
  ['footer gates Fests by fest mode',main.includes("isFestMode(data)&&<button onClick={()=>nav('/fests')}>Fests</button>")],
  ['club logo alt text is descriptive',main.includes('alt={`${c.name} logo`}'),],
 ];
@@ -46,7 +46,7 @@ checks.push(
  ['club and event source galleries are uncapped',main.includes('sourceHubMedia(c.name).photoItems.map')&&main.includes('media.items.map((m,i)=>')&&!main.includes('media.items.slice(0,12)')&&!main.includes('photoItems.slice(0,10)')],
  ['remaining public source-media merge is URL-keyed',fs.readFileSync(path.join(root,'src/jyc-source-media.js'),'utf8').includes("map.set(String(enriched.url),enriched)")],
  ['remaining find-community ornament is static, not orbital motion',!fs.readFileSync(path.join(root,'src/v36-depth-polish.css'),'utf8').includes('jycV36Orbit')],
- ['LLMs release boundary is current',fs.readFileSync(path.join(root,'public/llms.txt'),'utf8').includes('V56.6 is a club-first public website')],
+ ['LLMs release boundary is current',fs.readFileSync(path.join(root,'public/llms.txt'),'utf8').includes('V56.7 is a club-first public website')],
  ['public feature bundle has no retired academic calendar surface',!fs.readFileSync(path.join(root,'src/extra-features.jsx'),'utf8').includes('academicKeyDates')],
  ['dark theme follows native color-scheme',fs.readFileSync(path.join(root,'src/styles/public-system.css'),'utf8').includes('html[data-theme="dark"] { color-scheme: dark; }')],
  ['GLB navigator is mounted non-blockingly and supports intent animations',main.includes('LazyJYCBot')&&main.includes('<Suspense fallback={null}><LazyJYCBot data={data}/></Suspense>')&&fs.readFileSync(path.join(root,'src/jyc-bot.jsx'),'utf8').includes('intent=\'wave\'')&&fs.readFileSync(path.join(root,'src/jyc-bot.jsx'),'utf8').includes('animationCursor')],
