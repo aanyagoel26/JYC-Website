@@ -108,6 +108,7 @@ export const JYC_HUB_DETAILS = {
   },
   Aura:{
     label:'Photography and visual storytelling',
+    sourceHighlights:['The supplied Aura material presents photography as both an art and a practical skill','Aura covers campus events, lectures, workshops and seminars and organises photo walks','The material highlights professional experience, low-light shooting, communication skills and certificates / letters of recommendation','Photo Walk 2025/26 and collaborations with Panache and Lodhi Garden are documented','The presentation records Converge and Synergy’25 competition exposure'],
     activities:['Campus event coverage','Lectures and workshops','Photo walks','Profile photography','Photography competitions'],
     experience:'The supplied Aura material focuses on photography as an art and a practical skill, covering campus events, lectures, workshops, photo walks and competitions while building professional experience.',
     signature:['Photo Walk 2025/26','Converge','Synergy’25','Panache × Aura','Old Delhi Photography Workshop']
