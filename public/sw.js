@@ -20,10 +20,7 @@ self.addEventListener('fetch', (event) => {
   const requestUrl = new URL(request.url);
   // Never cache same-origin API responses. Public JYC Now uses /api/jyc-updates and
   // must be allowed to refresh even when an older service-worker cache exists.
-  if (requestUrl.origin === self.location.origin && requestUrl.pathname.startsWith('/api/')) {
-    event.respondWith(fetch(request).catch(() => Response.error()));
-    return;
-  }
+  if (requestUrl.origin === self.location.origin && requestUrl.pathname.startsWith('/api/')) return;
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request).then((response) => {
