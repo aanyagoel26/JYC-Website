@@ -102,7 +102,7 @@ Gallery records are intended to support:
 - provenance
 - archive state
 
-The five supplied archives contain 873 raw files, including 872 image assets, with 813 unique SHA-256 image hashes after 60 exact duplicate relationships. The repository keeps a curated/provenance-backed production layer; raw archive binaries are only promoted after safe binary transfer and review.
+The five supplied archives contain 873 raw files, including 872 image assets, with 813 unique SHA-256 image hashes after 60 exact duplicate relationships. The complete supplied archive is now safely ingested under `public/assets/source-archive/` with its catalog and provenance. The runtime media layer indexes all 873 supplied image files, while artwork/design/presentation assets remain classified separately from photography.
 
 ## Event architecture
 
@@ -248,15 +248,15 @@ The connected production Supabase project is now active and has been hardened an
 - Seven deployed Edge Functions: admin management, notifications, backups, AI content assistance, error intake, media upload and public submissions.
 - Private backup storage and constrained public media storage.
 
-The remaining production gates are operational: configure required third-party Edge Function secrets, enable leaked-password protection in Supabase Auth, verify the connected Vercel production project, complete selective ingestion/review of the remaining raw photo candidates, and run final browser/performance QA against the real deployment.
+The remaining production gates are operational: configure required third-party Edge Function secrets, enable leaked-password protection in Supabase Auth, verify the connected Vercel production project, review which archive visuals should be promoted as official current event records, and run final browser/performance QA against the real deployment.
 
 ## Current release status
 
-**V55 is the current code release.** The codebase is intentionally in finish-and-stabilise mode rather than feature-expansion mode.
+**V56.7 is the current code release.** The codebase is intentionally in finish-and-stabilise mode rather than feature-expansion mode.
 
 The highest-value remaining production work is operational rather than architectural:
 
-1. Safely ingest and optimise the five supplied image archives, keeping the 873-file source inventory and 60 duplicate relationships documented.
+1. Keep the complete 873-file source archive catalogued and maintain editorial review when promoting new material into official event/club records.
 2. Run real browser QA against the deployed site at desktop/tablet/mobile sizes and both themes.
 3. Verify live Supabase content and every published club/event record.
 4. Verify the Vercel production deployment and its redirects/headers.
