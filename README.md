@@ -227,7 +227,7 @@ A release should be considered production-ready only after:
 7. No stale Sector-62 JYC positioning appears in the public 128 narrative.
 8. Club/event content is sourced or clearly historical.
 9. Critical routes have no runtime errors.
-10. Performance and accessibility regressions are checked.
+10. Performance and accessibility regressions are checked in CI; deployment smoke is run separately against production.
 11. Release metadata and documentation agree.
 12. The connected Vercel production deployment is verified separately from GitHub CI.
 13. The supplied photo archives have been safely ingested, deduplicated and optimised before being treated as the final production media set.
@@ -260,7 +260,7 @@ The release boundary is aligned across `package.json`, `package-lock.json`, the 
 The highest-value remaining production work is operational rather than architectural:
 
 1. Keep the complete 873-file source archive catalogued and maintain editorial review when promoting new material into official event/club records.
-2. Run real browser QA against the deployed site at desktop/tablet/mobile sizes and both themes.
+2. CI now enforces the production JS/CSS/image budget and expanded browser smoke suite; run the same browser suite against the deployed site at desktop/tablet/mobile sizes and both themes.
 3. Verify live Supabase content and every published club/event record.
 4. Verify the Vercel production deployment and its redirects/headers.
 5. Run a final performance pass after the real production image set is known.
