@@ -1,7 +1,9 @@
-import React,{useMemo} from 'react';
+import React,{useMemo,useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {JYC_HUB_CONTENT,JYC_HUB_FAMILIES} from './v21-hub-content.js';
 import {sourceHubMedia,sourceEventMedia} from './jyc-source-media.js';
+import {JYC_PUBLIC_ACTIVITIES} from './public-v1/config.js';
+import {JYC_CONTACTS} from './jyc-socials.js';
 import {JYCNowStrip} from './jyc-now.jsx';
 import {JYCSpotlight} from './jyc-spotlight.jsx';
 import {FlagshipExperience,PhotoChapters} from './jyc-next-experience.jsx';
@@ -16,163 +18,250 @@ const TEAM_PHOTOS={
  'asmi srivastava':'/assets/team/campaign/asmi-srivastava.webp',
  'juhi hatuka':'/assets/team/campaign/juhi-hatuka.webp',
  'pratik kumar':'/assets/team/campaign/pratik-kumar.webp',
- 'divye bajaj':'/assets/team/divye-bajaj.webp',
+ 'divye bajaj':'/assets/team/campaign/divye-bajaj.webp',
  'revant srivastava':'/assets/team/campaign/revant-srivastava.webp',
  'aradhyaa singh':'/assets/team/campaign/aradhyaa-singh.webp',
  'vansh mahajan':'/assets/team/campaign/vansh-mahajan.webp',
  'shriya singh':'/assets/team/campaign/shriya-singh.webp'
 };
 
+const slug=value=>String(value||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+const mediaUrl=item=>item?.url||item?.src||item?.image||item?.imageUrl||'';
 
 function dateValue(e){
-  const raw=String(e?.date||'');
-  const t=String(e?.start||'00:00');
-  const d=new Date(raw ? raw+'T'+(t.match(/^\d{1,2}:\d{2}/)?.[0]||'00:00') : '');
-  return Number.isNaN(d.getTime())?Number.MAX_SAFE_INTEGER:d.getTime();
+ const raw=String(e?.date||'');
+ const t=String(e?.start||'00:00').match(/^\d{1,2}:\d{2}/)?.[0]||'00:00';
+ const d=new Date(raw?raw+'T'+t:'');
+ return Number.isNaN(d.getTime())?Number.MAX_SAFE_INTEGER:d.getTime();
 }
 function formatDate(value){
-  const d=new Date(String(value||''));
-  return Number.isNaN(d.getTime())?'DATE TBA':d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+ const d=new Date(String(value||''));
+ return Number.isNaN(d.getTime())?'DATE TBA':d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
 }
-function eventMedia(e,index=0){
-  if(e?.poster)return e.poster;
-  const items=sourceEventMedia(e)?.items||[];
-  const photos=items.filter(x=>x?.url&&(x.mediaKind==='photo'||!x.mediaKind));
-  return photos[index%Math.max(1,photos.length)]?.url||FALLBACK_PHOTO;
+function eventStatus(event){
+ if(event?.archived)return {label:'Completed',tone:'muted'};
+ const start=event?.date?Date.parse(event.date+'T'+(event.start||'00:00')):NaN;
+ const endDate=event?.dateEnd||event?.date;
+ const end=endDate?Date.parse(endDate+'T'+(event.end||'23:59')):NaN;
+ const now=Date.now();
+ if(Number.isFinite(start)&&Number.isFinite(end)){
+  if(now>=start&&now<=end)return {label:'Ongoing',tone:'live'};
+  if(now>end)return {label:'Completed',tone:'muted'};
+ }
+ if(event?.registrationUrl||event?.registrationMode==='native')return {label:'Registration Open',tone:'open'};
+ return {label:'Coming Soon',tone:'soon'};
+}
+function eventMedia(event,index=0){
+ if(event?.poster)return event.poster;
+ const items=sourceEventMedia(event)?.items||[];
+ const photos=items.filter(x=>x?.url&&(x.mediaKind==='photo'||!x.mediaKind));
+ return photos[index%Math.max(1,photos.length)]?.url||FALLBACK_PHOTO;
 }
 function hubMedia(name,index=0){
-  const media=sourceHubMedia(name);
-  return media?.photos?.[index%Math.max(1,media.photos.length)]||FALLBACK_PHOTO;
+ const media=sourceHubMedia(name);
+ return media?.photos?.[index%Math.max(1,media.photos.length)]||FALLBACK_PHOTO;
+}
+function externalUrl(value){
+ const raw=String(value||'').trim();
+ if(!raw)return '';
+ try{
+  const u=new URL(raw,window.location.origin);
+  return ['http:','https:'].includes(u.protocol)?u.href:'';
+ }catch{return ''}
+}
+function activityPhoto(activity,index,gallery){
+ const family=JYC_HUB_FAMILIES.find(x=>String(activity?.title||'').toLowerCase()===String(x).toLowerCase());
+ if(family){
+  const first=Object.entries(JYC_HUB_CONTENT).find(([,p])=>p.family===family);
+  if(first)return hubMedia(first[0],index);
+ }
+ return gallery[index%Math.max(1,gallery.length)]?.url||FALLBACK_PHOTO;
 }
 
 export function JYCEditorialHome({data}){
-  const nav=useNavigate();
-  const [activeFamily,setActiveFamily]=React.useState('All');
-  const publishedClubs=useMemo(()=>(
-    (data?.clubs||[]).filter(c=>c?.published&&c?.status!=='archived')
-      .sort((a,b)=>String(a.name||'').localeCompare(String(b.name||'')))
-  ),[data?.clubs]);
-  const upcoming=useMemo(()=>(
-    (data?.events||[]).filter(e=>e?.published&&!e?.archived).sort((a,b)=>dateValue(a)-dateValue(b)).slice(0,4)
-  ),[data?.events]);
-  const gallery=useMemo(()=>(
-    (data?.gallery||[]).filter(g=>g?.url).slice(0,12)
-  ),[data?.gallery]);
-  const familyEntries=JYC_HUB_FAMILIES.map(family=>({
-    family,
-    hubs:Object.entries(JYC_HUB_CONTENT).filter(([,p])=>p.family===family).map(([name,p])=>({name,...p}))
-  }));
-  const visibleFamilies=activeFamily==='All'?familyEntries:familyEntries.filter(x=>x.family===activeFamily);
-  const team=(data?.team||[]).filter(x=>x?.published===true).slice(0,6);
+ const nav=useNavigate();
+ const [activeFamily,setActiveFamily]=useState('All');
+ const publishedClubs=useMemo(()=>(
+  (data?.clubs||[]).filter(c=>c?.published&&c?.status!=='archived')
+   .sort((a,b)=>String(a.name||'').localeCompare(String(b.name||'')))
+ ),[data?.clubs]);
+ const upcoming=useMemo(()=>(
+  (data?.events||[]).filter(e=>e?.published&&!e?.archived).sort((a,b)=>dateValue(a)-dateValue(b)).slice(0,4)
+ ),[data?.events]);
+ const allPublishedEvents=useMemo(()=>(
+  (data?.events||[]).filter(e=>e?.published&&!e?.archived)
+ ),[data?.events]);
+ const gallery=useMemo(()=>(
+  (data?.gallery||[]).filter(g=>g?.url).slice(0,18)
+ ),[data?.gallery]);
+ const team=(data?.team||[]).filter(x=>x?.published===true).slice(0,6);
+ const familyEntries=JYC_HUB_FAMILIES.map(family=>({
+  family,
+  hubs:Object.entries(JYC_HUB_CONTENT).filter(([,p])=>p.family===family).map(([name,p])=>({name,...p}))
+ }));
+ const visibleFamilies=activeFamily==='All'?familyEntries:familyEntries.filter(x=>x.family===activeFamily);
+ const activities=JYC_PUBLIC_ACTIVITIES;
+ const updates=useMemo(()=>{
+  const rows=[];
+  if(data?.announcement?.on&&data?.announcement?.text){
+   rows.push({kind:'Notice',title:'JYC announcement',text:data.announcement.text,link:data.announcement.link||'/announcements'});
+  }
+  allPublishedEvents.slice(0,5).forEach(event=>{
+   const status=eventStatus(event);
+   if(status.label==='Completed')return;
+   rows.push({
+    kind:status.label,
+    title:event.title,
+    text:[formatDate(event.date),event.start||'Time TBA',event.venue||'Venue TBA'].join(' · '),
+    link:'/events/'+slug(event.title)
+   });
+  });
+  return rows.slice(0,4);
+ },[allPublishedEvents,data?.announcement]);
 
-  React.useEffect(()=>{const nodes=[...document.querySelectorAll('.jyc-editorial-home .editorial-reveal')];if(!nodes.length)return;const reduce=window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;if(reduce){nodes.forEach(n=>n.classList.add('is-visible'));return;}const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('is-visible');observer.unobserve(entry.target);}}),{rootMargin:'0px 0px -8% 0px',threshold:.08});nodes.forEach(n=>observer.observe(n));return()=>observer.disconnect();},[]);
+ const stats=[
+  {value:publishedClubs.length||Object.keys(JYC_HUB_CONTENT).length,label:'Published communities'},
+  {value:JYC_HUB_FAMILIES.length,label:'Community families'},
+  {value:allPublishedEvents.length,label:'Published events'},
+  {value:data?.team?.filter(m=>m?.published===true).length||0,label:'Published team profiles'}
+ ];
 
-  return <main className="jyc-editorial-home">
-    <section className="jyc-editorial-hero" aria-labelledby="jyc-editorial-title">
-      <div className="jyc-editorial-hero-copy">
-        <div className="jyc-editorial-kicker"><span>JIIT · SECTOR 128 · NOIDA</span><i/> <b>STUDENT LED</b></div>
-        <h1 id="jyc-editorial-title"><span>The campus.</span><span>In motion.</span><em>Together.</em></h1>
-        <p>JIIT Youth Club brings communities, events, creativity, technology, sport and campus memories into one student-led ecosystem.</p>
-        <div className="jyc-editorial-actions">
-          <button className="jyc-editorial-btn" onClick={()=>nav('/clubs')}>Explore communities <span>↗</span></button>
-          <button className="jyc-editorial-btn secondary" onClick={()=>nav('/events')}>See what's next <span>→</span></button><button className="jyc-editorial-join" onClick={()=>nav('/recruitment')}>Join JYC ↗</button>
-        </div>
-        <div className="jyc-editorial-proof"><span><b>01</b> COMMUNITIES</span><span><b>02</b> EXPERIENCES</span><span><b>03</b> MEMORIES</span></div>
-      </div>
-      <div className="jyc-editorial-hero-media">
-        <div className="jyc-editorial-photo-frame">
-          <img src={gallery[0]?.url||FALLBACK_PHOTO} alt={gallery[0]?.caption||'JIIT Youth Club campus moment'} fetchPriority="high"/>
-          <span className="jyc-editorial-photo-label">JYC / 128 · OFFICIAL ARCHIVE</span>
-          <span className="jyc-editorial-photo-index">01</span>
-        </div>
-        <div className="jyc-editorial-photo-note"><b>REAL PEOPLE.</b><span>REAL CAMPUS MOMENTS.</span></div>
-      </div>
-    </section>
+ return <main className="jyc-editorial-home">
+  <section id="hero" className="jyc-v1-hero" aria-labelledby="jyc-v1-title">
+   <div className="jyc-v1-hero-copy">
+    <div className="jyc-v1-brand-row">
+     <img src="/jyc-logo-official.webp" alt="JIIT Youth Club 128" className="jyc-v1-logo" onError={e=>{e.currentTarget.src='/jyc-logo-circle.png'}}/>
+     <div><b>JIIT YOUTH CLUB 128</b><span>JIIT WISH TOWN CAMPUS · SECTOR 128 · NOIDA</span></div>
+    </div>
+    <span className="jyc-v1-kicker">STUDENT-LED · CAMPUS COMMUNITY</span>
+    <h1 id="jyc-v1-title"><span>The Voice.</span><span>The Talent.</span><em>The Spirit of JIIT.</em></h1>
+    <p>JYC is the student-led coordinating body that brings communities, events, creativity, technology, sport and campus experiences together at JIIT 128.</p>
+    <div className="jyc-v1-actions">
+     <button className="jyc-v1-btn primary" onClick={()=>nav('/events')}>Explore Events <span>↗</span></button>
+     <button className="jyc-v1-btn" onClick={()=>nav('/join-jyc')}>Join JYC / Get Involved <span>→</span></button>
+     <button className="jyc-v1-text-btn" onClick={()=>nav('/clubs')}>View Clubs ↗</button>
+    </div>
+    <div className="jyc-v1-proof"><span><b>01</b> VOICE</span><span><b>02</b> TALENT</span><span><b>03</b> SPIRIT</span></div>
+   </div>
+   <div className="jyc-v1-hero-media">
+    <div className="jyc-v1-hero-photo">
+     <img src={gallery[0]?.url||FALLBACK_PHOTO} alt={gallery[0]?.caption||'JIIT Youth Club campus moment'} fetchPriority="high"/>
+     <div className="jyc-v1-photo-overlay"/>
+     <span className="jyc-v1-photo-credit">JYC 128 · OFFICIAL ARCHIVE</span>
+     <span className="jyc-v1-photo-index">01 / CAMPUS</span>
+    </div>
+    <div className="jyc-v1-photo-caption"><b>REAL PEOPLE.</b><span>REAL CAMPUS MOMENTS.</span></div>
+   </div>
+  </section>
 
-    {data?.announcement?.on&&data?.announcement?.text&&<section className="jyc-editorial-announcement" aria-label="JYC announcement"><b>JYC NOW</b><p>{data.announcement.text}</p>{data.announcement.link&&<a href={data.announcement.link}>Open ↗</a>}</section>}
+  <section className="jyc-v1-stat-strip" aria-label="JYC at a glance">
+   {stats.map((s,i)=><article key={s.label}><span>0{i+1}</span><strong>{s.value}+</strong><small>{s.label}</small></article>)}
+  </section>
 
-    <JYCNowStrip limit={3}/>
-    <JYCSpotlight data={data}/>
+  {data?.announcement?.on&&data?.announcement?.text&&<section className="jyc-v1-live-notice" aria-label="JYC announcement"><b>JYC NOW</b><p>{data.announcement.text}</p>{data.announcement.link&&<a href={externalUrl(data.announcement.link)||data.announcement.link}>Open ↗</a>}</section>}
 
-    <section className="jyc-editorial-section jyc-editorial-purpose editorial-reveal" aria-labelledby="jyc-purpose-title">
-      <div className="jyc-editorial-section-head">
-        <div><span className="jyc-editorial-eyebrow">WHAT JYC DOES</span><h2 id="jyc-purpose-title">A student-governed campus<br/><em>with room to belong.</em></h2></div>
-        <div className="jyc-editorial-head-copy"><p>The supplied JYC orientation material describes JYC as a student-governed organisation that gives students a platform to display their talents, organises inter- and intra-institutional activities, and helps first-year students acclimatise to campus life.</p></div>
-      </div>
-      <div className="jyc-editorial-purpose-grid">
-        {[
-          ['01','Discover','A platform for students to display talent, interests and creativity.'],
-          ['02','Experience','Inter- and intra-institutional activities that bring the campus together.'],
-          ['03','Belong','Communities across Cultural, Literary, Technical, Creative and Sports.'],
-          ['04','Arrive','A bridge for first-year students finding their place in the campus ecosystem.']
-        ].map(([n,title,copy])=><article key={n} className="jyc-editorial-purpose-card"><span>{n}</span><h3>{title}</h3><p>{copy}</p></article>)}
-      </div>
-    </section>
+  <JYCNowStrip limit={3}/>
+  <JYCSpotlight data={data}/>
 
-    <section className="jyc-editorial-section jyc-editorial-families editorial-reveal" aria-labelledby="jyc-families-title">
-      <div className="jyc-editorial-section-head">
-        <div><span className="jyc-editorial-eyebrow">FIND YOUR COMMUNITY</span><h2 id="jyc-families-title">Five families.<br/><em>Twenty-three communities.</em></h2></div>
-        <div className="jyc-editorial-head-copy"><p>The supplied JYC orientation material groups the ecosystem into Cultural, Technical, Creative, Literary and Sports communities.</p><button onClick={()=>nav('/clubs')}>Open the full directory →</button></div>
+  <section id="events" className="jyc-v1-section jyc-v1-featured-events editorial-reveal" aria-labelledby="jyc-featured-events-title">
+   <div className="jyc-v1-section-head">
+    <div><span className="jyc-v1-eyebrow">FEATURED / UPCOMING EVENTS</span><h2 id="jyc-featured-events-title">What’s happening<br/><em>at JYC.</em></h2><p>Find the next experiences, see who is organising them and move directly to the official event record.</p></div>
+    <button className="jyc-v1-link" onClick={()=>nav('/events')}>View all events →</button>
+   </div>
+   {upcoming.length?<div className="jyc-v1-event-grid">{upcoming.map((event,index)=>{
+    const status=eventStatus(event);
+    const registration=externalUrl(event.registrationUrl);
+    return <article className="jyc-v1-event-card" key={event.id||event.title}>
+     <button className="jyc-v1-event-main" onClick={()=>nav('/events/'+slug(event.title))} aria-label={'View '+event.title}>
+      <div className="jyc-v1-event-image"><img src={eventMedia(event,index)} alt="" loading="lazy"/><span>0{index+1}</span></div>
+      <div className="jyc-v1-event-body">
+       <div className="jyc-v1-event-meta"><span>{event.eventType||'JYC EXPERIENCE'}</span><b className={'status-'+status.tone}>{status.label}</b></div>
+       <h3>{event.title}</h3>
+       <p>{event.description||'Explore the official JYC event record.'}</p>
+       <dl><div><dt>DATE & TIME</dt><dd>{formatDate(event.date)} · {event.start||'Time TBA'}</dd></div><div><dt>VENUE</dt><dd>{event.venue||'Venue TBA'}</dd></div><div><dt>ORGANISED BY</dt><dd>{event.club||'JYC'}</dd></div></dl>
       </div>
-      <div className="jyc-editorial-family-tabs" role="tablist" aria-label="JYC community families">
-        <button className={activeFamily==='All'?'active':''} onClick={()=>setActiveFamily('All')}>All</button>
-        {JYC_HUB_FAMILIES.map(f=><button key={f} className={activeFamily===f?'active':''} onClick={()=>setActiveFamily(f)}>{f}</button>)}
-      </div>
-      <div className="jyc-editorial-family-grid">
-        {visibleFamilies.map((group,index)=><article className="jyc-editorial-family" key={group.family}>
-          <div className="jyc-editorial-family-media"><img src={hubMedia(group.hubs[0]?.name,index)} alt={group.family+' JYC community'} loading="lazy"/><span>0{index+1}</span></div>
-          <div className="jyc-editorial-family-copy">
-            <span className="jyc-editorial-eyebrow">{group.family}</span>
-            <h3>{group.hubs.length} communities</h3>
-            <p>{group.hubs.slice(0,4).map(x=>x.name).join(' · ')}</p>
-            <button onClick={()=>nav('/clubs')}>Explore {group.family} →</button>
-          </div>
-        </article>)}
-      </div>
-    </section>
+     </button>
+     <div className="jyc-v1-event-footer">
+      <button onClick={()=>nav('/events/'+slug(event.title))}>View event →</button>
+      {registration?<a href={registration} target="_blank" rel="noopener noreferrer">Register Now ↗</a>:<button onClick={()=>nav('/events/'+slug(event.title))}>{status.label==='Coming Soon'?'Details →':'Open record →'}</button>}
+     </div>
+    </article>
+   })}</div>:<div className="jyc-v1-empty">No published upcoming events are currently available.</div>}
+  </section>
 
-    <section className="jyc-editorial-section jyc-editorial-events editorial-reveal" aria-labelledby="jyc-events-title">
-      <div className="jyc-editorial-section-head">
-        <div><span className="jyc-editorial-eyebrow">WHAT'S NEXT</span><h2 id="jyc-events-title">Events with a reason<br/><em>to show up.</em></h2></div>
-        <button className="jyc-editorial-head-link" onClick={()=>nav('/events')}>View all events →</button>
-      </div>
-      {upcoming.length?<div className="jyc-editorial-event-list">{upcoming.map((event,index)=><button className="jyc-editorial-event" key={event.id||event.title} onClick={()=>nav('/events/'+String(event.title||event.id).toLowerCase().replace(/[^a-z0-9]+/g,'-'))}>
-        <span className="event-no">0{index+1}</span>
-        <span className="event-date">{formatDate(event.date)}</span>
-        <span className="event-photo"><img src={eventMedia(event,index)} alt="" loading="lazy"/></span>
-        <span className="event-copy"><small>{event.club||'JYC'} · {event.eventType||'JYC EXPERIENCE'}</small><strong>{event.title}</strong><em>{event.venue||'Venue TBA'}{event.start?' · '+event.start:''}</em></span>
-        <span className="event-arrow">↗</span>
-      </button>)}</div>:<div className="jyc-editorial-empty">No published upcoming experiences are currently available.</div>}
-    </section>
+  <section id="about" className="jyc-v1-section jyc-v1-about editorial-reveal" aria-labelledby="jyc-v1-about-title">
+   <div className="jyc-v1-about-mark"><img src="/jyc-logo-official.webp" alt="JYC 128"/></div>
+   <div><span className="jyc-v1-eyebrow">ABOUT JYC</span><h2 id="jyc-v1-about-title">A student-governed organisation with room to <em>participate, create, lead and belong.</em></h2><p>JYC gives students a platform to display their talents, organises inter- and intra-institutional activities, and helps first-year students acclimatise to campus life.</p><button className="jyc-v1-link" onClick={()=>nav('/about')}>Read about JYC →</button></div>
+  </section>
 
-    <FlagshipExperience data={data}/>
+  <section id="clubs" className="jyc-v1-section jyc-v1-families editorial-reveal" aria-labelledby="jyc-v1-families-title">
+   <div className="jyc-v1-section-head">
+    <div><span className="jyc-v1-eyebrow">CLUBS & COMMUNITIES</span><h2 id="jyc-v1-families-title">Find your <em>community.</em></h2><p>Explore the five community families documented in the JYC orientation material.</p></div>
+    <button className="jyc-v1-link" onClick={()=>nav('/clubs')}>View full directory →</button>
+   </div>
+   <div className="jyc-v1-family-tabs" role="tablist" aria-label="JYC community families">
+    <button className={activeFamily==='All'?'active':''} onClick={()=>setActiveFamily('All')}>All</button>
+    {JYC_HUB_FAMILIES.map(f=><button key={f} className={activeFamily===f?'active':''} onClick={()=>setActiveFamily(f)}>{f}</button>)}
+   </div>
+   <div className="jyc-v1-family-grid">{visibleFamilies.map((group,index)=><article className="jyc-v1-family-card" key={group.family}>
+    <button onClick={()=>nav('/clubs')} className="jyc-v1-family-media"><img src={hubMedia(group.hubs[0]?.name,index)} alt={group.family+' JYC community'} loading="lazy"/><span>0{index+1}</span></button>
+    <div className="jyc-v1-family-copy"><span className="jyc-v1-eyebrow">{group.family}</span><h3>{group.hubs.length} communities</h3><p>{group.hubs.slice(0,4).map(x=>x.name).join(' · ')}</p><button onClick={()=>nav('/clubs')}>Explore {group.family} →</button></div>
+   </article>)}</div>
+  </section>
 
-    <section className="jyc-editorial-section jyc-editorial-archive editorial-reveal" aria-labelledby="jyc-archive-title">
-      <div className="jyc-editorial-section-head">
-        <div><span className="jyc-editorial-eyebrow">THE LIVING ARCHIVE</span><h2 id="jyc-archive-title">Don't just browse JYC.<br/><em>Remember it.</em></h2></div>
-        <div className="jyc-editorial-head-copy"><p>Real photography turns the archive into a record of people, stages, teams, workshops and campus life.</p><button onClick={()=>nav('/gallery')}>Open the full gallery →</button></div>
-      </div>
-      <div className="jyc-editorial-mosaic">
-        {gallery.slice(0,7).map((g,index)=><button key={g.id||index} className={'archive-photo archive-photo-'+index} onClick={()=>nav('/gallery')} aria-label={'Open JYC gallery: '+(g.caption||g.title||'archive photo')}>
-          <img src={g.url} alt={g.caption||g.title||'JIIT Youth Club archive photograph'} loading={index<3?'eager':'lazy'}/>
-          <span>{g.association||g.title||'JYC Archive'}</span>
-        </button>)}
-      </div>
-    </section>
+  <section id="activities" className="jyc-v1-section jyc-v1-activities editorial-reveal" aria-labelledby="jyc-v1-activities-title">
+   <div className="jyc-v1-section-head">
+    <div><span className="jyc-v1-eyebrow">WHAT JYC DOES</span><h2 id="jyc-v1-activities-title">More than clubs.<br/><em>A campus in motion.</em></h2></div>
+    <p className="jyc-v1-head-note">From culture and sport to technical communities, outreach, workshops and competitions, JYC creates places for students to participate.</p>
+   </div>
+   <div className="jyc-v1-activity-grid">{activities.map((activity,index)=><article className="jyc-v1-activity-card" key={activity.title}>
+    <button className="jyc-v1-activity-image" onClick={()=>nav(activity.link||'/clubs')}><img src={activityPhoto(activity,index,gallery)} alt="" loading="lazy"/><span>0{index+1}</span></button>
+    <div><h3>{activity.title}</h3><p>{activity.text}</p><button onClick={()=>nav(activity.link||'/clubs')}>Explore →</button></div>
+   </article>)}</div>
+  </section>
 
-    <PhotoChapters/>\n\n    <section className="jyc-editorial-section jyc-editorial-people editorial-reveal" aria-labelledby="jyc-people-title">
-      <div className="jyc-editorial-section-head">
-        <div><span className="jyc-editorial-eyebrow">THE PEOPLE</span><h2 id="jyc-people-title">The campus is made<br/><em>by people.</em></h2></div>
-        <button className="jyc-editorial-head-link" onClick={()=>nav('/team')}>Meet the team →</button>
-      </div>
-      <div className="jyc-editorial-people-grid">
-        {team.map((member,index)=><article key={member.id||index}><div className="person-photo"><img src={member.photo||member.image||TEAM_PHOTOS[String(member.name||'').trim().toLowerCase()]||'/jyc-logo-official.webp'} alt={member.name||'JYC team member'} loading="lazy"/></div><div><small>{member.role||member.position||'JYC Team'}</small><h3>{member.name||'JYC Team Member'}</h3></div></article>)}
-      </div>
-    </section>
+  <section className="jyc-v1-section jyc-v1-updates editorial-reveal" aria-labelledby="jyc-v1-updates-title">
+   <div className="jyc-v1-section-head">
+    <div><span className="jyc-v1-eyebrow">LATEST UPDATES</span><h2 id="jyc-v1-updates-title">Know what needs<br/><em>your attention.</em></h2></div>
+    <button className="jyc-v1-link" onClick={()=>nav('/announcements')}>View announcements →</button>
+   </div>
+   {updates.length?<div className="jyc-v1-update-list">{updates.map((item,index)=><button key={item.title+index} onClick={()=>nav(item.link?.startsWith('/')?item.link:'/announcements')}><span>{String(index+1).padStart(2,'0')}</span><small>{item.kind}</small><strong>{item.title}</strong><p>{item.text}</p><b>Open →</b></button>)}</div>:<div className="jyc-v1-empty">No new public announcements are currently published.</div>}
+  </section>
 
-    <section className="jyc-editorial-final">
-      <div><span className="jyc-editorial-eyebrow">ONE CAMPUS · MANY WAYS TO BELONG</span><h2>Find your people.<br/><em>Make something happen.</em></h2></div>
-      <div><p>Explore the communities, events and memories that make JIIT 128 feel like a campus.</p><button className="jyc-editorial-btn" onClick={()=>nav('/clubs')}>Start exploring ↗</button></div>
-    </section>
-  </main>;
+  <FlagshipExperience data={data}/>
+
+  <section id="moments" className="jyc-v1-section jyc-v1-gallery editorial-reveal" aria-labelledby="jyc-v1-gallery-title">
+   <div className="jyc-v1-section-head">
+    <div><span className="jyc-v1-eyebrow">GALLERY · MEMORIES</span><h2 id="jyc-v1-gallery-title">Campus moments,<br/><em>kept visible.</em></h2><p>Browse published JYC photography by event, community and year.</p></div>
+    <button className="jyc-v1-link" onClick={()=>nav('/gallery')}>Open full gallery →</button>
+   </div>
+   <div className="jyc-v1-gallery-mosaic">{gallery.slice(0,9).map((g,index)=><button key={g.id||index} className={'jyc-v1-gallery-photo gallery-photo-'+index} onClick={()=>nav('/gallery')} aria-label={'Open JYC gallery: '+(g.caption||g.title||'archive photo')}><img src={g.url} alt={g.caption||g.title||'JIIT Youth Club archive photograph'} loading={index<3?'eager':'lazy'}/><span>{g.association||g.title||'JYC Archive'}</span></button>)}</div>
+  </section>
+
+  <PhotoChapters/>
+
+  <section id="team" className="jyc-v1-section jyc-v1-team editorial-reveal" aria-labelledby="jyc-v1-team-title">
+   <div className="jyc-v1-section-head"><div><span className="jyc-v1-eyebrow">LEADERSHIP</span><h2 id="jyc-v1-team-title">Meet the people<br/><em>behind JYC.</em></h2><p>Faculty guidance, student leadership and core responsibilities form the people layer behind the ecosystem.</p></div><button className="jyc-v1-link" onClick={()=>nav('/team')}>Meet the full team →</button></div>
+   <div className="jyc-v1-team-grid">{team.length?team.map((member,index)=><button key={member.id||index} className="jyc-v1-person" onClick={()=>nav('/team')}><div><img src={member.photo||member.image||TEAM_PHOTOS[String(member.name||'').trim().toLowerCase()]||'/jyc-logo-official.webp'} alt={member.name||'JYC team member'} loading="lazy"/></div><small>{member.role||member.position||'JYC Team'}</small><strong>{member.name||'JYC Team Member'}</strong></button>):<div className="jyc-v1-empty">Official team profiles will appear here when JYC publishes them.</div>}</div>
+  </section>
+
+  <section id="achievements" className="jyc-v1-impact editorial-reveal" aria-labelledby="jyc-v1-impact-title">
+   <div><span className="jyc-v1-eyebrow">HIGHLIGHTS · IMPACT</span><h2 id="jyc-v1-impact-title">Built by students.<br/><em>Remembered by campus.</em></h2><p>Published achievements and milestones are kept source-first. The public record currently includes an SIH Finalist achievement from supplied JYC material.</p><div className="jyc-v1-impact-actions"><button className="jyc-v1-btn primary" onClick={()=>nav('/achievements')}>View achievements →</button><button className="jyc-v1-btn" onClick={()=>nav('/archive')}>Open archive</button></div></div>
+   <div className="jyc-v1-impact-card"><span>01 · WALL OF FAME</span><strong>SIH Finalist</strong><p>Recorded in the supplied JYC hub material. New outcomes should be published with their event, year and supporting source.</p></div>
+  </section>
+
+  <section className="jyc-v1-social editorial-reveal" aria-labelledby="jyc-v1-social-title">
+   <div><span className="jyc-v1-eyebrow">FOLLOW JYC</span><h2 id="jyc-v1-social-title">The website is the source of truth.<br/><em>Social keeps you close.</em></h2><p>Follow official channels for timely updates without making the website dependent on a social feed.</p></div>
+   <div className="jyc-v1-social-links">
+    <a href={JYC_CONTACTS.instagram} target="_blank" rel="noopener noreferrer"><span>01</span><strong>Instagram</strong><small>@jiityouthclub ↗</small></a>
+    <a href={JYC_CONTACTS.linkedin} target="_blank" rel="noopener noreferrer"><span>02</span><strong>LinkedIn</strong><small>JIIT Youth Club ↗</small></a>
+    <a href={JYC_CONTACTS.whatsapp} target="_blank" rel="noopener noreferrer"><span>03</span><strong>WhatsApp</strong><small>JYC Community ↗</small></a>
+   </div>
+  </section>
+
+  <section className="jyc-v1-final">
+   <div><span className="jyc-v1-eyebrow">JYC 128 · OFFICIAL PUBLIC WEBSITE</span><h2>Different roles.<br/><em>Different communities.<br/>One JYC.</em></h2></div>
+   <div><p>Explore the organisation, find a community, see what is happening and keep the campus memories close.</p><div className="jyc-v1-final-actions"><button className="jyc-v1-btn light" onClick={()=>nav('/clubs')}>View Clubs →</button><button className="jyc-v1-btn outline-light" onClick={()=>nav('/join-jyc')}>Join JYC · Coming Soon</button><button className="jyc-v1-text-btn light-text" onClick={()=>nav('/contact')}>Contact JYC ↗</button></div></div>
+  </section>
+ </main>;
 }
