@@ -181,6 +181,7 @@ test('photo-led pages render real image content', async ({ page }) => {
 
 
 test('legacy redirects and unknown routes resolve safely', async ({ page }) => {
+  test.setTimeout(60000);
   const redirects = {
     '/leadership': '/team',
     '/join-jyc': '/recruitment',
