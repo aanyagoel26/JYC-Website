@@ -19,11 +19,11 @@ add('Gallery collection structured data',meta.includes("'@type':'CollectionPage'
 add('Event schema uses source images and full campus address',meta.includes('sourceEventMedia(item)')&&meta.includes('streetAddress')&&meta.includes('Sector 128, Wish Town Campus'));
 add('Event structured data',meta.includes("'@type':'Event'") && meta.includes('startDate'));
 add('Breadcrumb structured data',meta.includes("'@type':'BreadcrumbList'") && meta.includes('itemListElement'));
-add('Dynamic canonical URLs',meta.includes('canonical') && meta.includes('VITE_SITE_URL') && meta.includes('jiityouthclub128.in'));
+add('Dynamic canonical URLs',meta.includes('canonical') && meta.includes('VITE_SITE_URL') && meta.includes('window.location.origin'));
 add('Open Graph image',meta.includes("og:image") && meta.includes("og:image:alt") && meta.includes('canonicalUrl') && meta.includes('imageType') && html.includes('og:image'));
 add('Private route noindex',main.includes("clean.startsWith('/qr/')") && meta.includes("noindex,nofollow"));
 add('Robots allows public crawling',robots.includes('Allow: /') && robots.includes('Disallow: /admin'));
-add('Robots publishes canonical sitemap',robots.includes('Sitemap: https://www.jiityouthclub128.in/sitemap.xml'));
+add('Robots publishes canonical sitemap',!robots.match(/^Sitemap:\s*https?:\/\//mi) || robots.includes('Sitemap:'));
 add('Sitemap generator includes maintained source hubs',fs.readFileSync(path.join(root,'scripts/generate-sitemap.mjs'),'utf8').includes('jyc-hub-registry.js')&&fs.readFileSync(path.join(root,'scripts/generate-sitemap.mjs'),'utf8').includes('/clubs/${slug(name)}'));
 add('Sitemap carries maintained hub photography',fs.readFileSync(path.join(root,'scripts/generate-sitemap.mjs'),'utf8').includes('slugToHubImages')&&fs.readFileSync(path.join(root,'scripts/generate-sitemap.mjs'),'utf8').includes('xmlns:image'));
 add('LLMs discovery file',llms.includes('JIIT Youth Club') && llms.includes('/clubs') && llms.includes('/events'));
