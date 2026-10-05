@@ -10,7 +10,7 @@ const checks=[
  ['media taxonomy exports manifest builder',source.includes('export function buildJycMediaManifest')],
  ['event page imports source event media',main.includes('sourceEventMedia')],
  ['event page renders visual record',main.includes('event-source-gallery')],
- ['event gallery preserves source page context',main.includes('Source page')],
+ ['event gallery preserves source provenance context',main.includes('sourceEventMedia(e)')&&main.includes('source photography connected to this experience')&&source.includes('sourceLabel:')&&source.includes('sourceType:')],
  ['event gallery is responsive',css.includes('.event-source-gallery-grid')],
  ['source archive remains deduplicated',source.includes('const seen=new Set()')],
  ['source media avoids synthetic imagery',source.includes('SOURCE_GALLERY')],
