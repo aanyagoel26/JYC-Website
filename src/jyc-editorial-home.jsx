@@ -18,7 +18,7 @@ const TEAM_PHOTOS={
  'asmi srivastava':'/assets/team/campaign/asmi-srivastava.webp',
  'juhi hatuka':'/assets/team/campaign/juhi-hatuka.webp',
  'pratik kumar':'/assets/team/campaign/pratik-kumar.webp',
- 'divye bajaj':'/assets/team/campaign/divye-bajaj.webp',
+ 'divye bajaj':'/assets/team/divye-bajaj.webp',
  'revant srivastava':'/assets/team/campaign/revant-srivastava.webp',
  'aradhyaa singh':'/assets/team/campaign/aradhyaa-singh.webp',
  'vansh mahajan':'/assets/team/campaign/vansh-mahajan.webp',
