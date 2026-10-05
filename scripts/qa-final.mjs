@@ -17,7 +17,7 @@ const checks=[
  ['detail canonical URLs use slugs',main.includes('const canonicalPath=club?`/clubs/${slug(club.name)}`')&&main.includes('`/events/${slug(event.title)}'),],
  ['breadcrumb styling exists',main.includes('className="visible-breadcrumbs reveal"')],
  ['SEO topic link styling exists',main.includes('.search-topic-links')],
- ['service worker cache matches V56.9 release',fs.readFileSync(path.join(root,'public/sw.js'),'utf8').includes('jyc-cache-v56-10-0')],
+ ['service worker cache matches V56.10 release',fs.readFileSync(path.join(root,'public/sw.js'),'utf8').includes('jyc-cache-v56-10-0')],
  ['footer gates Fests by fest mode',main.includes("isFestMode(data)&&<button onClick={()=>nav('/fests')}>Fests</button>")],
  ['club logo alt text is descriptive',main.includes('alt={\`\${c.name} logo\`}'),],
  ['homepage does not expose gallery image count as a hero metric',!main.includes('Published gallery images')&&!main.includes('gallery memories')],
