@@ -419,7 +419,7 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
  if(clean==='/')return <>{schema}<Home data={data}/></>;
  if(clean==='/history')return <><JYCHistory data={data}/></>;
  if(clean==='/about')return <>{schema}<About data={data}/></>;if(clean==='/clubs')return <>{schema}<Clubs data={data}/></>;if(club)return <>{schema}<ClubDetail data={data} id={slugId} virtualName={hubKey||undefined}/></>;
- if(clean==='/events')return <>{schema}<Events data={data}/></>;if(clean==='/fests')return isFestMode(data)?<>{schema}<FestsPage data={data}/>:<Navigate to="/events" replace/>;if(event&&parts[2]==='register')return <><RegistrationPage data={data} id={slugId} session={session}/></>;if(event)return <>{schema}<EventDetail data={data} id={slugId} session={session}/></>;
+ if(clean==='/events')return <>{schema}<Events data={data}/></>;if(clean==='/fests')return isFestMode(data)?<>{schema}<FestsPage data={data}/></>:<Navigate to="/events" replace/>;if(event&&parts[2]==='register')return <><RegistrationPage data={data} id={slugId} session={session}/></>;if(event)return <>{schema}<EventDetail data={data} id={slugId} session={session}/></>;
  if(clean==='/gallery')return <>{schema}<Gallery data={data}/></>;if(clean==='/team'||clean==='/leadership')return <>{schema}<Team data={data}/></>;if(clean==='/contact')return <>{schema}<Contact data={data}/></>;if(clean==='/archive')return <ArchivePage data={data}/>;
  if(clean==='/announcements')return <Announcements data={data}/>;
  if(clean==='/updates')return <><JYCNowPage data={data}/></>;
