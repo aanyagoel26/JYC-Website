@@ -4,6 +4,7 @@ import {JYC_HUB_CONTENT,JYC_HUB_FAMILIES} from './v21-hub-content.js';
 import {JYC_HUB_SOURCE_REGISTRY,JYC_HUB_SOURCE_STATUS,JYC_HUB_VERIFIED_CURRENT,JYC_HUB_SOURCE_ONLY} from './jyc-hub-registry.js';
 import {sourceHubMedia,canonicalHubName,JYC_SOURCE_ARCHIVE_PHOTO_ITEMS} from './jyc-source-media.js';
 import {JYC_SOURCE_ARCHIVE_STATS} from './jyc-source-archive.js';
+import {LivingPhoto} from './jyc-living-photo.jsx';
 
 const ROUTES=[
  {id:'build',label:'BUILD',kicker:'TECHNICAL · AI · ROBOTICS',text:'Build things that work. Find coding, robotics, AI, open-source and innovation communities.',families:['Technical'],focus:['AI','Robotics','Open Source','Programming','Innovation','Cybersecurity'],accent:'#8d6b42'},
@@ -65,54 +66,26 @@ export function ChooseYourRoute({data}){
 
 export function PhotoStory({data}){
  const nav=useNavigate();
- const [active,setActive]=useState(0);
- const [autoPlay,setAutoPlay]=useState(true);
- const [isHovering,setIsHovering]=useState(false);
  const items=useMemo(()=>{
   const published=(Array.isArray(data?.gallery)?data.gallery:[]).filter(g=>g?.url&&g?.published!==false);
-  const sourceBuckets=JYC_HUB_SOURCE_REGISTRY.map(meta=>sourceHubMedia(meta.name).photoItems.map((item,i)=>({id:`source-${meta.name}-${i}`,url:item.url,association:meta.name,year:item.year||'',caption:item.caption||item.title||`${meta.name} · source photography`,alt:item.alt||item.caption||`${meta.name} supplied JYC source photograph`,published:true,mediaKind:'photo',sourceLabel:item.sourceLabel||'JYC supplied hub archive'}))).filter(bucket=>bucket.length); 
-  const sourcePhotos=[];
-  const maxSourceDepth=Math.max(0,...sourceBuckets.map(bucket=>bucket.length));
-  for(let depth=0;depth<maxSourceDepth;depth++) sourceBuckets.forEach(bucket=>{if(bucket[depth])sourcePhotos.push(bucket[depth]);});
+  const sourceBuckets=JYC_HUB_SOURCE_REGISTRY.map(meta=>sourceHubMedia(meta.name).photoItems.map((item,i)=>({
+   id:`source-${meta.name}-${i}`,url:item.url,association:meta.name,year:item.year||'',
+   caption:item.caption||item.title||`${meta.name} · source photography`,
+   alt:item.alt||item.caption||`${meta.name} supplied JYC source photograph`,
+   published:true,mediaKind:'photo',sourceLabel:item.sourceLabel||'JYC supplied hub archive',family:meta.family||''
+  }))).filter(bucket=>bucket.length);
+  const sourcePhotos=[]; const maxSourceDepth=Math.max(0,...sourceBuckets.map(bucket=>bucket.length));
+  for(let depth=0;depth<maxSourceDepth;depth++)sourceBuckets.forEach(bucket=>{if(bucket[depth])sourcePhotos.push(bucket[depth])});
   const raw=[...published,...sourcePhotos,...JYC_SOURCE_ARCHIVE_PHOTO_ITEMS];
   const preferred=[...raw.filter(g=>/Converge|Dron-O-War|Ebullience|JAI|JYC Archive/i.test(String(g.association||''))),...raw];
   const seen=new Set();
-  return preferred.filter(g=>{const key=g.id||g.url;if(seen.has(key))return false;seen.add(key);return true});
+  return preferred.filter(g=>{const key=String(g.url||g.id||'');if(!key||seen.has(key))return false;seen.add(key);return true});
  },[data?.gallery]);
- useEffect(()=>{
-  if(!items.length)return undefined;
-  const next=items[(active+1)%items.length];
-  if(!next?.url)return undefined;
-  const preload=new Image();
-  preload.decoding='async';
-  preload.src=next.url;
-  return ()=>{preload.onload=null;preload.onerror=null;};
- },[active,items]);
- useEffect(()=>{
-  if(!autoPlay||isHovering||items.length<2)return undefined;
-  const timer=window.setInterval(()=>setActive(index=>(index+1)%items.length),5200);
-  return ()=>window.clearInterval(timer);
- },[autoPlay,isHovering,items.length]);
  if(!items.length)return null;
- const safeActive=Math.min(active,items.length-1);
- const current=items[safeActive];
- const indexWidth=Math.max(2,String(items.length).length);
- const railRadius=5;
- const railWindow=railRadius*2+1;
- const railStart=Math.max(0,Math.min(safeActive-railRadius,items.length-railWindow));
- const railItems=items.slice(railStart,railStart+railWindow);
- const selectPhoto=i=>setActive(i);
  return <section id="photo-story" className="section jyc-photo-story-section reveal">
-  <div className="jyc-photo-story-head"><div><span className="eyebrow">PHOTO STORY · JYC ARCHIVE</span><h2>Let the photographs tell the story.</h2><p>Real JYC media becomes the narrative layer: event, people, place, performance and work. The five supplied volumes contain 872 raster image assets plus 1 SVG across 873 raw archive files, reconciled to 813 unique binary hashes after exact-duplicate reconciliation; the public layer only exposes source-backed media with provenance.</p></div><button type="button" className="reference-view-all" onClick={()=>nav('/gallery')}>Open visual archive ↗</button></div>
-  <div className="jyc-photo-story" onMouseEnter={()=>setIsHovering(true)} onMouseLeave={()=>setIsHovering(false)}>
-   <div className="jyc-photo-story-stage" aria-live="polite">
-    <img key={current.url||safeActive} className="jyc-photo-story-transition" src={current.url} alt={current.alt||current.caption||'JYC visual archive moment'} loading="eager" decoding="async" fetchPriority="high" sizes="(max-width: 620px) calc(100vw - 20px), min(1180px, calc(100vw - 32px))"/>
-    <div className="jyc-photo-story-caption"><span>{String(safeActive+1).padStart(indexWidth,'0')} / {String(items.length).padStart(indexWidth,'0')}</span><div><small>{current.association||'JYC Archive'} · {current.year||'JYC'}</small><strong>{current.caption||'JYC moment'}</strong></div></div>
-    <button type="button" className="jyc-photo-story-autoplay" onClick={()=>setAutoPlay(v=>!v)} aria-pressed={autoPlay} aria-label={autoPlay?'Pause automatic photo transition':'Play automatic photo transition'}>{autoPlay?'Ⅱ':'▶'}</button>
-    <div className="jyc-photo-story-progress" aria-hidden="true"><span style={{width:autoPlay?'100%':((active+1)/items.length*100)+'%'}}/></div>
-   </div>
-   <div className="jyc-photo-story-controls"><label className="jyc-photo-story-scrubber"><span>Browse the full archive</span><input type="range" min="0" max={Math.max(0,items.length-1)} value={safeActive} onChange={e=>selectPhoto(Number(e.target.value))} aria-label="Browse every JYC archive photograph"/><output>{String(safeActive+1).padStart(indexWidth,'0')} / {String(items.length).padStart(indexWidth,'0')}</output></label><div className="jyc-photo-story-rail" aria-label="Nearby photo story moments">{railItems.map((item,offset)=>{const i=railStart+offset;return <button type="button" key={item.id||item.url||i} className={i===safeActive?'active':''} onClick={()=>selectPhoto(i)} aria-label={'Open archive photo '+(i+1)}><span>{String(i+1).padStart(indexWidth,'0')}</span><img src={item.url} alt="" loading="lazy" decoding="async" sizes="112px"/><b>{(item.caption||item.association||'JYC moment').split(' · ')[1]||item.association||'JYC moment'}</b></button>})}</div></div>
-  </div>
+  <div className="jyc-photo-story-head"><div><span className="eyebrow">PHOTO STORY · JYC ARCHIVE</span><h2>Let the photographs tell the story.</h2><p>Real JYC media becomes the narrative layer: event, people, place, performance and work. The archive stays available without forcing hundreds of images into the first paint.</p></div><button type="button" className="reference-view-all" onClick={()=>nav('/gallery')}>Open visual archive ↗</button></div>
+  <LivingPhoto items={items} seed={0} interval={6000} className="jyc-photo-story-living"/>
+  <div className="jyc-photo-story-footer"><span>{JYC_SOURCE_ARCHIVE_STATS.uniqueImages} unique archive images · related frames rotate automatically</span><button type="button" className="text-link" onClick={()=>nav('/gallery')}>Browse every frame ↗</button></div>
  </section>
 }
 
