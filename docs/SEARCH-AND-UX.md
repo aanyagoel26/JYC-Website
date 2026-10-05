@@ -25,3 +25,10 @@ This means a direct search for a club/event/page name is intentionally placed be
 - `Esc` closes search
 
 The interaction model follows established accessible command-palette patterns: focus stays in the search field, the active item is exposed through `aria-activedescendant`, and keyboard selection is explicit.
+
+
+## Public surface
+
+Search indexes only the public experience: published pages, clubs, events, published team members and published visual records. The staff Control Center is intentionally not surfaced in public navigation or public search; its authenticated route remains reserved for future operational work.
+
+Search metadata includes event type and date so queries such as a competition category or year can reach the correct event before generic shortcuts.
