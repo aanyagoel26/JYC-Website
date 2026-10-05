@@ -19,7 +19,7 @@ const checks=[
  ['media alt metadata exists',source.includes('alt:item.alt||item.caption')],
  ['external media is classified',source.includes('official-external-media')],
  ['gallery uses role filters',gallery.includes("roleLabels")&&gallery.includes('MEDIA TYPE')],
- ['gallery has no unused archive photo import',!gallery.includes('JYC_SOURCE_ARCHIVE_PHOTO_ITEMS')],
+ ['gallery consumes full curated archive photo pool',gallery.includes('JYC_SOURCE_ARCHIVE_PHOTO_ITEMS')&&gallery.includes('...sourceArchivePhotos')],
  ['archive photo policy is content-aware',source.includes('ARCHIVE_PHOTO_EXCLUSIONS')&&source.includes('ARCHIVE_SHOWCASE_PHOTOS')],
  ['complete source archive inventory is wired',source.includes('JYC_SOURCE_ARCHIVE_CATALOG')&&source.includes('JYC_SOURCE_ARCHIVE_STATS')&&archive.includes('sourceAssetFiles":873')&&archive.includes('uniqueBinaryHashes":813')],
 ];
