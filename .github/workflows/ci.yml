@@ -34,6 +34,8 @@ jobs:
       - run: npm run qa
       - run: npm run qa:seo
       - run: npm run build
+      - name: Enforce production performance budget
+        run: node scripts/qa-performance.mjs
 
       - name: Install Playwright Chromium
         run: npx playwright install --with-deps chromium
