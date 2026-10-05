@@ -20,7 +20,7 @@ const checks=[
  ['footer gates Fests by fest mode',main.includes("isFestMode(data)&&<button onClick={()=>nav('/fests')}>Fests</button>")],
  ['club logo alt text is descriptive',main.includes('alt={\`\${c.name} logo\`}'),],
  ['homepage does not expose gallery image count as a hero metric',!main.includes('Published gallery images')&&!main.includes('gallery memories')],
- ['homepage metric counters start at zero and use live values',main.includes('function useCountUp')&&main.includes('setValue(0)')&&main.includes('HeroStats communities={clubs.length}')&&main.includes('useCountUp(communities,active)')&&main.includes('useCountUp(families,active)')&&main.includes('useCountUp(programmes,active)')],
+ ['homepage metric counters start at zero and use live values',main.includes('function useCountUp')&&main.includes('setValue(0)')&&main.includes('HeroStats communities={clubs.length}')&&main.includes('useCountUp(communities,active)')&&main.includes('useCountUp(families,active)')&&main.includes('useCountUp(programmes,active)')&&!main.includes('communities=21')&&!main.includes('families=5,programmes=7')],
  ['reduced-motion count-up resolves directly to the current value',main.includes("prefers-reduced-motion: reduce")&&main.includes('setValue(numeric)')],
  ['native event registration route is reachable',main.includes('RegistrationPage')&&main.includes("parts[2]==='register'")&&!main.includes("parts[2]==='register')return <Navigate")],
  ['legacy event-calendar route redirects to canonical calendar',main.includes("if(clean==='/event-calendar')return <Navigate to=\"/calendar\" replace/>")],
