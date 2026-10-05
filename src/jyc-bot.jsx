@@ -29,8 +29,8 @@ export function JYCBot({data}){
    checkAsset();
   };
   if(customElements?.get('model-viewer')) start();
-  else if('requestIdleCallback' in window) window.requestIdleCallback(start,{timeout:1200});
-  else window.setTimeout(start,900);
+  else if('requestIdleCallback' in window) window.requestIdleCallback(start,{timeout:2600});
+  else window.setTimeout(start,2200);
   return()=>{cancelled=true;window.clearTimeout(motionTimer.current);window.clearTimeout(idleTimer.current)};
  },[]);
  useEffect(()=>{window.clearInterval(idleTimer.current);if(typeof window==='undefined'||window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return undefined;idleTimer.current=window.setInterval(()=>{if(!assistantOpen)runContextAnimation()},11000);return()=>window.clearInterval(idleTimer.current)},[assistantOpen,context]);
