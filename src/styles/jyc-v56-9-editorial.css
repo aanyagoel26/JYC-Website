@@ -696,3 +696,31 @@ html[data-theme="dark"] .public-app .team-card:hover{
 @media (prefers-reduced-motion:reduce){
  .public-app .jyc-webgl-identity{display:none!important}
 }
+
+/* V56.11 · Flagship experience layer
+   Purpose: borrow the JAI site's clarity of hierarchy without turning JYC into an event-only site. */
+.public-app .jyc-flagship-section{padding-top:clamp(54px,7vw,92px)!important;padding-bottom:clamp(54px,7vw,92px)!important}
+.public-app .jyc-flagship-head{display:flex;justify-content:space-between;gap:32px;align-items:flex-end;margin-bottom:28px;padding-bottom:18px;border-bottom:1px solid var(--jyc-editorial-line)}
+.public-app .jyc-flagship-head h2{margin:10px 0 8px;font-size:clamp(42px,6vw,78px)!important;line-height:.92!important;letter-spacing:-.055em!important}
+.public-app .jyc-flagship-head p{max-width:720px;margin:0;font-size:17px;line-height:1.6}
+.public-app .jyc-flagship-date{font-size:11px;font-weight:850;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;color:var(--jyc-editorial-muted)}
+.public-app .jyc-flagship-shell{display:grid;grid-template-columns:minmax(320px,.88fr) minmax(0,1.12fr);background:var(--jyc-editorial-ink);color:var(--jyc-editorial-white);min-height:620px}
+.public-app .jyc-flagship-visual{position:relative;min-height:620px;overflow:hidden;background:#111;display:flex;align-items:center;justify-content:center}
+.public-app .jyc-flagship-visual img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.82) contrast(1.03)}
+.public-app .jyc-flagship-mark{width:100%;height:100%;display:grid;place-items:center;align-content:center;gap:20px;background:radial-gradient(circle at 50% 42%,rgba(191,156,111,.28),transparent 42%),#111}
+.public-app .jyc-flagship-mark img{width:min(48%,260px);height:auto;object-fit:contain}
+.public-app .jyc-flagship-mark span{font-size:10px;letter-spacing:.2em;font-weight:850}
+.public-app .jyc-flagship-visual-label{position:absolute;left:20px;bottom:18px;font-size:10px;letter-spacing:.16em;font-weight:800;color:rgba(255,255,255,.74)}
+.public-app .jyc-flagship-copy{padding:clamp(28px,4vw,54px);display:flex;flex-direction:column;justify-content:center}
+.public-app .jyc-flagship-kicker{display:flex;justify-content:space-between;gap:18px;align-items:center;padding-bottom:16px;border-bottom:1px solid rgba(255,255,255,.16);font-size:10px;letter-spacing:.1em;text-transform:uppercase}
+.public-app .jyc-flagship-kicker span{color:#bf9c6f;font-weight:850}.public-app .jyc-flagship-kicker b{font-weight:700;color:rgba(255,255,255,.58);text-align:right}
+.public-app .jyc-flagship-copy h3{margin:24px 0 28px!important;color:#fff!important;font-size:clamp(24px,3.1vw,42px)!important;line-height:1.04!important;letter-spacing:-.035em!important;max-width:850px}
+.public-app .jyc-flagship-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid rgba(255,255,255,.16);border-bottom:1px solid rgba(255,255,255,.16);margin-bottom:26px}
+.public-app .jyc-flagship-stats span{display:grid;gap:7px;padding:13px 12px;border-right:1px solid rgba(255,255,255,.12);font-size:11px;color:rgba(255,255,255,.72);line-height:1.25}.public-app .jyc-flagship-stats span:last-child{border-right:0}.public-app .jyc-flagship-stats b{font-size:9px;letter-spacing:.12em;color:#bf9c6f}
+.public-app .jyc-flagship-steps{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid rgba(255,255,255,.12)}
+.public-app .jyc-flagship-steps article{display:grid;grid-template-columns:32px 1fr;gap:10px;padding:16px 12px 16px 0;border-bottom:1px solid rgba(255,255,255,.12)}
+.public-app .jyc-flagship-steps article:nth-child(odd){border-right:1px solid rgba(255,255,255,.12);padding-right:18px}.public-app .jyc-flagship-steps article:nth-child(even){padding-left:18px}
+.public-app .jyc-flagship-steps>b{font-size:10px;color:#bf9c6f}.public-app .jyc-flagship-steps strong{font-size:11px;letter-spacing:.1em}.public-app .jyc-flagship-steps p{margin:6px 0 0!important;font-size:13px;line-height:1.45;color:rgba(255,255,255,.6)!important}
+.public-app .jyc-flagship-actions{display:flex;gap:10px;margin-top:26px}.public-app .jyc-flagship-actions .btn{border-color:rgba(255,255,255,.2)!important}.public-app .jyc-flagship-actions .btn:not(.secondary){background:#fff!important;color:#111!important}.public-app .jyc-flagship-actions .btn.secondary{color:#fff!important;border:1px solid rgba(255,255,255,.28)!important;background:transparent!important}
+@media(max-width:900px){.public-app .jyc-flagship-head{align-items:flex-start;flex-direction:column;gap:12px}.public-app .jyc-flagship-date{white-space:normal}.public-app .jyc-flagship-shell{grid-template-columns:1fr}.public-app .jyc-flagship-visual{min-height:52vw;max-height:560px}.public-app .jyc-flagship-copy{padding:28px}.public-app .jyc-flagship-stats{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.public-app .jyc-flagship-head h2{font-size:clamp(38px,13vw,58px)!important}.public-app .jyc-flagship-copy{padding:22px 18px}.public-app .jyc-flagship-kicker{align-items:flex-start;flex-direction:column}.public-app .jyc-flagship-kicker b{text-align:left}.public-app .jyc-flagship-copy h3{font-size:27px!important}.public-app .jyc-flagship-stats{grid-template-columns:1fr 1fr}.public-app .jyc-flagship-steps{grid-template-columns:1fr}.public-app .jyc-flagship-steps article:nth-child(odd){border-right:0;padding-right:0}.public-app .jyc-flagship-steps article:nth-child(even){padding-left:0}.public-app .jyc-flagship-actions{display:grid;grid-template-columns:1fr}.public-app .jyc-flagship-actions .btn{width:100%}}
