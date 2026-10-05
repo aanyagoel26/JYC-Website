@@ -21,6 +21,6 @@ check('no positive tabindex values are introduced',!/tabIndex\s*=\s*\{\s*[1-9]\d
 check('skip link exists',main.includes('SkipLink')&&/className=["']skip-link["']/.test(extras)&&read('index.html').includes('skip-link'));
 check('filter controls expose pressed state',/aria-pressed=\{family===/.test(main)&&/aria-pressed=\{!savedOnly\}/.test(extras)&&/aria-pressed=\{savedOnly\}/.test(extras));
 check('filter groups do not misuse tablist semantics without tabs',!/className="hub-family-row" role="tablist"/.test(main)&&!/className="calendar-mode-tabs" role="tablist"/.test(extras));
+check('campus selector is a button group with pressed state',campus.includes('className="campus-switch" role="group"')&&campus.includes('aria-pressed={campus===x.id}'));
 if(failures.length) process.exit(1);
-console.log('Accessibility contract QA PASS ('+(10-failures.length)+' checks)')checks.push(['campus selector is a button group with pressed state',campus.includes('className="campus-switch" role="group"')&&campus.includes('aria-pressed={campus===x.id}')]);
-;
+console.log('Accessibility contract QA PASS ('+(11-failures.length)+' checks)');
