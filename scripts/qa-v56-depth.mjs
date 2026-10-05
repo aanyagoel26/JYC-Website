@@ -9,9 +9,9 @@ check((registry.match(/status:'brochure-verified'/g)||[]).length===17,'17 brochu
 check((registry.match(/status:'source-material'/g)||[]).length===6,'6 source-material registry entries required');
 check(!registry.includes("verified-current"),'stale verified-current status present');
 check(media.includes('QUALITY_OVERRIDES')&&media.includes('sourceHubMedia'),'source media quality/lookup layer missing');
-check(main.includes('hub-source-photo-strip')&&main.includes('photoItems?.length'),'club source photography rail not wired');
+check(main.includes('club-living-photo')&&main.includes('sourceHubMedia(c.name).photoItems')&&main.includes('LivingPhoto'),'club source photography rail not wired');
 check(source.includes('JYC_SOURCE_ARCHIVE_PHOTO_ITEMS')&&source.match(/mediaKind==='photo'/),'full source-archive photography pool is exposed');
-check(extra.includes('visibleCount')&&extra.includes('Load 60 more'),'large gallery is progressively rendered');
+check(extra.includes('visibleCount')&&extra.includes('setVisibleCount')&&extra.includes('items.slice(0,visibleCount)'),'large gallery is progressively rendered');
 check(main.includes('sourceEventMedia(e)'),'event source-media preference missing');
 check(extra.includes("image:images")&&extra.includes('eventImages.length?eventImages'),'entity JSON-LD image depth missing');
 check(system.includes('--jyc-final-bg: #0f0e11')&&system.includes('--jyc-final-surface: #18161d'),'official dark theme tokens missing');
