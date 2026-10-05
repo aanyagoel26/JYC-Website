@@ -479,6 +479,7 @@ function Navbar({data,admin,theme,setTheme}){
  <header className="nav"><div className="nav-inner">
    <button type="button" className="brand" onClick={()=>{setOpen(false);nav('/')}}><span className="brand-mark"><LogoImage alt="JIIT Youth Club logo"/></span><span>JIIT YOUTH CLUB</span></button>
    <nav className={open?'open':''}>{navButtons}<button className={`nav-more-trigger ${moreOpen?'active':''}`} onClick={()=>{setOpen(false);setMoreOpen(v=>!v)}} aria-expanded={moreOpen}>More <span aria-hidden="true">⌄</span></button></nav>
+   <button className="nav-join-cta" onClick={()=>nav('/join-jyc')}>Join JYC <span>↗</span></button>
    <Theme theme={theme} setTheme={setTheme}/><button className={`hamb ${open?'open':''}`} onClick={()=>setOpen(v=>!v)} type="button" aria-label="Menu" aria-expanded={open}><i/><i/><i/></button>
    {open&&<button className="mobile-nav-scrim" aria-label="Close navigation" onClick={()=>setOpen(false)}/>}<button className="search-trigger" onClick={()=>setSearch(true)} aria-label="Search JYC" title="Search JYC (Ctrl/Cmd + K)"><span className="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg></span><span className="search-label">Search</span><kbd>Ctrl K</kbd></button>
  </div></header>
