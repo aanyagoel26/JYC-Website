@@ -180,3 +180,46 @@ html[data-theme="dark"] .search-modal{background:rgba(24,22,29,.72)!important}
 @keyframes v17DialogIn{from{opacity:0;transform:translateY(8px) scale(.985)}to{opacity:1;transform:none}}
 @media(max-width:600px){.confirm-dialog{padding:22px;border-radius:20px}.confirm-actions{display:grid;grid-template-columns:1fr}.confirm-actions .btn{width:100%}.toast{right:16px;bottom:84px}}
 @media(prefers-reduced-motion:reduce){.confirm-overlay,.confirm-dialog{animation:none}}
+
+/* V58 — campus-portal refinement
+   Utility inspiration from Innovation/CICR: clearer navigation states,
+   stronger mobile ergonomics, less visual noise, and consistent JYC palette. */
+@media(max-width:760px){
+  body{padding-bottom:max(88px,calc(82px + env(safe-area-inset-bottom)))!important}
+  .nav-inner{padding-left:7px!important;padding-right:7px!important}
+  .nav .brand{flex:0 0 48px!important}
+  .nav-inner>nav.open{top:72px!important;max-height:calc(100dvh - 158px)!important}
+  .nav-inner>nav.open button{min-height:50px!important;font-size:13px!important}
+  .mobile-dock{
+    bottom:max(7px,env(safe-area-inset-bottom))!important;
+    min-height:64px!important;height:64px!important;
+    border-color:color-mix(in srgb,var(--accent-gold) 52%,var(--border-tech))!important;
+    background:color-mix(in srgb,var(--bg-card) 94%,transparent)!important;
+    box-shadow:0 12px 38px rgba(0,0,0,.22),inset 0 1px 0 rgba(255,255,255,.38)!important;
+  }
+  .mobile-dock button{min-height:52px!important;height:52px!important}
+  .mobile-dock button.active{
+    background:color-mix(in srgb,var(--accent-gold) 18%,var(--bg-card))!important;
+    color:var(--text-primary)!important;
+    box-shadow:inset 0 -2px 0 var(--accent-gold)!important;
+    transform:none!important;
+  }
+  .mobile-dock button:active{transform:scale(.97)!important}
+  .page{padding-top:24px!important}
+}
+@media(min-width:761px){
+  .nav nav button{min-height:42px}
+  .nav nav button:focus-visible,.search-trigger:focus-visible,.hamb:focus-visible,.theme-toggle:focus-visible{
+    outline:2px solid var(--accent-gold)!important;
+    outline-offset:3px!important;
+  }
+}
+.nav nav button.active{
+  color:var(--text-primary)!important;
+  background:color-mix(in srgb,var(--accent-gold) 10%,transparent)!important;
+}
+.nav nav button.active:after{background:var(--accent-gold)!important}
+.search-trigger{border-color:color-mix(in srgb,var(--accent-gold) 38%,var(--border-tech))!important}
+@media(prefers-reduced-motion:reduce){
+  .mobile-dock button:active{transform:none!important}
+}
