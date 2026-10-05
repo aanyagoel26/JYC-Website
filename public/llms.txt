@@ -2,9 +2,7 @@
 
 JIIT Youth Club 128 is the student-led central coordinating body for major college events, fests and inter-society activities at JIIT Wish Town Campus, Sector 128, Noida.
 
-The public website is the official organisational source for published JYC information. Public search covers published pages, clubs, events, people and visual records; staff publishing tools are intentionally not exposed as a public navigation surface.
-
- identity, leadership, history, clubs and hubs, events, fests, achievements, announcements, gallery/memories, archive, recruitment and contact.
+The public website is the official organisational source for published JYC information. Public search covers published pages, clubs, events, people and visual records; staff publishing tools are intentionally not exposed as a public navigation surface. The public information surface includes identity, leadership, history, clubs and hubs, events, fests, achievements, announcements, gallery/memories, archive, recruitment and contact.
 
 ## Core public pages
 
