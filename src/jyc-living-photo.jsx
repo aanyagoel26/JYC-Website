@@ -68,8 +68,9 @@ function supportsReducedMotion(){
   return typeof window!=='undefined'&&window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 }
 
-function preloadAndDecode(url){
-  return new Promise((resolve,reject)=>{
+function preloadAndDecode(url,cache){
+  if(cache?.has(url))return cache.get(url);
+  const promise=new Promise((resolve,reject)=>{
     if(!url)return reject(new Error('Missing image URL'));
     const img=new Image();
     img.decoding='async';
@@ -78,6 +79,8 @@ function preloadAndDecode(url){
     img.onerror=reject;
     img.src=url;
   });
+  cache?.set(url,promise);
+  return promise;
 }
 
 export function LivingPhoto({items=[],seed=0,interval=6000,className='',altFallback='JYC visual archive moment',onChange}){
@@ -92,6 +95,7 @@ export function LivingPhoto({items=[],seed=0,interval=6000,className='',altFallb
   const historyRef=useRef([]);
   const mountedRef=useRef(true);
   const timerRef=useRef(null);
+  const preloadCacheRef=useRef(new Map());
 
   useEffect(()=>()=>{mountedRef.current=false;if(timerRef.current)clearTimeout(timerRef.current)},[]);
   useEffect(()=>{
@@ -117,7 +121,7 @@ export function LivingPhoto({items=[],seed=0,interval=6000,className='',altFallb
   useEffect(()=>{
     if(!nextCandidate?.url)return;
     let cancelled=false;
-    preloadAndDecode(nextCandidate.url).catch(()=>{if(!cancelled)setError(true)});
+    preloadAndDecode(nextCandidate.url,preloadCacheRef.current).catch(()=>{if(!cancelled)setError(true)});
     return()=>{cancelled=true};
   },[nextCandidate?.url]);
 
@@ -129,7 +133,7 @@ export function LivingPhoto({items=[],seed=0,interval=6000,className='',altFallb
     if(!target?.url)return;
     setReady(false);
     try{
-      await preloadAndDecode(target.url);
+      await preloadAndDecode(target.url,preloadCacheRef.current);
       if(!mountedRef.current)return;
       const targetIndex=sequence.findIndex(x=>x.url===target.url);
       if(targetIndex>=0){setOutgoing(current);historyRef.current=[...historyRef.current,target.url].slice(-6);setIndex(targetIndex);window.setTimeout(()=>mountedRef.current&&setOutgoing(null),700)}
