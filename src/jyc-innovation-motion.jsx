@@ -61,13 +61,16 @@ function setupTilt(){
 
 export function JYCInnovationMotion(){
   useEffect(()=>{
+    const progress=document.querySelector('.jyc-scroll-progress span');
+    const syncProgress=()=>{if(!progress)return;const max=document.documentElement.scrollHeight-window.innerHeight;progress.style.transform=`scaleX(${max>0?window.scrollY/max:0})`};
+    syncProgress(); window.addEventListener('scroll',syncProgress,{passive:true}); window.addEventListener('resize',syncProgress,{passive:true});
     const cleanups=[setupReveal(),setupTilt()];
     const root=document.querySelector('.public-app');
     if(!root)return()=>cleanups.forEach(fn=>fn());
     const refresh=()=>{cleanups[1]?.();cleanups[1]=setupTilt();};
     const observer=new MutationObserver(refresh);
     observer.observe(root,{childList:true,subtree:true});
-    return()=>{observer.disconnect();cleanups.forEach(fn=>fn());};
+    return()=>{window.removeEventListener('scroll',syncProgress);window.removeEventListener('resize',syncProgress);observer.disconnect();cleanups.forEach(fn=>fn());};
   },[]);
   return <div className="jyc-scroll-progress" aria-hidden="true"><span/></div>;
 }
