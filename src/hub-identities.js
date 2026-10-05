@@ -57,6 +57,28 @@ const EVENT_PRESETS={
   'BITBOX':{accent:'#5B6558',motif:'BUILD / DEVELOP',signature:'Developer skills, experimentation and community',traits:['Development','Technology','Community'],shape:'nodes'},
   'Climate Data Hackathon':{accent:'#5C6A55',motif:'DATA / CLIMATE',signature:'Data-driven ideas for environmental challenges',traits:['Data','Climate','Innovation'],shape:'network'},
   'Jaypee Agentic AI':{accent:'#596B66',motif:'AGENTS / AUTONOMY',signature:'Reasoning, tools, multi-agent systems and applied AI',traits:['Agentic AI','Hackathon','Multi-agent'],shape:'network'}
+  'Student Induction Program':{accent:'#746753',motif:'WELCOME / ORIENTATION',signature:'The first chapter of campus life, community and belonging',traits:['Orientation','Community','Belonging'],shape:'path'},
+  'JYC Orientation':{accent:'#6F6653',motif:'WELCOME / JYC',signature:'Meeting the people and communities that shape campus life',traits:['JYC','Orientation','Community'],shape:'path'},
+  'JYC Performances & Auditions':{accent:'#805B4D',motif:'STAGE / AUDITION',signature:'Performance, expression and the first JYC showcase',traits:['Auditions','Performance','Culture'],shape:'stage'},
+  'JYC Function':{accent:'#78634D',motif:'CAMPUS / CELEBRATION',signature:'A JYC campus gathering built around community and performance',traits:['JYC','Culture','Community'],shape:'burst'},
+  'Innovate 4.0':{accent:'#7D6840',motif:'IDEATE / BUILD',signature:'Inter-institute innovation, prototypes and entrepreneurial thinking',traits:['Innovation','Prototype','Competition'],shape:'spark'},
+  'Intra-Institute Sports Week':{accent:'#536A5D',motif:'PLAY / COMPETE',signature:'Campus sport, teamwork and competitive energy',traits:['Sports','Teamwork','Competition'],shape:'court'},
+  "Teacher's Day":{accent:'#75644F',motif:'THANK / CELEBRATE',signature:'A campus celebration of mentors, teachers and community',traits:['Celebration','Community','Gratitude'],shape:'memory'},
+  'Inter-Institute Nukkad Natak':{accent:'#805B4D',motif:'STREET / STORY',signature:'Theatre in public space, social storytelling and expression',traits:['Nukkad Natak','Theatre','Storytelling'],shape:'stage'},
+  'Ethnic Day & Diwali':{accent:'#946844',motif:'TRADITION / LIGHT',signature:'Indian culture, traditional dress, music and campus celebration',traits:['Culture','Tradition','Celebration'],shape:'pattern'},
+  'Inter-Institute Sports Week 2027':{accent:'#536A5D',motif:'SPORT / ARENA',signature:'Inter-institute competition, teamwork and campus representation',traits:['Sports','Competition','Teamwork'],shape:'court'},
+  'Converge 2027':{accent:'#876746',motif:'CAMPUS / CONVERGENCE',signature:'The annual JYC convergence of technology, sport, culture and performance',traits:['Annual Fest','Technical','Cultural'],shape:'converge'},
+  'Inter-Institute Battle of Bands':{accent:'#7A6046',motif:'SOUND / LIVE',signature:'Bands, stagecraft and live campus performance',traits:['Music','Bands','Performance'],shape:'wave'},
+  'Inter-Institute Stage Play':{accent:'#805B4D',motif:'STAGE / STORY',signature:'Theatre, ensemble performance and narrative craft',traits:['Theatre','Drama','Performance'],shape:'stage'},
+  'Farewell 2027':{accent:'#705D50',motif:'MEMORY / MILESTONE',signature:'A final campus chapter shared through stories and performance',traits:['Farewell','Memories','Community'],shape:'memory'},
+  'Jaypee Youth Parliament':{accent:'#765E4E',motif:'DEBATE / DEMOCRACY',signature:'Parliamentary simulation, public speaking and civic dialogue',traits:['Debate','Public Affairs','Speaking'],shape:'quote'},
+  'Extempore':{accent:'#765E4E',motif:'SPEAK / THINK',signature:'Spontaneous speaking, ideas and confident expression',traits:['Speaking','Literary','Expression'],shape:'quote'},
+  'Campus Green':{accent:'#5C6A55',motif:'EARTH / ACTION',signature:'Environmental awareness and responsible campus practice',traits:['Environment','Awareness','Action'],shape:'pattern'},
+  'Scavenger Hunt':{accent:'#6A6250',motif:'CLUES / SOLVE',signature:'Clues, deduction and collaborative problem solving',traits:['Puzzle','Teamwork','Challenge'],shape:'question'},
+  'Microbe Premier League':{accent:'#5C6A55',motif:'SCIENCE / STRATEGY',signature:'Biotechnology, virtual industry and competitive strategy',traits:['Biotechnology','Strategy','Competition'],shape:'network'},
+  'Merge & Sketch':{accent:'#765A4F',motif:'DRAW / CREATE',signature:'Sketching, visual imagination and creative experimentation',traits:['Art','Sketching','Creative'],shape:'brush'},
+  'Conventional Rangoli':{accent:'#8A6849',motif:'PATTERN / CULTURE',signature:'Traditional visual craft, colour and campus expression',traits:['Rangoli','Culture','Art'],shape:'pattern'},
+  'Ebullience 2018':{accent:'#966D4D',motif:'WELCOME / FIRST CHAPTER',signature:'Freshers, stage energy and the beginning of campus life',traits:['Freshers','Culture','Community'],shape:'burst'},
 };
 
 export const JYC_EVENT_IDENTITIES=EVENT_PRESETS;
