@@ -25,7 +25,7 @@ const checks=[
  ['reduced-motion count-up resolves directly to the current value',main.includes("prefers-reduced-motion: reduce")&&main.includes('setValue(numeric)')],
  ['native event registration route is reachable',main.includes('RegistrationPage')&&main.includes("parts[2]==='register'")&&!main.includes("parts[2]==='register')return <Navigate")],['living photo engine uses decoded related transitions',livingPhoto.includes('scoreRelatedPhoto')&&livingPhoto.includes('preloadAndDecode')&&livingPhoto.includes('img.decode')&&livingPhoto.includes('setOutgoing')],
  ['living photo engine respects reduced motion and hidden tabs',livingPhoto.includes('prefers-reduced-motion')&&livingPhoto.includes('visibilitychange')],
- ['gallery defaults to living story mode',extraFeatures.includes("const [viewMode,setViewMode]=useState('story')")&&extraFeatures.includes('LivingPhoto')&&extraFeatures.includes("viewMode==='archive'")],
+ ['gallery defaults to living story mode',fs.readFileSync(path.join(root,'src/extra-features.jsx'),'utf8').includes("const [viewMode,setViewMode]=useState('story')")&&fs.readFileSync(path.join(root,'src/extra-features.jsx'),'utf8').includes('LivingPhoto')&&fs.readFileSync(path.join(root,'src/extra-features.jsx'),'utf8').includes("viewMode==='archive'")],
  
  ['legacy event-calendar route redirects to canonical calendar',main.includes("if(clean==='/event-calendar')return <Navigate to=\"/calendar\" replace/>")],
 ];
