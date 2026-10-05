@@ -344,10 +344,10 @@ function JYCCalendarPage({data}){
  const shift=n=>setMonth(new Date(year,m+n,1));
  return <section className="section page unified-public-page jyc-calendar-page">
   <Breadcrumbs items={[{label:'Event Calendar'}]}/><EcosystemContextRail/>
-  <div className="compact-page-head reveal"><div><span className="eyebrow">JYC EVENT CALENDAR</span><h1>Find the next JYC experience.</h1><p>A calendar for JYC events only. Academic schedules and campus utilities do not live here.</p></div><div className="page-stat-row"><span><b>{events.length}</b> published events</span><span><b>{monthEvents.length}</b> this month</span></div></div>
+  <div className="compact-page-head reveal"><div><span className="eyebrow">JYC EVENT CALENDAR</span><h1>Find the next JYC experience.</h1><p>A calendar for JYC events only. Academic schedules and campus utilities do not live here.</p></div><div className="page-stat-row"><span><b>{events.filter(e=>e.publicStatus!=='planned').length}</b> published events</span><span><b>{events.filter(e=>e.publicStatus==='planned').length}</b> planned</span><span><b>{monthEvents.length}</b> this month</span></div></div>
   <div className="calendar-controls reveal"><button className="btn secondary" onClick={()=>shift(-1)}>← Previous</button><strong>{label}</strong><button className="btn secondary" onClick={()=>shift(1)}>Next →</button></div>
   <div className="calendar"><Calendar events={monthEvents}/></div>
-  <div className="calendar-footer-note reveal"><span className="eyebrow">JYC WEBSITE</span><p>For complete event details, registration links and official media, open the event record.</p><a className="text-link" href="/events">Browse all events →</a></div>
+  <div className="calendar-footer-note reveal"><span className="eyebrow">JYC WEBSITE</span><p>Published records are the official event layer. Planned entries are source-backed programme dates and can change before confirmation.</p><a className="text-link" href="/events">Browse all events →</a></div>
  </section>
 }
 
@@ -919,7 +919,7 @@ function Achievements({data}){
 }
 
 function addCalendar(e){const dt=(s,t)=>{const [y,m,d]=String(s||'').split('-');const raw=String(t||'00:00').trim();const parts=raw.split(':');const hh=String(Math.max(0,Math.min(23,Number(parts[0]||0)))).padStart(2,'0');const mm=String(Math.max(0,Math.min(59,Number(parts[1]||0)))).padStart(2,'0');return `${y}${m}${d}T${hh}${mm}00`};if(!e?.date)return;const startTime=e.start||'09:00';const start=dt(e.date,startTime);const startDate=new Date(`${e.date}T${startTime}:00`);const endDate=e.dateEnd||e.date;const endTime=e.end||(e.dateEnd?'23:59':new Date(startDate.getTime()+60*60*1000).toTimeString().slice(0,5));const end=dt(endDate,endTime);const url=`https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(e.title||'JYC Event')}&dates=${start}/${end}&details=${encodeURIComponent(e.description||'')}&location=${encodeURIComponent(e.venue||'')}`;window.open(url,'_blank','noopener')}
-function Calendar({events}){const by=events.reduce((a,e)=>{(a[e.date]??=[]).push(e);return a},{});return <div className="calendar">{Object.keys(by).sort().map(d=><div className="calendar-day" key={d}><div><span>{fmtDate(d)}</span><b>{by[d].length}</b></div>{by[d].map(e=><div className="calendar-event" key={e.id}><strong>{e.start||'TBA'}</strong><span>{e.title}</span><small>{e.club||'JYC'} · {e.venue||'TBA'}</small></div>)}</div>)}{!events.length&&<State compact title="Calendar is empty." text="Published events will appear here."/>}</div>}
+function Calendar({events}){const by=events.reduce((a,e)=>{(a[e.date]??=[]).push(e);return a},{});return <div className="calendar">{Object.keys(by).sort().map(d=><div className="calendar-day" key={d}><div><span>{fmtDate(d)}</span><b>{by[d].length}</b></div>{by[d].map(e=><div className="calendar-event" key={e.id}><strong>{e.publicStatus==='planned'?'PLANNED':e.start||'TBA'}</strong><span>{e.title}</span><small>{e.club||'JYC'} · {e.venue||'TBA'}</small></div>)}</div>)}{!events.length&&<State compact title="Calendar is empty." text="Published events will appear here."/>}</div>}
 function Fest({data}){
  const f=data.fest||{};
  const rows=Array.isArray(f.events)?f.events:[];
