@@ -245,6 +245,7 @@ The connected production Supabase project is now active and has been hardened an
 - 6 curated gallery records with alt text/provenance fields.
 - Production RLS/write-boundary hardening, publication verification, fixed SECURITY DEFINER search paths and rate-limit guards.
 - Source-only hub records are review-gated in `jyc_content_verification`; gallery publication now has the same verification guard.
+- The public application currently consumes the compatibility JSON read model (`jyc_read_site_data`) rather than the normalized v2 tables directly; do not populate the two models independently without the planned migration/bridge.
 - Seven deployed Edge Functions: admin management, notifications, backups, AI content assistance, error intake, media upload and public submissions.
 - Private backup storage and constrained public media storage.
 
