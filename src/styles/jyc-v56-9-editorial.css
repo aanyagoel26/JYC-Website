@@ -618,3 +618,67 @@ html[data-theme="dark"] .public-app .team-card:hover{
     opacity:0;
   }
 }
+
+
+/* Living story presentation: archive is still one click away, but first paint stays small. */
+.gallery-controls{
+  align-items:center;
+  gap:12px;
+}
+.gallery-view-toggle{
+  margin-left:auto;
+  display:flex;
+  gap:1px;
+}
+.gallery-view-toggle button{
+  min-height:40px;
+  padding:0 13px;
+  border:1px solid var(--jyc-editorial-line);
+  background:transparent;
+  color:var(--jyc-editorial-ink);
+  font:inherit;
+  font-size:12px;
+  cursor:pointer;
+}
+.gallery-view-toggle button.active{
+  background:var(--jyc-editorial-ink);
+  color:var(--jyc-editorial-paper);
+}
+.gallery-living-story{
+  margin-top:22px;
+}
+.gallery-living-story-note{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  padding:12px 0 0;
+  color:var(--jyc-editorial-muted);
+  font-size:12px;
+  border-top:1px solid var(--jyc-editorial-line);
+}
+.gallery-living-photo .jyc-living-photo-stage{
+  min-height:min(68vh,720px);
+}
+.event-living-photo,
+.club-living-photo{
+  margin-top:18px;
+}
+.event-living-photo .jyc-living-photo-stage,
+.club-living-photo .jyc-living-photo-stage{
+  min-height:clamp(300px,46vw,620px);
+}
+@media(max-width:700px){
+  .gallery-view-toggle{
+    margin-left:0;
+    width:100%;
+  }
+  .gallery-view-toggle button{
+    flex:1;
+  }
+  .gallery-living-story-note{
+    align-items:flex-start;
+    flex-direction:column;
+    gap:8px;
+  }
+}
