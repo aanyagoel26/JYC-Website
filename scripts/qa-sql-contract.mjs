@@ -7,6 +7,7 @@ req('202610040017_v56_7_team_source_bridge.sql',['jyc_site_data','team','JYC 202
 req('202610040019_v56_9_normalized_event_read_bridge.sql',['jyc_read_site_data','jyc_events','status in (\'published\',\'ongoing\',\'past\')']);
 
 req('202610040011_v56_2_gallery_read_bridge.sql',['jyc_gallery_items','status=\'published\'','public_url','mediaKind']);
+req('202610050006_fix_public_gallery_read_status.sql',['jyc_read_site_data','jyc_gallery_items','status=\'approved\'','public_url']);
 req('202610040012_v56_2_public_json_seed.sql',['jyc_site_data','club-aakriti','club-cicr','agentic-ai-2026','converge-2026']);
 req('202610030001_production_hardening.sql',['jyc_ingest_error_report','jyc_registration_rate_limits','jyc-backups','revoke insert, update, delete on public.jyc_site_data from anon, authenticated;']);
 req('202610030002_ai_hardening.sql',['jyc_allow_ai_request']);
