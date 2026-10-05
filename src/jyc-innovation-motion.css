@@ -18,7 +18,7 @@
 .public-app .club-card-premium,
 .public-app .event-card-premium,
 .public-app .gallery-card{
-  --pointer-x:50%;--pointer-y:50%;--tilt-x:0deg;--tilt-y:0deg;
+  --pointer-x:50%;--pointer-y:50%;--tilt-x:0deg;--tilt-y:0deg;position:relative;will-change:transform;
   transform:perspective(1100px) rotateX(var(--tilt-x)) rotateY(var(--tilt-y));
   transform-style:preserve-3d;
   transition:transform 420ms cubic-bezier(.2,.8,.2,1),box-shadow 420ms ease;
@@ -57,4 +57,22 @@
   .public-app .event-card-premium,
   .public-app .gallery-card,
   .public-app .jyc-living-spotlight{transform:none!important;transition:none!important}
+}
+
+.public-app .event-directory-row .event-row-arrow{transition:transform 280ms cubic-bezier(.2,.8,.2,1)}
+.public-app .event-directory-row:hover .event-row-arrow{transform:translate(4px,-4px)}
+.public-app .gallery-card:hover img,
+.public-app .club-card-premium:hover img,
+.public-app .event-card-premium:hover img{transform:scale(1.035)}
+.public-app .jyc-living-spotlight:hover .jyc-living-spotlight-media img{transform:scale(1.025)}
+.public-app .gallery-card img,
+.public-app .club-card-premium img,
+.public-app .event-card-premium img,
+.public-app .jyc-living-spotlight-media img{transition:transform 700ms cubic-bezier(.2,.7,.2,1)}
+@media (prefers-reduced-motion:reduce){
+  .public-app .event-directory-row .event-row-arrow,
+  .public-app .gallery-card img,
+  .public-app .club-card-premium img,
+  .public-app .event-card-premium img,
+  .public-app .jyc-living-spotlight-media img{transition:none!important;transform:none!important}
 }
