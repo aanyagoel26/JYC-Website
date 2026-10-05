@@ -79,7 +79,10 @@ function preloadAndDecode(url,cache){
     img.onerror=reject;
     img.src=url;
   });
-  cache?.set(url,promise);
+  if(cache){
+    cache.set(url,promise);
+    while(cache.size>3)cache.delete(cache.keys().next().value);
+  }
   return promise;
 }
 
