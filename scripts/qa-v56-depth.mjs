@@ -11,7 +11,7 @@ check(!registry.includes("verified-current"),'stale verified-current status pres
 check(media.includes('QUALITY_OVERRIDES')&&media.includes('sourceHubMedia'),'source media quality/lookup layer missing');
 check(main.includes('club-living-photo')&&main.includes('sourceHubMedia(c.name).photoItems')&&main.includes('LivingPhoto'),'club source photography rail not wired');
 check(source.includes('JYC_SOURCE_ARCHIVE_PHOTO_ITEMS')&&source.match(/mediaKind==='photo'/),'full source-archive photography pool is exposed');
-check(extra.includes('visibleCount')&&extra.includes('setVisibleCount')&&extra.includes('items.slice(0,visibleCount)'),'large gallery is progressively rendered');
+check(extra.includes('visibleCount')&&extra.includes('setVisibleCount')&&extra.includes('remaining.slice(0,visibleCount)'),'large gallery is progressively rendered');
 check(main.includes('sourceEventMedia(e)'),'event source-media preference missing');
 check(extra.includes("image:images")&&extra.includes('eventImages.length?eventImages'),'entity JSON-LD image depth missing');
 check(system.includes('--jyc-final-bg: #0f0e11')&&system.includes('--jyc-final-surface: #18161d'),'official dark theme tokens missing');
