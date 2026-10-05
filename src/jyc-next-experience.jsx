@@ -64,6 +64,41 @@ export function ChooseYourRoute({data}){
  </section>
 }
 
+export function FlagshipExperience({data}){
+ const nav=useNavigate();
+ const event=useMemo(()=>{
+  const rows=Array.isArray(data?.events)?data.events:[];
+  const preferred=rows.find(e=>String(e.id||'')==='agentic-ai-2026'&&e.published&&!e.archived);
+  if(preferred)return preferred;
+  return rows.filter(e=>e.published&&!e.archived&&(e.featured||e.pinned)).sort((a,b)=>String(a.date||'').localeCompare(String(b.date||'')))[0]||null;
+ },[data?.events]);
+ if(!event)return null;
+ const tracks=Array.isArray(event.tracks)?event.tracks.slice(0,4):[];
+ const stats=Array.isArray(event.summitStats)?event.summitStats.slice(0,4):[];
+ const steps=[
+  ['01','UNDERSTAND','Start with the real problem and the published challenge context.'],
+  ['02','CHOOSE A TRACK',tracks.length?tracks.map(x=>x.name).join(' · '):'Choose the published experience track that fits your idea.'],
+  ['03','BUILD TOGETHER',event.teamSize?'Work with a '+event.teamSize+' team and turn the idea into a working experience.':'Build with your team, tools and community.'],
+  ['04','PRESENT & CONNECT','Show what you built, meet the ecosystem and take the work beyond the event.']
+ ];
+ const open=()=>nav('/events/'+String(event.title||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''));
+ const register=safeExternal(event.registrationUrl);
+ return <section className="section jyc-flagship-section reveal" aria-labelledby="jyc-flagship-title">
+  <div className="jyc-flagship-head"><div><span className="eyebrow">FLAGSHIP EXPERIENCE · JYC 128</span><h2 id="jyc-flagship-title">{event.title}</h2><p>{event.summitTitle||event.description||'A major JYC experience with a clear path from idea to participation.'}</p></div><span className="jyc-flagship-date">{event.date?(event.dateEnd?event.date+' — '+event.dateEnd:event.date):''}</span></div>
+  <div className="jyc-flagship-shell">
+   <div className="jyc-flagship-visual">{event.poster?<img src={event.poster} alt={event.title+' poster'} loading="lazy"/>:<div className="jyc-flagship-mark"><img src="/jyc-logo-official.webp" alt="JIIT Youth Club official emblem" loading="lazy"/><span>JYC · 128</span></div>}<span className="jyc-flagship-visual-label">JYC · SECTOR 128 · NOIDA</span></div>
+   <div className="jyc-flagship-copy">
+    <div className="jyc-flagship-kicker"><span>{event.eventType||'FLAGSHIP PROGRAMME'}</span><b>{event.venue||'JIIT Wish Town Campus · Sector 128, Noida'}</b></div>
+    <h3>{event.description||'Build, participate and connect through a flagship JYC experience.'}</h3>
+    <div className="jyc-flagship-stats">{stats.map((x,i)=><span key={i}><b>{String(i+1).padStart(2,'0')}</b>{x}</span>)}</div>
+    <div className="jyc-flagship-steps">{steps.map(([n,label,text])=><article key={n}><b>{n}</b><div><strong>{label}</strong><p>{text}</p></div></article>)}</div>
+    <div className="jyc-flagship-actions"><button className="btn" onClick={open}>Explore the experience ↗</button>{register&&<a className="btn secondary" href={register} target="_blank" rel="noopener noreferrer">Register ↗</a>}</div>
+   </div>
+  </div>
+ </section>
+}
+function safeExternal(value){const raw=String(value||'').trim();if(!raw)return '';try{const u=new URL(raw,window.location.origin);return ['http:','https:'].includes(u.protocol)?u.href:''}catch{return ''}}
+
 export function PhotoStory({data}){
  const nav=useNavigate();
  const items=useMemo(()=>{
