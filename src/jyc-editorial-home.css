@@ -1,11 +1,11 @@
 /* V1 public homepage — source-first editorial system */
 .jyc-editorial-home{
- --v1-ink:#111318;
+ --v1-ink:#18161d;
  --v1-paper:#f5f1e6;
- --v1-card:#fffdf8;
+ --v1-card:#ffffff;
  --v1-muted:#686660;
  --v1-line:rgba(17,19,24,.14);
- --v1-accent:#a47b43;
+ --v1-accent:#bf9c6f;
  background:var(--v1-paper);
  color:var(--v1-ink);
  overflow:hidden;
@@ -113,7 +113,7 @@
 .jyc-v1-event-meta b{font-size:9px;letter-spacing:.04em;padding:5px 8px;border-radius:999px;background:#eee9dd;color:var(--v1-muted)}
 .jyc-v1-event-meta b.status-open{background:#e7f3e8;color:#246d36}.jyc-v1-event-meta b.status-live{background:#e9effb;color:#36558c}.jyc-v1-event-meta b.status-soon{background:#f1eadb;color:#7b5a2d}
 .jyc-v1-event-body h3{font-size:30px;line-height:1.05;letter-spacing:-.045em;margin:16px 0 9px}
-.jyc-v1-event-body>p{color:var(--v1-muted);font-size:14px;line-height:1.6;margin:0 0 20px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.jyc-v1-event-body>p{color:var(--v1-muted);font-size:14px;line-height:1.6;margin:0 0 20px;overflow-wrap:anywhere}
 .jyc-v1-event-body dl{display:grid;gap:9px;margin:0}
 .jyc-v1-event-body dl div{display:grid;grid-template-columns:105px 1fr;gap:10px}
 .jyc-v1-event-body dt{font-size:8px;letter-spacing:.14em;color:var(--v1-muted);font-weight:800}
@@ -266,3 +266,26 @@
 .nav-join-cta span{margin-left:5px}
 .nav-join-cta:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(17,19,24,.14)}
 @media(max-width:980px){.nav-join-cta{display:none}}
+
+
+/* Final brand + theme contract: V1 editorial home follows the same JYC logo palette in both modes. */
+html[data-theme="dark"] .jyc-editorial-home{
+ --v1-paper:#18161d;
+ --v1-card:#211f25;
+ --v1-ink:#fff8e9;
+ --v1-muted:#c8bdae;
+ --v1-line:rgba(245,241,230,.16);
+ --v1-accent:#bf9c6f;
+}
+html[data-theme="dark"] .jyc-editorial-home .jyc-v1-hero-photo,
+html[data-theme="dark"] .jyc-editorial-home .jyc-v1-event-image,
+html[data-theme="dark"] .jyc-editorial-home .jyc-v1-family-media,
+html[data-theme="dark"] .jyc-editorial-home .jyc-v1-activity-image,
+html[data-theme="dark"] .jyc-editorial-home .jyc-v1-person>div,
+html[data-theme="dark"] .jyc-editorial-home .jyc-v1-gallery-photo{background:#29262d}
+.jyc-editorial-home img{max-width:100%;}
+.jyc-editorial-home img[src=""],.jyc-editorial-home img:not([src]){visibility:hidden}
+@media(max-width:680px){
+ .jyc-editorial-home .jyc-v1-event-body>p{font-size:15px;line-height:1.62}
+ .jyc-editorial-home .jyc-v1-event-body dl dd{overflow-wrap:anywhere}
+}
