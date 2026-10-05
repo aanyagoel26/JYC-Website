@@ -56,7 +56,7 @@ const EVENT_PRESETS={
   'CodeAI':{accent:'#566A61',motif:'CODE / INTELLIGENCE',signature:'Applied AI, coding and technical experimentation',traits:['AI','Coding','Challenge'],shape:'network'},
   'BITBOX':{accent:'#5B6558',motif:'BUILD / DEVELOP',signature:'Developer skills, experimentation and community',traits:['Development','Technology','Community'],shape:'nodes'},
   'Climate Data Hackathon':{accent:'#5C6A55',motif:'DATA / CLIMATE',signature:'Data-driven ideas for environmental challenges',traits:['Data','Climate','Innovation'],shape:'network'},
-  'Jaypee Agentic AI':{accent:'#596B66',motif:'AGENTS / AUTONOMY',signature:'Reasoning, tools, multi-agent systems and applied AI',traits:['Agentic AI','Hackathon','Multi-agent'],shape:'network'}
+  'Jaypee Agentic AI':{accent:'#596B66',motif:'AGENTS / AUTONOMY',signature:'Reasoning, tools, multi-agent systems and applied AI',traits:['Agentic AI','Hackathon','Multi-agent'],shape:'network'},
   'Student Induction Program':{accent:'#746753',motif:'WELCOME / ORIENTATION',signature:'The first chapter of campus life, community and belonging',traits:['Orientation','Community','Belonging'],shape:'path'},
   'JYC Orientation':{accent:'#6F6653',motif:'WELCOME / JYC',signature:'Meeting the people and communities that shape campus life',traits:['JYC','Orientation','Community'],shape:'path'},
   'JYC Performances & Auditions':{accent:'#805B4D',motif:'STAGE / AUDITION',signature:'Performance, expression and the first JYC showcase',traits:['Auditions','Performance','Culture'],shape:'stage'},
