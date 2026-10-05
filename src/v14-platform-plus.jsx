@@ -26,8 +26,8 @@ export function CampusMapPage({data}){
    <div className="page-stat-row"><span><b>2</b> campuses</span><span><b>{publishedLocations.length}</b> JYC venues</span></div>
   </div>
   <div className="campus-map-toolbar reveal">
-   <div className="campus-switch" role="tablist" aria-label="JIIT campus">
-    {Object.values(CAMPUSES).map(x=><button key={x.id} className={campus===x.id?'active':''} onClick={()=>{setCampus(x.id);setSelected(null);setQ('')}}>{x.label}</button>)}
+   <div className="campus-switch" role="group" aria-label="JIIT campus">
+    {Object.values(CAMPUSES).map(x=><button key={x.id} type="button" aria-pressed={campus===x.id} className={campus===x.id?'active':''} onClick={()=>{setCampus(x.id);setSelected(null);setQ('')}}>{x.label}</button>)}
    </div>
    <label className="map-search"><span aria-hidden="true">⌕</span><input value={q} onChange={e=>setQ(e.target.value)} placeholder="Search JYC venue…" aria-label="Search campus venues"/>{q&&<button type="button" onClick={()=>setQ('')} aria-label="Clear venue search">×</button>}</label>
   </div>
