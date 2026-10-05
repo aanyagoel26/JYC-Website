@@ -18,5 +18,7 @@ check('homepage browser QA checks unnamed buttons',browser.includes('unnamedButt
 check('homepage browser QA checks horizontal overflow',browser.includes('scrollWidth'));
 check('no positive tabindex values are introduced',!/tabIndex\s*=\s*\{\s*[1-9]\d*\s*\}|tabindex\s*=\s*["'][1-9]\d*["']/i.test(main));
 check('skip link exists',main.includes('SkipLink')&&/className=["']skip-link["']/.test(extras)&&read('index.html').includes('skip-link'));
+check('filter controls expose pressed state',/aria-pressed=\{family===/.test(main)&&/aria-pressed=\{!savedOnly\}/.test(extras)&&/aria-pressed=\{savedOnly\}/.test(extras));
+check('filter groups do not misuse tablist semantics without tabs',!/className="hub-family-row" role="tablist"/.test(main)&&!/className="calendar-mode-tabs" role="tablist"/.test(extras));
 if(failures.length) process.exit(1);
 console.log('Accessibility contract QA PASS ('+(10-failures.length)+' checks)');
