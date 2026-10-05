@@ -31,6 +31,7 @@ const scripts = [
   'qa-v54-next-experience.mjs',
   'qa-v55-visual-polish.mjs',
   'qa-v56-depth.mjs',
+  'qa-v56-9-editorial.mjs',
   'qa-final-hygiene.mjs',
   'qa-final.mjs'
 ];
