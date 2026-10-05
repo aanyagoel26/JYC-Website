@@ -12,7 +12,7 @@ const css=read('src/react-bits/JYCMicro.css');
 const checks=[
  ['React Bits dependency declared',pkg.dependencies.motion==='12.23.22'&&pkg.dependencies['@hugeicons/react']==='1.1.10'&&pkg.dependencies['@hugeicons/core-free-icons']==='4.3.5'],
  ['lockfile root matches',lock.packages[''].dependencies.motion==='12.23.22'&&lock.packages[''].dependencies['@hugeicons/react']==='1.1.10'],
- ['React Bits components present',/BellToggle|JellyRadio|RubberSegment|FlipCard|BorderGlow/.test(bits)],
+ ['React Bits components present',/BellToggle|JellyRadio|RubberSegment|BorderGlow/.test(bits)],
  ['Motion is lazy-loaded',main.includes("LazyRubberSegment")&&main.includes("LazyBorderGlow")&&main.includes("LazyBellToggle")],
  ['JYC Now uses JellyRadio',now.includes('LazyJellyRadio')&&now.includes('Filter JYC Now by community')],
  ['event view uses RubberSegment',main.includes('LazyRubberSegment')&&main.includes('Event view')],
