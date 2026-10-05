@@ -477,3 +477,144 @@ html[data-theme="dark"] .public-app .team-card:hover{
     transition:none!important;
   }
 }
+
+
+/* V56.10 · Living editorial photography
+   Performance contract: one visible image + one decoded transition frame.
+   No image grid is mounted by the living story. */
+.jyc-living-photo{
+  position:relative;
+  width:100%;
+}
+.jyc-living-photo-stage{
+  position:relative;
+  min-height:clamp(360px,58vw,720px);
+  overflow:hidden;
+  background:#111;
+  isolation:isolate;
+  contain:layout paint;
+}
+.jyc-living-photo-image{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  will-change:opacity;
+}
+.jyc-living-photo-image.is-current{
+  z-index:2;
+  opacity:1;
+}
+.jyc-living-photo-image.is-outgoing{
+  z-index:3;
+  opacity:1;
+  animation:jycLivingPhotoOut .72s cubic-bezier(.2,.7,.2,1) forwards;
+  pointer-events:none;
+}
+.jyc-living-photo-scrim{
+  position:absolute;
+  z-index:4;
+  inset:auto 0 0;
+  height:42%;
+  background:linear-gradient(transparent,rgba(0,0,0,.78));
+  pointer-events:none;
+}
+.jyc-living-photo-meta{
+  position:absolute;
+  z-index:5;
+  left:clamp(18px,3vw,42px);
+  right:clamp(18px,3vw,42px);
+  bottom:clamp(20px,3vw,38px);
+  display:grid;
+  gap:7px;
+  color:#fff;
+  pointer-events:none;
+}
+.jyc-living-photo-meta span{
+  font-size:11px;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  opacity:.72;
+}
+.jyc-living-photo-meta strong{
+  max-width:760px;
+  font-size:clamp(20px,3vw,38px);
+  line-height:1.05;
+  font-weight:600;
+}
+.jyc-living-photo-controls{
+  position:absolute;
+  z-index:6;
+  right:clamp(14px,2vw,28px);
+  bottom:clamp(16px,2vw,26px);
+  display:flex;
+  gap:1px;
+}
+.jyc-living-photo-controls button{
+  width:44px;
+  height:44px;
+  border:1px solid rgba(255,255,255,.38);
+  background:rgba(0,0,0,.28);
+  color:#fff;
+  cursor:pointer;
+  backdrop-filter:blur(8px);
+}
+.jyc-living-photo-controls button:hover{
+  background:rgba(0,0,0,.55);
+}
+.jyc-living-photo-status{
+  position:absolute;
+  z-index:7;
+  top:14px;
+  left:14px;
+  padding:7px 10px;
+  background:rgba(0,0,0,.65);
+  color:#fff;
+  font-size:11px;
+}
+.jyc-photo-story-footer{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  align-items:center;
+  padding:13px 0 0;
+  border-top:1px solid var(--jyc-editorial-line);
+  margin-top:1px;
+  font-size:12px;
+  color:var(--jyc-editorial-muted);
+}
+.jyc-photo-story-footer .text-link{
+  white-space:nowrap;
+}
+@keyframes jycLivingPhotoOut{
+  from{opacity:1}
+  to{opacity:0}
+}
+@media (max-width:700px){
+  .jyc-living-photo-stage{
+    min-height:68vw;
+    max-height:78vh;
+  }
+  .jyc-living-photo-meta strong{
+    max-width:calc(100% - 8px);
+    font-size:clamp(19px,6vw,28px);
+  }
+  .jyc-living-photo-controls{
+    right:12px;
+    top:12px;
+    bottom:auto;
+  }
+  .jyc-photo-story-footer{
+    align-items:flex-start;
+    flex-direction:column;
+    gap:8px;
+  }
+}
+@media (prefers-reduced-motion:reduce){
+  .jyc-living-photo-image.is-outgoing{
+    animation:none;
+    opacity:0;
+  }
+}
