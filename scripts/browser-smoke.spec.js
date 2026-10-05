@@ -275,6 +275,20 @@ test('public cards do not use pointer-driven 3D tilt', async ({ page }) => {
   expect(transforms.filter(value => value && value !== 'none' && value.includes('matrix3d')).length).toBe(0);
 });
 
+test('JYC assistant remains interactive with GLB or safe fallback', async ({ page }) => {
+  await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
+  await page.locator('.jyc-bot-orb').waitFor({ state: 'visible', timeout: 10000 });
+  await page.locator('.jyc-bot-orb').click();
+  await expect(page.locator('.jyc-assistant-panel')).toBeVisible();
+  const media = await page.locator('.jyc-bot-glb, .jyc-bot-model-fallback').count();
+  expect(media).toBeGreaterThan(0);
+  if (await page.locator('.jyc-bot-glb').count()) {
+    await expect(page.locator('.jyc-bot-glb')).toHaveAttribute('src', '/models/jyc-spatial.glb');
+  }
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.jyc-assistant-panel')).toHaveCount(0);
+});
+
 test('mobile fixed controls have separation and never overlap the navigation dock', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
