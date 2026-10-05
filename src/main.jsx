@@ -147,6 +147,20 @@ function SiteAtmosphere(){
 }
 
 function App(){const loc=useLocation();const nav=useNavigate();const [data,setData]=useState(()=>import.meta.env.DEV?publicDemoData():norm(empty));const [loading,setLoading]=useState(true);const [bootReady,setBootReady]=useState(false);const [bootStage,setBootStage]=useState('INITIALIZING');const [error,setError]=useState('');const [online,setOnline]=useState(()=>navigator.onLine!==false);const [theme,setTheme]=useState(()=>storageGet('jyc-theme','light')==='dark'?'dark':'light');const [session,setSession]=useState(null);const [admin,setAdmin]=useState(null);const [toast,setToast]=useState(null);const [confirm,setConfirm]=useState(null);
+
+ useEffect(()=>{
+  // Prevent a broken media URL from creating a visible dead rectangle or broken-image glyph.
+  // The first failure gets one deterministic local fallback; the fallback itself is never retried.
+  const onImageError=e=>{
+   const img=e.target;
+   if(!(img instanceof HTMLImageElement)||img.dataset.jycFallbackApplied==='1')return;
+   img.dataset.jycFallbackApplied='1';
+   const fallback=img.dataset.fallbackSrc||'/jyc-logo-circle.png';
+   if(img.src!==new URL(fallback,window.location.origin).href) img.src=fallback;
+  };
+  document.addEventListener('error',onImageError,true);
+  return()=>document.removeEventListener('error',onImageError,true);
+ },[]);
  useEffect(()=>{const onToast=e=>notify(e.detail?.message||'',e.detail?.type||'success');const onConfirm=e=>setConfirm(e.detail||null);window.addEventListener('jyc-toast',onToast);window.addEventListener('jyc-confirm',onConfirm);return()=>{window.removeEventListener('jyc-toast',onToast);window.removeEventListener('jyc-confirm',onConfirm)}},[]);
  useEffect(()=>{const on=()=>setOnline(true),off=()=>setOnline(false);window.addEventListener('online',on);window.addEventListener('offline',off);return()=>{window.removeEventListener('online',on);window.removeEventListener('offline',off)}},[]);
  useEffect(()=>{document.documentElement.dataset.theme=theme;storageSet('jyc-theme',theme);document.querySelector('meta[name="theme-color"]')?.setAttribute('content',theme==='dark'?'#0f0e11':'#f5f1e6');},[theme]);
