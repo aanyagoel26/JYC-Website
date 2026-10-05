@@ -494,3 +494,9 @@ html[data-theme="dark"] .public-app .event-source-gallery-grid figcaption{color:
 .public-app .hub-source-people>div>span{display:grid;gap:4px;padding:13px;border:1px solid var(--jyc-final-line);border-radius:14px;background:color-mix(in srgb,var(--jyc-final-surface) 92%,var(--jyc-final-gold) 8%)}
 .public-app .hub-source-people small{color:var(--jyc-final-gold);font-size:9px;letter-spacing:.1em;text-transform:uppercase}
 .public-app .hub-source-people strong{color:var(--jyc-final-ink)}
+
+/* Planned event identity state */
+.public-app .event-identity-card .planned,
+.public-app .event-detail-hero .planned,
+.public-app .state-label.planned{display:inline-flex;align-items:center;gap:6px;color:var(--hub-accent,var(--jyc-final-gold))!important;border-color:color-mix(in srgb,var(--hub-accent,var(--jyc-final-gold)) 42%,var(--jyc-final-line))!important;background:color-mix(in srgb,var(--hub-accent,var(--jyc-final-gold)) 9%,transparent)!important;font-weight:900;letter-spacing:.1em}
+.public-app .event-planned-note{display:block;margin:10px 0;color:var(--jyc-final-muted);font-size:11px;line-height:1.5;letter-spacing:.02em}
