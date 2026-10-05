@@ -200,8 +200,8 @@ export function JYCEditorialHome({data}){
     <button className="jyc-v1-link" onClick={()=>nav('/clubs')}>View full directory →</button>
    </div>
    <div className="jyc-v1-family-tabs" role="tablist" aria-label="JYC community families">
-    <button className={activeFamily==='All'?'active':''} onClick={()=>setActiveFamily('All')}>All</button>
-    {JYC_HUB_FAMILIES.map(f=><button key={f} className={activeFamily===f?'active':''} onClick={()=>setActiveFamily(f)}>{f}</button>)}
+    <button role="tab" aria-selected={activeFamily==='All'} className={activeFamily==='All'?'active':''} onClick={()=>setActiveFamily('All')}>All</button>
+    {JYC_HUB_FAMILIES.map(f=><button role="tab" aria-selected={activeFamily===f} key={f} className={activeFamily===f?'active':''} onClick={()=>setActiveFamily(f)}>{f}</button>)}
    </div>
    <div className="jyc-v1-family-grid">{visibleFamilies.map((group,index)=><article className="jyc-v1-family-card" key={group.family}>
     <button onClick={()=>nav('/clubs')} className="jyc-v1-family-media"><img src={hubMedia(group.hubs[0]?.name,index)} alt={group.family+' JYC community'} loading="lazy"/><span>0{index+1}</span></button>
