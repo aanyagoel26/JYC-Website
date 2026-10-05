@@ -20,6 +20,7 @@ import {JYC_SOCIALS,festSocialProfile,socialProfile} from './jyc-socials.js';
 import {JYCNowStrip,JYCNowPage,HubLatestUpdates} from './jyc-now.jsx';
 import JYCHistory,{HistoryTeaser} from './jyc-history-page.jsx';
 import {ChooseYourRoute,JYCBrandEditorial,PhotoStory,PhotoChapters,HubSignalRail} from './jyc-next-experience.jsx';
+import {JYCWebGLIdentity} from './jyc-webgl-identity.jsx';
 import {PUBLIC_TEAM_FALLBACK,JAI_OFFICIAL_MEDIA,PUBLIC_GALLERY_FALLBACK,PUBLIC_EVENT_FALLBACK} from './content/jyc-public-fallbacks.js';
 
 
@@ -716,6 +717,7 @@ function Home({data}){
   </div>
   <div className="v40-hero-visual" ref={heroArtRef}>
    <div className="v40-visual-frame">
+    <JYCWebGLIdentity/>
     <div className="v40-visual-top"><span>JYC / 128</span><span>01 — IDENTITY</span></div>
     <button className="v40-interactive-logo hero-logo-stage" type="button" aria-label="Interact with the JYC emblem" onClick={e=>{e.currentTarget.classList.remove('is-active');requestAnimationFrame(()=>e.currentTarget.classList.add('is-active'))}}>
       <span className="v40-logo-halo"/><img src={logo} alt="JIIT Youth Club official emblem" fetchPriority="high" decoding="async" onError={e=>{if(e.currentTarget.dataset.fallback==="1")return;e.currentTarget.dataset.fallback="1";e.currentTarget.src=logoFallback}}/>

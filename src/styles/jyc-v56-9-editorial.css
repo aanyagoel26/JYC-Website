@@ -682,3 +682,17 @@ html[data-theme="dark"] .public-app .team-card:hover{
     gap:8px;
   }
 }
+
+/* V56.10 identity atmosphere: lightweight WebGL only on capable fine-pointer devices. */
+.public-app .v40-visual-frame{isolation:isolate;overflow:hidden}
+.public-app .jyc-webgl-identity{
+ position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:.72;
+ mix-blend-mode:screen;
+}
+.public-app .v40-visual-frame>*:not(.jyc-webgl-identity){position:relative;z-index:1}
+@media (hover:none),(pointer:coarse){
+ .public-app .jyc-webgl-identity{display:none!important}
+}
+@media (prefers-reduced-motion:reduce){
+ .public-app .jyc-webgl-identity{display:none!important}
+}
