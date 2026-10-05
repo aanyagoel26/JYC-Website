@@ -1,6 +1,8 @@
 import fs from 'node:fs';
-const root=process.cwd();
-const read=p=>fs.readFileSync(new URL(p,import.meta.url).pathname.replace(/scripts[\\/]qa-react-bits\.mjs$/,'')+p,'utf8');
+import {fileURLToPath} from 'node:url';
+import path from 'node:path';
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const pkg=JSON.parse(read('package.json'));
 const lock=JSON.parse(read('package-lock.json'));
 const main=read('src/main.jsx');
