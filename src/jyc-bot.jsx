@@ -4,29 +4,29 @@ import {JYCAssistant} from './jyc-assistant.jsx';
 
 export function JYCBot({data}){
  const loc=useLocation(),[assistantOpen,setAssistantOpen]=useState(false),[modelReady,setModelReady]=useState(false),[modelAvailable,setModelAvailable]=useState(false),[modelFailed,setModelFailed]=useState(false),[motion,setMotion]=useState('');
- const modelRef=useRef(null); const motionTimer=useRef(null); const idleTimer=useRef(null); const animationCursor=useRef(0); const modelAnimationCursor=useRef(0);
+ const modelRef=useRef(null); const motionTimer=useRef(null); const idleTimer=useRef(null); const animationCursor=useRef(0); const modelAnimationCursor=useRef(0); const modelLoadAttempted=useRef(false);
  const context=loc.pathname.startsWith('/events')?'events':loc.pathname.startsWith('/clubs')?'clubs':loc.pathname.startsWith('/gallery')?'gallery':loc.pathname.startsWith('/team')||loc.pathname.startsWith('/leadership')?'team':'home';
  const loadModelViewer=()=>{
-  if(typeof window==='undefined'||customElements?.get('model-viewer')||document.querySelector('script[data-jyc-model-viewer]'))return;
+  if(typeof window==='undefined'||document.documentElement.dataset.performance==='lite'||navigator.connection?.saveData||modelLoadAttempted.current)return;
+  if(customElements?.get('model-viewer')){setModelReady(true);setModelAvailable(true);return;}
+  modelLoadAttempted.current=true;
   const script=document.createElement('script');
   script.type='module';
   script.src='https://ajax.googleapis.com/ajax/libs/model-viewer/4.3.1/model-viewer.min.js';
   script.dataset.jycModelViewer='true';
-  script.onload=()=>setModelReady(Boolean(customElements?.get('model-viewer')));
+  script.onload=()=>{const ready=Boolean(customElements?.get('model-viewer'));setModelReady(ready);setModelAvailable(ready)};
   script.onerror=()=>setModelFailed(true);
   document.head.appendChild(script);
  };
- const checkAsset=()=>fetch('/models/jyc-spatial.glb',{method:'HEAD',cache:'no-store'}).then(r=>setModelAvailable(r.ok)).catch(()=>setModelAvailable(false));
  const triggerMotion=(name='is-wave',duration=850,intent='wave')=>{window.clearTimeout(motionTimer.current);setMotion(name);playModelAnimation(intent);motionTimer.current=window.setTimeout(()=>setMotion(''),duration)};
  const playModelAnimation=(intent='wave')=>{const viewer=modelRef.current;if(!viewer||!Array.isArray(viewer.availableAnimations)||!viewer.availableAnimations.length)return;const names=viewer.availableAnimations;const patterns={wave:/wave|hello|greet|hand/i,idle:/idle|breath|stand|rest/i,bounce:/bounce|jump|hop/i,dance:/dance|move|walk/i,tap:/tap|nod|blink/i,think:/think|look|search|curious/i,celebrate:/celebrate|cheer|victory|happy/i,peek:/peek|turn|look/i};const pool=names.filter(n=>(patterns[intent]||patterns.wave).test(n));const selected=(pool.length?pool:names)[modelAnimationCursor.current%Math.max(1,(pool.length?pool:names).length)];modelAnimationCursor.current+=1;try{viewer.animationName=selected;viewer.currentTime=0;if(typeof viewer.play==='function'){const result=viewer.play({repetitions:1});if(result?.catch)result.catch(()=>viewer.play())}else viewer.play();window.setTimeout(()=>{try{viewer.pause()}catch{}},1800)}catch{}};
  const runContextAnimation=()=>{const map={home:['wave','peek'],clubs:['idle','think'],events:['tap','celebrate'],gallery:['dance','peek'],team:['wave','think']};const intents=map[context]||['idle'];const intent=intents[animationCursor.current%intents.length];animationCursor.current+=1;triggerMotion(`is-${intent}`,760,intent)};
- const openAssistant=()=>{loadModelViewer();checkAsset();const sequence=[['is-wave',900,'wave'],['is-bounce',820,'bounce'],['is-tap',520,'tap'],['is-celebrate',900,'celebrate'],['is-dance',980,'dance'],['is-peek',760,'peek']];const next=sequence[animationCursor.current%sequence.length];animationCursor.current+=1;triggerMotion(next[0],next[1],next[2]);setAssistantOpen(true)};
+ const openAssistant=()=>{loadModelViewer();const sequence=[['is-wave',900,'wave'],['is-bounce',820,'bounce'],['is-tap',520,'tap'],['is-celebrate',900,'celebrate'],['is-dance',980,'dance'],['is-peek',760,'peek']];const next=sequence[animationCursor.current%sequence.length];animationCursor.current+=1;triggerMotion(next[0],next[1],next[2]);setAssistantOpen(true)};
  useEffect(()=>{
   let cancelled=false;
   const start=()=>{
    if(cancelled||typeof window==='undefined')return;
    loadModelViewer();
-   checkAsset();
   };
   if(customElements?.get('model-viewer')) start();
   else if('requestIdleCallback' in window) window.requestIdleCallback(start,{timeout:2600});
