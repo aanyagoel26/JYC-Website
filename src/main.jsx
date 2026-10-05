@@ -895,7 +895,7 @@ function EventDetail({data,id,session}){
  const relatedClub=data.clubs.find(c=>String(c.id)===String(e.clubId)||String(c.name||'').trim().toLowerCase()===String(e.club||'').trim().toLowerCase());
  const identity=eventIdentity(e);
  const identityStyle={'--hub-accent':identity.accent,'--hub-accent-soft':`color-mix(in srgb, ${identity.accent} 12%, transparent)`,'--hub-accent-line':`color-mix(in srgb, ${identity.accent} 28%, transparent)`,'--identity-shape':`var(--jyc-shape-${identity.shape||'event'})`};
- const regOpen=!e.registrationDeadline||new Date(e.registrationDeadline)>new Date();
+ const eventRegistrationEnd=e.dateEnd||e.date;const eventEnded=eventRegistrationEnd?new Date(`${eventRegistrationEnd}T23:59:59`)<new Date():false;const regOpen=!eventEnded&&(!e.registrationDeadline||new Date(e.registrationDeadline)>new Date());
  const timeline=Array.isArray(e.timeline)?e.timeline:(Array.isArray(e.schedule)?e.schedule:[]);
  const relatedEvents=data.events.filter(x=>x.published&&!x.archived&&x.id!==e.id&&((e.clubId&&String(x.clubId)===String(e.clubId))||(e.club&&String(x.club||'').toLowerCase()===String(e.club).toLowerCase()))).sort((a,b)=>String(a.date||'').localeCompare(String(b.date||''))).slice(0,3);
  return <section className="section page event-detail-page event-identity-page" data-hub={slug(e.club||'JYC')} style={identityStyle}><Breadcrumbs items={[{label:'Events',href:'/events'},{label:e.title}]}/><Back label="Back to events" to="/events"/>
