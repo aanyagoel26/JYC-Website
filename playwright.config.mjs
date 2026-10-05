@@ -1,16 +1,36 @@
 import { defineConfig } from '@playwright/test';
 
+const baseURL = process.env.JYC_BASE_URL || 'http://127.0.0.1:5173';
+
 export default defineConfig({
   testDir: './scripts',
   timeout: 30000,
   expect: { timeout: 7000 },
   reporter: [['line']],
   use: {
-    baseURL: process.env.JYC_BASE_URL || 'http://127.0.0.1:5173',
+    baseURL,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure'
   },
+  projects: [
+    {
+      name: 'mobile-390',
+      use: { viewport: { width: 390, height: 844 }, isMobile: true }
+    },
+    {
+      name: 'mobile-430',
+      use: { viewport: { width: 430, height: 932 }, isMobile: true }
+    },
+    {
+      name: 'tablet-768',
+      use: { viewport: { width: 768, height: 1024 } }
+    },
+    {
+      name: 'desktop-1280',
+      use: { viewport: { width: 1280, height: 900 } }
+    }
+  ],
   webServer: {
     command: 'npm run dev -- --host 127.0.0.1',
     url: 'http://127.0.0.1:5173',
