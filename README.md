@@ -1,6 +1,6 @@
 # JIIT Youth Club 128 — Official Website
 
-> **Current release: V56.9 — source-depth, editorial identity, photography and CMS-layout pass**
+> **Current release: V56.10 — living editorial photography and performance-stabilisation pass**
 
 The official public website for **JIIT Youth Club (JYC), JIIT Wish Town Campus, Sector 128, Noida**.
 
@@ -253,7 +253,7 @@ The remaining production gates are operational: configure required third-party E
 
 ## Current release status
 
-**V56.9.0 is the current code release.** The codebase is intentionally in finish-and-stabilise mode rather than feature-expansion mode.
+**V56.10.0 is the current code release.** The codebase is intentionally in finish-and-stabilise mode rather than feature-expansion mode.
 
 The release boundary is aligned across `package.json`, `package-lock.json`, the service-worker cache, final product QA, final hygiene QA, `public/llms.txt`, and the latest release-alignment commits.
 
