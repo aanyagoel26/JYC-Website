@@ -6,6 +6,7 @@ const fallbacks=fs.readFileSync(path.join(root,'src/content/jyc-public-fallbacks
 const nextExperience=fs.readFileSync(path.join(root,'src/jyc-next-experience.jsx'),'utf8');
 const css=fs.readFileSync(path.join(root,'src/styles/public-system.css'),'utf8');
 const pkg=JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8'));
+const livingPhoto=fs.readFileSync(path.join(root,'src/jyc-living-photo.jsx'),'utf8');
 const checks=[
  ['release version is current V56.9 line',pkg.version==='56.9.0'],
  ['visible breadcrumbs component exists',main.includes('function Breadcrumbs')&&main.includes('aria-label="Breadcrumb"')],
@@ -22,7 +23,10 @@ const checks=[
  ['homepage does not expose gallery image count as a hero metric',!main.includes('Published gallery images')&&!main.includes('gallery memories')],
  ['homepage metric counters start at zero and use live values',main.includes('function useCountUp')&&main.includes('setValue(0)')&&main.includes('HeroStats communities={clubs.length}')&&main.includes('useCountUp(communities,active)')&&main.includes('useCountUp(families,active)')&&main.includes('useCountUp(programmes,active)')&&!main.includes('communities=21')&&!main.includes('families=5,programmes=7')],
  ['reduced-motion count-up resolves directly to the current value',main.includes("prefers-reduced-motion: reduce")&&main.includes('setValue(numeric)')],
- ['native event registration route is reachable',main.includes('RegistrationPage')&&main.includes("parts[2]==='register'")&&!main.includes("parts[2]==='register')return <Navigate")],
+ ['native event registration route is reachable',main.includes('RegistrationPage')&&main.includes("parts[2]==='register'")&&!main.includes("parts[2]==='register')return <Navigate")],['living photo engine uses decoded related transitions',livingPhoto.includes('scoreRelatedPhoto')&&livingPhoto.includes('preloadAndDecode')&&livingPhoto.includes('img.decode')&&livingPhoto.includes('setOutgoing')],
+ ['living photo engine respects reduced motion and hidden tabs',livingPhoto.includes('prefers-reduced-motion')&&livingPhoto.includes('visibilitychange')],
+ ['gallery defaults to living story mode',extraFeatures.includes("const [viewMode,setViewMode]=useState('story')")&&extraFeatures.includes('LivingPhoto')&&extraFeatures.includes("viewMode==='archive'")],
+ 
  ['legacy event-calendar route redirects to canonical calendar',main.includes("if(clean==='/event-calendar')return <Navigate to=\"/calendar\" replace/>")],
 ];
 
