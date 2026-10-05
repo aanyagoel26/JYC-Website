@@ -56,7 +56,7 @@ checks.push(
  ['club and event source galleries use living-photo presentation',main.includes('className="club-living-photo"')&&main.includes('className="event-living-photo"')&&main.includes('LivingPhoto')],
  ['remaining public source-media merge is URL-keyed',fs.readFileSync(path.join(root,'src/jyc-source-media.js'),'utf8').includes("map.set(String(enriched.url),enriched)")],
  ['remaining find-community ornament is static, not orbital motion',!fs.readFileSync(path.join(root,'src/v36-depth-polish.css'),'utf8').includes('jycV36Orbit')],
- ['public search does not expose the Control Center',!main.includes('more-sheet-staff')&&!main.includes('search-admin-tools')&&!main.includes('search-admin-tools')],
+ ['public search does not expose the Control Center',!main.includes('more-sheet-staff')&&!main.includes('search-admin-tools')],
  ['public search indexes published visual records',main.includes("type:'PHOTO'")&&main.includes("data.gallery.filter(g=>g&&g.url)" )],
  ['public event search includes event type and date',main.includes('e.eventType||')&&main.includes('e.date||')],
  ['public feature bundle has no retired academic calendar surface',!fs.readFileSync(path.join(root,'src/extra-features.jsx'),'utf8').includes('academicKeyDates')],
