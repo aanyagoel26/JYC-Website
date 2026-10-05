@@ -88,7 +88,7 @@ export function LivingPhoto({items=[],seed=0,interval=6000,className='',altFallb
   const [ready,setReady]=useState(true);
   const [paused,setPaused]=useState(false);
   const [reduced,setReduced]=useState(()=>supportsReducedMotion());
-  const [error,setError]=useState(false);
+  const [error,setError]=useState(false);\n  const [outgoing,setOutgoing]=useState(null);
   const historyRef=useRef([]);
   const mountedRef=useRef(true);
   const timerRef=useRef(null);
@@ -132,7 +132,7 @@ export function LivingPhoto({items=[],seed=0,interval=6000,className='',altFallb
       await preloadAndDecode(target.url);
       if(!mountedRef.current)return;
       const targetIndex=sequence.findIndex(x=>x.url===target.url);
-      if(targetIndex>=0){historyRef.current=[...historyRef.current,target.url].slice(-6);setIndex(targetIndex)}
+      if(targetIndex>=0){setOutgoing(current);historyRef.current=[...historyRef.current,target.url].slice(-6);setIndex(targetIndex);window.setTimeout(()=>mountedRef.current&&setOutgoing(null),700)}
       else{
         const nextSequence=[...sequence,target];
         historyRef.current=[...historyRef.current,target.url].slice(-6);
@@ -158,8 +158,8 @@ export function LivingPhoto({items=[],seed=0,interval=6000,className='',altFallb
   const label=current.caption||current.title||current.association||altFallback;
   return <div className={`jyc-living-photo ${className}`} onMouseEnter={()=>setPaused(true)} onMouseLeave={()=>setPaused(false)} onFocusCapture={()=>setPaused(true)} onBlurCapture={()=>setPaused(false)}>
     <div className="jyc-living-photo-stage" aria-live="polite">
+      {outgoing?.url&&<img className="jyc-living-photo-image is-outgoing" src={outgoing.url} alt="" aria-hidden="true" loading="eager" decoding="async" sizes="(max-width: 700px) calc(100vw - 24px), min(1180px, calc(100vw - 32px))"/>}
       <img className={`jyc-living-photo-image is-current ${ready?'is-ready':''}`} src={current.url} alt={current.alt||label} loading="eager" decoding="async" fetchPriority="high" sizes="(max-width: 700px) calc(100vw - 24px), min(1180px, calc(100vw - 32px))"/>
-      {nextCandidate?.url&&<link rel="preload" as="image" href={nextCandidate.url} fetchPriority="low"/>}
       <div className="jyc-living-photo-scrim" aria-hidden="true"/>
       <div className="jyc-living-photo-meta"><span>{current.association||current.sourceLabel||'JYC Archive'}{current.year?' · '+current.year:''}</span><strong>{label}</strong></div>
       <div className="jyc-living-photo-controls">
