@@ -7,7 +7,7 @@ const nextExperience=fs.readFileSync(path.join(root,'src/jyc-next-experience.jsx
 const css=fs.readFileSync(path.join(root,'src/styles/public-system.css'),'utf8');
 const pkg=JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8'));
 const checks=[
- ['release version is current V56.8 line',pkg.version==='56.9.0'],
+ ['release version is current V56.9 line',pkg.version==='56.9.0'],
  ['visible breadcrumbs component exists',main.includes('function Breadcrumbs')&&main.includes('aria-label="Breadcrumb"')],
  ['public home has closing CTA contract',main.includes('key="cta"')&&main.includes('READY TO SOAR')],
  ['Club navigation links include clubs/events/team/contact',main.includes("nav('/clubs')")&&main.includes("nav('/events')")&&main.includes("nav('/team')")&&main.includes("nav('/contact')")],
