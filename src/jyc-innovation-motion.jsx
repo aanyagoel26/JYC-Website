@@ -29,34 +29,9 @@ function setupReveal(){
 }
 
 function setupTilt(){
-  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return()=>{};
-  if(!window.matchMedia('(hover:hover) and (pointer:fine)').matches)return()=>{};
-  const cleanups=[];
-  TILT_TARGETS.forEach(selector=>{
-    document.querySelectorAll(selector).forEach(card=>{
-      if(card.dataset.jycMotionBound==='1')return;
-      card.dataset.jycMotionBound='1';
-      const move=e=>{
-        const r=card.getBoundingClientRect();
-        const x=(e.clientX-r.left)/r.width;
-        const y=(e.clientY-r.top)/r.height;
-        card.style.setProperty('--pointer-x',String(Math.round(x*100))+'%');
-        card.style.setProperty('--pointer-y',String(Math.round(y*100))+'%');
-        card.style.setProperty('--tilt-x',((.5-y)*2.2).toFixed(2)+'deg');
-        card.style.setProperty('--tilt-y',((x-.5)*2.2).toFixed(2)+'deg');
-        card.classList.add('jyc-pointer-active');
-      };
-      const leave=()=>{
-        card.style.setProperty('--tilt-x','0deg');
-        card.style.setProperty('--tilt-y','0deg');
-        card.classList.remove('jyc-pointer-active');
-      };
-      card.addEventListener('pointermove',move,{passive:true});
-      card.addEventListener('pointerleave',leave,{passive:true});
-      cleanups.push(()=>{card.removeEventListener('pointermove',move);card.removeEventListener('pointerleave',leave);});
-    });
-  });
-  return()=>cleanups.forEach(fn=>fn());
+  // Public card tilt was intentionally retired: it conflicts with the senior/V1 editorial direction,
+  // can feel unstable on touch hardware, and adds pointer-driven layout work. Keep reveal + image hover only.
+  return()=>{};
 }
 
 export function JYCInnovationMotion(){
