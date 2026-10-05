@@ -33,6 +33,7 @@ const scripts = [
   'qa-v56-depth.mjs',
   'qa-v56-9-editorial.mjs',
   'qa-final-hygiene.mjs',
+  'qa-react-bits.mjs',
   'qa-final.mjs'
 ];
 
