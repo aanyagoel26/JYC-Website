@@ -23,7 +23,7 @@ add('public shell does not mount student-platform UI',!/<(MyJYC|AccountLogin|Reg
 add('public shell does not mount academic calendar UI',!main.includes('JIIT Academic Calendar')&&!main.includes('Academic Calendar 2026'));
 add('public shell does not mount campus-map UI',!main.includes('Campus Map')&&!main.includes('<CampusMap'));
 add('public shell does not mount public notifications/settings UI',!main.includes('JYC Notifications')&&!main.includes('Experience Settings'));
-add('public event registration is external/editorial only',!main.includes("endsWith('/register')")&&!main.includes('RegistrationPage'));
+add('public event registration is explicit and event-scoped',main.includes("parts[2]==='register'")&&main.includes('RegistrationPage')&&!main.includes('AccountLogin')&&!main.includes('QRSharePage'));
 add('real source-media pipeline remains active',main.includes('mergeSourceGallery')&&main.includes('sourceHubMedia')&&media.includes('PDF_HUB_GALLERY'));
 add('Neural Nexus source override is unique',(media.match(/NeuralNexus:/g)||[]).length===1);
 add('senior logo palette is active',theme.includes('--jyc-navy:#18161d')&&theme.includes('--jyc-champagne:#bf9c6f')&&theme.includes('--jyc-ivory:#ffffff')&&theme.includes('--accent-red:#a82420'));
