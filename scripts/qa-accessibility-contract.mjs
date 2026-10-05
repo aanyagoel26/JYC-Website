@@ -5,6 +5,7 @@ const read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const failures=[];
 const check=(name,ok)=>{console.log((ok?'PASS':'FAIL')+': '+name);if(!ok)failures.push(name)};
 const main=read('src/main.jsx');
+const campus=read('src/v14-platform-plus.jsx');
 const extras=read('src/extra-features.jsx');
 const css=read('src/styles/public-system.css')+'\n'+read('src/jyc-logo-final-theme.css');
 const browser=read('scripts/browser-smoke.spec.js');
@@ -21,4 +22,5 @@ check('skip link exists',main.includes('SkipLink')&&/className=["']skip-link["']
 check('filter controls expose pressed state',/aria-pressed=\{family===/.test(main)&&/aria-pressed=\{!savedOnly\}/.test(extras)&&/aria-pressed=\{savedOnly\}/.test(extras));
 check('filter groups do not misuse tablist semantics without tabs',!/className="hub-family-row" role="tablist"/.test(main)&&!/className="calendar-mode-tabs" role="tablist"/.test(extras));
 if(failures.length) process.exit(1);
-console.log('Accessibility contract QA PASS ('+(10-failures.length)+' checks)');
+console.log('Accessibility contract QA PASS ('+(10-failures.length)+' checks)')checks.push(['campus selector is a button group with pressed state',campus.includes('className="campus-switch" role="group"')&&campus.includes('aria-pressed={campus===x.id}')]);
+;
