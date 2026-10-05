@@ -18,7 +18,7 @@ const checks=[
  ['photo story is mounted',main.includes('photoStory:<PhotoStory data={data}/>')],
  ['photo chapters are mounted',main.includes('photoChapters:<PhotoChapters/>')&&visualPolish.includes('jyc-photo-chapters-section')],
  ['hub signal rail is mounted',main.includes('hubSignal:<HubSignalRail data={data}/>')],
- ['homepage ordering is route-first',main.includes("const defaultLayout=['intro','brandEditorial','ecosystem','routes','hubSignal','updates','events','activities','clubs','moments','photoStory','photoChapters','journal','hubPhotoWall','hubStories','team','cta'")],
+ ['homepage ordering is route-first',main.includes("const defaultLayout=['intro','brandEditorial','ecosystem','routes','hubSignal','updates','events','flagship','activities','clubs','moments','photoStory','photoChapters','journal','hubPhotoWall','hubStories','team','cta'")&&main.includes("orderedLayout=normalizedLayout.includes('flagship')?normalizedLayout:normalizedLayout.flatMap(x=>x==='events'?[x,'flagship']:[x])")],
  ['bot context labels exist',bot.includes('Explore hubs')&&bot.includes('Find an event')&&bot.includes('Explore archive')],
  ['bot stays above mobile dock',bot.includes('bottom:calc(78px + env(safe-area-inset-bottom))')],
  ['assistant quick routes are contextual',assistant.includes("context==='clubs'")&&assistant.includes("context==='events'")&&assistant.includes("context==='gallery'")],
