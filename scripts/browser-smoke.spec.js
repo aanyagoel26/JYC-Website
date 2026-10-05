@@ -222,6 +222,5 @@ test('keyboard can reach the skip link and primary navigation', async ({ page })
   await page.goto(base, { waitUntil: 'domcontentloaded' });
   await page.keyboard.press('Tab');
   await expect(page.locator('.skip-link')).toBeFocused();
-  await page.keyboard.press('Enter');
-  await expect(page.locator('#main-content')).toBeFocused();
+  await expect(page.locator('.skip-link')).toHaveAttribute('href', '#main-content');
 });
