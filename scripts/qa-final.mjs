@@ -8,7 +8,7 @@ const css=fs.readFileSync(path.join(root,'src/styles/public-system.css'),'utf8')
 const pkg=JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8'));
 const livingPhoto=fs.readFileSync(path.join(root,'src/jyc-living-photo.jsx'),'utf8');
 const checks=[
- ['release version is current V56.10 line',pkg.version==='56.10.0'],
+ ['release version is current V56.10 line',pkg.version==='56.11.0'],
  ['visible breadcrumbs component exists',main.includes('function Breadcrumbs')&&main.includes('aria-label="Breadcrumb"')],
  ['public home has closing CTA contract',main.includes('key="cta"')&&main.includes('READY TO SOAR')],
  ['Club navigation links include clubs/events/team/contact',main.includes("nav('/clubs')")&&main.includes("nav('/events')")&&main.includes("nav('/team')")&&main.includes("nav('/contact')")],
@@ -17,7 +17,7 @@ const checks=[
  ['detail canonical URLs use slugs',main.includes('const canonicalPath=club?`/clubs/${slug(club.name)}`')&&main.includes('`/events/${slug(event.title)}'),],
  ['breadcrumb styling exists',main.includes('className="visible-breadcrumbs reveal"')],
  ['SEO topic link styling exists',main.includes('.search-topic-links')],
- ['service worker cache matches V56.10 release',fs.readFileSync(path.join(root,'public/sw.js'),'utf8').includes('jyc-cache-v56-10-0')],
+ ['service worker cache matches V56.10 release',fs.readFileSync(path.join(root,'public/sw.js'),'utf8').includes('jyc-cache-v56-11-0')],
  ['footer gates Fests by fest mode',main.includes("isFestMode(data)&&<button onClick={()=>nav('/fests')}>Fests</button>")],
  ['club logo alt text is descriptive',main.includes('alt={\`\${c.name} logo\`}'),],
  ['homepage does not expose gallery image count as a hero metric',!main.includes('Published gallery images')&&!main.includes('gallery memories')],
@@ -68,6 +68,8 @@ checks.push(
 
 );
 
+checks.push(['flagship experience layer is mounted and data-driven',main.includes('FlagshipExperience')&&main.includes('flagship:<FlagshipExperience data={data}/>')&&nextExperience.includes('export function FlagshipExperience')&&nextExperience.includes("agentic-ai-2026")]);
+checks.push(['flagship experience follows configured-home fallback ordering',main.includes("orderedLayout=normalizedLayout.includes('flagship')?normalizedLayout:normalizedLayout.flatMap(x=>x==='events'?[x,'flagship']:[x])")]);
 checks.push(['current flagship events have dedicated identities',(()=>{const id=fs.readFileSync(path.join(root,'src/hub-identities.js'),'utf8');return ['JAI 2026','DRONO-O-WAR','RIDE Hack','CodeAI Hackathon','TechTonic 2.0','Code Clash 25.1','Code Clash 25.2'].every(n=>id.includes(n))})()]);
 checks.push(['source photo relationship backfill migration exists',fs.existsSync(path.join(root,'supabase/migrations/202610040014_v56_4_source_photo_relationships.sql'))]);
 checks.push(['GLB bot assistant sequence uses declared animation state',(()=>{const b=fs.readFileSync(path.join(root,'src/jyc-bot.jsx'),'utf8');return b.includes('animationCursor.current%sequence.length')&&b.includes('animationCursor.current+=1')&&!b.includes('motionCursor')})()]);
