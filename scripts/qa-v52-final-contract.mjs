@@ -32,7 +32,7 @@ add('minimum pointer target contract is enforced',theme.includes('min-width:44px
 add('V56.8 overflow and typography guard is active',theme.includes('V56.8 FINAL VISUAL QA CONTRACT')&&theme.includes('overflow-wrap:anywhere')&&theme.includes('text-wrap:pretty'));
 add('V56.8 event imagery treatment is active',theme.includes('.event-poster')&&theme.includes('background-size:cover')&&theme.includes('.jyc-feature-poster img'));
 add('V56.8 responsive event grid is active',theme.includes('grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr))')&&theme.includes('@media(max-width:640px)'));
-add('Join JYC is a public coming-soon route',!vercel.redirects.some(x=>x.source==='/join-jyc'&&x.destination==='/recruitment')&&config.includes("'/join-jyc'"));
+add('Join JYC is a public coming-soon route',!vercel.redirects.some(x=>x.source==='/join-jyc'&&x.destination==='/recruitment')&&main.includes("'/join-jyc'"));
 add('legacy public routes redirect safely',vercel.redirects.some(x=>x.source==='/my-jyc'&&x.destination==='/')&&vercel.redirects.some(x=>x.source==='/planner'&&x.destination==='/events'));
 add('rewrite keeps SPA deep links alive',vercel.rewrites?.some(x=>x.source==='/(.*)'&&x.destination==='/'));
 
