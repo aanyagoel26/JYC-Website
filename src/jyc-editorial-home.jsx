@@ -1,4 +1,4 @@
-import React,{useMemo,useState} from 'react';
+import React,{lazy,Suspense,useMemo,useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {JYC_HUB_CONTENT,JYC_HUB_FAMILIES} from './v21-hub-content.js';
 import {sourceHubMedia,sourceEventMedia} from './jyc-source-media.js';
@@ -8,6 +8,8 @@ import {JYCNowStrip} from './jyc-now.jsx';
 import {JYCSpotlight} from './jyc-spotlight.jsx';
 import {FlagshipExperience,PhotoChapters} from './jyc-next-experience.jsx';
 import './jyc-editorial-home.css';
+
+const LazyDitherVeil=lazy(()=>import('./react-bits/DitherVeil.jsx'));
 
 const FALLBACK_PHOTO='/assets/hub-photos/jyc-06.webp';
 const TEAM_PHOTOS={
@@ -144,13 +146,14 @@ export function JYCEditorialHome({data}){
     <div className="jyc-v1-proof"><span><b>01</b> VOICE</span><span><b>02</b> TALENT</span><span><b>03</b> SPIRIT</span></div>
    </div>
    <div className="jyc-v1-hero-media">
-    <div className="jyc-v1-hero-photo">
-     <img src={gallery[0]?.url||FALLBACK_PHOTO} alt={gallery[0]?.caption||'JIIT Youth Club campus moment'} fetchPriority="high"/>
-     <div className="jyc-v1-photo-overlay"/>
-     <span className="jyc-v1-photo-credit">JYC 128 · OFFICIAL ARCHIVE</span>
-     <span className="jyc-v1-photo-index">01 / CAMPUS</span>
+    <div className="jyc-v1-hero-dither" aria-label="JYC official logo interactive dither reveal">
+     <Suspense fallback={<div className="jyc-v1-dither-fallback"><img src="/jyc-logo-official.webp" alt="JIIT Youth Club 128" fetchPriority="high"/></div>}>
+      <LazyDitherVeil src="/jyc-logo-official.webp" fit="contain" pattern="floyd" pixelSize={2} levels={2} palette="duotone" inkColor="#101a2d" paperColor="#f4f1e6" contrast={1.15} revealRadius={180} softness={0.6} linger={1} rim={0} clickBurst wander={false}/>
+     </Suspense>
+     <span className="jyc-v1-photo-credit">JYC 128 · OFFICIAL IDENTITY</span>
+     <span className="jyc-v1-photo-index">01 / IDENTITY</span>
     </div>
-    <div className="jyc-v1-photo-caption"><b>REAL PEOPLE.</b><span>REAL CAMPUS MOMENTS.</span></div>
+    <div className="jyc-v1-photo-caption"><b>ONE CLUB.</b><span>ONE CAMPUS. MANY VOICES.</span></div>
    </div>
   </section>
 
