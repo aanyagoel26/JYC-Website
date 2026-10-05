@@ -46,7 +46,7 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npx playwright install --with-deps chromium
-      - run: npx playwright test scripts/browser-smoke.spec.js --grep "${{ matrix.title }}" || true
+      - run: npx playwright test scripts/browser-smoke.spec.js --grep "${{ matrix.title }}"
       - uses: actions/upload-artifact@v6
         if: always()
         with:
