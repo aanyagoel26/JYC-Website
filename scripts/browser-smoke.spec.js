@@ -229,8 +229,10 @@ test('keyboard can reach the skip link and primary navigation', async ({ page })
 
 test('public images load, stay inside the viewport, and use centered focal positioning', async ({ page }) => {
   await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
+  await page.locator('main').waitFor({ state: 'attached', timeout: 10000 });
+  await page.locator('main img').first().waitFor({ state: 'attached', timeout: 10000 });
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-  await page.waitForTimeout(800);
+  await page.waitForTimeout(1200);
   const result = await page.locator('main img, footer img').evaluateAll(images => images.map(img => {
     const r = img.getBoundingClientRect();
     const style = getComputedStyle(img);
