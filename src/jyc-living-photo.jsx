@@ -94,7 +94,8 @@ export function LivingPhoto({items=[],seed=0,interval=6000,className='',altFallb
   const [ready,setReady]=useState(true);
   const [paused,setPaused]=useState(false);
   const [reduced,setReduced]=useState(()=>supportsReducedMotion());
-  const [error,setError]=useState(false);\n  const [outgoing,setOutgoing]=useState(null);
+  const [error,setError]=useState(false);
+  const [outgoing,setOutgoing]=useState(null);
   const historyRef=useRef([]);
   const mountedRef=useRef(true);
   const timerRef=useRef(null);
