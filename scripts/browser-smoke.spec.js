@@ -178,3 +178,50 @@ test('photo-led pages render real image content', async ({ page }) => {
     expect(await images.count(), route).toBeGreaterThan(0);
   }
 });
+
+
+test('legacy redirects and unknown routes resolve safely', async ({ page }) => {
+  const redirects = {
+    '/leadership': '/team',
+    '/join-jyc': '/recruitment',
+    '/event-calendar': '/calendar',
+    '/moments': '/gallery',
+    '/planner': '/events',
+    '/discover': '/clubs',
+    '/my-jyc': '/',
+    '/login': '/',
+    '/notifications': '/',
+    '/settings': '/about',
+    '/agenda': '/events',
+    '/download': '/about',
+    '/projects': '/clubs'
+  };
+  for (const [from, to] of Object.entries(redirects)) {
+    await page.goto(base + from, { waitUntil: 'domcontentloaded' });
+    await expect.poll(() => new URL(page.url()).pathname, { timeout: 3000 }).toBe(to);
+  }
+
+  await page.goto(base + '/this-route-should-not-exist-404', { waitUntil: 'domcontentloaded' });
+  await expect(page.locator('#root')).not.toBeEmpty();
+  await expect(page.locator('body')).toBeVisible();
+});
+
+test('production shell exposes required security headers when run against a deployment', async ({ page }) => {
+  test.skip(!/^https?:\/\/(?!127\.0\.0\.1|localhost)/i.test(base), 'Requires JYC_BASE_URL to point at a deployed HTTPS/HTTP origin');
+  const response = await page.goto(base, { waitUntil: 'domcontentloaded' });
+  expect(response).not.toBeNull();
+  const headers = response.headers();
+  expect(headers['x-content-type-options']).toBe('nosniff');
+  expect(headers['x-frame-options']).toBe('DENY');
+  expect(headers['referrer-policy']).toBe('strict-origin-when-cross-origin');
+  expect(headers['permissions-policy']).toContain('camera=()');
+  expect(headers['content-security-policy']).toContain("frame-ancestors 'none'");
+});
+
+test('keyboard can reach the skip link and primary navigation', async ({ page }) => {
+  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  await page.keyboard.press('Tab');
+  await expect(page.locator('.skip-link')).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.locator('#main-content')).toBeFocused();
+});
