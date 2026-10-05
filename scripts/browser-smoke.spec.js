@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 const base = process.env.JYC_BASE_URL || 'http://127.0.0.1:5173';
-const routes = ['/', '/about', '/history', '/clubs', '/events', '/gallery', '/team', '/calendar', '/archive', '/recruitment', '/contact', '/fests', '/updates', '/announcements'];
+const routes = ['/', '/about', '/history', '/clubs', '/events', '/team', '/gallery', '/achievements', '/announcements', '/recruitment', '/calendar', '/archive', '/updates', '/contact', '/fests'];
 
 test('public app mounts with no runtime errors', async ({ page }) => {
   const errors = [];
@@ -70,13 +70,11 @@ test('JYC calendar contains only event content', async ({ page }) => {
   await expect(page.getByText('Academic Calendar')).toHaveCount(0);
 });
 
-test('reduced-motion mode disables hero animation', async ({ page }) => {
+test('reduced-motion mode disables homepage motion', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto(base, { waitUntil: 'domcontentloaded' });
-  const animationNames = await page.locator('.hero-logo-stage img').evaluateAll(nodes =>
-    nodes.map(node => getComputedStyle(node).animationName)
-  );
-  expect(animationNames.every(name => name === 'none')).toBe(true);
+  const motion = await page.locator('.jyc-editorial-home').evaluate(root => [...root.querySelectorAll('*')].map(node => getComputedStyle(node).animationName).filter(name => name && name !== 'none'));
+  expect(motion).toEqual([]);
 });
 
 
@@ -110,7 +108,7 @@ test('brand text contrast stays readable in both themes', async ({ page }) => {
       }
       return parse(getComputedStyle(document.documentElement).backgroundColor)||[250,247,239,1];
     };
-    const selectors=['.hero h1','.hero p','.hero-context-rail span','.nav a'];
+    const selectors=['.jyc-v1-hero h1','.jyc-v1-hero-copy>p','.jyc-v1-eyebrow','.nav a'];
     return selectors.map(selector=>{
       const el=document.querySelector(selector);
       if(!el)return {selector,ratio:null};
@@ -171,11 +169,14 @@ test('mobile visual guardrails keep core content centered and inside viewport', 
 });
 
 test('photo-led pages render real image content', async ({ page }) => {
-  for (const route of ['/clubs', '/events', '/gallery']) {
+  for (const route of ['/', '/clubs', '/events', '/gallery']) {
     await page.goto(base + route, { waitUntil: 'domcontentloaded' });
     const images = page.locator('img');
-    await expect(images.first()).toBeVisible();
     expect(await images.count(), route).toBeGreaterThan(0);
+    await expect(images.first()).toBeVisible();
+    await expect.poll(async () => images.evaluateAll(nodes => nodes.filter(img => img.complete && img.naturalWidth > 0).length), { timeout: 5000 }).toBeGreaterThan(0);
+    const broken = await images.evaluateAll(nodes => nodes.filter(img => img.complete && img.naturalWidth === 0).map(img => img.getAttribute('src')));
+    expect(broken, 'broken images on '+route).toEqual([]);
   }
 });
 
