@@ -1,6 +1,6 @@
 # JIIT Youth Club 128 — Official Website
 
-> **Current release: V56.11 — flagship experience hierarchy and living editorial photography**
+> **Current release: V56.12 — public search refinement and private staff surface**
 
 The official public website for **JIIT Youth Club (JYC), JIIT Wish Town Campus, Sector 128, Noida**.
 
