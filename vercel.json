@@ -117,11 +117,6 @@
       "permanent": true
     },
     {
-      "source": "/join-jyc",
-      "destination": "/recruitment",
-      "permanent": true
-    },
-    {
       "source": "/event-calendar",
       "destination": "/calendar",
       "permanent": true
