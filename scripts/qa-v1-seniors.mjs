@@ -11,7 +11,7 @@ const socials=read('src/jyc-socials.js');
 const config=read('src/public-v1/config.js');
 const siteConfig=read('src/lib/site-config.js');
 const index=read('index.html');
-// Final V52 compatibility: assertions below follow canonical /team and /recruitment routes.
+// V1 public-site contract: assertions follow the canonical public routes and current homepage.
 const checks=[];
 const add=(name,ok)=>checks.push({name,ok:Boolean(ok)});
 
@@ -23,9 +23,9 @@ add('Senior navigation includes About, Clubs, Events, Gallery, Leadership and Co
   main.includes("['About','/about']")&&main.includes("['Clubs','/clubs']")&&main.includes("['Events','/events']")&&main.includes("['Gallery','/gallery']")&&main.includes("['Leadership','/team']")&&main.includes("['Contact','/contact']"));
 add('Leadership canonical route exists',main.includes("clean==='/team'||clean==='/leadership'")||main.includes("clean==='/team'?'team':clean==='/leadership'?'team'")&&main.includes("'/leadership':'JYC 128 Leadership"));
 add('Event Calendar canonical alias exists',main.includes("clean==='/calendar'||clean==='/event-calendar'")&&main.includes("'/event-calendar':'JYC 128 Event Calendar"));
-add('Join JYC recruitment CTA is clear',editorialHome.includes("nav('/recruitment')")&&editorialHome.includes('Join JYC ↗'));
-add('Home hero has required participation CTAs',editorialHome.includes("nav('/events')")&&editorialHome.includes("nav('/clubs')")&&editorialHome.includes("nav('/recruitment')"));
-add('Home hero uses senior-approved statement',editorialHome.includes('<span>The campus.</span>')&&editorialHome.includes('<span>In motion.</span>')&&editorialHome.includes('<em>Together.</em>'));
+add('Join JYC recruitment CTA is clear',editorialHome.includes("nav('/join-jyc')")&&editorialHome.includes('Join JYC / Get Involved'));
+add('Home hero has required participation CTAs',editorialHome.includes("nav('/events')")&&editorialHome.includes("nav('/clubs')")&&editorialHome.includes("nav('/join-jyc')"));
+add('Home hero uses senior-approved statement',editorialHome.includes('<span>The Voice.</span>')&&editorialHome.includes('<span>The Talent.</span>')&&editorialHome.includes('<em>The Spirit of JIIT.</em>'));
 add('JYC 128 scope is explicit',main.includes('JIIT · SECTOR 128 · NOIDA')&&main.includes('JIIT YOUTH CLUB'));
 add('Events expose upcoming/live/past states',main.includes("['upcoming','Upcoming',upcoming.length]")&&main.includes("['live','Ongoing',live.length]")&&main.includes("['past','Completed',past.length]"));
 add('Events expose senior-requested categories',config.includes("JYC_EVENT_CATEGORIES")&&config.includes("'Social'"));
