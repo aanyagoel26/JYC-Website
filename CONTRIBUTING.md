@@ -1,5 +1,7 @@
 # Contributing to the JYC Website
 
+> Start with [docs/CODE-ORGANIZATION.md](./docs/CODE-ORGANIZATION.md) to find the correct owner for a function or feature.
+
 JYC is a student-facing campus website, not a generic dashboard template. Changes should preserve the compact editorial feel and the official-content model.
 
 ## Before opening a PR
