@@ -738,3 +738,23 @@ html[data-theme="dark"] .public-app .team-card:hover{
 .public-app .jyc-flagship-actions{display:flex;gap:10px;margin-top:26px}.public-app .jyc-flagship-actions .btn{border-color:rgba(255,255,255,.2)!important}.public-app .jyc-flagship-actions .btn:not(.secondary){background:#fff!important;color:#111!important}.public-app .jyc-flagship-actions .btn.secondary{color:#fff!important;border:1px solid rgba(255,255,255,.28)!important;background:transparent!important}
 @media(max-width:900px){.public-app .jyc-flagship-head{align-items:flex-start;flex-direction:column;gap:12px}.public-app .jyc-flagship-date{white-space:normal}.public-app .jyc-flagship-shell{grid-template-columns:1fr}.public-app .jyc-flagship-visual{min-height:52vw;max-height:560px}.public-app .jyc-flagship-copy{padding:28px}.public-app .jyc-flagship-stats{grid-template-columns:1fr 1fr}}
 @media(max-width:600px){.public-app .jyc-flagship-head h2{font-size:clamp(38px,13vw,58px)!important}.public-app .jyc-flagship-copy{padding:22px 18px}.public-app .jyc-flagship-kicker{align-items:flex-start;flex-direction:column}.public-app .jyc-flagship-kicker b{text-align:left}.public-app .jyc-flagship-copy h3{font-size:27px!important}.public-app .jyc-flagship-stats{grid-template-columns:1fr 1fr}.public-app .jyc-flagship-steps{grid-template-columns:1fr}.public-app .jyc-flagship-steps article:nth-child(odd){border-right:0;padding-right:0}.public-app .jyc-flagship-steps article:nth-child(even){padding-left:0}.public-app .jyc-flagship-actions{display:grid;grid-template-columns:1fr}.public-app .jyc-flagship-actions .btn{width:100%}}
+
+
+/* V56.15.1 · Search surface: final JYC palette, compact viewport fit, zero decorative dead space. */
+.public-app .search-overlay{background:rgba(24,22,29,.62)!important;backdrop-filter:blur(8px)}
+.public-app .search-modal{width:min(860px,calc(100vw - 28px))!important;max-height:min(760px,calc(100vh - 28px))!important;overflow:hidden!important;background:var(--jyc-editorial-white)!important;color:var(--jyc-editorial-ink)!important;border:1px solid var(--jyc-editorial-line)!important;box-shadow:0 28px 80px rgba(24,22,29,.24)!important}
+.public-app .search-modal .modal-head,.public-app .search-modal .search-meta,.public-app .search-modal .search-footer{border-color:var(--jyc-editorial-line)!important}
+.public-app .search-modal input{background:transparent!important;color:var(--jyc-editorial-ink)!important;border-color:var(--jyc-editorial-line)!important}
+.public-app .search-modal input::placeholder{color:var(--jyc-editorial-muted)!important}
+.public-app .search-modal button,.public-app .search-modal kbd{color:var(--jyc-editorial-ink)!important;border-color:var(--jyc-editorial-line)!important;background:transparent!important}
+.public-app .search-modal button:hover,.public-app .search-modal .search-result-active{background:rgba(191,156,111,.12)!important;border-color:rgba(191,156,111,.45)!important}
+.public-app .search-modal .eyebrow,.public-app .search-modal .search-footer,.public-app .search-modal .search-meta{color:var(--jyc-editorial-muted)!important}
+.public-app .search-modal .search-footer{background:var(--jyc-editorial-ink)!important;color:var(--jyc-editorial-white)!important}
+html[data-theme="dark"] .public-app .search-overlay{background:rgba(15,14,17,.76)!important}
+html[data-theme="dark"] .public-app .search-modal{background:#17161a!important;color:#f7f2e8!important;border-color:rgba(210,180,140,.22)!important;box-shadow:0 32px 90px rgba(0,0,0,.52)!important}
+html[data-theme="dark"] .public-app .search-modal input{color:#f7f2e8!important;border-color:rgba(210,180,140,.22)!important}
+html[data-theme="dark"] .public-app .search-modal input::placeholder{color:#aaa5ad!important}
+html[data-theme="dark"] .public-app .search-modal button,html[data-theme="dark"] .public-app .search-modal kbd{color:#f7f2e8!important;border-color:rgba(210,180,140,.18)!important}
+html[data-theme="dark"] .public-app .search-modal button:hover,html[data-theme="dark"] .public-app .search-modal .search-result-active{background:rgba(191,156,111,.14)!important;border-color:rgba(210,180,140,.42)!important}
+@media(max-width:700px){.public-app .search-modal{width:100%!important;max-height:min(760px,calc(100vh - 10px))!important}.public-app .search-modal .search-list{max-height:46vh!important;overflow:auto!important}}
+@media(prefers-reduced-motion:reduce){.public-app .search-overlay{backdrop-filter:none!important}}
