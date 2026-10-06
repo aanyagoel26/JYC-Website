@@ -1,9 +1,4 @@
 
-check('DriftWall gallery is lazy-loaded and bounded',home.includes('LazyDriftWall')&&home.includes('pauseOnHover={true}')&&fs.existsSync(path.join(root,'src/components/react-bits/DriftWall.css')));
-check('MagicBento is lazy-loaded and GSAP is declared',home.includes('LazyMagicBento')&&pkg.dependencies.gsap==='3.15.0'&&lock.packages['node_modules/gsap']?.version==='3.15.0');
-check('DriftWall has offscreen and reduced-motion safeguards',dither.length>0&&read('src/components/react-bits/DriftWall.jsx').includes('IntersectionObserver')&&read('src/components/react-bits/DriftWall.jsx').includes('prefers-reduced-motion'));
-check('MagicBento disables heavy effects on mobile/coarse pointers',read('src/components/react-bits/MagicBento.jsx').includes('(pointer:coarse)')&&read('src/components/react-bits/MagicBento.jsx').includes('max-width:768px'));
-
 import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -46,6 +41,11 @@ check('CountUp component is present',fs.existsSync(path.join(root,'src/component
 check('DepthCarousel component is present',fs.existsSync(path.join(root,'src/components/react-bits/DepthCarousel.jsx'))&&fs.readFileSync(path.join(root,'src/components/react-bits/DepthCarousel.css'),'utf8').includes('overflow:hidden'));
 check('DepthCarousel avoids GSAP dependency',!read('src/components/react-bits/DepthCarousel.jsx').includes("from'gsap'")&&!pkg.dependencies?.gsap);
 check('DepthCarousel is lazy-loaded on public routes',main.includes('LazyDepthCarousel')&&main.includes('<Suspense fallback={<div className="depth-carousel depth-carousel--loading"'));
+
+check('DriftWall gallery is lazy-loaded and bounded',home.includes('LazyDriftWall')&&home.includes('pauseOnHover={true}')&&fs.existsSync(path.join(root,'src/components/react-bits/DriftWall.css')));
+check('MagicBento is lazy-loaded and GSAP is declared',home.includes('LazyMagicBento')&&pkg.dependencies.gsap==='3.15.0'&&lock.packages['node_modules/gsap']?.version==='3.15.0');
+check('DriftWall has offscreen and reduced-motion safeguards',dither.length>0&&read('src/components/react-bits/DriftWall.jsx').includes('IntersectionObserver')&&read('src/components/react-bits/DriftWall.jsx').includes('prefers-reduced-motion'));
+check('MagicBento disables heavy effects on mobile/coarse pointers',read('src/components/react-bits/MagicBento.jsx').includes('(pointer:coarse)')&&read('src/components/react-bits/MagicBento.jsx').includes('max-width:768px'));
 
 let failed=0;
 for(const [name,ok] of checks){console.log((ok?'PASS':'FAIL')+' · '+name);if(!ok)failed++}
