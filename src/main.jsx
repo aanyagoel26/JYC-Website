@@ -81,7 +81,6 @@ import {CREATOR,JYC_CONTACTS} from './lib/site-config.js';
 
 import {MomentsSection} from './v14-platform.jsx';
 import {SkipLink,InstallPrompt,MaintenanceGate,ErrorBoundary,EventTools,DownloadICS,JsonLd,usePageMeta,Gallery,GalleryItems,RecruitmentHub,RegistrationPage} from './extra-features.jsx';
-const Admin=lazy(()=>import('./admin-chunk.jsx'));
 import {readSiteCache,writeSiteCache,siteCacheAge,formatCacheAge,armStoredReminders,googleCalendarUrl,hasLocalReminder,scheduleEventReminder,clearLocalReminder} from './v15-functional.js';
 
 const logo='/jyc-logo-official.webp';
