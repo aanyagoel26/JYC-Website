@@ -20,7 +20,7 @@ const metaOriginOk=extra.includes("export function usePageMeta")&&extra.includes
 console.log((metaOriginOk ? "PASS" : "FAIL")+": usePageMeta resolves a site origin before building canonical/OG URLs");
 if(!metaOriginOk)failed++;
 const nowModule=fs.readFileSync(path.join(root,'src/jyc-now.jsx'),'utf8');
-const nowLazyImportOk=nowModule.includes('lazy(') && /import React,\{[^}]*\\blazy\\b/.test(nowModule);
+const nowLazyImportOk=nowModule.includes('lazy(') && /import React,\{[^}]*\blazy\b/.test(nowModule);
 console.log((nowLazyImportOk ? "PASS" : "FAIL")+": JYC Now lazy React dependency is explicitly imported");
 if(!nowLazyImportOk)failed++;
 const assistant=fs.readFileSync(path.join(root,'src/jyc-assistant.jsx'),'utf8');
