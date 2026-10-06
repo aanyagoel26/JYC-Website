@@ -2,6 +2,8 @@ import fs from 'node:fs';
 const socials=fs.readFileSync('src/jyc-socials.js','utf8');
 const now=fs.readFileSync('src/jyc-now.jsx','utf8');
 const main=fs.readFileSync('src/main.jsx','utf8');
+const config=fs.readFileSync('src/lib/site-config.js','utf8');
+const index=fs.readFileSync('index.html','utf8');
 const failures=[];
 for(const needle of [
   "canonicalCampus: 'sector-128'",
@@ -12,5 +14,7 @@ for(const needle of [
 if(!now.includes('is128SocialProfile')) failures.push('JYC Now does not enforce 128 social profile filtering');
 if(!main.includes('social&&is128SocialProfile(social)')) failures.push('public club enrichment does not enforce 128 social profile filtering');
 if(!main.includes('isSector128Venue(e.venue)&&(/fest|impressions|converge|ebullience/i.test')) failures.push('public fests are not explicitly restricted to Sector 128 venues');
+if(config.includes("instagram:'https://www.instagram.com/jiityouthclub/'")||config.includes("linkedin:'https://www.linkedin.com/company/jiityouthclub/'")) failures.push('legacy JYC social identity remains in public contact config');
+if(index.includes('https://www.instagram.com/jiityouthclub/')||index.includes('https://www.linkedin.com/company/jiityouthclub/')) failures.push('legacy JYC social identity remains in Organization JSON-LD');
 if(failures.length){failures.forEach(x=>console.error('FAIL:',x));process.exit(1)}
 console.log('PASS: social source policy is explicitly restricted to JIIT Sector 128');
