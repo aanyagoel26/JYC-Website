@@ -2014,3 +2014,73 @@ footer a:hover{
   .footer-links a{font-size:14px}
   .theme-toggle-rb{box-shadow:0 8px 24px rgba(0,0,0,.18)!important}
 }
+
+/* Complementary semantic accents — keep navy/ivory/gold as the identity, use cool tones for meaning */
+:root{
+  --jyc-blue:#456b95;
+  --jyc-blue-soft:#dfeaf5;
+  --jyc-teal:#397b78;
+  --jyc-teal-soft:#dceeea;
+  --jyc-green:#4f7655;
+  --jyc-green-soft:#e2eee2;
+  --jyc-coral:#a6534a;
+  --jyc-coral-soft:#f4e1dd;
+}
+:root[data-theme="dark"]{
+  --jyc-blue:#8db5dc;
+  --jyc-blue-soft:#182c45;
+  --jyc-teal:#78c1b8;
+  --jyc-teal-soft:#123330;
+  --jyc-green:#9bc39f;
+  --jyc-green-soft:#18301e;
+  --jyc-coral:#ef9b8f;
+  --jyc-coral-soft:#351d1a;
+}
+/* Informational / discovery UI */
+.search-trigger:hover,
+.live-strip button:hover,
+.back:hover{
+  border-color:var(--jyc-blue);
+}
+.calendar-event a:hover,
+.search-list button:hover{
+  border-color:color-mix(in srgb,var(--jyc-blue) 48%,var(--border-tech));
+}
+.events-live-strip{
+  border-color:color-mix(in srgb,var(--jyc-teal) 40%,var(--border-tech));
+  background:color-mix(in srgb,var(--jyc-teal-soft) 55%,var(--bg-card));
+}
+.live-dot{
+  background:var(--jyc-teal)!important;
+  box-shadow:0 0 0 5px color-mix(in srgb,var(--jyc-teal) 18%,transparent)!important;
+}
+/* Positive / connected states */
+.success-box{
+  border-color:color-mix(in srgb,var(--jyc-green) 48%,var(--border-tech));
+  background:color-mix(in srgb,var(--jyc-green-soft) 70%,var(--bg-card));
+  color:var(--jyc-green);
+}
+.status-pill{
+  border-color:color-mix(in srgb,var(--jyc-blue) 45%,var(--border-tech));
+  background:color-mix(in srgb,var(--jyc-blue-soft) 52%,var(--bg-card));
+  color:var(--jyc-blue);
+}
+/* Errors stay warm but separate from the brand bronze */
+.error-box{
+  border-color:color-mix(in srgb,var(--jyc-coral) 55%,var(--border-tech));
+  background:color-mix(in srgb,var(--jyc-coral-soft) 78%,var(--bg-card));
+  color:var(--jyc-coral);
+}
+/* Secondary metadata can use cool blue without competing with primary headings */
+.meta a,.calendar-event a,.contact-line a{
+  color:var(--jyc-blue);
+}
+.meta a:hover,.calendar-event a:hover,.contact-line a:hover{
+  color:var(--text-primary);
+}
+:root[data-theme="dark"] .meta a,
+:root[data-theme="dark"] .calendar-event a,
+:root[data-theme="dark"] .contact-line a{
+  color:var(--jyc-blue);
+}
+/* Keep semantic colours away from primary headings and long-form copy */
