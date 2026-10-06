@@ -214,6 +214,44 @@ Key project references:
 - `scripts/qa-v55-visual-polish.mjs`
 - `scripts/qa-final-hygiene.mjs`
 
+
+## 🧭 Maintainer quick-start
+
+If you are new to this repository, start here — **do not begin by editing `src/main.jsx` blindly**.
+
+1. Read [`docs/CODE-ORGANIZATION.md`](./docs/CODE-ORGANIZATION.md) for the responsibility map.
+2. Read [`docs/ARCHITECTURE-V56.1.md`](./docs/ARCHITECTURE-V56.1.md) for runtime boundaries.
+3. Read [`CONTRIBUTING.md`](./CONTRIBUTING.md) before changing public behaviour.
+4. Run `npm ci` → `npm run qa` → `npm run build` locally before pushing.
+5. Use a focused branch name such as `fix/gallery-lightbox`, `feat/events-filter`, or `docs/repository-guide`.
+
+### Repository map
+
+| Area | Responsibility | Start here |
+|---|---|---|
+| Public runtime | Routing, page composition, data loading | `src/main.jsx` |
+| Public pages | Editorial home and page-level experiences | `src/jyc-editorial-home.jsx`, `src/extra-features.jsx` |
+| Content | JYC hubs, events, history, social and source records | `src/content/`, `src/*hub*.js`, `src/jyc-source-*.js` |
+| UI system | Shared public styles and responsive behaviour | `src/styles/` |
+| React Bits | Isolated interactive visual components | `src/components/react-bits/`, `src/react-bits/` |
+| Supabase | Public reads + privileged server boundaries | `src/lib/`, `supabase/` |
+| QA | Static contracts, media, security, performance and browser checks | `scripts/` |
+| GitHub | CI, CodeQL, ownership and contribution rules | `.github/` |
+| Documentation | Architecture, research and maintainer guidance | `docs/` |
+| Static assets | Logos, approved media, PWA files | `public/` |
+
+### Function ownership rule
+
+Every new function should have **one obvious owner**. Keep route composition in page modules, data normalization in content/data modules, reusable UI in components, browser/platform helpers in `src/lib/`, and validation in `scripts/`. Avoid creating another helper in `main.jsx` when the behaviour belongs to an existing domain module.
+
+For the detailed function/domain map and naming rules, see [`docs/CODE-ORGANIZATION.md`](./docs/CODE-ORGANIZATION.md).
+
+### Pull-request hygiene
+
+The repository is maintained with a **clean PR queue**. Open PRs should be focused, reviewable and merged/closed before starting unrelated work. Do not leave abandoned branches as pseudo-PRs; stale branches should be cleaned up by maintainers when they are no longer useful.
+
+**Current repository state:** 0 open pull requests at the time of this documentation pass.
+
 ## Production gates
 
 A release should be considered production-ready only after:
