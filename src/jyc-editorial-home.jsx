@@ -233,12 +233,12 @@ export function JYCEditorialHome({data}){
 
   <FlagshipExperience data={data}/>
 
-  <section id="moments" className="jyc-v1-section jyc-v1-gallery editorial-reveal" aria-labelledby="jyc-v1-gallery-title">
+  <section id="gallery" className="jyc-v1-section jyc-v1-gallery editorial-reveal" aria-labelledby="jyc-v1-gallery-title">
    <div className="jyc-v1-section-head">
-    <div><span className="jyc-v1-eyebrow">GALLERY · MEMORIES</span><h2 id="jyc-v1-gallery-title">Campus moments,<br/><em>kept visible.</em></h2><p>Browse published JYC photography by event, community and year.</p></div>
-    <button className="jyc-v1-link" onClick={()=>nav('/gallery')}>Open full gallery →</button>
+    <div><span className="jyc-v1-eyebrow">VISUAL ARCHIVE · GALLERY</span><h2 id="jyc-v1-gallery-title">The JYC archive,<br/><em>always in motion.</em></h2><p>Drift through published JYC photography by event, community and year. Hover to pause a column, focus a frame or open the full archive.</p></div>
+    <button className="jyc-v1-link" onClick={()=>nav('/gallery')}>Browse full archive →</button>
    </div>
-   <Suspense fallback={<div className="drift-wall-loading" aria-hidden="true"/>}><LazyDriftWall items={gallery.slice(0,12).map((g,index)=>({id:g.id||index,image:g.url,title:g.caption||g.title||g.association||'JYC Archive',href:'/gallery'}))} columns={4} tileWidth={190} tileHeight={126} gap={14} tilt={12} turn={-10} perspective={1250} depth={100} speed={18} direction="up" variance={.28} parallax={.22} pauseOnHover={true} lift={34} fade={.55} dim={.58} grayscale={false} overlayColor="#18161d"/></Suspense>
+   {gallery.length?<Suspense fallback={<div className="drift-wall-loading" aria-hidden="true"/>}><LazyDriftWall items={gallery.slice(0,24).map((g,index)=>({id:g.id||index,image:g.url,title:g.caption||g.title||g.association||'JYC Archive',href:'/gallery'}))} columns={4} tileWidth={190} tileHeight={126} gap={14} tilt={12} turn={-10} perspective={1250} depth={100} speed={18} direction="up" variance={.28} parallax={.22} pauseOnHover={true} lift={34} fade={.55} dim={.58} grayscale={false} overlayColor="#18161d"/></Suspense>:<div className="jyc-v1-empty">The visual archive is ready for published JYC photography. Open the full gallery to explore source collections.</div>}
   </section>
 
   <PhotoChapters/>
