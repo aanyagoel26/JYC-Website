@@ -1,5 +1,7 @@
 # JYC Website — Architecture Map (V56.1)
 
+> Maintainer companion: [CODE-ORGANIZATION.md](./CODE-ORGANIZATION.md). Use that document to decide where new functions and components belong.
+
 This repository is intentionally organised around one active public React application plus a private Control Center.
 
 ## Active public runtime
