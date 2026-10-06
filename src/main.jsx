@@ -21,6 +21,8 @@ import {JYCNowStrip,JYCNowPage,HubLatestUpdates} from './jyc-now.jsx';
 import JYCHistory,{HistoryTeaser} from './jyc-history-page.jsx';
 import {JYCBrandEditorial} from './jyc-next-experience.jsx';
 import {JYCEditorialHome} from './jyc-editorial-home.jsx';
+import {FeaturedEventPopup} from './featured-event-popup.jsx';
+
 
 import {PUBLIC_TEAM_FALLBACK,JAI_OFFICIAL_MEDIA,PUBLIC_GALLERY_FALLBACK,PUBLIC_EVENT_FALLBACK} from './content/jyc-public-fallbacks.js';
 import {JYC_EDITORIAL_ACHIEVEMENTS,JYC_TEAM_SOCIALS} from './jyc-editorial-content.js';
@@ -207,7 +209,8 @@ function App(){const loc=useLocation();const nav=useNavigate();const [data,setDa
   if(!bootReady)return <Loading stage={bootStage} cached={Boolean(readSiteCache())}/>;
   const connectionNotice=(!online||error)?<div className={`connection-notice ${readSiteCache()?'cached':'offline'} ${error==='JYC data service is not deployed. Run supabase/FINAL-PRODUCTION-REPAIR.sql in the connected Supabase project, then refresh.'?'setup-needed':''}`} role="status"><span>{!online?'You are offline. JYC will keep using cached content until the connection returns.':error==='JYC data service is not deployed. Run supabase/FINAL-PRODUCTION-REPAIR.sql in the connected Supabase project, then refresh.'?'JYC data service needs setup.':readSiteCache()?`Showing the last saved JYC snapshot · ${formatCacheAge(siteCacheAge())}.`:'JYC content is currently offline.'}</span><button onClick={()=>window.dispatchEvent(new CustomEvent('jyc-refresh-data'))}>Refresh</button></div>:null;
  const isAdmin=loc.pathname.startsWith('/admin');
- const content=<div className="app-frame"><ScrollProgress/><BackToTop/><SkipLink/>{!isAdmin&&<Suspense fallback={null}><LazyJYCInnovationMotion/></Suspense>}{!isAdmin&&<><Navbar data={data} admin={admin} theme={theme} setTheme={setTheme}/></>} {connectionNotice}<div id="main-content" className={isAdmin?'app admin-app':'app public-app'}><div className="route-stage" key={`${loc.pathname}${loc.search}`}><Routes data={data} admin={admin} session={session} setAdmin={setAdmin} commit={commit} notify={notify} theme={theme} setTheme={setTheme}/></div></div>{!isAdmin&&<Footer data={data} admin={admin}/>} {!isAdmin&&<Suspense fallback={null}><LazyJYCBot data={data}/></Suspense>} {toast&&<div className={`toast toast-${toast.type||'success'}`} role="status"><span>{toast.type==='error'?'!':'✓'}</span>{toast.message}</div>} {confirm&&<ConfirmDialog request={confirm} onClose={ok=>{confirm.resolve?.(ok);setConfirm(null)}}/>}<InstallPrompt/></div>;
+ const content=<div className="app-frame"><ScrollProgress/><BackToTop/><SkipLink/>{!isAdmin&&<Suspense fallback={null}><LazyJYCInnovationMotion/></Suspense>}{!isAdmin&&<><Navbar data={data} admin={admin} theme={theme} setTheme={setTheme}/></>} {connectionNotice}<div id="main-content" className={isAdmin?'app admin-app':'app public-app'}><div className="route-stage" key={`${loc.pathname}${loc.search}`}><Routes data={data} admin={admin} session={session} setAdmin={setAdmin} commit={commit} notify={notify} theme={theme} setTheme={setTheme}/></div></div>{!isAdmin&&<Footer data={data} admin={admin}/>} {!isAdmin&&<Suspense fallback={null}><LazyJYCBot data={data}/></Suspense>} {toast&&<div className={`toast toast-${toast.type||'success'}`} role="status"><span>{toast.type==='error'?'!':'✓'}</span>{toast.message}</div>} {confirm&&<ConfirmDialog request={confirm} onClose={ok=>{confirm.resolve?.(ok);setConfirm(null)}}/>}<FeaturedEventPopup />
+      <InstallPrompt/></div>;
  return <MaintenanceGate data={isAdmin?{maintenance:{on:false}}:data}>{content}</MaintenanceGate>}
 
 function ClubDetail({data,id,virtualName}){
