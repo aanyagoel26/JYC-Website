@@ -1,6 +1,6 @@
 # JIIT Youth Club 128 — Official Website
 
-> **Current release: V56.15.1 — stabilisation, performance and maintainer cleanup**
+> **Current release: V56.15.2 — stabilisation, performance and maintainer cleanup**
 
 [![Quality](https://github.com/coolbandariya/JYC-Website/actions/workflows/ci.yml/badge.svg)](https://github.com/coolbandariya/JYC-Website/actions/workflows/ci.yml) [![CodeQL](https://github.com/coolbandariya/JYC-Website/actions/workflows/codeql.yml/badge.svg)](https://github.com/coolbandariya/JYC-Website/actions/workflows/codeql.yml) [![JYC Quality](https://github.com/coolbandariya/JYC-Website/actions/workflows/jyc-quality.yml/badge.svg)](https://github.com/coolbandariya/JYC-Website/actions/workflows/jyc-quality.yml)
 
@@ -293,7 +293,7 @@ The remaining production gates are operational: configure required third-party E
 
 ## Current release status
 
-**V56.15.1 is the current code release.** The codebase is intentionally in finish-and-stabilise mode rather than feature-expansion mode.
+**V56.15.2 is the current code release.** The codebase is intentionally in finish-and-stabilise mode rather than feature-expansion mode.
 
 The release boundary is aligned across `package.json`, `package-lock.json`, the service-worker cache, final product QA, final hygiene QA, `public/llms.txt`, and the latest public-surface hardening commits.
 
