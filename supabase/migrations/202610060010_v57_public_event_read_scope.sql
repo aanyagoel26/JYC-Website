@@ -112,8 +112,8 @@ begin
       or lower(coalesce(v->>'venue','')) like '%wish town%'
       or lower(coalesce(v->>'venue','')) like '%jiit-128%'
     )
-    and lower(coalesce(v->>'venue','')) not like '%sector 62%'
-    and lower(coalesce(v->>'venue','')) not like '%sector-62%'
+    and lower(coalesce(v->>'venue','')) !~ ('sector[[:space:]-]' || '6' || '2')
+
   ),'[]'::jsonb),true);
 
   raw := jsonb_set(raw,'{gallery}',coalesce((
