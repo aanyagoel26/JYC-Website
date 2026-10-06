@@ -7,6 +7,7 @@ const drift=read('src/components/react-bits/DriftWall.jsx');
 const dither=read('src/react-bits/DitherVeil.jsx');
 const bento=read('src/components/react-bits/MagicBento.jsx');
 const home=read('src/jyc-editorial-home.jsx');
+const main=read('src/main.jsx');
 const failures=[];
 const check=(name,ok)=>{console.log((ok?'PASS':'FAIL')+': '+name);if(!ok)failures.push(name)};
 
