@@ -79,7 +79,15 @@ test('admin routes stay outside the public experience', async ({ page }) => {
   }
 });
 
-test('public entry routes mount directly', async ({ page }) => {\n  for (const route of ['/join-jyc', '/recruitment', '/leadership']) {\n    await page.goto(base + route, { waitUntil: 'domcontentloaded' });\n    await waitForAppMount(page, route);\n    await expect(page.locator('body')).toBeVisible();\n  }\n});\n\ntest('retired student-platform routes resolve to safe public destinations', async ({ page }) => {
+test('public entry routes mount directly', async ({ page }) => {
+  for (const route of ['/join-jyc', '/recruitment', '/leadership']) {
+    await page.goto(base + route, { waitUntil: 'domcontentloaded' });
+    await waitForAppMount(page, route);
+    await expect(page.locator('body')).toBeVisible();
+  }
+});
+
+test('retired student-platform routes resolve to safe public destinations', async ({ page }) => {
   for (const route of ['/my-jyc','/login','/planner','/notifications','/settings','/agenda','/projects','/download']) {
     await page.goto(base + route, { waitUntil: 'domcontentloaded' });
     await waitForAppMount(page, 'redirect');
