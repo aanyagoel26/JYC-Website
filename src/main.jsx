@@ -863,7 +863,7 @@ function HubDirectory({data}){
     <div className="hub-preview-copy"><span className="eyebrow">{activeMedia.family||'JYC COMMUNITY'} · {activeMedia.focus||'COMMUNITY'}</span><h3>{active}</h3><p>{activeMedia.summary||'Source-grounded community profile.'}</p><div>{(activeIdentity.traits||[]).slice(0,4).map(x=><span key={x}>{x}</span>)}</div><button type="button" className="text-link" onClick={()=>nav('/clubs/'+slug(active))}>Open full profile →</button></div>
    </aside>
   </div>
- </sectio</>n>
+ </section>
 }
 function ClubCard({c,index=0}){
  const nav=useNavigate();
@@ -914,7 +914,6 @@ function EventDetail({data,id,session}){
   {related.length>0&&<div id="event-gallery"><DetailSection title="Event gallery"><GalleryItems items={related}/></DetailSection></div>}
   {relatedEvents.length>0&&<section className="event-related-events reveal"><div className="section-inline-head"><div><span className="eyebrow">MORE FROM {e.club||'JYC'}</span><h2>Other experiences.</h2></div><a className="text-link" href="/events">All events →</a></div><div className="event-related-grid">{relatedEvents.map(x=><a className="event-related-card" key={x.id} href={`/events/${slug(x.title)}`}><small>{fmtDate(x.date)} · {x.start||'TBA'}</small><strong>{x.title}</strong><span>{x.venue||'Venue TBA'}</span><b>Open →</b></a>)}</div></section>}
   </section>
- </>
 }
 
 function Announcements({data}){
