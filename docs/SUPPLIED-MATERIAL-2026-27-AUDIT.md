@@ -135,3 +135,20 @@ The supplied `photos.zip` contains 23 images:
 4. Event dates, registration status and venues require event-level source checks even when the event name appears in orientation material.
 5. The supplied decks are JYC 128 / Jaypee Wish Town material and should not be mixed with Sector 62 JYC identities.
 6. The supplied Instagram screenshots establish the 2026 JYC leadership campaign content but should not be treated as permission to publish private contact details visible elsewhere in screenshots.
+
+
+## Current public-source cross-checks added on 06 Oct 2026
+
+The following hub identities were independently matched to current public profiles/sites and are safe to surface as official links in the website registry:
+
+- CICR — official site: https://www.cicr.in/ ; LinkedIn identifies it as the official Robotics Hub of JIIT-128.
+- Dronotics — official site: https://www.dronotics.in/ ; LinkedIn identifies Dronotics JIIT-128 and its site.
+- GDG JIIT-128 — official site: https://gdg-jiit.com/ ; current LinkedIn identity is Google Developer Groups - JIIT 128.
+- Innovation Club — official site: https://www.innovationjiit.in/
+- JODC — current LinkedIn identity is JIIT Open-Source Developers Circle and explicitly identifies JIIT-128.
+- CypherX — current LinkedIn identity is CypherX_jiit and explicitly identifies JIIT-128.
+- Zencoders — current LinkedIn identity is ZENCODERS; its public posts identify the Instagram handle @zencodersjiit.
+- Eloquence — official blog: https://thyeloquence.blogspot.com/ ; current LinkedIn identity identifies it as the Literary Hub at JIIT Sector 128.
+- VamUnique — current LinkedIn identity identifies it as the official dance society of JIIT Sector 128.
+
+These links are stored only where the evidence is strong enough. The other hubs remain source-backed without guessed social URLs.
