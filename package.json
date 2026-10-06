@@ -1,7 +1,7 @@
 {
   "name": "jyc-website",
   "private": true,
-  "version": "56.17.0",
+  "version": "57.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -25,7 +25,8 @@
     "qa:media": "node scripts/qa-media-architecture.mjs",
     "qa:photos": "node scripts/qa-photo-integrity.mjs",
     "qa:events:128": "node scripts/qa-events-128.mjs",
-    "qa:socials:128": "node scripts/qa-jyc-social-scope.mjs"
+    "qa:socials:128": "node scripts/qa-jyc-social-scope.mjs",
+    "qa:trust": "node scripts/qa-trust-contract.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.117.2",
