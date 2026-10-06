@@ -31,7 +31,7 @@ check(vercel.redirects?.some(x=>x.source==='/guide'&&x.destination==='/about'&&x
 check(vercel.redirects?.some(x=>x.source==='/resources'&&x.destination==='/about'&&x.permanent),'resources must redirect permanently to about');
 check(manifest.icons.every(x=>x.type==='image/webp'),'PWA icon MIME type must match the WebP asset');
 warn((main.match(/<img\\b/g)||[]).length<80,'main.jsx contains many image nodes; continue moving repeated image rendering into a dedicated Image component');
-warn((main.match(/<button\\b(?![^>]*\\btype=)/g)||[]).length===0,'some buttons do not declare an explicit type; audit form-adjacent buttons');
+const formButtons=[...main.matchAll(/<form\\b[\\s\\S]*?<\\/form>/g)].flatMap(m=>[...m[0].matchAll(/<button\\b[^>]*>/g)].map(m=>m[0]));\nwarn(formButtons.every(button=>/\\btype\\s*=/.test(button)),'a form contains a button without an explicit type');
 warn((main.match(/style=\\{\\{[^}]*backgroundImage/g)||[]).length===0,'background-image rendering bypasses the shared image component and cannot provide responsive image hints');
 for(const f of failures) console.error('::error file=scripts/qa-architecture.mjs::'+f);
 for(const w of warnings) console.warn('WARNING: '+w);
