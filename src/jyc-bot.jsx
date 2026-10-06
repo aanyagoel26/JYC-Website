@@ -7,7 +7,7 @@ export function JYCBot({data}){
  const modelRef=useRef(null); const modelPreloadRef=useRef(false); const motionTimer=useRef(null); const animationStopTimer=useRef(null); const idleTimer=useRef(null); const animationCursor=useRef(0); const modelAnimationCursor=useRef(0);
  const context=loc.pathname.startsWith('/events')?'events':loc.pathname.startsWith('/clubs')?'clubs':loc.pathname.startsWith('/gallery')?'gallery':loc.pathname.startsWith('/team')||loc.pathname.startsWith('/leadership')?'team':'home';
  const loadModelViewer=()=>{
-  if(typeof window==='undefined'||document.documentElement.dataset.performance==='lite'||navigator.connection?.saveData||window.matchMedia?.('(hover: none), (pointer: coarse)').matches)return;
+  if(typeof window==='undefined'||document.documentElement.dataset.performance==='lite'||navigator.connection?.saveData)return;
   if(customElements?.get('model-viewer')){setModelReady(true);return;}
   const existing=document.querySelector('script[data-jyc-model-viewer]');
   if(existing){
@@ -46,7 +46,7 @@ export function JYCBot({data}){
    loadModelViewer();
    setModelAvailable(true);
   };
-  if(document.documentElement.dataset.performance==='lite'||navigator.connection?.saveData||window.matchMedia?.('(hover: none), (pointer: coarse)').matches){setModelFailed(true);return undefined;}
+  if(document.documentElement.dataset.performance==='lite'||navigator.connection?.saveData){setModelFailed(true);return undefined;}
   if(customElements?.get('model-viewer')) start();
   else if('requestIdleCallback' in window) window.requestIdleCallback(start,{timeout:2400});
   else window.setTimeout(start,1800);
