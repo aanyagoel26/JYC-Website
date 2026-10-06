@@ -97,7 +97,7 @@ export function JYCEditorialHome({data}){
   (data?.events||[]).filter(e=>e?.published&&!e?.archived)
  ),[data?.events]);
  const gallery=useMemo(()=>(
-  (data?.gallery||[]).filter(g=>g?.url).slice(0,18)
+  (data?.gallery||[]).filter(g=>g?.url)
  ),[data?.gallery]);
  const team=(data?.team||[]).filter(x=>x?.published===true).slice(0,6);
  const familyEntries=JYC_HUB_FAMILIES.map(family=>({
@@ -235,7 +235,7 @@ export function JYCEditorialHome({data}){
 
   <section id="gallery" className="jyc-v1-section jyc-v1-gallery editorial-reveal" aria-labelledby="jyc-v1-gallery-title">
    <div className="jyc-v1-section-head">
-    <div><span className="jyc-v1-eyebrow">VISUAL ARCHIVE · GALLERY</span><h2 id="jyc-v1-gallery-title">The JYC archive,<br/><em>always in motion.</em></h2><p>Drift through published JYC photography by event, community and year. Hover to pause a column, focus a frame or open the full archive.</p></div>
+    <div><span className="jyc-v1-eyebrow">VISUAL ARCHIVE · GALLERY</span><h2 id="jyc-v1-gallery-title">The JYC archive,<br/><em>always in motion.</em></h2><p>Drift through published JYC photography by event, community and year. Hover to pause the wall, focus a frame or open the full archive.</p></div>
     <button className="jyc-v1-link" onClick={()=>nav('/gallery')}>Browse full archive →</button>
    </div>
    {gallery.length?<Suspense fallback={<div className="drift-wall-loading" aria-hidden="true"/>}><LazyDriftWall items={gallery.slice(0,24).map((g,index)=>({id:g.id||index,image:g.url,title:[g.caption||g.title||'JYC Archive',g.association,g.year].filter(Boolean).join(' · '),href:'/gallery'}))} columns={4} tileWidth={190} tileHeight={126} gap={14} tilt={12} turn={-10} perspective={1250} depth={100} speed={18} direction="up" variance={.28} parallax={.22} pauseOnHover={true} lift={34} fade={.55} dim={.58} grayscale={false} overlayColor="#18161d"/></Suspense>:<div className="jyc-v1-empty">The visual archive is ready for published JYC photography. Open the full gallery to explore source collections.</div>}<div className="jyc-v1-gallery-wall-note"><strong>{gallery.length} published frames</strong><span>DriftWall is the homepage archive preview · full metadata, filters and lightbox live in the Gallery.</span></div>
