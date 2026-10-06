@@ -70,6 +70,15 @@ test('homepage accessibility and responsive guardrails', async ({ page }) => {
   expect(overflow).toBe(false);
 });
 
+test('admin routes stay outside the public experience', async ({ page }) => {
+  for (const route of ['/admin', '/admin/', '/admin/users', '/admin/settings']) {
+    await page.goto(base + route, { waitUntil: 'domcontentloaded' });
+    await waitForAppMount(page, 'admin redirect');
+    await expect.poll(() => new URL(page.url()).pathname, { timeout: 3000 }).toBe('/');
+    await expect(page.getByText('JYC CONTROL CENTER')).toHaveCount(0);
+  }
+});
+
 test('retired student-platform routes resolve to safe public destinations', async ({ page }) => {
   for (const route of ['/my-jyc','/login','/planner','/notifications','/settings','/agenda','/projects','/download']) {
     await page.goto(base + route, { waitUntil: 'domcontentloaded' });
