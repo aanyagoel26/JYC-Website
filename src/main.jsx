@@ -30,7 +30,8 @@ const LazyJYCBot=lazy(()=>import('./jyc-bot.jsx').then(m=>({default:m.JYCBot})))
 const LazyJYCInnovationMotion=lazy(()=>import('./jyc-innovation-motion.jsx').then(m=>({default:m.JYCInnovationMotion})));
 const LazyRubberSegment=lazy(()=>import('./react-bits/JYCMicro.jsx').then(m=>({default:m.RubberSegment})));
 const LazyBellToggle=lazy(()=>import('./react-bits/JYCMicro.jsx').then(m=>({default:m.BellToggle})));
-const LazyDepthCarousel=lazy(()=>import('./components/react-bits/DepthCarousel.jsx'));\nconst LazyDriftWall=lazy(()=>import('./components/react-bits/DriftWall.jsx'));
+const LazyDepthCarousel=lazy(()=>import('./components/react-bits/DepthCarousel.jsx'));
+const LazyDriftWall=lazy(()=>import('./components/react-bits/DriftWall.jsx'));
 const LazyFlipCard=lazy(()=>import('./components/react-bits/FlipCard.jsx'));
 
 
