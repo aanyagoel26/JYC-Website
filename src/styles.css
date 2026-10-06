@@ -1556,3 +1556,92 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
 @media(max-width:820px){.footer-v6-inner{width:min(100% - 32px,1440px)}.footer-v6-rail{min-height:78px}.footer-v6-main{grid-template-columns:1fr;gap:42px;padding:52px 0}.footer-v6-links>div{grid-template-columns:1fr 1fr}.footer-v6-bottom{align-items:flex-start;flex-direction:column;justify-content:center;padding:18px 0;gap:8px}}
 @media(max-width:520px){.footer-v6-links>div{grid-template-columns:1fr}.footer-v6-brand span{font-size:8px}.footer-v6-index{display:none}.footer-v6-intro h2{font-size:52px}}
 @media(prefers-reduced-motion:reduce){.footer-v6-links button,.footer-v6-connect a,.footer-v6-biglink button{transition:none}}
+
+/* Theme switcher — React Bits-inspired motion language, original JYC implementation */
+.theme-toggle-rb{
+  width:112px!important;height:48px!important;min-width:112px;
+  top:14px!important;right:18px!important;
+  display:flex!important;align-items:center;gap:8px;padding:4px 8px 4px 5px!important;
+  border-radius:999px!important;
+  background:color-mix(in srgb,var(--bg-card) 88%,transparent)!important;
+  border:1px solid color-mix(in srgb,var(--accent-gold) 32%,var(--border-tech))!important;
+  box-shadow:0 10px 32px color-mix(in srgb,var(--bg-main) 20%,transparent),inset 0 1px 0 rgba(255,255,255,.08)!important;
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  transition:width .45s var(--ease),transform .35s var(--ease),border-color .35s,background .45s,box-shadow .45s!important;
+}
+.theme-toggle-rb:hover{width:122px!important;transform:translateY(-2px)!important;border-color:var(--accent-gold)!important}
+.theme-toggle-track{
+  width:38px;height:38px;flex:0 0 38px;border-radius:50%;display:grid;place-items:center;
+  background:linear-gradient(145deg,color-mix(in srgb,var(--accent-gold) 18%,var(--bg-card)),var(--bg-main));
+  border:1px solid var(--border-tech);position:relative;overflow:hidden;
+}
+.theme-toggle-orb{
+  width:30px;height:30px;border-radius:50%;display:grid;place-items:center;
+  background:var(--text-primary);color:var(--bg-main);
+  box-shadow:0 4px 18px color-mix(in srgb,var(--accent-gold) 18%,transparent);
+  transition:transform .55s cubic-bezier(.22,1,.36,1),background .45s,color .45s;
+}
+.theme-toggle-orb span{display:block;font-size:14px;line-height:1;transition:transform .55s cubic-bezier(.22,1,.36,1)}
+.theme-toggle-rb.is-dark .theme-toggle-orb{transform:rotate(-18deg)}
+.theme-toggle-rb.is-dark .theme-toggle-orb span{transform:rotate(18deg)}
+.theme-toggle-copy{display:grid;text-align:left;line-height:1.05;min-width:0}
+.theme-toggle-copy b{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-primary)}
+.theme-toggle-copy small{font-size:8px;letter-spacing:.16em;text-transform:uppercase;color:var(--text-muted);margin-top:3px}
+.theme-toggle-rb:focus-visible{outline:2px solid var(--accent-gold);outline-offset:3px}
+:root[data-theme="light"] .theme-toggle-rb{
+  background:rgba(255,253,247,.9)!important;
+  box-shadow:0 10px 32px rgba(26,25,29,.10),inset 0 1px 0 rgba(255,255,255,.95)!important;
+}
+:root[data-theme="dark"] .theme-toggle-rb{
+  background:rgba(24,22,29,.88)!important;
+  box-shadow:0 10px 34px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.05)!important;
+}
+:root[data-theme="light"] .theme-toggle-orb{background:#201e24;color:#fffdf7}
+:root[data-theme="dark"] .theme-toggle-orb{background:#fff2cf;color:#201e24}
+:root[data-theme="light"] body{
+  background:
+    radial-gradient(circle at 8% 2%,color-mix(in srgb,var(--accent-gold) 10%,transparent),transparent 24%),
+    radial-gradient(circle at 92% 26%,color-mix(in srgb,var(--accent-red) 4%,transparent),transparent 24%),
+    var(--bg-main);
+}
+:root[data-theme="dark"] body{
+  background:
+    radial-gradient(circle at 15% 0%,color-mix(in srgb,var(--accent-gold) 6%,transparent),transparent 27%),
+    radial-gradient(circle at 85% 28%,color-mix(in srgb,var(--accent-red) 5%,transparent),transparent 25%),
+    var(--bg-main);
+}
+:root[data-theme="dark"] .card,:root[data-theme="dark"] .featured,:root[data-theme="dark"] .contact-card,
+:root[data-theme="dark"] .club-hero,:root[data-theme="dark"] .event-detail-poster{
+  background:linear-gradient(145deg,#1b1920,#151319);border-color:rgba(210,180,140,.20);
+}
+:root[data-theme="dark"] .card:hover,:root[data-theme="dark"] .featured:hover,:root[data-theme="dark"] .contact-card:hover{
+  box-shadow:0 28px 80px rgba(0,0,0,.34);border-color:rgba(210,180,140,.42);
+}
+:root[data-theme="dark"] .nav{
+  background:rgba(15,14,17,.78);
+  box-shadow:0 10px 40px rgba(0,0,0,.20);
+}
+:root[data-theme="light"] .btn{box-shadow:0 8px 24px rgba(164,123,67,.12)}
+:root[data-theme="light"] .card,:root[data-theme="light"] .featured,:root[data-theme="light"] .contact-card{
+  border-color:rgba(191,156,111,.32);
+}
+:root[data-theme="light"] .text-link,:root[data-theme="light"] .nav nav button.active{color:#201e24}
+:root[data-theme="light"] .eyebrow,:root[data-theme="light"] .tag{color:#8f2e28}
+:root[data-theme="dark"] .eyebrow,:root[data-theme="dark"] .tag{color:#d6a15e}
+.theme-is-switching body{transition:none!important}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.52s;animation-timing-function:cubic-bezier(.22,1,.36,1)}
+::view-transition-old(root){animation-name:jycThemeOut}
+::view-transition-new(root){animation-name:jycThemeIn}
+@keyframes jycThemeOut{to{opacity:.55;filter:blur(3px)}}
+@keyframes jycThemeIn{from{opacity:.35;clip-path:circle(0% at 92% 6%);filter:blur(3px)}to{opacity:1;clip-path:circle(150% at 92% 6%);filter:blur(0)}}
+@media(prefers-reduced-motion:reduce){
+ .theme-toggle-rb,.theme-toggle-orb,.theme-toggle-orb span{transition:none!important}
+ ::view-transition-old(root),::view-transition-new(root){animation:none!important}
+}
+@media(max-width:700px){
+ .theme-toggle-rb{top:70px!important;right:8px!important;width:44px!important;min-width:44px;height:42px!important;padding:3px!important}
+ .theme-toggle-rb:hover{width:44px!important;transform:none!important}
+ .theme-toggle-track{width:34px;height:34px;flex-basis:34px}
+ .theme-toggle-orb{width:27px;height:27px}
+ .theme-toggle-copy{display:none}
+}
