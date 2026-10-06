@@ -34,6 +34,7 @@ const scripts = [
   'qa-v56-9-editorial.mjs',
   'qa-final-hygiene.mjs',
   'qa-react-bits.mjs',
+  'qa-animation-performance.mjs',
   'qa-final.mjs'
 ];
 
