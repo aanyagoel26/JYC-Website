@@ -14,6 +14,7 @@ const microCss=read('src/react-bits/JYCMicro.css');
 const dither=read('src/react-bits/DitherVeil.jsx');
 const ditherCss=read('src/react-bits/DitherVeil.css');
 const home=read('src/jyc-editorial-home.jsx');
+const homeCss=read('src/jyc-editorial-home.css');
 
 const checks=[
  ['React Bits dependencies declared',pkg.dependencies.motion==='12.23.22'&&pkg.dependencies['@hugeicons/react']==='1.1.10'&&pkg.dependencies['@hugeicons/core-free-icons']==='4.3.5'&&pkg.dependencies.ogl==='1.0.11'],
@@ -46,6 +47,8 @@ check('FlexCarousel is the homepage gallery archive',home.includes('LazyFlexCaro
 check('Heavy homepage visual engines are viewport-deferred',home.includes('function ViewportDeferred')&&home.includes('rootMargin=\'700px\'')&&home.includes('<ViewportDeferred'));
 check('MagicBento is lazy-loaded and GSAP is declared',home.includes('LazyMagicBento')&&pkg.dependencies.gsap==='3.15.0'&&lock.packages['node_modules/gsap']?.version==='3.15.0');
 check('FlexCarousel component is present and homepage-loaded',fs.existsSync(path.join(root,'src/components/react-bits/FlexCarousel.jsx'))&&fs.existsSync(path.join(root,'src/components/react-bits/FlexCarousel.css'))&&home.includes('LazyFlexCarousel'));
+check('FlexCarousel homepage surface has a non-collapsing responsive height',homeCss.includes('.jyc-v1-gallery .jyc-deferred-surface{width:100%;min-height:560px}')&&homeCss.includes('.jyc-v1-gallery .flex-carousel{height:560px;min-height:560px')&&homeCss.includes('.jyc-v1-gallery .flex-carousel{height:430px}'));
+check('Homepage FlexCarousel CSS contains no escaped newline literals',!homeCss.includes('\\n'));
 check('DriftWall has offscreen, low-power and reduced-motion safeguards',read('src/components/react-bits/DriftWall.jsx').includes('IntersectionObserver')&&read('src/components/react-bits/DriftWall.jsx').includes('lowPower')&&read('src/components/react-bits/DriftWall.jsx').includes('prefers-reduced-motion'));
 check('DriftWall is used for event and community visual rails',main.includes('event-drift-wall-section')&&main.includes('club-drift-wall-section')&&main.includes('LazyDriftWall'));
 check('MagicBento disables heavy effects on mobile/coarse pointers',read('src/components/react-bits/MagicBento.jsx').includes('(pointer:coarse)')&&read('src/components/react-bits/MagicBento.jsx').includes('max-width:768px'));
