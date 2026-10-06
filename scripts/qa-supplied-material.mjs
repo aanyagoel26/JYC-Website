@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+// V57 release gate: supplied JYC 128 material is source evidence, not invented content.
 
 const registry=fs.readFileSync('src/jyc-hub-registry.js','utf8');
 const team=fs.readFileSync('src/content/jyc-public-fallbacks.js','utf8');
