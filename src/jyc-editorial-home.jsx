@@ -14,6 +14,20 @@ const LazyDitherVeil=lazy(()=>import('./react-bits/DitherVeil.jsx'));
 const LazyDriftWall=lazy(()=>import('./components/react-bits/DriftWall.jsx'));
 const LazyMagicBento=lazy(()=>import('./components/react-bits/MagicBento.jsx'));
 
+function ViewportDeferred({children,fallback,rootMargin='700px'}){
+ const ref=useRef(null);
+ const [ready,setReady]=useState(false);
+ useEffect(()=>{
+  if(ready||!ref.current)return;
+  const node=ref.current;
+  if(!('IntersectionObserver' in window)){setReady(true);return}
+  const io=new IntersectionObserver(([entry])=>{if(entry.isIntersecting){setReady(true);io.disconnect()}},{rootMargin});
+  io.observe(node);
+  return()=>io.disconnect();
+ },[ready,rootMargin]);
+ return <div ref={ref} className="jyc-deferred-surface">{ready?children:fallback}</div>;
+}
+
 const FALLBACK_PHOTO='/assets/hub-photos/jyc-06.webp';
 const TEAM_PHOTOS={
  'devansh tripathi':'/assets/team/campaign/devansh-tripathi.webp',
@@ -220,7 +234,7 @@ export function JYCEditorialHome({data}){
     <div><span className="jyc-v1-eyebrow">WHAT JYC DOES</span><h2 id="jyc-v1-activities-title">More than clubs.<br/><em>A campus in motion.</em></h2></div>
     <p className="jyc-v1-head-note">From culture and sport to technical communities, outreach, workshops and competitions, JYC creates places for students to participate.</p>
    </div>
-   <Suspense fallback={<div className="magic-bento-loading" aria-hidden="true"/>}><LazyMagicBento items={activities.map((activity,index)=>({id:activity.id||activity.title,title:activity.title,description:activity.text,label:`0${index+1}`,image:activityPhoto(activity,index,gallery),href:activity.link||'/clubs'}))} textAutoHide={false} enableStars={true} enableSpotlight={true} enableBorderGlow={true} enableTilt={false} enableMagnetism={false} particleCount={5} spotlightRadius={300} glowColor="191,156,111" clickEffect={true}/></Suspense>
+   <ViewportDeferred fallback={<div className="magic-bento-loading" aria-hidden="true"/>}><Suspense fallback={<div className="magic-bento-loading" aria-hidden="true"/>}><LazyMagicBento items={activities.map((activity,index)=>({id:activity.id||activity.title,title:activity.title,description:activity.text,label:`0${index+1}`,image:activityPhoto(activity,index,gallery),href:activity.link||'/clubs'}))} textAutoHide={false} enableStars={true} enableSpotlight={true} enableBorderGlow={true} enableTilt={false} enableMagnetism={false} particleCount={5} spotlightRadius={300} glowColor="191,156,111" clickEffect={true}/></Suspense></ViewportDeferred>
   </section>
 
   <section className="jyc-v1-section jyc-v1-updates editorial-reveal" aria-labelledby="jyc-v1-updates-title">
@@ -238,7 +252,7 @@ export function JYCEditorialHome({data}){
     <div><span className="jyc-v1-eyebrow">VISUAL ARCHIVE · GALLERY</span><h2 id="jyc-v1-gallery-title">The JYC archive,<br/><em>always in motion.</em></h2><p>Drift through published JYC photography by event, community and year. Hover to pause the wall, focus a frame or open the full archive.</p></div>
     <button className="jyc-v1-link" onClick={()=>nav('/gallery')}>Browse full archive →</button>
    </div>
-   {gallery.length?<Suspense fallback={<div className="drift-wall-loading" aria-hidden="true"/>}><LazyDriftWall items={gallery.slice(0,24).map((g,index)=>({id:g.id||index,image:g.url,title:[g.caption||g.title||'JYC Archive',g.association,g.year].filter(Boolean).join(' · '),href:'/gallery'}))} columns={4} tileWidth={190} tileHeight={126} gap={14} tilt={12} turn={-10} perspective={1250} depth={100} speed={18} direction="up" variance={.28} parallax={.22} pauseOnHover={true} lift={34} fade={.55} dim={.58} grayscale={false} overlayColor="#18161d"/></Suspense>:<div className="jyc-v1-empty">The visual archive is ready for published JYC photography. Open the full gallery to explore source collections.</div>}<div className="jyc-v1-gallery-wall-note"><strong>{gallery.length} published frames</strong><span>DriftWall is the homepage archive preview · full metadata, filters and lightbox live in the Gallery.</span></div>
+   {gallery.length?<ViewportDeferred fallback={<div className="drift-wall-loading" aria-hidden="true"/>}><Suspense fallback={<div className="drift-wall-loading" aria-hidden="true"/>}><LazyDriftWall items={gallery.slice(0,24).map((g,index)=>({id:g.id||index,image:g.url,title:[g.caption||g.title||'JYC Archive',g.association,g.year].filter(Boolean).join(' · '),href:'/gallery'}))} columns={4} tileWidth={190} tileHeight={126} gap={14} tilt={12} turn={-10} perspective={1250} depth={100} speed={18} direction="up" variance={.28} parallax={.22} pauseOnHover={true} lift={34} fade={.55} dim={.58} grayscale={false} overlayColor="#18161d"/></Suspense></ViewportDeferred>:<div className="jyc-v1-empty">The visual archive is ready for published JYC photography. Open the full gallery to explore source collections.</div>}<div className="jyc-v1-gallery-wall-note"><strong>{gallery.length} published frames</strong><span>DriftWall is the homepage archive preview · full metadata, filters and lightbox live in the Gallery.</span></div>
   </section>
 
   <PhotoChapters/>
