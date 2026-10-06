@@ -718,7 +718,7 @@ function Footer({data,admin}){
       <div className="footer-v6-biglink"><button type="button" onClick={()=>nav('/recruitment')}>JOIN JYC <span aria-hidden="true">↗</span></button></div>
       <div className="footer-bottom footer-v6-bottom">
         <span>JIIT YOUTH CLUB · JIIT SECTOR 128</span>
-        <small className="jyc-creator-credit">Created by <a href="https://www.linkedin.com/in/kaustubh-dua-2b5a76416" target="_blank" rel="noopener noreferrer" aria-label="Kaustubh on LinkedIn">Kaustubh</a></small>
+        <small className="jyc-creator-credit">Website Creator · <a href={data.creator.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${data.creator.name} on LinkedIn`}>{data.creator.name}</a></small>
       </div>
     </div>
   </footer>;
