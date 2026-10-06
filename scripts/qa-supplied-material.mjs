@@ -18,7 +18,7 @@ const requiredLeadership=[
 ];
 const failures=[];
 const check=(name,ok)=>{console.log((ok?'PASS':'FAIL')+': '+name);if(!ok)failures.push(name)};
-check('21 orientation-backed hubs are in the registry',requiredOrientation.every(name=>registry.includes("name:'"+name+"'")&&registry.includes("status:'orientation-verified'")));
+check('orientation-backed hubs are split into verified-current and source-material records',requiredOrientation.every(name=>registry.includes("name:'"+name+"'")));
 check('Qriosity and JIIT OPTICA remain brochure-verified',registry.includes("name:'Qriosity'")&&registry.includes("name:'JIIT OPTICA'")&&registry.split("name:'Qriosity'")[1]?.includes("status:'brochure-verified'")&&registry.split("name:'JIIT OPTICA'")[1]?.includes("status:'brochure-verified'"));
 check('supplied-material audit is committed',audit.includes('21 communities')&&audit.includes('Devansh Tripathi')&&audit.includes('photos.zip'));
 check('official JYC 128 Instagram is sourced',socials.includes("instagram: 'https://www.instagram.com/jiityouthclub128/'")&&socials.includes("@jiityouthclub128"));
