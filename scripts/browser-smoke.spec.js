@@ -79,7 +79,7 @@ test('admin routes stay outside the public experience', async ({ page }) => {
   }
 });
 
-test('retired student-platform routes resolve to safe public destinations', async ({ page }) => {
+test('public entry routes mount directly', async ({ page }) => {\n  for (const route of ['/join-jyc', '/recruitment', '/leadership']) {\n    await page.goto(base + route, { waitUntil: 'domcontentloaded' });\n    await waitForAppMount(page, route);\n    await expect(page.locator('body')).toBeVisible();\n  }\n});\n\ntest('retired student-platform routes resolve to safe public destinations', async ({ page }) => {
   for (const route of ['/my-jyc','/login','/planner','/notifications','/settings','/agenda','/projects','/download']) {
     await page.goto(base + route, { waitUntil: 'domcontentloaded' });
     await waitForAppMount(page, 'redirect');
@@ -246,7 +246,6 @@ test('legacy redirects and unknown routes resolve safely', async ({ page }) => {
   test.setTimeout(60000);
   const redirects = {
     '/leadership': '/team',
-    '/join-jyc': '/join-jyc',
     '/event-calendar': '/calendar',
     '/moments': '/gallery',
     '/planner': '/events',
@@ -259,7 +258,10 @@ test('legacy redirects and unknown routes resolve safely', async ({ page }) => {
     '/download': '/about',
     '/projects': '/clubs',
     '/projects/submit': '/clubs',
-    '/map': '/events'
+    '/map': '/events',
+    '/qr/example': '/events',
+    '/guide': '/about',
+    '/resources': '/about'
   };
   for (const [from, to] of Object.entries(redirects)) {
     await page.goto(base + from, { waitUntil: 'domcontentloaded' });
