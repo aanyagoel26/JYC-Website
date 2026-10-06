@@ -57,7 +57,8 @@ export const JYC_SOCIALS = {
     campus: 'sector-128',
     sourcePriority: 'official-hub',
     verifiedBy: 'https://www.linkedin.com/company/zencoders/',
-    verifiedOn: '2026-10-03'
+    verifiedOn: '2026-10-03',
+    sourceNote: 'LinkedIn profile states official cybersecurity community of JIIT-128 and primary location at JIIT Sector 128, Jaypee Wishtown.'
   },
   JODC: {
     linkedin: 'https://in.linkedin.com/company/jodc/',
@@ -65,7 +66,8 @@ export const JYC_SOCIALS = {
     campus: 'sector-128',
     sourcePriority: 'official-hub',
     verifiedBy: 'https://www.linkedin.com/company/jodc/',
-    verifiedOn: '2026-10-03'
+    verifiedOn: '2026-10-03',
+    sourceNote: 'LinkedIn profile states the official dance society of JIIT Sector 128 and describes its cultural/inter-college activity.'
   },
   CypherX: {
     instagram: 'https://www.instagram.com/cypherx_jiit/',
