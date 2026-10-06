@@ -11,7 +11,7 @@ const requiredOrientation=[
 ];
 const requiredLeadership=[
   ['Devansh Tripathi','General Secretary'],['Amrit Kumar Jha','Vice President'],
-  ['Daksh Sachdeva','Finance Secretary / Treasurer'],['Saksham Kotia','Joint Secretary'],
+  ['Daksh Sachdeva','Finance Secretary'],['Saksham Kotia','Joint Secretary'],
   ['Aradhyaa Singh','Executive Head'],['Divye Bajaj','PR Head'],['Shriya Singh','Digital Head'],
   ['Revant Srivastava','Management Head'],['Juhi Hatuka','Hospitality Head'],
   ['Asmi Srivastava','Hospitality Head'],['Vansh Mahajan','Security Head'],['Pratik Kumar','Security Head']
