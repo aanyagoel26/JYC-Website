@@ -57,8 +57,7 @@ export const JYC_SOCIALS = {
     campus: 'sector-128',
     sourcePriority: 'official-hub',
     verifiedBy: 'https://www.linkedin.com/company/zencoders/',
-    verifiedOn: '2026-10-03',
-    sourceNote: 'LinkedIn profile states official cybersecurity community of JIIT-128 and primary location at JIIT Sector 128, Jaypee Wishtown.'
+    verifiedOn: '2026-10-03'
   },
   JODC: {
     linkedin: 'https://in.linkedin.com/company/jodc/',
@@ -67,7 +66,7 @@ export const JYC_SOCIALS = {
     sourcePriority: 'official-hub',
     verifiedBy: 'https://www.linkedin.com/company/jodc/',
     verifiedOn: '2026-10-03',
-    sourceNote: 'LinkedIn profile states the official dance society of JIIT Sector 128 and describes its cultural/inter-college activity.'
+    sourceNote: 'Current LinkedIn profile states the official dance society of JIIT Sector 128 and describes cultural, inter-college and community activity.'
   },
   CypherX: {
     instagram: 'https://www.instagram.com/cypherx_jiit/',
@@ -75,7 +74,8 @@ export const JYC_SOCIALS = {
     linkedin: 'https://www.linkedin.com/company/cypherx-jiit/',
     label: 'CypherX · JIIT-128',
     campus: 'sector-128',
-    sourcePriority: 'official-hub'
+    sourcePriority: 'official-hub',
+    sourceNote: 'Current LinkedIn profile states the official cybersecurity community of JIIT-128 and primary location at Jaypee Wishtown, Sector 128.'
   },
   Arcadia: {
     instagram: 'https://www.instagram.com/arcadia_jiit/',
