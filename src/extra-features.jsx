@@ -42,7 +42,6 @@ export function JsonLd({data,pageType='home',item=null,path='/'}){const origin=(
   name:'JIIT Youth Club',
   alternateName:['JYC','JIIT JYC'],
   publisher:{'@id':`${origin}/#organization`},
-  potentialAction:{'@type':'SearchAction',target:{'@type':'EntryPoint',urlTemplate:`${origin}/?q={search_term_string}`},'query-input':'required name=search_term_string'}
 }];
 const absoluteMediaUrl=value=>{const v=String(value||'').trim();return !v?'':v.startsWith('/')?origin+v:v};
 const eventDateTime=(date,time)=>{if(!date)return '';const raw=String(time||'').trim();if(!raw)return String(date);const match=raw.match(/^(\d{1,2}):(\d{2})(?::\d{2})?$/);return match?(String(date)+'T'+String(match[1]).padStart(2,'0')+':'+match[2]+':00+05:30'):String(date)};
