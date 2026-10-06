@@ -39,10 +39,11 @@ const checks=[
 
 check('CountUp component is present',fs.existsSync(path.join(root,'src/components/react-bits/CountUp.jsx')));
 check('DepthCarousel component is present',fs.existsSync(path.join(root,'src/components/react-bits/DepthCarousel.jsx'))&&fs.readFileSync(path.join(root,'src/components/react-bits/DepthCarousel.css'),'utf8').includes('overflow:hidden'));
-check('DepthCarousel avoids GSAP dependency',!read('src/components/react-bits/DepthCarousel.jsx').includes("from'gsap'")&&!pkg.dependencies?.gsap);
+check('DepthCarousel avoids a direct GSAP import',!read('src/components/react-bits/DepthCarousel.jsx').includes("from'gsap'")&&!read('src/components/react-bits/DepthCarousel.jsx').includes('from "gsap"'));
 check('DepthCarousel is lazy-loaded on public routes',main.includes('LazyDepthCarousel')&&main.includes('<Suspense fallback={<div className="depth-carousel depth-carousel--loading"'));
 
 check('DriftWall gallery is lazy-loaded and bounded',home.includes('LazyDriftWall')&&home.includes('pauseOnHover={true}')&&fs.existsSync(path.join(root,'src/components/react-bits/DriftWall.css')));
+check('DriftWall is the homepage gallery archive',home.includes('id="gallery"')&&home.includes('always in motion')&&home.includes('gallery.slice(0,24)')&&home.includes("href:'/gallery'"));
 check('MagicBento is lazy-loaded and GSAP is declared',home.includes('LazyMagicBento')&&pkg.dependencies.gsap==='3.15.0'&&lock.packages['node_modules/gsap']?.version==='3.15.0');
 check('DriftWall has offscreen, low-power and reduced-motion safeguards',read('src/components/react-bits/DriftWall.jsx').includes('IntersectionObserver')&&read('src/components/react-bits/DriftWall.jsx').includes('lowPower')&&read('src/components/react-bits/DriftWall.jsx').includes('prefers-reduced-motion'));
 check('MagicBento disables heavy effects on mobile/coarse pointers',read('src/components/react-bits/MagicBento.jsx').includes('(pointer:coarse)')&&read('src/components/react-bits/MagicBento.jsx').includes('max-width:768px'));
