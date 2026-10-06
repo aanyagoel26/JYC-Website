@@ -681,7 +681,48 @@ function Search({data,admin,close}){
 }
 function ConfirmDialog({request,onClose}){useEffect(()=>{const onKey=e=>{if(e.key==='Escape')onClose(false);if(e.key==='Enter')onClose(true)};document.addEventListener('keydown',onKey);return()=>document.removeEventListener('keydown',onKey)},[onClose]);return <div className="confirm-overlay" role="presentation" onMouseDown={e=>{if(e.currentTarget===e.target)onClose(false)}}><div className="confirm-dialog" role="alertdialog" aria-modal="true" aria-labelledby="jyc-confirm-title" aria-describedby="jyc-confirm-text"><span className="eyebrow">JYC · CONFIRM</span><h2 id="jyc-confirm-title">{request.title||'Are you sure?'}</h2><p id="jyc-confirm-text">{request.text||''}</p><div className="confirm-actions"><button type="button" className="btn secondary" onClick={()=>onClose(false)}>Cancel</button><button type="button" className={`btn ${request.danger?'danger':''}`} onClick={()=>onClose(true)}>{request.confirmLabel||'Confirm'}</button></div></div></div>}
 
-function Footer({data,admin}){const nav=useNavigate();return <footer className="jyc-footer jyc-club-footer"><div className="footer-top"><div className="footer-brand"><div className="footer-logo-lockup"><LogoImage alt="JYC logo"/></div><div><strong>JIIT YOUTH CLUB</strong><span>READY TO SOAR · JIIT SECTOR 128</span><p>The student-led club behind JIIT's communities, events and campus experiences.</p></div></div><div className="footer-nav"><span className="eyebrow">JYC</span><div><button type="button" onClick={()=>nav('/about')}>About</button><button type="button" onClick={()=>nav('/clubs')}>Clubs</button><button type="button" onClick={()=>nav('/events')}>Events</button>{isFestMode(data)&&<button type="button" onClick={()=>nav('/fests')}>Fests</button>}<button type="button" onClick={()=>nav('/team')}>Team</button><button type="button" onClick={()=>nav('/recruitment')}>Join JYC</button><button type="button" onClick={()=>nav('/calendar')}>Event calendar</button><button type="button" onClick={()=>nav('/archive')}>Archive</button><button type="button" onClick={()=>nav('/history')}>History</button><button type="button" onClick={()=>nav('/achievements')}>Achievements</button><button type="button" onClick={()=>nav('/contact')}>Contact</button></div></div><div className="footer-connect creator-card"><span className="eyebrow">BUILT FOR JYC</span><strong>JYC public experience</strong><p>Official club information, communities and experiences in one public home.</p><span className="eyebrow">CONNECT</span><a href={JYC_CONTACTS.instagram} target="_blank" rel="noopener noreferrer">Instagram ↗</a><a href={JYC_CONTACTS.whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp ↗</a><a href={'mailto:'+data.creator.email}>Email ↗</a></div></div><div className="footer-bottom"><span>JIIT YOUTH CLUB</span><small className="jyc-creator-credit">Created by <a href="https://www.linkedin.com/in/kaustubh-dua-2b5a76416" target="_blank" rel="noopener noreferrer" aria-label="Kaustubh on LinkedIn">Kaustubh ↗</a></small></div></footer>}
+function Footer({data,admin}){
+  const nav=useNavigate();
+  const links=[
+    ['/about','About'],['/clubs','Clubs'],['/events','Events'],
+    ...(isFestMode(data)?[['/fests','Fests']]:[]),
+    ['/team','Team'],['/recruitment','Join JYC'],['/calendar','Event calendar'],
+    ['/archive','Archive'],['/history','History'],['/achievements','Achievements'],['/contact','Contact']
+  ];
+  return <footer className="jyc-footer jyc-footer-v6">
+    <div className="footer-v6-inner">
+      <div className="footer-v6-rail">
+        <div className="footer-v6-brand">
+          <div className="footer-logo-lockup"><LogoImage alt="JYC logo"/></div>
+          <div><strong>JIIT YOUTH CLUB</strong><span>READY TO SOAR · JIIT SECTOR 128</span></div>
+        </div>
+        <span className="footer-v6-index">JYC / 128</span>
+      </div>
+      <div className="footer-v6-main">
+        <div className="footer-v6-intro">
+          <span className="eyebrow">STUDENT-LED · SECTOR 128</span>
+          <h2>Make your mark<br/>on campus.</h2>
+          <p>Communities, events and experiences built by JIIT students, for JIIT students.</p>
+        </div>
+        <nav className="footer-v6-links" aria-label="JYC footer navigation">
+          <span className="eyebrow">EXPLORE</span>
+          <div>{links.map(([href,label])=><button key={href} type="button" onClick={()=>nav(href)}>{label}<span aria-hidden="true">↗</span></button>)}</div>
+        </nav>
+        <div className="footer-v6-connect">
+          <span className="eyebrow">CONNECT</span>
+          <a href={JYC_CONTACTS.instagram} target="_blank" rel="noopener noreferrer">Instagram <span>↗</span></a>
+          <a href={JYC_CONTACTS.whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp <span>↗</span></a>
+          <a href={'mailto:'+data.creator.email}>Email <span>↗</span></a>
+        </div>
+      </div>
+      <div className="footer-v6-biglink"><button type="button" onClick={()=>nav('/recruitment')}>JOIN JYC <span aria-hidden="true">↗</span></button></div>
+      <div className="footer-bottom footer-v6-bottom">
+        <span>JIIT YOUTH CLUB · JIIT SECTOR 128</span>
+        <small className="jyc-creator-credit">Created by <a href="https://www.linkedin.com/in/kaustubh-dua-2b5a76416" target="_blank" rel="noopener noreferrer" aria-label="Kaustubh on LinkedIn">Kaustubh</a></small>
+      </div>
+    </div>
+  </footer>;
+}
 
 function Loading({stage='INITIALIZING',cached=false}){ 
  const labels={INITIALIZING:['INITIALIZING','CONNECTING TO JYC'],LOADING:['LOADING','PREPARING THE CAMPUS ECOSYSTEM'],SYNCING:['SYNCING',cached?'USING YOUR LATEST SAVED SNAPSHOT':'CHECKING THE LATEST CAMPUS DATA'],READY:['READY','BUILDING YOUR EXPERIENCE'],OFFLINE:['OFFLINE','OPENING THE LAST AVAILABLE JYC EXPERIENCE']};
