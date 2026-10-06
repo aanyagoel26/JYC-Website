@@ -1,4 +1,4 @@
--- V56.17.1 · remove legacy JYC social identities from public aggregation
+-- V56.17.0 · remove legacy JYC social identities from public aggregation
 -- The former JIIT Youth Club company/Instagram identities are not safe evidence for JYC 128.
 update public.aggregated_posts p
 set published=false, verified=false, updated_at=now()
