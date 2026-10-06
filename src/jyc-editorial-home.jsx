@@ -111,7 +111,7 @@ export function JYCEditorialHome({data}){
   (data?.events||[]).filter(e=>e?.published&&!e?.archived)
  ),[data?.events]);
  const gallery=useMemo(()=>(
-  (data?.gallery||[]).filter(g=>g?.url)
+  mergeSourceGallery(data?.gallery||[]).filter(g=>g?.url)
  ),[data?.gallery]);
  const team=(data?.team||[]).filter(x=>x?.published===true).slice(0,6);
  const familyEntries=JYC_HUB_FAMILIES.map(family=>({
