@@ -354,7 +354,7 @@ function EventDirectoryList({events}){
  return <div className="event-directory-list">{events.map((event,index)=>{
    const end=event.dateEnd||event.date;
    const ended=end?new Date(end+'T23:59:59')<new Date():false;
-   const canRegister=event.publicStatus!=='planned'&&!ended&&Boolean(event.registrationUrl||event.registrationMode==='native')&&(!event.registrationDeadline||new Date(event.registrationDeadline)>new Date());
+   const canRegister=(event.publicStatus!=='planned'||event.registrationVerified===true)&&!ended&&Boolean(event.registrationUrl||event.registrationMode==='native')&&(!event.registrationDeadline||new Date(event.registrationDeadline)>new Date());
    const registrationState=event.publicStatus==='planned'?'REGISTRATION NOT PUBLISHED':canRegister?'REGISTER':(event.registrationUrl||event.registrationMode==='native')?'REGISTRATION CLOSED':'VIEW EVENT';
    return <button className="event-directory-row" key={event.id||event.title} onClick={()=>nav('/events/'+slug(event.title))}><span className="event-row-number">{String(index+1).padStart(2,'0')}</span><span className="event-row-date"><b>{fmtDate(event.date)}</b><small>{event.start||'TIME TBA'}</small></span><span className="event-row-copy"><small>{event.club||'JYC'}{event.venue?' · '+event.venue:''}</small><strong>{event.title}</strong><em>{event.description||'Open the official event record.'}</em></span><span className="event-row-state">{event.publicStatus==='planned'?'PLANNED':eventState(event).toUpperCase()}</span><span className="event-row-register">{registrationState}</span><b className="event-row-arrow" aria-hidden="true">↗</b></button>
  })}</div>
@@ -909,7 +909,7 @@ function EventCard({e,index=0}){
  const identity=eventIdentity(e);
  const eventEnd=e.dateEnd||e.date;
  const eventEnded=eventEnd?new Date(eventEnd+'T23:59:59')<new Date():false;
- const regOpen=e.publicStatus!=='planned'&&!eventEnded&&(!e.registrationDeadline||new Date(e.registrationDeadline)>new Date())&&Boolean(e.registrationUrl||e.registrationMode==='native');
+ const regOpen=(e.publicStatus!=='planned'||e.registrationVerified===true)&&!eventEnded&&(!e.registrationDeadline||new Date(e.registrationDeadline)>new Date())&&Boolean(e.registrationUrl||e.registrationMode==='native');
  const regClosed=Boolean(e.registrationUrl||e.registrationMode==='native')&&!regOpen;
  const registrationLabel=e.publicStatus==='planned'?'REGISTRATION NOT PUBLISHED':regOpen?'REGISTER':regClosed?'REGISTRATION CLOSED':'VIEW EVENT';
  const identityStyle={'--hub-accent':identity.accent,'--hub-accent-soft':'color-mix(in srgb, '+identity.accent+' 12%, transparent)','--hub-accent-line':'color-mix(in srgb, '+identity.accent+' 28%, transparent)','--identity-shape':'var(--jyc-shape-'+(identity.shape||'event')+')'};
