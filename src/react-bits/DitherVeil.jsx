@@ -422,6 +422,11 @@ const DitherVeil = ({
     if (!container) return undefined;
 
     const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    const coarsePointer = window.matchMedia?.('(pointer: coarse)').matches || window.innerWidth < 800;
+    if (reducedMotion || coarsePointer) {
+      container.dataset.static = '1';
+      return () => { delete container.dataset.static; };
+    }
     const renderer = new Renderer({ dpr: Math.min(window.devicePixelRatio || 1, 2), alpha: false, antialias: false });
     const gl = renderer.gl;
     const canvas = gl.canvas;
@@ -802,7 +807,7 @@ const DitherVeil = ({
     };
   }, [src]);
 
-  return <div ref={containerRef} className={`dither-veil ${className}`.trim()} style={style} />;
+  return <div ref={containerRef} className={`dither-veil ${className}`.trim()} style={style}><img className="dither-veil__fallback" src={src} alt="" aria-hidden="true" decoding="async" /></div>;
 };
 
 export default DitherVeil;
