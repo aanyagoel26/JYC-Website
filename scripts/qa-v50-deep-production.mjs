@@ -10,5 +10,10 @@ check('all JYC Now providers use bounded fetches',!api.includes('await fetch(u,'
 check('featured event dialog has a focus trap',popup.includes("e.key==='Tab'")&&popup.includes('dialogRef.current.querySelectorAll'));
 check('featured event dialog retains Escape dismissal',popup.includes("e.key==='Escape'"));
 check('JYC Now images have meaningful alt text',now.includes("alt={`${item.hub||'JYC'} — ${item.title}`}"));
+check('JAI popup uses official 128 source',popup.includes("https://www.jiityouthclub128.in/")&&popup.includes("JIIT Wish Town Campus · Sector 128, Noida"));
+check('JAI popup is homepage-scoped',popup.includes("window.location.pathname==='/'")&&popup.includes("if(!onHome||!open)return null;"));
+check('JAI popup is dismissible and reduced-motion safe',popup.includes('localStorage')&&popup.includes("e.key==='Escape'")&&popup.includes('prefers-reduced-motion:reduce'));
+check('JAI popup has official registration and site actions',popup.includes('unstop.com/o/XAfa40i')&&popup.includes('Register on Unstop')&&popup.includes('Official site'));
+
 if(failures.length)process.exit(1);
 console.log('V50 DEEP PRODUCTION QA PASS');
