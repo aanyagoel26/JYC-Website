@@ -43,7 +43,7 @@ const missing=[];
 const dynamicLocalRefs=new Set();
 for(const file of files){
   const text=fs.readFileSync(file,'utf8');
-  for(const m of text.matchAll(/(?:src|poster|href|content|url)\\s*=\\s*[{\\(]?\\s*['\"](\\/(?:assets|models|jyc-[^'\"]+|offline\\.html|manifest\\.json|robots\\.txt|sitemap\\.xml|llms\\.txt)[^'\"]*)['\"]/g)) dynamicLocalRefs.add(m[1].split('?')[0]);
+  for(const m of text.matchAll(/(?:src|poster|href|content|url)\s*=\s*[{(]?\s*['\"](\/(?:assets|models|jyc-[^'\"]+|offline\.html|manifest\.json|robots\.txt|sitemap\.xml|llms\.txt)[^'\"]*)['\"]/g)) dynamicLocalRefs.add(m[1].split('?')[0]);
 }
 for(const asset of dynamicLocalRefs) if(!refs.has(asset)) refs.set(asset,['dynamic-local-reference']);
 for(const [asset,owners] of refs){
