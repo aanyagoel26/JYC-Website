@@ -152,3 +152,7 @@ The following hub identities were independently matched to current public profil
 - VamUnique — current LinkedIn identity identifies it as the official dance society of JIIT Sector 128.
 
 These links are stored only where the evidence is strong enough. The other hubs remain source-backed without guessed social URLs.
+
+## Normalized production publication state observed on 06 Oct 2026
+
+The connected Supabase project currently has 23 normalized club records: 17 published and 6 draft. The six draft records are Arcadia, CypherX, Dronotics, GDG, Neural Nexus and Zencoders. The supplied 2026–27 orientation material supports these as current JYC 128 communities, but the normalized publication guard has no content-verification records for them, so they remain draft rather than being force-published. Their social identities are therefore not used to bypass the publication gate.
