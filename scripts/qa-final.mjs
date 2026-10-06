@@ -28,6 +28,7 @@ const checks=[
  ['living photo engine respects reduced motion and hidden tabs',livingPhoto.includes('prefers-reduced-motion')&&livingPhoto.includes('visibilitychange')],
  ['gallery defaults to living story mode',fs.readFileSync(path.join(root,'src/extra-features.jsx'),'utf8').includes("const [viewMode,setViewMode]=useState('story')")&&fs.readFileSync(path.join(root,'src/extra-features.jsx'),'utf8').includes('LivingPhoto')&&fs.readFileSync(path.join(root,'src/extra-features.jsx'),'utf8').includes("viewMode==='archive'")],
  
+ ['club detail has source-safe leadership fallback',main.includes('club-leadership-pending')&&main.includes('Current club leadership is not publicly published yet.')&&main.includes('sourcePeople')],
  ['Projects, Impact and FAQ are not public pages',!main.includes("function ProjectsPage")&&!main.includes("function ImpactPage")&&!main.includes("function FAQPage")&&!main.includes("JYC Student Projects")&&!main.includes("JYC Community Impact")&&!main.includes("JYC FAQ")&&!main.includes("nav('/projects')")&&!main.includes("nav('/impact')")&&!main.includes("nav('/faq')")],
  ['legacy event-calendar route redirects to canonical calendar',main.includes("if(clean==='/event-calendar')return <Navigate to=\"/calendar\" replace/>")],
 ];
