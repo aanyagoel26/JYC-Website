@@ -5,6 +5,7 @@ const main=read('src/main.jsx');
 const editorialHome=read('src/jyc-editorial-home.jsx');
 const next=read('src/jyc-next-experience.jsx');
 const sourceMedia=read('src/jyc-source-media.js');
+const extraFeatures=read('src/extra-features.jsx');
 const checks=[
  ['V56.7 polish is imported',read('src/styles/public-system.css').includes("./jyc-v55-visual-polish.css")],
  ['public content has centered width contract',css.includes('--jyc-content')&&css.includes('margin-inline:auto')],
@@ -19,6 +20,7 @@ const checks=[
  ['homepage DriftWall is the main visual archive',editorialHome.includes('id="gallery"')&&editorialHome.includes('LazyDriftWall')&&editorialHome.includes('gallery.slice(0,24)')&&editorialHome.includes('always in motion')&&editorialHome.includes('href:\'/gallery\'')],
  ['club source rail uses metadata-aware captions',main.includes('club-living-photo')&&read('src/jyc-living-photo.jsx').includes('current.caption||current.title||current.association')&&read('src/jyc-living-photo.jsx').includes('jyc-living-photo-meta')],
  ['gallery mounts source hub photography',read('src/extra-features.jsx').includes('sourcePhotoItems=useMemo')&&read('src/extra-features.jsx').includes('sourceHubMedia(name).photoItems')],
+ ['gallery defaults to DriftWall archive presentation',extraFeatures.includes("useState('wall')")&&extraFeatures.includes('LazyDriftWall')&&extraFeatures.includes('items.slice(0,36)')&&extraFeatures.includes('href:\'#gallery-archive\'')&&extraFeatures.includes('Drift wall')],
  ['maintained hub photo mapping has no duplicate URLs',(()=>{const refs=[...sourceMedia.matchAll(/QUALITY_OVERRIDES=[\s\S]*?};/g)][0]?.[0]||'';const urls=[...refs.matchAll(/['\"](\/assets\/[^'\"]+)['\"]/g)].map(m=>m[1]);return new Set(urls).size===urls.length})()],
  ['public club/event/photo cards stay upright',!main.includes('club-card-v41 tilt-card')&&!main.includes('event-card-premium tilt-card')&&!main.includes('moments-feature-${i} tilt-card')],
  ['event identity contract remains present',main.includes('event-identity-page')&&main.includes('eventIdentity(e)')],
