@@ -25,6 +25,10 @@ check(fs.readFileSync(path.join(root,'src/jyc-bot.jsx'),'utf8').includes('<JYCAs
 check(!main.includes('CampusMapPage')&&!main.includes("clean==='/map'"),'campus map must not be a public JYC product route');
 check(vercel.redirects?.some(x=>x.source==='/map'&&x.destination==='/events'&&x.permanent),'retired campus map must permanently redirect to events');
 check(vercel.redirects?.some(x=>x.source==='/leadership'&&x.destination==='/team'&&x.permanent)&&vercel.redirects?.some(x=>x.source==='/event-calendar'&&x.destination==='/calendar'&&x.permanent),'legacy aliases must be handled by permanent redirects');
+check(main.includes("if(clean==='/admin'||clean.startsWith('/admin/'))return <Navigate to=\"/\" replace/>;"),'Control Center must not be reachable from the public React router');
+check(!main.includes("const adminPages=admin?"),'public search must not expose Control Center');
+check(vercel.redirects?.some(x=>x.source==='/admin'&&x.destination==='/'&&x.permanent),'admin must permanently redirect away from the public site');
+check(vercel.redirects?.some(x=>x.source==='/admin/:path*'&&x.destination==='/'&&x.permanent),'nested admin routes must permanently redirect away from the public site');
 check(vercel.redirects?.some(x=>x.source==='/leadership'&&x.destination==='/team'&&x.permanent),'leadership must redirect permanently to team');
 check(vercel.redirects?.some(x=>x.source==='/event-calendar'&&x.destination==='/calendar'&&x.permanent),'event-calendar must redirect permanently to calendar');
 check(vercel.redirects?.some(x=>x.source==='/guide'&&x.destination==='/about'&&x.permanent),'guide must redirect permanently to about');
