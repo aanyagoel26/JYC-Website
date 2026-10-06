@@ -45,9 +45,9 @@ add('Leadership and gallery have explicit page metadata',main.includes("'/leader
 add('Contact form does not claim success when Supabase is unconfigured',main.includes("if(!supabase.__configured)")&&main.includes("The live contact inbox is not configured yet"));
 add('Contact form has name/email/message fields',main.includes('name="name"')&&main.includes('name="email"')&&main.includes('name="message"'));
 add('Homepage What JYC Does covers the senior categories',config.includes("title:'Cultural'")&&config.includes("title:'Technical'")&&config.includes("title:'Literary'")&&config.includes("title:'Sports'")&&config.includes("title:'Management'")&&config.includes("title:'Social Outreach'")&&config.includes("title:'Workshops'")&&config.includes("title:'Competitions'"));
-add('JYC social identity uses the publicly verified handle',socials.includes("instagramHandle: '@jiityouthclub'")&&socials.includes("verifiedBy: 'https://linktr.ee/jiityouthclub'"));
-add('JYC contact config uses the publicly verified handle',siteConfig.includes("instagram:'https://www.instagram.com/jiityouthclub/'")&&!siteConfig.includes('instagram.com/jiityouthclub128/'));
-add('Organization JSON-LD uses the publicly verified handle',index.includes('https://www.instagram.com/jiityouthclub/')&&!index.includes('https://www.instagram.com/jiityouthclub128/'));
+add('JYC social identity is explicitly 128-scoped',socials.includes("canonicalCampus: 'sector-128'")&&socials.includes("https://in.linkedin.com/in/jyc128")&&socials.includes("https://linktr.ee/jiityouthclub"));
+add('JYC contact config uses verified 128 identity',siteConfig.includes("official:'https://linktr.ee/jiityouthclub'")&&siteConfig.includes("linkedin:'https://in.linkedin.com/in/jyc128'")&&!siteConfig.includes("instagram:'https://www.instagram.com/jiityouthclub/'"));
+add('Organization JSON-LD uses verified 128 identity',index.includes('https://in.linkedin.com/in/jyc128')&&index.includes('https://linktr.ee/jiityouthclub')&&!index.includes('https://www.instagram.com/jiityouthclub/'));
 add('Club cards surface verified social actions',main.includes('club-socials')&&main.includes('socialProfile(c.name)'));
 add('Production does not use demo fallback content',main.includes('allowContentFallback:false')&&main.includes('return norm(empty)'));
 
