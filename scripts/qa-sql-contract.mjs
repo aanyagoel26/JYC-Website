@@ -26,6 +26,7 @@ req('202610060005_v57_event_source_metadata.sql',['jiityouthclub128.in','officia
 req('202610060006_v57_verified_source_rechecks.sql',['dronotics.in','innovationjiit.in','g-jai-summit','g-dronowar-1']);
 req('202610060007_v57_club_source_rechecks.sql',['cypherx-jiit','dronotics-jiit-128','club-zencoders']);
 req('202610060008_v57_linkedin_provenance_metadata.sql',['source_name','source_platform','confidence','LinkedIn']);
+req('202610060011_v57_2_read_rpc_privilege_hardening.sql',['revoke execute on function public.jyc_read_site_data() from authenticated;']);
 req('202610030005_publication_verification_guard.sql',['jyc_guard_json_publication','jyc_guard_json_publication on public.jyc_site_data','cannot be published before verification']);
 req('202610050007_normalized_publication_verification_guard.sql',['jyc_guard_normalized_publication','jyc_guard_normalized_club_publication','jyc_guard_normalized_event_publication','source_url']);
 if(failures.length){console.error('SQL CONTRACT QA FAIL');failures.forEach(x=>console.error('FAIL:',x));process.exit(1)}
