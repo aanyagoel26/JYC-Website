@@ -11,7 +11,8 @@ import CountUp from './components/react-bits/CountUp.jsx';
 import './jyc-editorial-home.css';
 
 const LazyDitherVeil=lazy(()=>import('./react-bits/DitherVeil.jsx'));
-const LazyDepthCarousel=lazy(()=>import('./components/react-bits/DepthCarousel.jsx'));\nconst LazyFlexCarousel=lazy(()=>import('./components/react-bits/FlexCarousel.jsx'));
+const LazyDepthCarousel=lazy(()=>import('./components/react-bits/DepthCarousel.jsx'));
+const LazyFlexCarousel=lazy(()=>import('./components/react-bits/FlexCarousel.jsx'));
 const LazyMagicBento=lazy(()=>import('./components/react-bits/MagicBento.jsx'));
 
 function ViewportDeferred({children,fallback,rootMargin='700px'}){
