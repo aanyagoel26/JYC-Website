@@ -21,6 +21,8 @@ req('202610030007_verification_trust_contract.sql',['jyc_content_verification_ve
 req('202610030008_verification_identity_audit.sql',['jyc_set_verification_audit_fields','auth.uid()','verified_at := now()','Verified content requires an authenticated verifier']);
 req('202610030009_public_submission_guard.sql',['jyc_public_submission_rate_limits','jyc_allow_public_submission','revoke all on public.jyc_public_submission_rate_limits from anon, authenticated;','grant execute on function public.jyc_allow_public_submission(text,integer,integer) to service_role;']);
 req('202610060003_jyc_social_identity_hardening.sql',['aggregated_posts','content_sources','jiityouthclub/','jyc128']);
+req('202610060004_v57_trust_contract.sql',['confidence text not null default \'review\'','source_captured_at','review_reason','v.campus_id=\'sector-128\'']);
+req('202610060005_v57_event_source_metadata.sql',['jiityouthclub128.in','official-event-site','confidence=\'strong\'']);
 req('202610030005_publication_verification_guard.sql',['jyc_guard_json_publication','jyc_guard_json_publication on public.jyc_site_data','cannot be published before verification']);
 req('202610050007_normalized_publication_verification_guard.sql',['jyc_guard_normalized_publication','jyc_guard_normalized_club_publication','jyc_guard_normalized_event_publication','source_url']);
 if(failures.length){console.error('SQL CONTRACT QA FAIL');failures.forEach(x=>console.error('FAIL:',x));process.exit(1)}
