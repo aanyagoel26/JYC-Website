@@ -30,6 +30,7 @@ const LazyJYCInnovationMotion=lazy(()=>import('./jyc-innovation-motion.jsx').the
 const LazyRubberSegment=lazy(()=>import('./react-bits/JYCMicro.jsx').then(m=>({default:m.RubberSegment})));
 const LazyBellToggle=lazy(()=>import('./react-bits/JYCMicro.jsx').then(m=>({default:m.BellToggle})));
 const LazyDepthCarousel=lazy(()=>import('./components/react-bits/DepthCarousel.jsx'));
+const LazyFlipCard=lazy(()=>import('./components/react-bits/FlipCard.jsx'));
 
 
 
@@ -258,13 +259,31 @@ function Team({data}){
  const faculty=members.filter(m=>/faculty|advisor|coordinator/i.test(String(m.role||m.position||'')));
  const apex=members.filter(m=>/president|vice president|general secretary|joint secretary|finance secretary|treasurer/i.test(String(m.role||m.position||''))&&!/faculty/i.test(String(m.role||'')));
  const core=members.filter(m=>!faculty.includes(m)&&!apex.includes(m));
- const MemberCard=({m,index})=><article className="team-layer-card reveal" key={m.id||m.name||index}>
-   <div className="team-photo-editorial">{teamPhotoFor(m)?<img src={teamPhotoFor(m)} alt={m.name||'JYC team member'} loading="lazy"/>:<LogoImage alt="JIIT Youth Club logo"/>}</div>
-   <span className="tag">{m.role||m.position||'JYC Team'}</span>
-   <h3>{m.name||'JYC Team Member'}</h3>
-   {(m.bio||m.description)&&<p>{m.bio||m.description}</p>}
-   <div className="team-social-row">{safeExternalUrl(m.linkedin)&&<a href={safeExternalUrl(m.linkedin)} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>}{safeExternalUrl(m.instagram)&&<a href={safeExternalUrl(m.instagram)} target="_blank" rel="noopener noreferrer">Instagram ↗</a>}</div>
+ const MemberCard=({m,index})=>{
+  const name=m.name||'JYC Team Member';
+  const role=m.role||m.position||'JYC Team';
+  const photo=teamPhotoFor(m);
+  const about=m.bio||m.description||'Official JYC leadership profile. More details will be published as the organisation updates its public people records.';
+  return <article className="team-layer-card team-flip-member reveal" key={m.id||name||index}>
+   <Suspense fallback={<div className="team-flip-loading" aria-hidden="true"/>}>
+    <LazyFlipCard label={`Open profile for ${name}`} className="team-member-flip">
+     <span className="team-member-face-content">
+      <span className="team-photo-editorial">{photo?<img src={photo} alt={name} loading="lazy"/>:<LogoImage alt="JIIT Youth Club logo"/>}</span>
+      <span className="tag">{role}</span>
+      <strong className="team-member-name">{name}</strong>
+      <span className="team-member-hint">Click to read profile →</span>
+     </span>
+     <span className="team-member-face-content team-member-back-content">
+      <span className="eyebrow">ABOUT · {role}</span>
+      <strong>{name}</strong>
+      <span className="team-member-about">{about}</span>
+      <span className="team-member-back-note">Tap / click again to return to the photo.</span>
+      <span className="team-social-row">{safeExternalUrl(m.linkedin)&&<a href={safeExternalUrl(m.linkedin)} target="_blank" rel="noopener noreferrer" onClick={e=>e.stopPropagation()}>LinkedIn ↗</a>}{safeExternalUrl(m.instagram)&&<a href={safeExternalUrl(m.instagram)} target="_blank" rel="noopener noreferrer" onClick={e=>e.stopPropagation()}>Instagram ↗</a>}</span>
+     </span>
+    </LazyFlipCard>
+   </Suspense>
   </article>;
+ };
  const roleFallback=members.length?null:<State title="The JYC team is being prepared." text="Official team profiles will appear here when JYC publishes them from the Control Center."><Button secondary onClick={()=>nav('/about')}>Learn about JYC →</Button></State>;
  return <section className="section page team-page jyc-team-page unified-public-page">
   <Breadcrumbs items={[{label:'Team'}]}/><EcosystemContextRail/>
