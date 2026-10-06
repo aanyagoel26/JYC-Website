@@ -24,8 +24,8 @@ function urlBase64ToUint8Array(base64String){const padding='='.repeat((4-base64S
 function useObjectUrl(file){const [url,setUrl]=useState('');useEffect(()=>{if(!file){setUrl('');return undefined}const next=URL.createObjectURL(file);setUrl(next);return()=>URL.revokeObjectURL(next)},[file]);return url}
 function Loading(){return <div className="loading"><div className="loading-center"><span className="loading-mark"><img src={markLogo} alt="JYC"/></span><div className="loading-kicker"><i/> JIIT YOUTH CLUB · STAFF</div><div className="loadline"><i/></div><small>Opening Control Center</small></div></div>}
 function State({title,text,children,compact=false}){return <section className={`state ${compact?'compact':''}`}><div className="state-orbit"/><span className="eyebrow">JYC</span><h1>{title}</h1><p>{text}</p>{children}</section>}
-function Button({children,onClick,secondary=false,danger=false,disabled=false}){return <button disabled={disabled} className={`btn ${secondary?'secondary':''} ${danger?'danger':''}`} onClick={onClick}>{children}</button>}
-function Back({to,label='Back'}){const nav=useNavigate();return <button className="back" onClick={()=>to?nav(to):nav(-1)}>← {label}</button>}
+function Button({children,onClick,secondary=false,danger=false,disabled=false}){return <button type="button" disabled={disabled} className={`btn ${secondary?'secondary':''} ${danger?'danger':''}`} onClick={onClick}>{children}</button>}
+function Back({to,label='Back'}){const nav=useNavigate();return <button type="button" className="back" onClick={()=>to?nav(to):nav(-1)}>← {label}</button>}
 function AdminAICopilot({title,context,onApply}){
  const [open,setOpen]=useState(false),[busy,setBusy]=useState(false),[mode,setMode]=useState('audit'),[result,setResult]=useState(null),[error,setError]=useState('');
  const draftData=context?.draft;
