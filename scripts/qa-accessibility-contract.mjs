@@ -20,6 +20,8 @@ check('homepage browser QA checks horizontal overflow',browser.includes('scrollW
 check('no positive tabindex values are introduced',!/tabIndex\s*=\s*\{\s*[1-9]\d*\s*\}|tabindex\s*=\s*["'][1-9]\d*["']/i.test(main));
 check('skip link exists',main.includes('SkipLink')&&/className=["']skip-link["']/.test(extras)&&read('index.html').includes('skip-link'));
 check('filter controls expose pressed state',/aria-pressed=\{family===/.test(main)&&/aria-pressed=\{!savedOnly\}/.test(extras)&&/aria-pressed=\{savedOnly\}/.test(extras));
+const publicButtonFiles=['src/main.jsx','src/extra-features.jsx','src/jyc-editorial-home.jsx','src/jyc-next-experience.jsx','src/jyc-now.jsx','src/featured-event-popup.jsx'];
+check('public buttons declare an explicit type',publicButtonFiles.every(file=>{const text=read(file);return !/<button\\b([^>]*)>/g.test(text.replace(/<button\\b[^>]*>/g,'')) && [...text.matchAll(/<button\\b([^>]*)>/g)].every(m=>/\\btype\\s*=/.test(m[1]));}));
 check('filter groups do not misuse tablist semantics without tabs',!/className="hub-family-row" role="tablist"/.test(main)&&!/className="calendar-mode-tabs" role="tablist"/.test(extras));
 check('campus selector is a button group with pressed state',campus.includes('className="campus-switch" role="group"')&&campus.includes('aria-pressed={campus===x.id}'));
 if(failures.length) process.exit(1);
