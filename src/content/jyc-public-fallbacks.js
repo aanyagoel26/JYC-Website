@@ -44,7 +44,8 @@ const PUBLIC_GALLERY_FALLBACK=[
  {id:'team-aradhyaa-campaign',url:'/assets/team/campaign/aradhyaa-singh.webp',caption:'Leadership campaign · Aradhyaa Singh',association:'JYC Team · Aradhyaa Singh',year:'2026'},
  {id:'team-vansh-campaign',url:'/assets/team/campaign/vansh-mahajan.webp',caption:'Leadership campaign · Vansh Mahajan',association:'JYC Team · Vansh Mahajan',year:'2026'},
  {id:'team-pratik-campaign',url:'/assets/team/campaign/pratik-kumar.webp',caption:'Leadership campaign · Pratik Kumar',association:'JYC Team · Pratik Kumar',year:'2026'},
- {id:'team-shriya-campaign',url:'/assets/team/campaign/shriya-singh.webp',caption:'Leadership campaign · Shriya Singh',association:'JYC Team · Shriya Singh',year:'2026'}
+ {id:'team-shriya-campaign',url:'/assets/team/campaign/shriya-singh.webp',caption:'Leadership campaign · Shriya Singh',association:'JYC Team · Shriya Singh',year:'2026'},
+ {id:'team-divye-portrait',url:'/assets/team/divye-bajaj.webp',caption:'Leadership portrait · Divye Bajaj',association:'JYC Team · Divye Bajaj',year:'2026',mediaKind:'photo',sourceLabel:'JYC supplied team portrait'}
 ];
 
 const PUBLIC_EVENT_FALLBACK=[
