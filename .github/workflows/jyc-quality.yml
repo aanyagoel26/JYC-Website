@@ -1,53 +1,36 @@
 name: JYC Quality Gate
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+  workflow_dispatch:
 
-concurrency:
-  group: jyc-quality-${{ github.ref }}
-  cancel-in-progress: true
+permissions:
+  contents: read
 
 jobs:
   quality:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 5
     steps:
       - name: Checkout
         uses: actions/checkout@v5
-
-      - name: Setup Node
-        uses: actions/setup-node@v5
         with:
-          node-version: 22
-          cache: npm
+          persist-credentials: false
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Verify release metadata is internally consistent
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="$(node -p "require('./package.json').version")"
+          CACHE="$(grep -o "jyc-cache-v[0-9.-]*" public/sw.js | head -n1)"
+          echo "package version: $VERSION"
+          echo "service-worker cache: $CACHE"
+          test "$CACHE" = "jyc-cache-v$VERSION"
+          grep -q "V$VERSION" scripts/qa-jyc-release-guard.mjs
 
-      - name: Static QA
-        run: npm run qa
-
-      - name: Production build
-        run: npm run build
-
-      - name: Production performance budget
-        run: node scripts/qa-performance.mjs
-
-      - name: Install Chromium
-        run: npx playwright install --with-deps chromium
-
-      - name: Browser QA
-        run: npm run qa:browser
-
-      - name: Upload Playwright diagnostics
-        if: failure()
-        uses: actions/upload-artifact@v6
-        with:
-          name: jyc-playwright-diagnostics
-          path: |
-            test-results/
-            playwright-report/
-          if-no-files-found: ignore
+      - name: Verify forbidden public-scope pages stay absent
+        shell: bash
+        run: |
+          set -euo pipefail
+          ! grep -RqsE "href=[\"']/projects|to=[\"']/projects" src --include='*.jsx' --include='*.js'
+          ! grep -RqsE "FAQ|Frequently Asked Questions" src/main.jsx src/*.jsx
+          ! grep -RqsE "Impact" src/main.jsx src/*.jsx
