@@ -59,7 +59,7 @@ export const JYC_SOCIALS = {
     verifiedOn: '2026-10-03'
   },
   JODC: {
-    linkedin: 'https://www.linkedin.com/company/jiit-open-source-developers-circle/',
+    linkedin: 'https://in.linkedin.com/company/jodc/',
     label: 'JIIT Open-Source Developers Circle',
     campus: 'sector-128',
     sourcePriority: 'official-hub',
@@ -99,6 +99,7 @@ export const JYC_SOCIALS = {
     instagram: 'https://www.instagram.com/dronoticsjiit128/',
     instagramHandle: '@dronoticsjiit128',
     website: 'https://www.dronotics.in/',
+    linkedin: 'https://www.linkedin.com/company/dronotics-jiit-128/',
     label: 'Dronotics · JIIT-128',
     campus: 'sector-128',
     sourcePriority: 'official-hub',
@@ -124,6 +125,7 @@ export const JYC_SOCIALS = {
     instagram: 'https://www.instagram.com/eloquencej128/',
     instagramHandle: '@eloquencej128',
     linkedin: 'https://www.linkedin.com/company/eloquence-litsoc/',
+    website: 'https://thyeloquence.blogspot.com/',
     label: 'Eloquence · Literary Society of JIIT',
     campus: 'sector-128',
     sourcePriority: 'official-hub',
@@ -136,12 +138,14 @@ export const JYC_SOCIALS = {
 export const JYC_FEST_SOCIALS = {
   'Converge 2026': {
     website: 'https://converge.cicr.in/',
+    linkedin: 'https://www.linkedin.com/posts/jiitofficial_converge2026-jiit-jiitnoida-activity-7437724646713536512-kt8q',
     instagram: 'https://www.instagram.com/cicr_jiit/',
     instagramHandle: '@cicr_jiit',
     label: 'CICR × CONVERGE 2026'
   },
   'JAI 2026 · Jaypee Agentic AI Hackathon': {
     website: 'https://www.jiityouthclub128.in/',
+    linkedin: 'https://in.linkedin.com/in/jyc128',
     label: 'Jaypee Agentic AI International Summit 2026'
   },
   'RIDE Hack 26': {
