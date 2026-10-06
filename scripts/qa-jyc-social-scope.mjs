@@ -14,6 +14,7 @@ for(const needle of [
   "https://www.instagram.com/jiityouthclub/",
   "https://www.linkedin.com/company/jiityouthclub/"
 ]) if(!socials.includes(needle)) failures.push('missing social source policy: '+needle);
+if(!socials.includes("blockedIdentities: [")||!socials.includes("'https://www.instagram.com/jiityouthclub/'")) failures.push('legacy JYC Instagram is not explicitly blocked');
 if(!now.includes('is128SocialProfile')) failures.push('JYC Now does not enforce 128 social profile filtering');
 if(!main.includes('social&&is128SocialProfile(social)')) failures.push('public club enrichment does not enforce 128 social profile filtering');
 if(!socials.includes("campus: 'review'")||!socials.includes("sourcePriority: 'review-only'")) failures.push('ambiguous GDG identity is not review-gated');
