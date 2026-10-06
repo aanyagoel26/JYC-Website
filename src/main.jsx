@@ -453,9 +453,6 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
   '/gallery':'Browse the JYC 128 visual archive by event, year and published source media.',
   '/leadership':'Meet the JYC 128 faculty advisors, apex leadership and core team.',
   '/achievements':'JYC 128 achievements, Wall of Fame, community milestones and published outcomes.',
-  '/projects':'Source-backed JYC club projects, technical builds and innovation experiences.',
-  '/impact':'Verified JYC outreach, awareness and community initiatives.',
-  '/faq':'Answers about JYC, clubs, events, recruitment and the public archive.',
   '/join-jyc':'Join JYC 128 is currently coming soon. Recruitment and application opportunities will be published here when the next official cycle opens.'
  };
  const privateRoute=clean==='/admin';
@@ -560,9 +557,6 @@ const explore=[
    ['/calendar','Event Calendar','Browse JYC events by date'],
    ['/gallery','Gallery','Event memories, years and visual archive'],
    ['/achievements','Achievements','Wall of Fame and community outcomes'],
-   ['/projects','Projects','Source-backed student builds and innovation work'],
-   ['/impact','Impact','Verified outreach and community initiatives'],
-   ['/faq','FAQ','Answers about JYC, clubs and events'],
    ['/updates','JYC Now','Recent verified updates from JYC and the hubs'],
    ['/announcements','Announcements','Registrations, notices and JYC updates'],
    ['/join-jyc','Join JYC · Coming Soon','Official JYC recruitment will appear here when the next cycle opens'],
