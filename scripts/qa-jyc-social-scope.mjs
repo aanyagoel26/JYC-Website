@@ -18,7 +18,7 @@ if(!socials.includes("blockedIdentities: [")||!socials.includes("'https://www.in
 if(!now.includes('is128SocialProfile')) failures.push('JYC Now does not enforce 128 social profile filtering');
 if(!main.includes('social&&is128SocialProfile(social)')) failures.push('public club enrichment does not enforce 128 social profile filtering');
 if(!socials.includes("campus: 'review'")||!socials.includes("sourcePriority: 'review-only'")) failures.push('ambiguous GDG identity is not review-gated');
-if(!sql.includes("hub_name in ('GDG','RPH')")) failures.push('ambiguous GDG/RPH feeds are not disabled in the social hardening migration');
+if(!sql.includes('normalized JYC tables') || !sql.includes('to_regclass')) failures.push('social hardening migration is not compatible with the normalized schema');
 if(!main.includes('isSector128Venue(e.venue)&&(/fest|impressions|converge|ebullience/i.test')) failures.push('public fests are not explicitly restricted to Sector 128 venues');
 if(config.includes("instagram:'https://www.instagram.com/jiityouthclub/'")||config.includes("linkedin:'https://www.linkedin.com/company/jiityouthclub/'")) failures.push('legacy JYC social identity remains in public contact config');
 if(index.includes('https://www.instagram.com/jiityouthclub/')||index.includes('https://www.linkedin.com/company/jiityouthclub/')) failures.push('legacy JYC social identity remains in Organization JSON-LD');
