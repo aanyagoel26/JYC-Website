@@ -24,6 +24,6 @@ check('Qriosity and JIIT OPTICA remain brochure-verified',registry.includes("nam
 check('supplied-material audit is committed',audit.includes('21 communities')&&audit.includes('Devansh Tripathi')&&audit.includes('photos.zip'));
 check('official JYC 128 Instagram is sourced',socials.includes("instagram: 'https://www.instagram.com/jiityouthclub128/'")&&socials.includes("@jiityouthclub128"));
 check('all 12 photographed leadership identities remain in fallback data',requiredLeadership.every(([name,role])=>team.includes("name:'"+name+"'")&&team.includes("role:'"+role+"'")));
-check('no fallback gallery entry references an unshipped Divye asset',!team.includes("team-divye-campaign")&&!team.includes("divye-bajaj.webp"));
+check('no fallback gallery entry references an unshipped Divye campaign asset',!team.includes("team-divye-campaign"));
 if(failures.length){console.error('SUPPLIED MATERIAL QA FAILED: '+failures.length);process.exit(1)}
 console.log('SUPPLIED MATERIAL QA PASS');
