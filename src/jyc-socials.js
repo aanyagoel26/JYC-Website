@@ -169,7 +169,7 @@ export const JYC_FEST_SOCIALS = {
     label: 'Dronotics JIIT-128 · DRON-O-WAR 1.0',
     sourceType: 'official-hub-social'
   },
-  'INNOVATE 3.0 — Hack to Build':
+  'INNOVATE 3.0 — Hack to Build': {
     linkedin: 'https://www.linkedin.com/posts/jiitofficial_innovate3-hacktobuild-innovationclub-activity-7424395513288003584-wpTw',
     label: 'JIIT official · INNOVATE 3.0',
     sourceType: 'official-university-social'
