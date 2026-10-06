@@ -27,6 +27,8 @@ check(vercel.redirects?.some(x=>x.source==='/map'&&x.destination==='/events'&&x.
 check(main.includes("if(clean==='/projects'||clean==='/projects/submit')return <Navigate to=\"/clubs\" replace/>;"),'retired Projects routes must redirect safely to clubs in the client router');
 check(vercel.redirects?.some(x=>x.source==='/leadership'&&x.destination==='/team'&&x.permanent)&&vercel.redirects?.some(x=>x.source==='/event-calendar'&&x.destination==='/calendar'&&x.permanent),'legacy aliases must be handled by permanent redirects');
 check(main.includes("if(clean==='/admin'||clean.startsWith('/admin/'))return <Navigate to=\"/\" replace/>;"),'Control Center must not be reachable from the public React router');
+check(!main.includes('<Admin data={data}'),'public router must not render the admin workspace component');
+check(!main.includes('JYC CONTROL CENTER')||main.includes("const privateRoute=clean==='/admin'||clean.startsWith('/admin/')"),'public main shell must not expose an admin loading screen');
 check(!main.includes("const adminPages=admin?"),'public search must not expose Control Center');
 check(vercel.redirects?.some(x=>x.source==='/admin'&&x.destination==='/'&&x.permanent),'admin must permanently redirect away from the public site');
 check(vercel.redirects?.some(x=>x.source==='/admin/:path*'&&x.destination==='/'&&x.permanent),'nested admin routes must permanently redirect away from the public site');
