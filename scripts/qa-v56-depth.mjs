@@ -7,7 +7,7 @@ const hubs=['Fortissimo','BDS','VamUnique','Panache','RPH','CICR','Innovation','
 for(const h of hubs)check(new RegExp("(?:['\\\"])?"+h.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\\\$&')+"(?:['\\\"])?\\s*:").test(details),`hub detail missing: ${h}`);
 check((registry.match(/status:'brochure-verified'/g)||[]).length===2,'2 brochure-verified registry entries required');
 check((registry.match(/status:'orientation-verified'/g)||[]).length===15,'15 orientation-verified registry entries required');
-check((registry.match(/status:'source-material'/g)||[]).length===6,'6 source-material registry entries required');
+check((registry.match(/status:'source-material'/g)||[]).length===6,'0 source-material registry entries required after supplied-material promotion');
 check(!registry.includes("verified-current"),'stale verified-current status present');
 check(media.includes('QUALITY_OVERRIDES')&&media.includes('sourceHubMedia'),'source media quality/lookup layer missing');
 check(main.includes('club-living-photo')&&main.includes('sourceHubMedia(c.name).photoItems')&&main.includes('LivingPhoto'),'club source photography rail not wired');
