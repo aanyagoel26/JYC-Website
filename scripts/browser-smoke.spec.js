@@ -3,6 +3,20 @@ import { test, expect } from '@playwright/test';
 const base = process.env.JYC_BASE_URL || 'http://127.0.0.1:5173';
 const routes = ['/', '/about', '/history', '/clubs', '/events', '/team', '/gallery', '/achievements', '/announcements', '/recruitment', '/calendar', '/archive', '/updates', '/contact', '/fests'];
 
+async function waitForAppMount(page, label='page') {
+  try {
+    await page.waitForFunction(() => Boolean(document.querySelector('#root')?.children.length), { timeout: 30000 });
+  } catch (error) {
+    const diagnostics = await page.evaluate(() => ({
+      readyState: document.readyState,
+      rootHtml: document.querySelector('#root')?.innerHTML?.slice(0, 1200) || '',
+      bodyText: document.body?.innerText?.slice(0, 1200) || '',
+      scriptCount: document.scripts.length
+    }));
+    throw new Error(label + ' did not mount within 30s: ' + JSON.stringify(diagnostics) + '; ' + error.message);
+  }
+}
+
 test('public app mounts with no runtime errors', async ({ page }) => {
   const errors = [];
   page.on('pageerror', error => errors.push(`pageerror: ${error.message}`));
@@ -10,7 +24,7 @@ test('public app mounts with no runtime errors', async ({ page }) => {
   await page.goto(base, { waitUntil: 'domcontentloaded' });
   await expect(page.locator('#root')).toBeAttached();
   await expect(page).toHaveTitle(/JYC|JIIT YOUTH CLUB/i);
-  await expect(page.locator('#root')).not.toBeEmpty({ timeout: 15000 });
+  await waitForAppMount(page, 'homepage');
   expect(errors, `browser errors: ${errors.join(' | ')}`).toEqual([]);
 });
 
@@ -21,7 +35,7 @@ for (const route of routes) {
     page.on('console', message => { if (message.type() === 'error') errors.push(`console: ${message.text()}`); });
     await page.goto(base + route, { waitUntil: 'domcontentloaded' });
     await expect(page.locator('#root')).toBeAttached();
-    await expect(page.locator('#root')).not.toBeEmpty({ timeout: 15000 });
+    await waitForAppMount(page, route);
     await expect(page.locator('body')).toBeVisible();
     expect(errors, `runtime errors on ${route}: ${errors.join(' | ')}`).toEqual([]);
   });
