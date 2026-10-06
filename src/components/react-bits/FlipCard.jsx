@@ -9,5 +9,5 @@ export default function FlipCard({front,back,className='',label='Flip card'}) {
    <span className="flip-card__face flip-card__front">{front}</span>
    <span className="flip-card__face flip-card__back">{back}</span>
   </span>
- </button>;
+ </div>;
 }
