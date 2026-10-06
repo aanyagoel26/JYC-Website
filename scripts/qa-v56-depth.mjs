@@ -9,6 +9,7 @@ check((registry.match(/status:'brochure-verified'/g)||[]).length===2,'2 brochure
 check((registry.match(/status:'orientation-verified'/g)||[]).length===21,'21 orientation-verified registry entries required');
 check((registry.match(/status:'source-material'/g)||[]).length===0,'0 source-material registry entries required after supplied-material promotion');
 check(!registry.includes("verified-current"),'stale verified-current status present');
+check(/name:'Arcadia'[^\n]+publicationStatus:'published'/.test(registry)&&/name:'Neural Nexus'[^\n]+publicationStatus:'published'/.test(registry),'final two hub publication status missing');
 check(media.includes('QUALITY_OVERRIDES')&&media.includes('sourceHubMedia'),'source media quality/lookup layer missing');
 check(main.includes('club-living-photo')&&main.includes('sourceHubMedia(c.name).photoItems')&&main.includes('LivingPhoto'),'club source photography rail not wired');
 check(source.includes('JYC_SOURCE_ARCHIVE_PHOTO_ITEMS')&&source.match(/mediaKind==='photo'/),'full source-archive photography pool is exposed');
