@@ -44,6 +44,7 @@ check('DepthCarousel is lazy-loaded on public routes',main.includes('LazyDepthCa
 
 check('DriftWall gallery is lazy-loaded and bounded',home.includes('LazyDriftWall')&&home.includes('pauseOnHover={true}')&&fs.existsSync(path.join(root,'src/components/react-bits/DriftWall.css')));
 check('DriftWall is the homepage gallery archive',home.includes('id="gallery"')&&home.includes('always in motion')&&home.includes('gallery.slice(0,24)')&&home.includes("href:'/gallery'"));
+check('Heavy homepage visual engines are viewport-deferred',home.includes('function ViewportDeferred')&&home.includes('rootMargin=\'700px\'')&&home.includes('<ViewportDeferred'));
 check('MagicBento is lazy-loaded and GSAP is declared',home.includes('LazyMagicBento')&&pkg.dependencies.gsap==='3.15.0'&&lock.packages['node_modules/gsap']?.version==='3.15.0');
 check('DriftWall has offscreen, low-power and reduced-motion safeguards',read('src/components/react-bits/DriftWall.jsx').includes('IntersectionObserver')&&read('src/components/react-bits/DriftWall.jsx').includes('lowPower')&&read('src/components/react-bits/DriftWall.jsx').includes('prefers-reduced-motion'));
 check('MagicBento disables heavy effects on mobile/coarse pointers',read('src/components/react-bits/MagicBento.jsx').includes('(pointer:coarse)')&&read('src/components/react-bits/MagicBento.jsx').includes('max-width:768px'));
