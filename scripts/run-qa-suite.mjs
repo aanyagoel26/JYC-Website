@@ -22,6 +22,7 @@ const scripts = [
   'qa-v42-public-pages.mjs',
   'qa-final-product.mjs',
   'qa-data-integrity.mjs',
+  'qa-events-128.mjs',
   'qa-accessibility-contract.mjs',
   'qa-repo-hygiene.mjs',
   'qa-v52-final-contract.mjs',
