@@ -163,7 +163,7 @@ export const JYC_FEST_SOCIALS = {
     label: 'CICR JIIT 128 · ROBOSPARK',
     sourceType: 'official-hub-social'
   },
-  'DRON-O-WAR 1.0': {
+  'DRONO-O-WAR 1.0': {
     website: 'https://www.dronotics.in/',
     linkedin: 'https://www.linkedin.com/company/dronotics-jiit-128/',
     label: 'Dronotics JIIT-128 · DRON-O-WAR 1.0',
