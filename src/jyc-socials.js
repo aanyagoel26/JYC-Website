@@ -53,6 +53,7 @@ export const JYC_SOCIALS = {
     instagram: 'https://www.instagram.com/zencodersjiit/',
     instagramHandle: '@zencodersjiit',
     linkedin: 'https://www.linkedin.com/company/zencoders/',
+    website: '',
     label: 'ZENCODERS',
     campus: 'sector-128',
     sourcePriority: 'official-hub',
