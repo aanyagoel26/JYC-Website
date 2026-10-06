@@ -94,7 +94,8 @@ export const JYC_SOCIALS = {
     campus: 'review',
     sourcePriority: 'review-only',
     verifiedBy: 'https://www.linkedin.com/company/dsc-jiit/',
-    verifiedOn: '2026-10-03'
+    verifiedOn: '2026-10-03',
+    sourceNote: 'Current GDG JIIT 128 posts identify the community as JIIT 128 and advertise 128 events; its LinkedIn location field still says Sector 62, so the organization remains review-gated.'
   },
   Dronotics: {
     instagram: 'https://www.instagram.com/dronoticsjiit128/',
@@ -161,7 +162,7 @@ export const JYC_FEST_SOCIALS = {
     label: 'JIIT official + GDG JIIT 128',
     sourceType: 'official-university-social'
   },
-  'RIDE Hack 26':
+  'RIDE Hack 26': {
     website: 'https://www.innovationjiit.in/',
     linkedin: 'https://www.linkedin.com/company/innovation-jiit/',
     label: 'INNOVATION JIIT'
