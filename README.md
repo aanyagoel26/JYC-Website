@@ -293,7 +293,7 @@ The remaining production gates are operational: configure required third-party E
 
 ## Current release status
 
-**V56.16.0 is the current code release.** The codebase is intentionally in final public polish and production-QA mode rather than feature expansion.
+**V57.0.0 is the current code release.** The codebase is intentionally in final public polish and production-QA mode rather than feature expansion.
 
 The release boundary is aligned across `package.json`, `package-lock.json`, the service-worker cache, final product QA, final hygiene QA, `public/llms.txt`, and the latest public-surface hardening commits.
 
