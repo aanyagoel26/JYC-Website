@@ -3,7 +3,7 @@ begin;
 
 alter table public.jyc_content_verification
   add column if not exists confidence text not null default 'review'
-    check (confidence in ('official','strong','corroborated','weak')),
+    check (confidence in ('official','strong','corroborated','weak','review')),
   add column if not exists source_name text,
   add column if not exists source_platform text,
   add column if not exists source_captured_at timestamptz,
