@@ -493,7 +493,7 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
   '/achievements':'JYC 128 achievements, Wall of Fame, community milestones and published outcomes.',
   '/join-jyc':'Join JYC 128 is currently coming soon. Recruitment and application opportunities will be published here when the next official cycle opens.'
  };
- const privateRoute=clean==='/admin';
+ const privateRoute=clean==='/admin'||clean.startsWith('/admin/');
  const knownPublic=['/','/about','/history','/clubs','/events','/fests','/gallery','/team','/leadership','/contact','/archive','/calendar','/event-calendar','/achievements','/announcements','/updates','/recruitment','/join-jyc'].includes(clean)&&(clean!=='/fests'||isFestMode(data));
  const knownDetail=Boolean(club||event);
  const unknownRoute=!privateRoute&&!knownPublic&&!knownDetail;
