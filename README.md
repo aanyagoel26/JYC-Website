@@ -196,8 +196,8 @@ The static QA suite includes source integrity, security, SEO, build preflight, p
 
 - **Organisation:** JIIT Youth Club 128
 - **Campus:** JIIT Wish Town Campus · Sector 128, Noida
-- **Instagram:** @jiityouthclub
-- **LinkedIn:** JIIT Youth Club
+- **Official links:** https://linktr.ee/jiityouthclub
+- **LinkedIn:** JIIT Youth Club 128
 
 ## Research / source basis
 
