@@ -23,7 +23,7 @@ import {JYCBrandEditorial} from './jyc-next-experience.jsx';
 import {JYCEditorialHome} from './jyc-editorial-home.jsx';
 
 import {PUBLIC_TEAM_FALLBACK,JAI_OFFICIAL_MEDIA,PUBLIC_GALLERY_FALLBACK,PUBLIC_EVENT_FALLBACK} from './content/jyc-public-fallbacks.js';
-import {JYC_EDITORIAL_ACHIEVEMENTS,JYC_EDITORIAL_PROJECTS,JYC_IMPACT_RECORDS,JYC_FAQ} from './jyc-editorial-content.js';
+import {JYC_EDITORIAL_ACHIEVEMENTS,JYC_EDITORIAL_PROJECTS,JYC_IMPACT_RECORDS,JYC_FAQ,JYC_TEAM_SOCIALS} from './jyc-editorial-content.js';
 
 
 const LazyJYCBot=lazy(()=>import('./jyc-bot.jsx').then(m=>({default:m.JYCBot})));
@@ -45,6 +45,7 @@ function mergePublicFallback(d,{allowContentFallback=true}={}){
  const existingClubNames=new Set(enrichedClubs.map(c=>String(c.name||'').trim().toLowerCase()));
  const sourceOnlyClubs=JYC_HUB_SOURCE_ONLY.filter(meta=>!existingClubNames.has(meta.name.toLowerCase())).map(meta=>{const p=JYC_HUB_CONTENT[meta.name]||{};return enrichSourceClubs([{id:`hub-${slug(meta.name)}`,name:meta.name,type:p.family==='Technical'?'Technical':'Non-Technical',category:p.focus||p.family,description:p.summary||`${meta.name} is retained in the JYC source ecosystem.`,about:p.detail||'',interests:[p.family,p.focus].filter(Boolean),published:true,status:'source-material',sourceVerification:'source-material',sourceLabel:meta.source,theme:'jyc'}])[0]});
  const clubs=[...enrichedClubs,...sourceOnlyClubs];
+ const enrichedTeam=(Array.isArray(x.team)?x.team:[]).map(member=>{const key=Object.keys(JYC_TEAM_SOCIALS).find(n=>n.toLowerCase()===String(member?.name||'').trim().toLowerCase());const social=key?JYC_TEAM_SOCIALS[key]:null;return social?{...member,socials:{...(member.socials||{}),linkedin:member.socials?.linkedin||social.linkedin||''},linkedin:member.linkedin||social.linkedin||'',socialVerifiedBy:social.verifiedBy||'',socialVerifiedOn:social.verifiedOn||''}:member});
  const sourceGallery=mergeSourceGallery(x.gallery);
  const gallery=[...sourceGallery,...JAI_OFFICIAL_MEDIA,...(allowContentFallback?[...PDF_HUB_GALLERY,...PDF_HUB_EXTRA_GALLERY,...PUBLIC_GALLERY_FALLBACK]:[])].filter((g,i,a)=>a.findIndex(x=>x.id===g.id)===i);
  const liveEvents=Array.isArray(x.events)?x.events:[];
@@ -52,7 +53,7 @@ function mergePublicFallback(d,{allowContentFallback=true}={}){
  const events=allowContentFallback
    ? [...fallbackEvents,...liveEvents.filter(e=>!fallbackEvents.some(f=>String(f.id)===String(e.id)))]
    : liveEvents;
- return {...x,clubs,events,gallery,team:allowContentFallback&&x.team?.length===0?PUBLIC_TEAM_FALLBACK:x.team,homepage:{...x.homepage,activities:Array.isArray(x.homepage?.activities)&&x.homepage.activities.length?x.homepage.activities:PUBLIC_ACTIVITIES}};
+ return {...x,clubs,events,gallery,team:((allowContentFallback&&x.team?.length===0?PUBLIC_TEAM_FALLBACK:enrichedTeam)),homepage:{...x.homepage,activities:Array.isArray(x.homepage?.activities)&&x.homepage.activities.length?x.homepage.activities:PUBLIC_ACTIVITIES}};
 }
 const TEAM_LOCAL_PHOTOS={
  'devansh tripathi':'/assets/team/campaign/devansh-tripathi.webp','amrit kumar':'/assets/team/campaign/amrit-kumar.webp','daksh sachdeva':'/assets/team/campaign/daksh-sachdeva.webp','saksham kotia':'/assets/team/campaign/saksham-kotia.webp','asmi srivastava':'/assets/team/campaign/asmi-srivastava.webp','juhi hatuka':'/assets/team/campaign/juhi-hatuka.webp','pratik kumar':'/assets/team/campaign/pratik-kumar.webp','divye bajaj':'/assets/team/divye-bajaj.webp','revant srivastava':'/assets/team/campaign/revant-srivastava.webp','aradhyaa singh':'/assets/team/campaign/aradhyaa-singh.webp','vansh mahajan':'/assets/team/campaign/vansh-mahajan.webp','shriya singh':'/assets/team/campaign/shriya-singh.webp'
