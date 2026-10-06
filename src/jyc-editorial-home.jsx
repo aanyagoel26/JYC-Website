@@ -11,7 +11,7 @@ import CountUp from './components/react-bits/CountUp.jsx';
 import './jyc-editorial-home.css';
 
 const LazyDitherVeil=lazy(()=>import('./react-bits/DitherVeil.jsx'));
-const LazyDriftWall=lazy(()=>import('./components/react-bits/DriftWall.jsx'));
+const LazyDepthCarousel=lazy(()=>import('./components/react-bits/DepthCarousel.jsx'));
 const LazyMagicBento=lazy(()=>import('./components/react-bits/MagicBento.jsx'));
 
 function ViewportDeferred({children,fallback,rootMargin='700px'}){
@@ -249,10 +249,10 @@ export function JYCEditorialHome({data}){
 
   <section id="gallery" className="jyc-v1-section jyc-v1-gallery editorial-reveal" aria-labelledby="jyc-v1-gallery-title">
    <div className="jyc-v1-section-head">
-    <div><span className="jyc-v1-eyebrow">VISUAL ARCHIVE · GALLERY</span><h2 id="jyc-v1-gallery-title">The JYC archive,<br/><em>always in motion.</em></h2><p>Drift through published JYC photography by event, community and year. Hover to pause the wall, focus a frame or open the full archive.</p></div>
+    <div><span className="jyc-v1-eyebrow">VISUAL ARCHIVE · GALLERY</span><h2 id="jyc-v1-gallery-title">The JYC archive,<br/><em>always in motion.</em></h2><p>Move through a curated set of published JYC photographs. The depth stack keeps the archive visual, tactile and easy to scan; the full Gallery holds the complete metadata record.</p></div>
     <button className="jyc-v1-link" onClick={()=>nav('/gallery')}>Browse full archive →</button>
    </div>
-   {gallery.length?<ViewportDeferred fallback={<div className="drift-wall-loading" aria-hidden="true"/>}><Suspense fallback={<div className="drift-wall-loading" aria-hidden="true"/>}><LazyDriftWall items={gallery.slice(0,24).map((g,index)=>({id:g.id||index,image:g.url,title:[g.caption||g.title||'JYC Archive',g.association,g.year].filter(Boolean).join(' · '),href:'/gallery'}))} columns={4} tileWidth={190} tileHeight={126} gap={14} tilt={12} turn={-10} perspective={1250} depth={100} speed={18} direction="up" variance={.28} parallax={.22} pauseOnHover={true} lift={34} fade={.55} dim={.58} grayscale={false} overlayColor="#18161d"/></Suspense></ViewportDeferred>:<div className="jyc-v1-empty">The visual archive is ready for published JYC photography. Open the full gallery to explore source collections.</div>}<div className="jyc-v1-gallery-wall-note"><strong>{gallery.length} published frames</strong><span>DriftWall is the homepage archive preview · full metadata, filters and lightbox live in the Gallery.</span></div>
+   {gallery.length?<ViewportDeferred fallback={<div className="depth-carousel depth-carousel--loading" aria-hidden="true"/>}><Suspense fallback={<div className="depth-carousel depth-carousel--loading" aria-hidden="true"/>}><LazyDepthCarousel items={gallery.slice(0,12).map((g,index)=>({id:g.id||index,image:g.url,alt:[g.caption||g.title||'JYC archive',g.association,g.year].filter(Boolean).join(' · ')}))} cardWidth={280} cardHeight={360} depth={190} spread={72} tilt={16} visibleCards={3} loop showControls showIndicators/></Suspense></ViewportDeferred>:<div className="jyc-v1-empty">The visual archive is ready for published JYC photography. Open the full Gallery to explore the source collections.</div>}<div className="jyc-v1-gallery-wall-note"><strong>{gallery.length} published frames</strong><span>Depth Carousel is the homepage visual preview · full metadata, filters and lightbox live in the Gallery.</span></div>
   </section>
 
   <PhotoChapters/>
