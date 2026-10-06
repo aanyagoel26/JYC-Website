@@ -39,6 +39,7 @@ const checks=[
 check('CountUp component is present',fs.existsSync(path.join(root,'src/components/react-bits/CountUp.jsx')));
 check('DepthCarousel component is present',fs.existsSync(path.join(root,'src/components/react-bits/DepthCarousel.jsx'))&&fs.readFileSync(path.join(root,'src/components/react-bits/DepthCarousel.css'),'utf8').includes('overflow:hidden'));
 check('DepthCarousel avoids GSAP dependency',!read('src/components/react-bits/DepthCarousel.jsx').includes("from'gsap'")&&!pkg.dependencies?.gsap);
+check('DepthCarousel is lazy-loaded on public routes',main.includes('LazyDepthCarousel')&&main.includes('<Suspense fallback={<div className="depth-carousel depth-carousel--loading"'));
 
 let failed=0;
 for(const [name,ok] of checks){console.log((ok?'PASS':'FAIL')+' · '+name);if(!ok)failed++}
