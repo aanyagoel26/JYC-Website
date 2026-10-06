@@ -187,7 +187,8 @@ export function festSocialProfile(title){
 export const JYC_SOCIAL_SOURCE_POLICY = {
   canonicalCampus: 'sector-128',
   blockedIdentities: [
-    'https://www.linkedin.com/company/jiityouthclub/'
+    'https://www.linkedin.com/company/jiityouthclub/',
+    'https://www.instagram.com/jiityouthclub/'
   ],
   approvedIdentities: [
     'https://in.linkedin.com/in/jyc128',
