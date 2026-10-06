@@ -66,7 +66,7 @@ export const JYC_SOCIALS = {
     sourcePriority: 'official-hub',
     verifiedBy: 'https://www.linkedin.com/company/jodc/',
     verifiedOn: '2026-10-03',
-    sourceNote: 'Current LinkedIn profile states the official dance society of JIIT Sector 128 and describes cultural, inter-college and community activity.'
+    sourceNote: 'Current LinkedIn profile states Open Source Society of JIIT-128 and primary location JIIT Sector 128, Noida.'
   },
   CypherX: {
     instagram: 'https://www.instagram.com/cypherx_jiit/',
