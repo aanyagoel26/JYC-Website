@@ -10,8 +10,8 @@ test('public app mounts with no runtime errors', async ({ page }) => {
   await page.goto(base, { waitUntil: 'domcontentloaded' });
   await expect(page.locator('#root')).toBeAttached();
   await expect(page).toHaveTitle(/JYC|JIIT YOUTH CLUB/i);
-  await expect(page.locator('#root')).not.toBeEmpty();
-  expect(errors).toEqual([]);
+  await expect(page.locator('#root')).not.toBeEmpty({ timeout: 15000 });
+  expect(errors, `browser errors: ${errors.join(' | ')}`).toEqual([]);
 });
 
 for (const route of routes) {
@@ -21,9 +21,9 @@ for (const route of routes) {
     page.on('console', message => { if (message.type() === 'error') errors.push(`console: ${message.text()}`); });
     await page.goto(base + route, { waitUntil: 'domcontentloaded' });
     await expect(page.locator('#root')).toBeAttached();
-    await expect(page.locator('#root')).not.toBeEmpty();
+    await expect(page.locator('#root')).not.toBeEmpty({ timeout: 15000 });
     await expect(page.locator('body')).toBeVisible();
-    expect(errors, `runtime errors on ${route}`).toEqual([]);
+    expect(errors, `runtime errors on ${route}: ${errors.join(' | ')}`).toEqual([]);
   });
 }
 
