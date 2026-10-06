@@ -1,6 +1,8 @@
 # JIIT Youth Club 128 — Official Website
 
-> **Current release: V56.15 — public search refinement and private staff surface**
+> **Current release: V56.15.1 — stabilisation, performance and maintainer cleanup**
+
+[![Quality](https://github.com/coolbandariya/JYC-Website/actions/workflows/ci.yml/badge.svg)](https://github.com/coolbandariya/JYC-Website/actions/workflows/ci.yml) [![CodeQL](https://github.com/coolbandariya/JYC-Website/actions/workflows/codeql.yml/badge.svg)](https://github.com/coolbandariya/JYC-Website/actions/workflows/codeql.yml) [![JYC Quality](https://github.com/coolbandariya/JYC-Website/actions/workflows/jyc-quality.yml/badge.svg)](https://github.com/coolbandariya/JYC-Website/actions/workflows/jyc-quality.yml)
 
 The official public website for **JIIT Youth Club (JYC), JIIT Wish Town Campus, Sector 128, Noida**.
 
