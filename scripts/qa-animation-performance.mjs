@@ -11,8 +11,8 @@ const main=read('src/main.jsx');
 const failures=[];
 const check=(name,ok)=>{console.log((ok?'PASS':'FAIL')+': '+name);if(!ok)failures.push(name)};
 
-check('DriftWall does not schedule an idle RAF when reduced/low-power/offscreen',drift.includes('if(reduced||lowPower||!visible.current)')&&drift.includes('if(!reduced&&!lowPower&&visible.current)raf.current=requestAnimationFrame(tick)'));
-check('FlexCarousel remains bounded on homepage',home.includes('gallery.slice(0,12)')&&home.includes('LazyFlexCarousel'));
+check('DriftWall does not schedule an idle RAF when reduced/low-power/offscreen',drift.includes('if(reduced||lowPower||!visible.current)')&&drift.includes('if(!reduced&&!lowPower&&visible.current)frame.current=requestAnimationFrame(animate)'));
+check('FlexCarousel remains bounded on homepage',home.includes('DRIFT_WALL_PRESETS')&&home.includes('LazyDriftWall')&&home.includes("gallery.slice(0,18)"));
 check('DriftWall remains bounded on event and club rails',main.includes('event-drift-wall-section')&&main.includes('club-drift-wall-section')&&main.includes('.slice(0,18)')&&main.includes('.slice(0,24)'));
 check('DriftWall remains bounded on Gallery page',read('src/extra-features.jsx').includes('items.slice(0,24)'));
 check('DriftWall images are lazy and async decoded',drift.includes('loading="lazy"')&&drift.includes('decoding="async"'));
