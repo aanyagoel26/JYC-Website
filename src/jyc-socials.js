@@ -89,8 +89,8 @@ export const JYC_SOCIALS = {
     linkedin: 'https://www.linkedin.com/company/dsc-jiit/',
     website: 'https://gdg-jiit.com/',
     label: 'GDG JIIT-128',
-    campus: 'sector-128',
-    sourcePriority: 'official-hub',
+    campus: 'review',
+    sourcePriority: 'review-only',
     verifiedBy: 'https://www.linkedin.com/company/dsc-jiit/',
     verifiedOn: '2026-10-03'
   },
