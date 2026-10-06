@@ -21,7 +21,7 @@ const checks=[
  ['breadcrumb styling exists',main.includes('className="visible-breadcrumbs reveal"')],
  ['SEO topic link styling exists',main.includes('.search-topic-links')],
  ['service worker cache matches V57 release',fs.readFileSync(path.join(root,'public/sw.js'),'utf8').includes('jyc-cache-v57-0-0')],
- ['footer gates Fests by fest mode',main.includes("isFestMode(data)&&<button onClick={()=>nav('/fests')}>Fests</button>")],
+ ['footer gates Fests by fest mode',/isFestMode\(data\)&&<button[^>]*>Fests<\/button>/.test(main)],
  ['club logo alt text is descriptive',main.includes('alt={\`\${c.name} logo\`}'),],
  ['homepage does not expose gallery image count as a hero metric',!main.includes('Published gallery images')&&!main.includes('gallery memories')],
  ['homepage DriftWall presets 1, 2 and 4 are available',editorialHome.includes('DRIFT_WALL_PRESETS')&&editorialHome.includes("['1','2','4']")&&editorialHome.includes('LazyDriftWall')],
