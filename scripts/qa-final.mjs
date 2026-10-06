@@ -8,6 +8,7 @@ const nextExperience=fs.readFileSync(path.join(root,'src/jyc-next-experience.jsx
 const css=fs.readFileSync(path.join(root,'src/styles/public-system.css'),'utf8');
 const pkg=JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8'));
 const livingPhoto=fs.readFileSync(path.join(root,'src/jyc-living-photo.jsx'),'utf8');
+const extraFeatures=fs.readFileSync(path.join(root,'src/extra-features.jsx'),'utf8');
 const checks=[
  ['release version is current V56.15 line',pkg.version==='56.15.2'],
  ['visible breadcrumbs component exists',main.includes('function Breadcrumbs')&&main.includes('aria-label="Breadcrumb"')],
@@ -34,7 +35,7 @@ const checks=[
 ];
 
 const extraPublicCss=fs.readFileSync(path.join(root,'src/styles/jyc-v56-final-system.css'),'utf8');
-const extraFeatures=fs.readFileSync(path.join(root,'src/extra-features.jsx'),'utf8');
+
 
 const official=fs.readFileSync(path.join(root,'src/jyc-official-hub-descriptions.js'),'utf8');
 checks.push(['official brochure hub descriptions cover 17 communities', ['VamUnique','BDS','Aakriti','Panache','Abhivyakti','Aura','Cinekala','Eloquence','Qriosity','Prismatic','Fortissimo','CICR','JODC','RPH','Innovation','JSA','JIIT OPTICA'].every(n=>official.includes("'"+n+"':"))]);
