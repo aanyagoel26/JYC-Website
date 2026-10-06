@@ -500,3 +500,9 @@ html[data-theme="dark"] .public-app .event-source-gallery-grid figcaption{color:
 .public-app .event-detail-hero .planned,
 .public-app .state-label.planned{display:inline-flex;align-items:center;gap:6px;color:var(--hub-accent,var(--jyc-final-gold))!important;border-color:color-mix(in srgb,var(--hub-accent,var(--jyc-final-gold)) 42%,var(--jyc-final-line))!important;background:color-mix(in srgb,var(--hub-accent,var(--jyc-final-gold)) 9%,transparent)!important;font-weight:900;letter-spacing:.1em}
 .public-app .event-planned-note{display:block;margin:10px 0;color:var(--jyc-final-muted);font-size:11px;line-height:1.5;letter-spacing:.02em}
+
+/* Source-safe club leadership state */
+.public-app .club-leadership-pending{display:grid;gap:10px;margin-top:14px;padding:20px;border:1px dashed var(--jyc-final-line);border-radius:18px;background:color-mix(in srgb,var(--jyc-final-surface) 94%,var(--jyc-final-gold) 6%);text-align:center}
+.public-app .club-leadership-pending strong{color:var(--jyc-final-ink);font-size:16px}
+.public-app .club-leadership-pending p{max-width:680px;margin:0 auto;color:var(--jyc-final-muted);font-size:13px;line-height:1.65}
+.public-app .club-leadership-pending .tag{justify-self:center;color:var(--jyc-final-gold);border-color:color-mix(in srgb,var(--jyc-final-gold) 34%,var(--jyc-final-line))}
