@@ -22,8 +22,9 @@ check(fs.existsSync(path.join(root,'supabase/migrations/202610030004_media_write
 check(!main.includes('AgenticAIPopup')&&!main.includes('useAgenticPopup'),'intrusive Agentic AI popup must stay out of the core JYC experience');
 check(main.includes('LazyJYCBot')&&fs.readFileSync(path.join(root,'src/jyc-bot.jsx'),'utf8').includes("/models/jyc-spatial.glb"),'approved GLB navigator is lazy-loaded from the isolated bot module');
 check(fs.readFileSync(path.join(root,'src/jyc-bot.jsx'),'utf8').includes('<JYCAssistant')&&fs.readFileSync(path.join(root,'src/jyc-assistant.jsx'),'utf8').includes('role="dialog"'),'GLB navigator opens the bounded contextual assistant dialog');
-check(!main.includes('CampusMapPage')&&!main.includes("clean==='/map'"),'campus map must not be a public JYC product route');
+check(!main.includes('CampusMapPage')&&main.includes("if(clean==='/map')return <Navigate to=\"/events\" replace/>;"),'campus map must not render a public map page and must redirect safely to events');
 check(vercel.redirects?.some(x=>x.source==='/map'&&x.destination==='/events'&&x.permanent),'retired campus map must permanently redirect to events');
+check(main.includes("if(clean==='/projects'||clean==='/projects/submit')return <Navigate to=\"/clubs\" replace/>;"),'retired Projects routes must redirect safely to clubs in the client router');
 check(vercel.redirects?.some(x=>x.source==='/leadership'&&x.destination==='/team'&&x.permanent)&&vercel.redirects?.some(x=>x.source==='/event-calendar'&&x.destination==='/calendar'&&x.permanent),'legacy aliases must be handled by permanent redirects');
 check(main.includes("if(clean==='/admin'||clean.startsWith('/admin/'))return <Navigate to=\"/\" replace/>;"),'Control Center must not be reachable from the public React router');
 check(!main.includes("const adminPages=admin?"),'public search must not expose Control Center');
