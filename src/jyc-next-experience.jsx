@@ -92,7 +92,7 @@ export function FlagshipExperience({data}){
     <h3>{event.description||'Build, participate and connect through a flagship JYC experience.'}</h3>
     <div className="jyc-flagship-stats">{stats.map((x,i)=><span key={i}><b>{String(i+1).padStart(2,'0')}</b>{x}</span>)}</div>
     <div className="jyc-flagship-steps">{steps.map(([n,label,text])=><article key={n}><b>{n}</b><div><strong>{label}</strong><p>{text}</p></div></article>)}</div>
-    <div className="jyc-flagship-actions"><button className="btn" onClick={open}>Explore the experience ↗</button>{register&&<a className="btn secondary" href={register} target="_blank" rel="noopener noreferrer">Register ↗</a>}</div>
+    <div className="jyc-flagship-actions"><button type="button" className="btn" onClick={open}>Explore the experience ↗</button>{register&&<a className="btn secondary" href={register} target="_blank" rel="noopener noreferrer">Register ↗</a>}</div>
    </div>
   </div>
  </section>
