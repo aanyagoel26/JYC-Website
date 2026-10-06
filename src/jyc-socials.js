@@ -153,7 +153,23 @@ export const JYC_FEST_SOCIALS = {
     linkedin: 'https://in.linkedin.com/in/jyc128',
     label: 'Jaypee Agentic AI International Summit 2026'
   },
-  'INNOVATE 3.0 — Hack to Build': {
+  'CICR की कक्षा #1 — AI Unlocked': {
+    linkedin: 'https://in.linkedin.com/company/cicrjiit128',
+    label: 'CICR JIIT 128 · AI Unlocked',
+    sourceType: 'official-hub-social'
+  },
+  'ROBOSPARK': {
+    linkedin: 'https://in.linkedin.com/company/cicrjiit128',
+    label: 'CICR JIIT 128 · ROBOSPARK',
+    sourceType: 'official-hub-social'
+  },
+  'DRON-O-WAR 1.0': {
+    website: 'https://www.dronotics.in/',
+    linkedin: 'https://www.linkedin.com/company/dronotics-jiit-128/',
+    label: 'Dronotics JIIT-128 · DRON-O-WAR 1.0',
+    sourceType: 'official-hub-social'
+  },
+  'INNOVATE 3.0 — Hack to Build':
     linkedin: 'https://www.linkedin.com/posts/jiitofficial_innovate3-hacktobuild-innovationclub-activity-7424395513288003584-wpTw',
     label: 'JIIT official · INNOVATE 3.0',
     sourceType: 'official-university-social'
