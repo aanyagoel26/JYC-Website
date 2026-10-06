@@ -175,5 +175,5 @@ export const JYC_SOCIAL_SOURCE_POLICY = {
 };
 
 export function is128SocialProfile(profile){
-  return Boolean(profile && profile.campus === 'sector-128' && profile.sourcePriority && !JYC_SOCIAL_SOURCE_POLICY.blockedIdentities.includes(profile.linkedin));
+  return Boolean(profile && profile.campus === 'sector-128' && profile.sourcePriority && (profile.verifiedBy || JYC_SOCIAL_SOURCE_POLICY.approvedIdentities.includes(profile.linkedin) || JYC_SOCIAL_SOURCE_POLICY.approvedIdentities.includes(profile.instagram)) && !JYC_SOCIAL_SOURCE_POLICY.blockedIdentities.includes(profile.linkedin));
 }
