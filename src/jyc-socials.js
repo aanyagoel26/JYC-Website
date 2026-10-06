@@ -46,7 +46,8 @@ export const JYC_SOCIALS = {
     website: 'https://www.innovationjiit.in/',
     label: 'INNOVATION JIIT',
     campus: 'sector-128',
-    sourcePriority: 'official-hub'
+    sourcePriority: 'official-hub',
+    sourceNote: 'Current LinkedIn recruitment and BITBOX communications identify the community as JIIT 128; company-location metadata still reports Sector 62, so event-level campus evidence must be used.'
   },
   Zencoders: {
     instagram: 'https://www.instagram.com/zencodersjiit/',
@@ -103,7 +104,8 @@ export const JYC_SOCIALS = {
     label: 'Dronotics · JIIT-128',
     campus: 'sector-128',
     sourcePriority: 'official-hub',
-    verifiedBy: 'https://www.dronotics.in/FPV%20rulebook%20DronoWar.pdf',
+    verifiedBy: 'https://www.linkedin.com/company/dronotics-jiit-128/',
+    sourceNote: 'Current LinkedIn profile identifies Dronotics as the Drone Society of JIIT 128 and its DRON-O-WAR post explicitly gives Sector 128.',
     verifiedOn: '2026-10-03'
   },
   Aakriti: {},
@@ -148,7 +150,18 @@ export const JYC_FEST_SOCIALS = {
     linkedin: 'https://in.linkedin.com/in/jyc128',
     label: 'Jaypee Agentic AI International Summit 2026'
   },
-  'RIDE Hack 26': {
+  'INNOVATE 3.0 — Hack to Build': {
+    linkedin: 'https://www.linkedin.com/posts/jiitofficial_innovate3-hacktobuild-innovationclub-activity-7424395513288003584-wpTw',
+    label: 'JIIT official · INNOVATE 3.0',
+    sourceType: 'official-university-social'
+  },
+  'BITBOX 6.0': {
+    linkedin: 'https://www.linkedin.com/posts/jiitofficial_hackathon-bitbox6-innovation-activity-7450788450456444928-Kg29',
+    supportingLinkedIn: 'https://www.linkedin.com/posts/dsc-jiit_gdg128-bitbox6-hackathon2026-activity-7440130480148029441-iqCy',
+    label: 'JIIT official + GDG JIIT 128',
+    sourceType: 'official-university-social'
+  },
+  'RIDE Hack 26':
     website: 'https://www.innovationjiit.in/',
     linkedin: 'https://www.linkedin.com/company/innovation-jiit/',
     label: 'INNOVATION JIIT'
