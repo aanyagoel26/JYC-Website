@@ -2,12 +2,15 @@
 begin;
 
 alter table public.jyc_content_verification
-  add column if not exists confidence text not null default 'review'
-    check (confidence in ('official','strong','corroborated','weak','review')),
+  add column if not exists confidence text,
   add column if not exists source_name text,
   add column if not exists source_platform text,
   add column if not exists source_captured_at timestamptz,
   add column if not exists review_reason text;
+update public.jyc_content_verification set confidence=case when status in ('verified','published') then 'official' else 'review' end where confidence is null or confidence not in ('official','strong','corroborated','weak','review');
+alter table public.jyc_content_verification alter column confidence set default 'review', alter column confidence set not null;
+alter table public.jyc_content_verification drop constraint if exists jyc_content_verification_confidence_check;
+alter table public.jyc_content_verification add constraint jyc_content_verification_confidence_check check (confidence in ('official','strong','corroborated','weak','review'));
 
 comment on column public.jyc_content_verification.confidence is 'Editorial evidence strength; official is the strongest public-source confidence.';
 comment on column public.jyc_content_verification.source_name is 'Human-readable source/account name.';
