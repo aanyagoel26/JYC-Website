@@ -9,7 +9,7 @@
 
 ## Canonical 2026–27 hub evidence from supplied orientation material
 
-The supplied orientation/hub decks directly represent these 21 communities:
+The supplied orientation/hub decks directly represent these 21 communities. The registry deliberately separates 15 orientation-backed current records from 6 source-material records that still need explicit publication verification:
 
 ### Cultural
 - Fortissimo
@@ -42,7 +42,7 @@ The supplied orientation/hub decks directly represent these 21 communities:
 ### Sports
 - JSA
 
-These records are promoted to `orientation-verified` in the public source registry. This does **not** automatically verify every social identity or every current event; those remain separately source-gated.
+15 of these communities are promoted to `orientation-verified` in the public source registry. Arcadia, CypherX, Dronotics, GDG, Neural Nexus and Zencoders remain `source-material` in the public registry until their live club records/source verification are explicitly published. This preserves the distinction between supplied current orientation evidence and the site's independently published current club records.
 
 ## Brochure-only current records
 
