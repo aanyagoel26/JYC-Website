@@ -683,6 +683,20 @@ html[data-theme="dark"] .public-app .team-card:hover{
   }
 }
 
+/* V56.9 gallery archive wall */
+.gallery-drift-wall-shell{margin-top:22px}
+.gallery-drift-wall-loading{width:100%;min-height:clamp(420px,58vw,650px);border:1px solid var(--jyc-editorial-line);background:var(--jyc-editorial-card,#fff);border-radius:18px}
+.gallery-drift-wall-note{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:12px 2px 0;margin-top:2px;border-top:1px solid var(--jyc-editorial-line);color:var(--jyc-editorial-muted);font-size:12px;line-height:1.5}
+.gallery-drift-wall-note strong{color:var(--jyc-editorial-ink);font-weight:850}
+.gallery-archive-results{scroll-margin-top:96px}
+@media(max-width:700px){
+ .gallery-drift-wall-note{align-items:flex-start;flex-direction:column;gap:8px}
+ .gallery-drift-wall-loading{min-height:360px}
+}
+@media(prefers-reduced-motion:reduce){
+ .gallery-drift-wall-shell{scroll-margin-top:0}
+}
+
 /* V56.10 identity atmosphere: lightweight WebGL only on capable fine-pointer devices. */
 .public-app .v40-visual-frame{isolation:isolate;overflow:hidden}
 .public-app .jyc-webgl-identity{
