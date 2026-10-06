@@ -24,7 +24,8 @@
     "qa:hygiene": "node scripts/qa-final-hygiene.mjs",
     "qa:media": "node scripts/qa-media-architecture.mjs",
     "qa:photos": "node scripts/qa-photo-integrity.mjs",
-    "qa:events:128": "node scripts/qa-events-128.mjs"
+    "qa:events:128": "node scripts/qa-events-128.mjs",
+    "qa:socials:128": "node scripts/qa-jyc-social-scope.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.117.2",
