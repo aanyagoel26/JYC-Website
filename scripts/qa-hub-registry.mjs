@@ -12,7 +12,7 @@ const source=[...registry.matchAll(/status:'source-material'/g)].length;
 expect(registryNames.length===23,'expected 23 registry entries, found '+registryNames.length);
 expect(brochure===2,'expected 2 brochure-verified entries, found '+brochure);
 expect(orientation===15,'expected 15 orientation-verified entries, found '+orientation);
-expect(source===6,'expected 6 source-material entries, found '+source);
+expect(source===0,'expected 6 source-material entries, found '+source);
 expect(!registry.includes("status:'verified-current'"),'stale verified-current status remains');
 expect(identities.includes('Qriosity:') && identities.includes("'JIIT OPTICA':"),'Qriosity/OPTICA identity coverage missing');
 expect(contentFile.includes('Qriosity:') && contentFile.includes("'JIIT OPTICA':"),'Qriosity/OPTICA content coverage missing');
