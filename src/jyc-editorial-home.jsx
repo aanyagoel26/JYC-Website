@@ -11,6 +11,8 @@ import CountUp from './components/react-bits/CountUp.jsx';
 import './jyc-editorial-home.css';
 
 const LazyDitherVeil=lazy(()=>import('./react-bits/DitherVeil.jsx'));
+const LazyDriftWall=lazy(()=>import('./components/react-bits/DriftWall.jsx'));
+const LazyMagicBento=lazy(()=>import('./components/react-bits/MagicBento.jsx'));
 
 const FALLBACK_PHOTO='/assets/hub-photos/jyc-06.webp';
 const TEAM_PHOTOS={
@@ -218,10 +220,7 @@ export function JYCEditorialHome({data}){
     <div><span className="jyc-v1-eyebrow">WHAT JYC DOES</span><h2 id="jyc-v1-activities-title">More than clubs.<br/><em>A campus in motion.</em></h2></div>
     <p className="jyc-v1-head-note">From culture and sport to technical communities, outreach, workshops and competitions, JYC creates places for students to participate.</p>
    </div>
-   <div className="jyc-v1-activity-grid">{activities.map((activity,index)=><article className="jyc-v1-activity-card" key={activity.title}>
-    <button className="jyc-v1-activity-image" onClick={()=>nav(activity.link||'/clubs')}><img src={activityPhoto(activity,index,gallery)} alt="" loading="lazy"/><span>0{index+1}</span></button>
-    <div><h3>{activity.title}</h3><p>{activity.text}</p><button onClick={()=>nav(activity.link||'/clubs')}>Explore →</button></div>
-   </article>)}</div>
+   <Suspense fallback={<div className="magic-bento-loading" aria-hidden="true"/>}><LazyMagicBento items={activities.map((activity,index)=>({id:activity.id||activity.title,title:activity.title,description:activity.text,label:`0${index+1}`,image:activityPhoto(activity,index,gallery),href:activity.link||'/clubs'}))} textAutoHide={false} enableStars={true} enableSpotlight={true} enableBorderGlow={true} enableTilt={false} enableMagnetism={false} particleCount={5} spotlightRadius={300} glowColor="191,156,111" clickEffect={true}/></Suspense>
   </section>
 
   <section className="jyc-v1-section jyc-v1-updates editorial-reveal" aria-labelledby="jyc-v1-updates-title">
@@ -239,7 +238,7 @@ export function JYCEditorialHome({data}){
     <div><span className="jyc-v1-eyebrow">GALLERY · MEMORIES</span><h2 id="jyc-v1-gallery-title">Campus moments,<br/><em>kept visible.</em></h2><p>Browse published JYC photography by event, community and year.</p></div>
     <button className="jyc-v1-link" onClick={()=>nav('/gallery')}>Open full gallery →</button>
    </div>
-   <div className="jyc-v1-gallery-mosaic">{gallery.slice(0,9).map((g,index)=><button key={g.id||index} className={'jyc-v1-gallery-photo gallery-photo-'+index} onClick={()=>nav('/gallery')} aria-label={'Open JYC gallery: '+(g.caption||g.title||'archive photo')}><img src={g.url} alt={g.caption||g.title||'JIIT Youth Club archive photograph'} loading={index<3?'eager':'lazy'}/><span>{g.association||g.title||'JYC Archive'}</span></button>)}</div>
+   <Suspense fallback={<div className="drift-wall-loading" aria-hidden="true"/>}><LazyDriftWall items={gallery.slice(0,12).map((g,index)=>({id:g.id||index,image:g.url,title:g.caption||g.title||g.association||'JYC Archive',href:'/gallery'}))} columns={4} tileWidth={190} tileHeight={126} gap={14} tilt={12} turn={-10} perspective={1250} depth={100} speed={18} direction="up" variance={.28} parallax={.22} pauseOnHover={true} lift={34} fade={.55} dim={.58} grayscale={false} overlayColor="#18161d"/></Suspense>
   </section>
 
   <PhotoChapters/>
