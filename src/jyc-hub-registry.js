@@ -14,12 +14,12 @@ export const JYC_HUB_SOURCE_REGISTRY = [
   {name:'Prismatic',family:'Creative',status:'orientation-verified',source:'Supplied JYC Orientation Program 2026–2027 / All Hubs material'},
   {name:'RPH',family:'Technical',status:'orientation-verified',source:'Supplied JYC Orientation Program 2026–2027 / All Hubs material'},
   {name:'VamUnique',family:'Cultural',status:'orientation-verified',source:'Supplied JYC Orientation Program 2026–2027 / All Hubs material'},
-  {name:'Arcadia',family:'Technical',status:'orientation-verified',source:'Supplied JYC Orientation Program 2026–2027 / All Hubs material'},
-  {name:'CypherX',family:'Technical',status:'orientation-verified',source:'Supplied JYC Orientation Program 2026–2027 / All Hubs material'},
-  {name:'Dronotics',family:'Technical',status:'orientation-verified',source:'Supplied JYC Orientation Program 2026–2027 / All Hubs material'},
-  {name:'GDG',family:'Technical',status:'orientation-verified',source:'Supplied JYC Orientation Program 2026–2027 / All Hubs material'},
-  {name:'Neural Nexus',family:'Technical',status:'orientation-verified',source:'Supplied JYC Orientation Program 2026–2027 / All Hubs material'},
-  {name:'Zencoders',family:'Technical',status:'orientation-verified',source:'Supplied JYC Orientation Program 2026–2027 / All Hubs material'},
+  {name:'Arcadia',family:'Technical',status:'source-material',source:'Supplied JYC Orientation Program 2026–2027 / All Hubs material'},
+  {name:'CypherX',family:'Technical',status:'source-material',source:'Supplied JYC Orientation Program 2026–2027 / All Hubs material'},
+  {name:'Dronotics',family:'Technical',status:'source-material',source:'Supplied JYC Orientation Program 2026–2027 / All Hubs material'},
+  {name:'GDG',family:'Technical',status:'source-material',source:'Supplied JYC Orientation Program 2026–2027 / All Hubs material'},
+  {name:'Neural Nexus',family:'Technical',status:'source-material',source:'Supplied JYC Orientation Program 2026–2027 / All Hubs material'},
+  {name:'Zencoders',family:'Technical',status:'source-material',source:'Supplied JYC Orientation Program 2026–2027 / All Hubs material'},
   {name:'JIIT OPTICA',family:'Technical',status:'brochure-verified',source:'JIIT Admission Brochure 2026'},
   {name:'Qriosity',family:'Literary',status:'brochure-verified',source:'JIIT Admission Brochure 2026'}
 ];
