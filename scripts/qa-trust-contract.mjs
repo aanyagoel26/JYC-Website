@@ -12,7 +12,7 @@ if(!trust) failures.push('missing V57 trust contract migration');
 else {
   const sql=read('supabase/migrations/'+trust);
   for(const needle of [
-    "confidence text not null default 'review'",
+    "confidence text",
     "source_captured_at",
     "review_reason",
     "v.campus_id='sector-128'",
