@@ -170,7 +170,6 @@ export const JYC_SOCIAL_SOURCE_POLICY = {
   ],
   approvedIdentities: [
     'https://in.linkedin.com/in/jyc128',
-    'https://www.instagram.com/jiityouthclub/',
     'https://linktr.ee/jiityouthclub'
   ]
 };
