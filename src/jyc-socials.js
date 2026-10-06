@@ -156,28 +156,33 @@ export const JYC_FEST_SOCIALS = {
   'CICR की कक्षा #1 — AI Unlocked': {
     linkedin: 'https://in.linkedin.com/company/cicrjiit128',
     label: 'CICR JIIT 128 · AI Unlocked',
+    visualReference: 'https://in.linkedin.com/company/cicrjiit128',
     sourceType: 'official-hub-social'
   },
   'ROBOSPARK': {
     linkedin: 'https://in.linkedin.com/company/cicrjiit128',
     label: 'CICR JIIT 128 · ROBOSPARK',
+    visualReference: 'https://in.linkedin.com/company/cicrjiit128',
     sourceType: 'official-hub-social'
   },
   'DRONO-O-WAR 1.0': {
     website: 'https://www.dronotics.in/',
     linkedin: 'https://www.linkedin.com/company/dronotics-jiit-128/',
     label: 'Dronotics JIIT-128 · DRON-O-WAR 1.0',
+    visualReference: 'https://www.linkedin.com/company/dronotics-jiit-128/',
     sourceType: 'official-hub-social'
   },
   'INNOVATE 3.0 — Hack to Build': {
     linkedin: 'https://www.linkedin.com/posts/jiitofficial_innovate3-hacktobuild-innovationclub-activity-7424395513288003584-wpTw',
     label: 'JIIT official · INNOVATE 3.0',
+    visualReference: 'https://www.linkedin.com/posts/jiitofficial_innovate3-hacktobuild-innovationclub-activity-7424395513288003584-wpTw',
     sourceType: 'official-university-social'
   },
   'BITBOX 6.0': {
     linkedin: 'https://www.linkedin.com/posts/jiitofficial_hackathon-bitbox6-innovation-activity-7450788450456444928-Kg29',
     supportingLinkedIn: 'https://www.linkedin.com/posts/dsc-jiit_gdg128-bitbox6-hackathon2026-activity-7440130480148029441-iqCy',
     label: 'JIIT official + GDG JIIT 128',
+    visualReference: 'https://www.linkedin.com/posts/dsc-jiit_gdg128-bitbox6-hackathon2026-activity-7440130480148029441-iqCy',
     sourceType: 'official-university-social'
   },
   'RIDE Hack 26': {
