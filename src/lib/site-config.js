@@ -7,7 +7,8 @@ export const CREATOR=Object.freeze({
   email:'kaustubhdua1991@gmail.com'
 });
 export const JYC_CONTACTS=Object.freeze({
-  instagram:'https://www.instagram.com/jiityouthclub/',
+  instagram:'',
+  official:'https://linktr.ee/jiityouthclub',
   whatsapp:'https://chat.whatsapp.com/BUvEqpevLr6Jp44904ysht?s=cl&p=a&mlu=4&ilr=4',
-  linkedin:'https://www.linkedin.com/company/jiityouthclub/'
+  linkedin:'https://in.linkedin.com/in/jyc128'
 });
