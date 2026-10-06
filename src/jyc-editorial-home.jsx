@@ -165,9 +165,9 @@ export function JYCEditorialHome({data}){
     <h1 id="jyc-v1-title"><span>The Voice.</span><span>The Talent.</span><em>The Spirit of JIIT.</em></h1>
     <p>JYC is the student-led coordinating body that brings communities, events, creativity, technology, sport and campus experiences together at JIIT 128.</p>
     <div className="jyc-v1-actions">
-     <button className="jyc-v1-btn primary" onClick={()=>nav('/events')}>Explore Events <span>↗</span></button>
-     <button className="jyc-v1-btn" onClick={()=>nav('/join-jyc')}>Join JYC / Get Involved <span>→</span></button>
-     <button className="jyc-v1-text-btn" onClick={()=>nav('/clubs')}>View Clubs ↗</button>
+     <button type="button" className="jyc-v1-btn primary" onClick={()=>nav('/events')}>Explore Events <span>↗</span></button>
+     <button type="button" className="jyc-v1-btn" onClick={()=>nav('/join-jyc')}>Join JYC / Get Involved <span>→</span></button>
+     <button type="button" className="jyc-v1-text-btn" onClick={()=>nav('/clubs')}>View Clubs ↗</button>
     </div>
     <div className="jyc-v1-proof"><span><b>01</b> VOICE</span><span><b>02</b> TALENT</span><span><b>03</b> SPIRIT</span></div>
    </div>
@@ -195,13 +195,13 @@ export function JYCEditorialHome({data}){
   <section id="events" className="jyc-v1-section jyc-v1-featured-events editorial-reveal" aria-labelledby="jyc-featured-events-title">
    <div className="jyc-v1-section-head">
     <div><span className="jyc-v1-eyebrow">FEATURED / UPCOMING EVENTS</span><h2 id="jyc-featured-events-title">What’s happening<br/><em>at JYC.</em></h2><p>Find the next experiences, see who is organising them and move directly to the official event record.</p></div>
-    <button className="jyc-v1-link" onClick={()=>nav('/events')}>View all events →</button>
+    <button type="button" className="jyc-v1-link" onClick={()=>nav('/events')}>View all events →</button>
    </div>
    {upcoming.length?<div className="jyc-v1-event-grid">{upcoming.map((event,index)=>{
     const status=eventStatus(event);
     const registration=externalUrl(event.registrationUrl);
     return <article className="jyc-v1-event-card" key={event.id||event.title}>
-     <button className="jyc-v1-event-main" onClick={()=>nav('/events/'+slug(event.title))} aria-label={'View '+event.title}>
+     <button type="button" className="jyc-v1-event-main" onClick={()=>nav('/events/'+slug(event.title))} aria-label={'View '+event.title}>
       <div className="jyc-v1-event-image"><img src={eventMedia(event,index)} alt="" loading="lazy"/><span>0{index+1}</span></div>
       <div className="jyc-v1-event-body">
        <div className="jyc-v1-event-meta"><span>{event.eventType||'JYC EXPERIENCE'}</span><b className={'status-'+status.tone}>{status.label}</b></div>
@@ -211,8 +211,8 @@ export function JYCEditorialHome({data}){
       </div>
      </button>
      <div className="jyc-v1-event-footer">
-      <button onClick={()=>nav('/events/'+slug(event.title))}>View event →</button>
-      {registration?<a href={registration} target="_blank" rel="noopener noreferrer">Register Now ↗</a>:<button onClick={()=>nav('/events/'+slug(event.title))}>{status.label==='Coming Soon'?'Details →':'Open record →'}</button>}
+      <button type="button" onClick={()=>nav('/events/'+slug(event.title))}>View event →</button>
+      {registration?<a href={registration} target="_blank" rel="noopener noreferrer">Register Now ↗</a>:<button type="button" onClick={()=>nav('/events/'+slug(event.title))}>{status.label==='Coming Soon'?'Details →':'Open record →'}</button>}
      </div>
     </article>
    })}</div>:<div className="jyc-v1-empty">No published upcoming events are currently available.</div>}
@@ -220,21 +220,21 @@ export function JYCEditorialHome({data}){
 
   <section id="about" className="jyc-v1-section jyc-v1-about editorial-reveal" aria-labelledby="jyc-v1-about-title">
    <div className="jyc-v1-about-mark"><img src="/jyc-logo-official.webp" alt="JYC 128"/></div>
-   <div><span className="jyc-v1-eyebrow">ABOUT JYC</span><h2 id="jyc-v1-about-title">A student-governed organisation with room to <em>participate, create, lead and belong.</em></h2><p>JYC gives students a platform to display their talents, organises inter- and intra-institutional activities, and helps first-year students acclimatise to campus life.</p><button className="jyc-v1-link" onClick={()=>nav('/about')}>Read about JYC →</button></div>
+   <div><span className="jyc-v1-eyebrow">ABOUT JYC</span><h2 id="jyc-v1-about-title">A student-governed organisation with room to <em>participate, create, lead and belong.</em></h2><p>JYC gives students a platform to display their talents, organises inter- and intra-institutional activities, and helps first-year students acclimatise to campus life.</p><button type="button" className="jyc-v1-link" onClick={()=>nav('/about')}>Read about JYC →</button></div>
   </section>
 
   <section id="clubs" className="jyc-v1-section jyc-v1-families editorial-reveal" aria-labelledby="jyc-v1-families-title">
    <div className="jyc-v1-section-head">
     <div><span className="jyc-v1-eyebrow">CLUBS & COMMUNITIES</span><h2 id="jyc-v1-families-title">Find your <em>community.</em></h2><p>Explore the five community families documented in the JYC orientation material.</p></div>
-    <button className="jyc-v1-link" onClick={()=>nav('/clubs')}>View full directory →</button>
+    <button type="button" className="jyc-v1-link" onClick={()=>nav('/clubs')}>View full directory →</button>
    </div>
    <div className="jyc-v1-family-tabs" role="tablist" aria-label="JYC community families">
-    <button role="tab" aria-selected={activeFamily==='All'} className={activeFamily==='All'?'active':''} onClick={()=>setActiveFamily('All')}>All</button>
-    {JYC_HUB_FAMILIES.map(f=><button role="tab" aria-selected={activeFamily===f} key={f} className={activeFamily===f?'active':''} onClick={()=>setActiveFamily(f)}>{f}</button>)}
+    <button type="button" role="tab" aria-selected={activeFamily==='All'} className={activeFamily==='All'?'active':''} onClick={()=>setActiveFamily('All')}>All</button>
+    {JYC_HUB_FAMILIES.map(f=><button type="button" role="tab" aria-selected={activeFamily===f} key={f} className={activeFamily===f?'active':''} onClick={()=>setActiveFamily(f)}>{f}</button>)}
    </div>
    <div className="jyc-v1-family-grid">{visibleFamilies.map((group,index)=><article className="jyc-v1-family-card" key={group.family}>
-    <button onClick={()=>nav('/clubs')} className="jyc-v1-family-media"><img src={hubMedia(group.hubs[0]?.name,index)} alt={group.family+' JYC community'} loading="lazy"/><span>0{index+1}</span></button>
-    <div className="jyc-v1-family-copy"><span className="jyc-v1-eyebrow">{group.family}</span><h3>{group.hubs.length} communities</h3><p>{group.hubs.slice(0,4).map(x=>x.name).join(' · ')}</p><button onClick={()=>nav('/clubs')}>Explore {group.family} →</button></div>
+    <button type="button" onClick={()=>nav('/clubs')} className="jyc-v1-family-media"><img src={hubMedia(group.hubs[0]?.name,index)} alt={group.family+' JYC community'} loading="lazy"/><span>0{index+1}</span></button>
+    <div className="jyc-v1-family-copy"><span className="jyc-v1-eyebrow">{group.family}</span><h3>{group.hubs.length} communities</h3><p>{group.hubs.slice(0,4).map(x=>x.name).join(' · ')}</p><button type="button" onClick={()=>nav('/clubs')}>Explore {group.family} →</button></div>
    </article>)}</div>
   </section>
 
@@ -249,9 +249,9 @@ export function JYCEditorialHome({data}){
   <section className="jyc-v1-section jyc-v1-updates editorial-reveal" aria-labelledby="jyc-v1-updates-title">
    <div className="jyc-v1-section-head">
     <div><span className="jyc-v1-eyebrow">LATEST UPDATES</span><h2 id="jyc-v1-updates-title">Know what needs<br/><em>your attention.</em></h2></div>
-    <button className="jyc-v1-link" onClick={()=>nav('/announcements')}>View announcements →</button>
+    <button type="button" className="jyc-v1-link" onClick={()=>nav('/announcements')}>View announcements →</button>
    </div>
-   {updates.length?<div className="jyc-v1-update-list">{updates.map((item,index)=><button key={item.title+index} onClick={()=>nav(item.link?.startsWith('/')?item.link:'/announcements')}><span>{String(index+1).padStart(2,'0')}</span><small>{item.kind}</small><strong>{item.title}</strong><p>{item.text}</p><b>Open →</b></button>)}</div>:<div className="jyc-v1-empty">No new public announcements are currently published.</div>}
+   {updates.length?<div className="jyc-v1-update-list">{updates.map((item,index)=><button type="button" key={item.title+index} onClick={()=>nav(item.link?.startsWith('/')?item.link:'/announcements')}><span>{String(index+1).padStart(2,'0')}</span><small>{item.kind}</small><strong>{item.title}</strong><p>{item.text}</p><b>Open →</b></button>)}</div>:<div className="jyc-v1-empty">No new public announcements are currently published.</div>}
   </section>
 
   <FlagshipExperience data={data}/>
@@ -268,7 +268,7 @@ export function JYCEditorialHome({data}){
   <section id="gallery" className="jyc-v1-section jyc-v1-gallery editorial-reveal" aria-labelledby="jyc-v1-gallery-title">
    <div className="jyc-v1-section-head">
     <div><span className="jyc-v1-eyebrow">VISUAL ARCHIVE · GALLERY</span><h2 id="jyc-v1-gallery-title">The JYC archive,<br/><em>always in motion.</em></h2><p>Move through a curated set of published JYC photographs. The depth stack keeps the archive visual, tactile and easy to scan; the full Gallery holds the complete metadata record.</p></div>
-    <button className="jyc-v1-link" onClick={()=>nav('/gallery')}>Browse full archive →</button>
+    <button type="button" className="jyc-v1-link" onClick={()=>nav('/gallery')}>Browse full archive →</button>
    </div>
    {gallery.length?<ViewportDeferred fallback={<div className="flex-carousel flex-carousel--loading" aria-hidden="true"/>}><Suspense fallback={<div className="flex-carousel flex-carousel--loading" aria-hidden="true"/>}><LazyFlexCarousel items={gallery.slice(0,12).map((g,index)=>({id:g.id||index,src:g.url,alt:[g.caption||g.title||'JYC archive',g.association,g.year].filter(Boolean).join(' · '),title:g.caption||g.title||'JYC archive',subtitle:[g.association,g.year].filter(Boolean).join(' · ')}))} preset="liquid" intro="rise" fit="portrait" cardHeight={.64} gap={14} radius={8} squeeze={.18} focusOnClick captions captureWheel/></Suspense></ViewportDeferred>:<div className="jyc-v1-empty">The visual archive is ready for published JYC photography. Open the full Gallery to explore the source collections.</div>}<div className="jyc-v1-gallery-wall-note"><strong>{gallery.length} published frames</strong><span>FlexCarousel is the homepage visual preview · full metadata, filters and lightbox live in the Gallery.</span></div>
   </section>
@@ -276,12 +276,12 @@ export function JYCEditorialHome({data}){
   <PhotoChapters/>
 
   <section id="team" className="jyc-v1-section jyc-v1-team editorial-reveal" aria-labelledby="jyc-v1-team-title">
-   <div className="jyc-v1-section-head"><div><span className="jyc-v1-eyebrow">LEADERSHIP</span><h2 id="jyc-v1-team-title">Meet the people<br/><em>behind JYC.</em></h2><p>Faculty guidance, student leadership and core responsibilities form the people layer behind the ecosystem.</p></div><button className="jyc-v1-link" onClick={()=>nav('/team')}>Meet the full team →</button></div>
-   <div className="jyc-v1-team-grid">{team.length?team.map((member,index)=><button key={member.id||index} className="jyc-v1-person" onClick={()=>nav('/team')}><div><img src={member.photo||member.image||TEAM_PHOTOS[String(member.name||'').trim().toLowerCase()]||'/jyc-logo-official.webp'} alt={member.name||'JYC team member'} loading="lazy"/></div><small>{member.role||member.position||'JYC Team'}</small><strong>{member.name||'JYC Team Member'}</strong></button>):<div className="jyc-v1-empty">Official team profiles will appear here when JYC publishes them.</div>}</div>
+   <div className="jyc-v1-section-head"><div><span className="jyc-v1-eyebrow">LEADERSHIP</span><h2 id="jyc-v1-team-title">Meet the people<br/><em>behind JYC.</em></h2><p>Faculty guidance, student leadership and core responsibilities form the people layer behind the ecosystem.</p></div><button type="button" className="jyc-v1-link" onClick={()=>nav('/team')}>Meet the full team →</button></div>
+   <div className="jyc-v1-team-grid">{team.length?team.map((member,index)=><button type="button" key={member.id||index} className="jyc-v1-person" onClick={()=>nav('/team')}><div><img src={member.photo||member.image||TEAM_PHOTOS[String(member.name||'').trim().toLowerCase()]||'/jyc-logo-official.webp'} alt={member.name||'JYC team member'} loading="lazy"/></div><small>{member.role||member.position||'JYC Team'}</small><strong>{member.name||'JYC Team Member'}</strong></button>):<div className="jyc-v1-empty">Official team profiles will appear here when JYC publishes them.</div>}</div>
   </section>
 
   <section id="achievements" className="jyc-v1-achievements editorial-reveal" aria-labelledby="jyc-v1-achievements-title">
-   <div><span className="jyc-v1-eyebrow">ACHIEVEMENTS · WALL OF FAME</span><h2 id="jyc-v1-achievements-title">Built by students.<br/><em>Remembered by campus.</em></h2><p>Published achievements and milestones stay source-first. The public record currently includes an SIH Finalist achievement from supplied JYC material.</p><div className="jyc-v1-achievements-actions"><button className="jyc-v1-btn primary" onClick={()=>nav('/achievements')}>View achievements →</button><button className="jyc-v1-btn" onClick={()=>nav('/archive')}>Open archive</button></div></div>
+   <div><span className="jyc-v1-eyebrow">ACHIEVEMENTS · WALL OF FAME</span><h2 id="jyc-v1-achievements-title">Built by students.<br/><em>Remembered by campus.</em></h2><p>Published achievements and milestones stay source-first. The public record currently includes an SIH Finalist achievement from supplied JYC material.</p><div className="jyc-v1-achievements-actions"><button type="button" className="jyc-v1-btn primary" onClick={()=>nav('/achievements')}>View achievements →</button><button type="button" className="jyc-v1-btn" onClick={()=>nav('/archive')}>Open archive</button></div></div>
    <div className="jyc-v1-achievements-card"><span>01 · WALL OF FAME</span><strong>SIH Finalist</strong><p>Recorded in the supplied JYC hub material. New outcomes should be published with their event, year and supporting source.</p></div>
   </section>
 
@@ -296,7 +296,7 @@ export function JYCEditorialHome({data}){
 
   <section className="jyc-v1-final">
    <div><span className="jyc-v1-eyebrow">JYC 128 · OFFICIAL PUBLIC WEBSITE</span><h2>Different roles.<br/><em>Different communities.<br/>One JYC.</em></h2></div>
-   <div><p>Explore the organisation, find a community, see what is happening and keep the campus memories close.</p><div className="jyc-v1-final-actions"><button className="jyc-v1-btn light" onClick={()=>nav('/clubs')}>View Clubs →</button><button className="jyc-v1-btn outline-light" onClick={()=>nav('/join-jyc')}>Join JYC · Coming Soon</button><button className="jyc-v1-text-btn light-text" onClick={()=>nav('/contact')}>Contact JYC ↗</button></div></div>
+   <div><p>Explore the organisation, find a community, see what is happening and keep the campus memories close.</p><div className="jyc-v1-final-actions"><button type="button" className="jyc-v1-btn light" onClick={()=>nav('/clubs')}>View Clubs →</button><button type="button" className="jyc-v1-btn outline-light" onClick={()=>nav('/join-jyc')}>Join JYC · Coming Soon</button><button type="button" className="jyc-v1-text-btn light-text" onClick={()=>nav('/contact')}>Contact JYC ↗</button></div></div>
   </section>
  </main>;
 }
