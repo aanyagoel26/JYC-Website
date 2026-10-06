@@ -11,7 +11,7 @@ const publicCss=read('src/styles/public-system.css');
 const sw=read('public/sw.js');
 const checks=[
  ['release is V56.17.0',pkg.version==='56.17.0'&&lock.version==='56.17.0'&&lock.packages?.['']?.version==='56.17.0'],
- ['service worker cache is V56.17.0',sw.includes('jyc-cache-v56-17-0')],
+ ['service worker cache is V56.17.0',sw.includes('jyc-cache-v57-0-0')],
  ['retired Projects/Impact/FAQ navigation is absent',!main.includes("['/projects','Projects'")&&!main.includes("['/impact','Impact'")&&!main.includes("['/faq','FAQ'"),],
  ['homepage retired Impact section is absent',!home.includes('jyc-v1-impact')&&!home.includes('HIGHLIGHTS · IMPACT')],
  ['homepage achievements section remains available',home.includes('jyc-v1-achievements')&&home.includes("nav('/achievements')")],
