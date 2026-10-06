@@ -1,14 +1,15 @@
 export const JYC_SOCIALS = {
   JYC: {
-    instagram: 'https://www.instagram.com/jiityouthclub/',
-    instagramHandle: '@jiityouthclub',
-    verifiedBy: 'https://linktr.ee/jiityouthclub',
-    verifiedOn: '2026-10-03',
-    linkedin: 'https://www.linkedin.com/company/jiityouthclub/',
+    instagram: '',
+    instagramHandle: '',
+    official: 'https://linktr.ee/jiityouthclub',
+    verifiedBy: 'https://in.linkedin.com/in/jyc128',
+    verifiedOn: '2026-10-06',
+    linkedin: 'https://in.linkedin.com/in/jyc128',
     label: 'JIIT Youth Club · Sector 128',
     campus: 'sector-128',
     sourcePriority: 'canonical-128',
-    sourceNote: 'Use this 128-campus identity for public JYC social/event sourcing.'
+    sourceNote: 'Use only the verified JYC 128 identity for public social/event sourcing.'
   },
   Fortissimo: {},
   BDS: {},
