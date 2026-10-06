@@ -1,7 +1,9 @@
+import fs from 'node:fs';
 import {JYC_SOURCE_MEDIA_STATS,mergeSourceGallery,sourceEventMedia,buildJycMediaManifest,JYC_SOURCE_ARCHIVE_PHOTO_ITEMS} from '../src/jyc-source-media.js';
 
 const assert=(name,ok,detail='')=>{console.log((ok?'PASS: ':'FAIL: ')+name+(detail?' — '+detail:''));if(!ok)process.exitCode=1};
 const gallery=mergeSourceGallery([]);
+const galleryUiSource=fs.readFileSync('src/extra-features.jsx','utf8');
 const manifest=buildJycMediaManifest([]);
 const urls=gallery.map(x=>x.url).filter(Boolean);
 const duplicateUrls=urls.filter((url,i)=>urls.indexOf(url)!==i);
@@ -16,6 +18,7 @@ const inductionUrls=new Set(induction.items.map(x=>x.url));
 assert('full committed archive photography pool is exposed',JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.length===748,`found ${JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.length}`);
 assert('source gallery has maintained communities',JYC_SOURCE_MEDIA_STATS.maintainedCommunities>0);
 assert('source gallery is non-empty',gallery.length>0);
+assert('gallery opens in photography mode',galleryUiSource.includes("const [filter,setFilter]=useState('All'); const [role,setRole]=useState('All'); const [visual,setVisual]=useState('photo');"));
 assert('complete supplied archive is represented',manifest.total>=873,`manifest=${manifest.total}`);
 assert('manifest total matches merged source gallery',manifest.total===gallery.length);
 assert('source gallery has no duplicate URLs',duplicateUrls.length===0,duplicateUrls.slice(0,3).join(', '));
