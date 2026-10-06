@@ -28,6 +28,10 @@ req('202610060007_v57_club_source_rechecks.sql',['cypherx-jiit','dronotics-jiit-
 req('202610060008_v57_linkedin_provenance_metadata.sql',['source_name','source_platform','confidence','LinkedIn']);
 req('202610060011_v57_2_read_rpc_privilege_hardening.sql',['revoke execute on function public.jyc_read_site_data() from authenticated;']);
 req('202610060012_v57_3_jai_registration_source.sql',['registrationVerified','registrationSource','agentic-ai-2026']);
+req('202610060013_v57_4_normalized_event_registration_provenance.sql',['registrationVerified','registrationSource','officialUrl','revoke execute on function public.jyc_read_site_data() from authenticated;']);
+req('202610060014_v57_5_jai_registration_refresh.sql',['officialUrl','registrationVerified','registrationDeadline','agentic-ai-2026']);
+req('202610060015_v57_6_jai_registration_deadline_normalized.sql',['registration_deadline','agentic-ai-2026']);
+req('202610060016_v57_7_jai_registration_deadline_slug_fix.sql',['registration_deadline','jai-2026-jaypee-agentic-ai-hackathon']);
 req('202610030005_publication_verification_guard.sql',['jyc_guard_json_publication','jyc_guard_json_publication on public.jyc_site_data','cannot be published before verification']);
 req('202610050007_normalized_publication_verification_guard.sql',['jyc_guard_normalized_publication','jyc_guard_normalized_club_publication','jyc_guard_normalized_event_publication','source_url']);
 if(failures.length){console.error('SQL CONTRACT QA FAIL');failures.forEach(x=>console.error('FAIL:',x));process.exit(1)}
