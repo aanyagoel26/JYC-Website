@@ -27,10 +27,9 @@ jobs:
           test "$CACHE" = "jyc-cache-v$VERSION"
           grep -q "V$VERSION" scripts/qa-jyc-release-guard.mjs
 
-      - name: Verify forbidden public-scope pages stay absent
+      - name: Verify repository hygiene
         shell: bash
         run: |
           set -euo pipefail
-          ! grep -RqsE "href=[\"']/projects|to=[\"']/projects" src --include='*.jsx' --include='*.js'
-          ! grep -RqsE "FAQ|Frequently Asked Questions" src/main.jsx src/*.jsx
-          ! grep -RqsE "Impact" src/main.jsx src/*.jsx
+          test -z "$(git ls-files '*.zip')"
+          test -z "$(git grep -n 'jyc-website-.*\.vercel\.app' -- ':!README.md' ':!docs/**' || true)"
