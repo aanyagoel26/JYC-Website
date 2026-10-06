@@ -86,7 +86,17 @@ export const JYC_SOCIALS = {
     verifiedBy: 'all hubs 1.pdf',
     verifiedOn: '2026-10-04'
   },
-  'Neural Nexus': {},
+  'Neural Nexus': {
+    instagram: 'https://www.instagram.com/neuralnexus_ai_ml/',
+    instagramHandle: '@neuralnexus_ai_ml',
+    linkedin: 'https://www.linkedin.com/company/neural-nexus-jiit-noida/',
+    label: 'Neural Nexus AI/ML Club · JIIT',
+    campus: 'sector-128',
+    sourcePriority: 'official-hub',
+    verifiedBy: 'https://www.linkedin.com/company/neural-nexus-jiit-noida/',
+    verifiedOn: '2026-10-06',
+    sourceNote: 'Current Neural Nexus public LinkedIn activity identifies the AI/ML society at JIIT; the supplied All Hubs material identifies its JIIT-128 AI/ML identity and publishes @neuralnexus_ai_ml.'
+  },
   GDG: {
     instagram: 'https://www.instagram.com/gdg_jiit/',
     instagramHandle: '@gdg_jiit',
