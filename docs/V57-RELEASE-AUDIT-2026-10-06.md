@@ -2,11 +2,11 @@
 
 ## Completed in this finalization pass
 
-- Reconciled the V57 trust/provenance work on the PR 137 branch and continued hardening it instead of merging PR 136 separately. PR 137 already contains the overlapping PR 136 source-safety work.
+- Reconciled the V57 trust/provenance work on the PR 137 branch and continued hardening it instead of merging PR 136 separately. PR 137 contains the overlapping PR 136 source-safety work; PR 136 remains closed as superseded.
 - Promoted the supplied 2026–27 orientation material into a canonical 23-community registry: 21 orientation-backed JYC 128 communities + 2 brochure-backed communities.
-- Recorded publication state in the registry: 17 currently published normalized clubs and 6 publication-gated drafts.
-- Added verified public hub links where current evidence is strong (CICR, Dronotics, GDG, Innovation, JODC, Zencoders, CypherX, Eloquence, VamUnique).
-- Kept ambiguous GDG campus identity review-gated rather than forcing it into the public social layer.
+- Recorded publication state in the registry: 21 currently published normalized clubs and 2 publication-gated drafts.
+- Added verified public hub links where current evidence is strong, and independently promoted CypherX, Dronotics, GDG and Zencoders through the Supabase verification guard.
+- Kept Arcadia and Neural Nexus publication-gated because this pass did not find equally strong official community URLs; GDG is now verified through its current Linktree and LinkedIn presence.
 - Added the supplied 2026–27 hub/leadership/photo source audit to the repository.
 - Verified the supplied leadership photo set contains 23 files: 11 clean campaign cards and 12 social-post screenshots. The public team assets cover the 12 photographed leaders; no broken Divye campaign-gallery asset is referenced.
 - Added source-backed leadership copy to the public fallback layer for the 12 photographed campaign identities while leaving Harisha and Dhruv as source-only text records because the supplied photo set does not contain clean cards for them.
