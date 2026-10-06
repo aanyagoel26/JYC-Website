@@ -61,7 +61,7 @@ check('GLB asset size remains within the approved supplied asset contract',fs.st
 check('published team photo fallbacks resolve to committed assets',editorialHome.includes("'divye bajaj':'/assets/team/divye-bajaj.webp'")&&fs.existsSync(path.join(root,'public/assets/team/divye-bajaj.webp')));
 check('public media frames centre their images',logoTheme.includes('object-position:center center')&&logoTheme.includes('place-items:center'));
 check('mobile public content clears the persistent dock',logoTheme.includes('.public-app{padding-bottom:96px}'));
-check('service worker cache is current',read('public/sw.js').includes('jyc-cache-v56-15-2'));
+check('service worker cache is current',read('public/sw.js').includes('jyc-cache-v57-0-0'));
 const maintainedHubCount=(hubContent.match(/^\s{2}(?:'[^']+'|[A-Za-z][^:]+):\{/gm)||[]).length;
 check('orientation source count stays internally consistent',main.includes('JYC_HUB_CONTENT')&&main.includes("Object.keys(JYC_HUB_CONTENT).length")&&maintainedHubCount===23&&hubRegistry.match(/\{name:/g)?.length===23);
 check('hub detail exposes source and live evidence layers',main.includes('hub-evidence-rail')&&main.includes('club-source')&&main.includes('Published JYC records provide the live layer'));

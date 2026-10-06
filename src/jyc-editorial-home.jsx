@@ -11,7 +11,6 @@ import CountUp from './components/react-bits/CountUp.jsx';
 import './jyc-editorial-home.css';
 
 const LazyDitherVeil=lazy(()=>import('./react-bits/DitherVeil.jsx'));
-const LazyFlexCarousel=lazy(()=>import('./components/react-bits/FlexCarousel.jsx'));
 const LazyMagicBento=lazy(()=>import('./components/react-bits/MagicBento.jsx'));
 const LazyDriftWall=lazy(()=>import('./components/react-bits/DriftWall.jsx'));
 
@@ -289,7 +288,7 @@ export function JYCEditorialHome({data}){
   <section className="jyc-v1-social editorial-reveal" aria-labelledby="jyc-v1-social-title">
    <div><span className="jyc-v1-eyebrow">FOLLOW JYC</span><h2 id="jyc-v1-social-title">The website is the source of truth.<br/><em>Social keeps you close.</em></h2><p>Follow official channels for timely updates without making the website dependent on a social feed.</p></div>
    <div className="jyc-v1-social-links">
-    <a href={JYC_CONTACTS.instagram} target="_blank" rel="noopener noreferrer"><span>01</span><strong>Instagram</strong><small>@jiityouthclub ↗</small></a>
+    <a href={JYC_CONTACTS.official} target="_blank" rel="noopener noreferrer"><span>01</span><strong>Official JYC links</strong><small>Verified JYC 128 links ↗</small></a>
     <a href={JYC_CONTACTS.linkedin} target="_blank" rel="noopener noreferrer"><span>02</span><strong>LinkedIn</strong><small>JIIT Youth Club ↗</small></a>
     <a href={JYC_CONTACTS.whatsapp} target="_blank" rel="noopener noreferrer"><span>03</span><strong>WhatsApp</strong><small>JYC Community ↗</small></a>
    </div>

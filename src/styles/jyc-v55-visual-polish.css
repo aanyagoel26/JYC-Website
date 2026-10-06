@@ -1042,7 +1042,7 @@ html[data-theme="dark"] .public-app .jyc-brand-editorial-logo img{filter:drop-sh
 }
 
 
-/* JYC V56.16 loader polish: identity-first, centered, quiet, and cheap to paint. */
+/* JYC V57 loader polish: identity-first, centered, quiet, and cheap to paint. */
 .loading-v41{
   background:
     radial-gradient(circle at 50% 42%,color-mix(in srgb,var(--jyc-champagne) 9%,transparent),transparent 31%),

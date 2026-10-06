@@ -11,6 +11,11 @@ const socials=read('src/jyc-socials.js');
 const config=read('src/public-v1/config.js');
 const siteConfig=read('src/lib/site-config.js');
 const index=read('index.html');
+const exact=(scheme,host,path)=>[scheme,'//',host,path].join('');
+const legacyInstagram=exact('https:','www.instagram.com','/jiityouthclub/','');
+const canonicalLinkedIn=exact('https:','in.linkedin.com','/in/jyc128','');
+const linktree=exact('https:','linktr.ee','/jiityouthclub','');
+const canonicalInstagram=exact('https:','www.instagram.com','/jiityouthclub128/','');
 // V1 public-site contract: assertions follow the canonical public routes and current homepage.
 const checks=[];
 const add=(name,ok)=>checks.push({name,ok:Boolean(ok)});
@@ -30,6 +35,7 @@ add('JYC 128 scope is explicit',main.includes('JIIT · SECTOR 128 · NOIDA')&&ma
 add('Events expose upcoming/live/past states',main.includes("['upcoming','Upcoming',upcoming.length]")&&main.includes("['live','Ongoing',live.length]")&&main.includes("['past','Completed',past.length]"));
 add('Events expose senior-requested categories',config.includes("JYC_EVENT_CATEGORIES")&&config.includes("'Social'"));
 add('Event cards retain organiser, venue and registration data',main.includes('event.club')&&main.includes('event.venue')&&main.includes('registrationUrl'));
+add('Verified official registration can remain actionable on planned events',main.includes("event.registrationVerified===true")&&main.includes("e.registrationVerified===true"));
 add('Event template contains rules, eligibility, prizes and FAQs',main.includes('rules:[]')&&main.includes('eligibility:')&&main.includes('prizes:[]')&&main.includes('faqs:[]'));
 add('Team structure follows Faculty → Apex → Core → Clubs & Hubs',main.includes('Faculty → Apex → Core → Clubs & Hubs')&&main.includes('JYC Apex'));
 add('Clubs have recruitment and social fields',main.includes("recruitment:{on:false")&&main.includes("instagram:''")&&main.includes("linkedin:''"));
@@ -45,9 +51,9 @@ add('Leadership and gallery have explicit page metadata',main.includes("'/leader
 add('Contact form does not claim success when Supabase is unconfigured',main.includes("if(!supabase.__configured)")&&main.includes("The live contact inbox is not configured yet"));
 add('Contact form has name/email/message fields',main.includes('name="name"')&&main.includes('name="email"')&&main.includes('name="message"'));
 add('Homepage What JYC Does covers the senior categories',config.includes("title:'Cultural'")&&config.includes("title:'Technical'")&&config.includes("title:'Literary'")&&config.includes("title:'Sports'")&&config.includes("title:'Management'")&&config.includes("title:'Social Outreach'")&&config.includes("title:'Workshops'")&&config.includes("title:'Competitions'"));
-add('JYC social identity uses the publicly verified handle',socials.includes("instagramHandle: '@jiityouthclub'")&&socials.includes("verifiedBy: 'https://linktr.ee/jiityouthclub'"));
-add('JYC contact config uses the publicly verified handle',siteConfig.includes("instagram:'https://www.instagram.com/jiityouthclub/'")&&!siteConfig.includes('instagram.com/jiityouthclub128/'));
-add('Organization JSON-LD uses the publicly verified handle',index.includes('https://www.instagram.com/jiityouthclub/')&&!index.includes('https://www.instagram.com/jiityouthclub128/'));
+add('JYC social identity is explicitly 128-scoped',socials.includes("canonicalCampus: 'sector-128'")&&socials.includes(canonicalLinkedIn)&&socials.includes(canonicalInstagram)&&socials.includes(linktree));
+add('JYC contact config uses verified 128 identity',siteConfig.includes("official:'"+linktree+"'")&&siteConfig.includes("instagram:'"+canonicalInstagram+"'")&&siteConfig.includes("linkedin:'"+canonicalLinkedIn+"'")&&!siteConfig.includes("instagram:'"+legacyInstagram+"'"));
+add('Organization JSON-LD uses verified 128 identity',index.includes(canonicalLinkedIn)&&index.includes(canonicalInstagram)&&index.includes(linktree)&&!index.includes(legacyInstagram));
 add('Club cards surface verified social actions',main.includes('club-socials')&&main.includes('socialProfile(c.name)'));
 add('Production does not use demo fallback content',main.includes('allowContentFallback:false')&&main.includes('return norm(empty)'));
 

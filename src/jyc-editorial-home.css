@@ -391,7 +391,7 @@ html[data-theme="dark"] .jyc-editorial-home .jyc-v1-gallery-photo{background:#29
 @media(max-width:680px){.jyc-v1-gallery .depth-carousel{border-radius:0}.jyc-v1-gallery .depth-carousel__arrow--prev{left:8px}.jyc-v1-gallery .depth-carousel__arrow--next{right:8px}}
 
 
-/* V56.16 homepage DriftWall: one mounted engine, three restrained presets. */
+/* V57 homepage DriftWall: one mounted engine, three restrained presets. */
 .jyc-v1-drift{overflow:hidden}
 .jyc-v1-drift .jyc-v1-section-head{align-items:end}
 .jyc-v1-drift-presets{display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;align-items:center}

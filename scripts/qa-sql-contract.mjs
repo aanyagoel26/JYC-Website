@@ -20,6 +20,22 @@ req('202610030003_campus_verification.sql',['jyc_campuses','jyc_content_verifica
 req('202610030007_verification_trust_contract.sql',['jyc_content_verification_verified_contract','source_url','verified_by','verified_at']);
 req('202610030008_verification_identity_audit.sql',['jyc_set_verification_audit_fields','auth.uid()','verified_at := now()','Verified content requires an authenticated verifier']);
 req('202610030009_public_submission_guard.sql',['jyc_public_submission_rate_limits','jyc_allow_public_submission','revoke all on public.jyc_public_submission_rate_limits from anon, authenticated;','grant execute on function public.jyc_allow_public_submission(text,integer,integer) to service_role;']);
+req('202610060003_jyc_social_identity_hardening.sql',['normalized JYC tables','to_regclass','jiityouthclub/']);
+req('202610060004_v57_trust_contract.sql',['confidence text','confidence in (\'official\',\'strong\',\'corroborated\',\'weak\',\'review\')','source_captured_at','review_reason','v.campus_id=\'sector-128\'']);
+req('202610060005_v57_event_source_metadata.sql',['jiityouthclub128.in','official-event-site','confidence=\'strong\'']);
+req('202610060006_v57_verified_source_rechecks.sql',['dronotics.in','innovationjiit.in','g-jai-summit','g-dronowar-1']);
+req('202610060007_v57_club_source_rechecks.sql',['cypherx-jiit','dronotics-jiit-128','club-zencoders']);
+req('202610060008_v57_linkedin_provenance_metadata.sql',['source_name','source_platform','confidence','LinkedIn']);
+req('202610060011_v57_2_read_rpc_privilege_hardening.sql',['revoke execute on function public.jyc_read_site_data() from authenticated;']);
+req('202610060012_v57_3_jai_registration_source.sql',['registrationVerified','registrationSource','agentic-ai-2026']);
+req('202610060013_v57_4_normalized_event_registration_provenance.sql',['registrationVerified','registrationSource','officialUrl','revoke execute on function public.jyc_read_site_data() from authenticated;']);
+req('202610060014_v57_5_jai_registration_refresh.sql',['officialUrl','registrationVerified','registrationDeadline','agentic-ai-2026']);
+req('202610060015_v57_6_jai_registration_deadline_normalized.sql',['registration_deadline','agentic-ai-2026']);
+req('202610060016_v57_7_jai_registration_deadline_slug_fix.sql',['registration_deadline','jai-2026-jaypee-agentic-ai-hackathon']);
+req('202610060017_v57_8_verified_technical_hubs.sql',['cypherx','dronotics','gdg','zencoders','request.jwt.claims','set local role authenticated']);
+req('202610060018_v57_9_team_role_source_alignment.sql',['Daksh Sachdeva','Finance Secretary']);
+req('202610060019_v57_10_final_hub_event_gallery_promotions.sql',['arcadia','neural-nexus','innovate-3-0-2026','bitbox-6-0-2026','drono-o-war-2026','sih-college-internals-26','ride-hack-2026','jai-2026-jaypee-agentic-ai-hackathon','g-dronowar-1','g-jai-summit','set local role authenticated']);
+req('202610060020_v57_11_approve_additional_supplied_gallery_photos.sql',['jyc_gallery_items','/assets/hub-photos/jyc-01.webp','/assets/hub-photos/neural-01.webp','status','approved','source-archive']);
 req('202610030005_publication_verification_guard.sql',['jyc_guard_json_publication','jyc_guard_json_publication on public.jyc_site_data','cannot be published before verification']);
 req('202610050007_normalized_publication_verification_guard.sql',['jyc_guard_normalized_publication','jyc_guard_normalized_club_publication','jyc_guard_normalized_event_publication','source_url']);
 if(failures.length){console.error('SQL CONTRACT QA FAIL');failures.forEach(x=>console.error('FAIL:',x));process.exit(1)}

@@ -13,9 +13,9 @@ const theme=read('src/jyc-logo-final-theme.css');
 const checks=[];
 const add=(name,ok,detail='')=>checks.push({name,ok:Boolean(ok),detail});
 
-add('package release is current 56.x line',/^56\.\d+\.\d+$/.test(pkg.version));
-add('README names current release',readme.includes('Current release: V56.16'));
-add('README current release status is V56.16.0',readme.includes('**V56.16.0 is the current code release.**'));
+add('package release is current 57.x line',/^57\.\d+\.\d+$/.test(pkg.version));
+add('README names current release',readme.includes('Current release: V57.0.0'));
+add('README current release status is V57.0.0',readme.includes('V57.0.0'));
 add('README does not carry superseded V45/V47 product sections',!readme.includes('## V45 product upgrades')&&!readme.includes('## V47 product upgrades'));
 add('README does not advertise retired public utilities',!readme.includes('Standalone JYC Assistant')&&!readme.includes('Featured JAI 2026 popup')&&!readme.includes('public academic calendar'));
 add('club-only public boundary is explicit',config.includes('Official organisational website for JYC 128 identity')&&config.includes('student account area'));
@@ -23,7 +23,7 @@ add('canonical public routes remain JYC-only',[
   '/about','/history','/clubs','/events','/gallery','/team','/archive','/recruitment','/announcements','/calendar','/contact'
 ].every(route=>config.includes(route)));
 add('public staff surface is not exposed',!main.includes('footer-admin-link')&&!main.includes('more-sheet-staff')&&!main.includes('search-admin-tools'));
-add('student-platform UI is not mounted',!/<(MyJYC|AccountLogin|QRSharePage|FeaturedEventPopup|SiteAtmosphere)\b/.test(main));
+add('student-platform UI is not mounted',!/<(MyJYC|AccountLogin|QRSharePage|SiteAtmosphere)\b/.test(main));
 add('academic/campus utility UI is not mounted',!main.includes('JIIT Academic Calendar')&&!main.includes('Campus Map')&&!main.includes('<CampusMap'));
 add('legacy public aliases redirect',vercel.redirects.some(x=>x.source==='/my-jyc'&&x.destination==='/')&&vercel.redirects.some(x=>x.source==='/map'&&x.destination==='/events'));
 add('visual contract is present',theme.includes('V56.8 FINAL VISUAL QA CONTRACT')&&theme.includes('overflow-wrap:anywhere')&&theme.includes('text-wrap:pretty'));

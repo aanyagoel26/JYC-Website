@@ -36,7 +36,10 @@ const scripts = [
   'qa-react-bits.mjs',
   'qa-animation-performance.mjs',
   'qa-final.mjs',
-  'qa-jyc-release-guard.mjs'
+  'qa-jyc-release-guard.mjs',
+  'qa-jyc-social-scope.mjs',
+  'qa-trust-contract.mjs',
+  'qa-supplied-material.mjs'
 ];
 
 for (const script of scripts) {
