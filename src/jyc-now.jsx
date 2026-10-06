@@ -1,4 +1,4 @@
-import React,{lazy,useEffect,useMemo,useState} from 'react';
+import React,{lazy,Suspense,useEffect,useMemo,useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {JYC_SOCIALS,socialProfile,is128SocialProfile} from './jyc-socials.js';
 import {JYC_HUB_SOURCE_REGISTRY} from './jyc-hub-registry.js';
