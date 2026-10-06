@@ -47,3 +47,12 @@ The first read-RPC privilege surface was reduced. The remaining warnings need a 
 ## Release decision
 
 Do not call production certification complete until the V57 branch passes the repository Quality Gate and the production deployment can be browser-tested. The source/data/provenance side is materially stronger and the Supabase public-data boundary is now verified at the database layer.
+
+## V57.10–V57.11 follow-up — 2026-10-06
+
+- Promoted the final two normalized communities, Arcadia and Neural Nexus, after combining the supplied 2026–27 All Hubs material with current public club evidence.
+- Promoted six additional Sector 128 event records with authenticated source verification: INNOVATE 3.0, BITBOX 6.0, DRONO-O-WAR 1.0, SIH College Internals 2026, RIDE Hack 26 and JAI 2026.
+- Kept the remaining event candidates under review rather than inventing dates or campus evidence.
+- Approved 13 additional repository-backed supplied photographs in normalized Supabase gallery storage; normalized approved gallery count is now 105.
+- Public RPC currently exposes 23 clubs, 12 public events, 16 team records and 105 gallery records.
+- Browser QA was hardened to wait up to 30 seconds for the React root to mount and to report mount diagnostics. Static QA and production build have passed on the latest commit; browser QA is still running.
