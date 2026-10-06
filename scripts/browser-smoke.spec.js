@@ -248,7 +248,9 @@ test('legacy redirects and unknown routes resolve safely', async ({ page }) => {
     '/settings': '/about',
     '/agenda': '/events',
     '/download': '/about',
-    '/projects': '/clubs'
+    '/projects': '/clubs',
+    '/projects/submit': '/clubs',
+    '/map': '/events'
   };
   for (const [from, to] of Object.entries(redirects)) {
     await page.goto(base + from, { waitUntil: 'domcontentloaded' });
