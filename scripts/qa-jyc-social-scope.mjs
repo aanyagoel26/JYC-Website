@@ -11,10 +11,12 @@ const exact=(scheme,host,path)=>[scheme,'//',host,path].join('');
 const legacyInstagram=exact('https:','www.instagram.com','/jiityouthclub/','');
 const legacyLinkedIn=exact('https:','www.linkedin.com','/company/jiityouthclub/','');
 const canonicalLinkedIn=exact('https:','in.linkedin.com','/in/jyc128','');
+const canonicalInstagram=exact('https:','www.instagram.com','/jiityouthclub128/','');
 const failures=[];
 for(const needle of [
   "canonicalCampus: 'sector-128'",
   canonicalLinkedIn,
+  canonicalInstagram,
   legacyInstagram,
   legacyLinkedIn
 ]) if(!socials.includes(needle)) failures.push('missing social source policy: '+needle);
