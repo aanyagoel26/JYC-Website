@@ -733,9 +733,28 @@ function Loading({stage='INITIALIZING',cached=false}){
 function BackToTop(){const [show,setShow]=useState(false);useEffect(()=>{const onScroll=()=>setShow(window.scrollY>520);window.addEventListener('scroll',onScroll,{passive:true});return()=>window.removeEventListener('scroll',onScroll)},[]);if(!show)return null;return <button type="button" className="back-to-top" onClick={()=>window.scrollTo({top:0,behavior:'smooth'})} aria-label="Back to top" title="Back to top">↑</button>}
 function ScrollProgress(){const [progress,setProgress]=useState(0);useEffect(()=>{const update=()=>{const d=document.documentElement;const max=d.scrollHeight-d.clientHeight;setProgress(max>0?Math.min(100,(d.scrollTop/max)*100):0)};update();window.addEventListener('scroll',update,{passive:true});window.addEventListener('resize',update);return()=>{window.removeEventListener('scroll',update);window.removeEventListener('resize',update)}},[]);return <div className="scroll-progress" aria-hidden="true" style={{'--scroll-progress-width':`${progress}%`}}><i/></div>}
 function Theme({theme,setTheme}){
- const switchMode=()=>setTheme(theme==='dark'?'light':'dark');
- return <button type="button" className="theme-toggle" onClick={switchMode} aria-label={`Switch to ${theme==='dark'?'light':'dark'} mode`} title={`Switch to ${theme==='dark'?'light':'dark'} mode`}>
-  <span className="theme-icon" aria-hidden="true">{theme==='dark'?'☀':'☾'}</span><span className="theme-label">{theme==='dark'?'Day':'Night'}</span>
+ const switchMode=()=>{
+  const next=theme==='dark'?'light':'dark';
+  const apply=()=>setTheme(next);
+  document.documentElement.classList.add('theme-is-switching');
+  try{
+   if(document.startViewTransition){
+    const transition=document.startViewTransition(apply);
+    transition.finished?.finally(()=>window.setTimeout(()=>document.documentElement.classList.remove('theme-is-switching'),180));
+   }else{
+    apply();
+    window.setTimeout(()=>document.documentElement.classList.remove('theme-is-switching'),420);
+   }
+  }catch{
+   apply();
+   window.setTimeout(()=>document.documentElement.classList.remove('theme-is-switching'),420);
+  }
+ };
+ return <button type="button" className={`theme-toggle theme-toggle-rb ${theme==='dark'?'is-dark':'is-light'}`} onClick={switchMode} aria-label={`Switch to ${theme==='dark'?'light':'dark'} mode`} title={`Switch to ${theme==='dark'?'light':'dark'} mode`}>
+  <span className="theme-toggle-track" aria-hidden="true">
+   <span className="theme-toggle-orb"><span>{theme==='dark'?'☾':'☀'}</span></span>
+  </span>
+  <span className="theme-toggle-copy"><b>{theme==='dark'?'Dark':'Light'}</b><small>Mode</small></span>
  </button>
 }
 function State({title,text,children,compact=false}){return <section className={`state ${compact?'compact':''}`}><span className="eyebrow">JYC</span><h1>{title}</h1><p>{text}</p>{children}</section>}
