@@ -11,7 +11,6 @@ import CountUp from './components/react-bits/CountUp.jsx';
 import './jyc-editorial-home.css';
 
 const LazyDitherVeil=lazy(()=>import('./react-bits/DitherVeil.jsx'));
-const LazyFlexCarousel=lazy(()=>import('./components/react-bits/FlexCarousel.jsx'));
 const LazyMagicBento=lazy(()=>import('./components/react-bits/MagicBento.jsx'));
 const LazyDriftWall=lazy(()=>import('./components/react-bits/DriftWall.jsx'));
 
