@@ -15,6 +15,7 @@ const exact=(scheme,host,path)=>[scheme,'//',host,path].join('');
 const legacyInstagram=exact('https:','www.instagram.com','/jiityouthclub/','');
 const canonicalLinkedIn=exact('https:','in.linkedin.com','/in/jyc128','');
 const linktree=exact('https:','linktr.ee','/jiityouthclub','');
+const canonicalInstagram=exact('https:','www.instagram.com','/jiityouthclub128/','');
 // V1 public-site contract: assertions follow the canonical public routes and current homepage.
 const checks=[];
 const add=(name,ok)=>checks.push({name,ok:Boolean(ok)});
@@ -49,9 +50,9 @@ add('Leadership and gallery have explicit page metadata',main.includes("'/leader
 add('Contact form does not claim success when Supabase is unconfigured',main.includes("if(!supabase.__configured)")&&main.includes("The live contact inbox is not configured yet"));
 add('Contact form has name/email/message fields',main.includes('name="name"')&&main.includes('name="email"')&&main.includes('name="message"'));
 add('Homepage What JYC Does covers the senior categories',config.includes("title:'Cultural'")&&config.includes("title:'Technical'")&&config.includes("title:'Literary'")&&config.includes("title:'Sports'")&&config.includes("title:'Management'")&&config.includes("title:'Social Outreach'")&&config.includes("title:'Workshops'")&&config.includes("title:'Competitions'"));
-add('JYC social identity is explicitly 128-scoped',socials.includes("canonicalCampus: 'sector-128'")&&socials.includes(canonicalLinkedIn)&&socials.includes(linktree));
-add('JYC contact config uses verified 128 identity',siteConfig.includes("official:'"+linktree+"'")&&siteConfig.includes("linkedin:'"+canonicalLinkedIn+"'")&&!siteConfig.includes("instagram:'"+legacyInstagram+"'"));
-add('Organization JSON-LD uses verified 128 identity',index.includes(canonicalLinkedIn)&&index.includes(linktree)&&!index.includes(legacyInstagram));
+add('JYC social identity is explicitly 128-scoped',socials.includes("canonicalCampus: 'sector-128'")&&socials.includes(canonicalLinkedIn)&&socials.includes(canonicalInstagram)&&socials.includes(linktree));
+add('JYC contact config uses verified 128 identity',siteConfig.includes("official:'"+linktree+"'")&&siteConfig.includes("instagram:'"+canonicalInstagram+"'")&&siteConfig.includes("linkedin:'"+canonicalLinkedIn+"'")&&!siteConfig.includes("instagram:'"+legacyInstagram+"'"));
+add('Organization JSON-LD uses verified 128 identity',index.includes(canonicalLinkedIn)&&index.includes(canonicalInstagram)&&index.includes(linktree)&&!index.includes(legacyInstagram));
 add('Club cards surface verified social actions',main.includes('club-socials')&&main.includes('socialProfile(c.name)'));
 add('Production does not use demo fallback content',main.includes('allowContentFallback:false')&&main.includes('return norm(empty)'));
 
