@@ -1645,3 +1645,124 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible,
  .theme-toggle-orb{width:27px;height:27px}
  .theme-toggle-copy{display:none}
 }
+
+/* JYC logo palette — navy, ivory, champagne gold, warm bronze */
+:root{
+  --jyc-navy:#101d35;
+  --jyc-navy-deep:#081326;
+  --jyc-ivory:#f6efdf;
+  --jyc-ivory-bright:#fffaf0;
+  --jyc-gold:#d1a35b;
+  --jyc-gold-bright:#e5c27d;
+  --jyc-bronze:#9a6a32;
+  --jyc-ink:#172238;
+  --jyc-muted:#686b74;
+  --bg-main:var(--jyc-ivory);
+  --bg-card:var(--jyc-ivory-bright);
+  --text-primary:var(--jyc-ink);
+  --text-muted:var(--jyc-muted);
+  --accent-red:var(--jyc-bronze);
+  --accent-gold:var(--jyc-gold);
+  --border-tech:rgba(154,106,50,.28);
+  --shadow:0 24px 70px rgba(16,29,53,.10);
+}
+:root[data-theme="dark"]{
+  --bg-main:var(--jyc-navy-deep);
+  --bg-card:#0e1b30;
+  --text-primary:var(--jyc-ivory);
+  --text-muted:#aeb5c0;
+  --accent-red:var(--jyc-gold);
+  --accent-gold:var(--jyc-gold-bright);
+  --border-tech:rgba(229,194,125,.24);
+  --shadow:0 28px 90px rgba(0,0,0,.38);
+}
+:root[data-theme="light"] body{
+  background:
+    radial-gradient(circle at 8% 0%,rgba(209,163,91,.13),transparent 25%),
+    radial-gradient(circle at 92% 28%,rgba(16,29,53,.045),transparent 27%),
+    var(--bg-main);
+}
+:root[data-theme="dark"] body{
+  background:
+    radial-gradient(circle at 10% 0%,rgba(209,163,91,.10),transparent 27%),
+    radial-gradient(circle at 88% 32%,rgba(16,29,53,.50),transparent 30%),
+    var(--bg-main);
+}
+:root[data-theme="light"] .nav{
+  background:rgba(255,250,240,.86);
+  border-bottom-color:rgba(154,106,50,.25);
+}
+:root[data-theme="dark"] .nav{
+  background:rgba(8,19,38,.84);
+  border-bottom-color:rgba(229,194,125,.20);
+}
+:root[data-theme="light"] .card,
+:root[data-theme="light"] .featured,
+:root[data-theme="light"] .contact-card,
+:root[data-theme="light"] .editor-card,
+:root[data-theme="light"] .club-hero,
+:root[data-theme="light"] .event-detail-poster,
+:root[data-theme="light"] .quote-card{
+  background:var(--jyc-ivory-bright);
+  border-color:rgba(154,106,50,.25);
+}
+:root[data-theme="dark"] .card,
+:root[data-theme="dark"] .featured,
+:root[data-theme="dark"] .contact-card,
+:root[data-theme="dark"] .editor-card,
+:root[data-theme="dark"] .club-hero,
+:root[data-theme="dark"] .event-detail-poster,
+:root[data-theme="dark"] .quote-card{
+  background:linear-gradient(145deg,#10213a,#0b1729);
+  border-color:rgba(229,194,125,.18);
+}
+:root[data-theme="light"] .dark-band{
+  background:#e8dfcb;
+  border-color:rgba(154,106,50,.20);
+}
+:root[data-theme="dark"] .dark-band{
+  background:#0b1729;
+}
+:root[data-theme="light"] .btn{
+  background:var(--jyc-navy);
+  border-color:var(--jyc-navy);
+  color:var(--jyc-ivory-bright);
+}
+:root[data-theme="dark"] .btn{
+  background:var(--jyc-gold);
+  border-color:var(--jyc-gold);
+  color:var(--jyc-navy-deep);
+}
+:root[data-theme="light"] .btn.secondary{
+  background:transparent;
+  color:var(--jyc-navy);
+  border-color:rgba(16,29,53,.22);
+}
+:root[data-theme="dark"] .btn.secondary{
+  background:transparent;
+  color:var(--jyc-ivory);
+  border-color:rgba(229,194,125,.28);
+}
+:root[data-theme="light"] .eyebrow,
+:root[data-theme="light"] .tag,
+:root[data-theme="light"] .live,
+:root[data-theme="light"] .live-pill,
+:root[data-theme="light"] .live-db{
+  color:var(--jyc-bronze);
+}
+:root[data-theme="dark"] .eyebrow,
+:root[data-theme="dark"] .tag,
+:root[data-theme="dark"] .live,
+:root[data-theme="dark"] .live-pill,
+:root[data-theme="dark"] .live-db{
+  color:var(--jyc-gold-bright);
+}
+:root[data-theme="dark"] .hero-rule,
+:root[data-theme="dark"] .live:before,
+:root[data-theme="dark"] .live-db i,
+:root[data-theme="dark"] .live-pill span{
+  background:var(--jyc-gold);
+}
+:root[data-theme="light"] .hero-rule{
+  background:var(--jyc-navy);
+}
