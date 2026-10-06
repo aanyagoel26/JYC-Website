@@ -438,6 +438,7 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
  const nav=useNavigate();
  const p=useLocation().pathname;
  const clean=p.replace(/\/$/,'')||'/';
+ if(clean==='/admin'||clean.startsWith('/admin/'))return <Navigate to="/" replace/>;
  if(clean==='/leadership')return <Navigate to="/team" replace/>;
  if(clean==='/my-jyc'||clean==='/login'||clean==='/notifications')return <Navigate to="/" replace/>;
  if(clean==='/planner'||clean==='/agenda')return <Navigate to="/events" replace/>;
@@ -637,7 +638,7 @@ function Search({data,admin,close}){
   ['JYC Event Calendar','Published JYC events by date.','PAGE','/calendar'],
   ['Events & venues','Find published JYC event locations.','PAGE','/events']
  ];
- const adminPages=admin?[['Control Center','Staff publishing, reviews, registrations and operations.','ADMIN','/admin']]:[];
+ const adminPages=[];
  const rawResults=[
   ...adminPages.map(x=>({key:'a'+x[3]+x[0],type:x[2],title:x[0],meta:x[1],searchText:`${x[0]} ${x[1]} JYC JIIT`,icon:'⚙',go:()=>nav(x[3])})),
   ...pageIndex.map(x=>({key:'p'+x[3],type:x[2],title:x[0],meta:x[1],searchText:`${x[0]} ${x[1]} JYC JIIT Noida`,icon:'⌘',go:()=>nav(x[3])})),
