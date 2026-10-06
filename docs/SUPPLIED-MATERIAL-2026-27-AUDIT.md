@@ -42,7 +42,7 @@ The supplied orientation/hub decks directly represent these 21 communities. The 
 ### Sports
 - JSA
 
-15 of these communities are promoted to `orientation-verified` in the public source registry. Arcadia, CypherX, Dronotics, GDG, Neural Nexus and Zencoders remain `source-material` in the public registry until their live club records/source verification are explicitly published. This preserves the distinction between supplied current orientation evidence and the site's independently published current club records.
+All 21 orientation-backed communities are `orientation-verified` in the public source registry. CypherX, Dronotics, GDG and Zencoders were independently verified from current official/community web sources on 06 Oct 2026 and promoted to published normalized club records. Arcadia and Neural Nexus remain publication-gated drafts because this audit did not find comparably strong official community URLs. This preserves the distinction between supplied current orientation evidence and the site's independently published current club records.
 
 ## Brochure-only current records
 
