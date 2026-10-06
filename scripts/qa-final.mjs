@@ -10,6 +10,7 @@ const pkg=JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8'));
 const livingPhoto=fs.readFileSync(path.join(root,'src/jyc-living-photo.jsx'),'utf8');
 const extraFeatures=fs.readFileSync(path.join(root,'src/extra-features.jsx'),'utf8');
 const checks=[
+ ['public events are explicitly Sector 128 only',main.includes("const isSector128Venue=venue=>/sector\\s*128|jiit[-\\s]*128|wish\\s*town/i.test(String(venue||''));")&&main.includes('events:events.filter(e=>isSector128Venue(e.venue))')&&!fallbacks.includes("venue:'JIIT Noida'")&&!fallbacks.includes('Sector 62')],
  ['release version is current V56.16 line',pkg.version==='56.16.0'],
  ['visible breadcrumbs component exists',main.includes('function Breadcrumbs')&&main.includes('aria-label="Breadcrumb"')],
  ['public home has closing CTA contract',main.includes('JYCEditorialHome')&&editorialHome.includes('jyc-v1-final')],
