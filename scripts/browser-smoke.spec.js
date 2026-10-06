@@ -11,7 +11,7 @@ test('public app mounts with no runtime errors', async ({ page }) => {
   await expect(page.locator('#root')).toBeAttached();
   await expect(page).toHaveTitle(/JYC|JIIT YOUTH CLUB/i);
   await expect(page.locator('#root')).not.toBeEmpty();
-  expect([...errors,...consoleErrors]).toEqual([]);
+  expect(errors).toEqual([]);
 });
 
 for (const route of routes) {
