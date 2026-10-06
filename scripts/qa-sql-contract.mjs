@@ -34,6 +34,7 @@ req('202610060015_v57_6_jai_registration_deadline_normalized.sql',['registration
 req('202610060016_v57_7_jai_registration_deadline_slug_fix.sql',['registration_deadline','jai-2026-jaypee-agentic-ai-hackathon']);
 req('202610060017_v57_8_verified_technical_hubs.sql',['cypherx','dronotics','gdg','zencoders','request.jwt.claims','set local role authenticated']);
 req('202610060018_v57_9_team_role_source_alignment.sql',['Daksh Sachdeva','Finance Secretary']);
+req('202610060019_v57_10_final_hub_event_gallery_promotions.sql',['arcadia','neural-nexus','innovate-3-0-2026','bitbox-6-0-2026','drono-o-war-2026','sih-college-internals-26','ride-hack-2026','jai-2026-jaypee-agentic-ai-hackathon','g-dronowar-1','g-jai-summit','set local role authenticated']);
 req('202610030005_publication_verification_guard.sql',['jyc_guard_json_publication','jyc_guard_json_publication on public.jyc_site_data','cannot be published before verification']);
 req('202610050007_normalized_publication_verification_guard.sql',['jyc_guard_normalized_publication','jyc_guard_normalized_club_publication','jyc_guard_normalized_event_publication','source_url']);
 if(failures.length){console.error('SQL CONTRACT QA FAIL');failures.forEach(x=>console.error('FAIL:',x));process.exit(1)}
