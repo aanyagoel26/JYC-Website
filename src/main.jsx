@@ -239,7 +239,7 @@ function ClubDetail({data,id,virtualName}){
  const sourceStory=PDF_HUB_STORIES.find(x=>String(x.name).toLowerCase()===String(c.name).toLowerCase())||(()=>{const m=sourceHubMedia(c.name);if(!m.photos.length||!profile)return null;return {name:profile.name||c.name,family:profile.family,focus:profile.focus,image:m.photos[0],text:detail?.experience||profile.detail||profile.summary||`${c.name} is part of the JYC ${profile.family} ecosystem.`}})();
  const sourceGallery=[...PDF_HUB_GALLERY,...PDF_HUB_EXTRA_GALLERY].filter(g=>String(g.association||'').trim().toLowerCase()===String(c.name).trim().toLowerCase());
  const gallery=[...data.gallery.filter(g=>g.clubId===c.id||g.association===c.name||g.association==='club:'+c.id),...sourceGallery].filter((g,i,a)=>a.findIndex(x=>x.id===g.id)===i);
- const links=[['Instagram',c.instagram],['WhatsApp',c.whatsapp],['Website',c.website],['LinkedIn',c.linkedin],['YouTube',c.youtube]].filter(x=>x[1]);
+ const links=[['Instagram',c.instagram],['WhatsApp',c.whatsapp],['Website',c.website],['LinkedIn',c.linkedin],['YouTube',c.youtube],...(Array.isArray(c.links)?c.links.map(x=>[x.label,x.url]):[])].filter(x=>x[1]).filter((x,i,a)=>a.findIndex(y=>y[1]===x[1])===i);
  const leadership=[['President',c.president],['Vice President',c.vicePresident],['Secretary',c.secretary]].filter(x=>x[1]);
  const sourcePeople=Array.isArray(detail?.sourcePeople)?detail.sourcePeople:[];
  const people=leadership.length?leadership:sourcePeople;
