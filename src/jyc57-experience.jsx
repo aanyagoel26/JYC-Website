@@ -137,6 +137,28 @@ export function JYC57Gallery({data}){
   {active&&<div ref={dialogRef} className="jyc57-lightbox" role="dialog" aria-modal="true" aria-label={active.caption||'JYC photograph'} onClick={close} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}><div className="jyc57-lightbox-inner" onClick={e=>e.stopPropagation()}><button className="jyc57-close" onClick={close} aria-label="Close photograph">×</button><button className="jyc57-nav prev" type="button" onClick={()=>move(-1)} aria-label="Previous photograph">‹</button><div className="jyc57-lightbox-media"><img width={imageManifest[active.url]?.width} height={imageManifest[active.url]?.height} src={active.url} alt={active.alt||active.caption||'JYC photograph'} style={{transform:'scale('+zoom+')'}} draggable="false"/></div><button className="jyc57-nav next" type="button" onClick={()=>move(1)} aria-label="Next photograph">›</button><div className="jyc57-lightbox-copy"><span className="eyebrow">{active.association||'JYC'}</span><h2>{active.caption||'JYC moment'}</h2><p>{active.story||active.description||active.alt||'Published JYC photography.'}</p><small>{active.sourceLabel||active.source||'JYC public archive'}{active.credit?' · '+active.credit:''}</small><span className="jyc57-counter">{selectedIndex+1} / {filtered.length}</span><div className="jyc57-lightbox-actions"><button type="button" onClick={()=>setZoom(z=>z>1?1:2)}>{zoom>1?'Reset zoom':'Zoom'}</button><button type="button" onClick={share}>{copied?'Link copied':'Share photograph'}</button><button type="button" onClick={download}>Open / download</button>{active.eventId&&<button type="button" onClick={()=>nav('/events/'+encodeURIComponent(active.eventId))}>Open event ↗</button>}{active.association&&<button type="button" onClick={()=>nav('/clubs/'+encodeURIComponent(active.association))}>Open community ↗</button>}</div></div></div></div>}
  </section>
 }
+export function JYCBestOf({data}){
+ const items=useMemo(()=>{
+  const incoming=Array.isArray(data?.gallery)?data.gallery:[];
+  const strict=[...incoming,...JYC_SOURCE_ARCHIVE_PHOTO_ITEMS]
+   .filter(g=>g?.url&&(!g.mediaKind||g.mediaKind==='photo'))
+   .map(g=>({...g,mediaKind:'photo'}));
+  return rankJycPhotoItems([...new Map(strict.map(g=>[String(g.url),g])).values()],{limit:24});
+ },[data?.gallery]);
+ const groups=useMemo(()=>[
+  ['People',items.filter(g=>/people|portrait|group|student|team/i.test(String(g.caption||g.alt||'')))],
+  ['Performance',items.filter(g=>/stage|performance|audience|music|dance|theatre/i.test(String(g.caption||g.alt||'')))],
+  ['Innovation',items.filter(g=>/innovation|workshop|technical|competition|hackathon/i.test(String(g.caption||g.alt||'')))],
+  ['Campus',items.filter(g=>/campus|jiit|event|community/i.test(String(g.caption||g.alt||'')))],
+  ['Celebrations',items.filter(g=>/fest|celebr|farewell|ethnic|converge|aakriti/i.test(String(g.caption||g.alt||'')))],
+ ].map(([name,rows])=>[name,rows.slice(0,6)]).filter(([,rows])=>rows.length));
+ return <section className="section page unified-public-page jyc57-page jyc-best-of-page">
+  <header className="jyc57-archive-head"><div><span className="eyebrow">JYC · EDITORIAL SELECTION</span><h1>The Best of JYC.</h1><p>A photography-first selection of people, performance, innovation, campus life and celebrations from the maintained JYC visual archive.</p></div><div className="jyc57-gallery-meta"><span><b>{items.length}</b> selected frames</span><span>Source-backed only</span></div></header>
+  {groups.map(([name,rows])=><section className="jyc57-featured" key={name} aria-labelledby={'best-'+name}><div className="jyc57-section-head"><div><span className="eyebrow">BEST OF JYC</span><h2 id={'best-'+name}>{name}</h2></div><span>{rows.length} frames</span></div><div className="jyc57-featured-grid">{rows.map((g,i)=><figure className={'jyc57-feature-card feature-'+i%6} key={g.id||g.url}><img src={g.url} alt={g.alt||g.caption||'JYC archive photograph'} loading={i<2?'eager':'lazy'} decoding="async"/><figcaption><small>{g.association||'JYC ARCHIVE'}{g.year?' · '+g.year:''}</small><strong>{g.caption||'JYC moment'}</strong></figcaption></figure>)}</div></section>)}
+  {!groups.length&&<Empty eyebrow="BEST OF JYC" title="The selection is waiting." text="Published source photography will appear here as the archive grows."/>}
+ </section>
+}
+
 export function JYC57Archive({data}){
  const nav=useNavigate();const events=publishedEvents(data);const years=[...new Set(events.map(e=>String(e.date||'').slice(0,4)).filter(Boolean))].sort((a,b)=>Number(b)-Number(a));
  const [year,setYear]=useState(years[0]||'all');const selected=year==='all'?events:events.filter(e=>String(e.date||'').startsWith(year));const photos=(data.gallery||[]).filter(g=>g?.url||g?.src).slice(0,6);
