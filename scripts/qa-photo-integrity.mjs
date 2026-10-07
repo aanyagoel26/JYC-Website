@@ -4,8 +4,8 @@ import {JYC_SOURCE_MEDIA_STATS,mergeSourceGallery,sourceEventMedia,buildJycMedia
 const assert=(name,ok,detail='')=>{console.log((ok?'PASS: ':'FAIL: ')+name+(detail?' — '+detail:''));if(!ok)process.exitCode=1};
 const mediaSource=fs.readFileSync('src/jyc-source-media.js','utf8');
 const forbiddenArchiveIds=[
-  'p1-image240','p1-image336','p1-image339','p2-image342',
-  'p4-image828','p4-image830','p4-image841','p4-image907','p4-image932',
+  'p1-image221','p1-image222','p1-image224','p1-image226','p1-image227','p1-image228','p1-image229','p1-image232','p1-image233','p1-image234','p1-image235','p1-image236','p1-image237','p1-image238','p1-image239','p1-image240','p1-image242','p1-image245','p1-image246','p1-image247','p1-image248','p1-image249','p1-image250','p1-image251','p1-image252','p1-image253','p1-image254','p1-image255','p1-image256','p1-image257','p1-image258','p1-image259','p1-image268','p1-image269','p1-image271','p1-image274','p1-image276','p1-image277','p1-image278','p1-image281','p1-image282','p1-image283','p1-image285','p1-image286','p1-image288','p1-image290','p1-image294','p1-image295','p1-image296','p1-image297','p1-image299','p1-image300','p1-image304','p1-image305','p1-image308','p1-image309','p1-image310','p1-image311','p1-image312','p1-image315','p1-image317','p1-image320','p1-image322','p1-image325','p1-image336','p1-image339','p2-image342',
+  'p4-image828','p4-image830','p4-image841','p4-image867','p4-image869','p4-image871','p4-image875','p4-image898','p4-image907','p4-image913','p4-image914','p4-image917','p4-image921','p4-image926','p4-image927','p4-image928','p4-image930','p4-image931','p4-image932',
   'p2-image520','p2-image530','p2-image543','p2-image550','p2-image591','p2-image608',
   'p4-image749','p4-image750','p4-image753','p4-image754','p4-image755','p4-image756','p4-image758','p4-image760','p4-image770','p4-image774','p4-image786','p4-image790'
 ];
