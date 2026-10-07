@@ -18,6 +18,7 @@ add('release is v57.1.0',pkg.version==='57.1.0'&&lock.version==='57.1.0'&&lock.p
 add('service worker cache is rotated',sw.includes('jyc-cache-v57-1-0')&&!sw.includes('jyc-cache-v57-0-0'));
 add('README release is v57.1.0',readme.includes('Current release: V57.1.0')&&readme.includes('V57.1.0 is the current code release'));
 add('event detail has registration action',/id="event-register"/.test(main)&&/REGISTER NOW|REGISTRATIONS CLOSED/.test(main));
+add('event detail gates unverified planned registration',/registrationPublished=e\.publicStatus!=='planned'\|\|e\.registrationVerified===true/.test(main)&&/Boolean\(e\.registrationUrl\|\|e\.registrationMode==='native'\)/.test(main));
 add('event detail has share and ICS tools',/ShareButton/.test(main)&&/DownloadICS/.test(main));
 add('event detail has source/provenance surface',/Official event sources|source photography|VISUAL RECORD/.test(main));
 add('event detail has related event/community links',/relatedEvents/.test(main)&&/relatedClub/.test(main));
