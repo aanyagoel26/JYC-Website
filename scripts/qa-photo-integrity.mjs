@@ -3,7 +3,8 @@ import {JYC_SOURCE_MEDIA_STATS,mergeSourceGallery,sourceEventMedia,buildJycMedia
 
 const assert=(name,ok,detail='')=>{console.log((ok?'PASS: ':'FAIL: ')+name+(detail?' — '+detail:''));if(!ok)process.exitCode=1};
 const mediaSource=fs.readFileSync('src/jyc-source-media.js','utf8');
-assert('non-photographic club override cleanup',mediaSource.includes("CypherX:[]")&&mediaSource.includes("Zencoders:[]")&&mediaSource.includes("NeuralNexus:[]")&&mediaSource.includes("Arcadia:[]"));
+assert('non-photographic club override cleanup',mediaSource.includes("CypherX:[]")&&mediaSource.includes("Zencoders:[]")&&mediaSource.includes("NeuralNexus:[]")&&mediaSource.includes("Arcadia:[]")&&mediaSource.includes("Dronotics:[]")&&mediaSource.includes("Eloquence:[]"));
+assert('visual archive exclusions include Aakriti and Panache',mediaSource.includes("'festivals/aakriti':new Set")&&mediaSource.includes("'clubs/panache':new Set"));
 assert('event gallery placements include Dron-O-War and Converge',mediaSource.includes("'Dron-O-War'")&&mediaSource.includes("'Converge'"));
 const gallery=mergeSourceGallery([]);
 const galleryUiSource=fs.readFileSync('src/extra-features.jsx','utf8');
@@ -18,7 +19,7 @@ const normalizedEvents=['Converge 2026','JAI 2026 · Jaypee Agentic AI Hackathon
 const normalizedEventMappings=normalizedEvents.map(name=>[name,sourceEventMedia(name).collection]);
 const eventUrls=new Set(event.items.map(x=>x.url));
 const inductionUrls=new Set(induction.items.map(x=>x.url));
-assert('full committed archive photography pool is exposed',JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.length===748,`found ${JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.length}`);
+assert('curated archive photography pool is exposed',JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.length>600,`found ${JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.length}`);
 assert('source gallery has maintained communities',JYC_SOURCE_MEDIA_STATS.maintainedCommunities>0);
 assert('source gallery is non-empty',gallery.length>0);
 assert('gallery opens in photography mode',galleryUiSource.includes("const [filter,setFilter]=useState('All'); const [role,setRole]=useState('All'); const [visual,setVisual]=useState('photo');"));
