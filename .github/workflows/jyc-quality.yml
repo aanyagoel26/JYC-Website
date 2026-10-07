@@ -36,6 +36,9 @@ jobs:
         run: npm run qa
 
 
+      - name: Verify canonical sitemap
+        run: npm run qa:sitemap
+
       - name: Verify release metadata
         shell: bash
         run: |
