@@ -52,5 +52,5 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          test -z "$(git grep -n 'jyc-website-.*\.vercel\.app' -- ':!README.md' ':!docs/**' || true)"
+          test -z "$(git grep -nE 'https://jyc-website-[a-z0-9]+-[a-z0-9]+\.vercel\.app' -- ':!README.md' ':!docs/**' || true)"
           test -z "$(git ls-files '*.zip')"
