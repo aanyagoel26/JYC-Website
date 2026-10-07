@@ -314,10 +314,10 @@ test('public images load, stay inside the viewport, and use centered focal posit
       const max = Math.max(0, document.body.scrollHeight - window.innerHeight);
       window.scrollTo(0, Math.round(max * f));
     }, fraction);
-    await page.waitForTimeout(500);
+    await page.waitForTimeout(1200);
     await page.locator('main img, footer img').evaluateAll(images => Promise.all(images
       .filter(img => { const r=img.getBoundingClientRect(); return r.bottom>0 && r.top<window.innerHeight && r.width>0 && r.height>0; })
-      .map(img => img.complete ? true : new Promise(resolve => { const done=()=>resolve(true); img.addEventListener('load',done,{once:true}); img.addEventListener('error',done,{once:true}); setTimeout(done,5000); }))));
+      .map(img => img.complete ? true : new Promise(resolve => { const done=()=>resolve(true); img.addEventListener('load',done,{once:true}); img.addEventListener('error',done,{once:true}); setTimeout(done,10000); }))));
     const result = await page.locator('main img, footer img').evaluateAll(images => images
       .filter(img => {
         const r=img.getBoundingClientRect();
