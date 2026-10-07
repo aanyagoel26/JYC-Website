@@ -540,15 +540,15 @@ function Navbar({data,admin,theme,setTheme}){
  const homeLinks=[['Home','hero'],['About','about'],['Clubs','clubs'],['Events','events'],['Gallery','moments'],['Leadership','team']];
  useEffect(()=>{
    const onKey=e=>{
-     if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();setSearch(true);return}
+     if((e.ctrlKey||e.metaKey)&&(e.key?.toLowerCase()==='k'||e.code==='KeyK')){e.preventDefault();e.stopPropagation();setSearch(true);return}
      if(e.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)){e.preventDefault();setSearch(true);return}
      if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName))return;
      if(e.key.toLowerCase()==='g'){shortcutRef.current='g';window.clearTimeout(shortcutRef._timer);shortcutRef._timer=window.setTimeout(()=>shortcutRef.current='',700);return}
      if(shortcutRef.current==='g'){const routes={c:'/clubs',e:'/events',t:'/team',a:'/archive',m:'/gallery'};if(routes[e.key.toLowerCase()]){e.preventDefault();shortcutRef.current='';nav(routes[e.key.toLowerCase()]);return}}
      if(e.key==='Escape'){setOpen(false);setSearch(false);setMoreOpen(false)}
    };
-   const openSearch=()=>setSearch(true);window.addEventListener('keydown',onKey);window.addEventListener('jyc-open-search',openSearch);
-   return()=>{window.removeEventListener('keydown',onKey);window.removeEventListener('jyc-open-search',openSearch)}
+   const openSearch=()=>setSearch(true);window.addEventListener('keydown',onKey,true);window.addEventListener('jyc-open-search',openSearch);
+   return()=>{window.removeEventListener('keydown',onKey,true);window.removeEventListener('jyc-open-search',openSearch)}
  },[]);
  useEffect(()=>{setOpen(false);setMoreOpen(false);const query=new URLSearchParams(loc.search||'').get('q');setSearch(Boolean(query));},[loc.pathname,loc.search]);
  useEffect(()=>{document.body.classList.toggle('menu-open',open);return()=>document.body.classList.remove('menu-open')},[open]);
