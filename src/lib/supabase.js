@@ -38,6 +38,9 @@ function createSafeFallback() {
     __configured: false,
     __configError: missingConfig,
     rpc: async () => ({ data: null, error: missingConfig }),
+    functions: {
+      invoke: async () => ({ data: null, error: missingConfig }),
+    },
     from: () => rejectedQuery(),
     storage: {
       from: () => ({
