@@ -1,7 +1,7 @@
 import React,{useEffect,useMemo,useState} from 'react';
 import {supabase} from './lib/supabase';
 
-const empty={clubs:[],events:[],gallery:[],reviews:[],verification:[]};
+const empty={clubs:[],events:[],gallery:[],reviews:[],verification:[],clubLinks:[]};
 const pct=(a,b)=>b?Math.round((a/b)*100):0;
 
 export function AdminTrustDashboard(){
@@ -14,11 +14,12 @@ export function AdminTrustDashboard(){
     supabase.from('jyc_events').select('id,slug,status,club_id').limit(300),
     supabase.from('jyc_gallery_items').select('id,status,club_id,event_id').limit(500),
     supabase.from('jyc_content_verification').select('entity_type,entity_id,campus_id,status,source_url,verified_at,last_updated_at').order('last_updated_at',{ascending:false}).limit(500),
-    supabase.from('jyc_content_reviews').select('id,entity_type,entity_id,status,created_at,reviewed_at').order('created_at',{ascending:false}).limit(100)
+    supabase.from('jyc_content_reviews').select('id,entity_type,entity_id,status,created_at,reviewed_at').order('created_at',{ascending:false}).limit(100),
+    supabase.from('jyc_club_links').select('club_id,label,url').limit(300)
    ]);
-   const first=[clubs,events,gallery,verification,reviews].find(x=>x.error);
+   const first=[clubs,events,gallery,verification,reviews,clubLinks].find(x=>x.error);
    if(first?.error)throw first.error;
-   setData({clubs:clubs.data||[],events:events.data||[],gallery:gallery.data||[],reviews:reviews.data||[],verification:verification.data||[]});
+   setData({clubs:clubs.data||[],events:events.data||[],gallery:gallery.data||[],reviews:reviews.data||[],verification:verification.data||[],clubLinks:clubLinks.data||[]});
   }catch(e){setError(e?.message||'Could not load the trust dashboard.')}
   finally{setBusy(false)}
  };
@@ -31,12 +32,13 @@ export function AdminTrustDashboard(){
   const verifiedIds=new Map();
   for(const row of v.filter(x=>['verified','published'].includes(x.status))) verifiedIds.set(row.entity_type+'::'+row.entity_id,true);
   const currentVerified=(type,rows)=>rows.filter(x=>verifiedIds.has(type+'::'+(x.slug||x.id))).length;
-  const clubs=data.clubs,events=data.events,gallery=data.gallery;
+  const clubs=data.clubs,events=data.events,gallery=data.gallery,clubLinks=data.clubLinks||[];
   return {
    clubsPublished:published(clubs),eventsPublished:published(events),galleryPublished:published(gallery),
    clubsVerified:currentVerified('club',clubs),eventsVerified:currentVerified('event',events),galleryVerified:currentVerified('gallery',gallery),
    clubsReview:review('club'),eventsReview:review('event'),galleryReview:review('gallery'),
    eventsLinked:events.filter(x=>x.club_id).length,galleryClubLinked:gallery.filter(x=>x.club_id).length,galleryEventLinked:gallery.filter(x=>x.event_id).length,
+   clubsWithLinks:new Set(clubLinks.map(x=>String(x.club_id))).size,
    reviewQueue:data.reviews.filter(x=>!['approved','rejected'].includes(x.status)).length
   };
  },[data]);
@@ -68,7 +70,8 @@ export function AdminTrustDashboard(){
      <div className="analytics-row"><span>Events linked to clubs</span><strong>{stats.eventsLinked}/{data.events.length}</strong></div>
      <div className="analytics-row"><span>Gallery linked to clubs</span><strong>{stats.galleryClubLinked}/{data.gallery.length}</strong></div>
      <div className="analytics-row"><span>Gallery linked to events</span><strong>{stats.galleryEventLinked}/{data.gallery.length}</strong></div>
-     <div className="analytics-row"><span>Event people / club members / club links</span><strong>Populate when authoritative rosters exist</strong></div>
+     <div className="analytics-row"><span>Published clubs with official-link records</span><strong>{stats.clubsWithLinks}/{stats.clubsPublished}</strong></div>
+     <div className="analytics-row"><span>Club-link records</span><strong>{data.clubLinks.length}</strong></div>
     </div>
     <p className="admin-note">The dashboard intentionally exposes missing relationships instead of inventing people, event-gallery associations or recruitment claims.</p>
    </div>
@@ -78,7 +81,8 @@ export function AdminTrustDashboard(){
      <li>Resolve every club/event/gallery record still in <b>review</b> with a current Sector-128 source.</li>
      <li>Keep planned events from exposing registration until an authoritative registration path exists.</li>
      <li>Link galleries to events only when the source explicitly establishes the relationship.</li>
-     <li>Populate people, club members and official links from authoritative rosters rather than estimates.</li>
+     <li>Audit clubs without official-link records and add only links supported by an attributable current source.</li>
+     <li>Populate people and club members from authoritative rosters rather than estimates.</li>
     </ol>
    </div>
   </>}
