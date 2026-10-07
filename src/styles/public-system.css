@@ -255,14 +255,14 @@ h1,h2,h3,h4,.brand span,.section-head h2,.page h1,.page h2{font-family:"Space Gr
 .scroll-progress i{background:var(--red)!important}
 .back-to-top{background:var(--red)!important;color:#fff!important;border-color:var(--red)!important}
 @media(max-width:900px){
- --page:min(100% - 40px,1320px);
+ :root{--page:min(100% - 40px,1320px)}
  .ecosystem-context-rail{grid-template-columns:repeat(2,1fr)}
  .archive-summary{grid-template-columns:1fr}
  .archive-summary>div{border-right:0;border-bottom:1px solid var(--line)}
  .archive-summary>div:last-child{border-bottom:0}
 }
 @media(max-width:640px){
- --page:min(100% - 28px,1320px);
+ :root{--page:min(100% - 28px,1320px)}
  .unified-public-page{padding-top:24px;padding-bottom:80px}
  .ecosystem-context-rail{grid-template-columns:1fr;overflow:hidden}
  .ecosystem-context-rail button:nth-child(n+4){display:none}
