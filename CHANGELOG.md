@@ -3,6 +3,7 @@
 ## V58.0.8 — Media audit
 
 - Added duplicate public-URL detection to the media-health workspace so archive collisions are visible to editors.
+- Added the Best of JYC editorial photo selection route using the curated source-photography ranking.
 
 
 ## V58.0.7 — Verification cleanup
