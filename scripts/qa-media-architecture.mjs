@@ -20,7 +20,7 @@ const checks=[
  ['external media is classified',source.includes('official-external-media')],
  ['gallery uses role filters',gallery.includes("roleLabels")&&gallery.includes('MEDIA TYPE')],
  ['gallery consumes full curated archive photo pool',gallery.includes('JYC_SOURCE_ARCHIVE_PHOTO_ITEMS')&&gallery.includes('...sourceArchivePhotos')],
- ['archive photo policy is content-aware',source.includes('ARCHIVE_PHOTO_EXCLUSIONS')&&source.includes('ARCHIVE_SHOWCASE_PHOTOS')],
+ ['archive photo policy is content-aware',source.includes('ARCHIVE_PHOTO_EXCLUSIONS')&&source.includes('ARCHIVE_SHOWCASE_PHOTOS')&&source.includes('JYC_SOURCE_ARCHIVE_PHOTO_ITEMS=ARCHIVE_GALLERY')],
  ['living photo engine is wired',gallery.includes('LivingPhoto')&&source.includes('JYC_SOURCE_ARCHIVE_PHOTO_ITEMS')],
  ['featured photo ranking is wired',source.includes('rankJycPhotoItems')&&gallery.includes('rankJycPhotoItems(items,{limit:24})')],
  ['living photo engine has decoded preloading and related scoring',read('src/jyc-living-photo.jsx').includes('preloadAndDecode')&&read('src/jyc-living-photo.jsx').includes('scoreRelatedPhoto')&&read('src/jyc-living-photo.jsx').includes('prefers-reduced-motion')],
