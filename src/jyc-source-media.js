@@ -52,19 +52,19 @@ const archivePhotoKind=item=>{
 const ARCHIVE_GALLERY=JYC_SOURCE_ARCHIVE_CATALOG.map(item=>({...item,mediaKind:archivePhotoKind(item),sourceType:'source-archive',sourceLabel:'JYC supplied image archive',role:item.association?'club':'archive',caption:item.association?item.association+' · supplied archive image':item.category.replaceAll('/',' · '),alt:item.association?item.association+' · JYC supplied archive image':'JIIT Youth Club 128 supplied archive image'}));
 
 const QUALITY_OVERRIDES={
-  Aakriti:['/assets/hub-photos-extra/aakriti-01.webp','/assets/hub-photos-extra/aakriti-02.webp','/assets/hub-photos-extra/aakriti-04.webp','/assets/hub-photos-extra/aakriti-05.webp','/assets/hub-photos-extra/aakriti-06.webp'],
-  Aura:['/assets/hub-photos-extra/aura-07.webp','/assets/hub-photos-extra/aura-08.webp','/assets/hub-photos-extra/aura-09.webp','/assets/hub-photos-extra/aura-10.webp','/assets/hub-photos-extra/aura-11.webp','/assets/hub-photos-extra/aura-12.webp','/assets/hub-photos-extra/aura-13.webp'],
-  BDS:['/assets/hub-photos-extra/bds-33.webp','/assets/hub-photos-extra/bds-34.webp','/assets/hub-photos-extra/bds-35.webp','/assets/hub-photos-extra/bds-36.webp'],
-  CypherX:['/assets/hub-photos-extra/cypherx-51.webp','/assets/hub-photos-extra/cypherx-52.webp','/assets/hub-photos-extra/cypherx-53.webp','/assets/hub-photos-extra/cypherx-54.webp','/assets/hub-photos-extra/cypherx-55.webp','/assets/hub-photos-extra/cypherx-56.webp','/assets/hub-photos-extra/cypherx-57.webp','/assets/hub-photos-extra/cypherx-58.webp'],
-  Dronotics:['/assets/hub-photos-extra/dronotics-43.webp','/assets/hub-photos-extra/dronotics-44.webp','/assets/hub-photos-extra/dronotics-45.webp','/assets/hub-photos-extra/dronotics-46.webp','/assets/hub-photos-extra/dronotics-47.webp','/assets/hub-photos-extra/dronotics-49.webp','/assets/hub-photos-extra/dronotics-50.webp'],
+  Aakriti:['/assets/hub-photos-extra/aakriti-04.webp'],
+  Aura:['/assets/hub-photos-extra/aura-08.webp','/assets/hub-photos-extra/aura-09.webp','/assets/hub-photos-extra/aura-10.webp','/assets/hub-photos-extra/aura-11.webp','/assets/hub-photos-extra/aura-12.webp','/assets/hub-photos-extra/aura-13.webp'],
+  BDS:['/assets/hub-photos-extra/bds-34.webp','/assets/hub-photos-extra/bds-35.webp','/assets/hub-photos-extra/bds-36.webp'],
+  CypherX:[],
+  Dronotics:['/assets/hub-photos-extra/dronotics-45.webp','/assets/hub-photos-extra/dronotics-46.webp','/assets/hub-photos-extra/dronotics-47.webp'],
   Eloquence:['/assets/hub-photos-extra/eloquence-25.webp','/assets/hub-photos-extra/eloquence-26.webp','/assets/hub-photos-extra/eloquence-27.webp','/assets/hub-photos-extra/eloquence-28.webp','/assets/hub-photos-extra/eloquence-29.webp','/assets/hub-photos-extra/eloquence-30.webp','/assets/hub-photos-extra/eloquence-31.webp'],
-  Panache:['/assets/hub-photos-extra/panache-14.webp','/assets/hub-photos-extra/panache-15.webp','/assets/hub-photos-extra/panache-16.webp'],
-  Prismatic:['/assets/hub-stories/prismatic.webp','/assets/hub-photos-extra/prismatic-72.webp','/assets/hub-photos-extra/prismatic-73.webp'],
-  RPH:['/assets/hub-photos-extra/rph-37.webp','/assets/hub-photos-extra/rph-40.webp','/assets/hub-photos-extra/rph-38.webp','/assets/hub-photos-extra/rph-39.webp','/assets/hub-photos-extra/rph-41.webp','/assets/hub-photos-extra/rph-42.webp'],
+  Panache:['/assets/hub-photos-extra/panache-16.webp'],
+  Prismatic:[],
+  RPH:[],
   VamUnique:['/assets/hub-photos-extra/vamunique-59.webp','/assets/hub-photos-extra/vamunique-60.webp','/assets/hub-photos-extra/vamunique-61.webp','/assets/hub-photos-extra/vamunique-62.webp','/assets/hub-photos-extra/vamunique-63.webp'],
-  Zencoders:['/assets/hub-photos-extra/zencoders-17.webp','/assets/hub-photos-extra/zencoders-18.webp','/assets/hub-photos-extra/zencoders-19.webp','/assets/hub-photos-extra/zencoders-20.webp','/assets/hub-photos-extra/zencoders-21.webp','/assets/hub-photos-extra/zencoders-22.webp','/assets/hub-photos-extra/zencoders-23.webp','/assets/hub-photos-extra/zencoders-24.webp'],
-  Arcadia:['/assets/hub-photos-extra/arcadia-64.webp','/assets/hub-photos-extra/arcadia-65.webp','/assets/hub-photos-extra/arcadia-66.webp'],
-  NeuralNexus:['/assets/hub-photos-extra/neural-nexus-67.webp','/assets/hub-photos-extra/neural-nexus-68.webp','/assets/hub-photos-extra/neural-nexus-69.webp','/assets/hub-photos-extra/neural-nexus-70.webp','/assets/hub-photos-extra/neural-nexus-71.webp'],
+  Zencoders:[],
+  Arcadia:[],
+  NeuralNexus:[],
   Sports:['/assets/hub-photos/sports-01.webp','/assets/hub-photos/sports-02.webp','/assets/hub-photos/sports-03.webp','/assets/hub-photos/sports-04.webp']
 };
 
