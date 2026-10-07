@@ -1,5 +1,11 @@
 # Changelog
 
+## V58.0.7 — Verification cleanup
+
+- Removed seven stale/duplicate verification rows after canonical club and JAI event identity cleanup; current published club verification is now one-to-one.
+- Kept unresolved event/gallery records in review instead of auto-verifying them without an authenticated JYC verifier.
+
+
 ## V58.0.6 — Media health
 
 - Added a Control Center media-health workspace covering photo metadata, rights, provenance, stale verification, album readiness and missing relationships.
