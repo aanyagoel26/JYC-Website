@@ -28,10 +28,10 @@ const SOURCE_GALLERY=[...PDF_HUB_GALLERY,...PDF_HUB_EXTRA_GALLERY];
 // treating every binary as a photograph. All excluded assets remain available in the full archive.
 const ARCHIVE_PHOTO_EXCLUSIONS={
   'festivals/aakriti':new Set(['p1-image135','p1-image136','p1-image138','p1-image140','p1-image129','p1-image130','p1-image131','p1-image132','p1-image117','p1-image118','p1-image119','p1-image120','p1-image121','p1-image122','p1-image123','p1-image124','p1-image125','p1-image128','p1-image133','p1-image134','p1-image135','p1-image139','p1-image141','p1-image142','p1-image143','p1-image146','p1-image147','p1-image148','p1-image152','p1-image153','p1-image154','p1-image155','p1-image156','p1-image158','p1-image159']),
-  'clubs/panache':new Set(['p1-image228','p1-image230','p1-image231','p1-image232','p1-image233','p1-image274','p1-image226','p1-image227','p1-image228','p1-image229','p1-image230','p1-image221','p1-image222','p1-image224','p1-image234','p1-image235','p1-image236','p1-image237','p1-image238','p1-image239','p1-image242','p1-image244','p1-image245','p1-image246','p1-image247','p1-image248','p1-image249','p1-image250','p1-image251','p1-image252','p1-image253','p1-image254','p1-image255','p1-image256','p1-image257','p1-image258','p1-image259','p1-image268','p1-image269','p1-image271']),
-  'clubs/abhivyakti':new Set(['p4-image796','p4-image820','p3-image685','p3-image686','p3-image687','p3-image688','p3-image689','p3-image690','p3-image691','p3-image692','p3-image693','p3-image694','p3-image695','p3-image696','p3-image697','p3-image698','p3-image699','p3-image700']),
-  'gallery/campus-events':new Set(['p2-image494','p2-image495']),
-  'clubs/cypherx':new Set(['p4-image746','p4-image748','p4-image751','p4-image752']),
+  'clubs/panache':new Set(['p1-image240','p1-image336','p1-image339','p2-image342','p1-image228','p1-image230','p1-image231','p1-image232','p1-image233','p1-image274','p1-image226','p1-image227','p1-image228','p1-image229','p1-image230','p1-image221','p1-image222','p1-image224','p1-image234','p1-image235','p1-image236','p1-image237','p1-image238','p1-image239','p1-image242','p1-image244','p1-image245','p1-image246','p1-image247','p1-image248','p1-image249','p1-image250','p1-image251','p1-image252','p1-image253','p1-image254','p1-image255','p1-image256','p1-image257','p1-image258','p1-image259','p1-image268','p1-image269','p1-image271']),
+  'clubs/abhivyakti':new Set(['p4-image796','p4-image820','p4-image828','p4-image830','p4-image841','p4-image907','p4-image932','p3-image685','p3-image686','p3-image687','p3-image688','p3-image689','p3-image690','p3-image691','p3-image692','p3-image693','p3-image694','p3-image695','p3-image696','p3-image697','p3-image698','p3-image699','p3-image700']),
+  'gallery/campus-events':new Set(['p2-image494','p2-image495','p2-image520','p2-image530','p2-image543','p2-image550','p2-image591','p2-image608']),
+  'clubs/cypherx':new Set(['p4-image746','p4-image748','p4-image749','p4-image750','p4-image751','p4-image752','p4-image753','p4-image754','p4-image755','p4-image756','p4-image758','p4-image760','p4-image770','p4-image774','p4-image786','p4-image790']),
   'clubs/cicr':new Set(['p3-image611','p3-image612','p3-image613','p3-image614','p3-image615','p3-image616','p3-image617','p3-image618','p3-image619','p3-image620','p3-image621','p3-image622','p3-image623','p3-image624','p3-image625','p3-image626','p3-image627','p3-image628','p3-image629','p3-image630','p3-image631','p3-image632','p5-logo']),
   'clubs/cine-film':new Set(['p2-image440','p2-image441','p2-image442','p2-image443','p2-image444','p2-image445','p2-image446','p2-image447']),
   'clubs/jodc':new Set(['p3-image634','p3-image635','p3-image636','p3-image637','p3-image638','p3-image639','p3-image640','p3-image642','p3-image643','p3-image645','p3-image650','p3-image651','p3-image652','p3-image656','p3-image661','p3-image662']),
@@ -203,10 +203,12 @@ export function sourceEventMedia(eventOrName){
   }):[];
   const items=[...exact,...related].map(enrichMediaItem).filter(Boolean);
   const seen=new Set();
+  const uniqueItems=items.filter(item=>{if(seen.has(item.url))return false;seen.add(item.url);return true});
   return {
     name:name||alias||'JYC',
     collection:alias||name||'JYC Archive',
-    items:items.filter(item=>{if(seen.has(item.url))return false;seen.add(item.url);return true})
+    items:uniqueItems,
+    photoItems:uniqueItems.filter(item=>item.mediaKind==='photo')
   };
 }
 export const JYC_SOURCE_MEDIA_STATS={maintainedCommunities:Object.keys(JYC_HUB_CONTENT).length,storyBackedCommunities:PDF_HUB_STORIES.length,galleryItems:SOURCE_GALLERY.length,sourcePhotography:SOURCE_GALLERY.filter(item=>mediaKind(item)==='photo').length,qualityOverrideCommunities:Object.keys(QUALITY_OVERRIDES).length,eventCollections:Object.keys(EVENT_ALIASES).length};
