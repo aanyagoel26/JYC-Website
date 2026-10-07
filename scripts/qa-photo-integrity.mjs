@@ -20,6 +20,15 @@ const normalizedEvents=['Converge 2026','JAI 2026 · Jaypee Agentic AI Hackathon
 const normalizedEventMappings=normalizedEvents.map(name=>[name,sourceEventMedia(name).collection]);
 const eventUrls=new Set(event.items.map(x=>x.url));
 const inductionUrls=new Set(induction.items.map(x=>x.url));
+const forbiddenArchiveIds=[
+  'p1-image240','p1-image336','p1-image339','p2-image342',
+  'p4-image828','p4-image830','p4-image841','p4-image907','p4-image932',
+  'p2-image520','p2-image530','p2-image543','p2-image550','p2-image591','p2-image608',
+  'p4-image749','p4-image750','p4-image753','p4-image754','p4-image755','p4-image756','p4-image758','p4-image760','p4-image770','p4-image774','p4-image786','p4-image790'
+];
+const archivePhotoUrls=new Set(JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.map(x=>x.url));
+const eventPhotoItems=event.photoItems||[];
+
 assert('curated archive photography pool is exposed',JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.length>500,`found ${JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.length}`);
 assert('visually audited featured overrides are present',mediaSource.includes("Aakriti:['/assets/source-archive/festivals/aakriti/p1-image126.webp")&&mediaSource.includes("Abhivyakti:['/assets/source-archive/clubs/abhivyakti/p4-image795.webp")&&mediaSource.includes("Panache:['/assets/source-archive/clubs/panache/p1-image272.webp")&&mediaSource.includes("CICR:['/assets/source-archive/clubs/cicr/p3-image609.webp")&&mediaSource.includes("Innovation:['/assets/source-archive/clubs/innovation/p5-DSC02902.webp"));
 assert('source gallery has maintained communities',JYC_SOURCE_MEDIA_STATS.maintainedCommunities>0);
@@ -35,5 +44,8 @@ assert('Induction does not inherit Ebullience photography',[...inductionUrls].ev
 assert('manifest exposes visual roles',manifest.roles.includes('club')&&manifest.roles.includes('event')&&manifest.roles.includes('archive'));
 assert('manifest exposes source types',manifest.sourceTypes.includes('presentation-export')&&manifest.sourceTypes.includes('maintained-jyc-media'));
 assert('normalized event names resolve to deterministic collections',normalizedEventMappings.every(([name,collection])=>collection&&collection!=='JYC Archive'),JSON.stringify(normalizedEventMappings));
+assert('newly audited non-photo archive assets stay out of photo pool',forbiddenArchiveIds.every(id=>![...archivePhotoUrls].some(url=>url.includes('/'+id+'.webp'))),forbiddenArchiveIds.filter(id=>[...archivePhotoUrls].some(url=>url.includes('/'+id+'.webp'))).join(', '));
+assert('event photo rail exposes only explicit photography',eventPhotoItems.every(x=>x?.mediaKind==='photo'));
+assert('event media still retains broader source records separately',event.items.length>=eventPhotoItems.length);
 if(process.exitCode)process.exit(1);
 console.log('Photo integrity QA: all checks passed.');
