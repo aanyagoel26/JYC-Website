@@ -10,8 +10,8 @@ const homeCss=read('src/jyc-editorial-home.css');
 const publicCss=read('src/styles/public-system.css');
 const sw=read('public/sw.js');
 const checks=[
- ['release is V58.0.6',pkg.version==='58.0.6'&&lock.version==='58.0.6'&&lock.packages?.['']?.version==='58.0.6'],
- ['service worker cache is V58.0.6',sw.includes('jyc-cache-v58-0-6')&&!sw.includes('jyc-cache-v57-0-0')],
+ ['release is V58.0.7',pkg.version==='58.0.7'&&lock.version==='58.0.7'&&lock.packages?.['']?.version==='58.0.7'],
+ ['service worker cache is V58.0.7',sw.includes('jyc-cache-v58-0-7')&&!sw.includes('jyc-cache-v57-0-0')],
  ['retired Projects/Impact/FAQ navigation is absent',!main.includes("['/projects','Projects'")&&!main.includes("['/impact','Impact'")&&!main.includes("['/faq','FAQ'"),],
  ['homepage retired Impact section is absent',!home.includes('jyc-v1-impact')&&!home.includes('HIGHLIGHTS · IMPACT')],
  ['homepage achievements section remains available',home.includes("nav('/achievements')")&&home.includes('Explore Achievements')],
