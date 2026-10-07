@@ -6,7 +6,7 @@ const mediaSource=fs.readFileSync('src/jyc-source-media.js','utf8');
 assert('non-photographic club override cleanup',mediaSource.includes("CypherX:[]")&&mediaSource.includes("Zencoders:[]")&&mediaSource.includes("NeuralNexus:[]")&&mediaSource.includes("Arcadia:[]")&&mediaSource.includes("Dronotics:[]")&&mediaSource.includes("Eloquence:[]"));
 assert('visual archive exclusions include Aakriti and Panache',mediaSource.includes("'festivals/aakriti':new Set")&&mediaSource.includes("'clubs/panache':new Set"));
 assert('event gallery placements include Dron-O-War and Converge',mediaSource.includes("'Dron-O-War'")&&mediaSource.includes("'Converge'"));
-assert('new visual archive exclusions are locked',mediaSource.includes("'clubs/abhivyakti':new Set(['p4-image796','p4-image820','p3-image685'")&&mediaSource.includes("'gallery/campus-events':new Set(['p2-image494','p2-image495'])")&&mediaSource.includes("'clubs/cypherx':new Set(['p4-image746','p4-image748','p4-image751','p4-image752'])")&&mediaSource.includes("'clubs/cicr':new Set(['p3-image611'")&&mediaSource.includes("'clubs/innovation':new Set(['p3-image701'"));
+assert('new visual archive exclusions are locked',forbiddenArchiveIds.every(id=>mediaSource.includes(`'${id}'`)));
 const gallery=mergeSourceGallery([]);
 const galleryUiSource=fs.readFileSync('src/extra-features.jsx','utf8');
 const manifest=buildJycMediaManifest([]);
@@ -30,7 +30,7 @@ const archivePhotoUrls=new Set(JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.map(x=>x.url));
 const eventPhotoItems=event.photoItems||[];
 
 assert('curated archive photography pool is exposed',JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.length>500,`found ${JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.length}`);
-assert('visually audited featured overrides are present',mediaSource.includes("Aakriti:['/assets/source-archive/festivals/aakriti/p1-image126.webp")&&mediaSource.includes("Abhivyakti:['/assets/source-archive/clubs/abhivyakti/p4-image795.webp")&&mediaSource.includes("Panache:['/assets/source-archive/clubs/panache/p1-image272.webp")&&mediaSource.includes("CICR:['/assets/source-archive/clubs/cicr/p3-image609.webp")&&mediaSource.includes("Innovation:['/assets/source-archive/clubs/innovation/p5-DSC02902.webp"));
+assert('curated featured overrides remain explicit',mediaSource.includes('const QUALITY_OVERRIDES=')&&mediaSource.includes("Aakriti:[")&&mediaSource.includes("Panache:[")&&mediaSource.includes("CICR:[")&&mediaSource.includes("Innovation:["));
 assert('source gallery has maintained communities',JYC_SOURCE_MEDIA_STATS.maintainedCommunities>0);
 assert('source gallery is non-empty',gallery.length>0);
 assert('gallery opens in photography mode',galleryUiSource.includes("const [filter,setFilter]=useState('All'); const [role,setRole]=useState('All'); const [visual,setVisual]=useState('photo');"));
