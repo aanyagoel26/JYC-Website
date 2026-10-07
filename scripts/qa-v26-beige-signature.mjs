@@ -11,7 +11,6 @@ const fallbacks=read('src/content/jyc-public-fallbacks.js');
 const extra=read('src/extra-features.jsx');
 const css=read('src/jyc-logo-final-theme.css');
 const index=read('index.html');
-const pkg=JSON.parse(read('package.json'));
 const sw=read('public/sw.js');
 const hubContent=read('src/v21-hub-content.js');
 const sourceMedia=read('src/jyc-source-media.js');
