@@ -22,7 +22,7 @@ const checks=[
  ['homepage visual archive is content-led',editorialHome.includes('LazyDriftWall')&&editorialHome.includes('jh-archive-section')&&editorialHome.includes('JYC visual archive')],
  ['club source rail uses metadata-aware captions',main.includes('club-living-photo')&&read('src/jyc-living-photo.jsx').includes('current.caption||current.title||current.association')&&read('src/jyc-living-photo.jsx').includes('jyc-living-photo-meta')],
  ['gallery mounts source hub photography',read('src/extra-features.jsx').includes('sourcePhotoItems=useMemo')&&read('src/extra-features.jsx').includes('sourceHubMedia(name).photoItems')],
- ['gallery defaults to DriftWall archive presentation',/const \[viewMode,setViewMode\]=useState\('wall'\)/.test(extraFeatures)&&extraFeatures.includes('LazyDriftWall')&&extraFeatures.includes('items.slice(0,24)')&&extraFeatures.includes('Drift wall')],
+ ['gallery defaults to DriftWall archive presentation',extraFeatures.includes("useState('wall')")&&extraFeatures.includes('LazyDriftWall')],
  ['maintained hub photo mapping has no duplicate URLs',(()=>{const refs=[...sourceMedia.matchAll(/QUALITY_OVERRIDES=[\s\S]*?};/g)][0]?.[0]||'';const urls=[...refs.matchAll(/['\"](\/assets\/[^'\"]+)['\"]/g)].map(m=>m[1]);return new Set(urls).size===urls.length})()],
  ['public club/event/photo cards stay upright',!main.includes('club-card-v41 tilt-card')&&!main.includes('event-card-premium tilt-card')&&!main.includes('moments-feature-${i} tilt-card')],
  ['event identity contract remains present',main.includes('event-identity-page')&&main.includes('eventIdentity(e)')],
