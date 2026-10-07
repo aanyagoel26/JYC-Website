@@ -1,0 +1,63 @@
+name: JYC Browser QA
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Build production bundle
+        run: npm run build
+
+      - name: Start production server
+        run: |
+          nohup npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/jyc-preview.log 2>&1 &
+          echo $! > /tmp/jyc-preview.pid
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          cat /tmp/jyc-preview.log
+          exit 1
+
+      - name: Run browser smoke and responsive QA
+        env:
+          JYC_BASE_URL: http://127.0.0.1:4173
+        run: npm run qa:browser
+
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v6
+        with:
+          name: jyc-playwright-report
+          path: |
+            playwright-report
+            test-results
+            /tmp/jyc-preview.log
+          if-no-files-found: ignore
