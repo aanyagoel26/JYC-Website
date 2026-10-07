@@ -1,3 +1,13 @@
+# Changelog
+
+## V58.0.1 — Accessibility, Event Modal & Archive Polish
+
+- Hardened the featured JAI 2026 announcement into an accessible, keyboard-trapped, scroll-safe modal with proper focus restoration and mobile behavior.
+- Canonicalized the JAI 2026 event route and kept registration, official-site and Discord actions connected.
+- Added verified Cinekala official LinkedIn sourcing for the JIIT-128 club directory metadata.
+- Rotated the service-worker cache and aligned the package, lockfile and release guard to V58.0.1.
+- Added the featured-event checks to the main static QA suite.
+
 ## V57.0.0 — Security and release hardening
 
 - Ran the live Supabase security/performance advisors and removed seven exact duplicate RLS policies; remaining warnings are documented for intentional security-definer RPCs, auth settings and traffic-dependent index review.
