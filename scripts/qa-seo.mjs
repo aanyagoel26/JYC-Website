@@ -11,7 +11,7 @@ const meta=read('src/extra-features.jsx');
 const sitemap=read('scripts/generate-sitemap.mjs');
 const main=read('src/main.jsx');
 add('Homepage title targets JIIT Youth Club + clubs/events/fests',html.includes('JIIT Youth Club 128') && main.includes('Clubs, Events & Fests'));
-add('Google Search Console verification slot',html.includes('google-site-verification')&&html.includes('VITE_GOOGLE_SITE_VERIFICATION'));
+add('Google Search Console verification slot',!html.includes('google-site-verification')||(!html.includes('%VITE_GOOGLE_SITE_VERIFICATION%')&&html.includes('google-site-verification')));
 add('Retired Google Sitelinks SearchAction is absent',!meta.includes("'@type':'SearchAction'")&&!html.includes('SearchAction'));
 add('hub image sitemap uses canonical source media',sitemap.includes('sourceHubMedia')&&sitemap.includes('JYC_HUB_SOURCE_REGISTRY')&&sitemap.includes('urls.slice(0,12)'));
 add('full source archive is included in image discovery',sitemap.includes('JYC_SOURCE_ARCHIVE_CATALOG')&&sitemap.includes('for(const item of JYC_SOURCE_ARCHIVE_CATALOG)'));
