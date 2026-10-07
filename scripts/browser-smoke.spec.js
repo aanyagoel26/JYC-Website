@@ -400,7 +400,76 @@ test('public cards do not use pointer-driven 3D tilt', async ({ page }) => {
   expect(transforms.filter(value => value && value !== 'none' && value.includes('matrix3d')).length).toBe(0);
 });
 
+test('featured event popup never blocks the JYC assistant control', async ({ page }) => {
+  await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
+  await page.locator('.jyc-bot-orb').waitFor({ state: 'visible', timeout: 10000 });
+  const popup = page.locator('.jyc-featured-event-overlay');
+  if (await popup.count()) {
+    await expect(popup).toBeVisible();
+    const overlayZ = await popup.evaluate(el => Number.parseInt(getComputedStyle(el).zIndex || '0', 10));
+    const botZ = await page.locator('.jyc-bot-shell').evaluate(el => Number.parseInt(getComputedStyle(el).zIndex || '0', 10));
+    expect(botZ).toBeGreaterThan(overlayZ);
+  }
+  await page.locator('.jyc-bot-orb').click();
+  await expect(page.locator('.jyc-assistant-panel')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.jyc-assistant-panel')).toHaveCount(0);
+});
+
 test('JYC assistant remains interactive with GLB or safe fallback', async ({ page }) => {
+  await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
+  await page.locator('.jyc-bot-orb').waitFor({ state: 'visible', timeout: 10000 });
+  await page.locator('.jyc-bot-orb').click();
+  await expect(page.locator('.jyc-assistant-panel')).toBeVisible();
+  const media = await page.locator('.jyc-bot-glb, .jyc-bot-model-fallback').count();
+  expect(media).toBeGreaterThan(0);
+  if (await page.locator('.jyc-bot-glb').count()) {
+    await expect(page.locator('.jyc-bot-glb')).toHaveAttribute('data-jyc-glb-src', '/models/jyc-spatial.glb');
+  }
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.jyc-assistant-panel')).toHaveCount(0);
+});
+
+test('GLB stays on capable desktop hardware and falls back on touch-first mobile', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
+  await page.locator('.jyc-bot-orb').waitFor({ state: 'visible', timeout: 10000 });
+  await page.waitForTimeout(1800);
+  const desktopState=await page.evaluate(()=>({
+    hasModel:Boolean(document.querySelector('.jyc-bot-glb')),
+    src:document.querySelector('.jyc-bot-glb')?.getAttribute('data-jyc-glb-src')||null
+  }));
+  if(desktopState.hasModel) expect(desktopState.src).toBe('/models/jyc-spatial.glb');
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
+  await page.locator('.jyc-bot-orb').waitFor({ state: 'visible', timeout: 10000 });
+  await page.waitForTimeout(500);
+  await expect(page.locator('.jyc-bot-model-fallback')).toBeVisible();
+  await expect(page.locator('.jyc-bot-glb')).toHaveCount(0);
+});
+
+test('mobile fixed controls have separation and never overlap the navigation dock', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
+  const boxes = await page.evaluate(() => {
+    const rect = sel => { const el=document.querySelector(sel); if(!el) return null; const r=el.getBoundingClientRect(); return {left:r.left,right:r.right,top:r.top,bottom:r.bottom}; };
+    return {dock:rect('.mobile-dock'),bot:rect('.jyc-bot-shell'),nav:rect('.nav')};
+  });
+  if(boxes.dock && boxes.bot){
+    const overlap = Math.max(0, Math.min(boxes.dock.bottom,boxes.bot.bottom)-Math.max(boxes.dock.top,boxes.bot.top)) *
+      Math.max(0, Math.min(boxes.dock.right,boxes.bot.right)-Math.max(boxes.dock.left,boxes.bot.left));
+    expect(overlap).toBe(0);
+  }
+});
+
+
+test('Join JYC exposes the public coming-soon experience', async ({ page }) => {
+  await page.goto(base + '/join-jyc', { waitUntil: 'domcontentloaded' });
+  await expect(page.getByRole('heading', { name: 'Join JYC.' })).toBeVisible();
+  await expect(page.getByText('The next JYC recruitment cycle is being prepared.')).toBeVisible();
+});
+
   await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
   await page.locator('.jyc-bot-orb').waitFor({ state: 'visible', timeout: 10000 });
   await page.locator('.jyc-bot-orb').click();
