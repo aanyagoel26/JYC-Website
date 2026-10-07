@@ -10,8 +10,8 @@ const homeCss=read('src/jyc-editorial-home.css');
 const publicCss=read('src/styles/public-system.css');
 const sw=read('public/sw.js');
 const checks=[
- ['release is V59.0.0',pkg.version==='59.0.0'&&lock.version==='59.0.0'&&lock.packages?.['']?.version==='59.0.0'],
- ['service worker cache is V59.0.0',sw.includes('jyc-cache-v58-0-8')&&!sw.includes('jyc-cache-v57-0-0')],
+ ['release is V59.0.1',pkg.version==='59.0.1'&&lock.version==='59.0.1'&&lock.packages?.['']?.version==='59.0.1'],
+ ['service worker cache is V59.0.1',sw.includes('jyc-cache-v58-0-8')&&!sw.includes('jyc-cache-v57-0-0')],
  ['retired Projects/Impact/FAQ navigation is absent',!main.includes("['/projects','Projects'")&&!main.includes("['/impact','Impact'")&&!main.includes("['/faq','FAQ'"),],
  ['homepage retired Impact section is absent',!home.includes('jyc-v1-impact')&&!home.includes('HIGHLIGHTS · IMPACT')],
  ['homepage achievements section remains available',home.includes("nav('/achievements')")&&home.includes('Explore Achievements')],
@@ -24,4 +24,4 @@ const checks=[
 ];
 let failed=0;for(const [name,ok] of checks){console.log((ok?'PASS':'FAIL')+' · '+name);if(!ok)failed++}
 if(failed)process.exit(1);
-console.log('JYC V59 release guard PASS');
+console.log('JYC V59.0.1 release guard PASS');
