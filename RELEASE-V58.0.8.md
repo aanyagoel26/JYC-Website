@@ -1,6 +1,6 @@
 # V58.0.8 — Accessibility, Event Modal & Media Audit
 
-V58.0.8 is the current JYC public-code release boundary.
+V58.0.8 is the current JYC public-code release boundary. The current main head is `f89c3798edfbc287e48b3b0f5d5602c13d0e8f13`.
 
 ## Included
 - Accessible featured-event modal and keyboard/focus hardening.
@@ -18,8 +18,8 @@ V58.0.8 is the current JYC public-code release boundary.
 The live Supabase project contains 23 published JYC clubs, 8 published JYC events, 31 unpublished editorial album shells, and a review-gated media/provenance queue. Gallery publication remains conservative: approved photography is not automatically treated as rights-cleared or provenance-verified.
 
 ## Remaining launch gates
-1. Obtain a green GitHub CI/quality/browser/CodeQL run on the current main revision.
-2. Publish the current main revision to the connected Vercel production project.
+1. Obtain a green GitHub CI/quality/browser/CodeQL run on the current main revision; the connector currently shows no new workflow run for the latest commits, so this gate remains unverified.
+2. Publish the current main revision to the connected Vercel production project; Vercel currently returns `api-deployments-free-per-day` and asks to retry in 24 hours.
 3. Run the browser and HTTP smoke suite against the production URL.
 4. Complete manual Supabase Auth configuration review, especially leaked-password protection.
 5. Continue editorial media review for rights, photographer attribution, focal points and album promotion.
