@@ -428,3 +428,6 @@ img{max-width:100%}svg{max-width:100%}.page a,.section a{text-decoration-thickne
  .jyc57-feature-card img,.jyc57-photo img,.jyc57-lightbox-media img{transition:none!important}
  .jyc57-feature-card:hover img,.jyc57-photo:hover img{transform:none!important}
 }
+
+.jyc57-archive-head .jyc57-album-hero{display:block;width:min(100%,980px);max-height:360px;object-fit:cover;object-position:center;border:1px solid var(--border-tech);border-radius:22px;margin-top:18px;box-shadow:0 18px 48px rgba(0,0,0,.12)}
+@media(max-width:700px){.jyc57-archive-head .jyc57-album-hero{max-height:240px;border-radius:16px;margin-top:14px}}
