@@ -155,7 +155,7 @@ test('brand text contrast stays readable in both themes', async ({ page }) => {
 
 
 test('mobile visual guardrails keep core content centered and inside viewport', async ({ page }) => {
-  for (const width of [320, 360, 390, 430]) {
+  for (const width of [320, 375, 390, 430, 768, 1024, 1280, 1440, 1920]) {
     await page.setViewportSize({ width, height: 844 });
     for (const route of ['/', '/clubs', '/events', '/gallery']) {
       await page.goto(base + route, { waitUntil: 'domcontentloaded' });
