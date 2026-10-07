@@ -17,7 +17,7 @@ const checks=[
  ['gallery has mobile single-column fallback',css.includes('@media(max-width:480px)')&&css.includes('.public-app .gallery-grid{column-count:1}')],
  ['club pages expose source photo strip',main.includes('club-living-photo')&&main.includes('sourceHubMedia(c.name).photoItems')&&main.includes('LivingPhoto')],
  ['homepage photo story uses source hub photos',editorialHome.includes('<PhotoChapters/>')&&next.includes('JYC_SOURCE_ARCHIVE_PHOTO_ITEMS')&&next.includes('sourceBuckets=JYC_HUB_SOURCE_REGISTRY.map')],
- ['homepage visual archive is content-led',editorialHome.includes('<PhotoChapters/>')&&editorialHome.includes('jh-photo-story')&&extraFeatures.includes('LazyDriftWall')&&extraFeatures.includes('Drift wall')],
+ ['homepage visual archive is content-led',editorialHome.includes('LazyDriftWall')&&editorialHome.includes('jh-archive-section')&&editorialHome.includes('JYC visual archive')],
  ['club source rail uses metadata-aware captions',main.includes('club-living-photo')&&read('src/jyc-living-photo.jsx').includes('current.caption||current.title||current.association')&&read('src/jyc-living-photo.jsx').includes('jyc-living-photo-meta')],
  ['gallery mounts source hub photography',read('src/extra-features.jsx').includes('sourcePhotoItems=useMemo')&&read('src/extra-features.jsx').includes('sourceHubMedia(name).photoItems')],
  ['gallery defaults to DriftWall archive presentation',extraFeatures.includes("useState('wall')")&&extraFeatures.includes('LazyDriftWall')&&extraFeatures.includes('items.slice(0,24)')&&extraFeatures.includes('Drift wall')],
