@@ -1,5 +1,10 @@
 # Changelog
 
+## V58.0.8 — Media audit
+
+- Added duplicate public-URL detection to the media-health workspace so archive collisions are visible to editors.
+
+
 ## V58.0.7 — Verification cleanup
 
 - Removed seven stale/duplicate verification rows after canonical club and JAI event identity cleanup; current published club verification is now one-to-one.
