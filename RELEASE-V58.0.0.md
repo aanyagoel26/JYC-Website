@@ -41,3 +41,22 @@ Run:
 `npm run qa`
 
 For the live trust dashboard, sign into the Control Center and open **Publication Health**.
+
+
+## Visual archive follow-through
+
+The production media pass now keeps the photography boundary separate from source identity/design material while preserving useful discarded assets. Verified CICR and JODC logo material is reused as club identity fallback, and JODC banner material remains available as source identity material without entering the photography pool.
+
+The public gallery now supports:
+
+- editorial featured frames separated from the archive grid;
+- collection, year and published-album filtering;
+- permanent album routes under `/gallery/<album-slug>`;
+- shareable photograph entry points under `/gallery?photo=<id-or-url>`;
+- previous/next keyboard navigation, focus return and modal focus containment;
+- mobile swipe navigation, double-tap zoom and explicit zoom controls;
+- source/provenance context and open/download actions;
+- progressive gallery rendering with bounded initial results;
+- reduced-motion-safe visual treatment.
+
+Responsive `srcset`/alternate-resolution delivery remains intentionally gated on generating genuine alternate image files. The site does not advertise multiple resolutions until those resources actually exist.
