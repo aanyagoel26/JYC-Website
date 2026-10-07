@@ -236,6 +236,7 @@ function ClubDetail({data,id,virtualName}){
  const detail=hubDetails(c.name);
  const sections=[...(c.customSections||[])].filter(s=>s.visible!==false);
  const events=data.events.filter(e=>e.published&&!e.archived&&(e.clubId===c.id||e.club===c.name)).sort((a,b)=>`${a.date} ${a.start}`.localeCompare(`${b.date} ${b.start}`));
+ const upcomingEvents=events.filter(e=>eventState(e)!=='past');
  const sourceStory=PDF_HUB_STORIES.find(x=>String(x.name).toLowerCase()===String(c.name).toLowerCase())||(()=>{const m=sourceHubMedia(c.name);if(!m.photos.length||!profile)return null;return {name:profile.name||c.name,family:profile.family,focus:profile.focus,image:m.photos[0],text:detail?.experience||profile.detail||profile.summary||`${c.name} is part of the JYC ${profile.family} ecosystem.`}})();
  const sourceGallery=[...PDF_HUB_GALLERY,...PDF_HUB_EXTRA_GALLERY].filter(g=>String(g.association||'').trim().toLowerCase()===String(c.name).trim().toLowerCase());
  const gallery=[...data.gallery.filter(g=>g.clubId===c.id||g.association===c.name||g.association==='club:'+c.id),...sourceGallery].filter((g,i,a)=>a.findIndex(x=>x.id===g.id)===i);
@@ -273,7 +274,7 @@ function ClubDetail({data,id,virtualName}){
     {gallery.length>0&&<section id="club-gallery" className="club-section-card reveal"><span className="eyebrow">GALLERY</span><h2>Moments from the club.</h2><GalleryItems items={gallery}/></section>}<HubLatestUpdates hub={c.name}/>
     {relatedHubs.length>0&&<section className="club-section-card reveal hub-related-section"><div className="section-inline-head"><div><span className="eyebrow">SAME JYC FAMILY</span><h2>Explore nearby communities.</h2></div><a className="text-link" href="/clubs">All communities →</a></div><div className="hub-related-grid">{relatedHubs.map(([name,p])=><a key={name} className="hub-related-card" href={`/clubs/${slug(name)}`}><small>{p.focus}</small><strong>{name}</strong><span>{p.summary}</span><b>Explore →</b></a>)}</div></section>}
    </main>
-   <aside className="club-side-panel reveal"><span className="eyebrow">THE COMMUNITY</span><h3>{c.name}</h3><p>Explore this JYC community, its work, events and official connections.</p>{events.length>0&&<div className="club-next-event"><span>NEXT UP</span><strong>{events[0].title}</strong><small>{fmtDate(events[0].date)} · {events[0].start||'TBA'}</small></div>}{links.map(([n,u])=>safeExternalUrl(u)?<a className="side-link" key={n} href={safeExternalUrl(u)} target="_blank" rel="noopener noreferrer"><span>{n}</span><b>↗</b></a>:null)}<div className="side-divider"/><span className="eyebrow">JYC</span><p className="small-copy">JIIT Youth Club · Sector 128, Noida</p></aside>
+   <aside className="club-side-panel reveal"><span className="eyebrow">THE COMMUNITY</span><h3>{c.name}</h3><p>Explore this JYC community, its work, events and official connections.</p>{upcomingEvents.length>0&&<div className="club-next-event"><span>{eventState(upcomingEvents[0])==='live'?'HAPPENING NOW':'NEXT UP'}</span><strong>{upcomingEvents[0].title}</strong><small>{fmtDate(upcomingEvents[0].date)} · {upcomingEvents[0].start||'TBA'}</small></div>}{links.map(([n,u])=>safeExternalUrl(u)?<a className="side-link" key={n} href={safeExternalUrl(u)} target="_blank" rel="noopener noreferrer"><span>{n}</span><b>↗</b></a>:null)}<div className="side-divider"/><span className="eyebrow">JYC</span><p className="small-copy">JIIT Youth Club · Sector 128, Noida</p></aside>
   </div>
  </section>
 }
@@ -437,10 +438,19 @@ function JYCCalendarPage({data}){
  const monthEvents=events.filter(e=>{const d=new Date(`${e.date}T12:00:00`);return d.getFullYear()===year&&d.getMonth()===m});
  const label=month.toLocaleDateString('en-IN',{month:'long',year:'numeric'});
  const shift=n=>setMonth(new Date(year,m+n,1));
+ const downloadMonthICS=()=>{
+  if(!monthEvents.length)return;
+  const esc=v=>String(v||'').replace(/\\/g,'\\\\').replace(/[;,]/g,m=>'\\'+m).replace(/\\r?\\n/g,'\\n');
+  const iso=(date,time='09:00')=>{const d=new Date(date+'T'+time+':00');return Number.isNaN(d.getTime())?'':d.toISOString().replace(/[-:]/g,'').replace(/\\.\\d{3}Z$/,'Z')};
+  const rows=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//JYC//EN','CALSCALE:GREGORIAN','X-WR-CALNAME:JYC Events · '+year+'-'+String(m+1).padStart(2,'0')];
+  monthEvents.forEach(e=>{const start=iso(e.date,e.start||'09:00'),end=iso(e.dateEnd||e.date,e.end||'23:59');if(!start||!end)return;rows.push('BEGIN:VEVENT','UID:'+esc(e.id)+'@jyc128','DTSTART:'+start,'DTEND:'+end,'SUMMARY:'+esc(e.title),'LOCATION:'+esc(e.venue),'DESCRIPTION:'+esc(e.description),'END:VEVENT')});
+  rows.push('END:VCALENDAR');
+  const blob=new Blob([rows.join('\\r\\n')],{type:'text/calendar;charset=utf-8'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='jyc-events-'+year+'-'+String(m+1).padStart(2,'0')+'.ics';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+ };
  return <section className="section page unified-public-page jyc-calendar-page">
   <Breadcrumbs items={[{label:'Event Calendar'}]}/><EcosystemContextRail/>
   <div className="compact-page-head reveal"><div><span className="eyebrow">JYC EVENT CALENDAR</span><h1>Find the next JYC experience.</h1><p>A calendar for JYC events only. Academic schedules and campus utilities do not live here.</p></div><div className="page-stat-row"><span><b>{events.filter(e=>e.publicStatus!=='planned').length}</b> published events</span><span><b>{events.filter(e=>e.publicStatus==='planned').length}</b> planned</span><span><b>{monthEvents.length}</b> this month</span></div></div>
-  <div className="calendar-controls reveal"><button type="button" className="btn secondary" onClick={()=>shift(-1)}>← Previous</button><strong>{label}</strong><button type="button" className="btn secondary" onClick={()=>shift(1)}>Next →</button></div>
+  <div className="calendar-controls reveal"><button type="button" className="btn secondary" onClick={()=>shift(-1)}>← Previous</button><strong>{label}</strong><button type="button" className="btn secondary" onClick={()=>shift(1)}>Next →</button><button type="button" className="btn" onClick={()=>setMonth(new Date())}>Today</button><button type="button" className="btn secondary" onClick={downloadMonthICS} disabled={!monthEvents.length}>Add month to device</button></div>
   <div className="calendar"><Calendar events={monthEvents}/></div>
   <div className="calendar-footer-note reveal"><span className="eyebrow">JYC WEBSITE</span><p>Published records are the official event layer. Planned entries are source-backed programme dates and can change before confirmation.</p><a className="text-link" href="/events">Browse all events →</a></div>
  </section>
