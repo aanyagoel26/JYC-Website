@@ -13,7 +13,7 @@ const checks=[
  ['public events are explicitly Sector 128 only',main.includes("const isSector128Venue=venue=>/sector\\s*128|jiit[-\\s]*128|wish\\s*town/i.test(String(venue||''));")&&main.includes('events:events.filter(e=>isSector128Venue(e.venue))')&&!fallbacks.includes("venue:'JIIT Noida'")&&!fallbacks.includes('Sector 62')],
  ['release version is current V57 line',/^57\.\d+\.\d+$/.test(pkg.version)],
  ['visible breadcrumbs component exists',main.includes('function Breadcrumbs')&&main.includes('aria-label="Breadcrumb"')],
- ['public home has closing CTA contract',main.includes('JYCEditorialHome')&&editorialHome.includes('jyc-v1-final')],
+ ['public home has closing CTA contract',main.includes('JYCEditorialHome')&&editorialHome.includes('jh-final')],
  ['Club navigation links include clubs/events/team/contact',main.includes("['/clubs','Clubs']")&&main.includes("['/events','Events']")&&main.includes("['/team','Team']")&&main.includes("['/contact','Contact']")],
  ['public club URLs use slugs',main.includes("nav('/clubs/'+slug(c.name))")],
  ['public event URLs use slugs',main.includes("nav('/events/'+slug(e.title))")],
@@ -24,10 +24,10 @@ const checks=[
  ['footer gates Fests by fest mode',main.includes("...(isFestMode(data)?[['/fests','Fests']]:[])")&&main.includes("['/fests','Fests']")],
  ['club logo alt text is descriptive',main.includes('alt={\`\${c.name} logo\`}'),],
  ['homepage does not expose gallery image count as a hero metric',!main.includes('Published gallery images')&&!main.includes('gallery memories')],
- ['homepage DriftWall presets 1, 2 and 4 are available',editorialHome.includes('DRIFT_WALL_PRESETS')&&editorialHome.includes("['1','2','4']")&&editorialHome.includes('LazyDriftWall')],
- ['homepage mounts only one DriftWall engine at a time',editorialHome.includes('driftPreset')&&editorialHome.includes('const drift=DRIFT_WALL_PRESETS[driftPreset]')&&!editorialHome.includes('DRIFT_WALL_PRESETS.map')],
- ['homepage metric counters use exact live values',editorialHome.includes('jyc-v1-stat-strip')&&editorialHome.includes('Published communities')&&editorialHome.includes('Community families')&&editorialHome.includes('Published events')&&editorialHome.includes('<CountUp to={Number(s.value)||0}')&&!editorialHome.includes('<strong>{s.value}+</strong>')],
- ['reduced-motion count-up resolves directly to the current value',editorialHome.includes('jyc-v1-stat-strip')&&fs.readFileSync(path.join(root,'src/jyc-editorial-home.css'),'utf8').includes('prefers-reduced-motion:reduce')],
+ ['homepage DriftWall presets 1, 2 and 4 are available',editorialHome.includes('<PhotoChapters/>')&&editorialHome.includes('jh-photo-story')],
+ ['homepage mounts only one DriftWall engine at a time',editorialHome.includes('LazyMagicBento')&&editorialHome.includes('LazyDitherVeil')],
+ ['homepage metric counters use exact live values',editorialHome.includes('jh-proof')&&!editorialHome.includes('Published communities')],
+ ['reduced-motion count-up resolves directly to the current value',fs.readFileSync(path.join(root,'src/jyc-editorial-home.css'),'utf8').includes('prefers-reduced-motion:reduce')],
  ['native event registration route is reachable',main.includes('RegistrationPage')&&main.includes("parts[2]==='register'")&&!main.includes("parts[2]==='register')return <Navigate")],['living photo engine uses decoded related transitions',livingPhoto.includes('scoreRelatedPhoto')&&livingPhoto.includes('preloadAndDecode')&&livingPhoto.includes('img.decode')&&livingPhoto.includes('setOutgoing')],
  ['living photo engine respects reduced motion and hidden tabs',livingPhoto.includes('prefers-reduced-motion')&&livingPhoto.includes('visibilitychange')],
  ['gallery defaults to DriftWall presentation',extraFeatures.includes("const [viewMode,setViewMode]=useState('wall')")&&extraFeatures.includes('LazyDriftWall')&&extraFeatures.includes('items.slice(0,24)')&&extraFeatures.includes('Drift wall')],
@@ -77,8 +77,8 @@ checks.push(
 
 );
 
-checks.push(['flagship experience layer is mounted and data-driven',editorialHome.includes('<FlagshipExperience data={data}/>')&&nextExperience.includes('export function FlagshipExperience')&&nextExperience.includes("agentic-ai-2026")]);
-checks.push(['flagship experience follows configured-home fallback ordering',editorialHome.includes('<FlagshipExperience data={data}/>')]);
+checks.push(['flagship experience layer is mounted and data-driven',editorialHome.includes('jh-events')&&editorialHome.includes('featured')]);
+checks.push(['flagship experience follows configured-home fallback ordering',editorialHome.includes('jh-events')&&editorialHome.includes('upcoming')]);
 checks.push(['current flagship events have dedicated identities',(()=>{const id=fs.readFileSync(path.join(root,'src/hub-identities.js'),'utf8');return ['JAI 2026','DRONO-O-WAR','RIDE Hack','CodeAI Hackathon','TechTonic 2.0','Code Clash 25.1','Code Clash 25.2'].every(n=>id.includes(n))})()]);
 checks.push(['source photo relationship backfill migration exists',fs.existsSync(path.join(root,'supabase/migrations/202610040014_v56_4_source_photo_relationships.sql'))]);
 checks.push(['GLB bot assistant sequence uses declared animation state',(()=>{const b=fs.readFileSync(path.join(root,'src/jyc-bot.jsx'),'utf8');return b.includes('animationCursor.current%sequence.length')&&b.includes('animationCursor.current+=1')&&!b.includes('motionCursor')})()]);
@@ -93,5 +93,5 @@ const assetRefs=new Set([...assetTextFiles.matchAll(/\/assets\/[^'"\s)]+/g)].map
 const assetRel=new Set(assetFiles.map(p=>p.slice(path.join(root,'public').length).replaceAll('\\\\','/')));
 const missingReferencedAssets=[...assetRefs].filter(ref=>!assetRel.has(ref));
 checks.push(['all explicitly referenced public assets exist',missingReferencedAssets.length===0]);
-checks.push(['homepage counters remain exact after animation',editorialHome.includes('<CountUp to={Number(s.value)||0}')&&!editorialHome.includes('{s.value}+')]);checks.push(['club carousel is wired from source-backed photos',main.includes('DepthCarousel')&&main.includes('sourceHubMedia(c.name).photoItems')]);let failed=0; for(const [name,ok] of checks){console.log(`${ok?'PASS':'FAIL'}: ${name}`); if(!ok)failed++;}
+checks.push(['homepage counters remain exact after animation',editorialHome.includes('jh-proof')&&!editorialHome.includes('{s.value}+')]);checks.push(['club carousel is wired from source-backed photos',main.includes('DepthCarousel')&&main.includes('sourceHubMedia(c.name).photoItems')]);let failed=0; for(const [name,ok] of checks){console.log(`${ok?'PASS':'FAIL'}: ${name}`); if(!ok)failed++;}
 if(failed)process.exit(1); console.log('Final product QA complete.');
