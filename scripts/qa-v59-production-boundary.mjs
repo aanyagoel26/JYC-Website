@@ -7,6 +7,7 @@ const checks=[
   ['release version is V59.0.0',JSON.parse(read('package.json')).version==='59.0.0'],
   ['service worker cache is V59.0.0',read('public/sw.js').includes('jyc-cache-v59-0-0')],
   ['production media boundary plugin exists',read('vite.config.js').includes("name:'jyc-production-media-boundary'")],
+  ['image manifest uses the same curated archive boundary',read('scripts/generate-image-manifest.mjs').includes('allowedArchiveUrls')&&read('scripts/generate-image-manifest.mjs').includes("url.startsWith('/assets/source-archive/')&&!allowedArchiveUrls.has(url)")],
   ['production media boundary keeps strict photos and identity assets',read('vite.config.js').includes('JYC_SOURCE_ARCHIVE_PHOTO_ITEMS')&&read('vite.config.js').includes('JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS')],
   ['production media boundary removes raw dist archive before restoring curated assets',read('vite.config.js').includes("fs.rmSync(outArchive,{recursive:true,force:true})")&&read('vite.config.js').includes("fs.copyFileSync(source,target)")],
   ['sitemap uses strict photography rather than the complete raw archive',read('scripts/generate-sitemap.mjs').includes('JYC_SOURCE_ARCHIVE_PHOTO_ITEMS')&&!read('scripts/generate-sitemap.mjs').includes('JYC_SOURCE_ARCHIVE_CATALOG')],
