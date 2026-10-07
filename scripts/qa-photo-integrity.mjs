@@ -46,7 +46,7 @@ assert('Induction does not inherit Ebullience photography',[...inductionUrls].ev
 assert('manifest exposes visual roles',manifest.roles.includes('club')&&manifest.roles.includes('event')&&manifest.roles.includes('archive'));
 assert('manifest exposes source types',manifest.sourceTypes.includes('presentation-export')&&manifest.sourceTypes.includes('maintained-jyc-media'));
 assert('normalized event names resolve to deterministic collections',normalizedEventMappings.every(([name,collection])=>collection&&collection!=='JYC Archive'),JSON.stringify(normalizedEventMappings));
-assert('newly audited non-photo archive assets stay out of photo pool',forbiddenArchiveIds.every(id=>![...archivePhotoUrls].some(url=>url.includes('/'+id+'.webp'))),forbiddenArchiveIds.filter(id=>[...archivePhotoUrls].some(url=>url.includes('/'+id+'.webp'))).join(', '));
+assert('newly audited non-photo archive assets stay out of photo pool',auditedExclusionIds.every(id=>![...archivePhotoUrls].some(url=>url.includes('/'+id+'.webp'))),auditedExclusionIds.filter(id=>[...archivePhotoUrls].some(url=>url.includes('/'+id+'.webp'))).join(', '));
 assert('event photo rail exposes only explicit photography',eventPhotoItems.every(x=>x?.mediaKind==='photo'));
 assert('event media still retains broader source records separately',event.items.length>=eventPhotoItems.length);
 if(process.exitCode)process.exit(1);
