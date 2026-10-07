@@ -36,6 +36,7 @@ add('Flagship event URLs use canonical current slugs',(()=>{const s=fs.readFileS
 add('Sitemap generator exists',fs.existsSync(path.join(root,'scripts/generate-sitemap.mjs')));
 add('SEO pages have useful route metadata',main.includes('JIIT Clubs & Student Communities') && main.includes('JIIT Events & Campus Activities') && main.includes('About JIIT Youth Club') && main.includes('JIIT Fests & Flagship Events'));
 add('Fest discovery route exists',main.includes("clean==='/fests'") && llms.includes('/fests'));
+add('Best of JYC editorial route exists',main.includes("clean==='/best-of-jyc'") && main.includes('JYCBestOf'));
 add('Search-intent editorial content is visible on key pages',main.includes('SearchTopicBand') && main.includes('Official JIIT clubs and student communities') && main.includes('JIIT events, workshops and campus experiences'));
 add('Service worker cache namespace matches current release',read('public/sw.js').includes('jyc-cache-v'+pkg.version.replace(/\./g,'-')));
 const failed=checks.filter(x=>!x.ok);
