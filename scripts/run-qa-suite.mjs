@@ -42,7 +42,8 @@ const scripts = [
   'qa-jyc-social-scope.mjs',
   'qa-trust-contract.mjs',
   'qa-supplied-material.mjs',
-  'qa-v58-trust-cms.mjs'
+  'qa-v58-trust-cms.mjs',
+  'qa-v58-design.mjs'
 ];
 
 for (const script of scripts) {
