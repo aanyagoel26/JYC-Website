@@ -14,9 +14,9 @@ const readme=read('README.md');
 const checks=[];
 const add=(name,ok)=>checks.push([name,Boolean(ok)]);
 
-add('release is v57.1.0',pkg.version==='57.1.0'&&lock.version==='57.1.0'&&lock.packages?.['']?.version==='57.1.0');
-add('service worker cache is rotated',sw.includes('jyc-cache-v57-1-0')&&!sw.includes('jyc-cache-v57-0-0'));
-add('README release is v57.1.0',readme.includes('Current release: V57.1.0')&&readme.includes('V57.1.0 is the current code release'));
+add('release is v58.0.0',pkg.version==='58.0.0'&&lock.version==='58.0.0'&&lock.packages?.['']?.version==='58.0.0');
+add('service worker cache is rotated',sw.includes('jyc-cache-v58-0-0')&&!sw.includes('jyc-cache-v57-0-0'));
+add('README release is v58.0.0',readme.includes('Current release: V58.0.0')&&readme.includes('V58.0.0 is the current code release'));
 add('event detail has registration action',/id="event-register"/.test(main)&&/REGISTER NOW|REGISTRATIONS CLOSED/.test(main));
 add('event detail gates unverified planned registration',/registrationPublished=e\.publicStatus!=='planned'\|\|e\.registrationVerified===true/.test(main)&&/Boolean\(e\.registrationUrl\|\|e\.registrationMode==='native'\)/.test(main));
 add('event detail has share and ICS tools',/ShareButton/.test(main)&&/DownloadICS/.test(main));
