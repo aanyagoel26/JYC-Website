@@ -1,6 +1,6 @@
 # JIIT Youth Club 128 — Official Website
 
-> **Current release: V57.0.0 — trust, provenance and 128-campus publication hardening**
+> **Current release: V57.1.0 — trust, provenance and 128-campus publication hardening**
 
 [![Quality](https://github.com/kaustubhdua/JYC-Website/actions/workflows/ci.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/ci.yml) [![CodeQL](https://github.com/kaustubhdua/JYC-Website/actions/workflows/codeql.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/codeql.yml) [![JYC Quality](https://github.com/kaustubhdua/JYC-Website/actions/workflows/jyc-quality.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/jyc-quality.yml)
 
@@ -293,7 +293,7 @@ The remaining production gates are operational: configure required third-party E
 
 ## Current release status
 
-**V57.0.0 is the current code release.** The codebase is intentionally in final public polish and production-QA mode rather than feature expansion.
+**V57.1.0 is the current code release.** The codebase is intentionally in final public polish and production-QA mode rather than feature expansion.
 
 The release boundary is aligned across `package.json`, `package-lock.json`, the service-worker cache, final product QA, final hygiene QA, `public/llms.txt`, and the latest public-surface hardening commits.
 
