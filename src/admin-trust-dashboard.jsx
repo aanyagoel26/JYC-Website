@@ -13,7 +13,7 @@ export function AdminTrustDashboard(){
     supabase.from('jyc_clubs').select('id,status').limit(200),
     supabase.from('jyc_events').select('id,status,club_id').limit(300),
     supabase.from('jyc_gallery_items').select('id,status,club_id,event_id').limit(500),
-    supabase.from('jyc_content_verification').select('entity_type,entity_id,campus_id,status,source_url,verified_at,last_updated_at').order('updated_at',{ascending:false}).limit(500),
+    supabase.from('jyc_content_verification').select('entity_type,entity_id,campus_id,status,source_url,verified_at,last_updated_at').order('last_updated_at',{ascending:false}).limit(500),
     supabase.from('jyc_content_reviews').select('id,entity_type,entity_id,status,created_at,reviewed_at').order('created_at',{ascending:false}).limit(100)
    ]);
    const first=[clubs,events,gallery,verification,reviews].find(x=>x.error);
