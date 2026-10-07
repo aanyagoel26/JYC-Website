@@ -147,3 +147,6 @@ html[data-theme="dark"] .public-app textarea::placeholder { color: #a9a092; }
 .event-card-register--muted{opacity:.72;cursor:default}
 .event-row-register{font-size:.68rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;opacity:.78}
 @media (max-width:640px){.event-card-actions{align-items:flex-start}.event-card-register{width:100%}.event-card-actions .text-link{width:100%}.event-row-register{display:none}}
+
+/* QA invariant: public media remains visually centred unless a component explicitly opts out. */
+.public-app :where(img,video){object-position:50% 50%;}
