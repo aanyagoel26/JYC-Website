@@ -176,18 +176,18 @@ function Admin({data,admin,setAdmin,commit,notify,theme,setTheme}){
     ['calendar','Academic Calendar'],['platform','Campus Map'],['homepage','Homepage'],['team','Team'],['gallery',clubScoped?'My Gallery':'Gallery'],
     ['albums','Gallery Albums'],['categories','Categories'],['admins','Admins'],['activity','Activity'],
     ['notifications','Notifications'],['settings','Settings'],['system','System & Platform'],['reviews','Inbox & Reviews'],
-    ['versions','Version History'],['registrations','Registrations']
+    ['versions','Version History'],['trust','Publication Health'],['registrations','Registrations']
   ];
   const items=allItems.filter(([id])=>(roleTabs[role]||roleTabs.jyc_admin).includes(id));
   const groups=[
     ['OVERVIEW',['overview']],
     ['CONTENT',['clubs','events','fest','homepage','team','gallery','albums']],
     ['CAMPUS & OPERATIONS',['calendar','platform','registrations','reviews','notifications']],
-    ['SYSTEM',['activity','system','versions','admins','categories','settings']]
+    ['SYSTEM',['activity','system','versions','trust','admins','categories','settings']]
   ];
   const byId=Object.fromEntries(allItems);
   const go=id=>setTab(id);
-  const icons={overview:'⌂',clubs:'◈',events:'◷',fest:'✦',gallery:'▧',albums:'▦',team:'♙',homepage:'⌘',categories:'◇',registrations:'✓',admins:'♟',reviews:'✓',activity:'◌',notifications:'●',settings:'⚙',system:'◉',versions:'↻',calendar:'▦',platform:'◇'};
+  const icons={overview:'⌂',clubs:'◈',events:'◷',fest:'✦',gallery:'▧',albums:'▦',team:'♙',homepage:'⌘',categories:'◇',registrations:'✓',admins:'♟',reviews:'✓',activity:'◌',notifications:'●',settings:'⚙',system:'◉',versions:'↻',trust:'✓',calendar:'▦',platform:'◇'};
   const visibleItems=items.filter(([id,label])=>!commandQuery||`${label} ${id}`.toLowerCase().includes(commandQuery.toLowerCase()));
 
   return <div className={`admin-shell admin-role-${role} admin-theme-${adminTheme}`}>
