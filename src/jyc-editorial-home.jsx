@@ -33,7 +33,7 @@ export function JYCEditorialHome({data}){
  const families=JYC_HUB_FAMILIES.map(f=>({family:f,hubs:Object.entries(JYC_HUB_CONTENT).filter(([,p])=>p.family===f).map(([name,p])=>({name,...p}))}));
  const activities=JYC_PUBLIC_ACTIVITIES.slice(0,6);
  const featured=upcoming[0];
- return <main className="jyc-home">
+ return <main className="jyc-editorial-home jyc-home">
    <section className="jh-hero" aria-labelledby="jh-title">
      <div className="jh-hero-copy">
        <div className="jh-kicker"><span>JIIT YOUTH CLUB</span><b>128</b></div>
