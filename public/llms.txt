@@ -14,7 +14,8 @@ The public website is the official organisational source for published JYC infor
 - /events — official published JYC events
 - /fests — official published JYC fests and flagship events
 - /events/:id — event details, registration, rules, FAQs, results and recap
-- /gallery — official event and club memories
+- /gallery
+/best-of-jyc — official event and club memories
 - /achievements — documented JYC achievements
 - /announcements — official JYC notices, registrations, results and updates
 - /recruitment — official recruitment / Join JYC destination; published cycles appear when JYC opens them
