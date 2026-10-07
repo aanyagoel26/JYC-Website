@@ -2,6 +2,9 @@ import fs from 'node:fs';
 import {JYC_SOURCE_MEDIA_STATS,mergeSourceGallery,sourceEventMedia,buildJycMediaManifest,JYC_SOURCE_ARCHIVE_PHOTO_ITEMS} from '../src/jyc-source-media.js';
 
 const assert=(name,ok,detail='')=>{console.log((ok?'PASS: ':'FAIL: ')+name+(detail?' — '+detail:''));if(!ok)process.exitCode=1};
+const mediaSource=fs.readFileSync('src/jyc-source-media.js','utf8');
+assert('non-photographic club override cleanup',mediaSource.includes("CypherX:[]")&&mediaSource.includes("Zencoders:[]")&&mediaSource.includes("NeuralNexus:[]")&&mediaSource.includes("Arcadia:[]"));
+assert('event gallery placements include Dron-O-War and Converge',mediaSource.includes("'Dron-O-War'")&&mediaSource.includes("'Converge'"));
 const gallery=mergeSourceGallery([]);
 const galleryUiSource=fs.readFileSync('src/extra-features.jsx','utf8');
 const manifest=buildJycMediaManifest([]);
