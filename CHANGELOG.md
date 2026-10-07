@@ -1,5 +1,11 @@
 # Changelog
 
+## V58.0.4 — Album Guard Security Hardening
+
+- Revoked direct `EXECUTE` privileges from the album publication SECURITY DEFINER trigger function for `public`, `anon` and `authenticated` roles.
+- Kept album publication enforcement trigger-only while preserving the database-side rights/provenance gate.
+- Rotated the service-worker cache and aligned package, lockfile and release QA to V58.0.4.
+
 ## V58.0.3 — Album publication guard
 
 - Public album publication now requires linked approved photographs with cleared rights and resolved provenance where verification records exist.
