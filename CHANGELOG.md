@@ -1,5 +1,14 @@
 # Changelog
 
+## V58.0.2 — Institutional Media Governance
+
+- Added photographer, rights, license, review and explicit album relationships to the normalized media model.
+- Seeded 23 club and 8 published-event album shells as unpublished editorial drafts, without bypassing trust/publication gates.
+- Added safe `Courtesy of JYC Archive` attribution where no individual credit exists.
+- Added verified JIIT-128 community links for Cinekala, CypherX, Zencoders, Neural Nexus and VamUnique.
+- Added canonical legacy JAI redirect coverage and expanded gallery/JAI browser QA contracts.
+
+
 ## V58.0.1 — Accessibility, Event Modal & Archive Polish
 
 - Hardened the featured JAI 2026 announcement into an accessible, keyboard-trapped, scroll-safe modal with proper focus restoration and mobile behavior.
