@@ -175,7 +175,7 @@ export default function DriftWall({
         }}
        >
         <span className="drift-wall__inner">
-         <img src={item.image} alt={item.title||''} loading="lazy" decoding="async" draggable="false"/>
+         <img src={item.image} alt={item.title||''} loading="lazy" decoding="async" draggable="false" style={{objectPosition:`${Number.isFinite(Number(item.focalX))?Math.max(0,Math.min(100,Number(item.focalX))):50}% ${Number.isFinite(Number(item.focalY))?Math.max(0,Math.min(100,Number(item.focalY))):50}%`}}/>
          <span className="drift-wall__overlay"/>
         </span>
        </button>;
