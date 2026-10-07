@@ -254,6 +254,35 @@ test('public pages have no empty media frames or normal-flow section overlaps', 
   }
 });
 
+test('legacy JAI event slug redirects to the canonical event route', async ({ page }) => {
+  await page.goto(base + '/events/agentic-ai-2026', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'legacy JAI redirect');
+  await expect.poll(() => new URL(page.url()).pathname, { timeout: 5000 }).toBe('/events/jai-2026-jaypee-agentic-ai-hackathon');
+});
+
+test('gallery lightbox traps focus and restores it after close', async ({ page }) => {
+  await page.goto(base + '/gallery', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'gallery');
+  const trigger=page.locator('.jyc57-photo,.jyc57-feature-card').first();
+  await expect(trigger).toBeVisible();
+  await trigger.focus();
+  await trigger.press('Enter');
+  const dialog=page.locator('.jyc57-lightbox[role="dialog"]');
+  await expect(dialog).toBeVisible();
+  await expect(dialog.locator('button').first()).toBeFocused();
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Tab');
+  await page.keyboard.press('Tab');
+  const escapedFocus=await page.evaluate(() => {
+    const dialog=document.querySelector('.jyc57-lightbox[role="dialog"]');
+    return Boolean(dialog && !dialog.contains(document.activeElement));
+  });
+  expect(escapedFocus).toBe(false);
+  await page.keyboard.press('Escape');
+  await expect(dialog).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+});
+
 test('legacy redirects and unknown routes resolve safely', async ({ page }) => {
   test.setTimeout(60000);
   const redirects = {
