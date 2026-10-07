@@ -1,0 +1,11 @@
+name: JYC production CodeQL scope
+paths:
+  - src
+  - api
+  - public
+  - supabase/functions
+paths-ignore:
+  - scripts/**
+  - docs/**
+  - '**/*.test.js'
+  - '**/*.test.mjs'
