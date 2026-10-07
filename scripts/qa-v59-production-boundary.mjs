@@ -4,8 +4,8 @@ import path from 'node:path';
 const root=process.cwd();
 const read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const checks=[
-  ['release version is V59.0.0',JSON.parse(read('package.json')).version==='59.0.0'],
-  ['service worker cache is V59.0.0',read('public/sw.js').includes('jyc-cache-v59-0-0')],
+  ['release version is V59.0.0',JSON.parse(read('package.json')).version==='59.0.1'],
+  ['service worker cache is V59.0.0',read('public/sw.js').includes('jyc-cache-v59-0-1')],
   ['production media boundary plugin exists',read('vite.config.js').includes("name:'jyc-production-media-boundary'")],
   ['image manifest uses the same curated archive boundary',read('scripts/generate-image-manifest.mjs').includes('allowedArchiveUrls')&&read('scripts/generate-image-manifest.mjs').includes("url.startsWith('/assets/source-archive/')&&!allowedArchiveUrls.has(url)")],
   ['production media boundary keeps strict photos and identity assets',read('vite.config.js').includes('JYC_SOURCE_ARCHIVE_PHOTO_ITEMS')&&read('vite.config.js').includes('JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS')],
