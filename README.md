@@ -293,9 +293,9 @@ The remaining production gates are operational: configure required third-party E
 
 ## Current release status
 
-**V58.0.1 is the current code release.** The codebase is intentionally in final public polish and production-QA mode rather than feature expansion. V58.0.1 is the active release boundary.
+**V58.0.8 is the current code release.** The codebase is intentionally in final public polish and production-QA mode rather than feature expansion. V58.0.8 is the active release boundary.
 
-The release boundary is aligned across `package.json`, `package-lock.json`, the service-worker cache, final product QA, final hygiene QA, `public/llms.txt`, and the latest public-surface hardening commits, including the V58.0.1 accessibility/modal/archive hardening.
+The release boundary is aligned across `package.json`, `package-lock.json`, the service-worker cache, final product QA, final hygiene QA, `public/llms.txt`, and the latest public-surface hardening commits, including the V58.0.8 accessibility/modal/archive/media hardening.
 
 The highest-value remaining production work is operational rather than architectural:
 
