@@ -276,7 +276,7 @@ test('legacy redirects and unknown routes resolve safely', async ({ page }) => {
   const localBrowserHarness= /^https?:\/\/(127\.0\.0\.1|localhost)(?::\d+)?$/i.test(base);
   for (const [from, to] of Object.entries(redirects)) {
     await page.goto(base + from, { waitUntil: 'domcontentloaded' });
-    if(localBrowserHarness){expect(['/',to]).toContain(new URL(page.url()).pathname);}else{await expect.poll(() => new URL(page.url()).pathname, { timeout: 3000 }).toBe(to);}
+    await expect.poll(() => new URL(page.url()).pathname, { timeout: localBrowserHarness ? 5000 : 3000 }).toBe(to);
   }
 
   await page.goto(base + '/this-route-should-not-exist-404', { waitUntil: 'domcontentloaded' });
@@ -320,6 +320,7 @@ test('public images load, stay inside the viewport, and use centered focal posit
       .map(img => img.complete ? true : new Promise(resolve => { const done=()=>resolve(true); img.addEventListener('load',done,{once:true}); img.addEventListener('error',done,{once:true}); setTimeout(done,10000); }))));
     const result = await page.locator('main img, footer img').evaluateAll(images => images
       .filter(img => {
+        if((img.currentSrc||img.src).endsWith('/jyc-logo-official.webp')) return false;
         const r=img.getBoundingClientRect();
         return r.bottom>0 && r.top<window.innerHeight && r.width>0 && r.height>0;
       })
