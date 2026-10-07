@@ -105,7 +105,7 @@ Gallery records are intended to support:
 - provenance
 - archive state
 
-The five supplied archives contain 873 raw files, including 872 image assets, with 813 unique SHA-256 image hashes after 60 exact duplicate relationships. The complete supplied archive is now safely ingested under `public/assets/source-archive/` with its catalog and provenance. The runtime media layer indexes all 873 supplied archive entries (872 raster images plus 1 SVG), while artwork/design/presentation assets remain classified separately from photography.
+The five supplied archives contain 873 raw files, including 872 image assets, with 813 unique SHA-256 image hashes after 60 exact duplicate relationships. The complete supplied archive remains preserved under `public/assets/source-archive/` with its catalog and provenance, but it is treated as source material rather than a production asset bucket. The strict public photography pool is maintained separately (currently 356 curated photographs), while identity assets remain preserved outside the photography classification. Production builds now serve only the curated photo/identity subset from the source archive; design, presentation and other excluded source assets are not copied into the production archive.
 
 ## Event architecture
 
