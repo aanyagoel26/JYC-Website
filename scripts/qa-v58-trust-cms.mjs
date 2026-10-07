@@ -26,6 +26,8 @@ const checks=[
  ['album publication guard exists',read('supabase/migrations/202610080004_v58_3_album_publication_guard.sql').includes('jyc_guard_media_album_publication')&&read('supabase/migrations/202610080004_v58_3_album_publication_guard.sql').includes('rights_status <> \'cleared\'')],
  ['album guard RPC is not publicly executable',read('supabase/migrations/202610080005_v58_4_album_guard_privilege_hardening.sql').includes('revoke execute')&&read('supabase/migrations/202610080006_v58_5_album_guard_authenticated_revoke.sql').includes('revoke execute')],
  ['media health dashboard exists',read('src/admin-extra.jsx').includes('AdminMediaHealth')&&read('src/admin-chunk.jsx').includes("tab==='media-health'")],
+ ['duplicate media audit exists',read('src/admin-extra.jsx').includes('Duplicate public URLs')&&read('src/admin-extra.jsx').includes('public_url')],
+
  ['album story fields exist',read('supabase/migrations/202610080007_v58_6_album_story_fields.sql').includes('narrative text')&&read('supabase/migrations/202610080007_v58_6_album_story_fields.sql').includes('hero_url text')&&read('src/jyc57-experience.jsx').includes('hero_url')],
  ['stale verification cleanup exists',read('supabase/migrations/202610080008_v58_7_remove_stale_verification_duplicates.sql').includes("entity_id like 'club-%'")&&read('supabase/migrations/202610080008_v58_7_remove_stale_verification_duplicates.sql').includes("agentic-ai-2026")],
 
