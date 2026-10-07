@@ -27,9 +27,9 @@ const SOURCE_GALLERY=[...PDF_HUB_GALLERY,...PDF_HUB_EXTRA_GALLERY];
 // These conservative exclusions keep the default photography stream editorial rather than
 // treating every binary as a photograph. All excluded assets remain available in the full archive.
 const ARCHIVE_PHOTO_EXCLUSIONS={
-  'festivals/aakriti':new Set(['p1-image129','p1-image130','p1-image131','p1-image132','p1-image117','p1-image118','p1-image119','p1-image120','p1-image121','p1-image122','p1-image123','p1-image124','p1-image125','p1-image128','p1-image133','p1-image134','p1-image135','p1-image139','p1-image141','p1-image142','p1-image143','p1-image146','p1-image147','p1-image148','p1-image152','p1-image153','p1-image154','p1-image155','p1-image156','p1-image158','p1-image159']),
-  'clubs/panache':new Set(['p1-image226','p1-image227','p1-image228','p1-image229','p1-image230','p1-image221','p1-image222','p1-image224','p1-image234','p1-image235','p1-image236','p1-image237','p1-image238','p1-image239','p1-image242','p1-image244','p1-image245','p1-image246','p1-image247','p1-image248','p1-image249','p1-image250','p1-image251','p1-image252','p1-image253','p1-image254','p1-image255','p1-image256','p1-image257','p1-image258','p1-image259','p1-image268','p1-image269','p1-image271']),
-  'clubs/abhivyakti':new Set(['p3-image685','p3-image686','p3-image687','p3-image688','p3-image689','p3-image690','p3-image691','p3-image692','p3-image693','p3-image694','p3-image695','p3-image696','p3-image697','p3-image698','p3-image699','p3-image700']),
+  'festivals/aakriti':new Set(['p1-image135','p1-image136','p1-image138','p1-image140','p1-image129','p1-image130','p1-image131','p1-image132','p1-image117','p1-image118','p1-image119','p1-image120','p1-image121','p1-image122','p1-image123','p1-image124','p1-image125','p1-image128','p1-image133','p1-image134','p1-image135','p1-image139','p1-image141','p1-image142','p1-image143','p1-image146','p1-image147','p1-image148','p1-image152','p1-image153','p1-image154','p1-image155','p1-image156','p1-image158','p1-image159']),
+  'clubs/panache':new Set(['p1-image228','p1-image230','p1-image231','p1-image232','p1-image233','p1-image274','p1-image226','p1-image227','p1-image228','p1-image229','p1-image230','p1-image221','p1-image222','p1-image224','p1-image234','p1-image235','p1-image236','p1-image237','p1-image238','p1-image239','p1-image242','p1-image244','p1-image245','p1-image246','p1-image247','p1-image248','p1-image249','p1-image250','p1-image251','p1-image252','p1-image253','p1-image254','p1-image255','p1-image256','p1-image257','p1-image258','p1-image259','p1-image268','p1-image269','p1-image271']),
+  'clubs/abhivyakti':new Set(['p4-image796','p4-image820','p3-image685','p3-image686','p3-image687','p3-image688','p3-image689','p3-image690','p3-image691','p3-image692','p3-image693','p3-image694','p3-image695','p3-image696','p3-image697','p3-image698','p3-image699','p3-image700']),
   'gallery/campus-events':new Set(['p2-image494','p2-image495']),
   'clubs/cypherx':new Set(['p4-image746','p4-image748','p4-image751','p4-image752']),
   'clubs/cicr':new Set(['p3-image611','p3-image612','p3-image613','p3-image614','p3-image615','p3-image616','p3-image617','p3-image618','p3-image619','p3-image620','p3-image621','p3-image622','p3-image623','p3-image624','p3-image625','p3-image626','p3-image627','p3-image628','p3-image629','p3-image630','p3-image631','p3-image632','p5-logo']),
@@ -57,13 +57,15 @@ const archivePhotoKind=item=>{
 const ARCHIVE_GALLERY=JYC_SOURCE_ARCHIVE_CATALOG.map(item=>({...item,mediaKind:archivePhotoKind(item),sourceType:'source-archive',sourceLabel:'JYC supplied image archive',role:item.association?'club':'archive',caption:item.association?item.association+' · supplied archive image':item.category.replaceAll('/',' · '),alt:item.association?item.association+' · JYC supplied archive image':'JIIT Youth Club 128 supplied archive image'}));
 
 const QUALITY_OVERRIDES={
-  Aakriti:['/assets/hub-photos-extra/aakriti-04.webp'],
+  Aakriti:['/assets/hub-photos-extra/aakriti-04.webp','/assets/source-archive/festivals/aakriti/p1-image126.webp','/assets/source-archive/festivals/aakriti/p1-image127.webp','/assets/source-archive/festivals/aakriti/p1-image137.webp','/assets/source-archive/festivals/aakriti/p1-image139.webp','/assets/source-archive/festivals/aakriti/p1-image149.webp','/assets/source-archive/festivals/aakriti/p1-image150.webp'],
   Aura:['/assets/hub-photos-extra/aura-08.webp','/assets/hub-photos-extra/aura-09.webp','/assets/hub-photos-extra/aura-10.webp','/assets/hub-photos-extra/aura-11.webp','/assets/hub-photos-extra/aura-12.webp','/assets/hub-photos-extra/aura-13.webp'],
   BDS:[],
+  Innovation:['/assets/source-archive/clubs/innovation/p5-DSC02902.webp','/assets/source-archive/clubs/innovation/p5-DSC02924.webp','/assets/source-archive/clubs/innovation/p5-DSC03006.webp','/assets/source-archive/clubs/innovation/p5-DSC03268.webp','/assets/source-archive/clubs/innovation/p5-DSC03304.webp','/assets/source-archive/clubs/innovation/p5-DSC03380.webp'],
+  CICR:['/assets/source-archive/clubs/cicr/p3-image609.webp','/assets/source-archive/clubs/cicr/p3-image610.webp'],
   CypherX:[],
   Dronotics:[],
   Eloquence:[],
-  Panache:[],
+  Panache:['/assets/source-archive/clubs/panache/p1-image272.webp','/assets/source-archive/clubs/panache/p1-image273.webp'],
   Prismatic:[],
   RPH:[],
   VamUnique:['/assets/hub-photos-extra/vamunique-61.webp','/assets/hub-photos-extra/vamunique-63.webp'],
