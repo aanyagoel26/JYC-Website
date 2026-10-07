@@ -4,18 +4,18 @@ import path from 'node:path';
 const root=process.cwd();
 const {JYC_HUB_SOURCE_REGISTRY}=await import('../src/jyc-hub-registry.js');
 const {sourceHubMedia}=await import('../src/jyc-source-media.js');
-const {JYC_SOURCE_ARCHIVE_CATALOG}=await import('../src/source-archive-index.js');
+const {JYC_SOURCE_ARCHIVE_PHOTO_ITEMS}=await import('../src/jyc-source-media.js');
 const rawSite=(process.env.VITE_SITE_URL||process.env.SITE_URL||process.env.VERCEL_PROJECT_PRODUCTION_URL||process.env.VERCEL_URL||'https://jyc-website-eight.vercel.app').trim();
 const site=(rawSite?(/^[a-z]+:\/\//i.test(rawSite)?rawSite:`https://${rawSite}`):'').replace(/\/$/,'');
 const out=path.join(root,'public','sitemap.xml');
-const core=['/','/about','/history','/clubs','/events','/fests','/gallery','/team','/contact','/calendar','/announcements','/updates','/achievements','/best-of-jyc','/join-jyc','/events/jai-2026-jaypee-agentic-ai-hackathon','/events/ride-hack-2026','/events/converge-2026','/events/drono-o-war-2026','/events/innovate-3-0-2026','/events/bitbox-6-0-2026'];
+const core=['/','/about','/history','/clubs','/events','/fests','/gallery','/team','/contact','/calendar','/announcements','/updates','/achievements','/best-of-jyc','/join-jyc','/events/jai-2026-jaypee-agentic-ai-hackathon','/events/ride-hack-2026','/events/converge-2026','/events/drono-o-war-2026','/events/innovate-3-0-2026','/events/bitbox-6-0-2026','/events/sih-college-internals-26','/events/jyc-function-2026'];
 const dynamicDates=new Map();
 const sourceHubNames=JYC_HUB_SOURCE_REGISTRY.map(item=>item.name);
 const slug=value=>String(value||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 const urls=new Set([...core,...sourceHubNames.map(name=>`/clubs/${slug(name)}`)]);
 const imageUrls=new Set();
 const hubImages=new Map();
-for(const item of JYC_SOURCE_ARCHIVE_CATALOG) if(item?.url) imageUrls.add(item.url);
+for(const item of JYC_SOURCE_ARCHIVE_PHOTO_ITEMS) if(item?.url) imageUrls.add(item.url);
 for(const source of ['src/jyc-source-media.js','src/pdf-hub-content.js']){
   try{
     const text=fs.readFileSync(path.join(root,source),'utf8');
@@ -38,7 +38,7 @@ async function loadDynamic(){
     if(!r.ok)return;
     const data=await r.json();
     for(const c of (data?.clubs||[])) if(c?.published&&c?.status!=='archived') { const u=`/clubs/${slug(c.name)||encodeURIComponent(String(c.id))}`; urls.add(u); if(c.updated_at) dynamicDates.set(u,String(c.updated_at).slice(0,10)); }
-    for(const e of (data?.events||[])) if(e?.published&&!e?.archived) { const u=`/events/${slug(e.title)||encodeURIComponent(String(e.id))}`; urls.add(u); if(e.updated_at) dynamicDates.set(u,String(e.updated_at).slice(0,10)); }
+    for(const e of (data?.events||[])) if(e?.published&&!e?.archived) { const u=`/events/${slug(e.slug||e.title)||encodeURIComponent(String(e.id))}`; urls.add(u); if(e.updated_at) dynamicDates.set(u,String(e.updated_at).slice(0,10)); }
   }catch{}
 }
 
