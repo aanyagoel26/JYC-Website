@@ -399,7 +399,7 @@ function Events({data}){
  const dated=filtered.filter(e=>e.publicStatus!=='planned');
  const upcoming=dated.filter(e=>eventState(e)!=='past'),live=dated.filter(e=>eventState(e)==='live'),past=dated.filter(e=>eventState(e)==='past');
  const shown=scope==='planned'?planned:scope==='upcoming'?upcoming:scope==='live'?live:scope==='past'?past:filtered;
- const eventDriftItems=filtered.flatMap((e,eventIndex)=>{const media=sourceEventMedia(e)?.items||[];const photos=media.filter(x=>x?.url&&(x.mediaKind==='photo'||!x.mediaKind)).slice(0,3);const rows=photos.length?photos:[{url:e.poster}].filter(x=>x.url);return rows.map((x,i)=>({id:`${e.id||eventIndex}-${i}`,image:x.url,title:[e.title,e.club,e.date].filter(Boolean).join(' · '),href:'/events/'+slug(e.title)}))}).slice(0,18);
+ const eventDriftItems=filtered.flatMap((e,eventIndex)=>{const media=sourceEventMedia(e)?.photoItems||[];const photos=media.filter(x=>x?.url).slice(0,3);const rows=photos.length?photos:[{url:e.poster}].filter(x=>x.url);return rows.map((x,i)=>({id:`${e.id||eventIndex}-${i}`,image:x.url,title:[e.title,e.club,e.date].filter(Boolean).join(' · '),href:'/events/'+slug(e.title)}))}).slice(0,18);
  return <><section className="section page events-page v40-events-page"><Breadcrumbs items={[{label:'Events'}]}/><EcosystemContextRail/><div className="compact-page-head events-page-head reveal"><div><span className="eyebrow">JYC EVENTS{queryYear?` · ${queryYear}`:''}</span><h1>What's happening.</h1><p>Upcoming, live and past JIIT events — workshops, competitions, cultural activities, club programmes and campus experiences published by JYC.</p></div><div className="page-stat-row"><span><b>{upcoming.length}</b> upcoming</span><span><b>{live.length}</b> live</span><span><b>{past.length}</b> completed</span><span><b>{planned.length}</b> planned</span></div></div>
   <div className="event-program-band reveal"><div><span className="eyebrow">JYC EVENT PROGRAMME</span><h2>From induction to flagship experiences.</h2><p>The supplied JYC material highlights Induction, Ebullience, Hackathons, Ethnic Day, Converge, Dron-O-War and Farewell alongside periodic activities. Published event records below are the source of truth for current dates.</p></div><div className="event-program-list"><span>INDUCTION</span><span>EBULLIENCE</span><span>HACKATHONS</span><span>ETHNIC DAY</span><span>CONVERGE</span><span>DRON-O-WAR</span><span>FAREWELL</span></div></div>
   {live.length>0&&<div className="events-live-strip reveal"><span className="live-dot"/><div><small>HAPPENING NOW</small><strong>{live[0].title}</strong><span>{live[0].venue||'Venue TBA'} · {live[0].club||'JYC'}</span></div><a className="text-link" href={'/events/'+slug(live[0].title)}>Open event →</a></div>}
@@ -984,7 +984,7 @@ function ClubCard({c,index=0}){
 function eventVisualFor(e,index=0){
  const explicit=safeExternalUrl(e?.poster)||'';
  if(explicit)return explicit;
- const sourceItems=sourceEventMedia(e)?.items?.filter(m=>m.mediaKind==='photo'||!m.mediaKind)||[]; const source=sourceItems.length?sourceItems[index%sourceItems.length]:null;
+ const sourceItems=sourceEventMedia(e)?.photoItems||[]; const source=sourceItems.length?sourceItems[index%sourceItems.length]:null;
  if(source?.url)return source.url;
  const hay=`${e?.title||''} ${e?.club||''}`.toLowerCase();
  const candidates=[...PDF_HUB_GALLERY,...PDF_HUB_EXTRA_GALLERY,...PUBLIC_GALLERY_FALLBACK];
