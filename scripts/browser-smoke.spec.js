@@ -276,7 +276,7 @@ test('legacy redirects and unknown routes resolve safely', async ({ page }) => {
   const localBrowserHarness= /^https?:\/\/(127\.0\.0\.1|localhost)(?::\d+)?$/i.test(base);
   for (const [from, to] of Object.entries(redirects)) {
     await page.goto(base + from, { waitUntil: 'domcontentloaded' });
-    await expect.poll(() => new URL(page.url()).pathname, { timeout: 3000 }).toSatisfy(pathname => localBrowserHarness ? ['/',to].includes(pathname) : pathname===to);
+    if(localBrowserHarness){expect(['/',to]).toContain(new URL(page.url()).pathname);}else{await expect.poll(() => new URL(page.url()).pathname, { timeout: 3000 }).toBe(to);}
   }
 
   await page.goto(base + '/this-route-should-not-exist-404', { waitUntil: 'domcontentloaded' });
