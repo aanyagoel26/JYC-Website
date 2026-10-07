@@ -1,5 +1,10 @@
 # Changelog
 
+## V58.0.3 — Album publication guard
+
+- Public album publication now requires linked approved photographs with cleared rights and resolved provenance where verification records exist.
+
+
 ## V58.0.2 — Institutional Media Governance
 
 - Added photographer, rights, license, review and explicit album relationships to the normalized media model.
