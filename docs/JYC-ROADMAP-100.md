@@ -178,7 +178,9 @@ The website is 100% done only when sections A–J are either implemented and gre
 
 ## Live release state (2026-10-07)
 
-- GitHub `main` currently points to `f1482acf5e03311540cef4766d8e5c47f9b4cbff` (latest checked commit; subsequent QA-only pushes may advance this pointer).
-- Vercel's latest READY production deployment is `dpl_2bBifhk3nLFfYR6vyfAwMiCtYrBF`, built from commit `f1482acf5e03311540cef4766d8e5c47f9b4cbff`.
-- Latest observed GitHub checks: Quality Gate PASS, CI PASS, CodeQL PASS; Browser QA remains in progress.
-- The current production deployment is not blocked by the earlier Vercel rate limit.
+- GitHub `main` currently points to `4172d294a5ab13efedc99bbe6f0852adca1086eb` (Dependabot merge updating Vite/Motion).
+- Vercel production is READY at deployment `dpl_HmQN44hacjado1jUFgwiez1wfavD`, built from the exact current `main` SHA `4172d294a5ab13efedc99bbe6f0852adca1086eb` and aliased to `jyc-website-eight.vercel.app`.
+- The latest completed Quality Gate, CI and CodeQL checks are green; Browser QA is still running in GitHub Actions.
+- Vercel runtime observability shows one low-impact Node deprecation warning group on `/api/jyc-updates` (`url.parse()` warning), with no application exception group reported in the last 24h.
+- The screenshot-reported 142 open CodeQL findings remain an account-level disposition task; the current CodeQL workflow itself is green, so each historical alert still needs individual remediation/dismissal/verification in GitHub Security.
+- Do not declare 100% release-ready until browser QA, production route/security checks, CodeQL alert disposition, and the remaining manual GitHub/Supabase checks are closed.
