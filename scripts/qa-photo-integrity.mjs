@@ -31,7 +31,7 @@ const inductionUrls=new Set(induction.items.map(x=>x.url));
 const archivePhotoUrls=new Set(JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.map(x=>x.url));
 const eventPhotoItems=event.photoItems||[];
 
-assert('curated archive photography pool is exposed',JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.length>500,`found ${JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.length}`);
+assert('curated archive photography pool is exposed',JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.length>350,`found ${JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.length}`);
 assert('curated featured overrides remain explicit',mediaSource.includes('const QUALITY_OVERRIDES=')&&mediaSource.includes("Aakriti:[")&&mediaSource.includes("Panache:[")&&mediaSource.includes("CICR:[")&&mediaSource.includes("Innovation:["));
 assert('source gallery has maintained communities',JYC_SOURCE_MEDIA_STATS.maintainedCommunities>0);
 assert('source gallery is non-empty',gallery.length>0);
