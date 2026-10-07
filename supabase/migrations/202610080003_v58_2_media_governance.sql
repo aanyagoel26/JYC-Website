@@ -121,3 +121,18 @@ comment on column public.jyc_gallery_items.rights_status is
   'Editorial rights state. review is the safe default; only an authorized reviewer should mark a record cleared.';
 comment on column public.jyc_gallery_items.album_id is
   'Explicit institutional album relationship; source-derived association remains a fallback when null.';
+
+
+-- Verified public community links found during the current JIIT-128 source pass.
+insert into public.jyc_club_links(club_id,label,url,sort_order)
+select c.id,x.label,x.url,
+       coalesce((select max(l.sort_order)+1 from public.jyc_club_links l where l.club_id=c.id),0)
+from (values
+  ('cinekala','LinkedIn','https://in.linkedin.com/company/cinekala'),
+  ('cypherx','LinkedIn','https://www.linkedin.com/company/cypherx-jiit/'),
+  ('zencoders','LinkedIn','https://www.linkedin.com/company/zencoders/'),
+  ('neural-nexus','LinkedIn','https://www.linkedin.com/company/neural-nexus-jiit-noida/'),
+  ('vamunique','Instagram','https://www.instagram.com/vamunique/')
+) as x(slug,label,url)
+join public.jyc_clubs c on c.slug=x.slug
+where not exists(select 1 from public.jyc_club_links l where l.club_id=c.id and l.url=x.url);
