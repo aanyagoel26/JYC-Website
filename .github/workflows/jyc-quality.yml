@@ -35,6 +35,9 @@ jobs:
       - name: Run full static release QA
         run: npm run qa
 
+      - name: Enforce production build media/performance budget
+        run: node scripts/qa-performance.mjs
+
 
       - name: Verify canonical event identifiers
         run: npm run qa:identifiers
