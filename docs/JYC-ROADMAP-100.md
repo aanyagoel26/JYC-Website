@@ -45,7 +45,8 @@ This is the execution ledger for taking the JIIT Youth Club 128 website from the
 - [x] npm audit high-severity gate
 - [x] Dependabot weekly npm updates
 - [x] Dependabot weekly GitHub Actions updates
-- [x] Dependency Review on PRs
+- [ ] Dependency Review on PRs — deferred until GitHub Dependency Graph is enabled; the initial action failed because the repository setting is off
+- [ ] Enable GitHub Dependency Graph, then restore the Dependency Review PR gate
 - [ ] Review first Dependabot PR batch and merge safe updates
 - [ ] Keep action versions current through Dependabot rather than hand-pinning old versions
 - [ ] Re-run audit after each dependency update batch
