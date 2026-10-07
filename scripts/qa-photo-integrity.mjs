@@ -55,7 +55,7 @@ assert('manifest exposes source types',manifest.sourceTypes.includes('presentati
 assert('normalized event names resolve to deterministic collections',normalizedEventMappings.every(([name,collection])=>collection&&collection!=='JYC Archive'),JSON.stringify(normalizedEventMappings));
 assert('newly audited non-photo archive assets stay out of photo pool',auditedExclusionIds.every(id=>![...archivePhotoUrls].some(url=>url.includes('/'+id+'.webp'))),auditedExclusionIds.filter(id=>[...archivePhotoUrls].some(url=>url.includes('/'+id+'.webp'))).join(', '));
 assert('event photo rail exposes only explicit photography',eventPhotoItems.every(x=>x?.mediaKind==='photo'));
-assert('gallery strict pool excludes identity assets',gallery.filter(x=>x.mediaKind==='identity').length===0);
+assert('identity assets are preserved in the broader source gallery',gallery.some(x=>x.mediaKind==='identity'));
 assert('event media still retains broader source records separately',event.items.length>=eventPhotoItems.length);
 if(process.exitCode)process.exit(1);
 console.log('Photo integrity QA: all checks passed.');
