@@ -307,7 +307,7 @@ test('global search opens, accepts keyboard input, and closes cleanly', async ({
   await trigger.press(process.platform === 'darwin' ? 'Meta+K' : 'Control+K');
   const dialog = page.locator('[role="dialog"]').filter({ hasText: /JYC search/i }).first();
   await expect(dialog).toBeVisible();
-  const input = page.getByRole('combobox', { name: /Search JYC/i }).first();
+  const input = page.getByRole('textbox', { name: /Search JYC/i }).first();
   await expect(input).toBeVisible();
   await input.fill('CICR');
   await page.waitForTimeout(150);
