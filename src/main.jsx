@@ -496,6 +496,7 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
   '/event-calendar':'JYC 128 Event Calendar | JIIT Youth Club',
 
   '/achievements':'JYC Achievements & Wall of Fame | JIIT Noida',
+  '/best-of-jyc':'The Best of JYC | JIIT Youth Club 128',
   '/join-jyc':'Join JYC | JIIT Youth Club',
   '/announcements':'JYC Announcements & Updates | JIIT Noida',
   '/updates':'JYC Now · Recent JYC & Hub Updates | JIIT Youth Club',
