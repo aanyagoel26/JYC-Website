@@ -39,8 +39,8 @@ export function JYCEditorialHome({data}){
        <h1 id="jh-title"><span>THE VOICE.</span><span>THE TALENT.</span><em>THE SPIRIT.</em></h1>
        <p className="jh-lead">The student-powered layer connecting the communities, events, culture, competition and campus life of JIIT 128.</p>
        <div className="jh-actions">
-         <button className="jh-btn jh-btn-primary" onClick={()=>nav('/clubs')}>Explore Clubs <span>↗</span></button>
-         <button className="jh-btn" onClick={()=>nav('/events')}>What’s Happening <span>→</span></button>
+         <button type="button" className="jh-btn jh-btn-primary" onClick={()=>nav('/clubs')}>Explore Clubs <span>↗</span></button>
+         <button type="button" className="jh-btn" onClick={()=>nav('/events')}>What’s Happening <span>→</span></button>
        </div>
        <div className="jh-proof"><span><b>01</b> DISCOVER</span><span><b>02</b> PARTICIPATE</span><span><b>03</b> BELONG</span></div>
      </div>
@@ -61,7 +61,7 @@ export function JYCEditorialHome({data}){
      <div className="jh-section-number">01 / THE ORGANISATION</div>
      <div className="jh-intro-grid">
        <h2>The student organisation behind the experiences that make <em>campus life move.</em></h2>
-       <div><p>JYC is the central student-led layer connecting JIIT 128 communities, events, fests and inter-society activity. It gives students places to discover a skill, find people, lead something and make a memory.</p><button className="jh-text-link" onClick={()=>nav('/about')}>What is JYC? <span>→</span></button></div>
+       <div><p>JYC is the central student-led layer connecting JIIT 128 communities, events, fests and inter-society activity. It gives students places to discover a skill, find people, lead something and make a memory.</p><button type="button" className="jh-text-link" onClick={()=>nav('/about')}>What is JYC? <span>→</span></button></div>
      </div>
      <div className="jh-word-rail"><span>CLUBS</span><i>×</i><span>EVENTS</span><i>×</i><span>CULTURE</span><i>×</i><span>COMPETITION</span><i>×</i><span>COMMUNITY</span></div>
    </section>
@@ -70,30 +70,30 @@ export function JYCEditorialHome({data}){
 
    <section className="jh-dark-section">
      <div className="jh-container">
-       <div className="jh-section-head light"><div><div className="jh-section-number">02 / FIND YOUR SPACE</div><h2>Many communities.<br/><em>One campus.</em></h2></div><button className="jh-text-link light" onClick={()=>nav('/clubs')}>Explore all clubs <span>↗</span></button></div>
+       <div className="jh-section-head light"><div><div className="jh-section-number">02 / FIND YOUR SPACE</div><h2>Many communities.<br/><em>One campus.</em></h2></div><button type="button" className="jh-text-link light" onClick={()=>nav('/clubs')}>Explore all clubs <span>↗</span></button></div>
        <div className="jh-family-grid">
          {families.slice(0,5).map((group,i)=><article className={'jh-family family-'+i} key={group.family}>
-           <button onClick={()=>nav('/clubs')} className="jh-family-image"><Img src={hubImage(group.hubs[0]?.name,i)} alt={group.family+' communities at JIIT 128'} loading="lazy"/><span>0{i+1}</span></button>
-           <div className="jh-family-copy"><span>{group.family}</span><h3>{group.hubs.slice(0,3).map(x=>x.name).join(' · ')}</h3><p>{group.hubs.length} documented communities</p><button onClick={()=>nav('/clubs')}>Find your space →</button></div>
+           <button type="button" onClick={()=>nav('/clubs')} className="jh-family-image"><Img src={hubImage(group.hubs[0]?.name,i)} alt={group.family+' communities at JIIT 128'} loading="lazy"/><span>0{i+1}</span></button>
+           <div className="jh-family-copy"><span>{group.family}</span><h3>{group.hubs.slice(0,3).map(x=>x.name).join(' · ')}</h3><p>{group.hubs.length} documented communities</p><button type="button" onClick={()=>nav('/clubs')}>Find your space →</button></div>
          </article>)}
        </div>
      </div>
    </section>
 
    <section className="jh-container jh-events">
-     <div className="jh-section-head"><div><div className="jh-section-number">03 / WHAT’S NEXT</div><h2>What’s happening<br/><em>at JYC.</em></h2></div><button className="jh-text-link" onClick={()=>nav('/events')}>View all events <span>↗</span></button></div>
+     <div className="jh-section-head"><div><div className="jh-section-number">03 / WHAT’S NEXT</div><h2>What’s happening<br/><em>at JYC.</em></h2></div><button type="button" className="jh-text-link" onClick={()=>nav('/events')}>View all events <span>↗</span></button></div>
      {featured ? <div className="jh-featured-event" onClick={()=>nav('/events/'+slug(featured.title))}>
        <div className="jh-event-image"><Img src={eventImage(featured)} alt={featured.title+' event poster'} loading="lazy"/><span>FEATURED EVENT</span></div>
-       <div className="jh-event-copy"><p className="jh-event-meta">{dateLabel(featured.date)} · JIIT 128 · {featured.club||'JYC'}</p><h3>{featured.title}</h3><p>{featured.description||'Discover the official event record, schedule and registration information.'}</p><div className="jh-event-details"><span>VENUE <b>{featured.venue||'JIIT 128'}</b></span><span>TIME <b>{featured.start||'TBA'}</b></span></div><button className="jh-btn jh-btn-primary">View Event <span>↗</span></button></div>
+       <div className="jh-event-copy"><p className="jh-event-meta">{dateLabel(featured.date)} · JIIT 128 · {featured.club||'JYC'}</p><h3>{featured.title}</h3><p>{featured.description||'Discover the official event record, schedule and registration information.'}</p><div className="jh-event-details"><span>VENUE <b>{featured.venue||'JIIT 128'}</b></span><span>TIME <b>{featured.start||'TBA'}</b></span></div><button type="button" className="jh-btn jh-btn-primary">View Event <span>↗</span></button></div>
      </div> : <div className="jh-empty">No published upcoming events are currently available.</div>}
-     {upcoming.slice(1).length>0&&<div className="jh-event-list">{upcoming.slice(1).map((e,i)=><button key={e.id||e.title} onClick={()=>nav('/events/'+slug(e.title))}><span>{dateLabel(e.date)}</span><strong>{e.title}</strong><small>{e.club||'JYC'} · {e.venue||'JIIT 128'}</small><b>→</b></button>)}</div>}
+     {upcoming.slice(1).length>0&&<div className="jh-event-list">{upcoming.slice(1).map((e,i)=><button type="button" key={e.id||e.title} onClick={()=>nav('/events/'+slug(e.title))}><span>{dateLabel(e.date)}</span><strong>{e.title}</strong><small>{e.club||'JYC'} · {e.venue||'JIIT 128'}</small><b>→</b></button>)}</div>}
    </section>
 
    <section className="jh-photo-story">
      <div className="jh-container">
-       <div className="jh-section-head"><div><div className="jh-section-number">04 / CAMPUS IN MOTION</div><h2>Real people.<br/><em>Real moments.</em></h2></div><button className="jh-text-link" onClick={()=>nav('/gallery')}>Open gallery <span>↗</span></button></div>
+       <div className="jh-section-head"><div><div className="jh-section-number">04 / CAMPUS IN MOTION</div><h2>Real people.<br/><em>Real moments.</em></h2></div><button type="button" className="jh-text-link" onClick={()=>nav('/gallery')}>Open gallery <span>↗</span></button></div>
        <div className="jh-photo-grid">
-         {gallery.slice(0,6).map((g,i)=><button key={g.id||i} onClick={()=>nav('/gallery')} className={'jh-gallery-tile tile-'+i}><Img src={g.url} alt={g.alt||g.caption||'JYC 128 campus moment'} loading="lazy"/><span>{g.caption||g.title||'JYC 128'}</span></button>)}
+         {gallery.slice(0,6).map((g,i)=><button type="button" key={g.id||i} onClick={()=>nav('/gallery')} className={'jh-gallery-tile tile-'+i}><Img src={g.url} alt={g.alt||g.caption||'JYC 128 campus moment'} loading="lazy"/><span>{g.caption||g.title||'JYC 128'}</span></button>)}
        </div>
      </div>
    </section>
@@ -106,16 +106,16 @@ export function JYCEditorialHome({data}){
    <JYCNowStrip limit={3}/>
 
    <section className="jh-history">
-     <div className="jh-container jh-history-grid"><div><div className="jh-section-number">06 / THROUGH THE YEARS</div><h2>JYC is not a moment.<br/><em>It is a continuity.</em></h2><p>Official reports, events and campus photography give JYC a history worth remembering.</p><button className="jh-btn jh-btn-primary" onClick={()=>nav('/history')}>Explore History <span>→</span></button></div><div className="jh-years"><span>2016</span><span>2019</span><span>2023</span><span>2026</span><b>NOW</b></div></div>
+     <div className="jh-container jh-history-grid"><div><div className="jh-section-number">06 / THROUGH THE YEARS</div><h2>JYC is not a moment.<br/><em>It is a continuity.</em></h2><p>Official reports, events and campus photography give JYC a history worth remembering.</p><button type="button" className="jh-btn jh-btn-primary" onClick={()=>nav('/history')}>Explore History <span>→</span></button></div><div className="jh-years"><span>2016</span><span>2019</span><span>2023</span><span>2026</span><b>NOW</b></div></div>
    </section>
 
    <section className="jh-people jh-container">
-     <div className="jh-section-head"><div><div className="jh-section-number">07 / THE PEOPLE</div><h2>The students<br/><em>behind JYC.</em></h2></div><button className="jh-text-link" onClick={()=>nav('/team')}>Meet the team <span>↗</span></button></div>
-     {team.length?<div className="jh-team-row">{team.map((m,i)=><button key={m.id||i} onClick={()=>nav('/team')}><div><Img src={m.photo||m.image} alt={m.name||'JYC team member'} loading="lazy"/></div><span>{m.role||m.position||'JYC Team'}</span><strong>{m.name||'JYC Team Member'}</strong></button>)}</div>:<div className="jh-empty">Official team profiles will appear here when published.</div>}
+     <div className="jh-section-head"><div><div className="jh-section-number">07 / THE PEOPLE</div><h2>The students<br/><em>behind JYC.</em></h2></div><button type="button" className="jh-text-link" onClick={()=>nav('/team')}>Meet the team <span>↗</span></button></div>
+     {team.length?<div className="jh-team-row">{team.map((m,i)=><button type="button" key={m.id||i} onClick={()=>nav('/team')}><div><Img src={m.photo||m.image} alt={m.name||'JYC team member'} loading="lazy"/></div><span>{m.role||m.position||'JYC Team'}</span><strong>{m.name||'JYC Team Member'}</strong></button>)}</div>:<div className="jh-empty">Official team profiles will appear here when published.</div>}
    </section>
 
    <section className="jh-final">
-     <div className="jh-container jh-final-grid"><div><div className="jh-section-number">08 / GET INVOLVED</div><h2>Find your place<br/><em>in JIIT 128.</em></h2></div><div><p>Discover a community. Find the next event. Meet the people making campus life happen.</p><div className="jh-actions"><button className="jh-btn jh-btn-light" onClick={()=>nav('/clubs')}>Explore Clubs <span>↗</span></button><button className="jh-btn jh-btn-outline-light" onClick={()=>nav('/events')}>See Events <span>→</span></button><button className="jh-btn jh-btn-outline-light" onClick={()=>nav('/join-jyc')}>Join JYC <span>→</span></button></div></div></div>
+     <div className="jh-container jh-final-grid"><div><div className="jh-section-number">08 / GET INVOLVED</div><h2>Find your place<br/><em>in JIIT 128.</em></h2></div><div><p>Discover a community. Find the next event. Meet the people making campus life happen.</p><div className="jh-actions"><button type="button" className="jh-btn jh-btn-light" onClick={()=>nav('/clubs')}>Explore Clubs <span>↗</span></button><button type="button" className="jh-btn jh-btn-outline-light" onClick={()=>nav('/events')}>See Events <span>→</span></button><button type="button" className="jh-btn jh-btn-outline-light" onClick={()=>nav('/join-jyc')}>Join JYC <span>→</span></button></div></div></div>
    </section>
  </main>;
 }
