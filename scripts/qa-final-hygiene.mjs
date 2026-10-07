@@ -6,6 +6,7 @@ const read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const pkg=JSON.parse(read('package.json'));
 const readme=read('README.md');
 const main=read('src/main.jsx');
+const jycNow=read('src/jyc-now.jsx');
 const config=read('src/public-v1/config.js');
 const vercel=JSON.parse(read('vercel.json'));
 const theme=read('src/jyc-logo-final-theme.css');
