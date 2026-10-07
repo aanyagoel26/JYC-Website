@@ -3,7 +3,7 @@ import {JYC_SOURCE_MEDIA_STATS,mergeSourceGallery,sourceEventMedia,buildJycMedia
 
 const assert=(name,ok,detail='')=>{console.log((ok?'PASS: ':'FAIL: ')+name+(detail?' — '+detail:''));if(!ok)process.exitCode=1};
 const mediaSource=fs.readFileSync('src/jyc-source-media.js','utf8');
-const auditedExclusionIds=[...mediaSource.matchAll(/'(clubs\/abhivyakti|clubs\/panache|clubs\/cypherx|festivals\/aakriti|gallery\/campus-events)':new Set\\(\\[([^\\]]*)\\]\\)/g)].flatMap(m=>[...m[2].matchAll(/'([^']+)'/g)].map(x=>x[1]));
+const auditedExclusionIds=[...mediaSource.matchAll(/'(clubs\/abhivyakti|clubs\/panache|clubs\/cypherx|festivals\/aakriti|gallery\/campus-events)':new Set\(\[([^\]]*)\]\)/g)].flatMap(m=>[...m[2].matchAll(/'([^']+)'/g)].map(x=>x[1]));
 
 
 assert('non-photographic club override cleanup',mediaSource.includes("CypherX:[]")&&mediaSource.includes("Zencoders:[]")&&mediaSource.includes("NeuralNexus:[]")&&mediaSource.includes("Arcadia:[]")&&mediaSource.includes("Dronotics:[]")&&mediaSource.includes("Eloquence:[]"));
