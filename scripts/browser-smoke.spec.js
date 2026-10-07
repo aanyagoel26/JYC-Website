@@ -274,6 +274,29 @@ test('gallery deep-link opens the requested photograph', async ({ page }) => {
   await expect(page.locator('.jyc57-lightbox[role="dialog"]')).toBeVisible();
 });
 
+test('homepage records Core Web Vitals under the browser harness', async ({ page }) => {
+  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'web vitals');
+  await page.waitForTimeout(1800);
+  await page.locator('.search-trigger').first().click().catch(()=>{});
+  await page.waitForTimeout(150);
+  await page.keyboard.press('Escape').catch(()=>{});
+  const vitals=await page.evaluate(() => {
+    const entries=performance.getEntriesByType('navigation');
+    const nav=entries[0];
+    const lcp=performance.getEntriesByType('largest-contentful-paint').at(-1)?.startTime ?? null;
+    const layoutShift=performance.getEntriesByType('layout-shift').reduce((sum,e)=>sum+(e.hadRecentInput?0:e.value),0);
+    const interactionEntries=performance.getEntriesByType('event');
+    const inp=interactionEntries.length ? Math.max(...interactionEntries.map(e=>Number(e.duration)||0)) : 0;
+    return {lcp,cls:layoutShift,inp,domContentLoaded:nav?.domContentLoadedEventEnd||null,load:nav?.loadEventEnd||null};
+  });
+  console.log('JYC WEB VITALS', JSON.stringify(vitals));
+  expect(vitals.domContentLoaded).not.toBeNull();
+  if(vitals.lcp!==null) expect(vitals.lcp).toBeLessThan(10000);
+  expect(vitals.cls).toBeLessThan(0.25);
+  expect(vitals.inp).toBeLessThan(1000);
+});
+
 test('homepage remains usable on constrained mobile network', async ({ page }) => {
   test.skip(!/chromium/i.test(test.info().project.name), 'CDP network emulation requires Chromium');
   const client=await page.context().newCDPSession(page);
