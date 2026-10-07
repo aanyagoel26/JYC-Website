@@ -1,3 +1,12 @@
+## V57.0.0 — Security and release hardening
+
+- Expanded Dependabot coverage to npm and GitHub Actions with weekly grouped updates.
+- Added a pull-request dependency-review gate for high-severity dependency changes and prohibited GPL-3.0/AGPL-3.0 dependencies.
+- Modernized CodeQL to v4 and added JavaScript/TypeScript plus GitHub Actions analysis.
+- Strengthened the repository security policy and release roadmap.
+- Added external URL validation to JYC Now and server-side remote update ingestion, including private-network/metadata endpoint blocking.
+- Added QA contracts for the new URL-safety boundaries.
+
 ## V57.0.0 — Release verification hardening
 
 - Added a production browser-QA GitHub Actions gate using the built Vite artifact and Playwright/Chromium.
