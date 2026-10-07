@@ -53,9 +53,10 @@ jobs:
           set -euo pipefail
           VERSION="$(node -p "require('./package.json').version")"
           CACHE="$(grep -o "jyc-cache-v[0-9.-]*" public/sw.js | head -n1)"
+          EXPECTED_CACHE="jyc-cache-v${VERSION//./-}"
           echo "package version: $VERSION"
           echo "service-worker cache: $CACHE"
-          test "$CACHE" = "jyc-cache-v$VERSION"
+          test "$CACHE" = "$EXPECTED_CACHE"
           grep -q "V$VERSION" scripts/qa-jyc-release-guard.mjs
 
       - name: Reject accidental Vercel preview references
