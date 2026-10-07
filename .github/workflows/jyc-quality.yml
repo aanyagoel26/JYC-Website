@@ -32,6 +32,9 @@ jobs:
       - name: Production build
         run: npm run build
 
+      - name: Run full static release QA
+        run: npm run qa
+
       - name: Verify 128 event scope
         run: node scripts/qa-events-128.mjs
 
