@@ -9,6 +9,7 @@ import './jyc-editorial-home.css';
 
 const LazyDitherVeil=lazy(()=>import('./react-bits/DitherVeil.jsx'));
 const LazyMagicBento=lazy(()=>import('./components/react-bits/MagicBento.jsx'));
+const LazyDriftWall=lazy(()=>import('./components/react-bits/DriftWall.jsx'));
 
 const FALLBACK='/assets/hub-photos/jyc-06.webp';
 const slug=v=>String(v||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
@@ -23,6 +24,7 @@ function Img({src,alt,...props}){return <img {...props} src={src||FALLBACK} alt=
 
 export function JYCEditorialHome({data}){
  const nav=useNavigate();
+ const visualArchive=useMemo(()=>mergeSourceGallery().filter(x=>media(x)).slice(0,24).map((x,i)=>({id:x.id||i,src:media(x),alt:x.alt||x.title||x.caption||'JYC campus moment'})),[]);
  const clubs=useMemo(()=>Array.isArray(data?.clubs)?data.clubs.filter(c=>c?.published&&c?.status!=='archived').slice().sort((a,b)=>String(a.name).localeCompare(String(b.name))):[],[data?.clubs]);
  const events=useMemo(()=>Array.isArray(data?.events)?data.events.filter(e=>e?.published&&!e?.archived).slice().sort((a,b)=>dateMs(a)-dateMs(b)):[],[data?.events]);
  const upcoming=events.slice(0,4);
@@ -103,7 +105,7 @@ export function JYCEditorialHome({data}){
      <Suspense fallback={<div className="jh-bento-fallback"/>}><LazyMagicBento items={activities.map((a,i)=>({id:a.id||a.title,title:a.title,description:a.text,label:String(i+1).padStart(2,'0'),image:gallery[i%Math.max(1,gallery.length)]?.url||FALLBACK,href:a.link||'/clubs'}))} textAutoHide={false} enableStars={false} enableSpotlight enableBorderGlow enableTilt={false} enableMagnetism={false} particleCount={0} spotlightRadius={260} glowColor="168,36,32" clickEffect/></Suspense>
    </section>
 
-   <JYCNowStrip limit={3}/>
+   <section className="jh-archive-section" aria-labelledby="jh-archive-title"><div className="jh-section-head"><div><span className="jh-section-number">06 / MOMENTS</span><h2 id="jh-archive-title">The visual archive.</h2><p>Published JYC photography, posters and campus moments — a living record of student life at 128.</p></div><button type="button" className="jh-text-link" onClick={()=>nav("/gallery")}>Open gallery →</button></div><Suspense fallback={<div className="jh-archive-fallback" aria-hidden="true"/>}><LazyDriftWall items={visualArchive} columns={3} tileWidth={240} tileHeight={160} gap={14} tilt={5} turn={-4} perspective={1100} depth={45} speed={1.5} direction="up" variance={.08} parallax={.05} pauseOnHover lift={10} fade={.5} dim={.25} ariaLabel="JYC visual archive"/></Suspense></section>\n\n   <JYCNowStrip limit={3}/>
 
    <section className="jh-history">
      <div className="jh-container jh-history-grid"><div><div className="jh-section-number">06 / THROUGH THE YEARS</div><h2>JYC is not a moment.<br/><em>It is a continuity.</em></h2><p>Official reports, events and campus photography give JYC a history worth remembering.</p><button type="button" className="jh-btn jh-btn-primary" onClick={()=>nav('/history')}>Explore History <span>→</span></button><button type="button" className="jh-btn" onClick={()=>nav('/achievements')}>Explore Achievements <span>→</span></button></div><div className="jh-years"><span>2016</span><span>2019</span><span>2023</span><span>2026</span><b>NOW</b></div></div>
