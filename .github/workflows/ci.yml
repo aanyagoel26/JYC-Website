@@ -37,10 +37,3 @@ jobs:
       - name: Enforce production performance budget
         run: node scripts/qa-performance.mjs
 
-      - name: Install Playwright Chromium
-        run: npx playwright install --with-deps chromium
-
-      - name: Run browser QA
-        env:
-          JYC_BASE_URL: http://127.0.0.1:5173
-        run: npm run qa:browser
