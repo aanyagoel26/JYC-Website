@@ -174,3 +174,9 @@ For each route verify:
 ## Definition of done
 
 The website is 100% done only when sections A–J are either implemented and green, or a manual/account-level item has an explicit verified disposition. No “looks fine” release is allowed with open high/critical security findings, unknown production deployment state, broken media, wrong campus scope, or unverified browser behavior.
+
+## Live release state (2026-10-07)
+
+- GitHub `main` currently points to `2a4b113d79a11d0800d224712236e97d9ac5717c`.
+- Vercel's latest READY production deployment is `dpl_35Qgg5y2MQ3NZPv9KHk9Xj9JBmZw`, built from commit `88da28b076113b36cd93d7529ba2af9ec920321d`.
+- The Vercel GitHub status is currently failing because the deployment-rate limit has been reached. Do not repeatedly retry until the quota resets.
