@@ -1,14 +1,27 @@
 # Security Policy
 
+## Supported versions
+
+Security fixes are applied to the current production branch (`main`). Older historical releases are not guaranteed to receive security patches.
+
 ## Reporting a vulnerability
 
-Please do not publish credentials, tokens or exploitable details in a public issue. Contact the repository maintainer privately through the repository's configured security/contact channel.
+Please do **not** open a public GitHub issue for a suspected security vulnerability.
 
-## Project security expectations
+Use GitHub's private vulnerability reporting for this repository when it is available. Include a clear summary, affected route/component/workflow/database object, reproducible steps or proof of concept, security impact, and any suggested mitigation.
 
-- Supabase service-role credentials must remain server-side.
-- Browser code may only use the intended publishable Supabase configuration.
-- `.env.local` and other local secret files are ignored by Git.
-- Public external URLs should be validated before navigation or rendering.
-- Admin routes and publishing actions must remain protected.
-- CSP, HSTS, frame-ancestors, referrer policy and content-type protections should not be weakened without a documented reason.
+If private vulnerability reporting is unavailable, contact the repository maintainers through the security contact configured on GitHub and do not publish exploit details until a fix has been coordinated.
+
+## Secrets
+
+Never commit Supabase service-role/secret keys, OAuth/API provider secrets, VAPID private keys, database credentials, deployment tokens, or private certificates/signing keys.
+
+Browser code must use only the Supabase publishable/anon credential intended for public clients. Server-side secrets belong in Vercel/Supabase environment variables.
+
+## Dependency and CI security
+
+Dependabot monitors npm and GitHub Actions dependencies. CodeQL runs on JavaScript/TypeScript and GitHub Actions. Pull requests should pass the repository quality, security, and browser-QA gates before merge.
+
+## Disclosure
+
+After remediation, maintainers may publish a GitHub security advisory when appropriate.
