@@ -431,3 +431,8 @@ img{max-width:100%}svg{max-width:100%}.page a,.section a{text-decoration-thickne
 
 .jyc57-archive-head .jyc57-album-hero{display:block;width:min(100%,980px);max-height:360px;object-fit:cover;object-position:center;border:1px solid var(--border-tech);border-radius:22px;margin-top:18px;box-shadow:0 18px 48px rgba(0,0,0,.12)}
 @media(max-width:700px){.jyc57-archive-head .jyc57-album-hero{max-height:240px;border-radius:16px;margin-top:14px}}
+
+.jyc57-album-context{display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin:0 0 16px;color:var(--text-muted);font-size:.82rem}
+.jyc57-related-albums{display:flex;gap:7px;flex-wrap:wrap}
+.jyc57-related-albums button{border:1px solid var(--border-tech);background:var(--bg-card);color:var(--text-primary);border-radius:999px;padding:7px 11px;cursor:pointer}
+.jyc57-related-albums button:hover,.jyc57-related-albums button:focus-visible{border-color:var(--accent-red);color:var(--accent-red)}
