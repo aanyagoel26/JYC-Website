@@ -24,6 +24,7 @@ const checks=[
  ['verified community links are recorded',read('supabase/migrations/202610080003_v58_2_media_governance.sql').includes('in.linkedin.com/company/cinekala')&&read('supabase/migrations/202610080003_v58_2_media_governance.sql').includes('cypherx-jiit')],
  ['canonical JAI legacy redirect exists',read('src/main.jsx').includes("legacyEventSlugMap={'agentic-ai-2026':'jai-2026-jaypee-agentic-ai-hackathon'}")&&read('src/main.jsx').includes("legacyEventRedirect")],
  ['album publication guard exists',read('supabase/migrations/202610080004_v58_3_album_publication_guard.sql').includes('jyc_guard_media_album_publication')&&read('supabase/migrations/202610080004_v58_3_album_publication_guard.sql').includes('rights_status <> \'cleared\'')],
+ ['album guard is not directly executable',read('supabase/migrations/202610080005_revoke_album_guard_execute.sql').includes('revoke execute on function public.jyc_guard_media_album_publication() from public, anon, authenticated')],
 
 
 ];
