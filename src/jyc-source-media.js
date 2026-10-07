@@ -120,14 +120,17 @@ export const JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS=ARCHIVE_GALLERY
     sourceLabel:'Five-volume JYC source archive',alt:item.association?item.association+' identity asset':'JYC source identity asset',
     caption:item.association?item.association+' identity asset · supplied archive':'JYC supplied identity asset'
   }));
-const IDENTITY_BY_ASSOCIATION=new Map(JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS.map(item=>[normalise(item.association),item]));
+const IDENTITY_BY_ASSOCIATION=new Map();
+JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS.forEach(item=>{const key=normalise(item.association);const rows=IDENTITY_BY_ASSOCIATION.get(key)||[];rows.push(item);IDENTITY_BY_ASSOCIATION.set(key,rows)});
 
 export function enrichSourceClub(club){
   const media=sourceHubMedia(club?.name);
-  const identity=IDENTITY_BY_ASSOCIATION.get(normalise(media.name));
+  const identityAssets=IDENTITY_BY_ASSOCIATION.get(normalise(media.name))||[];
+  const identityLogo=identityAssets.find(item=>/logo/i.test(item.sourcePath||item.url))||identityAssets[0];
+  const identityBanner=identityAssets.find(item=>/banner/i.test(item.sourcePath||item.url))||null;
   const photos=[...new Set([...(Array.isArray(club?.hubPhotos)?club.hubPhotos:[]),...media.photos])];
   const profile=JYC_HUB_CONTENT[media.name];
-  return {...club,description:club?.description||profile?.summary||media.summary,about:club?.about||profile?.detail||media.detail,hubPhotos:photos,logo:club?.logo||identity?.url||'',banner:club?.banner||photos[0]||identity?.url||'',identityAsset:identity||null,sourceMediaCount:photos.length,sourceMediaLabel:photos.length?'JYC source archive · '+photos.length+' visual'+(photos.length===1?'':'s'):(identity?'JYC source archive · verified identity asset':'Identity-led profile · source photography not yet extracted')};
+  return {...club,description:club?.description||profile?.summary||media.summary,about:club?.about||profile?.detail||media.detail,hubPhotos:photos,logo:club?.logo||identityLogo?.url||'',banner:club?.banner||photos[0]||identityBanner?.url||identityLogo?.url||'',identityAsset:identityLogo||null,identityAssets,sourceMediaCount:photos.length,sourceMediaLabel:photos.length?'JYC source archive · '+photos.length+' visual'+(photos.length===1?'':'s'):(identityLogo?'JYC source archive · verified identity asset':'Identity-led profile · source photography not yet extracted')};
 }
 
 export function enrichSourceClubs(clubs){return (Array.isArray(clubs)?clubs:[]).map(enrichSourceClub);}
