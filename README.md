@@ -278,18 +278,19 @@ The homepage now includes a restrained **Choose Your Route** discovery layer (Bu
 
 ## Current backend readiness
 
-The connected production Supabase project is now active and has been hardened and populated with source-verified public content. The source registry now distinguishes 17 brochure-verified current communities from 6 additional source-backed communities awaiting live club publication. The current live backend state includes:
+The connected production Supabase project is active and has been hardened and populated with source-verified public content. The current live backend state includes:
 
-- 17 JIIT 128 club records verified against the official 2026 JIIT admission brochure.
-- JAI 2026 and Converge 2026 verified event records.
-- 6 curated gallery records with alt text/provenance fields.
+- 23 published JYC club records with verified club-source relationships.
+- 8 published JYC event records, including canonical JAI 2026, RIDE Hack'26, Converge 2026, DRONO-O-WAR 1.0, Innovate 3.0 and BITBOX 6.0 records.
+- 52 approved normalized gallery records, all credited and alt-text complete; rights/provenance review remains intentionally gated.
+- 31 editorial media-album shells, all currently unpublished; 25 are club-linked and 8 are event-linked, with 46 normalized gallery records already assigned to albums.
 - Production RLS/write-boundary hardening, publication verification, fixed SECURITY DEFINER search paths and rate-limit guards.
 - Source-only hub records are review-gated in `jyc_content_verification`; gallery publication now has the same verification guard.
 - The public application currently consumes the compatibility JSON read model (`jyc_read_site_data`) rather than the normalized v2 tables directly; do not populate the two models independently without the planned migration/bridge.
 - Seven deployed Edge Functions: admin management, notifications, backups, AI content assistance, error intake, media upload and public submissions.
 - Private backup storage and constrained public media storage.
 
-The remaining production gates are operational: configure required third-party Edge Function secrets, enable leaked-password protection in Supabase Auth, verify the connected Vercel production project, review which archive visuals should be promoted as official current event records, and run final browser/performance QA against the real deployment.
+The remaining production gates are operational: configure required third-party Edge Function secrets, enable leaked-password protection in Supabase Auth, verify the connected Vercel production project, publish the current main revision once the Vercel Hobby deployment limit clears, review which archive visuals should be promoted as official current event records, and run final browser/performance QA against the real deployment.
 
 ## Current release status
 
