@@ -1,5 +1,6 @@
 import React,{useEffect,useMemo,useRef,useState} from 'react';
 import {useLocation,useNavigate} from 'react-router-dom';
+import {supabase} from './lib/supabase';
 import {JYC_SOURCE_ARCHIVE_PHOTO_ITEMS,rankJycPhotoItems} from './jyc-source-media.js';
 
 const safeDate=(e)=>{const t=Date.parse(`${e?.date||''}T${e?.start||'00:00'}`);return Number.isFinite(t)?t:Infinity};
@@ -66,9 +67,13 @@ export function JYC57Clubs({data}){
 export function JYC57Gallery({data}){
  const nav=useNavigate(),loc=useLocation();
  const params=useMemo(()=>new URLSearchParams(loc.search),[loc.search]);
- const [query,setQuery]=useState(params.get('q')||''),[association,setAssociation]=useState(params.get('club')||'All'),[year,setYear]=useState(params.get('year')||'All');
+ const pathAlbum=loc.pathname.startsWith('/gallery/')?decodeURIComponent(loc.pathname.split('/').filter(Boolean)[1]||''):'';
+ const [query,setQuery]=useState(params.get('q')||''),[association,setAssociation]=useState(params.get('club')||'All'),[year,setYear]=useState(params.get('year')||'All'),[album,setAlbum]=useState(pathAlbum||params.get('album')||'All');
+ const [albums,setAlbums]=useState([]);
  const [selected,setSelected]=useState(null),[visibleCount,setVisibleCount]=useState(36),[zoom,setZoom]=useState(1),[copied,setCopied]=useState(false);
  const dialogRef=useRef(null),triggerRef=useRef(null),touchStart=useRef(null),lastTap=useRef(0);
+ useEffect(()=>{let alive=true;supabase.from('jyc_media_albums').select('id,name,slug,cover_url').eq('is_published',true).order('created_at',{ascending:false}).then(({data:rows})=>{if(alive)setAlbums(rows||[])});return()=>{alive=false}},[]);
+ const albumMatches=(g)=>{if(album==='All')return true;const key=String(g.albumId||g.album_id||'');return key===String(album)||String(g.album||g.albumSlug||'')===String(album)};
  const items=useMemo(()=>{
    const incoming=Array.isArray(data?.gallery)?data.gallery:[];
    const strict=[...incoming,...JYC_SOURCE_ARCHIVE_PHOTO_ITEMS].filter(g=>g?.url&&(!g.mediaKind||g.mediaKind==='photo')).filter(g=>g.mediaKind!=='identity'&&g.mediaKind!=='utility').map(g=>({...g,mediaKind:'photo'}));
@@ -78,8 +83,8 @@ export function JYC57Gallery({data}){
  const years=useMemo(()=>['All',...new Set(items.map(g=>String(g.year||g.date||'').slice(0,4)).filter(Boolean))].sort((a,b)=>a==='All'?-1:b==='All'?1:Number(b)-Number(a)),[items]);
  const filtered=useMemo(()=>items.filter(g=>{
    const hay=(g.caption||'')+' '+(g.alt||'')+' '+(g.association||'')+' '+(g.collection||'')+' '+(g.year||'');
-   return (!query||hay.toLowerCase().includes(query.toLowerCase()))&&(association==='All'||String(g.association||'')===association)&&(year==='All'||String(g.year||g.date||'').startsWith(year));
- }),[items,query,association,year]);
+   return (!query||hay.toLowerCase().includes(query.toLowerCase()))&&(association==='All'||String(g.association||'')===association)&&(year==='All'||String(g.year||g.date||'').startsWith(year))&&albumMatches(g);
+ }),[items,query,association,year,album]);
  const featured=useMemo(()=>rankJycPhotoItems(filtered,{limit:6}),[filtered]);
  const featuredKeys=useMemo(()=>new Set(featured.map(g=>String(g.url))),[featured]);
  const archiveItems=useMemo(()=>filtered.filter(g=>!featuredKeys.has(String(g.url))),[filtered,featuredKeys]);
@@ -87,12 +92,14 @@ export function JYC57Gallery({data}){
  const selectedIndex=selected===null?-1:filtered.findIndex(g=>String(g.url)===String(selected?.url));
  const active=selectedIndex>=0?filtered[selectedIndex]:null;
  const setFilter=(key,value)=>{
-   const next={q:query,club:association,year};next[key]=value;
+   if(key==='album'){setAlbum(value);setSelected(null);setVisibleCount(36);if(value==='All')nav('/gallery');else nav('/gallery/'+encodeURIComponent(value));return}
+   const next={q:query,club:association,year,album:album==='All'?'':album};next[key]=value;
    syncFilters(nav,loc,next);
    if(key==='q')setQuery(value);if(key==='club')setAssociation(value);if(key==='year')setYear(value);
    setSelected(null);setVisibleCount(36);
  };
- useEffect(()=>{setQuery(params.get('q')||'');setAssociation(params.get('club')||'All');setYear(params.get('year')||'All')},[params]);
+ useEffect(()=>{setQuery(params.get('q')||'');setAssociation(params.get('club')||'All');setYear(params.get('year')||'All');if(!pathAlbum)setAlbum(params.get('album')||'All')},[params,pathAlbum]);
+ useEffect(()=>{const key=params.get('photo');if(!key||!filtered.length)return;const match=filtered.find(g=>String(g.id)===String(key)||String(g.url)===decodeURIComponent(key));if(match)setSelected(match)},[params,filtered]);
  useEffect(()=>{
    if(!active)return;
    triggerRef.current=document.activeElement;setZoom(1);setCopied(false);
@@ -120,7 +127,7 @@ export function JYC57Gallery({data}){
  return <section className="section page unified-public-page jyc57-page jyc57-gallery-page">
   <header className="jyc57-archive-head"><div><span className="eyebrow">JYC · VISUAL ARCHIVE</span><h1>Keep the moments.</h1><p>A photography-first institutional record built from published JYC media. Design assets and identity material stay preserved without being misrepresented as photography.</p></div><label className="jyc57-search"><span>⌕</span><input value={query} onChange={e=>setFilter('q',e.target.value)} placeholder="Search photographs, clubs, events…" aria-label="Search photographs"/></label></header>
   <div className="jyc57-gallery-meta"><span><b>{filtered.length}</b> photographs</span><span>{associations.length-1} collections</span><span>{years.length-1} years</span><span>Swipe, zoom & keyboard ready</span></div>
-  <div className="jyc57-filterbar" aria-label="Archive filters"><div className="jyc57-filter-group"><span>Collection</span><div>{associations.slice(0,18).map(x=><button type="button" key={x} className={association===x?'active':''} onClick={()=>setFilter('club',x)}>{x}</button>)}</div></div><div className="jyc57-filter-group"><span>Year</span><div>{years.map(x=><button type="button" key={x} className={year===x?'active':''} onClick={()=>setFilter('year',x)}>{x}</button>)}</div></div></div>
+  <div className="jyc57-filterbar" aria-label="Archive filters"><div className="jyc57-filter-group"><span>Album</span><div><button type="button" className={album==='All'?'active':''} onClick={()=>setFilter('album','All')}>All albums</button>{albums.slice(0,12).map(a=><button type="button" key={a.id} className={album===a.slug||album===a.id?'active':''} onClick={()=>setFilter('album',a.slug)}>{a.name}</button>)}</div></div><div className="jyc57-filter-group"><span>Collection</span><div>{associations.slice(0,18).map(x=><button type="button" key={x} className={association===x?'active':''} onClick={()=>setFilter('club',x)}>{x}</button>)}</div></div><div className="jyc57-filter-group"><span>Year</span><div>{years.map(x=><button type="button" key={x} className={year===x?'active':''} onClick={()=>setFilter('year',x)}>{x}</button>)}</div></div></div>
   {featured.length>0&&<section className="jyc57-featured" aria-labelledby="jyc57-featured-title"><div className="jyc57-section-head"><div><span className="eyebrow">EDITORIAL SELECTION</span><h2 id="jyc57-featured-title">A few frames worth stopping for.</h2></div><span>{Math.min(featured.length,6)} featured from the current result</span></div><div className="jyc57-featured-grid">{featured.map((g,i)=><button type="button" key={g.id||g.url} className={'jyc57-feature-card feature-'+i} onClick={()=>setSelected(g)} aria-label={'Open '+(g.caption||'JYC photograph')}><img src={g.url} alt={g.alt||g.caption||'JYC archive photograph'} loading={i<2?'eager':'lazy'} decoding="async" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 42vw"/><span><small>{g.association||'JYC ARCHIVE'}{g.year?' · '+g.year:''}</small><strong>{g.caption||'JYC moment'}</strong></span></button>)}</div></section>}
   {filtered.length?<><div className="jyc57-masonry" aria-label="JYC photograph collection">{visible.map((g,i)=><button type="button" key={g.id||g.url||i} className={'jyc57-photo photo-'+i%6} onClick={()=>setSelected(g)} aria-label={'Open '+(g.caption||'JYC photograph')}><img src={g.url} alt={g.alt||g.caption||'JYC archive photograph'} loading={i<6?'eager':'lazy'} decoding="async" sizes="(max-width: 700px) 50vw, (max-width: 1100px) 33vw, 25vw"/><span><small>{g.association||g.collection||'JYC'}</small><strong>{g.caption||'JYC moment'}</strong></span></button>)}</div>{archiveItems.length>visibleCount&&<div className="jyc57-load-more"><span>Showing {visible.length} archive frames · {featured.length} featured above</span><button type="button" className="btn secondary" onClick={()=>setVisibleCount(n=>Math.min(n+36,archiveItems.length))}>Load 36 more</button></div>}</>:<Empty eyebrow="VISUAL ARCHIVE" title="The archive is waiting." text="No published photography matches this search yet."/>}
   {active&&<div ref={dialogRef} className="jyc57-lightbox" role="dialog" aria-modal="true" aria-label={active.caption||'JYC photograph'} onClick={close} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}><div className="jyc57-lightbox-inner" onClick={e=>e.stopPropagation()}><button className="jyc57-close" onClick={close} aria-label="Close photograph">×</button><button className="jyc57-nav prev" type="button" onClick={()=>move(-1)} aria-label="Previous photograph">‹</button><div className="jyc57-lightbox-media"><img src={active.url} alt={active.alt||active.caption||'JYC photograph'} style={{transform:'scale('+zoom+')'}} draggable="false"/></div><button className="jyc57-nav next" type="button" onClick={()=>move(1)} aria-label="Next photograph">›</button><div className="jyc57-lightbox-copy"><span className="eyebrow">{active.association||'JYC'}</span><h2>{active.caption||'JYC moment'}</h2><p>{active.story||active.description||active.alt||'Published JYC photography.'}</p><small>{active.sourceLabel||active.source||'JYC public archive'}{active.credit?' · '+active.credit:''}</small><span className="jyc57-counter">{selectedIndex+1} / {filtered.length}</span><div className="jyc57-lightbox-actions"><button type="button" onClick={()=>setZoom(z=>z>1?1:2)}>{zoom>1?'Reset zoom':'Zoom'}</button><button type="button" onClick={share}>{copied?'Link copied':'Share photograph'}</button><button type="button" onClick={download}>Open / download</button>{active.eventId&&<button type="button" onClick={()=>nav('/events/'+encodeURIComponent(active.eventId))}>Open event ↗</button>}{active.association&&<button type="button" onClick={()=>nav('/clubs/'+encodeURIComponent(active.association))}>Open community ↗</button>}</div></div></div></div>}
