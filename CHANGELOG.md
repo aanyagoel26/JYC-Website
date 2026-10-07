@@ -1,4 +1,4 @@
-## V57.0.1 — Release verification hardening
+## V57.0.0 — Release verification hardening
 
 - Added a production browser-QA GitHub Actions gate using the built Vite artifact and Playwright/Chromium.
 - Expanded responsive browser checks across 320–1920px target widths.
