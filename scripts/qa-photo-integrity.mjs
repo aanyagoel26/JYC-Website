@@ -3,6 +3,13 @@ import {JYC_SOURCE_MEDIA_STATS,mergeSourceGallery,sourceEventMedia,buildJycMedia
 
 const assert=(name,ok,detail='')=>{console.log((ok?'PASS: ':'FAIL: ')+name+(detail?' — '+detail:''));if(!ok)process.exitCode=1};
 const mediaSource=fs.readFileSync('src/jyc-source-media.js','utf8');
+const forbiddenArchiveIds=[
+  'p1-image240','p1-image336','p1-image339','p2-image342',
+  'p4-image828','p4-image830','p4-image841','p4-image907','p4-image932',
+  'p2-image520','p2-image530','p2-image543','p2-image550','p2-image591','p2-image608',
+  'p4-image749','p4-image750','p4-image753','p4-image754','p4-image755','p4-image756','p4-image758','p4-image760','p4-image770','p4-image774','p4-image786','p4-image790'
+];
+
 assert('non-photographic club override cleanup',mediaSource.includes("CypherX:[]")&&mediaSource.includes("Zencoders:[]")&&mediaSource.includes("NeuralNexus:[]")&&mediaSource.includes("Arcadia:[]")&&mediaSource.includes("Dronotics:[]")&&mediaSource.includes("Eloquence:[]"));
 assert('visual archive exclusions include Aakriti and Panache',mediaSource.includes("'festivals/aakriti':new Set")&&mediaSource.includes("'clubs/panache':new Set"));
 assert('event gallery placements include Dron-O-War and Converge',mediaSource.includes("'Dron-O-War'")&&mediaSource.includes("'Converge'"));
@@ -20,12 +27,6 @@ const normalizedEvents=['Converge 2026','JAI 2026 · Jaypee Agentic AI Hackathon
 const normalizedEventMappings=normalizedEvents.map(name=>[name,sourceEventMedia(name).collection]);
 const eventUrls=new Set(event.items.map(x=>x.url));
 const inductionUrls=new Set(induction.items.map(x=>x.url));
-const forbiddenArchiveIds=[
-  'p1-image240','p1-image336','p1-image339','p2-image342',
-  'p4-image828','p4-image830','p4-image841','p4-image907','p4-image932',
-  'p2-image520','p2-image530','p2-image543','p2-image550','p2-image591','p2-image608',
-  'p4-image749','p4-image750','p4-image753','p4-image754','p4-image755','p4-image756','p4-image758','p4-image760','p4-image770','p4-image774','p4-image786','p4-image790'
-];
 const archivePhotoUrls=new Set(JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.map(x=>x.url));
 const eventPhotoItems=event.photoItems||[];
 
