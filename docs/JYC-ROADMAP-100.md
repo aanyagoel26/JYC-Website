@@ -34,6 +34,8 @@ This is the execution ledger for taking the JIIT Youth Club 128 website from the
 - [ ] **MANUAL:** enable Private vulnerability reporting
 - [ ] **MANUAL:** enable Secret scanning / Push protection where GitHub plan/settings expose it
 - [ ] **MANUAL:** inspect the 17 existing CodeQL findings individually; fix real findings, dismiss only documented false positives/test-only findings
+- [ ] Review remaining 48 Supabase multiple-permissive-policy warnings; consolidate only where predicates are equivalent without changing role access
+- [ ] Review 61 unused-index INFO findings after production traffic exists; do not remove indexes solely because the project is currently low-traffic
 - [ ] **MANUAL:** remove/disable stale duplicate CodeQL configurations if GitHub reports multiple active origins
 - [ ] **MANUAL:** add merge protection requiring the security/quality checks once the checks have a stable green run
 
@@ -54,7 +56,8 @@ This is the execution ledger for taking the JIIT Youth Club 128 website from the
 - [x] JIIT 128 public filtering
 - [x] Browser service-role exclusion checks
 - [x] RLS/security contracts in repository QA
-- [ ] Run the live Supabase security advisor and remediate every high/critical finding
+- [x] Ran the live Supabase security advisor on 2026-10-07; no ERROR/CRITICAL lints were reported
+- [x] Removed 7 exact duplicate RLS policies from production; Supabase performance warning count dropped from 56 to 48
 - [ ] Verify every exposed table has intentional RLS and no accidental public write policy
 - [ ] Verify storage policies and upload MIME/size limits in production
 - [ ] Verify admin, JYC admin and club-admin authorization boundaries with real accounts
