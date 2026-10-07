@@ -42,4 +42,4 @@ add('public visual system has 320px-safe sizing',/max-width:320px/.test(read('sr
 let failed=0;
 for(const [name,ok] of checks){console.log((ok?'PASS':'FAIL')+' · '+name);if(!ok)failed++}
 if(failed)process.exit(1);
-console.log('JYC V57.1 production-finish contract PASS ('+checks.length+' checks)');
+console.log('JYC V58.0.4 production-finish contract PASS ('+checks.length+' checks)');
