@@ -443,6 +443,11 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
  const clean=p.replace(/\/$/,'')||'/';
  if(clean==='/admin'||clean.startsWith('/admin/'))return <Navigate to="/" replace/>;
  if(clean==='/leadership')return <Navigate to="/team" replace/>;
+ if(clean==='/event-calendar')return <Navigate to="/calendar" replace/>;
+ if(clean==='/moments')return <Navigate to="/gallery" replace/>;
+ if(clean==='/planner'||clean==='/agenda')return <Navigate to="/events" replace/>;
+ if(clean==='/discover')return <Navigate to="/clubs" replace/>;
+ if(clean==='/guide'||clean==='/resources')return <Navigate to="/about" replace/>;
  if(clean==='/my-jyc'||clean==='/login'||clean==='/notifications')return <Navigate to="/" replace/>;
  if(clean==='/planner'||clean==='/agenda')return <Navigate to="/events" replace/>;
  if(clean==='/settings'||clean==='/download')return <Navigate to="/about" replace/>;
