@@ -50,7 +50,8 @@ const archivePhotoKind=item=>{
   const stem=String(item.sourcePath||item.url||'').split('/').pop().replace(/\.[^.]+$/,'');
   if(/^archive\/presentation-assets|^design-assets/.test(cat))return 'visual';
   if(/^p5-showcase-/i.test(stem))return ARCHIVE_SHOWCASE_PHOTOS.has(cat+'/'+stem)?'photo':'visual';
-  if(/(?:logo|banner|qr)/i.test(stem))return 'visual';
+  if(/(?:logo|banner)/i.test(stem))return 'identity';
+  if(/qr/i.test(stem))return 'utility';
   if(ARCHIVE_PHOTO_EXCLUSIONS[cat]?.has(stem))return 'visual';
   return cat.startsWith('clubs/')||cat==='festivals/aakriti'||cat==='gallery/campus-events'||cat==='sports'?'photo':(item.mediaKind||'visual');
 };
@@ -108,11 +109,25 @@ export function sourceHubMedia(name){
 export const JYC_SOURCE_ARCHIVE_GALLERY=ARCHIVE_GALLERY;
 export const JYC_SOURCE_ARCHIVE_CATALOG_STATS=JYC_SOURCE_ARCHIVE_STATS;
 
+// Brand assets are deliberately kept outside the photography pool, but they are still valuable
+// source material: club logos/banners can fill identity slots when a maintained club record
+// has no verified logo/banner of its own.
+export const JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS=ARCHIVE_GALLERY
+  .filter(item=>item.mediaKind==='identity')
+  .map(item=>({
+    id:item.id,url:item.url,association:item.association||'JYC Archive',category:item.category,
+    sourcePath:item.sourcePath||'',mediaKind:'identity',sourceType:'source-archive',
+    sourceLabel:'Five-volume JYC source archive',alt:item.association?item.association+' identity asset':'JYC source identity asset',
+    caption:item.association?item.association+' identity asset · supplied archive':'JYC supplied identity asset'
+  }));
+const IDENTITY_BY_ASSOCIATION=new Map(JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS.map(item=>[normalise(item.association),item]));
+
 export function enrichSourceClub(club){
   const media=sourceHubMedia(club?.name);
+  const identity=IDENTITY_BY_ASSOCIATION.get(normalise(media.name));
   const photos=[...new Set([...(Array.isArray(club?.hubPhotos)?club.hubPhotos:[]),...media.photos])];
   const profile=JYC_HUB_CONTENT[media.name];
-  return {...club,description:club?.description||profile?.summary||media.summary,about:club?.about||profile?.detail||media.detail,hubPhotos:photos,banner:club?.banner||photos[0]||'',sourceMediaCount:photos.length,sourceMediaLabel:photos.length?'JYC source archive · '+photos.length+' visual'+(photos.length===1?'':'s'):'Identity-led profile · source photography not yet extracted'};
+  return {...club,description:club?.description||profile?.summary||media.summary,about:club?.about||profile?.detail||media.detail,hubPhotos:photos,logo:club?.logo||identity?.url||'',banner:club?.banner||photos[0]||identity?.url||'',identityAsset:identity||null,sourceMediaCount:photos.length,sourceMediaLabel:photos.length?'JYC source archive · '+photos.length+' visual'+(photos.length===1?'':'s'):(identity?'JYC source archive · verified identity asset':'Identity-led profile · source photography not yet extracted')};
 }
 
 export function enrichSourceClubs(clubs){return (Array.isArray(clubs)?clubs:[]).map(enrichSourceClub);}
