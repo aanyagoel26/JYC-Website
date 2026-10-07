@@ -104,7 +104,8 @@ test('JYC calendar contains only event content', async ({ page }) => {
 test('reduced-motion mode disables homepage motion', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto(base, { waitUntil: 'domcontentloaded' });
-  const motion = await page.locator('.jyc-editorial-home').evaluate(root => [...root.querySelectorAll('*')].map(node => getComputedStyle(node).animationName).filter(name => name && name !== 'none'));
+  await page.locator('.jyc-home').waitFor({ state: 'visible', timeout: 15000 });
+  const motion = await page.locator('.jyc-home').evaluate(root => [...root.querySelectorAll('*')].map(node => getComputedStyle(node).animationName).filter(name => name && name !== 'none'));
   expect(motion).toEqual([]);
 });
 
@@ -139,7 +140,7 @@ test('brand text contrast stays readable in both themes', async ({ page }) => {
       }
       return parse(getComputedStyle(document.documentElement).backgroundColor)||[250,247,239,1];
     };
-    const selectors=['.jyc-v1-hero h1','.jyc-v1-hero-copy>p','.jyc-v1-eyebrow','.nav a'];
+    const selectors=['.jh-hero h1','.jh-lead','.jh-overline','.nav a'];
     return selectors.map(selector=>{
       const el=document.querySelector(selector);
       if(!el)return {selector,ratio:null};
@@ -298,6 +299,7 @@ test('production shell exposes required security headers when run against a depl
 
 test('global search opens, accepts keyboard input, and closes cleanly', async ({ page }) => {
   await page.goto(base, { waitUntil: 'domcontentloaded' });
+  await page.locator('.jyc-home').waitFor({ state: 'visible', timeout: 15000 });
   await page.keyboard.press(process.platform === 'darwin' ? 'Meta+K' : 'Control+K');
   const dialog = page.locator('[role="dialog"]').filter({ hasText: /JYC search/i }).first();
   await expect(dialog).toBeVisible();
@@ -356,13 +358,13 @@ test('public images load, stay inside the viewport, and use centered focal posit
 });
 test('V1 homepage sections become visible and do not remain transparent', async ({ page }) => {
   await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
-  await page.locator('.jyc-editorial-home').waitFor({ state: 'visible', timeout: 10000 });
+  await page.locator('.jyc-home').waitFor({ state: 'visible', timeout: 15000 });
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
   await page.waitForTimeout(500);
-  const hidden = await page.locator('.jyc-editorial-home .editorial-reveal').evaluateAll(nodes =>
+  const hidden = await page.locator('.jyc-home section').evaluateAll(nodes =>
     nodes.filter(node => {
       const r=node.getBoundingClientRect(), s=getComputedStyle(node);
-      return r.width>0 && r.height>0 && (s.opacity==='0' || s.visibility==='hidden');
+      return r.width>0 && r.height>0 && (s.opacity==='0' || s.visibility==='hidden' || s.display==='none');
     }).length
   );
   expect(hidden).toBe(0);
@@ -370,13 +372,14 @@ test('V1 homepage sections become visible and do not remain transparent', async 
 
 test('V1 homepage keeps the JYC palette and readable dark mode', async ({ page }) => {
   await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
-  const light = await page.locator('.jyc-editorial-home').evaluate(el => {
+  await page.locator('.jyc-home').waitFor({ state: 'visible', timeout: 15000 });
+  const light = await page.locator('.jyc-home').evaluate(el => {
     const s = getComputedStyle(el);
     return { bg:s.backgroundColor, color:s.color };
   });
   await page.locator('.theme-toggle').click();
   await page.waitForTimeout(120);
-  const dark = await page.locator('.jyc-editorial-home').evaluate(el => {
+  const dark = await page.locator('.jyc-home').evaluate(el => {
     const s = getComputedStyle(el);
     return { bg:s.backgroundColor, color:s.color };
   });
