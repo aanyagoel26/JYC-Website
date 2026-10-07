@@ -1,6 +1,6 @@
 # JIIT Youth Club 128 — Official Website
 
-> **Current release: V58.0.0 — production trust, CMS workflow and content graph**
+> **Current release: V58.0.1 — accessibility, event modal and archive polish**
 
 [![Quality](https://github.com/kaustubhdua/JYC-Website/actions/workflows/ci.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/ci.yml) [![CodeQL](https://github.com/kaustubhdua/JYC-Website/actions/workflows/codeql.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/codeql.yml) [![JYC Quality](https://github.com/kaustubhdua/JYC-Website/actions/workflows/jyc-quality.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/jyc-quality.yml)
 
@@ -293,9 +293,9 @@ The remaining production gates are operational: configure required third-party E
 
 ## Current release status
 
-**V58.0.0 is the current code release.** The codebase is intentionally in final public polish and production-QA mode rather than feature expansion.
+**V58.0.1 is the current code release.** The codebase is intentionally in final public polish and production-QA mode rather than feature expansion. V58.0.1 is the active release boundary.
 
-The release boundary is aligned across `package.json`, `package-lock.json`, the service-worker cache, final product QA, final hygiene QA, `public/llms.txt`, and the latest public-surface hardening commits.
+The release boundary is aligned across `package.json`, `package-lock.json`, the service-worker cache, final product QA, final hygiene QA, `public/llms.txt`, and the latest public-surface hardening commits, including the V58.0.1 accessibility/modal/archive hardening.
 
 The highest-value remaining production work is operational rather than architectural:
 
