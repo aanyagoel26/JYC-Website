@@ -441,7 +441,7 @@ function JYCCalendarPage({data}){
  const downloadMonthICS=()=>{
   if(!monthEvents.length)return;
   const esc=v=>String(v||'').replace(/\\/g,'\\\\').replace(/[;,]/g,m=>'\\'+m).replace(/\\r?\\n/g,'\\n');
-  const iso=(date,time='09:00')=>{const d=new Date(date+'T'+time+':00');return Number.isNaN(d.getTime())?'':d.toISOString().replace(/[-:]/g,'').replace(/\\.\\d{3}Z$/,'Z')};
+  const iso=(date,time='09:00')=>{const match=String(time||'09:00').match(/^(\\d{1,2}):(\\d{2})/);if(!/^\\d{4}-\\d{2}-\\d{2}$/.test(String(date))||!match)return '';return String(date).replace(/-/g,'')+'T'+String(Number(match[1])).padStart(2,'0')+match[2]+'00'};
   const rows=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//JYC//EN','CALSCALE:GREGORIAN','X-WR-CALNAME:JYC Events · '+year+'-'+String(m+1).padStart(2,'0')];
   monthEvents.forEach(e=>{const start=iso(e.date,e.start||'09:00'),end=iso(e.dateEnd||e.date,e.end||'23:59');if(!start||!end)return;rows.push('BEGIN:VEVENT','UID:'+esc(e.id)+'@jyc128','DTSTART:'+start,'DTEND:'+end,'SUMMARY:'+esc(e.title),'LOCATION:'+esc(e.venue),'DESCRIPTION:'+esc(e.description),'END:VEVENT')});
   rows.push('END:VCALENDAR');
@@ -450,7 +450,7 @@ function JYCCalendarPage({data}){
  return <section className="section page unified-public-page jyc-calendar-page">
   <Breadcrumbs items={[{label:'Event Calendar'}]}/><EcosystemContextRail/>
   <div className="compact-page-head reveal"><div><span className="eyebrow">JYC EVENT CALENDAR</span><h1>Find the next JYC experience.</h1><p>A calendar for JYC events only. Academic schedules and campus utilities do not live here.</p></div><div className="page-stat-row"><span><b>{events.filter(e=>e.publicStatus!=='planned').length}</b> published events</span><span><b>{events.filter(e=>e.publicStatus==='planned').length}</b> planned</span><span><b>{monthEvents.length}</b> this month</span></div></div>
-  <div className="calendar-controls reveal"><button type="button" className="btn secondary" onClick={()=>shift(-1)}>← Previous</button><strong>{label}</strong><button type="button" className="btn secondary" onClick={()=>shift(1)}>Next →</button><button type="button" className="btn" onClick={()=>setMonth(new Date())}>Today</button><button type="button" className="btn secondary" onClick={downloadMonthICS} disabled={!monthEvents.length}>Add month to device</button></div>
+  <div className="calendar-controls reveal"><button type="button" className="btn secondary" aria-label="Previous month" onClick={()=>shift(-1)}>← Previous</button><strong aria-live="polite">{label}</strong><button type="button" className="btn secondary" aria-label="Next month" onClick={()=>shift(1)}>Next →</button><button type="button" className="btn" onClick={()=>setMonth(new Date())}>Today</button><button type="button" className="btn secondary" aria-label={monthEvents.length?'Add this month of JYC events to your device calendar':'No JYC events in this month'} onClick={downloadMonthICS} disabled={!monthEvents.length}>Add month to device</button></div>
   <div className="calendar"><Calendar events={monthEvents}/></div>
   <div className="calendar-footer-note reveal"><span className="eyebrow">JYC WEBSITE</span><p>Published records are the official event layer. Planned entries are source-backed programme dates and can change before confirmation.</p><a className="text-link" href="/events">Browse all events →</a></div>
  </section>
