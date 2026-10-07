@@ -131,7 +131,15 @@ export const JYC_SOCIALS = {
     verifiedBy: 'all hubs 1.pdf',
     verifiedOn: '2026-10-04'
   },
-  Cinekala: {},
+  Cinekala: {
+    linkedin: 'https://in.linkedin.com/company/cinekala',
+    label: 'Cinekala · The Filmmakers of JIIT',
+    campus: 'sector-128',
+    sourcePriority: 'official-hub',
+    verifiedBy: 'https://in.linkedin.com/company/cinekala',
+    verifiedOn: '2026-10-08',
+    sourceNote: 'Current LinkedIn profile identifies Cinekala at JIIT Sector-128, Noida and links its official YouTube presence.'
+  },
   Abhivyakti: {
     label: 'Abhivyakti · JIIT-128', campus: 'sector-128', sourcePriority: 'source-material'
   },
