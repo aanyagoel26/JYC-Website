@@ -1,10 +1,10 @@
-import React,{useEffect,useMemo,useState} from 'react';
+import React,{useEffect,useMemo,useRef,useState} from 'react';
 import {useLocation,useNavigate} from 'react-router-dom';
 
 const safeDate=(e)=>{const t=Date.parse(`${e?.date||''}T${e?.start||'00:00'}`);return Number.isFinite(t)?t:Infinity};
 const stateOf=(e)=>{const start=safeDate(e),end=Date.parse(`${e?.dateEnd||e?.date||''}T${e?.end||'23:59'}`),now=Date.now();if(!Number.isFinite(start)||!e?.date)return 'draft';if(now<start)return 'upcoming';if(Number.isFinite(end)&&now<=end)return 'live';return 'past'};
 const publishedEvents=(data)=>Array.isArray(data?.events)?data.events.filter(e=>e?.published&&e?.archived!==true):[];
-const publishedClubs=(data)=>Array.isArray(data?.clubs)?data.clubs.filter(c=>c?.published&&c?.status!=='archived'):[];
+const publishedClubs=(data)=>Array.isArray(data?.clubs)?data.clubs.filter(c=>c?.published&&c?.status!=='archived'):[];\nconst syncFilters=(nav,loc,values)=>{const p=new URLSearchParams(loc.search);Object.entries(values).forEach(([k,v])=>{const value=String(v??'').trim();if(!value||value==='All'||(k==='status'&&value==='upcoming'))p.delete(k);else p.set(k,value)});const search=p.toString();nav({pathname:loc.pathname,search:search?'?'+search:''},{replace:true});};
 
 function MetaPill({children,tone=''}){return <span className={`jyc57-pill ${tone}`}>{children}</span>}
 function Empty({eyebrow,title,text}){return <div className="jyc57-empty"><span className="eyebrow">{eyebrow}</span><h2>{title}</h2><p>{text}</p></div>}
@@ -31,10 +31,10 @@ export function JYC57Events({data}){
    {featured&&<button className="jyc57-feature" onClick={()=>nav('/events/'+(featured.id||featured.title))}>{featured.poster?<img src={featured.poster} alt="" loading="eager"/>:<div className="jyc57-feature-fallback">JYC</div>}<div><MetaPill tone={stateOf(featured)==='live'?'live':''}>{stateOf(featured)==='live'?'LIVE NOW':'UP NEXT'}</MetaPill><strong>{featured.title}</strong><small>{featured.club||'JYC'} · {featured.venue||'JIIT Sector 128'}</small><span>Open event ↗</span></div></button>}
   </header>
   <div className="jyc57-event-toolbar" aria-label="Event filters">
-   <label className="jyc57-search"><span aria-hidden="true">⌕</span><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search events, clubs or topics" aria-label="Search events"/></label>
-   <div className="jyc57-segment">{[['upcoming','Upcoming'],['live','Live'],['past','Past'],['all','All']].map(([id,label])=><button key={id} className={scope===id?'active':''} onClick={()=>setScope(id)}>{label}</button>)}</div>
+   <label className="jyc57-search"><span aria-hidden="true">⌕</span><input value={query} onChange={e=>{const v=e.target.value;setQuery(v);syncFilters(nav,loc,{q:v,category,status:scope})}} placeholder="Search events, clubs or topics" aria-label="Search events"/></label>
+   <div className="jyc57-segment">{[['upcoming','Upcoming'],['live','Live'],['past','Past'],['all','All']].map(([id,label])=><button key={id} className={scope===id?'active':''} onClick={()=>{setScope(id);syncFilters(nav,loc,{q:query,category,status:id})}}>{label}</button>)}</div>
   </div>
-  <div className="jyc57-category-row" aria-label="Event categories">{categories.map(c=><button key={c} className={category===c?'active':''} onClick={()=>setCategory(c)}>{c}</button>)}</div>
+  <div className="jyc57-category-row" aria-label="Event categories">{categories.map(c=><button key={c} className={category===c?'active':''} onClick={()=>{setCategory(c);syncFilters(nav,loc,{q:query,category:c,status:scope})}}>{c}</button>)}</div>
   <div className="jyc57-event-layout">
    <div className="jyc57-event-list">
     <div className="jyc57-list-head"><span>{filtered.length} published {filtered.length===1?'event':'events'}</span><small>Sector 128 only</small></div>
@@ -62,15 +62,15 @@ export function JYC57Clubs({data}){
 }
 
 export function JYC57Gallery({data}){
- const [query,setQuery]=useState(''),[selected,setSelected]=useState(null);
+ const nav=useNavigate(),loc=useLocation();const params=useMemo(()=>new URLSearchParams(loc.search),[loc.search]);const [query,setQuery]=useState(params.get('q')||''),[selected,setSelected]=useState(null);const dialogRef=useRef(null);const triggerRef=useRef(null);
  const items=useMemo(()=>Array.isArray(data?.gallery)?data.gallery.filter(g=>g?.url||g?.src):[],[data]);
  const filtered=items.filter(g=>{const hay=`${g.caption||''} ${g.association||''} ${g.collection||''} ${g.year||''}`.toLowerCase();return !query||hay.includes(query.toLowerCase())});
- useEffect(()=>{if(selected!==null){const onKey=e=>{if(e.key==='Escape')setSelected(null);};window.addEventListener('keydown',onKey);return()=>window.removeEventListener('keydown',onKey)}},[selected]);
+ useEffect(()=>{setQuery(params.get('q')||'')},[params]);\n useEffect(()=>{if(selected===null)return;triggerRef.current=document.activeElement;const onKey=e=>{if(e.key==='Escape'){setSelected(null);return}if(e.key!=='Tab')return;const root=dialogRef.current;if(!root)return;const nodes=[...root.querySelectorAll('button,[href],input,[tabindex]:not([tabindex="-1"])')].filter(x=>!x.disabled);if(!nodes.length)return;const first=nodes[0],last=nodes[nodes.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}};window.addEventListener('keydown',onKey);requestAnimationFrame(()=>dialogRef.current?.querySelector('button')?.focus());return()=>{window.removeEventListener('keydown',onKey);triggerRef.current?.focus?.()}},[selected]);
  return <section className="section page unified-public-page jyc57-page">
-  <header className="jyc57-archive-head"><div><span className="eyebrow">JYC · 03 / ARCHIVE</span><h1>Keep the moments.</h1><p>A photography-first archive built from published JYC media. Open an image for the full story context when it is available.</p></div><label className="jyc57-search"><span>⌕</span><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search the archive" aria-label="Search gallery"/></label></header>
+  <header className="jyc57-archive-head"><div><span className="eyebrow">JYC · 03 / ARCHIVE</span><h1>Keep the moments.</h1><p>A photography-first archive built from published JYC media. Open an image for the full story context when it is available.</p></div><label className="jyc57-search"><span>⌕</span><input value={query} onChange={e=>{const v=e.target.value;setQuery(v);syncFilters(nav,loc,{q:v})}} placeholder="Search the archive" aria-label="Search gallery"/></label></header>
   <div className="jyc57-gallery-meta"><span><b>{filtered.length}</b> published frames</span><span>Photography first</span><span>Keyboard accessible</span></div>
   {filtered.length?<div className="jyc57-masonry">{filtered.map((g,i)=><button key={g.id||i} className={`jyc57-photo photo-${i%6}`} onClick={()=>setSelected(i)}><img src={g.url||g.src} alt={g.caption||g.association||'JYC archive photograph'} loading={i<6?'eager':'lazy'}/><span><small>{g.association||g.collection||'JYC'}</small><strong>{g.caption||'JYC moment'}</strong></span></button>)}</div>:<Empty eyebrow="VISUAL ARCHIVE" title="The archive is waiting." text="No published photography matches this search yet."/>}
-  {selected!==null&&filtered[selected]&&<div className="jyc57-lightbox" role="dialog" aria-modal="true" aria-label="JYC photograph" onClick={()=>setSelected(null)}><div className="jyc57-lightbox-inner" onClick={e=>e.stopPropagation()}><button className="jyc57-close" onClick={()=>setSelected(null)} aria-label="Close">×</button><img src={filtered[selected].url||filtered[selected].src} alt={filtered[selected].caption||'JYC photograph'}/><div><span className="eyebrow">{filtered[selected].association||'JYC'}</span><h2>{filtered[selected].caption||'JYC moment'}</h2><p>{filtered[selected].story||filtered[selected].description||'Published JYC photography.'}</p></div></div></div>}
+  {selected!==null&&filtered[selected]&&<div ref={dialogRef} className="jyc57-lightbox" role="dialog" aria-modal="true" aria-label="JYC photograph" onClick={()=>setSelected(null)}><div className="jyc57-lightbox-inner" onClick={e=>e.stopPropagation()}><button className="jyc57-close" onClick={()=>setSelected(null)} aria-label="Close">×</button><img src={filtered[selected].url||filtered[selected].src} alt={filtered[selected].caption||'JYC photograph'}/><div><span className="eyebrow">{filtered[selected].association||'JYC'}</span><h2>{filtered[selected].caption||'JYC moment'}</h2><p>{filtered[selected].story||filtered[selected].description||'Published JYC photography.'}</p></div></div></div>}
  </section>
 }
 
