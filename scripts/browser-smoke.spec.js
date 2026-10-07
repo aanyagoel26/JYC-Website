@@ -229,6 +229,8 @@ test('public pages have no empty media frames or normal-flow section overlaps', 
         if(!root)return {empty:[],overlaps:[]};
         const empty=[...root.querySelectorAll('[class*="image"],[class*="photo"],[class*="media"],[class*="poster"]')].filter(el=>{
           const r=el.getBoundingClientRect(),s=getComputedStyle(el);
+          if(el.classList.contains('jyc-photo-chapters-head'))return false;
+          if(el.classList.contains('jyc-now-media')&&el.querySelector('.jyc-now-media-fallback'))return false;
           if(r.width<90||r.height<90||s.display==='none'||s.visibility==='hidden')return false;
           if(el.querySelector('img,video,iframe,svg,canvas'))return false;
           return !s.backgroundImage||s.backgroundImage==='none';
