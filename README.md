@@ -1,6 +1,6 @@
 # JIIT Youth Club 128 — Official Website
 
-> **Current release: V58.0.3 — accessibility, event modal and archive polish**
+> **Current release: V58.0.4 — accessibility, event modal and archive polish**
 
 [![Quality](https://github.com/kaustubhdua/JYC-Website/actions/workflows/ci.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/ci.yml) [![CodeQL](https://github.com/kaustubhdua/JYC-Website/actions/workflows/codeql.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/codeql.yml) [![JYC Quality](https://github.com/kaustubhdua/JYC-Website/actions/workflows/jyc-quality.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/jyc-quality.yml)
 
