@@ -14,9 +14,9 @@ const readme=read('README.md');
 const checks=[];
 const add=(name,ok)=>checks.push([name,Boolean(ok)]);
 
-add('release is v58.0.5',pkg.version==='58.0.5'&&lock.version==='58.0.5'&&lock.packages?.['']?.version==='58.0.5');
-add('service worker cache is rotated',sw.includes('jyc-cache-v58-0-5')&&!sw.includes('jyc-cache-v57-0-0'));
-add('README release is v58.0.5',readme.includes('Current release: V58.0.5')&&readme.includes('V58.0.5 is the current code release'));
+add('release is v58.0.8',pkg.version==='58.0.5'&&lock.version==='58.0.5'&&lock.packages?.['']?.version==='58.0.5');
+add('service worker cache is rotated',sw.includes('jyc-cache-v58-0-8')&&!sw.includes('jyc-cache-v57-0-0'));
+add('README release is v58.0.8',readme.includes('Current release: V58.0.8')&&readme.includes('V58.0.8 is the current code release'));
 add('event detail has registration action',/id="event-register"/.test(main)&&/REGISTER NOW|REGISTRATIONS CLOSED/.test(main));
 add('event detail gates unverified planned registration',/registrationPublished=e\.publicStatus!=='planned'\|\|e\.registrationVerified===true/.test(main)&&/Boolean\(e\.registrationUrl\|\|e\.registrationMode==='native'\)/.test(main));
 add('event detail has share and ICS tools',/ShareButton/.test(main)&&/DownloadICS/.test(main));
@@ -42,4 +42,4 @@ add('public visual system has 320px-safe sizing',/max-width:320px/.test(read('sr
 let failed=0;
 for(const [name,ok] of checks){console.log((ok?'PASS':'FAIL')+' · '+name);if(!ok)failed++}
 if(failed)process.exit(1);
-console.log('JYC V58.0.5 production-finish contract PASS ('+checks.length+' checks)');
+console.log('JYC V58.0.8 production-finish contract PASS ('+checks.length+' checks)');
