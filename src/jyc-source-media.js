@@ -27,6 +27,11 @@ const SOURCE_GALLERY=[...PDF_HUB_GALLERY,...PDF_HUB_EXTRA_GALLERY];
 // These conservative exclusions keep the default photography stream editorial rather than
 // treating every binary as a photograph. All excluded assets remain available in the full archive.
 const ARCHIVE_PHOTO_EXCLUSIONS={
+  'festivals/aakriti':new Set(['p1-image135','p1-image136','p1-image138','p1-image140','p1-image129','p1-image130','p1-image131','p1-image132','p1-image117','p1-image118','p1-image119','p1-image120','p1-image121','p1-image122','p1-image123','p1-image124','p1-image125','p1-image128','p1-image133','p1-image134','p1-image139','p1-image141','p1-image142','p1-image143','p1-image146','p1-image147','p1-image148','p1-image152','p1-image153','p1-image154','p1-image155','p1-image156','p1-image158','p1-image159','p1-image151','p1-image162','p1-image167','p1-image182','p1-image183','p1-image184','p1-image187','p1-image188','p1-image192','p1-image193','p1-image196','p1-image197','p1-image198','p1-image199','p1-image200','p1-image201','p1-image203','p1-image206','p1-image213','p1-image214','p1-image216','p1-image218','p1-image219','p1-image220']),
+  'clubs/panache':new Set(['p1-image240','p1-image336','p1-image339','p2-image342','p1-image228','p1-image230','p1-image231','p1-image232','p1-image233','p1-image274','p1-image226','p1-image227','p1-image229','p1-image221','p1-image222','p1-image224','p1-image234','p1-image235','p1-image236','p1-image237','p1-image238','p1-image239','p1-image242','p1-image244','p1-image245','p1-image246','p1-image247','p1-image248','p1-image249','p1-image250','p1-image251','p1-image252','p1-image253','p1-image254','p1-image255','p1-image256','p1-image257','p1-image258','p1-image259','p1-image268','p1-image269','p1-image271','p1-image276','p1-image277','p1-image278','p1-image281','p1-image282','p1-image283','p1-image285','p1-image286','p1-image288','p1-image290','p1-image294','p1-image295','p1-image296','p1-image297','p1-image299','p1-image300','p1-image304','p1-image305','p1-image308','p1-image309','p1-image310','p1-image311','p1-image312','p1-image315','p1-image317','p1-image320','p1-image322','p1-image325','p1-image327','p1-image331','p1-image334','p2-image336','p2-image339','p2-image340','p2-image341']),
+  'clubs/abhivyakti':new Set(['p4-image796','p4-image820','p4-image828','p4-image830','p4-image841','p4-image867','p4-image869','p4-image871','p4-image875','p4-image898','p4-image907','p4-image913','p4-image914','p4-image917','p4-image921','p4-image926','p4-image927','p4-image928','p4-image930','p4-image931','p4-image932','p3-image685','p3-image686','p3-image687','p3-image688','p3-image689','p3-image690','p3-image691','p3-image692','p3-image693','p3-image694','p3-image695','p3-image696','p3-image697','p3-image698','p3-image699','p3-image700']),
+  'gallery/campus-events':new Set(['p2-image494','p2-image495','p2-image499','p2-image500','p2-image502','p2-image520','p2-image530','p2-image543','p2-image550','p2-image591','p2-image608','p2-image515','p2-image516','p2-image517','p2-image518','p2-image521','p2-image522','p2-image523','p2-image524','p2-image525','p2-image526','p2-image527','p2-image528','p2-image529','p2-image531','p2-image532','p2-image533','p2-image534','p2-image535','p2-image536','p2-image541','p2-image542','p2-image544','p2-image545','p2-image546','p2-image547','p2-image549','p2-image553','p2-image556','p2-image563','p2-image564','p2-image565','p2-image566','p2-image567','p2-image568','p2-image574','p2-image575','p2-image584','p2-image592','p2-image593','p2-image594','p2-image598','p2-image601','p2-image602','p2-image603','p2-image605','p2-image606']),
+  'clubs/cypherx':new Set(['p4-image746','p4-image748','p4-image749','p4-image750','p4-image751','p4-image752','p4-image753','p4-image754','p4-image755','p4-image756','p4-image757','p4-image758','p4-image759','p4-image760','p4-image762','p4-image763','p4-image764','p4-image765','p4-image768','p4-image770','p4-image771','p4-image772','p4-image773','p4-image774','p4-image775','p4-image776','p4-image777','p4-image778','p4-image779','p4-image780','p4-image781','p4-image782','p4-image783','p4-image784','p4-image785','p4-image786','p4-image787','p4-image788','p4-image790','p4-image791','p4-image792','p4-image793','p4-image794']),
   'clubs/cicr':new Set(['p3-image611','p3-image612','p3-image613','p3-image614','p3-image615','p3-image616','p3-image617','p3-image618','p3-image619','p3-image620','p3-image621','p3-image622','p3-image623','p3-image624','p3-image625','p3-image626','p3-image627','p3-image628','p3-image629','p3-image630','p3-image631','p3-image632','p5-logo']),
   'clubs/cine-film':new Set(['p2-image440','p2-image441','p2-image442','p2-image443','p2-image444','p2-image445','p2-image446','p2-image447']),
   'clubs/jodc':new Set(['p3-image634','p3-image635','p3-image636','p3-image637','p3-image638','p3-image639','p3-image640','p3-image642','p3-image643','p3-image645','p3-image650','p3-image651','p3-image652','p3-image656','p3-image661','p3-image662']),
@@ -45,26 +50,31 @@ const archivePhotoKind=item=>{
   const stem=String(item.sourcePath||item.url||'').split('/').pop().replace(/\.[^.]+$/,'');
   if(/^archive\/presentation-assets|^design-assets/.test(cat))return 'visual';
   if(/^p5-showcase-/i.test(stem))return ARCHIVE_SHOWCASE_PHOTOS.has(cat+'/'+stem)?'photo':'visual';
-  if(/(?:logo|banner|qr)/i.test(stem))return 'visual';
+  if(/(?:logo|banner)/i.test(stem))return 'identity';
+  if(/qr/i.test(stem))return 'utility';
   if(ARCHIVE_PHOTO_EXCLUSIONS[cat]?.has(stem))return 'visual';
   return cat.startsWith('clubs/')||cat==='festivals/aakriti'||cat==='gallery/campus-events'||cat==='sports'?'photo':(item.mediaKind||'visual');
 };
 const ARCHIVE_GALLERY=JYC_SOURCE_ARCHIVE_CATALOG.map(item=>({...item,mediaKind:archivePhotoKind(item),sourceType:'source-archive',sourceLabel:'JYC supplied image archive',role:item.association?'club':'archive',caption:item.association?item.association+' · supplied archive image':item.category.replaceAll('/',' · '),alt:item.association?item.association+' · JYC supplied archive image':'JIIT Youth Club 128 supplied archive image'}));
+const ARCHIVE_BY_URL=new Map(JYC_SOURCE_ARCHIVE_CATALOG.map(item=>[String(item.url),item]));
+const isAcceptedArchiveUrl=url=>{const item=ARCHIVE_BY_URL.get(String(url||''));return !item||archivePhotoKind(item)==='photo';};
 
 const QUALITY_OVERRIDES={
-  Aakriti:['/assets/hub-photos-extra/aakriti-01.webp','/assets/hub-photos-extra/aakriti-02.webp','/assets/hub-photos-extra/aakriti-04.webp','/assets/hub-photos-extra/aakriti-05.webp','/assets/hub-photos-extra/aakriti-06.webp'],
-  Aura:['/assets/hub-photos-extra/aura-07.webp','/assets/hub-photos-extra/aura-08.webp','/assets/hub-photos-extra/aura-09.webp','/assets/hub-photos-extra/aura-10.webp','/assets/hub-photos-extra/aura-11.webp','/assets/hub-photos-extra/aura-12.webp','/assets/hub-photos-extra/aura-13.webp'],
-  BDS:['/assets/hub-photos-extra/bds-33.webp','/assets/hub-photos-extra/bds-34.webp','/assets/hub-photos-extra/bds-35.webp','/assets/hub-photos-extra/bds-36.webp'],
-  CypherX:['/assets/hub-photos-extra/cypherx-51.webp','/assets/hub-photos-extra/cypherx-52.webp','/assets/hub-photos-extra/cypherx-53.webp','/assets/hub-photos-extra/cypherx-54.webp','/assets/hub-photos-extra/cypherx-55.webp','/assets/hub-photos-extra/cypherx-56.webp','/assets/hub-photos-extra/cypherx-57.webp','/assets/hub-photos-extra/cypherx-58.webp'],
-  Dronotics:['/assets/hub-photos-extra/dronotics-43.webp','/assets/hub-photos-extra/dronotics-44.webp','/assets/hub-photos-extra/dronotics-45.webp','/assets/hub-photos-extra/dronotics-46.webp','/assets/hub-photos-extra/dronotics-47.webp','/assets/hub-photos-extra/dronotics-49.webp','/assets/hub-photos-extra/dronotics-50.webp'],
-  Eloquence:['/assets/hub-photos-extra/eloquence-25.webp','/assets/hub-photos-extra/eloquence-26.webp','/assets/hub-photos-extra/eloquence-27.webp','/assets/hub-photos-extra/eloquence-28.webp','/assets/hub-photos-extra/eloquence-29.webp','/assets/hub-photos-extra/eloquence-30.webp','/assets/hub-photos-extra/eloquence-31.webp'],
-  Panache:['/assets/hub-photos-extra/panache-14.webp','/assets/hub-photos-extra/panache-15.webp','/assets/hub-photos-extra/panache-16.webp'],
-  Prismatic:['/assets/hub-stories/prismatic.webp','/assets/hub-photos-extra/prismatic-72.webp','/assets/hub-photos-extra/prismatic-73.webp'],
-  RPH:['/assets/hub-photos-extra/rph-37.webp','/assets/hub-photos-extra/rph-40.webp','/assets/hub-photos-extra/rph-38.webp','/assets/hub-photos-extra/rph-39.webp','/assets/hub-photos-extra/rph-41.webp','/assets/hub-photos-extra/rph-42.webp'],
-  VamUnique:['/assets/hub-photos-extra/vamunique-59.webp','/assets/hub-photos-extra/vamunique-60.webp','/assets/hub-photos-extra/vamunique-61.webp','/assets/hub-photos-extra/vamunique-62.webp','/assets/hub-photos-extra/vamunique-63.webp'],
-  Zencoders:['/assets/hub-photos-extra/zencoders-17.webp','/assets/hub-photos-extra/zencoders-18.webp','/assets/hub-photos-extra/zencoders-19.webp','/assets/hub-photos-extra/zencoders-20.webp','/assets/hub-photos-extra/zencoders-21.webp','/assets/hub-photos-extra/zencoders-22.webp','/assets/hub-photos-extra/zencoders-23.webp','/assets/hub-photos-extra/zencoders-24.webp'],
-  Arcadia:['/assets/hub-photos-extra/arcadia-64.webp','/assets/hub-photos-extra/arcadia-65.webp','/assets/hub-photos-extra/arcadia-66.webp'],
-  NeuralNexus:['/assets/hub-photos-extra/neural-nexus-67.webp','/assets/hub-photos-extra/neural-nexus-68.webp','/assets/hub-photos-extra/neural-nexus-69.webp','/assets/hub-photos-extra/neural-nexus-70.webp','/assets/hub-photos-extra/neural-nexus-71.webp'],
+  Aakriti:['/assets/hub-photos-extra/aakriti-04.webp','/assets/source-archive/festivals/aakriti/p1-image126.webp','/assets/source-archive/festivals/aakriti/p1-image127.webp','/assets/source-archive/festivals/aakriti/p1-image137.webp','/assets/source-archive/festivals/aakriti/p1-image149.webp','/assets/source-archive/festivals/aakriti/p1-image150.webp'],
+  Aura:['/assets/hub-photos-extra/aura-08.webp','/assets/hub-photos-extra/aura-09.webp','/assets/hub-photos-extra/aura-10.webp','/assets/hub-photos-extra/aura-11.webp','/assets/hub-photos-extra/aura-12.webp','/assets/hub-photos-extra/aura-13.webp'],
+  BDS:[],
+  Innovation:['/assets/source-archive/clubs/innovation/p5-DSC02902.webp','/assets/source-archive/clubs/innovation/p5-DSC02924.webp','/assets/source-archive/clubs/innovation/p5-DSC03006.webp','/assets/source-archive/clubs/innovation/p5-DSC03268.webp','/assets/source-archive/clubs/innovation/p5-DSC03304.webp','/assets/source-archive/clubs/innovation/p5-DSC03380.webp'],
+  CICR:['/assets/source-archive/clubs/cicr/p3-image609.webp','/assets/source-archive/clubs/cicr/p3-image610.webp'],
+  CypherX:[],
+  Dronotics:[],
+  Eloquence:[],
+  Panache:['/assets/source-archive/clubs/panache/p1-image272.webp','/assets/source-archive/clubs/panache/p1-image273.webp'],
+  Prismatic:[],
+  RPH:[],
+  VamUnique:['/assets/hub-photos-extra/vamunique-61.webp','/assets/hub-photos-extra/vamunique-63.webp'],
+  Zencoders:[],
+  Arcadia:[],
+  NeuralNexus:[],
   Sports:['/assets/hub-photos/sports-01.webp','/assets/hub-photos/sports-02.webp','/assets/hub-photos/sports-03.webp','/assets/hub-photos/sports-04.webp']
 };
 
@@ -76,8 +86,8 @@ export function sourceHubMedia(name){
   const key=normalise(labelFromAlias);
   const canonical=Object.keys(JYC_HUB_CONTENT).find(k=>normalise(k)===key);
   const label=canonical||name;
-  const quality=QUALITY_BY_KEY.get(normalise(label))||[];
-  const mapped=HUB_PHOTO_MAP[label]||[];
+  const quality=(QUALITY_BY_KEY.get(normalise(label))||[]).filter(isAcceptedArchiveUrl);
+  const mapped=(HUB_PHOTO_MAP[label]||[]).filter(isAcceptedArchiveUrl);
   const archiveGallery=ARCHIVE_GALLERY.filter(g=>g.association&&normalise(canonicalHubName(g.association))===key).map(enrichMediaItem).filter(Boolean);
   const gallery=SOURCE_GALLERY.filter(g=>normalise(canonicalHubName(g.association))===key).map(enrichMediaItem).filter(Boolean);
   const story=storyByKey.get(key)||storyByKey.get(normalise(name));
@@ -99,11 +109,28 @@ export function sourceHubMedia(name){
 export const JYC_SOURCE_ARCHIVE_GALLERY=ARCHIVE_GALLERY;
 export const JYC_SOURCE_ARCHIVE_CATALOG_STATS=JYC_SOURCE_ARCHIVE_STATS;
 
+// Brand assets are deliberately kept outside the photography pool, but they are still valuable
+// source material: club logos/banners can fill identity slots when a maintained club record
+// has no verified logo/banner of its own.
+export const JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS=ARCHIVE_GALLERY
+  .filter(item=>item.mediaKind==='identity')
+  .map(item=>({
+    id:item.id,url:item.url,association:item.association||'JYC Archive',category:item.category,
+    sourcePath:item.sourcePath||'',mediaKind:'identity',sourceType:'source-archive',
+    sourceLabel:'Five-volume JYC source archive',alt:item.association?item.association+' identity asset':'JYC source identity asset',
+    caption:item.association?item.association+' identity asset · supplied archive':'JYC supplied identity asset'
+  }));
+const IDENTITY_BY_ASSOCIATION=new Map();
+JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS.forEach(item=>{const key=normalise(item.association);const rows=IDENTITY_BY_ASSOCIATION.get(key)||[];rows.push(item);IDENTITY_BY_ASSOCIATION.set(key,rows)});
+
 export function enrichSourceClub(club){
   const media=sourceHubMedia(club?.name);
+  const identityAssets=IDENTITY_BY_ASSOCIATION.get(normalise(media.name))||[];
+  const identityLogo=identityAssets.find(item=>/logo/i.test(item.sourcePath||item.url))||identityAssets[0];
+  const identityBanner=identityAssets.find(item=>/banner/i.test(item.sourcePath||item.url))||null;
   const photos=[...new Set([...(Array.isArray(club?.hubPhotos)?club.hubPhotos:[]),...media.photos])];
   const profile=JYC_HUB_CONTENT[media.name];
-  return {...club,description:club?.description||profile?.summary||media.summary,about:club?.about||profile?.detail||media.detail,hubPhotos:photos,banner:club?.banner||photos[0]||'',sourceMediaCount:photos.length,sourceMediaLabel:photos.length?'JYC source archive · '+photos.length+' visual'+(photos.length===1?'':'s'):'Identity-led profile · source photography not yet extracted'};
+  return {...club,description:club?.description||profile?.summary||media.summary,about:club?.about||profile?.detail||media.detail,hubPhotos:photos,logo:club?.logo||identityLogo?.url||'',banner:club?.banner||photos[0]||identityBanner?.url||identityLogo?.url||'',identityAsset:identityLogo||null,identityAssets,sourceMediaCount:photos.length,sourceMediaLabel:photos.length?'JYC source archive · '+photos.length+' visual'+(photos.length===1?'':'s'):(identityLogo?'JYC source archive · verified identity asset':'Identity-led profile · source photography not yet extracted')};
 }
 
 export function enrichSourceClubs(clubs){return (Array.isArray(clubs)?clubs:[]).map(enrichSourceClub);}
@@ -124,7 +151,7 @@ const ARCHIVE_CATEGORY_ASSOCIATIONS={
   'clubs/panache':'Panache','clubs/prismatic':'Prismatic','clubs/rph':'RPH','clubs/vamunique':'VamUnique','clubs/zencoders':'Zencoders',
   'festivals/aakriti':'Aakriti','sports':'JSA','gallery/campus-events':'JYC Archive','archive/presentation-assets':'JYC Archive','design-assets':'JYC Archive'
 };
-export const JYC_SOURCE_ARCHIVE_PHOTO_ITEMS=JYC_SOURCE_ARCHIVE_CATALOG
+export const JYC_SOURCE_ARCHIVE_PHOTO_ITEMS=ARCHIVE_GALLERY
   .filter(item=>item.mediaKind==='photo')
   .map((item,index)=>{
     const association=ARCHIVE_CATEGORY_ASSOCIATIONS[item.category]||item.association||'JYC Archive';
@@ -196,13 +223,39 @@ export function sourceEventMedia(eventOrName){
   }):[];
   const items=[...exact,...related].map(enrichMediaItem).filter(Boolean);
   const seen=new Set();
+  const uniqueItems=items.filter(item=>{if(seen.has(item.url))return false;seen.add(item.url);return true});
   return {
     name:name||alias||'JYC',
     collection:alias||name||'JYC Archive',
-    items:items.filter(item=>{if(seen.has(item.url))return false;seen.add(item.url);return true})
+    items:uniqueItems,
+    photoItems:uniqueItems.filter(item=>item.mediaKind==='photo')
   };
 }
 export const JYC_SOURCE_MEDIA_STATS={maintainedCommunities:Object.keys(JYC_HUB_CONTENT).length,storyBackedCommunities:PDF_HUB_STORIES.length,galleryItems:SOURCE_GALLERY.length,sourcePhotography:SOURCE_GALLERY.filter(item=>mediaKind(item)==='photo').length,qualityOverrideCommunities:Object.keys(QUALITY_OVERRIDES).length,eventCollections:Object.keys(EVENT_ALIASES).length};
+
+export function rankJycPhotoItems(items=[],{limit=24,seed=0}={}){
+  const pool=[...new Map((items||[]).filter(x=>x?.url&&(x.mediaKind||'photo')==='photo').map(x=>[String(x.url),x])).values()];
+  const score=item=>{
+    let n=0;
+    const role=String(item.role||''); const assoc=String(item.association||''); const year=Number(String(item.year||'').slice(0,4))||0;
+    if(role==='event')n+=120; else if(role==='club')n+=90; else if(role==='leadership')n+=80; else n+=40;
+    if(assoc&&assoc!=='JYC Archive')n+=24;
+    if(year)n+=Math.max(0,Math.min(24,year-2000));
+    const text=String(item.caption||item.alt||'').toLowerCase();
+    if(/stage|performance|team|group|workshop|competition|campus|event|people|student|audience|portrait/.test(text))n+=18;
+    if(/poster|logo|qr|banner|graphic|illustration|background|texture|screenshot/.test(text))n-=80;
+    return n;
+  };
+  const sorted=pool.map((item,index)=>({item,index,score:score(item)})).sort((a,b)=>b.score-a.score||String(a.item.association||'').localeCompare(String(b.item.association||''))||a.index-b.index);
+  const out=[]; const counts=new Map();
+  for(const entry of sorted){
+    const key=String(entry.item.association||'JYC Archive'); const count=counts.get(key)||0;
+    if(count>=3 && out.length<Math.min(limit,pool.length)-6)continue;
+    out.push(entry.item); counts.set(key,count+1); if(out.length>=Math.min(limit,pool.length))break;
+  }
+  if(seed&&out.length>1){const shift=Math.abs(Number(seed)||0)%out.length;return [...out.slice(shift),...out.slice(0,shift)]}
+  return out;
+}
 
 export function buildJycMediaManifest(gallery=[]){
   const merged=[...mergeSourceGallery(gallery)].reduce((acc,item)=>{const key=String(item?.url||item?.id||'');if(key&&!acc.some(x=>String(x?.url||x?.id||'')===key))acc.push(item);return acc},[]);

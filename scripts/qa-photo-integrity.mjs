@@ -1,7 +1,19 @@
 import fs from 'node:fs';
-import {JYC_SOURCE_MEDIA_STATS,mergeSourceGallery,sourceEventMedia,buildJycMediaManifest,JYC_SOURCE_ARCHIVE_PHOTO_ITEMS} from '../src/jyc-source-media.js';
+import {JYC_SOURCE_MEDIA_STATS,mergeSourceGallery,sourceEventMedia,buildJycMediaManifest,JYC_SOURCE_ARCHIVE_PHOTO_ITEMS,JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS} from '../src/jyc-source-media.js';
 
 const assert=(name,ok,detail='')=>{console.log((ok?'PASS: ':'FAIL: ')+name+(detail?' — '+detail:''));if(!ok)process.exitCode=1};
+const mediaSource=fs.readFileSync('src/jyc-source-media.js','utf8');
+const auditedCategories=['clubs/abhivyakti','clubs/panache','clubs/cypherx','festivals/aakriti','gallery/campus-events'];
+const auditedExclusionIds=auditedCategories.flatMap(cat=>{
+  const start=mediaSource.indexOf(`'${cat}':new Set([`);
+  const end=mediaSource.indexOf('])',start);
+  return start>=0&&end>start?[...mediaSource.slice(start,end).matchAll(/'([^']+)'/g)].map(x=>x[1]):[];
+});
+
+
+assert('non-photographic club override cleanup',mediaSource.includes("CypherX:[]")&&mediaSource.includes("Zencoders:[]")&&mediaSource.includes("NeuralNexus:[]")&&mediaSource.includes("Arcadia:[]")&&mediaSource.includes("Dronotics:[]")&&mediaSource.includes("Eloquence:[]"));
+assert('visual archive exclusions include Aakriti and Panache',mediaSource.includes("'festivals/aakriti':new Set")&&mediaSource.includes("'clubs/panache':new Set"));
+assert('event gallery placements include Dron-O-War and Converge',mediaSource.includes("'Dron-O-War'")&&mediaSource.includes("'Converge'"));
 const gallery=mergeSourceGallery([]);
 const galleryUiSource=fs.readFileSync('src/extra-features.jsx','utf8');
 const manifest=buildJycMediaManifest([]);
@@ -15,7 +27,19 @@ const normalizedEvents=['Converge 2026','JAI 2026 · Jaypee Agentic AI Hackathon
 const normalizedEventMappings=normalizedEvents.map(name=>[name,sourceEventMedia(name).collection]);
 const eventUrls=new Set(event.items.map(x=>x.url));
 const inductionUrls=new Set(induction.items.map(x=>x.url));
-assert('full committed archive photography pool is exposed',JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.length===748,`found ${JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.length}`);
+const archivePhotoUrls=new Set(JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.map(x=>x.url));
+const eventPhotoItems=event.photoItems||[];
+const auditedArchiveIds=new Set(auditedExclusionIds);
+const qualityOverrideUrls=[...(mediaSource.match(/'([^']+\\.webp)'/g)||[])].map(x=>x.slice(1,-1));
+const qualityOverrideViolations=qualityOverrideUrls.filter(url=>[...auditedArchiveIds].some(id=>url.endsWith('/'+id+'.webp')));
+
+assert('curated archive photography pool is exposed',JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.length>350,`found ${JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.length}`);
+assert('audited identity assets are preserved outside photography',JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS.some(x=>x.association==='CICR'&&/logo/i.test(x.sourcePath))&&JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS.some(x=>x.association==='JODC'&&/logo/i.test(x.sourcePath)),JSON.stringify(JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS.map(x=>x.sourcePath)));
+assert('identity assets remain excluded from photo pool',JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS.every(x=>!JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.some(p=>p.url===x.url)));
+assert('audited archive exclusions are declared before validation',auditedExclusionIds.length===272,`found ${auditedExclusionIds.length}`);
+assert('audited archive exclusions never re-enter through source overrides',auditedExclusionIds.every(id=>![...archivePhotoUrls].some(url=>url.includes('/'+id+'.webp'))),auditedExclusionIds.filter(id=>[...archivePhotoUrls].some(url=>url.includes('/'+id+'.webp'))).join(', '));
+assert('source overrides cannot reference audited archive exclusions',qualityOverrideViolations.length===0,qualityOverrideViolations.join(', '));
+assert('curated featured overrides remain explicit',mediaSource.includes('const QUALITY_OVERRIDES=')&&mediaSource.includes("Aakriti:[")&&mediaSource.includes("Panache:[")&&mediaSource.includes("CICR:[")&&mediaSource.includes("Innovation:["));
 assert('source gallery has maintained communities',JYC_SOURCE_MEDIA_STATS.maintainedCommunities>0);
 assert('source gallery is non-empty',gallery.length>0);
 assert('gallery opens in photography mode',galleryUiSource.includes("const [filter,setFilter]=useState('All'); const [role,setRole]=useState('All'); const [visual,setVisual]=useState('photo');"));
@@ -29,5 +53,9 @@ assert('Induction does not inherit Ebullience photography',[...inductionUrls].ev
 assert('manifest exposes visual roles',manifest.roles.includes('club')&&manifest.roles.includes('event')&&manifest.roles.includes('archive'));
 assert('manifest exposes source types',manifest.sourceTypes.includes('presentation-export')&&manifest.sourceTypes.includes('maintained-jyc-media'));
 assert('normalized event names resolve to deterministic collections',normalizedEventMappings.every(([name,collection])=>collection&&collection!=='JYC Archive'),JSON.stringify(normalizedEventMappings));
+assert('newly audited non-photo archive assets stay out of photo pool',auditedExclusionIds.every(id=>![...archivePhotoUrls].some(url=>url.includes('/'+id+'.webp'))),auditedExclusionIds.filter(id=>[...archivePhotoUrls].some(url=>url.includes('/'+id+'.webp'))).join(', '));
+assert('event photo rail exposes only explicit photography',eventPhotoItems.every(x=>x?.mediaKind==='photo'));
+assert('identity assets are preserved in the broader source gallery',gallery.some(x=>x.mediaKind==='identity'));
+assert('event media still retains broader source records separately',event.items.length>=eventPhotoItems.length);
 if(process.exitCode)process.exit(1);
 console.log('Photo integrity QA: all checks passed.');

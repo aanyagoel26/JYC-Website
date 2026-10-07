@@ -20,10 +20,21 @@ const checks=[
  ['external media is classified',source.includes('official-external-media')],
  ['gallery uses role filters',gallery.includes("roleLabels")&&gallery.includes('MEDIA TYPE')],
  ['gallery consumes full curated archive photo pool',gallery.includes('JYC_SOURCE_ARCHIVE_PHOTO_ITEMS')&&gallery.includes('...sourceArchivePhotos')],
- ['archive photo policy is content-aware',source.includes('ARCHIVE_PHOTO_EXCLUSIONS')&&source.includes('ARCHIVE_SHOWCASE_PHOTOS')],
+ ['discarded club identity assets are preserved separately',source.includes('JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS')&&source.includes("mediaKind:'identity'")&&source.includes('identityLogo')&&source.includes('identityBanner')],
+ ['archive photo policy is content-aware',source.includes('ARCHIVE_PHOTO_EXCLUSIONS')&&source.includes('ARCHIVE_SHOWCASE_PHOTOS')&&source.includes('JYC_SOURCE_ARCHIVE_PHOTO_ITEMS=ARCHIVE_GALLERY')],
  ['living photo engine is wired',gallery.includes('LivingPhoto')&&source.includes('JYC_SOURCE_ARCHIVE_PHOTO_ITEMS')],
+ ['featured photo ranking is wired',source.includes('rankJycPhotoItems')&&gallery.includes('rankJycPhotoItems(items,{limit:24})')],
  ['living photo engine has decoded preloading and related scoring',read('src/jyc-living-photo.jsx').includes('preloadAndDecode')&&read('src/jyc-living-photo.jsx').includes('scoreRelatedPhoto')&&read('src/jyc-living-photo.jsx').includes('prefers-reduced-motion')],
  ['complete source archive inventory is wired',source.includes('JYC_SOURCE_ARCHIVE_CATALOG')&&source.includes('JYC_SOURCE_ARCHIVE_STATS')&&archive.includes('sourceAssetFiles":873')&&archive.includes('uniqueBinaryHashes":813')],
+ ['audited archive boundary is reused for override URLs',source.includes('isAcceptedArchiveUrl')&&source.includes('QUALITY_OVERRIDES')&&source.includes('.filter(isAcceptedArchiveUrl)')],
+ ['gallery image component has failure recovery and focal-point support',gallery.includes('function JycGalleryImage')&&gallery.includes('setFailed')&&gallery.includes('focalX')&&gallery.includes('focalY')],
+ ['gallery wall derives its preview list after filtered items exist',gallery.includes('const wallItems=useMemo(()=>rankJycPhotoItems(items,{limit:24}),[items])')&&gallery.includes('LazyDriftWall items={wallItems.map')],
+ ['gallery lightbox supports keyboard image navigation',gallery.includes("e.key==='ArrowRight'")&&gallery.includes("e.key==='ArrowLeft'")&&gallery.includes('wallItems[next]')],
+ ['public gallery uses strict photo records',read('src/jyc57-experience.jsx').includes('JYC_SOURCE_ARCHIVE_PHOTO_ITEMS')&&read('src/jyc57-experience.jsx').includes("g.mediaKind==='photo'")],
+ ['public gallery supports shareable photo URLs',read('src/jyc57-experience.jsx').includes("/gallery?photo=")&&read('src/jyc57-experience.jsx').includes('params.get(\'photo\')')],
+ ['public gallery has published album routes',main.includes("clean.startsWith('/gallery/')")&&read('src/jyc57-experience.jsx').includes("/gallery/'+encodeURIComponent(value)")&&read('src/jyc57-experience.jsx').includes("jyc_media_albums")],
+ ['public gallery supports mobile swipe and zoom',read('src/jyc57-experience.jsx').includes('onTouchStart')&&read('src/jyc57-experience.jsx').includes('setZoom')],
+ ['public gallery uses metadata filters and progressive rendering',read('src/jyc57-experience.jsx').includes('visibleCount')&&read('src/jyc57-experience.jsx').includes("setFilter('club'")],
 ];
 let failed=0; for(const [name,ok] of checks){console.log((ok?'PASS':'FAIL')+': '+name);if(!ok)failed++}
 if(failed)process.exit(1);

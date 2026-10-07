@@ -2,7 +2,7 @@ import React,{useEffect,useMemo,useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {JYC_HUB_CONTENT,JYC_HUB_FAMILIES} from './v21-hub-content.js';
 import {JYC_HUB_SOURCE_REGISTRY,JYC_HUB_SOURCE_STATUS,JYC_HUB_VERIFIED_CURRENT,JYC_HUB_SOURCE_ONLY} from './jyc-hub-registry.js';
-import {sourceHubMedia,canonicalHubName,JYC_SOURCE_ARCHIVE_PHOTO_ITEMS} from './jyc-source-media.js';
+import {sourceHubMedia,rankJycPhotoItems,canonicalHubName,JYC_SOURCE_ARCHIVE_PHOTO_ITEMS} from './jyc-source-media.js';
 import {JYC_SOURCE_ARCHIVE_STATS} from './jyc-source-archive.js';
 import {LivingPhoto} from './jyc-living-photo.jsx';
 
@@ -132,7 +132,7 @@ export function PhotoChapters(){
    profile:JYC_HUB_CONTENT[h.name]||{},
    media:sourceHubMedia(h.name)
   })).filter(h=>h.media.photos.length);
-  const photos=hubs.flatMap(h=>h.media.photoItems.map((item,i)=>({
+  const photos=hubs.flatMap(h=>rankJycPhotoItems(h.media.photoItems,{limit:4,seed:h.name.length}).map((item,i)=>({
    url:item.url,
    hub:h.name,
    caption:item.caption||item.title||h.profile.summary||h.profile.focus||family,

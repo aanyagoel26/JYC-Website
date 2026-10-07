@@ -19,7 +19,7 @@ const safeUrl=v=>{try{const u=new URL(String(v||''),window.location.origin);retu
 const dateMs=e=>{const d=new Date(String(e?.date||'')+'T'+String(e?.start||'00:00'));return Number.isNaN(d.getTime())?Infinity:d.getTime()};
 const dateLabel=v=>{const d=new Date(String(v||''));return Number.isNaN(d.getTime())?'DATE TBA':d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});};
 const hubImage=(name,i=0)=>sourceHubMedia(name)?.photos?.[i%Math.max(1,sourceHubMedia(name)?.photos?.length||1)]||FALLBACK;
-const eventImage=(e,i=0)=>e?.poster||sourceEventMedia(e)?.items?.filter(x=>x?.url).map(media)[i]||FALLBACK;
+const eventImage=(e,i=0)=>e?.poster||sourceEventMedia(e)?.photoItems?.filter(x=>x?.url).map(media)[i]||FALLBACK;
 
 function Img({src,alt,...props}){return <img {...props} src={src||FALLBACK} alt={alt||''} onError={e=>{if(e.currentTarget.dataset.fallback)return;e.currentTarget.dataset.fallback='1';e.currentTarget.src=FALLBACK;}}/>}
 
