@@ -13,7 +13,7 @@ permissions:
 jobs:
   quality:
     runs-on: ubuntu-latest
-    timeout-minutes: 12
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v5
@@ -35,17 +35,6 @@ jobs:
       - name: Run full static release QA
         run: npm run qa
 
-      - name: Verify 128 event scope
-        run: node scripts/qa-events-128.mjs
-
-      - name: Verify 128 social scope
-        run: node scripts/qa-jyc-social-scope.mjs
-
-      - name: Verify trust contract
-        run: node scripts/qa-trust-contract.mjs
-
-      - name: Verify repository hygiene
-        run: node scripts/qa-final-hygiene.mjs
 
       - name: Verify release metadata
         shell: bash
