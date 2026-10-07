@@ -25,6 +25,9 @@ const checks=[
  ['canonical JAI legacy redirect exists',read('src/main.jsx').includes("legacyEventSlugMap={'agentic-ai-2026':'jai-2026-jaypee-agentic-ai-hackathon'}")&&read('src/main.jsx').includes("legacyEventRedirect")],
  ['album publication guard exists',read('supabase/migrations/202610080004_v58_3_album_publication_guard.sql').includes('jyc_guard_media_album_publication')&&read('supabase/migrations/202610080004_v58_3_album_publication_guard.sql').includes('rights_status <> \'cleared\'')],
  ['album guard RPC is not publicly executable',read('supabase/migrations/202610080005_v58_4_album_guard_privilege_hardening.sql').includes('revoke execute')&&read('supabase/migrations/202610080006_v58_5_album_guard_authenticated_revoke.sql').includes('revoke execute')],
+ ['media health dashboard exists',read('src/admin-extra.jsx').includes('AdminMediaHealth')&&read('src/admin-chunk.jsx').includes("tab==='media-health'")],
+ ['album story fields exist',read('supabase/migrations/202610080007_v58_6_album_story_fields.sql').includes('narrative text')&&read('supabase/migrations/202610080007_v58_6_album_story_fields.sql').includes('hero_url text')&&read('src/jyc57-experience.jsx').includes('hero_url')],
+
  ['album guard is not directly executable',read('supabase/migrations/202610080005_revoke_album_guard_execute.sql').includes('revoke execute on function public.jyc_guard_media_album_publication() from public, anon, authenticated')],
 
 
