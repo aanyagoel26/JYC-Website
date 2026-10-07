@@ -9,7 +9,7 @@ export function AdminTrustDashboard(){
  const load=async()=>{
   setBusy(true);setError('');
   try{
-   const [clubs,events,gallery,verification,reviews]=await Promise.all([
+   const [clubs,events,gallery,verification,reviews,clubLinks]=await Promise.all([
     supabase.from('jyc_clubs').select('id,slug,status').limit(200),
     supabase.from('jyc_events').select('id,slug,status,club_id').limit(300),
     supabase.from('jyc_gallery_items').select('id,status,club_id,event_id').limit(500),
