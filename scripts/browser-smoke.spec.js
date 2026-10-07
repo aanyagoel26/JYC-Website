@@ -559,3 +559,57 @@ test('Join JYC exposes the public coming-soon experience', async ({ page }) => {
   await expect(page.getByText('The next JYC recruitment cycle is being prepared.')).toBeVisible();
 });
 
+
+
+test('gallery interaction contract covers filters, album routes, navigation, zoom and share controls', async ({ page }) => {
+  await page.goto(base + '/gallery', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'gallery interaction');
+  const firstPhoto=page.locator('.jyc57-feature-card,.jyc57-photo').first();
+  await expect(firstPhoto).toBeVisible();
+
+  const albumButton=page.locator('.jyc57-filter-group').filter({ hasText: 'Album' }).locator('button').nth(1);
+  if (await albumButton.count()) {
+    await albumButton.click();
+    await expect.poll(() => new URL(page.url()).pathname).toMatch(/^\/gallery\//);
+    await expect(page.locator('.jyc57-archive-head h1')).toBeVisible();
+    await page.goto(base + '/gallery', { waitUntil: 'domcontentloaded' });
+    await waitForAppMount(page, 'gallery interaction reset');
+  }
+
+  const collectionButtons=page.locator('.jyc57-filter-group').filter({ hasText: 'Collection' }).locator('button');
+  if (await collectionButtons.count() > 1) {
+    await collectionButtons.nth(1).click();
+    await expect.poll(() => new URL(page.url()).search).toContain('club=');
+    await page.goto(base + '/gallery', { waitUntil: 'domcontentloaded' });
+    await waitForAppMount(page, 'gallery collection reset');
+  }
+
+  await firstPhoto.focus();
+  await firstPhoto.press('Enter');
+  const dialog=page.locator('.jyc57-lightbox[role="dialog"]');
+  await expect(dialog).toBeVisible();
+  const counter=dialog.locator('.jyc57-counter');
+  const before=await counter.textContent();
+  await dialog.getByRole('button', { name: 'Next photograph' }).click();
+  await expect(counter).not.toHaveText(before || '');
+  const image=dialog.locator('.jyc57-lightbox-media img');
+  const beforeTransform=await image.evaluate(el => getComputedStyle(el).transform);
+  await dialog.getByRole('button', { name: 'Zoom' }).click();
+  await expect.poll(() => image.evaluate(el => getComputedStyle(el).transform)).not.toBe(beforeTransform);
+  await expect(dialog.getByRole('button', { name: /Share photograph|Link copied/ })).toBeVisible();
+  await dialog.getByRole('button', { name: /Share photograph|Link copied/ }).click().catch(()=>{});
+  await page.keyboard.press('Escape');
+  await expect(dialog).toHaveCount(0);
+});
+
+test('gallery load-more control expands the archive without replacing the route', async ({ page }) => {
+  await page.goto(base + '/gallery', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'gallery load-more');
+  const loadMore=page.getByRole('button', { name: 'Load 36 more' });
+  if (await loadMore.count()) {
+    const before=await page.locator('.jyc57-photo').count();
+    await loadMore.click();
+    await expect.poll(() => page.locator('.jyc57-photo').count()).toBeGreaterThan(before);
+    await expect(new URL(page.url()).pathname).toBe('/gallery');
+  }
+});
