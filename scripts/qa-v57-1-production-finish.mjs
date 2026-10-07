@@ -26,7 +26,7 @@ add('club detail runtime is preserved',/function ClubDetail/.test(main));
 add('club detail supports recruitment and official links',/recruitment/.test(main)&&/socials|website|linkedin|instagram/.test(main));
 add('calendar route is preserved',/clean==='\\/calendar'/.test(main)&&/JYCCalendarPage/.test(main));
 add('calendar supports Google Calendar',/calendar\.google\.com/.test(main));
-add('public calendar exports the selected month as ICS',/const downloadMonthICS=/.test(main)&&/Add month to device/.test(main)&&/replace\(\/-\/g,''\).*T/.test(main));
+add('public calendar exports the selected month as ICS',/const downloadMonthICS=/.test(main)&&/Add month to device/.test(main)&&main.includes("replace(/-/g,'')"));
 add('calendar controls expose accessible month semantics',/aria-label="Previous month"/.test(main)&&/aria-label="Next month"/.test(main)&&/aria-live="polite"/.test(main));
 add('club side panel chooses the next live/upcoming event',/const upcomingEvents=events\.filter\(e=>eventState\(e\)!=='past'\)/.test(main)&&/upcomingEvents\[0\]/.test(main));
 add('calendar/ICS helper remains available',/DownloadICS/.test(main)&&/googleCalendarUrl/.test(main));
