@@ -15,7 +15,7 @@ const checks=[
  ['brand editorial module remains available for secondary public surfaces',next.includes('export function JYCBrandEditorial')&&next.includes('jyc-brand-editorial')],
  ['next experience module remains available',next.includes('export function ChooseYourRoute')&&next.includes('export function PhotoStory')&&next.includes('export function PhotoChapters')&&next.includes('export function HubSignalRail')],
  ['homepage imports next experience layer',main.includes("from './jyc-next-experience.jsx'")&&main.includes("from './jyc-editorial-home.jsx'")],
- ['editorial homepage provides community discovery',editorialHome.includes('JYC_HUB_FAMILIES.map')&&editorialHome.includes('View full directory')],
+ ['editorial homepage provides community discovery',editorialHome.includes('families.slice(0,5).map')&&editorialHome.includes('Explore all clubs')],
  ['editorial homepage mounts current updates',editorialHome.includes('<JYCNowStrip limit={3}/>')],
  ['editorial homepage mounts photo chapters',editorialHome.includes('<PhotoChapters/>')&&visualPolish.includes('jyc-photo-chapters-section')],
  ['editorial homepage mounts living spotlight',editorialHome.includes('LazyMagicBento')&&editorialHome.includes('LazyDitherVeil')],
