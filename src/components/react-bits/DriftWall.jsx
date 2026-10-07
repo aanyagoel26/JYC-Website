@@ -164,6 +164,7 @@ export default function DriftWall({
         type="button"
         key={id}
         className={`drift-wall__tile ${active===id?'is-active':''}`}
+        tabIndex={copyIndex===0?0:-1}
         aria-label={item.title||'JYC gallery image'}
         onMouseEnter={()=>{hoveredColumn.current=columnIndex;setActive(id)}}
         onFocus={()=>{hoveredColumn.current=columnIndex;setActive(id)}}
