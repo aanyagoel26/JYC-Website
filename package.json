@@ -29,7 +29,8 @@
     "qa:trust": "node scripts/qa-trust-contract.mjs",
     "qa:v58": "node scripts/qa-v58-design.mjs",
     "qa:trust-cms": "node scripts/qa-v58-trust-cms.mjs",
-    "qa:sitemap": "node scripts/qa-sitemap-contract.mjs"
+    "qa:sitemap": "node scripts/qa-sitemap-contract.mjs",
+    "qa:identifiers": "node scripts/qa-canonical-identifiers.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.117.2",
