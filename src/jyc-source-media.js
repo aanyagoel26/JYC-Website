@@ -124,7 +124,7 @@ const ARCHIVE_CATEGORY_ASSOCIATIONS={
   'clubs/panache':'Panache','clubs/prismatic':'Prismatic','clubs/rph':'RPH','clubs/vamunique':'VamUnique','clubs/zencoders':'Zencoders',
   'festivals/aakriti':'Aakriti','sports':'JSA','gallery/campus-events':'JYC Archive','archive/presentation-assets':'JYC Archive','design-assets':'JYC Archive'
 };
-export const JYC_SOURCE_ARCHIVE_PHOTO_ITEMS=JYC_SOURCE_ARCHIVE_CATALOG
+export const JYC_SOURCE_ARCHIVE_PHOTO_ITEMS=ARCHIVE_GALLERY
   .filter(item=>item.mediaKind==='photo')
   .map((item,index)=>{
     const association=ARCHIVE_CATEGORY_ASSOCIATIONS[item.category]||item.association||'JYC Archive';
