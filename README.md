@@ -26,6 +26,7 @@ It is intentionally **not** a student-help portal, academic portal, attendance s
 - Archive / memories
 - Leadership / Team
 - Achievements
+- Best of JYC — editorial photo selection
 - Recruitment
 - Announcements / JYC Now
 - JYC Event Calendar
