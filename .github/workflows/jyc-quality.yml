@@ -36,6 +36,9 @@ jobs:
         run: npm run qa
 
 
+      - name: Verify canonical event identifiers
+        run: npm run qa:identifiers
+
       - name: Verify canonical sitemap
         run: npm run qa:sitemap
 
