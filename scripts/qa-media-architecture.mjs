@@ -25,6 +25,10 @@ const checks=[
  ['featured photo ranking is wired',source.includes('rankJycPhotoItems')&&gallery.includes('rankJycPhotoItems(items,{limit:24})')],
  ['living photo engine has decoded preloading and related scoring',read('src/jyc-living-photo.jsx').includes('preloadAndDecode')&&read('src/jyc-living-photo.jsx').includes('scoreRelatedPhoto')&&read('src/jyc-living-photo.jsx').includes('prefers-reduced-motion')],
  ['complete source archive inventory is wired',source.includes('JYC_SOURCE_ARCHIVE_CATALOG')&&source.includes('JYC_SOURCE_ARCHIVE_STATS')&&archive.includes('sourceAssetFiles":873')&&archive.includes('uniqueBinaryHashes":813')],
+ ['audited archive boundary is reused for override URLs',source.includes('isAcceptedArchiveUrl')&&source.includes('QUALITY_OVERRIDES')&&source.includes('.filter(isAcceptedArchiveUrl)')],
+ ['gallery image component has failure recovery and focal-point support',gallery.includes('function JycGalleryImage')&&gallery.includes('setFailed')&&gallery.includes('focalX')&&gallery.includes('focalY')],
+ ['gallery wall derives its preview list after filtered items exist',gallery.includes('const wallItems=useMemo(()=>rankJycPhotoItems(items,{limit:24}),[items])')&&gallery.includes('LazyDriftWall items={wallItems.map')],
+ ['gallery lightbox supports keyboard image navigation',gallery.includes("e.key==='ArrowRight'")&&gallery.includes("e.key==='ArrowLeft'")&&gallery.includes('wallItems[next]')],
 ];
 let failed=0; for(const [name,ok] of checks){console.log((ok?'PASS':'FAIL')+': '+name);if(!ok)failed++}
 if(failed)process.exit(1);
