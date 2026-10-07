@@ -35,6 +35,9 @@ add('retired Projects/Impact/FAQ navigation remains absent',!main.includes("['/p
 add('reduced-motion CSS contract remains present',/prefers-reduced-motion/.test(read('src/styles/public-system.css')));
 add('no new animation/icon dependency was introduced',pkg.dependencies?.motion==='14.0.0'&&pkg.dependencies?.gsap==='3.15.0'&&pkg.dependencies?.['@hugeicons/react']==='1.1.10');
 add('v57.1 experience routes remain wired',main.includes('JYC57Events')&&main.includes('JYC57Clubs')&&main.includes('JYC57Gallery')&&main.includes('JYC57Archive')&&exp.includes('Sector 128 only'));
+add('public event filters are shareable in the URL',exp.includes('syncFilters')&&exp.includes('status')&&exp.includes('category'));
+add('gallery dialog traps focus and restores it',exp.includes('dialogRef')&&exp.includes('triggerRef')&&exp.includes('key===\'Tab\''));
+add('public visual system has 320px-safe sizing',/max-width:320px/.test(read('src/styles/jyc-v58-final.css'))||/min-width:0/.test(read('src/styles/jyc-v58-final.css')));
 
 let failed=0;
 for(const [name,ok] of checks){console.log((ok?'PASS':'FAIL')+' · '+name);if(!ok)failed++}
