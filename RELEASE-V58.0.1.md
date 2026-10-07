@@ -2,14 +2,14 @@
 
 ## Release boundary
 
-V58.0.1 is the current JYC public-site release. It keeps the V58 editorial/community product boundary while completing the latest accessibility, event-modal, media-governance and release-integrity work.
+V58.0.1 is a historical JYC public-site release; V58.0.3 is now current. It keeps the V58 editorial/community product boundary while completing the latest accessibility, event-modal, media-governance and release-integrity work.
 
 ## Included
 
 - Accessible featured JAI 2026 modal with keyboard focus management, Escape handling, focus restoration and mobile-safe scrolling.
 - Canonical JAI 2026 event routing with registration and official-source actions preserved.
 - Verified Cinekala official LinkedIn metadata.
-- V58.0.1 package, lockfile and service-worker cache alignment.
+- V58.0.1 package, lockfile and service-worker cache alignment at that release boundary.
 - Final hygiene QA aligned to the active release.
 - Institutional media-governance migration for photographer/rights metadata and draft event/club archive albums.
 - Reviewer foreign-key index for the governed gallery records.
