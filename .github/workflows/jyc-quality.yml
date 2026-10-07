@@ -1,6 +1,10 @@
 name: JYC Quality Gate
 
 on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
@@ -9,14 +13,38 @@ permissions:
 jobs:
   quality:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 12
     steps:
       - name: Checkout
         uses: actions/checkout@v5
         with:
           persist-credentials: false
 
-      - name: Verify release metadata is internally consistent
+      - name: Setup Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Production build
+        run: npm run build
+
+      - name: Verify 128 event scope
+        run: node scripts/qa-events-128.mjs
+
+      - name: Verify 128 social scope
+        run: node scripts/qa-jyc-social-scope.mjs
+
+      - name: Verify trust contract
+        run: node scripts/qa-trust-contract.mjs
+
+      - name: Verify repository hygiene
+        run: node scripts/qa-final-hygiene.mjs
+
+      - name: Verify release metadata
         shell: bash
         run: |
           set -euo pipefail
@@ -27,9 +55,9 @@ jobs:
           test "$CACHE" = "jyc-cache-v$VERSION"
           grep -q "V$VERSION" scripts/qa-jyc-release-guard.mjs
 
-      - name: Verify repository hygiene
+      - name: Reject accidental Vercel preview references
         shell: bash
         run: |
           set -euo pipefail
-          test -z "$(git ls-files '*.zip')"
           test -z "$(git grep -n 'jyc-website-.*\.vercel\.app' -- ':!README.md' ':!docs/**' || true)"
+          test -z "$(git ls-files '*.zip')"
