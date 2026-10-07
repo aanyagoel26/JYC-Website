@@ -22,6 +22,7 @@ const checks=[
  ['gallery consumes full curated archive photo pool',gallery.includes('JYC_SOURCE_ARCHIVE_PHOTO_ITEMS')&&gallery.includes('...sourceArchivePhotos')],
  ['archive photo policy is content-aware',source.includes('ARCHIVE_PHOTO_EXCLUSIONS')&&source.includes('ARCHIVE_SHOWCASE_PHOTOS')],
  ['living photo engine is wired',gallery.includes('LivingPhoto')&&source.includes('JYC_SOURCE_ARCHIVE_PHOTO_ITEMS')],
+ ['featured photo ranking is wired',source.includes('rankJycPhotoItems')&&gallery.includes('rankJycPhotoItems(items,{limit:24})')],
  ['living photo engine has decoded preloading and related scoring',read('src/jyc-living-photo.jsx').includes('preloadAndDecode')&&read('src/jyc-living-photo.jsx').includes('scoreRelatedPhoto')&&read('src/jyc-living-photo.jsx').includes('prefers-reduced-motion')],
  ['complete source archive inventory is wired',source.includes('JYC_SOURCE_ARCHIVE_CATALOG')&&source.includes('JYC_SOURCE_ARCHIVE_STATS')&&archive.includes('sourceAssetFiles":873')&&archive.includes('uniqueBinaryHashes":813')],
 ];
