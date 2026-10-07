@@ -7,6 +7,8 @@ const next=read('src/jyc-next-experience.jsx');
 const sourceMedia=read('src/jyc-source-media.js');
 const extraFeatures=read('src/extra-features.jsx');
 const checks=[
+ ['homepage photo chapters are curated per community',next.includes('rankJycPhotoItems(h.media.photoItems,{limit:4')],
+
  ['V56.7 polish is imported',read('src/styles/public-system.css').includes("./jyc-v55-visual-polish.css")],
  ['public content has centered width contract',css.includes('--jyc-content')&&css.includes('margin-inline:auto')],
  ['global text overflow is guarded',css.includes('overflow-wrap:anywhere')],
