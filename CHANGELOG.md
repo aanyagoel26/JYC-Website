@@ -1,5 +1,11 @@
 # Changelog
 
+## V58.0.5 — Security hardening
+
+- Hardened the internal album-publication trigger so it is not exposed as a callable PostgREST RPC.
+- Kept album publication gated by approved media, rights clearance and provenance review.
+
+
 ## V58.0.4 — Album Guard Security Hardening
 
 - Revoked direct `EXECUTE` privileges from the album publication SECURITY DEFINER trigger function for `public`, `anon` and `authenticated` roles.
