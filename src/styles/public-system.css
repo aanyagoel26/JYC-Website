@@ -293,3 +293,50 @@ h1,h2,h3,h4,.brand span,.section-head h2,.page h1,.page h2{font-family:"Space Gr
 html[data-theme="dark"]{--navy:#0f0e11;--ivory:#fff8e1;--champagne:#d2b48c;--accent:#c92a2a;--jyc-bg:#0f0e11;--jyc-surface:#18161d;--jyc-ink:#fff8e1;--jyc-muted:#a8a3b0;--jyc-line:rgba(210,180,140,.27)}
 :where(a,button,input,textarea,select,[tabindex]):focus-visible{outline:2px solid var(--red);outline-offset:3px}
 img{max-width:100%}svg{max-width:100%}.page a,.section a{text-decoration-thickness:1px;text-underline-offset:3px}.page button,.section button{font-family:inherit}
+
+
+/* V58 image presentation hardening — stable frames, readable metadata, safe fallbacks. */
+.public-app .gallery-story-card,
+.public-app .gallery-item{
+  min-width:0!important;
+  overflow:hidden!important;
+  isolation:isolate;
+}
+.public-app .gallery-story-card img,
+.public-app .gallery-item img{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  object-fit:cover!important;
+  background:var(--jyc-editorial-card,var(--bg-card,#eee))!important;
+  transition:transform .5s cubic-bezier(.2,.7,.2,1),filter .35s ease,opacity .2s ease!important;
+}
+.public-app .gallery-story-card:hover img,
+.public-app .gallery-item:hover img{transform:scale(1.035);filter:saturate(1.04)}
+.public-app .gallery-story-card:focus-visible,
+.public-app .gallery-item:focus-visible{outline:2px solid var(--accent-gold,#c2a682);outline-offset:3px}
+.public-app .jyc-image-fallback{
+  display:grid!important;
+  place-items:center;
+  width:100%;
+  height:100%;
+  min-height:180px;
+  padding:18px;
+  text-align:center;
+  color:var(--muted,#6d675f);
+  background:linear-gradient(135deg,color-mix(in srgb,var(--bg-card,#eee) 92%,var(--accent-gold,#c2a682)),var(--bg-card,#eee));
+  border:1px solid var(--line,#ddd);
+}
+.public-app .jyc-image-fallback span{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase}
+.public-app .gallery-page .lightbox-content img{display:block;width:100%;height:auto;max-width:100%;max-height:min(76vh,860px);object-fit:contain!important;background:transparent!important}
+.public-app .gallery-wall-lightbox .lightbox-content img{max-height:min(76vh,860px)}
+@media(max-width:760px){
+  .public-app .gallery-story-card img,.public-app .gallery-item img{transition:none!important}
+  .public-app .gallery-page .lightbox-content{grid-template-columns:1fr!important;max-height:88vh!important;overflow:auto!important}
+  .public-app .gallery-page .lightbox-content img{max-height:58vh}
+}
+@media(prefers-reduced-motion:reduce){
+  .public-app .gallery-story-card img,.public-app .gallery-item img{transition:none!important}
+}
