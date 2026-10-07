@@ -10,6 +10,7 @@ const llms=read('public/llms.txt');
 const meta=read('src/extra-features.jsx');
 const sitemap=read('scripts/generate-sitemap.mjs');
 const main=read('src/main.jsx');
+const pkg=JSON.parse(read('package.json'));
 add('Homepage title targets JIIT Youth Club + clubs/events/fests',html.includes('JIIT Youth Club 128') && main.includes('Clubs, Events & Fests'));
 add('Google Search Console verification slot',!html.includes('google-site-verification')||(!html.includes('%VITE_GOOGLE_SITE_VERIFICATION%')&&html.includes('google-site-verification')));
 add('Retired Google Sitelinks SearchAction is absent',!meta.includes("'@type':'SearchAction'")&&!html.includes('SearchAction'));
@@ -36,7 +37,7 @@ add('Sitemap generator exists',fs.existsSync(path.join(root,'scripts/generate-si
 add('SEO pages have useful route metadata',main.includes('JIIT Clubs & Student Communities') && main.includes('JIIT Events & Campus Activities') && main.includes('About JIIT Youth Club') && main.includes('JIIT Fests & Flagship Events'));
 add('Fest discovery route exists',main.includes("clean==='/fests'") && llms.includes('/fests'));
 add('Search-intent editorial content is visible on key pages',main.includes('SearchTopicBand') && main.includes('Official JIIT clubs and student communities') && main.includes('JIIT events, workshops and campus experiences'));
-add('Service worker cache namespace matches current release',read('public/sw.js').includes('jyc-cache-v57-0-0'));
+add('Service worker cache namespace matches current release',read('public/sw.js').includes('jyc-cache-v'+pkg.version.replace(/\\./g,'-')));
 const failed=checks.filter(x=>!x.ok);
 for(const c of checks) console.log(`${c.ok?'PASS':'FAIL'}: ${c.name}${c.detail?` — ${c.detail}`:''}`);
 if(failed.length){process.exitCode=1;console.error(`SEO QA failed: ${failed.length} check(s)`)} else console.log(`PASS: SEO QA (${checks.length} checks)`);
