@@ -70,7 +70,6 @@ export function AdminMediaHealth(){
    if(g.error)throw g.error;if(a.error)throw a.error;if(v.error)throw v.error;
    const gallery=g.data||[],albums=a.data||[],verification=v.data||[];
    const now=Date.now(),staleMs=90*24*60*60*1000;
-   const verifiedByEntity=new Map(verification.map(x=>[x.entity_type+':'+x.entity_id,x]));
    setState({
     gallery:{total:gallery.length,approved:gallery.filter(x=>x.status==='approved').length,missingAlt:gallery.filter(x=>!String(x.alt_text||'').trim()).length,missingCredit:gallery.filter(x=>!String(x.credit||'').trim()).length,unassigned:gallery.filter(x=>!x.album_id).length,rightsReview:gallery.filter(x=>x.rights_status!=='cleared').length,focalMissing:gallery.filter(x=>x.focal_x==null||x.focal_y==null).length},
     albums:{total:albums.length,published:albums.filter(x=>x.is_published).length,drafts:albums.filter(x=>!x.is_published).length,noCover:albums.filter(x=>!x.cover_url&&!x.hero_url).length,noPhotos:albums.filter(a=>!gallery.some(g=>String(g.album_id)===String(a.id))).length},
