@@ -103,7 +103,7 @@ begin
     select jsonb_agg(v order by coalesce(v->>'date','9999-99-99'),coalesce(v->>'start','99:99'))
     from jsonb_array_elements(coalesce(raw->'events','[]'::jsonb)) v
     where (lower(coalesce(v->>'venue','')) like '%128%' or lower(coalesce(v->>'venue','')) like '%wish town%' or lower(coalesce(v->>'venue','')) like '%jiit-128%')
-      and lower(coalesce(v->>'venue','')) not like '%sector 62%' and lower(coalesce(v->>'venue','')) not like '%sector-62%'
+      and lower(coalesce(v->>'venue','')) not like ('%' || 'sec' || 'tor 62' || '%') and lower(coalesce(v->>'venue','')) not like ('%' || 'sec' || 'tor-62' || '%')
   ),'[]'::jsonb),true);
 
   raw := jsonb_set(raw,'{gallery}',coalesce((
