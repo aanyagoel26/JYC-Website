@@ -260,6 +260,43 @@ test('legacy JAI event slug redirects to the canonical event route', async ({ pa
   await expect.poll(() => new URL(page.url()).pathname, { timeout: 5000 }).toBe('/events/jai-2026-jaypee-agentic-ai-hackathon');
 });
 
+test('gallery deep-link opens the requested photograph', async ({ page }) => {
+  await page.goto(base + '/gallery', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'gallery deep-link');
+  const trigger=page.locator('.jyc57-photo,.jyc57-feature-card').first();
+  await expect(trigger).toBeVisible();
+  const photoId=await trigger.getAttribute('data-photo-id');
+  const src=await trigger.locator('img').getAttribute('src');
+  const key=photoId||src;
+  expect(key).toBeTruthy();
+  await page.goto(base + '/gallery?photo=' + encodeURIComponent(key), { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'gallery photo deep-link');
+  await expect(page.locator('.jyc57-lightbox[role="dialog"]')).toBeVisible();
+});
+
+test('homepage remains usable on constrained mobile network', async ({ page }) => {
+  test.skip(!/chromium/i.test(test.info().project.name), 'CDP network emulation requires Chromium');
+  const client=await page.context().newCDPSession(page);
+  await client.send('Network.enable');
+  await client.send('Network.emulateNetworkConditions', {
+    offline:false,
+    downloadThroughput:1.5*1024*1024/8,
+    uploadThroughput:750*1024/8,
+    latency:150
+  });
+  const started=Date.now();
+  await page.setViewportSize({width:390,height:844});
+  await page.goto(base, { waitUntil:'domcontentloaded', timeout:45000 });
+  await waitForAppMount(page, 'constrained mobile');
+  const elapsed=Date.now()-started;
+  const visibleImages=await page.locator('main img').evaluateAll(nodes => nodes.filter(img => {
+    const r=img.getBoundingClientRect();
+    return r.width>0&&r.height>0;
+  }).length);
+  expect(visibleImages).toBeGreaterThan(0);
+  expect(elapsed).toBeLessThan(45000);
+});
+
 test('gallery lightbox traps focus and restores it after close', async ({ page }) => {
   await page.goto(base + '/gallery', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'gallery');
