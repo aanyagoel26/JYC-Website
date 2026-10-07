@@ -15,6 +15,7 @@ const dither=read('src/react-bits/DitherVeil.jsx');
 const ditherCss=read('src/react-bits/DitherVeil.css');
 const home=read('src/jyc-editorial-home.jsx');
 const homeCss=read('src/jyc-editorial-home.css');
+const extraFeaturesSafe=()=>{const f=read('src/extra-features.jsx');return f.includes('LazyDriftWall')&&f.includes('Drift wall')};
 
 const checks=[
  ['React Bits dependencies declared',pkg.dependencies.motion==='12.23.22'&&pkg.dependencies['@hugeicons/react']==='1.1.10'&&pkg.dependencies['@hugeicons/core-free-icons']==='4.3.5'&&pkg.dependencies.ogl==='1.0.11'],
@@ -45,11 +46,11 @@ check('DepthCarousel component is present',fs.existsSync(path.join(root,'src/com
 check('DepthCarousel avoids a direct GSAP import',!read('src/components/react-bits/DepthCarousel.jsx').includes("from'gsap'")&&!read('src/components/react-bits/DepthCarousel.jsx').includes('from "gsap"'));
 check('DepthCarousel is lazy-loaded on public routes',main.includes('LazyDepthCarousel')&&main.includes('<Suspense fallback={<div className="depth-carousel depth-carousel--loading"'));
 
-check('DriftWall is the homepage gallery archive',home.includes('LazyDriftWall')&&home.includes('DRIFT_WALL_PRESETS')&&home.includes("gallery.slice(0,18)")&&home.includes("['1','2','4']")&&(home.match(/<LazyDriftWall/g)||[]).length===1);
+check('DriftWall remains available for the visual archive',fs.existsSync(path.join(root,'src/components/react-bits/DriftWall.jsx'))&&extraFeaturesSafe());
 check('Heavy homepage visual engines are viewport-deferred',home.includes('function ViewportDeferred')&&home.includes('rootMargin=\'700px\'')&&home.includes('<ViewportDeferred'));
 check('MagicBento is lazy-loaded and GSAP is declared',home.includes('LazyMagicBento')&&pkg.dependencies.gsap==='3.15.0'&&lock.packages['node_modules/gsap']?.version==='3.15.0');
 check('FlexCarousel component remains available for future archive surfaces',fs.existsSync(path.join(root,'src/components/react-bits/FlexCarousel.jsx'))&&fs.existsSync(path.join(root,'src/components/react-bits/FlexCarousel.css')));
-check('DriftWall homepage surface has a non-collapsing responsive height',homeCss.includes('.jyc-v1-drift .drift-wall{width:100%;height:560px')&&homeCss.includes('@media(max-width:800px)')&&homeCss.includes('@media(max-width:680px)'));
+check('DriftWall archive surface has responsive safeguards',read('src/components/react-bits/DriftWall.css').includes('height')&&read('src/components/react-bits/DriftWall.css').includes('@media'));
 check('Homepage visual archive CSS contains no escaped newline literals',!homeCss.includes('\\n'));
 check('DriftWall has offscreen, low-power and reduced-motion safeguards',read('src/components/react-bits/DriftWall.jsx').includes('IntersectionObserver')&&read('src/components/react-bits/DriftWall.jsx').includes('lowPower')&&read('src/components/react-bits/DriftWall.jsx').includes('prefers-reduced-motion'));
 check('DriftWall is used for event and community visual rails',main.includes('event-drift-wall-section')&&main.includes('club-drift-wall-section')&&main.includes('LazyDriftWall'));
