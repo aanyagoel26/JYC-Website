@@ -6,6 +6,8 @@ const main=read('src/main.jsx');
 const css=read('src/jyc-logo-final-theme.css');
 const gallery=read('src/extra-features.jsx');
 const checks=[
+ ['media governance migration covers photographer and rights metadata',read('supabase/migrations/202610080003_v58_2_media_governance.sql').includes('jyc_photographers')&&read('supabase/migrations/202610080003_v58_2_media_governance.sql').includes('rights_status')&&read('supabase/migrations/202610080003_v58_2_media_governance.sql').includes('license_url')],
+ ['album publication is rights-gated',read('supabase/migrations/202610080004_v58_3_album_publication_guard.sql').includes('rights_status <> \'cleared\'')&&read('supabase/migrations/202610080004_v58_3_album_publication_guard.sql').includes('jyc_content_verification')],
  ['media taxonomy exports event mapper',source.includes('export function sourceEventMedia')],
  ['media taxonomy exports manifest builder',source.includes('export function buildJycMediaManifest')],
  ['event page imports source event media',main.includes('sourceEventMedia')],
