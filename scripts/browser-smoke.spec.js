@@ -296,6 +296,20 @@ test('production shell exposes required security headers when run against a depl
   expect(headers['content-security-policy']).toContain("frame-ancestors 'none'");
 });
 
+test('global search opens, accepts keyboard input, and closes cleanly', async ({ page }) => {
+  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  await page.keyboard.press(process.platform === 'darwin' ? 'Meta+K' : 'Control+K');
+  const dialog = page.locator('[role="dialog"]').filter({ hasText: /JYC search/i }).first();
+  await expect(dialog).toBeVisible();
+  const input = page.getByRole('textbox', { name: /Search JYC/i }).first();
+  await expect(input).toBeVisible();
+  await input.fill('CICR');
+  await page.waitForTimeout(150);
+  await expect(page.getByText(/CICR/i).first()).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(dialog).toHaveCount(0);
+});
+
 test('keyboard can reach the skip link and primary navigation', async ({ page }) => {
   await page.goto(base, { waitUntil: 'domcontentloaded' });
   await page.keyboard.press('Tab');
