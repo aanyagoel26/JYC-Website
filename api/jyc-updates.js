@@ -4,7 +4,7 @@ const fetchWithTimeout=(url,options={})=>fetch(url,{...options,signal:AbortSigna
 let memory={at:0,items:[]};
 const json=value=>{try{return JSON.parse(value||'{}')}catch{return {}}};
 const unique=rows=>{const seen=new Set();return rows.filter(x=>{const key=x.externalId||x.url;if(!key||seen.has(key))return false;seen.add(key);return true})};
-const cleanText=value=>String(value||'').replace(/<[^>]+>/g,' ').replace(/&amp;/g,'&').replace(/\s+/g,' ').trim();
+const safeRemoteUrl=value=>{const raw=String(value||'').trim();if(!raw)return '';try{const u=new URL(raw);if(!['http:','https:'].includes(u.protocol))return '';const host=u.hostname.toLowerCase();if(host==='localhost'||host==='127.0.0.1'||host==='0.0.0.0'||host==='::1'||host.startsWith('10.')||host.startsWith('192.168.')||/^172\.(1[6-9]|2\d|3[0-1])\./.test(host)||host.endsWith('.local'))return '';return u.href}catch{return ''}}\nconst cleanText=value=>String(value||'').replace(/<[^>]+>/g,' ').replace(/&amp;/g,'&').replace(/\s+/g,' ').trim();
 const cfg={
  instagram:json(process.env.JYC_INSTAGRAM_ACCOUNTS),
  youtube:json(process.env.JYC_YOUTUBE_CHANNELS),
@@ -18,7 +18,7 @@ async function instagram(hub,userId){
  u.searchParams.set('fields','id,caption,media_type,media_url,thumbnail_url,permalink,timestamp');u.searchParams.set('limit','8');u.searchParams.set('access_token',token);
  const r=await fetchWithTimeout(u);if(!r.ok)throw Error('Instagram '+r.status);
  const data=await r.json();
- return (data.data||[]).map(x=>({externalId:x.id,hub,platform:'Instagram',type:x.media_type==='VIDEO'?'Video':'Post',title:cleanText(x.caption).split('. ')[0]||hub+' update',summary:cleanText(x.caption).slice(0,220),publishedAt:x.timestamp,url:x.permalink,image:x.media_type==='VIDEO'?x.thumbnail_url:x.media_url,verified:true}));
+ return (data.data||[]).map(x=>({externalId:x.id,hub,platform:'Instagram',type:x.media_type==='VIDEO'?'Video':'Post',title:cleanText(x.caption).split('. ')[0]||hub+' update',summary:cleanText(x.caption).slice(0,220),publishedAt:x.timestamp,url:safeRemoteUrl(x.permalink),image:safeRemoteUrl(x.media_type==='VIDEO'?x.thumbnail_url:x.media_url),verified:true}));
 }
 async function youtube(hub,channelId){
  const key=process.env.YOUTUBE_API_KEY;if(!key||!channelId)return [];
@@ -27,7 +27,7 @@ async function youtube(hub,channelId){
  const channel=(await r.json()).items?.[0];const playlist=channel?.contentDetails?.relatedPlaylists?.uploads;if(!playlist)return [];
  const p=new URL('https://www.googleapis.com/youtube/v3/playlistItems');p.searchParams.set('part','snippet,contentDetails');p.searchParams.set('playlistId',playlist);p.searchParams.set('maxResults','8');p.searchParams.set('key',key);
  const pr=await fetchWithTimeout(p);if(!pr.ok)throw Error('YouTube playlist '+pr.status);
- return ((await pr.json()).items||[]).map(x=>({externalId:x.contentDetails?.videoId,hub,platform:'YouTube',type:'Video',title:x.snippet?.title||hub+' video',summary:cleanText(x.snippet?.description).slice(0,220),publishedAt:x.snippet?.publishedAt,url:x.contentDetails?.videoId?'https://www.youtube.com/watch?v='+x.contentDetails.videoId:'',image:x.snippet?.thumbnails?.high?.url||x.snippet?.thumbnails?.medium?.url||'',verified:true}));
+ return ((await pr.json()).items||[]).map(x=>({externalId:x.contentDetails?.videoId,hub,platform:'YouTube',type:'Video',title:x.snippet?.title||hub+' video',summary:cleanText(x.snippet?.description).slice(0,220),publishedAt:x.snippet?.publishedAt,url:x.contentDetails?.videoId?safeRemoteUrl('https://www.youtube.com/watch?v='+x.contentDetails.videoId):'',image:safeRemoteUrl(x.snippet?.thumbnails?.high?.url||x.snippet?.thumbnails?.medium?.url||'',verified:true}));
 }
 async function linkedin(hub,org){
  const token=process.env.LINKEDIN_ACCESS_TOKEN;if(!token||!org)return [];
@@ -36,16 +36,17 @@ async function linkedin(hub,org){
  const r=await fetchWithTimeout(u,{headers:{Authorization:'Bearer '+token,'X-Restli-Protocol-Version':'2.0.0','Linkedin-Version':process.env.JYC_LINKEDIN_VERSION||'202609'}});
  if(!r.ok)throw Error('LinkedIn '+r.status);
  const data=await r.json();
- return (data.elements||[]).filter(x=>x.lifecycleState==='PUBLISHED').map(x=>({externalId:x.id,hub,platform:'LinkedIn',type:x.content?.media?'Post':'Update',title:cleanText(x.commentary).split('. ')[0]||hub+' LinkedIn update',summary:cleanText(x.commentary).slice(0,220),publishedAt:x.publishedAt?new Date(x.publishedAt).toISOString():x.createdAt?new Date(x.createdAt).toISOString():'',url:'https://www.linkedin.com/feed/update/'+encodeURIComponent(x.id),image:'',verified:true}));
+ return (data.elements||[]).filter(x=>x.lifecycleState==='PUBLISHED').map(x=>({externalId:x.id,hub,platform:'LinkedIn',type:x.content?.media?'Post':'Update',title:cleanText(x.commentary).split('. ')[0]||hub+' LinkedIn update',summary:cleanText(x.commentary).slice(0,220),publishedAt:x.publishedAt?new Date(x.publishedAt).toISOString():x.createdAt?new Date(x.createdAt).toISOString():'',url:safeRemoteUrl('https://www.linkedin.com/feed/update/'+encodeURIComponent(x.id)),image:'',verified:true}));
 }
 async function rss(hub,feedUrl){
- if(!feedUrl)return [];
- const r=await fetchWithTimeout(feedUrl,{headers:{accept:'application/rss+xml, application/atom+xml, text/xml'}});if(!r.ok)throw Error('RSS '+r.status);
+ const remoteFeed=safeRemoteUrl(feedUrl);if(!remoteFeed)return [];
+
+ const r=await fetchWithTimeout(remoteFeed,{headers:{accept:'application/rss+xml, application/atom+xml, text/xml'}});if(!r.ok)throw Error('RSS '+r.status);
  const xml=await r.text();const blocks=xml.match(/<(?:item|entry)\b[\s\S]*?<\/(?:item|entry)>/gi)||[];
  const get=(block,tag)=>{const m=block.match(new RegExp('<'+tag+'[^>]*>([\\s\\S]*?)<\\/'+tag+'>','i'));return m?cleanText(m[1]):''};
- return blocks.slice(0,8).map(block=>{const link=block.match(/<link[^>]*href=["']([^"']+)["'][^>]*\/?>(?:<\/link>)?/i);return {externalId:get(block,'guid')||get(block,'id')||link?.[1],hub,platform:'Web',type:'Update',title:get(block,'title')||hub+' update',summary:get(block,'description').slice(0,220),publishedAt:get(block,'pubDate')||get(block,'published')||get(block,'updated'),url:link?.[1]||get(block,'link'),image:'',verified:true};}).filter(x=>x.url);
+ return blocks.slice(0,8).map(block=>{const link=block.match(/<link[^>]*href=["']([^"']+)["'][^>]*\/?>(?:<\/link>)?/i);return {externalId:get(block,'guid')||get(block,'id')||link?.[1],hub,platform:'Web',type:'Update',title:get(block,'title')||hub+' update',summary:get(block,'description').slice(0,220),publishedAt:get(block,'pubDate')||get(block,'published')||get(block,'updated'),url:safeRemoteUrl(link?.[1]||get(block,'link')),image:'',verified:true};}).filter(x=>x.url);
 }
-async function manual(){return cfg.manual.map((x,i)=>({...x,externalId:x.externalId||'manual-'+i+'-'+x.url,verified:true})).filter(x=>x.url);}
+async function manual(){return cfg.manual.map((x,i)=>({...x,externalId:x.externalId||'manual-'+i+'-'+x.url,verified:true,url:safeRemoteUrl(x.url),image:safeRemoteUrl(x.image)})).filter(x=>x.url);}
 async function collect(){
  const tasks=[];
  for(const [hub,id] of Object.entries(cfg.instagram||{}))tasks.push(instagram(hub,id));
