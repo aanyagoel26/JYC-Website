@@ -18,7 +18,7 @@ check('homepage browser QA checks missing image alt',browser.includes("img:not([
 check('homepage browser QA checks unnamed buttons',browser.includes('unnamedButtons'));
 check('homepage browser QA checks horizontal overflow',browser.includes('scrollWidth'));
 check('no positive tabindex values are introduced',!/tabIndex\s*=\s*\{\s*[1-9]\d*\s*\}|tabindex\s*=\s*["'][1-9]\d*["']/i.test(main));
-check('skip link exists',main.includes('SkipLink')&&/className=["']skip-link["']/.test(extras)&&read('index.html').includes('skip-link'));
+check('skip link exists',main.includes('SkipLink')&&/className=["']skip-link["']/.test(extras)&&!read('index.html').includes('class="skip-link"'));
 check('filter controls expose pressed state',/aria-pressed=\{family===/.test(main)&&/aria-pressed=\{!savedOnly\}/.test(extras)&&/aria-pressed=\{savedOnly\}/.test(extras));
 const publicButtonFiles=['src/main.jsx','src/extra-features.jsx','src/jyc-editorial-home.jsx','src/jyc-next-experience.jsx','src/jyc-now.jsx','src/featured-event-popup.jsx'];
 check('public buttons declare an explicit type',publicButtonFiles.every(file=>{const text=read(file);return [...text.matchAll(/<button\b([^>]*)>/g)].every(m=>/\btype\s*=/.test(m[1]));}));
