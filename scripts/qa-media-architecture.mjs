@@ -4,6 +4,7 @@ const source=read('src/jyc-source-media.js');
 const archive=read('src/source-archive-index.js');
 const main=read('src/main.jsx');
 const css=read('src/jyc-logo-final-theme.css');
+const vite=read('vite.config.js');
 const gallery=read('src/extra-features.jsx');
 const checks=[
  ['media governance migration covers photographer and rights metadata',read('supabase/migrations/202610080003_v58_2_media_governance.sql').includes('jyc_photographers')&&read('supabase/migrations/202610080003_v58_2_media_governance.sql').includes('rights_status')&&read('supabase/migrations/202610080003_v58_2_media_governance.sql').includes('license_url')],
