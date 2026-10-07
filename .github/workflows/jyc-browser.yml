@@ -35,20 +35,7 @@ jobs:
       - name: Build production bundle
         run: npm run build
 
-      - name: Start production server
-        run: |
-          nohup npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/jyc-preview.log 2>&1 &
-          echo $! > /tmp/jyc-preview.pid
-          for i in $(seq 1 30); do
-            if curl -fsS http://127.0.0.1:4173/ >/dev/null; then exit 0; fi
-            sleep 1
-          done
-          cat /tmp/jyc-preview.log
-          exit 1
-
       - name: Run browser smoke and responsive QA
-        env:
-          JYC_BASE_URL: http://127.0.0.1:4173
         run: npm run qa:browser
 
       - name: Upload Playwright report on failure
@@ -59,5 +46,4 @@ jobs:
           path: |
             playwright-report
             test-results
-            /tmp/jyc-preview.log
           if-no-files-found: ignore
