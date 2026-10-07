@@ -1,5 +1,6 @@
 ## V57.0.0 — Security and release hardening
 
+- Ran the live Supabase security/performance advisors and removed seven exact duplicate RLS policies; remaining warnings are documented for intentional security-definer RPCs, auth settings and traffic-dependent index review.
 - Expanded Dependabot coverage to npm and GitHub Actions with weekly grouped updates.
 - Added a pull-request dependency-review gate for high-severity dependency changes and prohibited GPL-3.0/AGPL-3.0 dependencies.
 - Modernized CodeQL to v4 and added JavaScript/TypeScript plus GitHub Actions analysis.
