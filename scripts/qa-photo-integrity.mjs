@@ -6,6 +6,7 @@ const mediaSource=fs.readFileSync('src/jyc-source-media.js','utf8');
 assert('non-photographic club override cleanup',mediaSource.includes("CypherX:[]")&&mediaSource.includes("Zencoders:[]")&&mediaSource.includes("NeuralNexus:[]")&&mediaSource.includes("Arcadia:[]")&&mediaSource.includes("Dronotics:[]")&&mediaSource.includes("Eloquence:[]"));
 assert('visual archive exclusions include Aakriti and Panache',mediaSource.includes("'festivals/aakriti':new Set")&&mediaSource.includes("'clubs/panache':new Set"));
 assert('event gallery placements include Dron-O-War and Converge',mediaSource.includes("'Dron-O-War'")&&mediaSource.includes("'Converge'"));
+assert('new visual archive exclusions are locked',mediaSource.includes("'clubs/abhivyakti':new Set(['p3-image685'")&&mediaSource.includes("'gallery/campus-events':new Set(['p2-image494','p2-image495'])")&&mediaSource.includes("'clubs/cypherx':new Set(['p4-image746','p4-image748','p4-image751','p4-image752'])"));
 const gallery=mergeSourceGallery([]);
 const galleryUiSource=fs.readFileSync('src/extra-features.jsx','utf8');
 const manifest=buildJycMediaManifest([]);
