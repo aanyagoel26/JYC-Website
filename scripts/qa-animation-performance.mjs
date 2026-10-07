@@ -14,7 +14,7 @@ const check=(name,ok)=>{console.log((ok?'PASS':'FAIL')+': '+name);if(!ok)failure
 check('DriftWall does not schedule an idle RAF when reduced/low-power/offscreen',drift.includes('if(reduced||lowPower||!visible.current)')&&drift.includes('if(!reduced&&!lowPower&&visible.current)frame.current=requestAnimationFrame(animate)'));
 check('Homepage signature engines remain bounded',home.includes('LazyMagicBento')&&home.includes('LazyDitherVeil')&&home.includes('activities.map'));
 check('DriftWall remains bounded on event and club rails',main.includes('event-drift-wall-section')&&main.includes('club-drift-wall-section')&&main.includes('.slice(0,18)')&&main.includes('.slice(0,24)'));
-check('DriftWall remains bounded on Gallery page',read('src/extra-features.jsx').includes('items.slice(0,24)')||read('src/extra-features.jsx').includes('slice(0,24).map'));
+check('DriftWall remains bounded on Gallery page',read('src/extra-features.jsx').includes('const driftWallItems=items.slice(0,24)'));
 check('DriftWall images are lazy and async decoded',drift.includes('loading="lazy"')&&drift.includes('decoding="async"'));
 check('DitherVeil avoids WebGL on mobile and reduced motion',dither.includes('(pointer: coarse)')&&dither.includes('reducedMotion || coarsePointer')&&dither.includes('dither-veil__fallback'));
 check('MagicBento disables heavy effects on coarse/mobile',bento.includes('(pointer:coarse)')&&bento.includes('const disabled=disableAnimations||mobile'));
