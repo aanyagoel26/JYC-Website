@@ -10,8 +10,8 @@ export function AdminTrustDashboard(){
   setBusy(true);setError('');
   try{
    const [clubs,events,gallery,verification,reviews]=await Promise.all([
-    supabase.from('jyc_clubs').select('id,status').limit(200),
-    supabase.from('jyc_events').select('id,status,club_id').limit(300),
+    supabase.from('jyc_clubs').select('id,slug,status').limit(200),
+    supabase.from('jyc_events').select('id,slug,status,club_id').limit(300),
     supabase.from('jyc_gallery_items').select('id,status,club_id,event_id').limit(500),
     supabase.from('jyc_content_verification').select('entity_type,entity_id,campus_id,status,source_url,verified_at,last_updated_at').order('last_updated_at',{ascending:false}).limit(500),
     supabase.from('jyc_content_reviews').select('id,entity_type,entity_id,status,created_at,reviewed_at').order('created_at',{ascending:false}).limit(100)
@@ -28,10 +28,13 @@ export function AdminTrustDashboard(){
   const verified=(type)=>v.filter(x=>x.entity_type===type&&['verified','published'].includes(x.status)).length;
   const review=(type)=>v.filter(x=>x.entity_type===type&&x.status==='review').length;
   const published=(rows)=>rows.filter(x=>['published','approved'].includes(x.status)).length;
+  const verifiedIds=new Map();
+  for(const row of v.filter(x=>['verified','published'].includes(x.status))) verifiedIds.set(row.entity_type+'::'+row.entity_id,true);
+  const currentVerified=(type,rows)=>rows.filter(x=>verifiedIds.has(type+'::'+(x.slug||x.id))).length;
   const clubs=data.clubs,events=data.events,gallery=data.gallery;
   return {
    clubsPublished:published(clubs),eventsPublished:published(events),galleryPublished:published(gallery),
-   clubsVerified:verified('club'),eventsVerified:verified('event'),galleryVerified:verified('gallery'),
+   clubsVerified:currentVerified('club',clubs),eventsVerified:currentVerified('event',events),galleryVerified:currentVerified('gallery',gallery),
    clubsReview:review('club'),eventsReview:review('event'),galleryReview:review('gallery'),
    eventsLinked:events.filter(x=>x.club_id).length,galleryClubLinked:gallery.filter(x=>x.club_id).length,galleryEventLinked:gallery.filter(x=>x.event_id).length,
    reviewQueue:data.reviews.filter(x=>!['approved','rejected'].includes(x.status)).length
