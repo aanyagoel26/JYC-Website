@@ -63,7 +63,7 @@ export function AdminMediaHealth(){
   setLoading(true);setError('');
   try{
    const [g,a,v]=await Promise.all([
-    supabase.from('jyc_gallery_items').select('id,status,alt_text,credit,album_id,rights_status,focal_x,focal_y,source_url,reviewed_at'),
+    supabase.from('jyc_gallery_items').select('id,status,alt_text,credit,album_id,rights_status,focal_x,focal_y,source_url,public_url,reviewed_at'),
     supabase.from('jyc_media_albums').select('id,name,slug,is_published,cover_url,hero_url,club_id,event_id'),
     supabase.from('jyc_content_verification').select('entity_type,entity_id,status,verified_at,expires_at')
    ]);
@@ -71,7 +71,7 @@ export function AdminMediaHealth(){
    const gallery=g.data||[],albums=a.data||[],verification=v.data||[];
    const now=Date.now(),staleMs=90*24*60*60*1000;
    setState({
-    gallery:{total:gallery.length,approved:gallery.filter(x=>x.status==='approved').length,missingAlt:gallery.filter(x=>!String(x.alt_text||'').trim()).length,missingCredit:gallery.filter(x=>!String(x.credit||'').trim()).length,unassigned:gallery.filter(x=>!x.album_id).length,rightsReview:gallery.filter(x=>x.rights_status!=='cleared').length,focalMissing:gallery.filter(x=>x.focal_x==null||x.focal_y==null).length},
+    gallery:{total:gallery.length,approved:gallery.filter(x=>x.status==='approved').length,duplicates:gallery.filter((x,i,a)=>x.public_url&&a.findIndex(y=>y.public_url===x.public_url)!==i).length,missingAlt:gallery.filter(x=>!String(x.alt_text||'').trim()).length,missingCredit:gallery.filter(x=>!String(x.credit||'').trim()).length,unassigned:gallery.filter(x=>!x.album_id).length,rightsReview:gallery.filter(x=>x.rights_status!=='cleared').length,focalMissing:gallery.filter(x=>x.focal_x==null||x.focal_y==null).length},
     albums:{total:albums.length,published:albums.filter(x=>x.is_published).length,drafts:albums.filter(x=>!x.is_published).length,noCover:albums.filter(x=>!x.cover_url&&!x.hero_url).length,noPhotos:albums.filter(a=>!gallery.some(g=>String(g.album_id)===String(a.id))).length},
     verification:{review:verification.filter(x=>x.status==='review').length,verified:verification.filter(x=>['verified','published','approved'].includes(x.status)).length,expired:verification.filter(x=>x.expires_at&&new Date(x.expires_at).getTime()<now).length,stale:verification.filter(x=>x.verified_at&&now-new Date(x.verified_at).getTime()>staleMs&&!x.expires_at).length},
     readyAlbums:albums.filter(a=>!a.is_published&&gallery.some(g=>String(g.album_id)===String(a.id))&&gallery.filter(g=>String(g.album_id)===String(a.id)).every(g=>g.status==='approved'&&g.rights_status==='cleared')).length
@@ -94,7 +94,7 @@ export function AdminMediaHealth(){
     <Metric n={state.readyAlbums} label="Albums ready to publish"/>
    </div>
    <div className="system-grid">
-    <div className="editor-card"><span className="eyebrow">CONTENT QUALITY</span><h3>Photo metadata</h3><p>Missing alt: <strong>{state.gallery.missingAlt}</strong></p><p>Missing credit: <strong>{state.gallery.missingCredit}</strong></p><p>Missing focal point: <strong>{state.gallery.focalMissing}</strong></p><p>Unassigned to an album: <strong>{state.gallery.unassigned}</strong></p></div>
+    <div className="editor-card"><span className="eyebrow">CONTENT QUALITY</span><h3>Photo metadata</h3><p>Missing alt: <strong>{state.gallery.missingAlt}</strong></p><p>Missing credit: <strong>{state.gallery.missingCredit}</strong></p><p>Missing focal point: <strong>{state.gallery.focalMissing}</strong></p><p>Unassigned to an album: <strong>{state.gallery.unassigned}</strong></p><p>Duplicate public URLs: <strong>{state.gallery.duplicates}</strong></p></div>
     <div className="editor-card"><span className="eyebrow">RIGHTS & PROVENANCE</span><h3>Trust queue</h3><p>Rights not cleared: <strong>{state.gallery.rightsReview}</strong></p><p>Verification review: <strong>{state.verification.review}</strong></p><p>Verified: <strong>{state.verification.verified}</strong></p><p>Expired source records: <strong>{state.verification.expired}</strong></p><p>Older than 90 days: <strong>{state.verification.stale}</strong></p></div>
     <div className="editor-card"><span className="eyebrow">ALBUMS</span><h3>Publication readiness</h3><p>Total: <strong>{state.albums.total}</strong></p><p>Drafts: <strong>{state.albums.drafts}</strong></p><p>Published: <strong>{state.albums.published}</strong></p><p>No cover/hero: <strong>{state.albums.noCover}</strong></p><p>No linked photos: <strong>{state.albums.noPhotos}</strong></p><p>Ready after rights/provenance clearance: <strong>{state.readyAlbums}</strong></p></div>
    </div>
