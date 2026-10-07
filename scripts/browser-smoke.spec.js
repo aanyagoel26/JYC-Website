@@ -274,6 +274,37 @@ test('gallery deep-link opens the requested photograph', async ({ page }) => {
   await expect(page.locator('.jyc57-lightbox[role="dialog"]')).toBeVisible();
 });
 
+
+test('gallery album routes are shareable and filter the archive', async ({ page }) => {
+  await page.goto(base + '/gallery', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'gallery album route');
+  const albumButton=page.locator('.jyc57-filter-group').filter({ hasText: 'Album' }).locator('button').nth(1);
+  await expect(albumButton).toBeVisible();
+  const label=(await albumButton.innerText()).trim();
+  await albumButton.click();
+  await expect.poll(() => new URL(page.url()).pathname, { timeout: 5000 }).toMatch(/^\/gallery\/[^/]+$/);
+  await expect(page.locator('h1').first()).toContainText(label);
+  await expect(page.locator('.jyc57-gallery-meta').first()).toContainText('photographs');
+});
+
+test('gallery lightbox supports next/previous keyboard navigation', async ({ page }) => {
+  await page.goto(base + '/gallery', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'gallery keyboard navigation');
+  const trigger=page.locator('.jyc57-photo,.jyc57-feature-card').first();
+  await expect(trigger).toBeVisible();
+  await trigger.focus();
+  await trigger.press('Enter');
+  const dialog=page.locator('.jyc57-lightbox[role="dialog"]');
+  await expect(dialog).toBeVisible();
+  const counter=dialog.locator('.jyc57-counter');
+  const before=(await counter.innerText()).trim();
+  await page.keyboard.press('ArrowRight');
+  await expect.poll(async()=> (await counter.innerText()).trim(), {timeout:3000}).not.toBe(before);
+  await page.keyboard.press('ArrowLeft');
+  await expect.poll(async()=> (await counter.innerText()).trim(), {timeout:3000}).toBe(before);
+  await page.keyboard.press('Escape');
+});
+
 test('homepage records Core Web Vitals under the browser harness', async ({ page }) => {
   await page.goto(base, { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'web vitals');
