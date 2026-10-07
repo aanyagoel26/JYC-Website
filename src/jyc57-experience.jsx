@@ -73,7 +73,7 @@ export function JYC57Gallery({data}){
  const [selected,setSelected]=useState(null),[visibleCount,setVisibleCount]=useState(36),[zoom,setZoom]=useState(1),[copied,setCopied]=useState(false);
  const dialogRef=useRef(null),triggerRef=useRef(null),touchStart=useRef(null),lastTap=useRef(0);
  useEffect(()=>{let alive=true;supabase.from('jyc_media_albums').select('id,name,slug,cover_url').eq('is_published',true).order('created_at',{ascending:false}).then(({data:rows})=>{if(alive)setAlbums(rows||[])});return()=>{alive=false}},[]);
- const albumMatches=(g)=>{if(album==='All')return true;const key=String(g.albumId||g.album_id||'');return key===String(album)||String(g.album||g.albumSlug||'')===String(album)};
+ const albumMatches=(g)=>{if(album==='All')return true;const key=String(g.albumId||g.album_id||'');const selectedAlbum=albums.find(a=>String(a.id)===String(album)||String(a.slug)===String(album));return key===String(selectedAlbum?.id||album)||String(g.album||g.albumSlug||'')===String(album)};
  const items=useMemo(()=>{
    const incoming=Array.isArray(data?.gallery)?data.gallery:[];
    const strict=[...incoming,...JYC_SOURCE_ARCHIVE_PHOTO_ITEMS].filter(g=>g?.url&&(!g.mediaKind||g.mediaKind==='photo')).filter(g=>g.mediaKind!=='identity'&&g.mediaKind!=='utility').map(g=>({...g,mediaKind:'photo'}));
@@ -84,7 +84,7 @@ export function JYC57Gallery({data}){
  const filtered=useMemo(()=>items.filter(g=>{
    const hay=(g.caption||'')+' '+(g.alt||'')+' '+(g.association||'')+' '+(g.collection||'')+' '+(g.year||'');
    return (!query||hay.toLowerCase().includes(query.toLowerCase()))&&(association==='All'||String(g.association||'')===association)&&(year==='All'||String(g.year||g.date||'').startsWith(year))&&albumMatches(g);
- }),[items,query,association,year,album]);
+ }),[items,query,association,year,album,albums]);
  const featured=useMemo(()=>rankJycPhotoItems(filtered,{limit:6}),[filtered]);
  const featuredKeys=useMemo(()=>new Set(featured.map(g=>String(g.url))),[featured]);
  const archiveItems=useMemo(()=>filtered.filter(g=>!featuredKeys.has(String(g.url))),[filtered,featuredKeys]);
