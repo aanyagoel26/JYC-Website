@@ -44,7 +44,7 @@ add('Public JSON CMS table is not directly readable',!read(path.join(root,'supab
 add('JSON-LD is escaped against script-breakout',/JSON\.stringify\(\{\'@context\':\'https:\/\/schema\.org\'/.test(read(path.join(root,'src/extra-features.jsx'))) && /replace\(\/</.test(read(path.join(root,'src/extra-features.jsx'))));
 add('No raw innerHTML usage',!files.some(file=>/\.jsx?$/.test(file)&&/\.innerHTML\s*=/.test(read(file))));
 add('JYC Now validates external navigation URLs',read(path.join(root,'src/jyc-now.jsx')).includes('function safeExternalUrl')&&read(path.join(root,'src/jyc-now.jsx')).includes("['http:','https:']"));
-add('Updates API validates remote URLs before persistence',read(path.join(root,'api/jyc-updates.js')).includes('function safeRemoteUrl')&&read(path.join(root,'api/jyc-updates.js')).includes("169.254.169.254")&&read(path.join(root,'api/jyc-updates.js')).includes("safeRemoteUrl(feedUrl)"));
+add('Updates API validates remote URLs before persistence',read(path.join(root,'api/jyc-updates.js')).includes('const safeRemoteUrl=')&&read(path.join(root,'api/jyc-updates.js')).includes("169.254.169.254")&&read(path.join(root,'api/jyc-updates.js')).includes("safeRemoteUrl(feedUrl)"));
 if(checks.some(x=>!x.ok)){for(const c of checks)console.log(`${c.ok?'PASS':'FAIL'}: ${c.name}${c.detail?` — ${c.detail}`:''}`);process.exit(1)}
 for(const c of checks)console.log(`PASS: ${c.name}${c.detail?` — ${c.detail}`:''}`);
 console.log(`SECURITY QA PASS (${checks.length} checks)`);
