@@ -15,6 +15,7 @@ const failures=hits.filter(file=>!allowed.has(file));
 const main=fs.readFileSync(path.join(root,'src/main.jsx'),'utf8');
 const checks=[
  ['canonical JAI slug is present in the runtime',main.includes(canonical)],
+ ['event canonicalization prefers stored event slugs',main.includes("slug(event.slug||event.title)")&&main.includes("slug(e.slug||e.title)")],
  ['legacy JAI redirect is explicit',main.includes(`legacyEventSlugMap={'${legacy}':'${canonical}'}`)],
  ['sitemap generator contains canonical JAI slug',fs.readFileSync(path.join(root,'scripts/generate-sitemap.mjs'),'utf8').includes(canonical)],
  ['no stale JAI slug remains in runtime/sitemap generator',failures.length===0,failures.join(', ')],
