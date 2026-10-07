@@ -30,11 +30,13 @@ const inductionUrls=new Set(induction.items.map(x=>x.url));
 const archivePhotoUrls=new Set(JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.map(x=>x.url));
 const eventPhotoItems=event.photoItems||[];
 const auditedArchiveIds=new Set(auditedExclusionIds);
+const qualityOverrideUrls=[...(mediaSource.match(/'([^']+\\.webp)'/g)||[])].map(x=>x.slice(1,-1));
+const qualityOverrideViolations=qualityOverrideUrls.filter(url=>[...auditedArchiveIds].some(id=>url.endsWith('/'+id+'.webp')));
 
 assert('curated archive photography pool is exposed',JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.length>350,`found ${JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.length}`);
 assert('audited archive exclusions are declared before validation',auditedExclusionIds.length===272,`found ${auditedExclusionIds.length}`);
 assert('audited archive exclusions never re-enter through source overrides',auditedExclusionIds.every(id=>![...archivePhotoUrls].some(url=>url.includes('/'+id+'.webp'))),auditedExclusionIds.filter(id=>[...archivePhotoUrls].some(url=>url.includes('/'+id+'.webp'))).join(', '));
-assert('source overrides cannot reference audited archive exclusions',!auditedArchiveIds.has('p1-image139'), 'p1-image139 must remain excluded from Aakriti overrides');
+assert('source overrides cannot reference audited archive exclusions',qualityOverrideViolations.length===0,qualityOverrideViolations.join(', '));
 assert('curated featured overrides remain explicit',mediaSource.includes('const QUALITY_OVERRIDES=')&&mediaSource.includes("Aakriti:[")&&mediaSource.includes("Panache:[")&&mediaSource.includes("CICR:[")&&mediaSource.includes("Innovation:["));
 assert('source gallery has maintained communities',JYC_SOURCE_MEDIA_STATS.maintainedCommunities>0);
 assert('source gallery is non-empty',gallery.length>0);
