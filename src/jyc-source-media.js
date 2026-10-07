@@ -55,9 +55,11 @@ const archivePhotoKind=item=>{
   return cat.startsWith('clubs/')||cat==='festivals/aakriti'||cat==='gallery/campus-events'||cat==='sports'?'photo':(item.mediaKind||'visual');
 };
 const ARCHIVE_GALLERY=JYC_SOURCE_ARCHIVE_CATALOG.map(item=>({...item,mediaKind:archivePhotoKind(item),sourceType:'source-archive',sourceLabel:'JYC supplied image archive',role:item.association?'club':'archive',caption:item.association?item.association+' · supplied archive image':item.category.replaceAll('/',' · '),alt:item.association?item.association+' · JYC supplied archive image':'JIIT Youth Club 128 supplied archive image'}));
+const ARCHIVE_BY_URL=new Map(JYC_SOURCE_ARCHIVE_CATALOG.map(item=>[String(item.url),item]));
+const isAcceptedArchiveUrl=url=>{const item=ARCHIVE_BY_URL.get(String(url||''));return !item||archivePhotoKind(item)==='photo';};
 
 const QUALITY_OVERRIDES={
-  Aakriti:['/assets/hub-photos-extra/aakriti-04.webp','/assets/source-archive/festivals/aakriti/p1-image126.webp','/assets/source-archive/festivals/aakriti/p1-image127.webp','/assets/source-archive/festivals/aakriti/p1-image137.webp','/assets/source-archive/festivals/aakriti/p1-image139.webp','/assets/source-archive/festivals/aakriti/p1-image149.webp','/assets/source-archive/festivals/aakriti/p1-image150.webp'],
+  Aakriti:['/assets/hub-photos-extra/aakriti-04.webp','/assets/source-archive/festivals/aakriti/p1-image126.webp','/assets/source-archive/festivals/aakriti/p1-image127.webp','/assets/source-archive/festivals/aakriti/p1-image137.webp','/assets/source-archive/festivals/aakriti/p1-image149.webp','/assets/source-archive/festivals/aakriti/p1-image150.webp'],
   Aura:['/assets/hub-photos-extra/aura-08.webp','/assets/hub-photos-extra/aura-09.webp','/assets/hub-photos-extra/aura-10.webp','/assets/hub-photos-extra/aura-11.webp','/assets/hub-photos-extra/aura-12.webp','/assets/hub-photos-extra/aura-13.webp'],
   BDS:[],
   Innovation:['/assets/source-archive/clubs/innovation/p5-DSC02902.webp','/assets/source-archive/clubs/innovation/p5-DSC02924.webp','/assets/source-archive/clubs/innovation/p5-DSC03006.webp','/assets/source-archive/clubs/innovation/p5-DSC03268.webp','/assets/source-archive/clubs/innovation/p5-DSC03304.webp','/assets/source-archive/clubs/innovation/p5-DSC03380.webp'],
@@ -83,8 +85,8 @@ export function sourceHubMedia(name){
   const key=normalise(labelFromAlias);
   const canonical=Object.keys(JYC_HUB_CONTENT).find(k=>normalise(k)===key);
   const label=canonical||name;
-  const quality=QUALITY_BY_KEY.get(normalise(label))||[];
-  const mapped=HUB_PHOTO_MAP[label]||[];
+  const quality=(QUALITY_BY_KEY.get(normalise(label))||[]).filter(isAcceptedArchiveUrl);
+  const mapped=(HUB_PHOTO_MAP[label]||[]).filter(isAcceptedArchiveUrl);
   const archiveGallery=ARCHIVE_GALLERY.filter(g=>g.association&&normalise(canonicalHubName(g.association))===key).map(enrichMediaItem).filter(Boolean);
   const gallery=SOURCE_GALLERY.filter(g=>normalise(canonicalHubName(g.association))===key).map(enrichMediaItem).filter(Boolean);
   const story=storyByKey.get(key)||storyByKey.get(normalise(name));
