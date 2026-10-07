@@ -400,6 +400,22 @@ test('public cards do not use pointer-driven 3D tilt', async ({ page }) => {
   expect(transforms.filter(value => value && value !== 'none' && value.includes('matrix3d')).length).toBe(0);
 });
 
+test('featured event popup never blocks the JYC assistant control', async ({ page }) => {
+  await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
+  await page.locator('.jyc-bot-orb').waitFor({ state: 'visible', timeout: 10000 });
+  const popup = page.locator('.jyc-featured-event-overlay');
+  if (await popup.count()) {
+    await expect(popup).toBeVisible();
+    const overlayZ = await popup.evaluate(el => Number.parseInt(getComputedStyle(el).zIndex || '0', 10));
+    const botZ = await page.locator('.jyc-bot-shell').evaluate(el => Number.parseInt(getComputedStyle(el).zIndex || '0', 10));
+    expect(botZ).toBeGreaterThan(overlayZ);
+  }
+  await page.locator('.jyc-bot-orb').click();
+  await expect(page.locator('.jyc-assistant-panel')).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.jyc-assistant-panel')).toHaveCount(0);
+});
+
 test('JYC assistant remains interactive with GLB or safe fallback', async ({ page }) => {
   await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
   await page.locator('.jyc-bot-orb').waitFor({ state: 'visible', timeout: 10000 });
@@ -453,3 +469,4 @@ test('Join JYC exposes the public coming-soon experience', async ({ page }) => {
   await expect(page.getByRole('heading', { name: 'Join JYC.' })).toBeVisible();
   await expect(page.getByText('The next JYC recruitment cycle is being prepared.')).toBeVisible();
 });
+
