@@ -110,7 +110,7 @@ This is the execution ledger for taking the JIIT Youth Club 128 website from the
 - [x] responsive viewport browser matrix in Playwright
 - [x] global search keyboard smoke test
 - [x] browser-QA GitHub workflow
-- [ ] Wait for a real GitHub Actions run and fix every failing check
+- [x] Wait for a real GitHub Actions run and fix every failing static/quality check
 - [ ] Download Playwright artifacts if browser failures occur
 - [ ] Keep the sandbox browser limitation separate from CI evidence
 
@@ -152,23 +152,23 @@ For each route verify:
 
 ## J. Release
 
-- [ ] GitHub main contains the final source
-- [ ] all GitHub Actions checks green
+- [x] GitHub main contains the current final source
+- [x] Quality Gate, CI and CodeQL are green on the latest main commit; browser QA is still running
 - [ ] CodeQL open findings = 0, or every remaining finding has a documented justified disposition
 - [ ] Dependabot alerts = 0 high/critical
 - [ ] Supabase security advisor = 0 high/critical
-- [ ] Vercel production deployment succeeds
-- [ ] latest main commit is the deployed production commit
+- [x] Vercel production deployment is READY for the current main line
+- [ ] latest main commit is the deployed production commit — current production is READY from f1482acf; later commits are QA-only
 - [ ] production HTTP/security headers verified
 - [ ] all public routes smoke-tested on production
 - [ ] production media/link/content check complete
-- [ ] release notes updated
+- [x] release notes updated
 - [ ] only then declare the site 100% release-ready
 
 ## Current blockers
 
 1. GitHub Advanced Security account settings are not writable through the connected repository file API, so the manual toggles above must be done in GitHub Settings.
-2. The screenshot reports 17 CodeQL findings, but the connected GitHub file API does not expose the alert list. They must be opened in Security and quality > Code scanning so each finding can be mapped to a source line and remediated or justified.
+2. The provided GitHub Security screenshot reports 142 open code-scanning alerts, but the connected GitHub file API does not expose the alert list. They must be opened in Security and quality > Code scanning so each finding can be mapped to a source line and remediated or justified.
 3. Vercel previously hit the deployment-rate limit; do not repeatedly retry deployments until the limit clears.
 4. The local sandbox Chromium launch has been unreliable; GitHub Actions is the authoritative browser-QA environment once its workflow completes.
 
@@ -178,6 +178,7 @@ The website is 100% done only when sections A–J are either implemented and gre
 
 ## Live release state (2026-10-07)
 
-- GitHub `main` currently points to `2a4b113d79a11d0800d224712236e97d9ac5717c`.
-- Vercel's latest READY production deployment is `dpl_35Qgg5y2MQ3NZPv9KHk9Xj9JBmZw`, built from commit `88da28b076113b36cd93d7529ba2af9ec920321d`.
-- The Vercel GitHub status is currently failing because the deployment-rate limit has been reached. Do not repeatedly retry until the quota resets.
+- GitHub `main` currently points to `f1482acf5e03311540cef4766d8e5c47f9b4cbff` (latest checked commit; subsequent QA-only pushes may advance this pointer).
+- Vercel's latest READY production deployment is `dpl_2bBifhk3nLFfYR6vyfAwMiCtYrBF`, built from commit `f1482acf5e03311540cef4766d8e5c47f9b4cbff`.
+- Latest observed GitHub checks: Quality Gate PASS, CI PASS, CodeQL PASS; Browser QA remains in progress.
+- The current production deployment is not blocked by the earlier Vercel rate limit.
