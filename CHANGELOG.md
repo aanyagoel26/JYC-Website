@@ -1,3 +1,13 @@
+## V57.0.1 — Release verification hardening
+
+- Added a production browser-QA GitHub Actions gate using the built Vite artifact and Playwright/Chromium.
+- Expanded responsive browser checks across 320–1920px target widths.
+- Added a keyboard global-search smoke test.
+- Made the static release gate run the complete repository QA suite on pushes and pull requests.
+- Aligned the PWA cache identifier with the package release version.
+- Fixed the release CI cache-version comparison for dotted package versions.
+- Allowed the declared Google Fonts resources through the production Content Security Policy.
+
 ## V35.1.0 — Production hardening & discovery polish
 
 - Synchronized release metadata, lockfile version, QA contracts and service-worker cache namespace.
