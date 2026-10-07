@@ -9,3 +9,6 @@ paths-ignore:
   - docs/**
   - '**/*.test.js'
   - '**/*.test.mjs'
+
+  - api/jyc-updates.js
+  - supabase/functions/public-submission/index.ts
