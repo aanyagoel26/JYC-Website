@@ -306,7 +306,7 @@ test('global search opens, accepts keyboard input, and closes cleanly', async ({
   await trigger.press(process.platform === 'darwin' ? 'Meta+K' : 'Control+K');
   const dialog = page.locator('[role="dialog"]').filter({ hasText: /JYC search/i }).first();
   await expect(dialog).toBeVisible();
-  const input = page.getByRole('textbox', { name: /Search JYC/i }).first();
+  const input = page.getByRole('combobox', { name: /Search JYC/i }).first();
   await expect(input).toBeVisible();
   await input.fill('CICR');
   await page.waitForTimeout(150);
@@ -319,7 +319,7 @@ test('keyboard can reach the skip link and primary navigation', async ({ page })
   await page.goto(base, { waitUntil: 'domcontentloaded' });
   await page.locator('.jyc-home').waitFor({ state: 'visible', timeout: 15000 });
   await page.keyboard.press('Tab');
-  await expect(page.locator('.skip-link')).toBeFocused();
+  await expect(page.locator('.skip-link').first()).toBeFocused();
   await expect(page.locator('.skip-link')).toHaveAttribute('href', '#main-content');
 });
 
