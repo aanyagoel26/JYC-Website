@@ -13,6 +13,7 @@ import './jyc-editorial-home.css';
 const LazyDitherVeil=lazy(()=>import('./react-bits/DitherVeil.jsx'));
 const LazyMagicBento=lazy(()=>import('./components/react-bits/MagicBento.jsx'));
 const LazyDriftWall=lazy(()=>import('./components/react-bits/DriftWall.jsx'));
+const LazyFlexCarousel=lazy(()=>import('./components/react-bits/FlexCarousel.jsx'));
 
 const DRIFT_WALL_PRESETS={
  '1':{columns:4,tileWidth:220,tileHeight:140,gap:16,tilt:8,turn:-6,perspective:1250,depth:60,speed:2.4,direction:'up',variance:.1,parallax:.08,lift:20,fade:.62,dim:.52},
