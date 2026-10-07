@@ -20,6 +20,7 @@ const checks=[
  ['external media is classified',source.includes('official-external-media')],
  ['gallery uses role filters',gallery.includes("roleLabels")&&gallery.includes('MEDIA TYPE')],
  ['gallery consumes full curated archive photo pool',gallery.includes('JYC_SOURCE_ARCHIVE_PHOTO_ITEMS')&&gallery.includes('...sourceArchivePhotos')],
+ ['discarded club identity assets are preserved separately',source.includes('JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS')&&source.includes("mediaKind:'identity'")&&source.includes('identityLogo')&&source.includes('identityBanner')],
  ['archive photo policy is content-aware',source.includes('ARCHIVE_PHOTO_EXCLUSIONS')&&source.includes('ARCHIVE_SHOWCASE_PHOTOS')&&source.includes('JYC_SOURCE_ARCHIVE_PHOTO_ITEMS=ARCHIVE_GALLERY')],
  ['living photo engine is wired',gallery.includes('LivingPhoto')&&source.includes('JYC_SOURCE_ARCHIVE_PHOTO_ITEMS')],
  ['featured photo ranking is wired',source.includes('rankJycPhotoItems')&&gallery.includes('rankJycPhotoItems(items,{limit:24})')],
@@ -29,6 +30,10 @@ const checks=[
  ['gallery image component has failure recovery and focal-point support',gallery.includes('function JycGalleryImage')&&gallery.includes('setFailed')&&gallery.includes('focalX')&&gallery.includes('focalY')],
  ['gallery wall derives its preview list after filtered items exist',gallery.includes('const wallItems=useMemo(()=>rankJycPhotoItems(items,{limit:24}),[items])')&&gallery.includes('LazyDriftWall items={wallItems.map')],
  ['gallery lightbox supports keyboard image navigation',gallery.includes("e.key==='ArrowRight'")&&gallery.includes("e.key==='ArrowLeft'")&&gallery.includes('wallItems[next]')],
+ ['public gallery uses strict photo records',read('src/jyc57-experience.jsx').includes('JYC_SOURCE_ARCHIVE_PHOTO_ITEMS')&&read('src/jyc57-experience.jsx').includes("g.mediaKind==='photo'")],
+ ['public gallery supports shareable photo URLs',read('src/jyc57-experience.jsx').includes("/gallery?photo=")],
+ ['public gallery supports mobile swipe and zoom',read('src/jyc57-experience.jsx').includes('onTouchStart')&&read('src/jyc57-experience.jsx').includes('setZoom')],
+ ['public gallery uses metadata filters and progressive rendering',read('src/jyc57-experience.jsx').includes('visibleCount')&&read('src/jyc57-experience.jsx').includes("setFilter('club'")],
 ];
 let failed=0; for(const [name,ok] of checks){console.log((ok?'PASS':'FAIL')+': '+name);if(!ok)failed++}
 if(failed)process.exit(1);
