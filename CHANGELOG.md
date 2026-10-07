@@ -1,5 +1,11 @@
 # Changelog
 
+## V58.0.6 — Media health
+
+- Added a Control Center media-health workspace covering photo metadata, rights, provenance, stale verification, album readiness and missing relationships.
+- Added explicit album narratives, hero media and related-album discovery to published archive routes.
+
+
 ## V58.0.5 — Security hardening
 
 - Hardened the internal album-publication trigger so it is not exposed as a callable PostgREST RPC.
