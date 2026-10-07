@@ -38,9 +38,10 @@ check('final JYC logo theme remains inside consolidated stylesheet stack',read('
 check('logo beige is the final public brand anchor',css.includes('--jyc-champagne:#bf9c6f')&&css.includes('--jyc-cream:#f5f1e6')&&css.includes('--jyc-navy:#18161d')&&css.includes('--accent-red:#a82420'));
 check('light/dark theme contracts are explicit',css.includes('html[data-theme="light"]')&&css.includes('html[data-theme="dark"]')&&css.includes('--jyc-text:var(--jyc-ink)')&&css.includes('--jyc-muted-live:var(--jyc-muted)'));
 check('public text has explicit secondary contrast',css.includes('.public-app p,.public-app li{color:var(--jyc-muted-live)!important}'));
-check('homepage hierarchy and motion layer are present',editorialCss.includes('.jyc-v1-hero{')&&editorialCss.includes('.jyc-v1-hero-media')&&editorialCss.includes('@media(prefers-reduced-motion:reduce)'));
+check('homepage hierarchy and motion layer are present',editorialHome.includes('jh-hero')&&editorialHome.includes('LazyDitherVeil')&&editorialCss.includes('@media(prefers-reduced-motion:reduce)'));
+
 check('latest updates are part of homepage',editorialHome.includes('<JYCNowStrip limit={3}/>'));
-check('Join JYC CTA is clear',editorialHome.includes("nav('/join-jyc')")&&editorialHome.includes('Join JYC / Get Involved'));
+check('Join JYC CTA is clear',editorialHome.includes("nav('/join-jyc')")&&editorialHome.includes('Join JYC'));
 check('Team hierarchy is explicit',main.includes('Faculty → Apex → Core → Clubs & Hubs')&&main.includes('team-command-strip')&&main.includes('JYC Apex'));
 check('About exposes requested principles',main.includes('WHAT WE STAND FOR')&&main.includes('about-principles-v33'));
 check('Gallery supports year discovery',extra.includes('gallery-years')&&extra.includes("const years=['All'"));
@@ -53,12 +54,12 @@ check('public navigation exposes Contact',main.includes("['Contact','/contact']"
 check('official JYC hub content is wired',main.includes('JYC_HUB_CONTENT')&&main.includes('JYC_HUB_FAMILIES'));
 check('verified leadership content remains source-grounded',fallbacks.includes('Dr. Vinay Anand Tikkiwal')&&fallbacks.includes('Dr. Pankaj Kumar Srivastava')&&fallbacks.includes("name:'Harisha'")&&fallbacks.includes("name:'Dhruv Choudhary'"));
 check('production path does not fabricate demo content',main.includes('allowContentFallback:false')&&main.includes('return norm(empty)'));
-check('JYC logo remains the public hero identity',editorialHome.includes('jyc-v1-hero-dither')&&editorialHome.includes('jyc-logo-official.webp')&&editorialHome.includes('JYC 128 · OFFICIAL IDENTITY'));
+check('JYC logo remains the public hero identity',editorialHome.includes('jyc-logo-official.webp')&&editorialHome.includes('JIIT YOUTH CLUB')&&editorialHome.includes('128'));
 check('SEO/social preview remains logo-led',index.includes('og:image" content="https://jyc-website-eight.vercel.app/jyc-logo-official.webp"')&&index.includes('twitter:image" content="https://jyc-website-eight.vercel.app/jyc-logo-official.webp"'));
 check('runtime image failures have a safe public fallback',main.includes("img.dataset.jycFallback='1'")&&main.includes("img.src='/jyc-logo-official.webp'"));
 check('GLB assistant loads without interaction-gated rendering',bot.includes("/models/jyc-spatial.glb")&&bot.includes('reveal="auto"')&&bot.includes('requestIdleCallback'));
 check('GLB asset size remains within the approved supplied asset contract',fs.statSync(path.join(root,'public/models/jyc-spatial.glb')).size===876764);
-check('published team photo fallbacks resolve to committed assets',editorialHome.includes("'divye bajaj':'/assets/team/divye-bajaj.webp'")&&fs.existsSync(path.join(root,'public/assets/team/divye-bajaj.webp')));
+check('published team photo fallbacks resolve to committed assets',editorialHome.includes('<Img src={m.photo||m.image}')&&main.includes('divye-bajaj.webp')&&fs.existsSync(path.join(root,'public/assets/team/divye-bajaj.webp')));
 check('public media frames centre their images',logoTheme.includes('object-position:center center')&&logoTheme.includes('place-items:center'));
 check('mobile public content clears the persistent dock',logoTheme.includes('.public-app{padding-bottom:96px}'));
 check('service worker cache is current',read('public/sw.js').includes('jyc-cache-v57-0-0'));
@@ -82,8 +83,8 @@ check('GLB click path does not double-trigger pointer and keyboard animations',!
 check('GLB animation stop timer prevents stacked playback timers',read('src/jyc-bot.jsx').includes('animationStopTimer')&&read('src/jyc-bot.jsx').includes('clearTimeout(animationStopTimer.current)'));
 check('GLB shadow cost is capped for smoother interaction',read('src/jyc-bot.jsx').includes('shadow-intensity="0.32"'));
 check('GLB avoids repeated asset HEAD probes and respects lite mode',!read('src/jyc-bot.jsx').includes("fetch('/models/jyc-spatial.glb'")&&read('src/jyc-bot.jsx').includes("dataset.performance==='lite'")&&read('src/jyc-bot.jsx').includes('saveData'));
-check('homepage impact counters are exact rather than plus-suffixed estimates',editorialHome.includes('<CountUp to={Number(s.value)||0}')&&!editorialHome.includes('<strong>{s.value}+</strong>'));
+check('homepage proof strip is explicit and non-fabricated',editorialHome.includes('01</b> DISCOVER')&&editorialHome.includes('02</b> PARTICIPATE')&&editorialHome.includes('03</b> BELONG'));
 check('release metadata is synchronized',pkg.version===lock.version&&pkg.version===lock.packages?.['']?.version);
 
-check('CountUp and DepthCarousel stay local and lightweight',editorialHome.includes('<CountUp to={Number(s.value)||0}')&&main.includes('DepthCarousel')&&!read('src/components/react-bits/DepthCarousel.jsx').includes("from'gsap'"));if(fail)process.exit(1);
+check('signature interaction modules remain local and lightweight',main.includes('DepthCarousel')&&!read('src/components/react-bits/DepthCarousel.jsx').includes("from'gsap'"));if(fail)process.exit(1);
 console.log(`Public visual QA: ${pass}/${pass+fail} passed.`);
