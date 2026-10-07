@@ -475,6 +475,7 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
   '/team':'JYC 128 Leadership | Faculty, Apex & Core Team',
   '/leadership':'JYC 128 Leadership | Faculty, Apex & Core Team',
   '/gallery':'JYC Gallery | JIIT Youth Club 128',
+  '/archive':'JYC Archive | JIIT Youth Club 128',
   '/contact':'Contact JIIT Youth Club | JYC',
   '/recruitment':'JIIT Club Recruitment & Auditions | JIIT Youth Club',
   '/calendar':'JYC 128 Event Calendar | JIIT Youth Club',
@@ -512,7 +513,7 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
  const knownPublic=['/','/about','/history','/clubs','/events','/fests','/gallery','/team','/leadership','/contact','/archive','/calendar','/event-calendar','/achievements','/announcements','/updates','/recruitment','/join-jyc'].includes(clean)&&(clean!=='/fests'||isFestMode(data));
  const knownDetail=Boolean(club||event);
  const unknownRoute=!privateRoute&&!knownPublic&&!knownDetail;
- const pageType=club?'club':event?'event':clean==='/fests'?'fests':clean==='/clubs'?'clubs':clean==='/events'?'events':clean==='/gallery'?'gallery':clean==='/team'||clean==='/leadership'?'team':clean==='/history'?'history':clean==='/announcements'?'announcements':clean==='/updates'?'updates':clean==='/achievements'?'achievements':clean==='/calendar'||clean==='/event-calendar'?'calendar':clean==='/recruitment'?'recruitment':clean==='/join-jyc'?'join-jyc':clean==='/about'?'about':clean==='/contact'?'contact':'home';
+ const pageType=club?'club':event?'event':clean==='/fests'?'fests':clean==='/clubs'?'clubs':clean==='/events'?'events':clean==='/gallery'?'gallery':clean==='/team'||clean==='/leadership'?'team':clean==='/history'?'history':clean==='/archive'?'archive':clean==='/announcements'?'announcements':clean==='/updates'?'updates':clean==='/achievements'?'achievements':clean==='/calendar'||clean==='/event-calendar'?'calendar':clean==='/recruitment'?'recruitment':clean==='/join-jyc'?'join-jyc':clean==='/about'?'about':clean==='/contact'?'contact':'home';
  const canonicalPath=club?`/clubs/${slug(club.name)}`:event?`/events/${slug(event.title)}${parts[2]==='register'?'/register':''}`:clean;
  useEffect(()=>{if((club||event)&&slugId!==slug((club||event).name||(club||event).title)){const target=event?`/events/${slug(event.title)}${parts[2]==='register'?'/register':''}`:`/clubs/${slug(club.name)}`;nav(target,{replace:true});}},[slugId,club?.id,event?.id,parts[2],nav]);
  const title=club?`${club.name} — ${club.category||'Student Community'} | JIIT Youth Club 128`:event?`${event.title} | JIIT Event · JYC`:titles[clean]||'JIIT Youth Club';
@@ -520,7 +521,7 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
  usePageMeta(title,description,canonicalPath,{noindex:privateRoute||unknownRoute,type:event?'event':'website',image:event?.poster||club?.logo||undefined,imageAlt:event?.title||club?.name||'JIIT Youth Club 128 official visual'});
  const schema=<JsonLd data={data} pageType={pageType} item={club||event} path={canonicalPath}/>;
  if(clean==='/')return <>{schema}<Home data={data}/></>;
- if(clean==='/history')return <><JYCHistory data={data}/></>;
+ if(clean==='/history')return <>{schema}<JYCHistory data={data}/></>;
  if(clean==='/about')return <>{schema}<About data={data}/></>;if(clean==='/clubs')return <>{schema}<Clubs data={data}/></>;if(club)return <>{schema}<ClubDetail data={data} id={slugId} virtualName={hubKey||undefined}/></>;
  if(clean==='/events')return <>{schema}<Events data={data}/></>;if(clean==='/fests')return isFestMode(data)?<>{schema}<FestsPage data={data}/></>:<Navigate to="/events" replace/>;if(event&&parts[2]==='register')return <><RegistrationPage data={data} id={slugId} session={session}/></>;if(event)return <>{schema}<EventDetail data={data} id={slugId} session={session}/></>;
  if(clean==='/gallery')return <>{schema}<Gallery data={data}/></>;if(clean==='/leadership')return <Navigate to="/team" replace/>;if(clean==='/team')return <>{schema}<Team data={data}/></>;if(clean==='/contact')return <>{schema}<Contact data={data}/></>;if(clean==='/archive')return <>{schema}<ArchivePage data={data}/></>;
