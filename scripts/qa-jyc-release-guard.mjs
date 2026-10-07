@@ -17,7 +17,7 @@ const checks=[
  ['homepage achievements section remains available',home.includes("nav('/achievements')")&&home.includes('Explore Achievements')],
  ['DriftWall presets 1, 2 and 4 are wired',home.includes('<PhotoChapters/>')&&home.includes('jh-photo-story')],
  ['only one DriftWall instance is mounted on the homepage',home.includes('LazyMagicBento')&&home.includes('LazyDitherVeil')],
- ['DriftWall surface has desktop/tablet/mobile height reservations',homeCss.includes('.jh-photo-grid')&&homeCss.includes('@media(max-width:800px)')&&homeCss.includes('@media(max-width:680px)')],
+ ['DriftWall surface has desktop/tablet/mobile height reservations',homeCss.includes('.jh-photo-story')&&homeCss.includes('@media(max-width:800px)')&&homeCss.includes('@media(max-width:680px)')],
  ['public layout has min-width and wrapping guards',publicCss.includes('min-width:0')&&publicCss.includes('overflow-wrap:anywhere')],
  ['reduced motion remains explicit',publicCss.includes('prefers-reduced-motion')],
  ['no placeholder hrefs are shipped in the public React entry',!main.includes('href="#"')]
