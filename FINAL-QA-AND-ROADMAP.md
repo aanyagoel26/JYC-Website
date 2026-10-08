@@ -44,3 +44,6 @@ The academic calendar supplied for this project is used as the source for the in
 
 ## Reference rule
 The JYC PDF defines required structure, functionality, approved theme variables and QA expectations. Its reference images are colour/theme inspiration, not a layout to copy. The final UI therefore keeps the JYC phoenix/orbit identity while using its own layout.
+
+
+> **Current release boundary:** The production public release intentionally does not expose the historical `/admin`, `/login`, `/my-jyc`, `/notifications`, or other retired student-platform routes. They resolve to safe public destinations. The backend/admin implementation remains repository infrastructure but is not part of the public-release acceptance gate unless a future release explicitly re-enables it.
