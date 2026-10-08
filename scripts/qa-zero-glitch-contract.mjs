@@ -18,7 +18,8 @@ const cssFiles=files.filter(p=>p.endsWith('.css'));
 const checks=[];
 const add=(name,ok,detail='')=>checks.push({name,ok:Boolean(ok),detail});
 
-const pkg=JSON.parse(read('package.json'));
+const pkg=JSON.parse(read('package.json'));\nadd('repository identity uses the current GitHub owner',!files.some(file=>/\.(js|jsx|mjs|css|json|html|md|sql|yml|yaml|ps1)$/.test(file)&&read(file).includes('coolbandariya')), 'stale @coolbandariya references remain in tracked text');
+
 add('release metadata is V64 or newer',Number(String(pkg.version).split('.')[0])>=64);
 add('Sharp is locked for real photo derivatives',pkg.devDependencies?.sharp==='0.35.5'&&pkg.scripts?.['media:derivatives']==='node scripts/generate-photo-derivatives.mjs'&&pkg.scripts?.prebuild?.includes('generate-photo-derivatives.mjs'));
 add('only one browser workflow remains',exists('.github/workflows/jyc-browser.yml')&&!exists('.github/workflows/browser-qa.yml'));
