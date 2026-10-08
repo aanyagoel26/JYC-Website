@@ -100,7 +100,7 @@ test('sitewide routes have no overflow, clipping, off-screen content or fixed-co
 });
 
 test('sitewide routes load every visible image successfully and expose alt text', async ({page})=>{\n  test.skip(!['mobile-390','desktop-1280'].includes(test.info().project.name));
-  for(const route of ['/', '/clubs', '/events', '/gallery', '/team']){
+  for(const route of routes){
     await page.goto(route,{waitUntil:'domcontentloaded'});
     await waitForPublicApp(page,route);
     const images=await loadAllImages(page);
