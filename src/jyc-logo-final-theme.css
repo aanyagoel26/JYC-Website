@@ -44,7 +44,7 @@ html[data-theme="dark"]{
   color-scheme:dark;
   --jyc-bg:#0f0e11;
   --jyc-surface:#18161d;
-  --jyc-text:#fff8e1;
+  --jyc-text:#FFFFFF;
   --jyc-muted-live:#a8a3b0;
   --jyc-border:var(--jyc-line-dark);
 }
@@ -131,7 +131,7 @@ html[data-theme="dark"] body{
 .public-app .about-intro-v28,
 .public-app .about-flow-v28{
   background:
-    linear-gradient(145deg,rgba(194,166,130,.075),transparent 58%),
+    linear-gradient(145deg,rgba(191,156,111,.075),transparent 58%),
     var(--jyc-surface)!important;
   color:var(--jyc-text)!important;
   border:1px solid var(--jyc-border)!important;
@@ -238,29 +238,29 @@ html[data-theme="dark"] .public-app .gallery-filter button.active{
 }
 
 /* One shared visual identity: hub/event accents never escape the senior logo palette. */
-.public-app [style*="--hub-accent"]{--hub-accent:var(--jyc-bronze)!important;--hub-accent-soft:rgba(194,166,130,.12)!important;--hub-accent-line:rgba(194,166,130,.34)!important}
-html[data-theme="dark"] .public-app [style*="--hub-accent"]{--hub-accent:var(--jyc-champagne)!important;--hub-accent-soft:rgba(194,166,130,.14)!important;--hub-accent-line:rgba(194,166,130,.34)!important}
+.public-app [style*="--hub-accent"]{--hub-accent:var(--jyc-bronze)!important;--hub-accent-soft:rgba(191,156,111,.12)!important;--hub-accent-line:rgba(191,156,111,.34)!important}
+html[data-theme="dark"] .public-app [style*="--hub-accent"]{--hub-accent:var(--jyc-champagne)!important;--hub-accent-soft:rgba(191,156,111,.14)!important;--hub-accent-line:rgba(191,156,111,.34)!important}
 
 
 /* Shared reveal language: small, purposeful motion instead of decorative clutter. */
 .public-app .reveal{opacity:0;transform:translateY(16px);transition:opacity .65s var(--jyc-ease),transform .65s var(--jyc-ease);transition-delay:var(--reveal-delay,0ms)}
 .public-app .reveal.is-visible{opacity:1;transform:none}
-.public-app .card:hover,.public-app .activity-card:hover,.public-app .home-team-card:hover,.public-app .hub-story-card:hover,.public-app .jyc-journal-card:hover,.public-app .past-card:hover,.public-app .contact-card:hover{transform:translateY(-5px)!important;box-shadow:0 22px 48px rgba(20,25,39,.13)!important;border-color:rgba(194,166,130,.55)!important}
+.public-app .card:hover,.public-app .activity-card:hover,.public-app .home-team-card:hover,.public-app .hub-story-card:hover,.public-app .jyc-journal-card:hover,.public-app .past-card:hover,.public-app .contact-card:hover{transform:translateY(-5px)!important;box-shadow:0 22px 48px rgba(20,25,39,.13)!important;border-color:rgba(191,156,111,.55)!important}
 html[data-theme="dark"] .public-app .card:hover,html[data-theme="dark"] .public-app .activity-card:hover,html[data-theme="dark"] .public-app .home-team-card:hover,html[data-theme="dark"] .public-app .hub-story-card:hover,html[data-theme="dark"] .public-app .jyc-journal-card:hover,html[data-theme="dark"] .public-app .past-card:hover,html[data-theme="dark"] .public-app .contact-card:hover{box-shadow:0 24px 60px rgba(0,0,0,.38)!important}
 
 /* Logo-led navigation */
 .public-app .nav{
   background:color-mix(in srgb,var(--jyc-navy) 96%,transparent)!important;
-  border-bottom:1px solid rgba(194,166,130,.24)!important;
+  border-bottom:1px solid rgba(191,156,111,.24)!important;
   box-shadow:0 10px 34px rgba(20,25,39,.20)!important;
 }
 .public-app .nav .brand-mark{
   background:var(--jyc-ivory)!important;
-  border:1px solid rgba(194,166,130,.62)!important;
-  box-shadow:0 8px 24px rgba(194,166,130,.13)!important;
+  border:1px solid rgba(191,156,111,.62)!important;
+  box-shadow:0 8px 24px rgba(191,156,111,.13)!important;
 }
 .public-app .nav .brand>span:last-child{color:var(--jyc-ivory)!important}
-.public-app .nav nav button{color:rgba(250,247,239,.74)!important}
+.public-app .nav nav button{color:rgba(255,255,255,.74)!important}
 .public-app .nav nav button:hover{color:var(--jyc-ivory)!important}
 .public-app .nav nav button.active{
   background:var(--jyc-champagne)!important;
@@ -269,9 +269,9 @@ html[data-theme="dark"] .public-app .card:hover,html[data-theme="dark"] .public-
 }
 .public-app .nav .theme-toggle,
 .public-app .nav .search-trigger{
-  background:rgba(250,247,239,.08)!important;
+  background:rgba(255,255,255,.08)!important;
   color:var(--jyc-ivory)!important;
-  border-color:rgba(194,166,130,.30)!important;
+  border-color:rgba(191,156,111,.30)!important;
 }
 .public-app .nav .search-trigger svg{stroke:var(--jyc-champagne)!important}
 .public-app .theme-toggle{
@@ -279,7 +279,7 @@ html[data-theme="dark"] .public-app .card:hover,html[data-theme="dark"] .public-
 }
 .public-app .theme-toggle:hover{
   transform:rotate(8deg) translateY(-1px)!important;
-  box-shadow:0 8px 22px rgba(194,166,130,.18)!important;
+  box-shadow:0 8px 22px rgba(191,156,111,.18)!important;
 }
 
 /* Hero: animated, but editorial rather than flashy */
@@ -301,9 +301,9 @@ html[data-theme="dark"] .public-app .card:hover,html[data-theme="dark"] .public-
   content:"";
   position:absolute;
   inset:10% 5%;
-  border:1px solid rgba(194,166,130,.22);
+  border:1px solid rgba(191,156,111,.22);
   border-radius:50%;
-  background:linear-gradient(110deg,transparent 34%,rgba(194,166,130,.14) 48%,transparent 62%);
+  background:linear-gradient(110deg,transparent 34%,rgba(191,156,111,.14) 48%,transparent 62%);
   background-size:220% 100%;
   animation:jycLogoSheen 6.5s ease-in-out infinite;
   pointer-events:none;
@@ -314,7 +314,7 @@ html[data-theme="dark"] .public-app .card:hover,html[data-theme="dark"] .public-
 .home .hero-logo-ring-b,
 .home .hero-logo-pulse{display:none!important}
 .home .hero-stats>div{transition:transform .35s var(--jyc-ease),background .35s ease,box-shadow .35s ease!important}
-.home .hero-stats>div:hover{background:rgba(194,166,130,.10)!important;box-shadow:inset 0 0 0 1px rgba(194,166,130,.12)!important}
+.home .hero-stats>div:hover{background:rgba(191,156,111,.10)!important;box-shadow:inset 0 0 0 1px rgba(191,156,111,.12)!important}
 
 /* Image treatment: warm editorial grade, no arbitrary club colors */
 .public-app .gallery-grid .gallery-item img,
@@ -383,7 +383,7 @@ html[data-theme="dark"] .public-app .card:hover,html[data-theme="dark"] .public-
 
 
 /* Accessible keyboard bypass: visible on focus, unobtrusive otherwise. */
-.skip-link{position:fixed;left:16px;top:12px;z-index:10000;transform:translateY(-180%);padding:10px 14px;min-height:44px;display:inline-flex;align-items:center;border:2px solid var(--jyc-ink,#0f1420);border-radius:10px;background:var(--jyc-cream,#efe3cb);color:var(--jyc-ink,#0f1420);font-weight:800;text-decoration:none;box-shadow:0 8px 24px rgba(15,20,32,.18);transition:transform .18s ease}
+.skip-link{position:fixed;left:16px;top:12px;z-index:10000;transform:translateY(-180%);padding:10px 14px;min-height:44px;display:inline-flex;align-items:center;border:2px solid var(--jyc-ink,#18161D);border-radius:10px;background:var(--jyc-cream,#F5F1E6);color:var(--jyc-ink,#18161D);font-weight:800;text-decoration:none;box-shadow:0 8px 24px rgba(15,20,32,.18);transition:transform .18s ease}
 .skip-link:focus,.skip-link:focus-visible{transform:translateY(0);outline:3px solid currentColor;outline-offset:3px}
 @media (prefers-reduced-motion:reduce){.skip-link{transition:none}}
 
@@ -394,7 +394,7 @@ html[data-theme="dark"] .public-app .card:hover,html[data-theme="dark"] .public-
    Purposeful texture, no decorative clutter.
    ========================================================= */
 
-.brand-mark{position:relative;display:grid;place-items:center;flex:0 0 auto;width:42px;height:42px;overflow:hidden;border:1px solid color-mix(in srgb,var(--jyc-champagne) 42%,transparent);border-radius:50%;background:radial-gradient(circle at 50% 42%,rgba(239,227,203,.18),transparent 62%),var(--jyc-navy-deep);box-shadow:0 8px 24px rgba(0,0,0,.16)}
+.brand-mark{position:relative;display:grid;place-items:center;flex:0 0 auto;width:42px;height:42px;overflow:hidden;border:1px solid color-mix(in srgb,var(--jyc-champagne) 42%,transparent);border-radius:50%;background:radial-gradient(circle at 50% 42%,rgba(245,241,230,.18),transparent 62%),var(--jyc-navy-deep);box-shadow:0 8px 24px rgba(0,0,0,.16)}
 .brand-mark img{display:block;width:100%;height:100%;object-fit:contain;padding:3px}
 .hero-logo-stage img,.archive-seal img,.join-soon-mark img,.team-hero-logo img,.about-hero-mark img{display:block;object-fit:contain}
 .hero-logo-stage img{width:min(100%,360px);height:auto;max-height:360px;filter:drop-shadow(0 24px 34px rgba(0,0,0,.34))}
@@ -413,7 +413,7 @@ html[data-theme="dark"] .public-app .card:hover,html[data-theme="dark"] .public-
   isolation:isolate;
   overflow:hidden;
   background:
-    radial-gradient(circle at 82% 18%,rgba(194,166,130,.13),transparent 27%),
+    radial-gradient(circle at 82% 18%,rgba(191,156,111,.13),transparent 27%),
     radial-gradient(circle at 8% 86%,rgba(120,89,59,.12),transparent 28%),
     linear-gradient(135deg,color-mix(in srgb,var(--jyc-navy-deep) 97%,transparent),color-mix(in srgb,var(--jyc-navy) 94%,transparent));
   border:1px solid color-mix(in srgb,var(--jyc-champagne) 18%,transparent);
@@ -430,8 +430,8 @@ html[data-theme="dark"] .public-app .card:hover,html[data-theme="dark"] .public-
   z-index:-1;
   opacity:.34;
   background-image:
-    radial-gradient(circle at 1px 1px,rgba(239,227,203,.28) 1px,transparent 1.5px),
-    linear-gradient(120deg,transparent 0 48%,rgba(194,166,130,.05) 48.2%,transparent 48.5%);
+    radial-gradient(circle at 1px 1px,rgba(245,241,230,.28) 1px,transparent 1.5px),
+    linear-gradient(120deg,transparent 0 48%,rgba(191,156,111,.05) 48.2%,transparent 48.5%);
   background-size:54px 54px,100% 100%;
   mask-image:linear-gradient(90deg,transparent 0,#000 18%,#000 82%,transparent 100%);
 }
@@ -450,9 +450,9 @@ html[data-theme="dark"] .public-app .card:hover,html[data-theme="dark"] .public-
   right:-14vw;
   top:-22vw;
   z-index:-1;
-  border:1px solid rgba(194,166,130,.14);
+  border:1px solid rgba(191,156,111,.14);
   border-radius:50%;
-  box-shadow:0 0 0 44px rgba(194,166,130,.025),0 0 0 88px rgba(194,166,130,.018);
+  box-shadow:0 0 0 44px rgba(191,156,111,.025),0 0 0 88px rgba(191,156,111,.018);
 }
 
 /* Hero layout repair: copy and identity mark get separate columns. */
@@ -496,7 +496,7 @@ html[data-theme="dark"] .public-app .card:hover,html[data-theme="dark"] .public-
 .nav nav{position:relative;z-index:10060;display:flex;align-items:center;gap:4px}
 .nav nav button{position:relative;z-index:10061;min-height:44px}
 .hamb{position:relative;z-index:10070;min-width:44px;min-height:44px}
-.mobile-nav-scrim{position:fixed!important;inset:0!important;z-index:10055!important;background:rgba(7,10,17,.58)!important;backdrop-filter:blur(5px);border:0!important}
+.mobile-nav-scrim{position:fixed!important;inset:0!important;z-index:10055!important;background:rgba(15,14,17,.58)!important;backdrop-filter:blur(5px);border:0!important}
 .more-sheet-overlay{position:fixed!important;inset:0!important;z-index:11000!important;display:grid;place-items:end center;pointer-events:auto!important}
 .more-sheet{position:relative!important;z-index:11001!important;max-height:min(86vh,900px);overflow:auto}
 .search-trigger{position:relative;z-index:10070}
@@ -573,9 +573,9 @@ html[data-theme="dark"] .public-app .card:hover,html[data-theme="dark"] .public-
   z-index:-1;
   opacity:.28;
   background:
-    radial-gradient(circle at 10% 20%,rgba(194,166,130,.12),transparent 25%),
+    radial-gradient(circle at 10% 20%,rgba(191,156,111,.12),transparent 25%),
     radial-gradient(circle at 90% 80%,rgba(120,89,59,.10),transparent 26%),
-    radial-gradient(circle at 1px 1px,rgba(194,166,130,.20) 1px,transparent 1.5px);
+    radial-gradient(circle at 1px 1px,rgba(191,156,111,.20) 1px,transparent 1.5px);
   background-size:auto,auto,52px 52px;
 }
 .gallery-page .feature-hero{margin-bottom:22px}
@@ -656,7 +656,7 @@ html[data-theme="dark"] .public-app .card:hover,html[data-theme="dark"] .public-
   position:absolute;
   inset:0;
   z-index:1;
-  background:linear-gradient(180deg,transparent 45%,rgba(7,10,17,.82) 100%);
+  background:linear-gradient(180deg,transparent 45%,rgba(15,14,17,.82) 100%);
   pointer-events:none;
 }
 .gallery-item>span{
@@ -1013,7 +1013,7 @@ html,body,#root,.app-frame,.app.public-app,.route-stage{max-width:100%;min-width
 .jyc-team-page .team-member-back-note{margin-top:auto;color:rgba(255,255,255,.48);font-size:9px;letter-spacing:.08em;text-transform:uppercase}
 .jyc-team-page .team-member-back-content .team-social-row{width:100%;justify-content:flex-start;margin-top:16px}
 .jyc-team-page .team-member-back-content .team-social-row a{color:var(--jyc-champagne,#bf9c6f);text-decoration:none}
-.jyc-team-page .team-flip-loading{min-height:360px;border:1px solid var(--jyc-border,rgba(194,166,130,.34));border-radius:16px;background:var(--jyc-surface,#fff)}
+.jyc-team-page .team-flip-loading{min-height:360px;border:1px solid var(--jyc-border,rgba(191,156,111,.34));border-radius:16px;background:var(--jyc-surface,#fff)}
 @media(max-width:700px){.jyc-team-page .team-flip-member,.jyc-team-page .team-member-flip,.jyc-team-page .team-flip-loading{min-height:320px}.jyc-team-page .team-member-back-content{padding:22px}.jyc-team-page .team-member-back-content strong{font-size:24px}}
 
 /* V56.15.2 visual archive rails */
