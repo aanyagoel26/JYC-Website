@@ -745,7 +745,7 @@ footer{padding-block:40px}
 
 /* ---------- image safety ---------- */
 img{max-width:100%;height:auto}
-img[loading="lazy"]{content-visibility:auto}
+img[loading="lazy"]{content-visibility:visible}
 :focus-visible{outline:2px solid var(--accent-gold)!important;outline-offset:3px!important}
 
 /* ---------- hide the optional "This week" feature completely ----------
