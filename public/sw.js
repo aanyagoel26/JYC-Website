@@ -1,6 +1,6 @@
 const CACHE_NAME = 'jyc-cache-v62-0-0';
 
-const APP_SHELL = ['/', '/offline.html', '/manifest.json', '/jyc-logo-official.webp'];
+const APP_SHELL = ['/', '/offline.html', '/manifest.json', '/JYC%20Logo(4).png'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)));
@@ -46,8 +46,8 @@ self.addEventListener('push', (event) => {
   const title = payload.title || 'JYC Update';
   const options = {
     body: payload.body || 'A new JYC update is available.',
-    icon: payload.icon || '/jyc-logo-official.webp',
-    badge: payload.badge || '/jyc-logo-official.webp',
+    icon: payload.icon || '/JYC%20Logo(4).png',
+    badge: payload.badge || '/JYC%20Logo(4).png',
     tag: payload.tag || 'jyc-update',
     data: { url: payload.url || '/' },
     renotify: true
