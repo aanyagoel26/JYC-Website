@@ -1,6 +1,6 @@
 # JIIT Youth Club 128 — Official Website
 
-> **Current release: V64.0.0 — Editorial interaction, media delivery and release hardening**
+> **Current release: V64.1.0 — Editorial interaction, media delivery and release hardening**
 
 [![Quality](https://github.com/kaustubhdua/JYC-Website/actions/workflows/ci.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/ci.yml) [![CodeQL](https://github.com/kaustubhdua/JYC-Website/actions/workflows/codeql.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/codeql.yml) [![JYC Quality](https://github.com/kaustubhdua/JYC-Website/actions/workflows/jyc-quality.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/jyc-quality.yml)
 
@@ -295,9 +295,9 @@ The remaining production gates are operational: configure required third-party E
 
 ## Current release status
 
-**V61.1.0 is the current code release.** V62 is a checklist/release-governance pass: it adds the restrained JYC Network hero interaction, removes the legacy dither hero layer, restores the beige/champagne editorial accent system, and adds the master checklist to the static QA suite.
+**V64.1.0 is the current code release.** V62 is a checklist/release-governance pass: it adds the restrained JYC Network hero interaction, removes the legacy dither hero layer, restores the beige/champagne editorial accent system, and adds the master checklist to the static QA suite.
 
-The release boundary is aligned across package metadata, the service-worker cache, final product QA, final hygiene QA, public discovery files and the latest V61.1 production-build hardening. The current V64 operational release status is documented in `docs/V62-OPERATIONAL-RELEASE-STATUS.md`.
+The release boundary is aligned across package metadata, the service-worker cache, final product QA, final hygiene QA, public discovery files and the latest V61.1 production-build hardening. The current V64.1 operational release status is documented in `docs/V62-OPERATIONAL-RELEASE-STATUS.md`.
 
 The highest-value remaining production work is operational/editorial rather than architectural:
 
