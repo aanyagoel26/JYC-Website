@@ -49,7 +49,7 @@ insert into public.jyc_site_data(id,data) values('main',jsonb_build_object(
   'announcement',jsonb_build_object('on',false,'text','','link',''),
   'mode','events','fest','null'::jsonb,
   'homepage',jsonb_build_object('heroTitle','JIIT YOUTH CLUB','heroSubtitle','READY TO SOAR','heroLead','A student-led ecosystem connecting campus communities, creativity, technology and experiences at JIIT Sector 128.','showClubs',true,'showEvents',true,'showGallery',true,'aboutTitle','The JYC story belongs here.','aboutText',''),
-  'creator',jsonb_build_object('name','Kaustubh Dua','role','Website Creator','linkedin','https://www.linkedin.com/in/kaustubh-dua-2b5a76416','instagram','https://www.instagram.com/kaustubh.this.side/','github','https://github.com/coolbandariya','email','kaustubhdua1991@gmail.com')
+  'creator',jsonb_build_object('name','Kaustubh Dua','role','Website Creator','linkedin','https://www.linkedin.com/in/kaustubh-dua-2b5a76416','instagram','https://www.instagram.com/kaustubh.this.side/','github','https://github.com/kaustubhdua','email','kaustubhdua1991@gmail.com')
 )) on conflict(id) do nothing;
 
 create table if not exists public.jyc_activity_logs(
@@ -175,7 +175,7 @@ begin
     'role','Website Creator',
     'linkedin','https://www.linkedin.com/in/kaustubh-dua-2b5a76416',
     'instagram','https://www.instagram.com/kaustubh.this.side/',
-    'github','https://github.com/coolbandariya',
+    'github','https://github.com/kaustubhdua',
     'email','kaustubhdua1991@gmail.com'
   ), true);
 
