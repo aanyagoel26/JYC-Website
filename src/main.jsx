@@ -84,8 +84,8 @@ import {MomentsSection} from './v14-platform.jsx';
 import {SkipLink,InstallPrompt,MaintenanceGate,ErrorBoundary,EventTools,DownloadICS,JsonLd,usePageMeta,Gallery,GalleryItems,RecruitmentHub,RegistrationPage} from './extra-features.jsx';
 import {readSiteCache,writeSiteCache,siteCacheAge,formatCacheAge,armStoredReminders,googleCalendarUrl,hasLocalReminder,scheduleEventReminder,clearLocalReminder} from './v15-functional.js';
 
-const logo='/jyc-logo-official.webp';
-const logoFallback='/jyc-logo-circle.png';
+const logo='/JYC%20Logo(4).png';
+const logoFallback='/JYC%20Logo(4).png';
 function LogoImage({alt='',...props}){
  return <img {...props} src={logo} alt={alt} onError={e=>{if(e.currentTarget.dataset.fallback==='1')return;e.currentTarget.dataset.fallback='1';e.currentTarget.src=logoFallback}}/>;
 }
@@ -212,7 +212,7 @@ function App(){const loc=useLocation();const nav=useNavigate();const [data,setDa
      img.dataset.jycFallback='1';
      img.dataset.jycFallbackApplied='1';
      img.removeAttribute('srcset');
-     img.src='/jyc-logo-official.webp';
+     img.src='/JYC%20Logo(4).png';
    };
    document.addEventListener('error',onImageError,true);
    return()=>document.removeEventListener('error',onImageError,true);
