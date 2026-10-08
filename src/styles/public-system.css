@@ -680,3 +680,41 @@ body{background:var(--bg)!important;color:var(--ink)!important}
     grid-template-columns:1fr!important;
   }
 }
+
+/* V64.4.2 — deterministic archive geometry.
+   The archive must not change row height based on individual photo content. */
+.public-app .jyc57-masonry{
+  display:grid!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  grid-auto-rows:auto!important;
+  gap:12px!important;
+  align-items:stretch!important;
+}
+.public-app .jyc57-masonry .jyc57-photo{
+  grid-column:auto!important;
+  grid-row:auto!important;
+  width:100%!important;
+  min-width:0!important;
+  min-height:0!important;
+  aspect-ratio:4/3!important;
+  height:auto!important;
+  overflow:hidden!important;
+}
+.public-app .jyc57-masonry .jyc57-photo img,
+.public-app .jyc57-masonry .jyc57-photo picture{
+  display:block!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  object-fit:cover!important;
+}
+@media(max-width:900px){
+  .public-app .jyc57-masonry{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:10px!important}
+}
+@media(max-width:620px){
+  .public-app .jyc57-masonry{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+  .public-app .jyc57-masonry .jyc57-photo{border-radius:12px!important}
+}
+@media(max-width:460px){
+  .public-app .jyc57-masonry{grid-template-columns:1fr!important}
+}
