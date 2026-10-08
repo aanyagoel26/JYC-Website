@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 const routes=[
   '/','/about','/history','/clubs','/events','/gallery','/team',
-  '/best-of-jyc','/archive','/recruitment','/announcements','/updates',
+  '/best-of-jyc','/achievements','/archive','/recruitment','/announcements','/updates',
   '/calendar','/fests','/contact','/join-jyc'
 ];
 
