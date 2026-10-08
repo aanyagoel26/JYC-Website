@@ -38,6 +38,7 @@ const checks=[
   [fs.existsSync('supabase/migrations/202610040010_v56_1_public_registration_acl.sql'),'retired public registration RPC is explicitly removed from client execute ACL']
 ];
 checks.push([main.includes('DepthCarousel')&&fs.existsSync('src/components/react-bits/DepthCarousel.jsx'),'club photography carousel is centred and contained']);
+checks.push([editorialHome.includes('gallery.slice(0,4)')&&!editorialHome.includes('<PhotoChapters/>')&&!editorialHome.includes('LazyDriftWall')&&!editorialHome.includes('image:gallery['),'homepage media composition is consolidated and does not duplicate gallery imagery']);
 checks.push([editorialHome.includes('01</b> DISCOVER')&&editorialHome.includes('02</b> PARTICIPATE')&&editorialHome.includes('03</b> BELONG'),'homepage participation proof is lightweight and non-fabricated']);
 let failed=false;
 for(const [ok,label] of checks){console.log(ok?'PASS':'FAIL',label);if(!ok)failed=true}
