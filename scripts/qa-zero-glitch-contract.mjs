@@ -90,7 +90,16 @@ add('browser QA workflow actually installs Chromium',workflowText.includes('play
 add('CI uses Node 22',workflowText.includes('node-version: 22'));
 add('production build uses the package build command',pkg.scripts.build==='vite build');
 add('production browser suite covers image integrity and geometry',exists('scripts/zero-glitch-browser.spec.js')&&read('scripts/zero-glitch-browser.spec.js').includes('broken images')&&read('scripts/zero-glitch-browser.spec.js').includes('fixed overlap'));
-add('direct public photos default to lazy loading',!sourceFiles.filter(file=>file!=='src/v14-platform.jsx').some(file=>/<img\s+src=/.test(read(file))&&!/loading=/.test(read(file))));
+const directImageLoadingFailures=[];
+for(const file of sourceFiles){
+  for(const tag of read(file).matchAll(/<img\b[^>]*>/g)){
+    const markup=tag[0];
+    if(/\bloading\s*=/.test(markup))continue;
+    if(/fetchPriority\s*=\s*["']high["']/.test(markup))continue;
+    directImageLoadingFailures.push(file);
+  }
+}
+add('direct public photos default to lazy loading',directImageLoadingFailures.length===0,[...new Set(directImageLoadingFailures)].slice(0,10).join(', '));
 
 let failed=0;
 for(const c of checks){
