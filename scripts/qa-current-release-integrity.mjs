@@ -36,4 +36,4 @@ check('media-layout gate is in main QA suite',suite.includes("'qa-media-layout.m
 check('current coherence gate is in main QA suite',suite.includes("'qa-current-release-coherence.mjs'"));
 check('no placeholder links are present in active public entry',!main.includes('href="#"')&&!home.includes('href="#"'));
 if(failures.length){for(const f of failures)console.error('FAIL: '+f.name+(f.detail?' — '+f.detail:''));process.exit(1)}
-console.log('CURRENT RELEASE INTEGRITY PASS ('+failures.length+' failures).');
+console.log('CURRENT RELEASE INTEGRITY PASS ('+(failures.length===0?'all checks passed':failures.length+' failures')+').');
