@@ -9,6 +9,7 @@ const home=read('src/jyc-editorial-home.jsx');
 const homeCss=read('src/jyc-editorial-home.css');
 const publicCss=read('src/styles/public-system.css');
 const suite=read('scripts/run-qa-suite.mjs');
+const admin=read('src/admin-chunk.jsx');
 
 const checks=[];
 const add=(name,ok,detail='')=>checks.push([name,Boolean(ok),detail]);
@@ -26,6 +27,7 @@ add('gallery has mobile layout contracts',publicCss.includes('@media(max-width:6
 add('homepage media CSS has the current family-index contract',homeCss.includes('.jyc-home .jh-family-index')&&!homeCss.includes('.jh-family-image{'));
 add('homepage media CSS has stable four-tile mobile placement',homeCss.includes('.jyc-home .tile-0')&&homeCss.includes('.jyc-home .tile-3')&&homeCss.includes('@media(max-width:680px)');
 add('active suite contains the current media/layout QA',suite.includes('qa-media-layout.mjs')&&suite.includes('qa-current-release-coherence.mjs'));
+add('homepage CMS cannot reorder or restore retired visual surfaces',!admin.includes('move=(id,dir)')&&!admin.includes("Photo Chapters")&&!admin.includes("Hub Photo Wall"));
 
 const suiteFiles=[...suite.matchAll(/'([^']+\.mjs)'/g)].map(m=>m[1]).filter(p=>p.startsWith('qa-'));
 const stale=[];
