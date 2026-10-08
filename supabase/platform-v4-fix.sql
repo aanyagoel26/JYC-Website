@@ -65,7 +65,7 @@ begin
   else raise exception 'Administrator role does not have permission for this content area'; end if;
 
   -- Permanently protect the creator identity.
-  next_data:=jsonb_set(next_data,'{creator}',jsonb_build_object('name','Kaustubh Dua','role','Website Creator','linkedin','https://www.linkedin.com/in/kaustubh-dua-2b5a76416','instagram','https://www.instagram.com/kaustubh.this.side/','github','https://github.com/coolbandariya','email','kaustubhdua1991@gmail.com'),true);
+  next_data:=jsonb_set(next_data,'{creator}',jsonb_build_object('name','Kaustubh Dua','role','Website Creator','linkedin','https://www.linkedin.com/in/kaustubh-dua-2b5a76416','instagram','https://www.instagram.com/kaustubh.this.side/','github','https://github.com/kaustubhdua','email','kaustubhdua1991@gmail.com'),true);
   insert into public.jyc_site_data(id,data,updated_at,updated_by) values('main',next_data,now(),auth.uid()) on conflict(id) do update set data=excluded.data,updated_at=excluded.updated_at,updated_by=excluded.updated_by;
   insert into public.jyc_activity_logs(actor_id,action,entity_type,entity_id,metadata) values(auth.uid(),coalesce(p_action,'Updated site'),p_entity_type,p_entity_id,jsonb_build_object('role',a_role));
   return next_data;
