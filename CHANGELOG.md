@@ -1,5 +1,12 @@
 # Changelog
 
+## V64.4.2 — Whole-site layout regression hardening
+
+- Removed a stale missing CSS import from the active public stylesheet chain.
+- Hardened the Gallery route against variable-row masonry drift with deterministic responsive image frames.
+- Expanded accessibility and zero-glitch QA to cover the active Gallery controls and CSS import graph.
+
+
 ## V64.4.1 — Activity media duplication fix
 
 - Removed the remaining gallery-image binding from homepage activity cards so the activity section stays text-led and does not duplicate the photo story.
