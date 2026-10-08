@@ -13,8 +13,8 @@ const sourceArchivePruner=()=>({
     if(!fs.existsSync(publicArchive)||!fs.existsSync(outArchive)) return;
     const media=await import('./src/jyc-source-media.js');
     const keep=new Set([
-      ...media.JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.map(item=>String(item?.url||'').replace(/^\\/assets\\//,'')),
-      ...media.JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS.map(item=>String(item?.url||'').replace(/^\\/assets\\//,''))
+      ...media.JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.map(item=>String(item?.url||'').replace(/^\/assets\//,'')),
+      ...media.JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS.map(item=>String(item?.url||'').replace(/^\/assets\//,''))
     ].filter(Boolean));
     const keepFiles=[...keep];
     fs.rmSync(outArchive,{recursive:true,force:true});
@@ -43,32 +43,32 @@ export default defineConfig({
           groups: [
             {
               name: 'react-vendor',
-              test: /node_modules[\\/]react(?:-dom)?[\\/]/,
+              test: /node_modules\/react(?:-dom)?\//,
               priority: 30
             },
             {
               name: 'router-vendor',
-              test: /node_modules[\\/]react-router-dom[\\/]/,
+              test: /node_modules\/react-router-dom\//,
               priority: 25
             },
             {
               name: 'supabase-vendor',
-              test: /node_modules[\\/]@supabase[\\/]/,
+              test: /node_modules\/@supabase\//,
               priority: 25
             },
             {
               name: 'falcon-vendor',
-              test: /node_modules[\\/]three[\\/]/,
+              test: /node_modules\/three\//,
               priority: 25
             },
             {
               name: 'jyc-archive-data',
-              test: /[\\/]src[\\/](?:source-archive-index|jyc-source-archive|jyc-source-media)\.js$/,
+              test: /src\/(?:source-archive-index|jyc-source-archive|jyc-source-media)\.js$/,
               priority: 35
             },
             {
               name: 'vendor',
-              test: /node_modules[\\/]/,
+              test: /node_modules\//,
               priority: 10,
               minSize: 20000
             }
