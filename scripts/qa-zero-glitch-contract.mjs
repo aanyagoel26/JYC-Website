@@ -18,7 +18,9 @@ const cssFiles=files.filter(p=>p.endsWith('.css'));
 const checks=[];
 const add=(name,ok,detail='')=>checks.push({name,ok:Boolean(ok),detail});
 
-const pkg=JSON.parse(read('package.json'));\nadd('repository identity uses the current GitHub owner',!files.some(file=>/\.(js|jsx|mjs|css|json|html|md|sql|yml|yaml|ps1)$/.test(file)&&read(file).includes('coolbandariya')), 'stale @coolbandariya references remain in tracked text');
+const pkg=JSON.parse(read('package.json'));
+const staleOwnerToken=['cool','bandariya'].join('');
+add('repository identity uses the current GitHub owner',!files.some(file=>/\.(js|jsx|mjs|css|json|html|md|sql|yml|yaml|ps1)$/.test(file)&&file!=='scripts/qa-zero-glitch-contract.mjs'&&read(file).includes(staleOwnerToken)), 'stale GitHub owner references remain outside the QA contract');
 
 add('release metadata is V64 or newer',Number(String(pkg.version).split('.')[0])>=64);
 add('Sharp is locked for real photo derivatives',pkg.devDependencies?.sharp==='0.35.5'&&pkg.scripts?.['media:derivatives']==='node scripts/generate-photo-derivatives.mjs'&&pkg.scripts?.prebuild?.includes('generate-photo-derivatives.mjs'));
@@ -87,6 +89,8 @@ const workflowText=fs.readdirSync(path.join(root,'.github/workflows')).filter(x=
 add('browser QA workflow actually installs Chromium',workflowText.includes('playwright install --with-deps chromium'));
 add('CI uses Node 22',workflowText.includes('node-version: 22'));
 add('production build uses the package build command',pkg.scripts.build==='vite build');
+add('production browser suite covers image integrity and geometry',exists('scripts/zero-glitch-browser.spec.js')&&read('scripts/zero-glitch-browser.spec.js').includes('broken images')&&read('scripts/zero-glitch-browser.spec.js').includes('fixed overlap'));
+add('direct public photos default to lazy loading',!sourceFiles.filter(file=>file!=='src/v14-platform.jsx').some(file=>/<img\s+src=/.test(read(file))&&!/loading=/.test(read(file))));
 
 let failed=0;
 for(const c of checks){
