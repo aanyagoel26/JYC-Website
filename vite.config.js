@@ -26,7 +26,7 @@ const sourceArchivePruner=()=>({
       fs.copyFileSync(source,target);
     }
     const marker=path.join(root,'dist','production-media-boundary.json');
-    fs.writeFileSync(marker,JSON.stringify({version:1,generatedAt:new Date().toISOString(),photoCount:media.JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.length,identityCount:media.JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS.length,servedArchiveFiles:keepFiles.length},null,2)+'\\n');
+    fs.writeFileSync(marker,JSON.stringify({version:1,generatedAt:new Date().toISOString(),photoCount:media.JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.length,identityCount:media.JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS.length,servedArchiveFiles:keepFiles.length},null,2)+'\n');
     console.log('Production media boundary: served '+keepFiles.length+' curated source-archive files; raw archive is excluded from dist.');
   }
 });
