@@ -220,6 +220,60 @@ test('event and gallery navigation use canonical, shareable URLs', async ({ page
   expect(eagerImages).toBeLessThanOrEqual(4);
 });
 
+test('homepage media composition stays editorial and non-scattered', async ({ page }) => {
+  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'homepage media composition');
+  const result = await page.evaluate(() => {
+    const story = [...document.querySelectorAll('.jyc-home .jh-gallery-tile')];
+    const familyImages = document.querySelectorAll('.jyc-home .jh-family-image, .jyc-home .jh-family img').length;
+    const archiveWalls = document.querySelectorAll('.jyc-home .jh-archive-section, .jyc-home .drift-wall, .jyc-home .jyc-photo-chapters-section').length;
+    const activityImages = document.querySelectorAll('.jyc-home .jh-activities img').length;
+    const storyOverflow = [...document.querySelectorAll('.jyc-home .jh-photo-grid')].some(el => el.scrollWidth > el.clientWidth + 1);
+    return {
+      storyTiles: story.length,
+      familyImages,
+      archiveWalls,
+      activityImages,
+      storyOverflow,
+      storySources: story.map(el => el.querySelector('img')?.currentSrc || el.querySelector('img')?.src || null)
+    };
+  });
+  expect(result.storyTiles, 'homepage photo-story tiles').toBe(4);
+  expect(result.familyImages, 'homepage family image duplicates').toBe(0);
+  expect(result.archiveWalls, 'homepage retired archive/photo-chapter surfaces').toBe(0);
+  expect(result.activityImages, 'homepage activity image duplication').toBe(0);
+  expect(result.storyOverflow, 'homepage photo-story horizontal overflow').toBe(false);
+  expect(result.storySources.filter(Boolean).length).toBe(4);
+});
+
+test('gallery archive uses deterministic responsive image frames', async ({ page }) => {
+  await page.goto(base + '/gallery', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'gallery layout');
+  await page.waitForTimeout(250);
+  const result = await page.evaluate(() => {
+    const grid = document.querySelector('.public-app .gallery-grid');
+    const items = [...document.querySelectorAll('.public-app .gallery-grid .gallery-item')].slice(0, 12);
+    return {
+      display: grid ? getComputedStyle(grid).display : null,
+      columnCount: grid ? getComputedStyle(grid).columnCount : null,
+      overflow: grid ? grid.scrollWidth > grid.clientWidth + 1 : null,
+      ratios: items.map(item => {
+        const img = item.querySelector('img');
+        if (!img) return null;
+        const r = img.getBoundingClientRect();
+        return r.width > 0 && r.height > 0 ? r.width / r.height : null;
+      }).filter(Boolean)
+    };
+  });
+  if (result.display !== null) {
+    expect(result.display).toBe('grid');
+    expect(result.columnCount).toBe('auto');
+    expect(result.overflow).toBe(false);
+    for (const ratio of result.ratios) expect(ratio).toBeGreaterThan(1.15);
+    for (const ratio of result.ratios) expect(ratio).toBeLessThan(1.55);
+  }
+});
+
 test('photo-led pages render real image content', async ({ page }) => {
   for (const route of ['/', '/clubs', '/events', '/gallery']) {
     await page.goto(base + route, { waitUntil: 'domcontentloaded' });
