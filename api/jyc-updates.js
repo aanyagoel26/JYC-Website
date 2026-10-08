@@ -60,14 +60,18 @@ async function collect(){
  return items.sort((a,b)=>new Date(b.publishedAt||0)-new Date(a.publishedAt||0)).slice(0,60);
 }
 async function dbRead(){
- const base=process.env.SUPABASE_URL,key=process.env.SUPABASE_SERVICE_ROLE_KEY||process.env.SUPABASE_SECRET_KEY;if(!base||!key)return [];
- const u=base.replace(/\/$/,'')+'/rest/v1/aggregated_posts?select=*&published=eq.true&order=published_at.desc&limit=60';
- const r=await fetchWithTimeout(u,{headers:{apikey:key,Authorization:'Bearer '+key}});if(!r.ok)return [];return await r.json();
+ try{
+  const base=process.env.SUPABASE_URL,key=process.env.SUPABASE_SERVICE_ROLE_KEY||process.env.SUPABASE_SECRET_KEY;if(!base||!key)return [];
+  const u=base.replace(/\/$/,'')+'/rest/v1/aggregated_posts?select=*&published=eq.true&order=published_at.desc&limit=60';
+  const r=await fetchWithTimeout(u,{headers:{apikey:key,Authorization:'Bearer '+key}});if(!r.ok)return [];return await r.json();
+ }catch{return []}
 }
 async function dbWrite(items){
- const base=process.env.SUPABASE_URL,key=process.env.SUPABASE_SERVICE_ROLE_KEY||process.env.SUPABASE_SECRET_KEY;if(!base||!key||!items.length)return;
- const u=base.replace(/\/$/,'')+'/rest/v1/aggregated_posts?on_conflict=external_id';
- await fetchWithTimeout(u,{method:'POST',headers:{apikey:key,Authorization:'Bearer '+key,'Content-Type':'application/json',Prefer:'resolution=merge-duplicates'},body:JSON.stringify(items.map(x=>({external_id:x.externalId,title:x.title,summary:x.summary||'',image_url:x.image||'',post_url:x.url,published_at:x.publishedAt||null,content_type:x.type||'Update',hub_name:x.hub,platform:x.platform,verified:true,published:true,updated_at:new Date().toISOString()})))});
+ try{
+  const base=process.env.SUPABASE_URL,key=process.env.SUPABASE_SERVICE_ROLE_KEY||process.env.SUPABASE_SECRET_KEY;if(!base||!key||!items.length)return;
+  const u=base.replace(/\/$/,'')+'/rest/v1/aggregated_posts?on_conflict=external_id';
+  await fetchWithTimeout(u,{method:'POST',headers:{apikey:key,Authorization:'Bearer '+key,'Content-Type':'application/json',Prefer:'resolution=merge-duplicates'},body:JSON.stringify(items.map(x=>({external_id:x.externalId,title:x.title,summary:x.summary||'',image_url:x.image||'',post_url:x.url,published_at:x.publishedAt||null,content_type:x.type||'Update',hub_name:x.hub,platform:x.platform,verified:true,published:true,updated_at:new Date().toISOString()})))});
+ }catch{}
 }
 export default async function handler(req,res){
  res.setHeader('X-Content-Type-Options','nosniff');
