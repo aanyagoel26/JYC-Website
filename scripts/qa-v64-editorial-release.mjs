@@ -7,6 +7,7 @@ const main=read('src/main.jsx');
 const gallery=read('src/jyc57-experience.jsx');
 const responsive=read('src/jyc-responsive-photo.jsx');
 const intelligence=read('src/jyc-photo-intelligence.js');
+const routeShells=read('scripts/generate-route-shells.mjs');
 const sitemap=read('scripts/generate-sitemap.mjs');
 const pkg=JSON.parse(read('package.json'));
 const checks=[
@@ -23,7 +24,7 @@ const checks=[
  ['Sector 128 event boundary remains enforced',main.includes('isSector128Venue')&&main.includes('events.filter(e=>isSector128Venue')],
  ['editorial QA remains wired',pkg.scripts?.['qa:editorial']==='node scripts/qa-editorial-system.mjs'],
  ['new V64 QA is wired',pkg.scripts?.['qa:v64-editorial']==='node scripts/qa-v64-editorial-release.mjs'],
- ['route metadata shell generator is wired',pkg.scripts?.postbuild==='node scripts/generate-route-shells.mjs']
+ ['route metadata shell generator is wired',pkg.scripts?.postbuild==='node scripts/generate-route-shells.mjs'&&routeShells.includes("<link rel=\"canonical\" href=\"${siteOrigin}${route}\" />")&&routeShells.includes("/events/jai-2026-jaypee-agentic-ai-hackathon")]
 ];
 let failed=0;
 for(const [name,ok] of checks){console.log((ok?'PASS':'FAIL')+' · '+name);if(!ok)failed++}
