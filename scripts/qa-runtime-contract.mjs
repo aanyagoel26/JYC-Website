@@ -27,6 +27,7 @@ const authModule=fs.readFileSync(path.join(root,'src/extra-features.jsx'),'utf8'
 const authRedirectOk=!authModule.includes("emailRedirectTo:`${window.location.origin}/my-jyc`")&&authModule.includes("emailRedirectTo:`${window.location.origin}/`");
 console.log((authRedirectOk ? "PASS" : "FAIL")+": passwordless auth callback avoids retired /my-jyc redirect");
 if(!authRedirectOk)failed++;
+const nowModule=fs.readFileSync(path.join(root,'src/jyc-now.jsx'),'utf8');
 const nowLogoOk=nowModule.includes('/JYC%20Logo(4).png')&&!nowModule.includes('/jyc-logo-official.webp');
 console.log((nowLogoOk ? "PASS" : "FAIL")+": JYC Now uses the canonical JYC logo asset");
 if(!nowLogoOk)failed++;
@@ -40,7 +41,6 @@ const retiredNativeRegistrationOk=!source.includes("registrationMode==='native'?
 console.log((retiredNativeRegistrationOk ? "PASS" : "FAIL")+": public registration UI does not depend on the revoked native registration RPC");
 if(!retiredNativeRegistrationOk)failed++;
 
-const nowModule=fs.readFileSync(path.join(root,'src/jyc-now.jsx'),'utf8');
 const nowLazyImportOk=nowModule.includes('lazy(') && /import React,\{[^}]*\blazy\b/.test(nowModule);
 console.log((nowLazyImportOk ? "PASS" : "FAIL")+": JYC Now lazy React dependency is explicitly imported");
 if(!nowLazyImportOk)failed++;
