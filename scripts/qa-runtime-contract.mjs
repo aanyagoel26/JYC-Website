@@ -36,7 +36,7 @@ if(!nowNormaliseOk)failed++;
 const registrationSubmitOk=authModule.includes('<form className="native-registration" onSubmit={submit}>')&&authModule.includes('<button type="submit" className="btn" disabled={busy}>{busy?\'Submitting…\':\'Submit registration\'}</button>');
 console.log((registrationSubmitOk ? "PASS" : "FAIL")+": native event registration form has a real submit control");
 if(!registrationSubmitOk)failed++;
-const retiredNativeRegistrationOk=!source.includes("registrationMode==='native'?")&&!source.includes("Boolean(e.registrationUrl||e.registrationMode==='native')")&&!authModule.includes("event.registrationMode==='native')return");
+const retiredNativeRegistrationOk=!source.includes("registrationMode==='native'?")&&!source.includes("Boolean(e.registrationUrl||e.registrationMode==='native')")&&authModule.includes("event.registrationMode==='native')return");
 console.log((retiredNativeRegistrationOk ? "PASS" : "FAIL")+": public registration UI does not depend on the revoked native registration RPC");
 if(!retiredNativeRegistrationOk)failed++;
 
