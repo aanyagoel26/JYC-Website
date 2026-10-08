@@ -100,7 +100,7 @@ begin
     'name','Kaustubh Dua','role','Website Creator',
     'linkedin','https://www.linkedin.com/in/kaustubh-dua-2b5a76416',
     'instagram','https://www.instagram.com/kaustubh.this.side/',
-    'github','https://github.com/coolbandariya',
+    'github','https://github.com/kaustubhdua',
     'email','kaustubhdua1991@gmail.com'
   ),true);
 
