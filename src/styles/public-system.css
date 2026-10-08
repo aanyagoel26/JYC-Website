@@ -928,3 +928,41 @@ body{background:var(--bg)!important;color:var(--ink)!important}
  .public-app .jyc-bot-orb:hover{transform:none!important}
  .public-app .jyc-scroll-progress{display:none!important}
 }
+
+/* V66.3 — senior-review consolidation: one visual language, fewer competing surfaces. */
+.public-app :where(.card,.featured,.club-card-premium,.event-card-premium,.contact-card,.mini-card,.join-grid>div,.achievement-feature,.announcement-card,.archive-event,.archive-club,.event-related-card,.event-context-card,.event-identity-panel,.speaker,.quote-card,.state){box-shadow:none!important}
+.public-app :where(.card:hover,.featured:hover,.club-card-premium:hover,.event-card-premium:hover,.contact-card:hover,.mini-card:hover,.achievement-feature:hover,.announcement-card:hover,.archive-event:hover,.archive-club:hover,.event-related-card:hover,.speaker:hover){transform:none!important;box-shadow:none!important}
+.public-app :where(.card,.featured,.club-card-premium,.event-card-premium,.contact-card,.mini-card,.join-grid>div,.achievement-feature,.announcement-card,.archive-event,.archive-club,.event-related-card,.event-context-card,.event-identity-panel,.speaker,.quote-card,.state){border-radius:12px!important}
+.public-app :where(.featured,.club-hero,.fest-hero,.event-detail-hero,.compact-page-head,.about-hero-v28,.achievements-hero,.announcements-hero,.archive-hero,.join-soon-hero){border-radius:14px!important;box-shadow:none!important}
+.public-app .ecosystem-context-rail{grid-template-columns:repeat(5,minmax(0,1fr));gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:18px 0 34px}
+.public-app .ecosystem-context-rail button{border:0;border-right:1px solid var(--line);border-radius:0;background:transparent;padding:12px 14px;transform:none!important}
+.public-app .ecosystem-context-rail button:last-child{border-right:0}
+.public-app .ecosystem-context-rail button:hover{border-color:var(--line);background:color-mix(in srgb,var(--red) 4%,transparent)}
+.public-app .ecosystem-context-rail img{display:none}
+.public-app .ecosystem-context-rail button{grid-template-columns:1fr 18px}
+.public-app .archive-story-collage{grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:auto;gap:10px}
+.public-app .archive-story-photo,.public-app .story-photo-0,.public-app .story-photo-1,.public-app .story-photo-2,.public-app .story-photo-3,.public-app .story-photo-4,.public-app .story-photo-5{grid-column:span 1;grid-row:span 1;aspect-ratio:4/3}
+.public-app .archive-story-photo img{height:100%;object-fit:cover}
+.public-app .jyc57-featured-grid{grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:auto;gap:10px}
+.public-app .jyc57-feature-card,.public-app .jyc57-feature-card:nth-child(n){grid-column:span 1;grid-row:span 1;aspect-ratio:4/3;border-radius:12px}
+.public-app .jyc57-feature-card:first-child{grid-column:span 2;grid-row:span 2}
+.public-app .jyc57-masonry{grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:auto;gap:10px}
+.public-app .jyc57-photo,.public-app .jyc57-photo:nth-child(n){grid-column:span 1;grid-row:span 1;aspect-ratio:4/3;border-radius:10px}
+.public-app .jyc57-photo img,.public-app .jyc57-feature-card img{transition:none!important}
+.public-app .jyc57-photo:hover img,.public-app .jyc57-feature-card:hover img{transform:none!important;filter:none!important}
+.public-app :where(.gallery-story-card img,.gallery-item img){transition:none!important}
+.public-app :where(.gallery-story-card:hover img,.gallery-item:hover img){transform:none!important;filter:none!important}
+.public-app .jyc-scroll-progress{height:1px!important;opacity:.45!important}
+.public-app .mobile-dock{display:none!important}
+@media(max-width:760px){
+ .public-app .ecosystem-context-rail{grid-template-columns:1fr 1fr;margin-bottom:28px}
+ .public-app .ecosystem-context-rail button{border-bottom:1px solid var(--line)}
+ .public-app .ecosystem-context-rail button:nth-child(2n){border-right:0}
+ .public-app .ecosystem-context-rail button:nth-last-child(-n+2){border-bottom:0}
+ .public-app .archive-story-collage,.public-app .jyc57-featured-grid,.public-app .jyc57-masonry{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ .public-app .jyc57-feature-card:first-child{grid-column:span 2;grid-row:span 1}
+ .public-app .jyc57-feature-card,.public-app .jyc57-feature-card:nth-child(n),.public-app .jyc57-photo,.public-app .jyc57-photo:nth-child(n){grid-column:span 1;grid-row:span 1;aspect-ratio:4/3}
+ .public-app .jyc57-feature-card:first-child{grid-column:span 2}
+ body{padding-bottom:0!important}
+}
+@media(prefers-reduced-motion:reduce){.public-app .ecosystem-context-rail button:hover{transform:none!important}}
