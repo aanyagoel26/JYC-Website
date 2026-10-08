@@ -61,7 +61,7 @@ GitHub contains the latest QA changes, including:
 - expanded browser smoke coverage;
 - release-gate documentation alignment.
 
-The connected Vercel account currently exposes no project matching `coolbandariya/JYC-Website` and no project named JYC. Therefore production deployment verification cannot honestly be marked complete from this connection.
+The connected Vercel account currently exposes no project matching `kaustubhdua/JYC-Website` and no project named JYC. Therefore production deployment verification cannot honestly be marked complete from this connection.
 
 ## Remaining P0 actions
 
