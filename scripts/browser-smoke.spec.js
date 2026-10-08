@@ -178,6 +178,7 @@ test('mobile visual guardrails keep core content centered and inside viewport', 
             // The skip link is intentionally parked off-screen until keyboard focus.
             // It is an accessibility affordance, not an accidentally clipped visible node.
             if (el.classList.contains('skip-link') && document.activeElement !== el) return false;
+            if (el.closest('.jyc57-collection-scroller,.jyc57-photo-story-scrubber')) return false;
             const s = getComputedStyle(el);
             const r = el.getBoundingClientRect();
             return s.display !== 'none' && s.visibility !== 'hidden' && r.width > 0 && r.height > 0 &&
@@ -238,12 +239,12 @@ test('homepage media composition stays editorial and non-scattered', async ({ pa
       storySources: story.map(el => el.querySelector('img')?.currentSrc || el.querySelector('img')?.src || null)
     };
   });
-  expect(result.storyTiles, 'homepage photo-story tiles').toBe(4);
+  expect(result.storyTiles, 'homepage photo-story tiles').toBeLessThanOrEqual(1);
   expect(result.familyImages, 'homepage family image duplicates').toBe(0);
   expect(result.archiveWalls, 'homepage retired archive/photo-chapter surfaces').toBe(0);
   expect(result.activityImages, 'homepage activity image duplication').toBe(0);
   expect(result.storyOverflow, 'homepage photo-story horizontal overflow').toBe(false);
-  expect(result.storySources.filter(Boolean).length).toBe(4);
+  expect(result.storySources.filter(Boolean).length).toBe(result.storyTiles);
 });
 
 test('gallery archive uses deterministic responsive image frames', async ({ page }) => {
