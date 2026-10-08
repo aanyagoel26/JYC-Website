@@ -30,7 +30,7 @@ Remaining warnings are mostly intentional architecture or dashboard configuratio
 1. Configure custom Edge Function secrets: SITE_ORIGINS / SITE_ORIGIN; VAPID_PUBLIC_KEY, VAPID_PRIVATE_KEY, VAPID_SUBJECT; BACKUP_FUNCTION_TOKEN; OPENAI_API_KEY, OPENAI_MODEL.
 2. Enable Supabase leaked-password protection.
 3. Confirm Auth URL/redirect configuration, email confirmation and production SMTP.
-4. Verify the real Vercel project is connected to coolbandariya/JYC-Website; the currently connected Vercel account exposes no JYC project, so production deployment cannot yet be certified from this connection.
+4. Verify the real Vercel project is connected to kaustubhdua/JYC-Website; the currently connected Vercel account exposes no JYC project, so production deployment cannot yet be certified from this connection.
 5. Run real browser QA against the production URL at 320/360/390/430px and desktop widths, including deep links, admin login, role boundaries, gallery lightbox/upload, event registration, contact/project submission and theme/reduced-motion behavior.
 6. Complete full supplied-photo ingestion: classify all source photos, remove duplicates, verify provenance, populate album/club/event relationships, generate responsive variants and audit broken/external URLs.
 7. Verify the remaining 2026–27 hub ecosystem beyond the brochure-backed 17. Current JIIT public material describes a broader 30+ active-hub ecosystem; the website should not imply the 17-record verified set is exhaustive.
