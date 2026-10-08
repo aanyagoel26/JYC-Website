@@ -13,7 +13,7 @@ a,button{-webkit-tap-highlight-color:transparent}
 .nav-inner nav a{position:relative}
 .nav-inner nav a::after{content:"";position:absolute;left:0;right:0;bottom:-7px;height:1px;background:var(--accent-gold,#c2a682);transform:scaleX(0);transform-origin:left;transition:transform var(--jyc-motion-fast) ease}
 .nav-inner nav a:hover::after,.nav-inner nav a[aria-current="page"]::after{transform:scaleX(1)}
-.reveal{will-change:opacity,transform}
+.reveal{will-change:auto}
 .public-app section{scroll-margin-top:92px}
 .public-app :where(input,textarea,select){transition:border-color var(--jyc-motion-fast) ease,box-shadow var(--jyc-motion-fast) ease}
 .public-app :where(input,textarea,select):focus-visible{box-shadow:0 0 0 3px color-mix(in srgb,var(--accent-gold,#c2a682) 20%,transparent)}
