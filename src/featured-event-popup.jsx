@@ -63,7 +63,7 @@ export function FeaturedEventPopup(){
     <section ref={dialogRef} className="jyc-featured-event" role="dialog" aria-modal="true" aria-labelledby="jyc-featured-event-title" aria-describedby="jyc-featured-event-description">
       <button ref={closeRef} type="button" className="jyc-featured-event-close" onClick={dismiss} aria-label="Close featured event">×</button>
       <div className="jyc-featured-event-media">
-        <img src={EVENT.poster} alt="JAI 2026 official Agentic AI Hackathon artwork" />
+        <img src={EVENT.poster} alt="JAI 2026 official Agentic AI Hackathon artwork" loading="lazy" decoding="async"/>
       </div>
       <div className="jyc-featured-event-copy">
         <span className="eyebrow">FEATURED EVENT · JYC 128</span>
