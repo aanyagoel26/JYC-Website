@@ -47,7 +47,8 @@ const scripts = [
   'qa-v64-editorial-release.mjs',
   'qa-dependency-lock.mjs',
   'qa-zero-glitch-contract.mjs',
-  'qa-media-layout.mjs'
+  'qa-media-layout.mjs',
+  'qa-current-release-coherence.mjs'
 ];
 
 for (const script of scripts) {
