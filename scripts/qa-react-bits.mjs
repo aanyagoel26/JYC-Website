@@ -5,6 +5,11 @@ import {fileURLToPath} from 'node:url';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 const read=p=>fs.readFileSync(path.join(root,p),'utf8');
+const collectFiles=(dir)=>fs.readdirSync(path.join(root,dir),{withFileTypes:true}).flatMap(entry=>{
+  const rel=path.join(dir,entry.name);
+  return entry.isDirectory()?collectFiles(rel):[rel];
+});
+const files=[...collectFiles('src/react-bits'),...collectFiles('src/components/react-bits')];
 const pkg=JSON.parse(read('package.json'));
 const lock=JSON.parse(read('package-lock.json'));
 const main=read('src/main.jsx');
