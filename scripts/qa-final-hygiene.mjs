@@ -15,7 +15,7 @@ const checks=[];
 const add=(name,ok,detail='')=>checks.push({name,ok:Boolean(ok),detail});
 
 add('package release is current V64 line',/^64\.\d+\.\d+$/.test(pkg.version));
-add('README names current release',readme.includes('Current release: V64.0.0'));
+add('README names current release',/^> \*\*Current release: V64\.\d+\.\d+/.test(readme));
 add('README does not advertise superseded release markers',!readme.includes('Current release: V61.1.0')&&!readme.includes('Current release: V58.0.8'));
 add('README does not carry superseded V45/V47 product sections',!readme.includes('## V45 product upgrades')&&!readme.includes('## V47 product upgrades'));
 add('README does not advertise retired public utilities',!readme.includes('Standalone JYC Assistant')&&!readme.includes('Featured JAI 2026 popup')&&!readme.includes('public academic calendar'));
