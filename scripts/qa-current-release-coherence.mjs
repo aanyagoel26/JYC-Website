@@ -38,6 +38,7 @@ const stalePatterns=[
   /column-count:4/
 ];
 for(const file of suiteFiles){
+  if(file==='qa-current-release-coherence.mjs') continue;
   const full=path.join('scripts',file);
   if(!fs.existsSync(path.join(root,full))) { stale.push(full+' (missing)'); continue; }
   const text=read(full);
