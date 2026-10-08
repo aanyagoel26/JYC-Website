@@ -147,7 +147,7 @@ export function armLocalReminder(event) {
       if ('Notification' in window && Notification.permission === 'granted') {
         const notification = new Notification(`JYC reminder · ${event.title}`, {
           body: 'Your event starts in about an hour.',
-          icon: '/jyc-logo-official.webp',
+          icon: '/JYC%20Logo(4).png',
           tag: `jyc-${event.id}`
         });
         notification.onclick = () => { window.focus(); window.location.href = `/events/${event.id}`; };
