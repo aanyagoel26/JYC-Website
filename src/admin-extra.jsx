@@ -57,7 +57,7 @@ export function AdminRegistrations({data}){const [eventId,setEventId]=useState('
 
 export function AdminAlbums(){
  const [tab,setTab]=useState('photos'),[rows,setRows]=useState([]),[albums,setAlbums]=useState([]),[verification,setVerification]=useState([]),[selected,setSelected]=useState(null),[busy,setBusy]=useState(false),[notice,setNotice]=useState(''),[query,setQuery]=useState(''),[rights,setRights]=useState('all'),[editorial,setEditorial]=useState('all');
- const load=async()=>{setNotice('');const [g,a]=await Promise.all([
+ const load=async()=>{setNotice('');const [g,a,v]=await Promise.all([
   supabase.from('jyc_gallery_items').select('*').order('created_at',{ascending:false}).limit(500),
   supabase.from('jyc_media_albums').select('*').order('sort_order',{ascending:true}).order('created_at',{ascending:false}),
   supabase.from('jyc_content_verification').select('entity_type,entity_id,status')
@@ -89,7 +89,7 @@ export function AdminAlbums(){
    rights_status:selected.rights_status||'review',rights_holder:selected.rights_holder?.trim()||null,license_name:selected.license_name?.trim()||null,license_url:selected.license_url?.trim()||null,usage_notes:selected.usage_notes?.trim()||null
   };
   const {error}=await supabase.from('jyc_gallery_items').update(next).eq('id',selected.id);
-  if(error)setNotice(error.message);else{setRows(rows.map(r=>String(r.id)===String(selected.id)?{...r,...next}:r));setSelected(s=>({...s,...next}));setNotice('Photo editorial metadata saved. Rights state was not changed.')}
+  if(error)setNotice(error.message);else{setRows(rows.map(r=>String(r.id)===String(selected.id)?{...r,...next}:r));setSelected(s=>({...s,...next}));setNotice('Photo editorial metadata saved. Rights changes were recorded through the review guard.')}
   setBusy(false);
  };
  const saveAlbum=async album=>{
