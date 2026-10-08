@@ -11,7 +11,7 @@ if(!fs.existsSync(index)){
 }
 
 const html=fs.readFileSync(index,'utf8');
-const siteOrigin=(process.env.VITE_SITE_URL|| (process.env.VERCEL_URL?`https://${process.env.VERCEL_URL}`:'https://jyc-website-eight.vercel.app')).replace(/\\/$/,'');
+const siteOrigin=(process.env.VITE_SITE_URL||'https://jyc-website-eight.vercel.app').replace(/\/$/,'');
 const routes={
   '/about':{
     title:'About JIIT Youth Club 128 | JYC',
