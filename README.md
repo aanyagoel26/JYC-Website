@@ -255,6 +255,8 @@ The repository is maintained with a **clean PR queue**. Open PRs should be focus
 
 **Current repository state:** 0 open pull requests at the time of this documentation pass.
 
+**Repository owner:** `kaustubhdua`. GitHub links in this document intentionally use the current owner after the account rename.
+
 ## Production gates
 
 A release should be considered production-ready only after:
