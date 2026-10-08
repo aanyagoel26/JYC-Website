@@ -71,8 +71,7 @@ export function AdminAlbums(){
   if(!selected)return;
   setBusy(true);setNotice('');
   const score=scoreJycPhoto({width:selected.width,height:selected.height,technicalQuality:selected.technical_quality,composition:selected.composition_score,peopleMoment:selected.people_moment_score,jycRelevance:selected.jyc_relevance_score,uniqueness:selected.uniqueness_score,storyValue:selected.story_value_score,duplicateGroup:selected.duplicate_group});
-  const {data:{user}}=await supabase.auth.getUser();
-  const next={
+   const next={
    title:selected.title?.trim()||null,story:selected.story?.trim()||null,alt_text:selected.alt_text?.trim()||selected.caption?.trim()||null,
    subjects:Array.isArray(selected.subjects)?selected.subjects:String(selected.subjects||'').split(',').map(x=>x.trim()).filter(Boolean),
    location:selected.location?.trim()||null,captured_at:selected.captured_at||null,captured_at_precision:selected.captured_at_precision||'unknown',
@@ -86,7 +85,7 @@ export function AdminAlbums(){
    editorial_score:score.total,editorial_status:selected.editorial_status||'unreviewed',editorial_reviewed_at:new Date().toISOString(),
    featured:Boolean(selected.featured),hero_eligible:Boolean(selected.hero_eligible),archive_eligible:selected.archive_eligible!==false,
    duplicate_group:selected.duplicate_group?.trim()||null,album_id:selected.album_id||null,focal_x:selected.focal_x==null?null:Number(selected.focal_x),focal_y:selected.focal_y==null?null:Number(selected.focal_y),
-   rights_status:selected.rights_status||'review',rights_holder:selected.rights_holder?.trim()||null,license_name:selected.license_name?.trim()||null,license_url:selected.license_url?.trim()||null,usage_notes:selected.usage_notes?.trim()||null,reviewed_by:user?.id||null
+   rights_status:selected.rights_status||'review',rights_holder:selected.rights_holder?.trim()||null,license_name:selected.license_name?.trim()||null,license_url:selected.license_url?.trim()||null,usage_notes:selected.usage_notes?.trim()||null
   };
   const {error}=await supabase.from('jyc_gallery_items').update(next).eq('id',selected.id);
   if(error)setNotice(error.message);else{setRows(rows.map(r=>String(r.id)===String(selected.id)?{...r,...next}:r));setSelected(s=>({...s,...next}));setNotice('Photo editorial metadata saved. Rights state was not changed.')}
