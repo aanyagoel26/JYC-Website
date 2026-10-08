@@ -1,27 +1,41 @@
-# V62 operational release status
+# V64 operational release status
 
-V62 is the current application release.
+V64 is the current application release on GitHub `main`.
 
-## Verified
-- Supabase project is ACTIVE_HEALTHY.
-- Seven production Edge Functions are deployed and active.
-- `backup-site-data` is deployed as v4. It accepts the existing scheduler token and an authenticated active `super_admin` session; it writes timestamped snapshots to the private `jyc-backups` bucket.
-- The current production deployment `jyc-website-eight.vercel.app` is READY and serves the V62 runtime from commit `a521f762cdf3a664017f04f4a9c256ca6836e67b`.
-- GitHub `main` has since advanced to merge commit `be476d9fd7ca3c98456f30e30af1524d77c3333c` (CI release-verification documentation only).
-- JAI/event Vercel infrastructure was not modified.
+## Verified in source / database
+- V64 shared Motion transition: event card → event detail.
+- V64 shared Motion transition: gallery card → lightbox.
+- Both transitions respect reduced-motion preferences.
+- Responsive photo delivery now bounds derivative candidates by source dimensions.
+- Route-specific static metadata shells are generated after production builds for the major public routes and canonical JAI route.
+- V64 editorial/release QA is wired into the project.
+- Browser QA workflow is present and runs Chromium against a production build.
+- Supabase media publication trigger functions have direct client execution revoked.
+- `jyc_media_albums.cover_gallery_item_id` has a supporting index.
+- Internal rate-limit tables now have explicit deny policies for direct `anon`/`authenticated` access.
+- Supabase production migration history contains `v64_security_performance_hardening` and `v64_1_rate_limit_rls_denials`.
+- Current CMS gallery state remains intentionally unpublished: 52 approved records, 0 rights-cleared, 0 focal-complete, 0 editorially reviewed.
+- Current production database therefore does not expose those CMS photos through the public gallery gate.
 
 ## Platform-gated
-- Vercel currently rejects new deployments with `api-deployments-free-per-day` and a 24-hour retry window. No billing or unrelated project was changed.
-- GitHub Actions creates the four expected jobs for the verification commit, but each failed job currently records zero steps; rerunning the CI workflow did not produce executable job steps. This is a GitHub runner/platform execution failure, not a failed application test.
-- Supabase leaked-password protection is still disabled and must be enabled in Auth password-security settings. Supabase documents this as a hosted-project Auth setting.
+- Vercel currently rejects new deployment creation with `api-deployments-free-per-day` / HTTP 402 and a 24-hour retry window. The current production deployment remains an older `main` commit.
+- The latest GitHub `main` code is therefore not yet the production runtime.
+- GitHub Actions has historically produced zero-step failures in this repository; the new browser/release workflows are committed, but a successful runner execution has not been verified.
+- Supabase leaked-password protection remains disabled. This is a hosted Auth configuration setting and cannot safely be enabled through the available project database tooling.
+- No custom domain has been attached or modified.
+- JAI/event Vercel infrastructure has not been touched.
 
-## Editorial / authorization-gated
-- All 52 gallery records remain `rights_status=review`; provenance/credit metadata is not legal permission to publish.
-- All 31 album shells remain unpublished; six gallery items remain unalbumed.
-- All 52 focal points remain unset because these require visual crop decisions rather than arbitrary 50/50 values.
-- Production Edge Function secret values cannot be read through the management API; the configured values must be verified in Supabase settings.
-- The backup bucket currently contains zero objects, so a restore drill cannot honestly be marked passed until the first real snapshot is created and restored in a controlled test.
-- No custom domain has been attached; no domain or DNS changes were made because the correct official domain must be explicitly selected without disturbing the existing JAI/event infrastructure.
+## Editorial / human authorization gates
+- Gallery rights clearance is still required for every CMS photograph.
+- Photographer / rights-holder attribution still requires review.
+- Focal points require actual visual crop decisions.
+- Album publication remains intentionally blocked until media is editorially and legally ready.
+- Backup/restore drill remains incomplete until a real production snapshot is created and restored in a controlled test.
+
+## SEO
+Major public routes now get static route-specific HTML metadata during build, reducing dependence on client-side metadata execution for crawlers and link unfurlers.
+
+Dynamic entity routes beyond the explicitly generated canonical JAI route still depend on the application runtime for entity-specific metadata. A future full SSR/SSG architecture could eliminate that limitation, but it should not be introduced as an untested framework migration immediately before release.
 
 ## Release safety
-The remaining gates are intentionally not represented as completed merely by changing database statuses or writing checklist text. Human/legal/editorial authorization and platform-level limits remain explicit.
+The release is not marked fully production-complete until the platform-gated, editorial/legal, backup, browser/device, and deployment gates above are actually passed. No database status was falsified and no unrelated JAI/event deployment was modified.
