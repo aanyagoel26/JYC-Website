@@ -966,3 +966,18 @@ body{background:var(--bg)!important;color:var(--ink)!important}
  body{padding-bottom:0!important}
 }
 @media(prefers-reduced-motion:reduce){.public-app .ecosystem-context-rail button:hover{transform:none!important}}
+
+
+/* V67 — final public visual hierarchy guardrails */
+.public-app{overflow-x:clip}
+.public-app :where(.card,.gallery-item,.contact-card,.mini-card,.join-grid>div,.jyc-now-card,.jyc-spotlight-grid button){min-width:0}
+.public-app :where(h1,h2,h3,h4,p,span,a,button){overflow-wrap:anywhere}
+.public-app :where(.card,.gallery-item,.contact-card,.mini-card,.join-grid>div,.featured,.club-hero,.fest-hero,.event-detail-poster,.quote-card,.search-modal,.state){box-shadow:none!important}
+.public-app :where(.card:hover,.gallery-item:hover,.contact-card:hover,.featured:hover){transform:none!important}
+.public-app :where(.card,.gallery-item,.contact-card,.mini-card,.join-grid>div){border-radius:12px}
+.public-app .section-head{max-width:760px}
+.public-app .section-head p{max-width:680px}
+.public-app :where(.hero-art .orbit,.state-orbit,.float-chip){animation:none!important}
+@media(max-width:900px){.public-app .section.page,.public-app .section.unified-public-page{width:min(100% - 40px,1240px)}}
+@media(max-width:620px){.public-app .section.page,.public-app .section.unified-public-page{width:calc(100% - 28px)}}
+@media(prefers-reduced-motion:reduce){.public-app *{animation-duration:.001ms!important;transition-duration:.001ms!important;scroll-behavior:auto!important}}
