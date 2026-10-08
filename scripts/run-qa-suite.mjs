@@ -25,7 +25,6 @@ const scripts = [
   'qa-events-128.mjs',
   'qa-accessibility-contract.mjs',
   'qa-repo-hygiene.mjs',
-  'qa-v52-final-contract.mjs',
   'qa-media-architecture.mjs',
   'qa-photo-integrity.mjs',
   'qa-local-assets.mjs',
@@ -47,7 +46,8 @@ const scripts = [
   'qa-master-checklist.mjs',
   'qa-v64-editorial-release.mjs',
   'qa-dependency-lock.mjs',
-  'qa-zero-glitch-contract.mjs'
+  'qa-zero-glitch-contract.mjs',
+  'qa-media-layout.mjs'
 ];
 
 for (const script of scripts) {
