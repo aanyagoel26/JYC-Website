@@ -5,7 +5,7 @@ const {JYC_SOURCE_ARCHIVE_PHOTO_ITEMS}=await import('../src/jyc-source-media.js'
 const allowedArchive=new Set(JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.map(item=>String(item?.url||'')));
 const root=path.resolve('public/assets');
 const outputRoot=path.resolve('public/assets/photo-derivatives');
-const WIDTHS=[320,480,640,960,1280,1600,2400];
+const WIDTHS=[480,960,1600];
 const ALLOWED=['source-archive','hub-photos','hub-photos-extra'];
 const inputFiles=[];
 const walk=dir=>{for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())walk(file);else if(/\.(jpe?g|png|webp)$/i.test(file))inputFiles.push(file)}};
