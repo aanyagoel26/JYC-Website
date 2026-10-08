@@ -50,6 +50,7 @@ check('DriftWall remains available for the visual archive',fs.existsSync(path.jo
 check('Heavy homepage visual engines are lazy-loaded',home.includes('LazyMagicBento')&&!home.includes('LazyDitherVeil')&&!home.includes('LazyDriftWall'));
 check('MagicBento is lazy-loaded and GSAP is declared',home.includes('LazyMagicBento')&&pkg.dependencies.gsap==='3.15.0'&&lock.packages['node_modules/gsap']?.version==='3.15.0');
 check('FlexCarousel component remains available for future archive surfaces',fs.existsSync(path.join(root,'src/components/react-bits/FlexCarousel.jsx'))&&fs.existsSync(path.join(root,'src/components/react-bits/FlexCarousel.css')));
+check('React Bits components do not ship CSP-incompatible remote demo media',!files.some(file=>/\.jsx$/.test(file)&&/images\.unsplash\.com/.test(read(file))));
 check('DriftWall archive surface has responsive safeguards',read('src/components/react-bits/DriftWall.css').includes('height')&&read('src/components/react-bits/DriftWall.css').includes('@media'));
 check('Homepage visual archive CSS contains no escaped newline literals',!homeCss.includes('\\n'));
 check('DriftWall has offscreen, low-power and reduced-motion safeguards',read('src/components/react-bits/DriftWall.jsx').includes('IntersectionObserver')&&read('src/components/react-bits/DriftWall.jsx').includes('lowPower')&&read('src/components/react-bits/DriftWall.jsx').includes('prefers-reduced-motion'));
