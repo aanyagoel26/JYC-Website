@@ -26,4 +26,4 @@ npm run qa:browser
 ```
 
 ## GitHub release
-Commit the complete source to the existing `coolbandariya/JYC-Website` repository on `main` only after Windows build/browser QA passes.
+Commit the complete source to the existing `kaustubhdua/JYC-Website` repository on `main` only after Windows build/browser QA passes.
