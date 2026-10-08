@@ -4,6 +4,14 @@ const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));
 const lock=JSON.parse(fs.readFileSync('package-lock.json','utf8'));
 const root=lock.packages?.[''];
 const failures=[];
+const nodeVersion=String(pkg.engines?.node||'');
+check(nodeVersion==='>=24 <25','package runtime is pinned to Node 24');
+check(fs.readFileSync('.nvmrc','utf8').trim()==='24','nvmrc matches Node 24');
+for(const workflow of ['ci.yml','jyc-browser.yml','jyc-quality.yml','legacy-redirect-check.yml','legacy-route-matrix.yml','unknown-route-check.yml']){
+  const workflowText=fs.readFileSync('.github/workflows/'+workflow,'utf8');
+  check(!workflowText.includes('node-version: 22'),'workflow '+workflow+' does not run the stale Node 22 runtime');
+  check(workflowText.includes('node-version: 24'),'workflow '+workflow+' runs Node 24');
+}
 const check=(ok,msg)=>{if(!ok)failures.push(msg);console.log((ok?'PASS':'FAIL')+' · '+msg)};
 
 check(lock.name===pkg.name,'package-lock name matches package name');
