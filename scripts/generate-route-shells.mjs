@@ -11,6 +11,7 @@ if(!fs.existsSync(index)){
 }
 
 const html=fs.readFileSync(index,'utf8');
+const siteOrigin=(process.env.VITE_SITE_URL|| (process.env.VERCEL_URL?`https://${process.env.VERCEL_URL}`:'https://jyc-website-eight.vercel.app')).replace(/\\/$/,'');
 const routes={
   '/about':{
     title:'About JIIT Youth Club 128 | JYC',
@@ -76,7 +77,7 @@ function shellFor(meta,route){
     }
   }
   out=out.replace(/<meta property="og:url" content="[^"]*"\s*\/>/i,`<meta property="og:url" content="__JYC_CANONICAL_ROUTE__" />`);
-  out=out.replace('__JYC_CANONICAL_ROUTE__',`__JYC_ORIGIN__${route}`);
+  out=out.replace('__JYC_CANONICAL_ROUTE__',`${siteOrigin}${route}`);
   out=out.replace(/<link rel="canonical" href="[^"]*"\s*\/>/i,`<link rel="canonical" href="__JYC_ORIGIN__${route}" />`);
   return out;
 }
