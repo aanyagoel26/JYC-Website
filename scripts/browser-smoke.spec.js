@@ -221,7 +221,7 @@ test('photo-led pages render real image content', async ({ page }) => {
     expect(await images.count(), route).toBeGreaterThan(0);
     await expect(images.first()).toBeVisible();
     await expect.poll(async () => images.evaluateAll(nodes => nodes.filter(img => img.complete && img.naturalWidth > 0).length), { timeout: 5000 }).toBeGreaterThan(0);
-    const broken = await images.evaluateAll(nodes => nodes.filter(img => img.complete && img.naturalWidth === 0 && !String(img.currentSrc||img.src).endsWith('/jyc-logo-official.webp')).map(img => img.getAttribute('src')));
+    const broken = await images.evaluateAll(nodes => nodes.filter(img => img.complete && img.naturalWidth === 0 && !String(img.currentSrc||img.src).endsWith('/JYC%20Logo(4).png')).map(img => img.getAttribute('src')));
     expect(broken, 'broken images on '+route).toEqual([]);
   }
 });
@@ -474,7 +474,7 @@ test('public images load, stay inside the viewport, and use centered focal posit
       .map(img => img.complete ? true : new Promise(resolve => { const done=()=>resolve(true); img.addEventListener('load',done,{once:true}); img.addEventListener('error',done,{once:true}); setTimeout(done,10000); }))));
     const result = await page.locator('main img, footer img').evaluateAll(images => images
       .filter(img => {
-        if((img.currentSrc||img.src).endsWith('/jyc-logo-official.webp')) return false;
+        if((img.currentSrc||img.src).endsWith('/JYC%20Logo(4).png')) return false;
         const r=img.getBoundingClientRect();
         return r.bottom>0 && r.top<window.innerHeight && r.width>0 && r.height>0;
       })
