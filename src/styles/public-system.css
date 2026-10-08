@@ -476,7 +476,7 @@ img{max-width:100%}svg{max-width:100%}.page a,.section a{text-decoration-thickne
   --bronze:var(--jyc-bronze);
   --accent:var(--jyc-red);
   --red:var(--jyc-red);
-  --jyc-red:var(--jyc-red);
+  --jyc-red:#A82420;
   --jyc-red-2:var(--jyc-red);
   --jyc-glow:rgba(168,36,32,.22);
   --jyc-soft:rgba(168,36,32,.08);
