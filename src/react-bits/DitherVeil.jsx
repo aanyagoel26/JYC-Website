@@ -5,7 +5,7 @@ import { Renderer, Program, Mesh, Triangle, Texture, RenderTarget } from 'ogl';
 
 import './DitherVeil.css';
 
-const DEFAULT_SRC = '/jyc-logo-official.webp';
+const DEFAULT_SRC = '/JYC%20Logo(4).png';
 
 const ORDERED = { bayer: 0, noise: 1, lines: 2 };
 
