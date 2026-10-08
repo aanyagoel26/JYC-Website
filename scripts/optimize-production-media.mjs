@@ -4,6 +4,7 @@ import sharp from 'sharp';
 
 const root=path.resolve('dist/assets');
 const MAX_BYTES=3*1024*1024;
+const TARGET_BYTES=2.5*1024*1024;
 const candidates=[];
 const walk=dir=>{
   if(!fs.existsSync(dir))return;
@@ -26,7 +27,7 @@ for(const file of raster){
     if(ext==='.jpg'||ext==='.jpeg'){
       await image.jpeg({quality:82,mozjpeg:true,progressive:true}).toFile(tmp);
     }else if(ext==='.png'){
-      await image.png({compressionLevel:9,adaptiveFiltering:true,palette:false}).toFile(tmp);
+      await image.png({compressionLevel:9,adaptiveFiltering:true,palette:true,quality:92,effort:10}).toFile(tmp);
     }else{
       await image.webp({quality:82,effort:5}).toFile(tmp);
     }
