@@ -893,3 +893,38 @@ body{background:var(--bg)!important;color:var(--ink)!important}
  .public-app .nav-inner{width:calc(100% - 32px);height:68px!important;padding-right:0!important}
  .public-app .brand img{width:42px!important;height:42px!important}
 }
+
+
+/* V66.2 — final public visual calm pass
+   Content first: one strong focal point, restrained chrome, predictable media geometry. */
+.public-app :where(.section,.page,.feature-page,.unified-public-page){scroll-margin-top:88px}
+.public-app :where(.hero,.home-hero,.page-hero,.feature-hero){isolation:isolate}
+.public-app :where(.hero-art,.hero-visual,.page-hero-visual){overflow:hidden}
+.public-app :where(.card,.feature-card,.contact-card,.archive-event,.archive-club,.achievement-feature,.announcement-card,.event-related-card,.event-context-card,.event-identity-panel,.mini-card,.join-grid>div,.speaker){box-shadow:none!important}
+.public-app :where(.card:hover,.feature-card:hover,.contact-card:hover,.archive-event:hover,.archive-club:hover,.achievement-feature:hover,.announcement-card:hover,.event-related-card:hover,.mini-card:hover,.speaker:hover){transform:none!important;box-shadow:none!important}
+.public-app :where(.card,.feature-card,.contact-card,.archive-event,.archive-club,.achievement-feature,.announcement-card,.event-related-card,.event-context-card,.event-identity-panel,.mini-card,.speaker){border-radius:12px!important}
+.public-app :where(.section-image,.quote-card,.event-detail-poster,.feature-media,.feature-image){border-radius:14px!important}
+.public-app :where(.hero-actions,.detail-actions,.social-row,.live-strip){gap:8px!important}
+.public-app :where(.eyebrow){letter-spacing:.14em}
+.public-app .jyc57-archive-nav{position:static;top:auto;backdrop-filter:none;border-radius:12px}
+.public-app .jyc57-collection-rail{margin-bottom:32px;border-radius:14px}
+.public-app .jyc57-photo-story-stage{min-height:460px;border-radius:14px}
+.public-app .jyc57-event-timeline{border-radius:14px;box-shadow:none}
+.public-app .jyc-bot-shell{right:18px!important;bottom:18px!important}
+.public-app .jyc-bot-orb{width:64px!important;height:64px!important;border-radius:18px!important;box-shadow:0 10px 26px rgba(24,20,15,.14)!important}
+.public-app .jyc-bot-model-wrap{width:52px!important;height:52px!important}
+.public-app .jyc-bot-hint{display:none!important}
+.public-app .jyc-bot-label{font-size:7px!important;box-shadow:none!important}
+.public-app .jyc-scroll-progress{height:1px!important;opacity:.55!important}
+.public-app .connection-notice{box-shadow:none!important}
+@media(max-width:760px){
+ .public-app .jyc-bot-shell{right:12px!important;bottom:calc(78px + env(safe-area-inset-bottom))!important}
+ .public-app .jyc-bot-orb{width:58px!important;height:58px!important;border-radius:16px!important}
+ .public-app .jyc-bot-model-wrap{width:48px!important;height:48px!important}
+ .public-app .jyc-bot-label{display:none!important}
+ .public-app .jyc57-photo-story-stage{min-height:0}
+}
+@media(prefers-reduced-motion:reduce){
+ .public-app .jyc-bot-orb:hover{transform:none!important}
+ .public-app .jyc-scroll-progress{display:none!important}
+}
