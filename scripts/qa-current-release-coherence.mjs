@@ -13,7 +13,7 @@ const suite=read('scripts/run-qa-suite.mjs');
 const checks=[];
 const add=(name,ok,detail='')=>checks.push([name,Boolean(ok),detail]);
 
-add('release metadata is V64.4.1',pkg.version==='64.4.1');
+add('release metadata is V64.4.1',pkg.version==='64.4.2');
 add('homepage has exactly one intentional photo-story surface',home.includes('gallery.slice(0,4)')&&home.includes('jh-photo-grid'));
 add('homepage has no retired PhotoChapters mount',!home.includes('<PhotoChapters/>'));
 add('homepage has no retired DriftWall mount',!home.includes('LazyDriftWall')&&!home.includes('jh-archive-section'));
@@ -21,6 +21,7 @@ add('homepage family cards are media-free',home.includes('jh-family-index')&&!ho
 add('homepage activity cards are media-free',!home.includes('image:gallery['));
 add('homepage does not lazy-load a retired visual archive engine',!home.includes('LazyDitherVeil'));
 add('gallery uses the deterministic grid contract',publicCss.includes('.public-app .gallery-grid{')&&publicCss.includes('display:grid!important')&&publicCss.includes('column-count:unset!important')&&publicCss.includes('aspect-ratio:4/3!important'));
+add('gallery archive uses deterministic rows',publicCss.includes('.public-app .jyc57-masonry')&&publicCss.includes('grid-auto-rows:auto!important')&&publicCss.includes('.public-app .jyc57-masonry .jyc57-photo'));
 add('gallery has mobile layout contracts',publicCss.includes('@media(max-width:620px)')&&publicCss.includes('grid-template-columns:repeat(2,minmax(0,1fr))!important')&&publicCss.includes('@media(max-width:460px)');
 add('homepage media CSS has the current family-index contract',homeCss.includes('.jyc-home .jh-family-index')&&!homeCss.includes('.jh-family-image{'));
 add('homepage media CSS has stable four-tile mobile placement',homeCss.includes('.jyc-home .tile-0')&&homeCss.includes('.jyc-home .tile-3')&&homeCss.includes('@media(max-width:680px)');
