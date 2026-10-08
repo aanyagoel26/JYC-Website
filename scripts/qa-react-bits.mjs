@@ -35,7 +35,7 @@ const checks=[
  ['single global image-error fallback listener is canonical',
   (main.match(/document\.addEventListener\('error',onImageError,true\)/g)||[]).length===1&&
   (main.match(/document\.removeEventListener\('error',onImageError,true\)/g)||[]).length===1&&
-  main.includes("img.dataset.jycFallback='1'")&&main.includes("img.dataset.jycFallbackApplied='1'")&&main.includes("img.src='/jyc-logo-official.webp'")],
+  main.includes("img.dataset.jycFallback='1'")&&main.includes("img.dataset.jycFallbackApplied='1'")&&main.includes("img.src='/JYC%20Logo(4).png'")],
  ['no public Control Center launcher added',!main.includes('Control Center</button>')&&!main.includes('Control Center ↗')]
 ];
 
