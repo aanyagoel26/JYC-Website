@@ -78,7 +78,7 @@ function shellFor(meta,route){
   }
   out=out.replace(/<meta property="og:url" content="[^"]*"\s*\/>/i,`<meta property="og:url" content="__JYC_CANONICAL_ROUTE__" />`);
   out=out.replace('__JYC_CANONICAL_ROUTE__',`${siteOrigin}${route}`);
-  out=out.replace(/<link rel="canonical" href="[^"]*"\s*\/>/i,`<link rel="canonical" href="__JYC_ORIGIN__${route}" />`);
+  out=out.replace(/<link rel="canonical" href="[^"]*"\s*\/>/i,`<link rel="canonical" href="${siteOrigin}${route}" />`);
   return out;
 }
 
@@ -86,9 +86,6 @@ for(const [route,meta] of Object.entries(routes)){
   const dir=path.join(dist,...route.replace(/^\//,'').split('/'));
   fs.mkdirSync(dir,{recursive:true});
   let shell=shellFor(meta,route);
-  shell=shell.replaceAll('__JYC_ORIGIN__','/');
-  // Keep the canonical origin relative so the deployed host is always correct.
-  shell=shell.replace(`content="/${route.replace(/^\//,'')}"`,`content="${route}"`);
   fs.writeFileSync(path.join(dir,'index.html'),shell);
 }
 console.log(`Generated ${Object.keys(routes).length} route-specific HTML shells.`);
