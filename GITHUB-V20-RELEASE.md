@@ -1,6 +1,6 @@
 # GitHub V20 release checklist
 
-Repository: `https://github.com/coolbandariya/JYC-Website.git`
+Repository: `https://github.com/kaustubhdua/JYC-Website.git`
 
 1. Extract this release.
 2. Copy source into the existing Git clone while excluding `.git`, `node_modules`, `dist`, and all `.env*` files.
