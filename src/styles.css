@@ -2150,3 +2150,67 @@ footer a:hover{
 .media-rights-panel label span{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)}
 .media-rights-panel input,.media-rights-panel textarea,.media-rights-panel select{width:100%;border:1px solid var(--border-tech);background:var(--bg-card);color:var(--text-primary);padding:10px 11px;border-radius:10px}
 @media(max-width:620px){.media-rights-panel{grid-template-columns:1fr}.media-rights-panel .media-editor-wide{grid-column:auto}}
+
+
+/* V66 — universal visual cleanup: reduce density, repetition and decorative noise */
+.public-app .section.page,
+.public-app .section.unified-public-page{max-width:1240px}
+.public-app .section-head{max-width:760px;margin-bottom:34px}
+.public-app .section-head h2{max-width:720px}
+.public-app .card-grid,.public-app .club-grid,.public-app .team-grid,.public-app .contact-grid{gap:14px}
+.public-app .card,.public-app .gallery-item,.public-app .contact-card,.public-app .mini-card,.public-app .join-grid>div{box-shadow:none;border-radius:12px}
+.public-app .card:hover,.public-app .gallery-item:hover,.public-app .contact-card:hover{transform:translateY(-3px);box-shadow:0 12px 30px rgba(26,25,29,.07)}
+.public-app .featured,.public-app .club-hero,.public-app .fest-hero,.public-app .event-detail-poster,.public-app .quote-card{border-radius:16px;box-shadow:none}
+.public-app .featured>div:last-child{padding:42px}
+.public-app .club-hero,.public-app .fest-hero{min-height:420px;padding:44px}
+.public-app .detail-section{margin-top:56px}
+.public-app .gallery-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.public-app .gallery-item img{height:220px}
+.public-app .team-photo{height:250px}
+.public-app .hero-actions{gap:10px}
+.public-app .btn{border-radius:10px;box-shadow:none}
+.public-app .filters,.public-app .event-toolbar{gap:8px;margin-bottom:24px}
+.public-app .discover,.public-app .gallery-filter,.public-app .seg{margin-bottom:22px}
+.public-app .state{border-radius:16px;min-height:240px;padding:44px}
+.public-app .announcement{border-radius:12px;box-shadow:none}
+.public-app .search-modal{border-radius:16px}
+.public-app .theme-toggle{position:static;box-shadow:none}
+.public-app .nav-inner{padding-right:0}
+@media (max-width:900px){
+ .public-app .section.page,.public-app .section.unified-public-page{width:min(100% - 40px,1240px)}
+ .public-app .section{padding-top:64px;padding-bottom:64px}
+ .public-app .card-grid,.public-app .club-grid,.public-app .team-grid,.public-app .contact-grid,.public-app .gallery-grid{grid-template-columns:1fr 1fr}
+ .public-app .featured{grid-template-columns:1fr}
+ .public-app .featured-image{min-height:300px}
+ .public-app .club-hero,.public-app .fest-hero{grid-template-columns:1fr;min-height:360px;padding:32px}
+ .public-app .detail-logo{justify-self:start;width:150px;height:150px}
+}
+@media (max-width:620px){
+ .public-app .section.page,.public-app .section.unified-public-page{width:calc(100% - 28px)}
+ .public-app .section{padding-top:48px;padding-bottom:48px}
+ .public-app .card-grid,.public-app .club-grid,.public-app .team-grid,.public-app .contact-grid,.public-app .gallery-grid{grid-template-columns:1fr}
+ .public-app .featured>div:last-child{padding:28px}
+ .public-app .gallery-item img{height:240px}
+ .public-app .club-hero,.public-app .fest-hero{padding:24px;border-radius:12px}
+ .public-app .club-hero h1,.public-app .fest-hero h1{font-size:clamp(44px,14vw,72px)}
+ .public-app .hero-actions{flex-direction:column;align-items:stretch}
+ .public-app .hero-actions .btn{width:100%;text-align:center}
+}
+@media (prefers-reduced-motion:reduce){.public-app *{scroll-behavior:auto!important;animation-duration:.001ms!important;transition-duration:.001ms!important}}
+
+
+/* V66.1 — remove remaining high-noise global patterns */
+.public-app .hero-art .orbit{animation:none;opacity:.42}
+.public-app .hero-art .o2,.public-app .hero-art .o3{opacity:.24}
+.public-app .float-chip{box-shadow:none}
+.public-app .logo-core{box-shadow:0 0 0 20px color-mix(in srgb,var(--accent-gold) 3%,transparent)}
+.public-app .card:hover,.public-app .gallery-item:hover,.public-app .contact-card:hover,.public-app .featured:hover{box-shadow:none}
+.public-app .btn:hover{box-shadow:none}
+.public-app .state-orbit{animation:none}
+@media (max-width:620px){
+ .public-app .hero-art{min-height:380px;overflow:hidden}
+ .public-app .hero-art .o1{width:420px;height:420px}
+ .public-app .hero-art .o2,.public-app .hero-art .o3{display:none}
+ .public-app .float-chip{display:none}
+ .public-app .logo-core{width:min(250px,72vw)}
+}

@@ -85,7 +85,8 @@ async function loadAllImages(page){
   });
 }
 
-test('sitewide routes have no overflow, clipping, off-screen content or fixed-control overlap', async ({page})=>{\n  test.skip(!['mobile-390','desktop-1280'].includes(test.info().project.name));
+test('sitewide routes have no overflow, clipping, off-screen content or fixed-control overlap', async ({page})=>{
+  test.skip(!['mobile-390','mobile-430','tablet-768','desktop-1280','desktop-1440'].includes(test.info().project.name));
   for(const route of routes){
     await page.goto(route,{waitUntil:'domcontentloaded'});
     await waitForPublicApp(page,route);
@@ -99,21 +100,23 @@ test('sitewide routes have no overflow, clipping, off-screen content or fixed-co
   }
 });
 
-test('sitewide routes load every visible image successfully and expose alt text', async ({page})=>{\n  test.skip(!['mobile-390','desktop-1280'].includes(test.info().project.name));
+test('sitewide routes load every visible image successfully and expose alt text', async ({page})=>{
+  test.skip(!['mobile-390','mobile-430','tablet-768','desktop-1280','desktop-1440'].includes(test.info().project.name));
   for(const route of routes){
     await page.goto(route,{waitUntil:'domcontentloaded'});
     await waitForPublicApp(page,route);
     const images=await loadAllImages(page);
-    const broken=images.filter(x=>!x.complete||x.naturalWidth===0);
+    const broken=images.filter(x=>x.naturalWidth===0);
     const missingAlt=images.filter(x=>x.alt===null);
     expect(broken,route+' broken images').toEqual([]);
     expect(missingAlt,route+' images without alt attribute').toEqual([]);
   }
 });
 
-test('mobile pages remain centered and controls meet touch-safe sizing', async ({page})=>{\n  test.skip(test.info().project.name!=='mobile-390');
+test('mobile pages remain centered and controls meet touch-safe sizing', async ({page})=>{
+  test.skip(!['mobile-390','mobile-430','tablet-768'].includes(test.info().project.name));
   for(const route of ['/', '/clubs', '/events', '/gallery', '/contact']){
-    await page.setViewportSize({width:390,height:844});
+    await page.setViewportSize(test.info().project.name==='mobile-430'?{width:430,height:932}:test.info().project.name==='tablet-768'?{width:768,height:1024}:{width:390,height:844});
     await page.goto(route,{waitUntil:'domcontentloaded'});
     await waitForPublicApp(page,route);
     const result=await page.evaluate(()=>{
@@ -129,7 +132,8 @@ test('mobile pages remain centered and controls meet touch-safe sizing', async (
   }
 });
 
-test('reduced-motion mode disables meaningful public animations', async ({page})=>{\n  test.skip(test.info().project.name!=='desktop-1280');
+test('reduced-motion mode disables meaningful public animations', async ({page})=>{
+  test.skip(!['tablet-768','desktop-1280','desktop-1440'].includes(test.info().project.name));
   await page.emulateMedia({reducedMotion:'reduce'});
   await page.goto('/',{waitUntil:'domcontentloaded'});
   await waitForPublicApp(page,'reduced motion');
@@ -147,7 +151,8 @@ test('reduced-motion mode disables meaningful public animations', async ({page})
   expect(active,'reduced-motion active animations').toEqual([]);
 });
 
-test('gallery lightbox opens, navigates, closes and restores focus without geometry failure', async ({page})=>{\n  test.skip(!['mobile-390','desktop-1280'].includes(test.info().project.name));
+test('gallery lightbox opens, navigates, closes and restores focus without geometry failure', async ({page})=>{
+  test.skip(!['mobile-390','desktop-1280'].includes(test.info().project.name));
   await page.goto('/gallery',{waitUntil:'domcontentloaded'});
   await waitForPublicApp(page,'gallery');
   const trigger=page.locator('.jyc57-photo,.jyc57-feature-card').first();
@@ -164,7 +169,8 @@ test('gallery lightbox opens, navigates, closes and restores focus without geome
   await expect(trigger).toBeFocused();
 });
 
-test('React Bits and Motion surfaces are present without horizontal overflow', async ({page})=>{\n  test.skip(test.info().project.name!=='desktop-1280');
+test('React Bits and Motion surfaces are present without horizontal overflow', async ({page})=>{
+  test.skip(!['desktop-1280','desktop-1440'].includes(test.info().project.name));
   await page.goto('/',{waitUntil:'domcontentloaded'});
   await waitForPublicApp(page,'motion surfaces');
   const result=await page.evaluate(()=>{

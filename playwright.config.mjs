@@ -6,7 +6,7 @@ export default defineConfig({
   testDir: './scripts',
   timeout: 30000,
   expect: { timeout: 7000 },
-  workers: process.env.CI ? 4 : undefined,
+  workers: process.env.CI ? 2 : undefined,
   fullyParallel: false,
   reporter: [['line']],
   // The public site exercises WebGL, image decoding and multiple lazy React surfaces. CI runners are memory-constrained; serializing projects prevents browser-context OOM cascades while retaining every viewport check.
@@ -32,6 +32,10 @@ export default defineConfig({
     {
       name: 'desktop-1280',
       use: { viewport: { width: 1280, height: 900 } }
+    },
+    {
+      name: 'desktop-1440',
+      use: { viewport: { width: 1440, height: 900 } }
     }
   ],
   webServer: {

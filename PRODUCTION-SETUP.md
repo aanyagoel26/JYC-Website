@@ -88,3 +88,6 @@ Do not add service-role or secret keys to Vercel frontend variables.
 - [ ] `npm run build` passes.
 - [ ] GitHub Actions passes.
 - [ ] Vercel deployment works.
+
+
+> **Current release boundary:** The production public release intentionally does not expose the historical `/admin`, `/login`, `/my-jyc`, `/notifications`, or other retired student-platform routes. They resolve to safe public destinations. The backend/admin implementation remains repository infrastructure but is not part of the public-release acceptance gate unless a future release explicitly re-enables it.

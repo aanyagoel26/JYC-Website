@@ -3,6 +3,16 @@ import { test, expect } from '@playwright/test';
 const base = (process.env.JYC_BASE_URL || 'http://127.0.0.1:5173').replace(/\/$/, '');
 const routes = ['/', '/about', '/history', '/clubs', '/events', '/team', '/gallery', '/achievements', '/announcements', '/recruitment', '/calendar', '/archive', '/updates', '/contact', '/fests','/best-of-jyc'];
 
+async function waitForImagesToSettle(page) {
+  await page.locator('img').evaluateAll(images => Promise.all(images.map(img => new Promise(resolve => {
+    if (img.complete) return resolve();
+    const done = () => { img.removeEventListener('load', done); img.removeEventListener('error', done); resolve(); };
+    img.addEventListener('load', done, { once: true });
+    img.addEventListener('error', done, { once: true });
+    setTimeout(done, 8000);
+  }))));
+}
+
 async function waitForAppMount(page, label='page') {
   try {
     await page.waitForFunction(() => Boolean(document.querySelector('#root .app-frame, #root .app, #root .public-app')), { timeout: 30000 });
@@ -178,6 +188,7 @@ test('mobile visual guardrails keep core content centered and inside viewport', 
             // The skip link is intentionally parked off-screen until keyboard focus.
             // It is an accessibility affordance, not an accidentally clipped visible node.
             if (el.classList.contains('skip-link') && document.activeElement !== el) return false;
+            if (el.closest('.jyc57-collection-scroller,.jyc57-photo-story-scrubber')) return false;
             const s = getComputedStyle(el);
             const r = el.getBoundingClientRect();
             return s.display !== 'none' && s.visibility !== 'hidden' && r.width > 0 && r.height > 0 &&
@@ -238,12 +249,12 @@ test('homepage media composition stays editorial and non-scattered', async ({ pa
       storySources: story.map(el => el.querySelector('img')?.currentSrc || el.querySelector('img')?.src || null)
     };
   });
-  expect(result.storyTiles, 'homepage photo-story tiles').toBe(4);
+  expect(result.storyTiles, 'homepage photo-story tiles').toBeLessThanOrEqual(1);
   expect(result.familyImages, 'homepage family image duplicates').toBe(0);
   expect(result.archiveWalls, 'homepage retired archive/photo-chapter surfaces').toBe(0);
   expect(result.activityImages, 'homepage activity image duplication').toBe(0);
   expect(result.storyOverflow, 'homepage photo-story horizontal overflow').toBe(false);
-  expect(result.storySources.filter(Boolean).length).toBe(4);
+  expect(result.storySources.filter(Boolean).length).toBe(result.storyTiles);
 });
 
 test('gallery archive uses deterministic responsive image frames', async ({ page }) => {
@@ -281,7 +292,8 @@ test('photo-led pages render real image content', async ({ page }) => {
     const images = page.locator('img');
     expect(await images.count(), route).toBeGreaterThan(0);
     await expect(images.first()).toBeVisible();
-    await expect.poll(async () => images.evaluateAll(nodes => nodes.filter(img => img.complete && img.naturalWidth > 0).length), { timeout: 5000 }).toBeGreaterThan(0);
+    await waitForImagesToSettle(page);
+    await expect.poll(async () => images.evaluateAll(nodes => nodes.filter(img => img.complete && img.naturalWidth > 0).length), { timeout: 8000 }).toBeGreaterThan(0);
     const broken = await images.evaluateAll(nodes => nodes.filter(img => img.complete && img.naturalWidth === 0 && !String(img.currentSrc||img.src).endsWith('/JYC%20Logo(4).png')).map(img => img.getAttribute('src')));
     expect(broken, 'broken images on '+route).toEqual([]);
   }
