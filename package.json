@@ -63,5 +63,6 @@
   },
   "engines": {
     "node": ">=24 <25"
-  }
+  },
+  "postbuild": "node scripts/optimize-production-media.mjs && node scripts/generate-route-shells.mjs"
 }
