@@ -2142,3 +2142,12 @@ footer a:hover{
  .media-editor-wide{grid-column:auto}
  .media-focal-preview{grid-template-columns:repeat(3,1fr)}
 }
+
+.media-rights-panel{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0;padding:14px;border:1px solid var(--border-tech,#bf9c6f);border-radius:12px;background:color-mix(in srgb,var(--accent-gold,#bf9c6f) 5%,var(--bg-card,#fff))}
+.media-rights-panel>div{grid-column:1/-1;display:grid;gap:5px}
+.media-rights-panel>div strong{font-size:14px}
+.media-rights-panel>div small{color:var(--text-muted);line-height:1.5}
+.media-rights-panel label{display:grid;gap:5px}
+.media-rights-panel label span{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)}
+.media-rights-panel input,.media-rights-panel textarea,.media-rights-panel select{width:100%;border:1px solid var(--border-tech);background:var(--bg-card);color:var(--text-primary);padding:10px 11px;border-radius:10px}
+@media(max-width:620px){.media-rights-panel{grid-template-columns:1fr}.media-rights-panel .media-editor-wide{grid-column:auto}}
