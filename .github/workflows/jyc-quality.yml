@@ -45,17 +45,12 @@ jobs:
       - name: Verify canonical sitemap
         run: npm run qa:sitemap
 
-      - name: Verify release metadata
-        shell: bash
+      - name: Verify current release contracts
         run: |
-          set -euo pipefail
-          VERSION="$(node -p "require('./package.json').version")"
-          CACHE="$(grep -o "jyc-cache-v[0-9.-]*" public/sw.js | head -n1)"
-          EXPECTED_CACHE="jyc-cache-v${VERSION//./-}"
-          echo "package version: $VERSION"
-          echo "service-worker cache: $CACHE"
-          test "$CACHE" = "$EXPECTED_CACHE"
-          grep -q "V$VERSION" scripts/qa-jyc-release-guard.mjs
+          npm run qa:dependency-lock
+          npm run qa:v64-editorial
+          npm run qa:photo-intelligence
+          npm run qa:seo
 
       - name: Reject accidental Vercel preview references
         shell: bash
