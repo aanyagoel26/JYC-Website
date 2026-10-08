@@ -42,6 +42,21 @@ for(const file of sourceFiles){
 }
 add('relative JS/CSS imports resolve',relativeFailures.length===0,relativeFailures.slice(0,10).join('; '));
 
+const cssImportFailures=[];
+for(const file of cssFiles){
+  const text=read(file);
+  for(const match of text.matchAll(/@import\\s+(?:url\\(\\s*)?['"]([^'"]+)['"]\\s*\\)?\\s*;/g)){
+    const spec=match[1];
+    if(!spec.startsWith('.'))continue;
+    const base=path.normalize(path.join(path.dirname(file),spec)).replaceAll('\\\\','/');
+    const candidates=[base,base+'.css',path.join(base,'index.css')].map(x=>x.replaceAll('\\\\','/'));
+    if(!candidates.some(exists))cssImportFailures.push(file+' -> '+spec);
+  }
+}
+add('relative CSS @imports resolve',cssImportFailures.length===0,cssImportFailures.slice(0,12).join('; '));
+
+
+
 const assetFailures=[];
 for(const file of [...sourceFiles,...cssFiles]){
   const text=read(file);
