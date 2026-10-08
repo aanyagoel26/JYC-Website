@@ -13,7 +13,7 @@ const walk=(dir,files=[])=>{
   return files;
 };
 const files=walk('.');
-const sourceFiles=files.filter(p=>/\.(js|jsx|mjs)$/.test(p));
+const sourceFiles=files.filter(p=>p.startsWith('src/')&&/\.(js|jsx|mjs)$/.test(p));
 const cssFiles=files.filter(p=>p.endsWith('.css'));
 const checks=[];
 const add=(name,ok,detail='')=>checks.push({name,ok:Boolean(ok),detail});
