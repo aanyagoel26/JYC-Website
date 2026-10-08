@@ -217,7 +217,7 @@ export const PDF_HUB_EXTRA_GALLERY=[
   },
   {
     "id": "extra-event-75",
-    "url": "/assets/hub-photos-extra/event-75.webp",
+    "url": "/assets/hub-photos-extra/event-76.webp",
     "caption": "Dron-O-War \u00b7 visual material from supplied JYC hub presentation (page 13)",
     "association": "Dron-O-War",
     "year": "2026",
