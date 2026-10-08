@@ -6,6 +6,7 @@ const read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const main=read('src/main.jsx');
 const gallery=read('src/jyc57-experience.jsx');
 const responsive=read('src/jyc-responsive-photo.jsx');
+const intelligence=read('src/jyc-photo-intelligence.js');
 const sitemap=read('scripts/generate-sitemap.mjs');
 const pkg=JSON.parse(read('package.json'));
 const checks=[
@@ -15,6 +16,7 @@ const checks=[
  ['gallery card and lightbox share the same media layout id',gallery.includes('layoutId={\`photo-\${String(g.id||g.url)}\`')&&gallery.includes('layoutId={\`photo-\${String(active.id||active.url)}\`}')],
  ['gallery transition is reduced-motion aware',gallery.includes('shouldReduceMotion?0:.28')],
  ['responsive photos provide AVIF/WebP srcset and sizes',responsive.includes('srcSet={sourceSet(variants.avif)}')&&responsive.includes('srcSet={sourceSet(variants.webp)}')&&responsive.includes('sizes={sizes}')],
+ ['derivative candidates respect source dimensions',responsive.includes('photoDerivativeUrls(src,width)')&&intelligence.includes('photoDerivativeUrls(url,sourceWidth)')&&intelligence.includes('width<=Number(sourceWidth)*1.15')],
  ['canonical JAI slug is the only sitemap slug',sitemap.includes('/events/jai-2026-jaypee-agentic-ai-hackathon')&&!sitemap.includes('/events/agentic-ai-2026')&&!sitemap.includes('/events/codeai-hackathon')],
  ['sitemap resolves dynamic event slugs from canonical data',sitemap.includes('slug(e.slug||e.title)')],
  ['legacy JAI redirect remains explicit in runtime',main.includes("legacyEventSlugMap={'agentic-ai-2026':'jai-2026-jaypee-agentic-ai-hackathon'}")],
