@@ -14,9 +14,9 @@ const readme=read('README.md');
 const checks=[];
 const add=(name,ok)=>checks.push([name,Boolean(ok)]);
 
-add('release is v58.0.8',pkg.version==='58.0.5'&&lock.version==='58.0.5'&&lock.packages?.['']?.version==='58.0.5');
-add('service worker cache is rotated',sw.includes('jyc-cache-v58-0-8')&&!sw.includes('jyc-cache-v57-0-0'));
-add('README release is v58.0.8',readme.includes('Current release: V58.0.8')&&readme.includes('V58.0.8 is the current code release'));
+add('release metadata is synchronized to current V64.4.2',pkg.version==='64.4.2'&&lock.version==='64.4.2'&&lock.packages?.['']?.version==='64.4.2');
+add('service worker cache matches current release',sw.includes('jyc-cache-v64-4-2'));
+add('README release matches current package',readme.includes('Current release: V'+pkg.version));
 add('event detail has registration action',/id="event-register"/.test(main)&&/REGISTER NOW|REGISTRATIONS CLOSED/.test(main));
 add('event detail gates unverified planned registration',/registrationPublished=e\.publicStatus!=='planned'\|\|e\.registrationVerified===true/.test(main)&&/Boolean\(e\.registrationUrl\|\|e\.registrationMode==='native'\)/.test(main));
 add('event detail has share and ICS tools',/ShareButton/.test(main)&&/DownloadICS/.test(main));
