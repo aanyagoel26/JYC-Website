@@ -337,7 +337,7 @@ export const PDF_HUB_PROGRAMME=[
     "name": "Induction",
     "type": "Welcome",
     "text": "The supplied JYC material lists Induction among the major campus programmes.",
-    "image": "/assets/hub-photos-extra/event-75.webp"
+    "image": "/assets/hub-photos-extra/event-76.webp"
   },
   {
     "name": "Ebullience",
