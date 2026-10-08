@@ -27,7 +27,7 @@ const checks=[
  ['event reminders use BellToggle',main.includes('EventReminderControl')&&main.includes('scheduleEventReminder')],
  ['Agentic AI popup is isolated from the public shell',!main.includes('AgenticAIPopup')&&!main.includes('agentic-launcher')&&!main.includes('LazyBorderGlow')],
  ['DitherVeil is the current React Bits implementation',dither.includes('const KERNELS =')&&dither.includes('const getBlueNoise')&&dither.includes('const diffuse')&&dither.includes('RenderTarget')&&dither.includes('measureEdge')],
- ['DitherVeil is lazy-loaded on the homepage',home.includes("lazy(()=>import('./react-bits/DitherVeil.jsx'))")&&home.includes('<LazyDitherVeil')],
+ ['DitherVeil remains available as a lazy-capable library surface',dither.includes('export default')&&dither.includes('prefers-reduced-motion')&&!home.includes('<LazyDitherVeil')],
  ['DitherVeil has reduced-motion/visibility lifecycle support',dither.includes("prefers-reduced-motion")&&dither.includes('IntersectionObserver')&&dither.includes('ResizeObserver')],
  ['DitherVeil CSS is minimal and scoped',ditherCss.includes('.dither-veil')&&!ditherCss.includes('body{')],
  ['public motion layer is lazy-loaded',main.includes('LazyJYCInnovationMotion')&&main.includes('<Suspense fallback={null}><LazyJYCInnovationMotion/></Suspense>')],
@@ -47,7 +47,7 @@ check('DepthCarousel avoids a direct GSAP import',!read('src/components/react-bi
 check('DepthCarousel is lazy-loaded on public routes',main.includes('LazyDepthCarousel')&&main.includes('<Suspense fallback={<div className="depth-carousel depth-carousel--loading"'));
 
 check('DriftWall remains available for the visual archive',fs.existsSync(path.join(root,'src/components/react-bits/DriftWall.jsx'))&&extraFeaturesSafe());
-check('Heavy homepage visual engines are lazy-loaded',home.includes('LazyDitherVeil')&&home.includes('LazyMagicBento'));
+check('Heavy homepage visual engines are lazy-loaded',home.includes('LazyMagicBento')&&!home.includes('LazyDitherVeil')&&!home.includes('LazyDriftWall'));
 check('MagicBento is lazy-loaded and GSAP is declared',home.includes('LazyMagicBento')&&pkg.dependencies.gsap==='3.15.0'&&lock.packages['node_modules/gsap']?.version==='3.15.0');
 check('FlexCarousel component remains available for future archive surfaces',fs.existsSync(path.join(root,'src/components/react-bits/FlexCarousel.jsx'))&&fs.existsSync(path.join(root,'src/components/react-bits/FlexCarousel.css')));
 check('DriftWall archive surface has responsive safeguards',read('src/components/react-bits/DriftWall.css').includes('height')&&read('src/components/react-bits/DriftWall.css').includes('@media'));
