@@ -83,7 +83,7 @@ export function AdminAlbums(){
    jyc_relevance_score:selected.jyc_relevance_score===''||selected.jyc_relevance_score==null?score.jycRelevance:Number(selected.jyc_relevance_score),
    uniqueness_score:selected.uniqueness_score===''||selected.uniqueness_score==null?score.uniqueness:Number(selected.uniqueness_score),
    story_value_score:selected.story_value_score===''||selected.story_value_score==null?score.storyValue:Number(selected.story_value_score),
-   editorial_score:score.total,editorial_status:selected.editorial_status||'unreviewed',editorial_reviewed_at:new Date().toISOString(),
+   editorial_score:score.total,editorial_status:selected.editorial_status||'unreviewed',
    featured:Boolean(selected.featured),hero_eligible:Boolean(selected.hero_eligible),archive_eligible:selected.archive_eligible!==false,
    duplicate_group:selected.duplicate_group?.trim()||null,album_id:selected.album_id||null,focal_x:selected.focal_x==null?null:Number(selected.focal_x),focal_y:selected.focal_y==null?null:Number(selected.focal_y),
    rights_status:selected.rights_status||'review',rights_holder:selected.rights_holder?.trim()||null,license_name:selected.license_name?.trim()||null,license_url:selected.license_url?.trim()||null,usage_notes:selected.usage_notes?.trim()||null
