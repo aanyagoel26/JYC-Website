@@ -43,7 +43,7 @@ Those are intentional queues for human editorial work.
 
 - npm run media:audit — generate public/photo-intelligence-report.json with dimensions, technical signals, binary hashes and perceptual near-duplicate groups.
 - npm run qa:photo-intelligence — verify the photo architecture contracts.
-- The normal build generates web derivatives before the image manifest.
+- `npm run media:derivatives` generates web derivatives explicitly; it is intentionally not part of the normal production build because the archive can produce thousands of derivative binaries. Set `VITE_ENABLE_PHOTO_DERIVATIVES=true` only on a deployment where those generated files are actually present.
 
 ## Standards used
 
@@ -52,3 +52,7 @@ Those are intentional queues for human editorial work.
 - W3C WAI Images Tutorial for alternative text
 - IIIF Image API as an architectural reference for future region/size transforms
 - Dublin Core / Library of Congress preservation principles for separating creator/date/rights/technical metadata from presentation
+
+## Public publication boundary
+
+The production read RPC now exposes CMS gallery photographs only when they are approved, explicitly rights-cleared, and have focal coordinates. The source-archive photographs used by the public gallery are a separate maintained repository asset set; CMS rights review does not silently change their status.
