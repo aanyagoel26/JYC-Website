@@ -85,7 +85,7 @@ async function loadAllImages(page){
   });
 }
 
-test('sitewide routes have no overflow, clipping, off-screen content or fixed-control overlap', async ({page})=>{\n  test.skip(!['mobile-390','desktop-1280'].includes(test.info().project.name));
+test('sitewide routes have no overflow, clipping, off-screen content or fixed-control overlap', async ({page})=>{\n  test.skip(!['mobile-390','mobile-430','tablet-768','desktop-1280'].includes(test.info().project.name));
   for(const route of routes){
     await page.goto(route,{waitUntil:'domcontentloaded'});
     await waitForPublicApp(page,route);
@@ -99,7 +99,7 @@ test('sitewide routes have no overflow, clipping, off-screen content or fixed-co
   }
 });
 
-test('sitewide routes load every visible image successfully and expose alt text', async ({page})=>{\n  test.skip(!['mobile-390','desktop-1280'].includes(test.info().project.name));
+test('sitewide routes load every visible image successfully and expose alt text', async ({page})=>{\n  test.skip(!['mobile-390','mobile-430','tablet-768','desktop-1280'].includes(test.info().project.name));
   for(const route of routes){
     await page.goto(route,{waitUntil:'domcontentloaded'});
     await waitForPublicApp(page,route);
@@ -111,9 +111,9 @@ test('sitewide routes load every visible image successfully and expose alt text'
   }
 });
 
-test('mobile pages remain centered and controls meet touch-safe sizing', async ({page})=>{\n  test.skip(test.info().project.name!=='mobile-390');
+test('mobile pages remain centered and controls meet touch-safe sizing', async ({page})=>{\n  test.skip(!['mobile-390','mobile-430','tablet-768'].includes(test.info().project.name));
   for(const route of ['/', '/clubs', '/events', '/gallery', '/contact']){
-    await page.setViewportSize({width:390,height:844});
+    await page.setViewportSize(test.info().project.name==='mobile-430'?{width:430,height:932}:test.info().project.name==='tablet-768'?{width:768,height:1024}:{width:390,height:844});
     await page.goto(route,{waitUntil:'domcontentloaded'});
     await waitForPublicApp(page,route);
     const result=await page.evaluate(()=>{
@@ -129,7 +129,7 @@ test('mobile pages remain centered and controls meet touch-safe sizing', async (
   }
 });
 
-test('reduced-motion mode disables meaningful public animations', async ({page})=>{\n  test.skip(test.info().project.name!=='desktop-1280');
+test('reduced-motion mode disables meaningful public animations', async ({page})=>{\n  test.skip(!['tablet-768','desktop-1280'].includes(test.info().project.name));
   await page.emulateMedia({reducedMotion:'reduce'});
   await page.goto('/',{waitUntil:'domcontentloaded'});
   await waitForPublicApp(page,'reduced motion');
