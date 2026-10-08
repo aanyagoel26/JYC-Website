@@ -20,7 +20,7 @@ const dateLabel=v=>{const d=new Date(String(v||''));return Number.isNaN(d.getTim
 const hubImage=(name,i=0)=>sourceHubMedia(name)?.photos?.[i%Math.max(1,sourceHubMedia(name)?.photos?.length||1)]||FALLBACK;
 const eventImage=(e,i=0)=>e?.poster||sourceEventMedia(e)?.photoItems?.filter(x=>x?.url).map(media)[i]||FALLBACK;
 
-function Img({src,alt,...props}){return <img {...props} src={src||FALLBACK} alt={alt||''} onError={e=>{if(e.currentTarget.dataset.fallback)return;e.currentTarget.dataset.fallback='1';e.currentTarget.src=FALLBACK;}}/>}
+function Img({src,alt,loading,fetchPriority,decoding='async',...props}){const resolvedLoading=loading??(fetchPriority==='high'?'eager':'lazy');return <img {...props} src={src||FALLBACK} alt={alt||''} loading={resolvedLoading} fetchPriority={fetchPriority} decoding={decoding} onError={e=>{if(e.currentTarget.dataset.fallback)return;e.currentTarget.dataset.fallback='1';e.currentTarget.src=FALLBACK;}}/>}
 
 export function JYCEditorialHome({data}){
  const nav=useNavigate();
