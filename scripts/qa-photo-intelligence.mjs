@@ -8,6 +8,7 @@ const gallery=read('src/jyc57-experience.jsx');
 const css=read('src/styles/public-system.css');
 const migration=read('supabase/migrations/202610080800_v63_photo_editorial_intelligence.sql');
 const hardening=read('supabase/migrations/202610080802_v63_1_editorial_rights_review_hardening.sql');
+const publicGate=read('supabase/migrations/202610080803_v63_2_public_gallery_rights_gate.sql');
 const admin=read('src/admin-extra.jsx');
 const derivatives=read('scripts/generate-photo-derivatives.mjs');
 const pkg=JSON.parse(read('package.json'));
@@ -21,6 +22,8 @@ check('focal points are publication-gated',migration.includes('focal_x is null')
 check('rights clearance is evidence-gated',hardening.includes("new.rights_status = 'cleared'")&&hardening.includes('auth.uid()')&&hardening.includes('usage_notes'));
 check('rights review is stamped server-side',hardening.includes('new.reviewed_at := now()')&&hardening.includes('new.reviewed_by := auth.uid()'));
 check('editorial review is timestamped',hardening.includes('editorial_reviewed_at')&&hardening.includes('jyc_stamp_gallery_editorial_review'));
+check('public gallery requires rights and focal clearance',publicGate.includes("g.rights_status='cleared'")&&publicGate.includes('g.focal_x is not null')&&publicGate.includes('g.focal_y is not null'));
+check('public gallery only exposes photographs',publicGate.includes("g.media_kind='photo'"));
 check('gallery save does not assume an updated_at column',!admin.includes('jyc_gallery_items').toString()||!admin.match(/from\('jyc_gallery_items'\)\.update\(\{\{[^}]*updated_at/));
 check('album narrative is publication-gated',migration.includes("trim(new.narrative)")&&migration.includes("editorial_status not in ('ready','published')"));
 check('Motion is used for gallery transitions',gallery.includes("from 'motion/react'")||gallery.includes('from "motion/react"'));
