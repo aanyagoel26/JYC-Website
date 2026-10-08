@@ -20,7 +20,7 @@ check('release metadata is synchronized',lock.version===pkg.version&&lock.packag
 check('service-worker cache matches the release',sw.includes('jyc-cache-v'+pkg.version.replace(/\./g,'-')));
 check('README advertises the exact release',readme.includes('Current release: V'+pkg.version));
 check('homepage uses the current editorial sequence',['jh-hero','jh-intro jh-container','jh-dark-section','jh-container jh-events','jh-activities jh-container'].every(x=>home.includes('className="'+x+'"')));
-check('homepage keeps imagery subordinate to content',home.includes('jh-photo-frame')&&home.includes('jh-featured-event')&&!home.includes('jh-archive-section')&&!home.includes('PhotoChapters')&&!home.includes('LazyDriftWall'));
+check('homepage keeps imagery subordinate to content',home.includes('jh-photo-frame')&&home.includes('jh-featured-event')&&!home.includes('jh-archive-section')&&!home.includes('PhotoChapters')&&!home.includes('LazyDriftWall')&&!home.includes('LazyMagicBento'));
 check('homepage activity cards are not fed gallery images',!home.includes('image:gallery[');
 check('homepage family cards are text-led',home.includes('jh-family-index')&&!home.includes('jh-family-image'));
 const galleryButtons=gallery.split('<button').slice(1).map(x=>x.split('>',1)[0]);
