@@ -19,5 +19,10 @@ for(const [section,declared] of Object.entries({dependencies:pkg.dependencies||{
   }
 }
 
+const sharpLock=lock.packages?.['node_modules/sharp'];
+if(pkg.devDependencies?.sharp){
+  check(Boolean(sharpLock), 'sharp is present in the lockfile');
+  for(const name of Object.keys(sharpLock?.optionalDependencies||{})) check(Boolean(lock.packages?.['node_modules/'+name]), 'sharp optional platform dependency is locked: '+name);
+}
 if(failures.length){console.error(`Dependency lock contract failed with ${failures.length} issue(s).`);process.exit(1)}
 console.log('DEPENDENCY LOCK CONTRACT PASS');
