@@ -41,7 +41,8 @@
     "postbuild": "node scripts/generate-route-shells.mjs",
     "qa:dependency-lock": "node scripts/qa-dependency-lock.mjs",
     "qa:zero-glitch": "node scripts/qa-zero-glitch-contract.mjs",
-    "qa:media-layout": "node scripts/qa-media-layout.mjs"
+    "qa:media-layout": "node scripts/qa-media-layout.mjs",
+    "qa:coherence": "node scripts/qa-current-release-coherence.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.117.2",
