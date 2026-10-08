@@ -24,7 +24,7 @@ const checks=[
   [editorialHome.includes('fetchPriority="high"')&&editorialHome.includes('jh-photo-frame'),'editorial hero image is prioritized for first paint'],
   [editorialHome.includes('jh-hero')&&read('src/jyc-editorial-home.css').includes('--jh-red:#a82420')&&read('src/jyc-editorial-home.css').includes('--jh-gold:#bf9c6f')&&read('src/jyc-editorial-home.css').includes('[data-theme=dark] .jyc-home'),'editorial homepage follows the JYC palette in light and dark mode'],
   [read('src/jyc-innovation-motion.jsx').includes('Public card tilt was intentionally retired')&&!read('src/jyc-innovation-motion.css').includes('perspective(1100px) rotateX(var(--tilt-x))'),'public card tilt is retired for V1 stability'],
-  [main.includes('dataset.jycFallbackApplied')&&main.includes("'/jyc-logo-circle.png'"),'runtime image fallback prevents broken media glyphs'],
+  [main.includes('dataset.jycFallbackApplied')&&main.includes("'/JYC%20Logo(4).png'"),'runtime image fallback prevents broken media glyphs'],
   [main.includes('PDF_HUB_PROGRAMME.map')&&main.includes('supplied-event-programme'),'All Hubs programme material remains surfaced'],
   [main.includes('PDF_HUB_EXTRA_GALLERY')&&main.includes('PDF_HUB_STORIES'),'source archive remains wired into the public experience'],
   [admin.includes('AdminVerification')&&admin.includes("tab==='verification'"),'admin verification workflow is wired into the control center'],
