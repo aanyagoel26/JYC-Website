@@ -2197,3 +2197,20 @@ footer a:hover{
  .public-app .hero-actions .btn{width:100%;text-align:center}
 }
 @media (prefers-reduced-motion:reduce){.public-app *{scroll-behavior:auto!important;animation-duration:.001ms!important;transition-duration:.001ms!important}}
+
+
+/* V66.1 — remove remaining high-noise global patterns */
+.public-app .hero-art .orbit{animation:none;opacity:.42}
+.public-app .hero-art .o2,.public-app .hero-art .o3{opacity:.24}
+.public-app .float-chip{box-shadow:none}
+.public-app .logo-core{box-shadow:0 0 0 20px color-mix(in srgb,var(--accent-gold) 3%,transparent)}
+.public-app .card:hover,.public-app .gallery-item:hover,.public-app .contact-card:hover,.public-app .featured:hover{box-shadow:none}
+.public-app .btn:hover{box-shadow:none}
+.public-app .state-orbit{animation:none}
+@media (max-width:620px){
+ .public-app .hero-art{min-height:380px;overflow:hidden}
+ .public-app .hero-art .o1{width:420px;height:420px}
+ .public-app .hero-art .o2,.public-app .hero-art .o3{display:none}
+ .public-app .float-chip{display:none}
+ .public-app .logo-core{width:min(250px,72vw)}
+}
