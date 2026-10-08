@@ -36,19 +36,17 @@ const scripts = [
   'qa-final-hygiene.mjs',
   'qa-react-bits.mjs',
   'qa-animation-performance.mjs',
-  'qa-final.mjs',
-  'qa-jyc-release-guard.mjs',
-  'qa-v57-1-production-finish.mjs',
   'qa-jyc-social-scope.mjs',
   'qa-trust-contract.mjs',
   'qa-supplied-material.mjs',
   'qa-v58-trust-cms.mjs',
   'qa-v58-design.mjs',
-  'qa-v59-production-boundary.mjs',
   'qa-v60-sitewide-polish.mjs',
   'qa-v61-finalization.mjs',
   'qa-v61-1-build-config.mjs',
-  'qa-master-checklist.mjs'
+  'qa-master-checklist.mjs',
+  'qa-v64-editorial-release.mjs',
+  'qa-dependency-lock.mjs'
 ];
 
 for (const script of scripts) {
