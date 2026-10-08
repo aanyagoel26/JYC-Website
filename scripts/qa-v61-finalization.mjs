@@ -3,8 +3,9 @@ const read=p=>fs.readFileSync(p,'utf8');
 const checks=[];
 const check=(name,ok,detail='')=>{checks.push(ok);console.log((ok?'PASS':'FAIL')+': '+name+(detail?' — '+detail:''));};
 const main=read('src/main.jsx'), gallery=read('src/jyc57-experience.jsx'), motion=read('src/v18.18-motion.jsx'), spotlight=read('src/jyc-spotlight.jsx'), pkg=JSON.parse(read('package.json')), lock=JSON.parse(read('package-lock.json')), sw=read('public/sw.js');
-check('release version is 61.0.0',pkg.version==='61.0.0'&&lock.version==='61.0.0'&&lock.packages?.['']?.version==='61.0.0');
-check('service worker cache rotated',sw.includes('jyc-cache-v61-0-0')&&!sw.includes('jyc-cache-v60-0-0'));
+check('release metadata is synchronized',lock.version===pkg.version&&lock.packages?.['']?.version===pkg.version&&Number(String(pkg.version).split('.')[0])>=61);
+const cacheToken='jyc-cache-v'+String(pkg.version).replace(/\./g,'-');
+check('service worker cache matches current release',sw.includes(cacheToken));
 check('event search URLs prefer stored slugs',main.includes('slug(e.slug||e.title)'));
 check('gallery event cards use canonical eventPath',gallery.includes('onClick={()=>nav(eventPath(e))}'));
 check('club cards use canonical slugs',gallery.includes("encodeURIComponent(slugify(c.name))"));
@@ -21,4 +22,4 @@ const bad=[
 ];
 for(const needle of bad) check('no legacy route pattern: '+needle,!gallery.includes(needle)&&!main.includes(needle)&&!motion.includes(needle)&&!spotlight.includes(needle));
 if(checks.some(x=>!x)) process.exit(1);
-console.log('V61 FINALIZATION QA PASS ('+checks.length+' checks)');
+console.log('ROUTING FINALIZATION QA PASS ('+checks.length+' checks)');
