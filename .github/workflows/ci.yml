@@ -40,6 +40,5 @@ jobs:
       - run: npm run build
       - name: Run production media optimizer
         run: node scripts/optimize-production-media.mjs
-- name: Enforce production media/performance budget
+      - name: Enforce production media/performance budget
         run: node scripts/qa-performance.mjs
-
