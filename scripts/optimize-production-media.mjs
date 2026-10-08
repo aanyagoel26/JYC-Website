@@ -4,7 +4,6 @@ import sharp from 'sharp';
 
 const root=path.resolve('dist/assets');
 const MAX_BYTES=3*1024*1024;
-const TARGET_BYTES=2.5*1024*1024;
 const candidates=[];
 const walk=dir=>{
   if(!fs.existsSync(dir))return;
