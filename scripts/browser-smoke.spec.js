@@ -3,6 +3,16 @@ import { test, expect } from '@playwright/test';
 const base = (process.env.JYC_BASE_URL || 'http://127.0.0.1:5173').replace(/\/$/, '');
 const routes = ['/', '/about', '/history', '/clubs', '/events', '/team', '/gallery', '/achievements', '/announcements', '/recruitment', '/calendar', '/archive', '/updates', '/contact', '/fests','/best-of-jyc'];
 
+async function waitForImagesToSettle(page) {
+  await page.locator('img').evaluateAll(images => Promise.all(images.map(img => new Promise(resolve => {
+    if (img.complete) return resolve();
+    const done = () => { img.removeEventListener('load', done); img.removeEventListener('error', done); resolve(); };
+    img.addEventListener('load', done, { once: true });
+    img.addEventListener('error', done, { once: true });
+    setTimeout(done, 8000);
+  }))));
+}
+
 async function waitForAppMount(page, label='page') {
   try {
     await page.waitForFunction(() => Boolean(document.querySelector('#root .app-frame, #root .app, #root .public-app')), { timeout: 30000 });
@@ -282,7 +292,8 @@ test('photo-led pages render real image content', async ({ page }) => {
     const images = page.locator('img');
     expect(await images.count(), route).toBeGreaterThan(0);
     await expect(images.first()).toBeVisible();
-    await expect.poll(async () => images.evaluateAll(nodes => nodes.filter(img => img.complete && img.naturalWidth > 0).length), { timeout: 5000 }).toBeGreaterThan(0);
+    await waitForImagesToSettle(page);
+    await expect.poll(async () => images.evaluateAll(nodes => nodes.filter(img => img.complete && img.naturalWidth > 0).length), { timeout: 8000 }).toBeGreaterThan(0);
     const broken = await images.evaluateAll(nodes => nodes.filter(img => img.complete && img.naturalWidth === 0 && !String(img.currentSrc||img.src).endsWith('/JYC%20Logo(4).png')).map(img => img.getAttribute('src')));
     expect(broken, 'broken images on '+route).toEqual([]);
   }
