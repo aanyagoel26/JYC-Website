@@ -1,6 +1,6 @@
 # JIIT Youth Club 128 — Official Website
 
-> **Current release: V64.3.0 — Editorial interaction, media delivery and release hardening**
+> **Current release: V64.4.0 — Editorial interaction, media delivery and release hardening**
 
 [![Quality](https://github.com/kaustubhdua/JYC-Website/actions/workflows/ci.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/ci.yml) [![CodeQL](https://github.com/kaustubhdua/JYC-Website/actions/workflows/codeql.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/codeql.yml) [![JYC Quality](https://github.com/kaustubhdua/JYC-Website/actions/workflows/jyc-quality.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/jyc-quality.yml)
 
@@ -297,7 +297,7 @@ The remaining production gates are operational: configure required third-party E
 
 ## Current release status
 
-**V64.3.0 is the current code release.** V62 is a checklist/release-governance pass: it adds the restrained JYC Network hero interaction, removes the legacy dither hero layer, restores the beige/champagne editorial accent system, and adds the master checklist to the static QA suite.
+**V64.4.0 is the current code release.** V62 is a checklist/release-governance pass: it adds the restrained JYC Network hero interaction, removes the legacy dither hero layer, restores the beige/champagne editorial accent system, and adds the master checklist to the static QA suite.
 
 The release boundary is aligned across package metadata, the service-worker cache, final product QA, final hygiene QA and public discovery files. The current operational/deployment state is documented in `docs/JYC-RELEASE-STATE-2026-10-07.md`; production deployment verification remains a separate gate from source-control QA.
 
