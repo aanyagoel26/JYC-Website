@@ -249,6 +249,7 @@ test('homepage media composition stays editorial and non-scattered', async ({ pa
 test('gallery archive uses deterministic responsive image frames', async ({ page }) => {
   await page.goto(base + '/gallery', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'gallery layout');
+  await page.getByRole('button', { name: 'Browse archive' }).click().catch(() => {});
   await page.waitForTimeout(250);
   const result = await page.evaluate(() => {
     const grid = document.querySelector('.public-app .gallery-grid');
