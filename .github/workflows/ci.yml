@@ -28,6 +28,8 @@ jobs:
           cache: npm
 
       - run: npm ci
+      - name: Verify dependency lock consistency
+        run: npm run qa:dependency-lock
       - name: Dependency vulnerability gate
         run: npm audit --audit-level=high
 
