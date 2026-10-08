@@ -113,7 +113,7 @@ export default function JYCHistory({data}){
         </div>
       </div>
       <div className="jyc-history-seal" style={S.seal}>
-        <img style={S.sealImg} src="/jyc-logo-official.webp" alt="JIIT Youth Club official emblem" loading="eager"/>
+        <img style={S.sealImg} src="/JYC%20Logo(4).png" alt="JIIT Youth Club official emblem" loading="eager"/>
         <span>JYC · 128</span>
         <small>VOICE · TALENT · SPIRIT</small>
       </div>
