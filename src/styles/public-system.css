@@ -436,3 +436,114 @@ img{max-width:100%}svg{max-width:100%}.page a,.section a{text-decoration-thickne
 .jyc57-related-albums{display:flex;gap:7px;flex-wrap:wrap}
 .jyc57-related-albums button{min-height:44px;border:1px solid var(--border-tech);background:var(--bg-card);color:var(--text-primary);border-radius:999px;padding:7px 11px;cursor:pointer}
 .jyc57-related-albums button:hover,.jyc57-related-albums button:focus-visible{border-color:var(--accent-red);color:var(--accent-red)}
+
+
+/* ================================================================
+   JYC LOGO PALETTE CONTRACT · 2026-10-08
+   The supplied JYC logo is the single visual source of truth.
+   Every public route inherits these aliases so legacy components
+   cannot introduce unrelated club/theme colours.
+   ================================================================ */
+:root{
+  --jyc-near-black:#18161D;
+  --jyc-deep-black:#0F0E11;
+  --jyc-champagne-gold:#BF9C6F;
+  --jyc-soft-champagne:#F5F1E6;
+  --jyc-white:#FFFFFF;
+  --jyc-bronze:#78593B;
+  --jyc-red:#A82420;
+  --jyc-dark-gold:#D2B48C;
+  --jyc-dark-red:#C92A2A;
+  --jyc-muted-grey:#6E6A75;
+  --jyc-dark-muted:#A8A3B0;
+
+  /* Legacy aliases used by older JYC components. */
+  --navy:var(--jyc-near-black);
+  --navy-deep:var(--jyc-deep-black);
+  --navy-soft:var(--jyc-near-black);
+  --dark:var(--jyc-deep-black);
+  --dark-surface:var(--jyc-near-black);
+  --surface:var(--jyc-white);
+  --bg:var(--jyc-soft-champagne);
+  --paper:var(--jyc-soft-champagne);
+  --cream:var(--jyc-soft-champagne);
+  --ivory:var(--jyc-white);
+  --ink:#1A191D;
+  --muted:var(--jyc-muted-grey);
+  --line:rgba(191,156,111,.35);
+  --gold:var(--jyc-champagne-gold);
+  --champagne:var(--jyc-champagne-gold);
+  --bronze:var(--jyc-bronze);
+  --accent:var(--jyc-red);
+  --red:var(--jyc-red);
+  --jyc-red:var(--jyc-red);
+  --jyc-red-2:var(--jyc-red);
+  --jyc-glow:rgba(168,36,32,.22);
+  --jyc-soft:rgba(168,36,32,.08);
+
+  /* Canonical JYC tokens used by the newer system. */
+  --jyc-bg:var(--jyc-soft-champagne);
+  --jyc-surface:var(--jyc-white);
+  --jyc-ink:#1A191D;
+  --jyc-muted:var(--jyc-muted-grey);
+  --jyc-line:rgba(191,156,111,.35);
+  --jyc-accent:var(--jyc-champagne-gold);
+  --jyc-focus:var(--jyc-red);
+  --accent-gold:var(--jyc-champagne-gold);
+  --accent-red:var(--jyc-red);
+  --club-red:var(--jyc-red);
+  --club-gold:var(--jyc-champagne-gold);
+  --jyc-gold:var(--jyc-champagne-gold);
+  --border-tech:var(--jyc-line);
+}
+html[data-theme="dark"]{
+  --navy:var(--jyc-near-black);
+  --navy-deep:var(--jyc-deep-black);
+  --navy-soft:var(--jyc-near-black);
+  --dark:var(--jyc-deep-black);
+  --dark-surface:var(--jyc-near-black);
+  --surface:var(--jyc-near-black);
+  --bg:var(--jyc-deep-black);
+  --paper:var(--jyc-near-black);
+  --cream:var(--jyc-near-black);
+  --ivory:var(--jyc-white);
+  --ink:var(--jyc-white);
+  --muted:var(--jyc-dark-muted);
+  --line:rgba(210,180,140,.27);
+  --gold:var(--jyc-dark-gold);
+  --champagne:var(--jyc-dark-gold);
+  --bronze:var(--jyc-dark-gold);
+  --accent:var(--jyc-dark-red);
+  --red:var(--jyc-dark-red);
+  --jyc-red:var(--jyc-dark-red);
+  --jyc-red-2:var(--jyc-dark-red);
+  --jyc-bg:var(--jyc-deep-black);
+  --jyc-surface:var(--jyc-near-black);
+  --jyc-ink:var(--jyc-white);
+  --jyc-muted:var(--jyc-dark-muted);
+  --jyc-line:rgba(210,180,140,.27);
+  --jyc-accent:var(--jyc-dark-gold);
+  --jyc-focus:var(--jyc-dark-red);
+  --accent-gold:var(--jyc-dark-gold);
+  --accent-red:var(--jyc-dark-red);
+  --club-red:var(--jyc-dark-red);
+  --club-gold:var(--jyc-dark-gold);
+  --jyc-gold:var(--jyc-dark-gold);
+  --border-tech:var(--jyc-line);
+}
+body{background:var(--bg)!important;color:var(--ink)!important}
+.public-app{color:var(--ink)!important}
+.public-app :where(.nav,.card,.activity-card,.home-team-card,.hub-story-card,.jyc-journal-card,.past-card,.contact-card,.archive-club,.event-related-card,.club-section-card,.event-context-card,.feature-card,.state,.search-modal,.more-sheet){border-color:var(--line)!important}
+.public-app :where(.nav,.card,.activity-card,.home-team-card,.hub-story-card,.jyc-journal-card,.past-card,.contact-card,.archive-club,.event-related-card,.club-section-card,.event-context-card,.feature-card,.state,.search-modal,.more-sheet){background-color:var(--surface)!important;color:var(--ink)!important}
+.public-app :where(.btn.primary,.btn:not(.secondary),.back-to-top,.skip-link){background:var(--accent)!important;border-color:var(--accent)!important;color:var(--ivory)!important}
+.public-app :where(.btn.secondary,.filter-toggle,.filter-chip,.category-pill,.gallery-filter button,.search-trigger,.theme-toggle){background:transparent!important;color:var(--ink)!important;border-color:var(--line)!important}
+.public-app :where(.btn.secondary:hover,.filter-toggle:hover,.filter-chip:hover,.category-pill:hover,.gallery-filter button:hover,.search-trigger:hover,.theme-toggle:hover){border-color:var(--gold)!important}
+.public-app :where(.filter-toggle.active,.filter-chip.active,.category-pill.active,.gallery-filter button.active){background:var(--accent)!important;color:var(--ivory)!important;border-color:var(--accent)!important}
+.public-app :where(a:not(.btn),.text-link,.eyebrow,.tag){color:var(--gold)!important}
+.public-app :where(p,li,small,.muted){color:var(--muted)!important}
+.jyc-footer,.jyc-footer-v6{background:var(--dark)!important;color:var(--ivory)!important}
+@media(max-width:760px){
+  .mobile-dock{background:color-mix(in srgb,var(--surface) 94%,transparent)!important;border-color:var(--line)!important}
+  .mobile-dock button{color:var(--muted)!important}
+  .mobile-dock button.active{color:var(--ink)!important;background:color-mix(in srgb,var(--accent) 10%,transparent)!important}
+}
