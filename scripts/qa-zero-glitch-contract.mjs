@@ -83,7 +83,7 @@ const responsive=read('src/jyc-responsive-photo.jsx');
 add('responsive photo component is production-enabled',responsive.includes('import.meta.env.PROD')&&responsive.includes('srcSet={sourceSet(variants.avif)}')&&responsive.includes('srcSet={sourceSet(variants.webp)}'));
 const derivative=read('scripts/generate-photo-derivatives.mjs');
 add('derivative generator matches supported image extensions',derivative.includes('/\\.(jpe?g|png|webp)$/i.test(file)'));
-add('derivative generator contains real Sharp transforms',derivative.includes("sharp(file)")&&derivative.includes(".avif({quality:52")&&derivative.includes(".webp({quality:82"));
+add('derivative generator contains budgeted Sharp transforms',derivative.includes("sharp(file)")&&derivative.includes(".avif({quality:50,effort:2")&&derivative.includes(".webp({quality:80,effort:3")&&derivative.includes("const WIDTHS=[480,960,1600]"));
 
 const workflowText=fs.readdirSync(path.join(root,'.github/workflows')).filter(x=>x.endsWith('.yml')||x.endsWith('.yaml')).map(x=>read('.github/workflows/'+x)).join('\n');
 add('browser QA workflow actually installs Chromium',workflowText.includes('playwright install --with-deps chromium'));
