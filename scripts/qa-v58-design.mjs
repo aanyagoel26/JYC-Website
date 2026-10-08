@@ -14,7 +14,7 @@ const checks=[
   ['official dark palette',css.includes('--jyc-bg:#0f0e11')&&css.includes('--jyc-red:#c92a2a')&&css.includes('--jyc-gold:#d2b48c')],
   ['Space Grotesk display system',css.includes('Space Grotesk')],
   ['desktop navigation uses JYC routes',main.includes("['Clubs','/clubs']")&&main.includes("['Events','/events']")],
-  ['home navigation exposes Team and Contact',main.includes("['Team','team']")&&main.includes("['Contact','/contact']")],
+  ['home navigation exposes Team and Contact',main.includes("['Team','/team']")&&main.includes("['Contact','/contact']")],
   ['mobile five-item dock retained',main.includes("['Home','/','home']")&&main.includes("['More','__more','more']")],
   ['home signature hero retained',home.includes('THE VOICE.')&&home.includes('THE TALENT.')&&home.includes('THE SPIRIT.')],
   ['real media fallback retained',home.includes('FALLBACK')&&home.includes('onError')],
