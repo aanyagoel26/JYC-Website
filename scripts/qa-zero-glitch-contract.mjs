@@ -70,7 +70,7 @@ for(const file of [...sourceFiles,...cssFiles]){
 add('literal local asset references resolve',assetFailures.length===0,assetFailures.slice(0,12).join('; '));
 
 const publicRoutes=[
-  '/','/about','/history','/clubs','/events','/gallery','/team','/best-of-jyc','/archive',
+  '/','/about','/history','/clubs','/events','/gallery','/team','/best-of-jyc','/achievements','/archive',
   '/recruitment','/announcements','/updates','/calendar','/fests','/contact','/join-jyc'
 ];
 const main=read('src/main.jsx');
