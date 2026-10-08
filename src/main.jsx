@@ -1008,7 +1008,7 @@ function EventCard({e,index=0}){
  const identity=eventIdentity(e);
  const eventEnd=e.dateEnd||e.date;
  const eventEnded=eventEnd?new Date(eventEnd+'T23:59:59')<new Date():false;
- const regOpen=(e.publicStatus!=='planned'||e.registrationVerified===true)&&!eventEnded&&(!e.registrationDeadline||new Date(e.registrationDeadline)>new Date())&&Boolean(e.registrationUrl||e.registrationMode==='native');
+ const regOpen=(e.publicStatus!=='planned'||e.registrationVerified===true)&&!eventEnded&&(!e.registrationDeadline||new Date(e.registrationDeadline)>new Date())&&Boolean(safeExternalUrl(e.registrationUrl));
  const regClosed=Boolean(safeExternalUrl(e.registrationUrl))&&!regOpen;
  const registrationLabel=e.publicStatus==='planned'?'REGISTRATION NOT PUBLISHED':regOpen?'REGISTER':regClosed?'REGISTRATION CLOSED':'VIEW EVENT';
  const identityStyle={'--hub-accent':identity.accent,'--hub-accent-soft':'color-mix(in srgb, '+identity.accent+' 12%, transparent)','--hub-accent-line':'color-mix(in srgb, '+identity.accent+' 28%, transparent)','--identity-shape':'var(--jyc-shape-'+(identity.shape||'event')+')'};
