@@ -17,6 +17,7 @@ const checks=[
   ['gallery archive uses a deterministic grid, not CSS columns/masonry',system.includes('.public-app .gallery-grid{')&&system.includes('display:grid!important')&&system.includes('column-count:unset!important')&&!system.includes('.public-app .gallery-grid{display:block!important')],
   ['gallery archive images have stable aspect-ratio frames',system.includes('.public-app .gallery-grid .gallery-item img')&&system.includes('aspect-ratio:4/3!important')],
   ['gallery archive remains responsive at mobile widths',system.includes('@media(max-width:620px)')&&system.includes('.public-app .gallery-grid')],
+  ['gallery route archive is deterministic rather than variable-row masonry',system.includes('.public-app .jyc57-masonry{')&&system.includes('grid-auto-rows:auto!important')&&system.includes('.public-app .jyc57-masonry .jyc57-photo')&&system.includes('aspect-ratio:4/3!important')],
 ];
 let failed=0;
 for(const [name,ok] of checks){console.log((ok?'PASS':'FAIL')+': '+name);if(!ok)failed++}
