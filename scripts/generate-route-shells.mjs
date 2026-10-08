@@ -1,5 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import {JYC_HUB_SOURCE_REGISTRY} from '../src/jyc-hub-registry.js';
+import {JYC_HUB_CONTENT} from '../src/v21-hub-content.js';
 
 const root=process.cwd();
 const dist=path.join(root,'dist');
@@ -45,9 +47,69 @@ const routes={
     title:'JYC History | JIIT Youth Club 128',
     description:'Explore the history, purpose and evolution of JIIT Youth Club 128.'
   },
+  '/announcements':{
+    title:'JYC Announcements | JIIT Youth Club 128',
+    description:'Official JYC announcements, notices, registrations and published community updates.'
+  },
+  '/updates':{
+    title:'JYC Now — Community Updates | JIIT Youth Club 128',
+    description:'Recent verified public updates from JIIT Youth Club 128 and its official community channels.'
+  },
+  '/calendar':{
+    title:'JYC Event Calendar | JIIT Youth Club 128',
+    description:'Plan around published JYC events, dates, venues and campus experiences.'
+  },
+  '/fests':{
+    title:'JYC Fests | JIIT Youth Club 128',
+    description:'Explore JYC fest experiences, programmes, live status, results and published fest archives.'
+  },
+  '/recruitment':{
+    title:'JYC Recruitment | JIIT Youth Club 128',
+    description:'Find JYC communities with published recruitment opportunities and official application links.'
+  },
+  '/join-jyc':{
+    title:'Join JYC | JIIT Youth Club 128',
+    description:'Learn how to get involved with JIIT Youth Club 128 and discover the next way to participate.'
+  },
+  '/achievements':{
+    title:'JYC Achievements | JIIT Youth Club 128',
+    description:'Explore published JYC achievements, community outcomes and official source records.'
+  },
+  '/best-of-jyc':{
+    title:'Best of JYC | JIIT Youth Club 128',
+    description:'A curated editorial selection of standout JYC communities, events and campus moments.'
+  },
   '/events/jai-2026-jaypee-agentic-ai-hackathon':{
     title:'JAI 2026 — Jaypee Agentic AI Hackathon | JYC',
     description:'Official JYC event record for JAI 2026, the Jaypee Agentic AI Hackathon.'
+  },
+  '/events/ride-hack-2026':{
+    title:'RIDE Hack 26 | JIIT Youth Club 128',
+    description:'Official JYC event record for RIDE Hack 26 and the JIIT innovation ecosystem.'
+  },
+  '/events/converge-2026':{
+    title:'Converge 2026 | JIIT Youth Club 128',
+    description:'Official JYC event record for Converge 2026 at JIIT Wish Town.'
+  },
+  '/events/drono-o-war-2026':{
+    title:'Drono-O-War 2026 | JIIT Youth Club 128',
+    description:'Official JYC event record for Drono-O-War 2026 and the JYC technical community.'
+  },
+  '/events/innovate-3-0-2026':{
+    title:'Innovate 3.0 2026 | JIIT Youth Club 128',
+    description:'Official JYC event record for Innovate 3.0 2026 at JIIT Wish Town.'
+  },
+  '/events/bitbox-6-0-2026':{
+    title:'BitBox 6.0 2026 | JIIT Youth Club 128',
+    description:'Official JYC event record for BitBox 6.0 2026 and the JYC technical community.'
+  },
+  '/events/sih-college-internals-26':{
+    title:'SIH College Internals 2026 | JIIT Youth Club 128',
+    description:'Official JYC event record for the Smart India Hackathon college internals at JIIT Wish Town.'
+  },
+  '/events/jyc-function-2026':{
+    title:'JYC Function 2026 | JIIT Youth Club 128',
+    description:'Official JYC event record for the JYC Function 2026.'
   }
 };
 
@@ -82,6 +144,13 @@ function shellFor(meta,route){
   return out;
 }
 
+for(const hub of JYC_HUB_SOURCE_REGISTRY.filter(item=>item.publicationStatus==='published')){
+  const content=JYC_HUB_CONTENT[hub.name]||{};
+  routes['/clubs/'+String(hub.name).toLowerCase().replace(/[^a-z0-9]+/g,'-')]={
+    title: hub.name+' | JIIT Youth Club 128',
+    description: content.summary || 'Official JYC community profile for '+hub.name+' at JIIT Wish Town Campus, Sector 128, Noida.'
+  };
+}
 for(const [route,meta] of Object.entries(routes)){
   const dir=path.join(dist,...route.replace(/^\//,'').split('/'));
   fs.mkdirSync(dir,{recursive:true});
