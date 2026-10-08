@@ -1,5 +1,13 @@
 # Changelog
 
+## V64.3.0 — Repository identity and release-QA hardening
+
+- Updated repository ownership, maintainer links and Supabase creator identity to the current GitHub account.
+- Repaired release-QA version assertions so V64 patch releases remain valid instead of being pinned to V64.0.0.
+- Repaired the runtime-contract QA script so its JYC Now checks initialize their module before use.
+- Added a zero-glitch guard against stale repository-owner references.
+
+
 ## V64.0.0 — Editorial interaction, media delivery & release hardening
 
 - Added restrained shared-element transitions for event cards → event details and gallery cards → lightbox, with reduced-motion fallbacks.
