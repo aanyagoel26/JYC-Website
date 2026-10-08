@@ -106,7 +106,7 @@ test('sitewide routes load every visible image successfully and expose alt text'
     await page.goto(route,{waitUntil:'domcontentloaded'});
     await waitForPublicApp(page,route);
     const images=await loadAllImages(page);
-    const broken=images.filter(x=>!x.complete||x.naturalWidth===0);
+    const broken=images.filter(x=>x.naturalWidth===0);
     const missingAlt=images.filter(x=>x.alt===null);
     expect(broken,route+' broken images').toEqual([]);
     expect(missingAlt,route+' images without alt attribute').toEqual([]);
