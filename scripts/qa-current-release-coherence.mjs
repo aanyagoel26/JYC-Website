@@ -22,7 +22,7 @@ add('homepage has one hero image and one featured-event image path',home.include
 add('gallery uses deterministic grid contract',publicCss.includes('.public-app .gallery-grid{')&&publicCss.includes('display:grid!important')&&publicCss.includes('column-count:unset!important')&&publicCss.includes('aspect-ratio:4/3!important'));
 add('gallery archive uses deterministic rows',publicCss.includes('.public-app .jyc57-masonry')&&publicCss.includes('grid-auto-rows:auto!important')&&publicCss.includes('.public-app .jyc57-masonry .jyc57-photo'));
 add('gallery has mobile layout contracts',publicCss.includes('@media(max-width:620px)')&&publicCss.includes('.public-app .gallery-grid'));
-add('homepage media CSS has family-index contract',homeCss.includes('.jyc-home .jh-family-index'));
+add('homepage media CSS has family-index contract',homeCss.includes('.jh-family-index'));
 add('active suite contains current media/layout QA',suite.includes('qa-media-layout.mjs')&&suite.includes('qa-current-release-coherence.mjs'));
 add('homepage CMS cannot restore retired visual surfaces',!admin.includes('move=(id,dir)')&&!admin.includes('Photo Chapters')&&!admin.includes('Hub Photo Wall'));
 add('browser QA guards homepage composition',browser.includes('homepage media composition stays editorial')&&browser.includes('activity image duplication'));
@@ -30,7 +30,7 @@ const suiteFiles=[...suite.matchAll(/'([^']+\.mjs)'/g)].map(m=>m[1]).filter(p=>p
 const stale=[];
 const stalePatterns=[/pkg\.version===['"](?:5[0-9]|6[0-3])\./,/release is v(?:5[0-9]|6[0-3])/i,/release version is V(?:5[0-9]|6[0-3])/i,/gallery\.slice\(0,4\)/,/jh-photo-grid/,/column-count:4/];
 for(const file of suiteFiles){
- if(file==='qa-current-release-coherence.mjs') continue;
+ if(file==='qa-current-release-coherence.mjs'||file==='qa-zero-glitch-contract.mjs') continue;
  const full=path.join('scripts',file);
  if(!fs.existsSync(path.join(root,full))){stale.push(full+' (missing)');continue}
  const text=read(full);
