@@ -18,7 +18,8 @@ check(details.includes('Grand Conclave 2026'),'Eloquence source programme missin
 check(team.includes('Dr. Vinay Anand Tikkiwal')&&team.includes('Dr. Pankaj Kumar Srivastava'),'faculty advisors missing');
 check(team.includes('Harisha')&&team.includes('Dhruv Choudhary'),'core heads missing');
 check(next.includes('23 COMMUNITIES'),'community count/source label missing');
-check(!read('src/jyc-editorial-home.jsx').includes('<PhotoChapters/>')&&read('src/jyc-editorial-home.jsx').includes('jh-photo-story'),'homepage should use the consolidated moments surface');
+const editorialHome=read('src/jyc-editorial-home.jsx');
+check(!editorialHome.includes('<PhotoChapters/>')&&editorialHome.includes('jh-photo-frame')&&editorialHome.includes('JYCNetwork'),'homepage should use the current single-photo editorial hero surface');
 check(main.includes('JYCNowStrip'),'homepage retains the consolidated JYC Now rail export');
 if(failures.length){failures.forEach(x=>console.error('FAIL:',x));process.exit(1)}
 console.log('Resource content QA PASS: source-derived hub, achievement, leadership and photo-story contracts are present.');
