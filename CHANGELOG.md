@@ -1,5 +1,10 @@
 # Changelog
 
+## V64.4.1 — Activity media duplication fix
+
+- Removed the remaining gallery-image binding from homepage activity cards so the activity section stays text-led and does not duplicate the photo story.
+
+
 ## V64.4.0 — Cohesive media layout hardening
 
 - Consolidated homepage imagery into intentional editorial surfaces instead of stacking multiple photo walls.
