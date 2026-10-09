@@ -260,30 +260,25 @@ test('homepage media composition stays editorial and non-scattered', async ({ pa
 test('gallery archive uses deterministic responsive image frames', async ({ page }) => {
   await page.goto(base + '/gallery', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'gallery layout');
-  await page.getByRole('button', { name: 'Browse archive' }).click().catch(() => {});
-  await page.waitForTimeout(250);
+  await page.locator('.jyc57-archive-nav').waitFor({ state: 'visible', timeout: 10000 });
   const result = await page.evaluate(() => {
-    const grid = document.querySelector('.public-app .gallery-grid');
-    const items = [...document.querySelectorAll('.public-app .gallery-grid .gallery-item')].slice(0, 12);
+    const grid = document.querySelector('.public-app .jyc57-masonry');
+    const items = [...document.querySelectorAll('.public-app .jyc57-masonry .jyc57-photo')].slice(0, 12);
     return {
       display: grid ? getComputedStyle(grid).display : null,
-      columnCount: grid ? getComputedStyle(grid).columnCount : null,
       overflow: grid ? grid.scrollWidth > grid.clientWidth + 1 : null,
+      itemCount: items.length,
       ratios: items.map(item => {
-        const img = item.querySelector('img');
-        if (!img) return null;
-        const r = img.getBoundingClientRect();
+        const r = item.getBoundingClientRect();
         return r.width > 0 && r.height > 0 ? r.width / r.height : null;
       }).filter(Boolean)
     };
   });
-  if (result.display !== null) {
-    expect(result.display).toBe('grid');
-    expect(result.columnCount).toBe('auto');
-    expect(result.overflow).toBe(false);
-    for (const ratio of result.ratios) expect(ratio).toBeGreaterThan(1.15);
-    for (const ratio of result.ratios) expect(ratio).toBeLessThan(1.55);
-  }
+  expect(result.display, 'current JYC gallery masonry is present').toBe('grid');
+  expect(result.itemCount, 'gallery contains responsive photo frames').toBeGreaterThan(0);
+  expect(result.overflow, 'gallery frame grid does not overflow').toBe(false);
+  for (const ratio of result.ratios) expect(ratio).toBeGreaterThan(0.45);
+  for (const ratio of result.ratios) expect(ratio).toBeLessThan(2.3);
 });
 
 test('photo-led pages render real image content', async ({ page }) => {
@@ -394,10 +389,10 @@ test('gallery lightbox supports next/previous keyboard navigation', async ({ pag
 test('homepage records Core Web Vitals under the browser harness', async ({ page }) => {
   await page.goto(base, { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'web vitals');
+  // Keep the measurement passive: the current editorial homepage has no
+  // legacy .search-trigger control, and a failed locator click can consume the
+  // entire test timeout without measuring any vitals.
   await page.waitForTimeout(1800);
-  await page.locator('.search-trigger').first().click().catch(()=>{});
-  await page.waitForTimeout(150);
-  await page.keyboard.press('Escape').catch(()=>{});
   const vitals=await page.evaluate(() => {
     const entries=performance.getEntriesByType('navigation');
     const nav=entries[0];
