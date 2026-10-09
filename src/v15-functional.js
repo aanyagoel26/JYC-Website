@@ -28,7 +28,8 @@ const PRIVATE_CACHE_FIELD = /(?:^|_)(?:access.?token|refresh.?token|authorizatio
 // rendering while refusing to persist identity, authentication, or submission
 // fields that might be added to the RPC response in a future schema change.
 function publicCacheSnapshot(value, depth = 0) {
-  if (depth > 8 || value == null || typeof value !== 'object') {
+  if (depth > 8) return undefined;
+  if (value == null || typeof value !== 'object') {
     return typeof value === 'function' || typeof value === 'symbol' ? undefined : value;
   }
   if (Array.isArray(value)) return value.map(item => publicCacheSnapshot(item, depth + 1)).filter(item => item !== undefined);
