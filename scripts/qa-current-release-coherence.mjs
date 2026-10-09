@@ -20,7 +20,7 @@ add('homepage family cards are media-free',home.includes('jh-family-index')&&!ho
 add('homepage activity cards are media-free',!home.includes('image:gallery['));
 add('homepage has one hero image and one featured-event image path',home.includes('jh-photo-frame')&&home.includes('jh-featured-event'));
 add('homepage hero uses photographs only, never posters or identity graphics',home.includes("g?.url&&g?.mediaKind==='photo'"));
-add('homepage event links use the same title slug as event cards and details',home.includes("const eventPath=e=>`/events/${slug(e?.title)}`"));
+add('homepage event links use the stored canonical slug used by event details and sitemap',home.includes("const eventPath=e=>`/events/${slug(e?.slug||e?.title)}`"));
 add('gallery uses deterministic grid contract',publicCss.includes('.public-app .gallery-grid{')&&publicCss.includes('display:grid!important')&&publicCss.includes('column-count:unset!important')&&publicCss.includes('aspect-ratio:4/3!important'));
 add('gallery archive uses deterministic rows',publicCss.includes('.public-app .jyc57-masonry')&&publicCss.includes('grid-auto-rows:auto!important')&&publicCss.includes('.public-app .jyc57-masonry .jyc57-photo'));
 add('gallery has mobile layout contracts',publicCss.includes('@media(max-width:620px)')&&publicCss.includes('.public-app .gallery-grid'));
