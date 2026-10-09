@@ -8,7 +8,7 @@ const EVENT={
   title:'JAI 2026 · Jaypee Agentic AI Hackathon',
   dates:'30–31 October 2026',
   venue:'JIIT Wish Town Campus · Sector 128, Noida',
-  poster:'/assets/events/agentic-ai-2026.webp',
+  poster:'/assets/events/jai-2026.webp',
   official:'https://www.jiityouthclub128.in/',
   register:'https://unstop.com/o/XAfa40i?lb=yRvSl6Vl&utm_medium=Share&utm_source=online_coding_challenge&utm_campaign=Jyc128tf6988',
   discord:'https://discord.gg/K6vrFAhMA',
@@ -19,13 +19,22 @@ const focusable='a[href],button:not([disabled]),textarea:not([disabled]),input:n
 
 export function FeaturedEventPopup(){
   const onHome=typeof window==='undefined'||window.location.pathname==='/'||window.location.pathname==='';
-  const [open,setOpen]=useState(()=>{
-    try{return Number(localStorage.getItem(FEATURED_EVENT_DISMISS_KEY)||0)<Date.now()}
-    catch{return true}
-  });
+  const [open,setOpen]=useState(false);
   const closeRef=useRef(null);
   const dialogRef=useRef(null);
   const triggerRef=useRef(null);
+  useEffect(()=>{
+    if(!onHome||Date.now()>EVENT_END)return;
+    let cancelled=false;
+    const timer=window.setTimeout(()=>{
+      if(cancelled)return;
+      try{
+        if(Number(localStorage.getItem(FEATURED_EVENT_DISMISS_KEY)||0)>=Date.now())return;
+      }catch{}
+      setOpen(true);
+    },450);
+    return()=>{cancelled=true;window.clearTimeout(timer)};
+  },[onHome]);
 
   const dismiss=()=>{
     try{localStorage.setItem(FEATURED_EVENT_DISMISS_KEY,String(Date.now()+FEATURED_EVENT_DISMISS_MS))}catch{}

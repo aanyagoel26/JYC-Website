@@ -122,6 +122,11 @@
       "permanent": true
     },
     {
+      "source": "/events/agentic-ai-2026",
+      "destination": "/events/jai-2026-jaypee-agentic-ai-hackathon",
+      "permanent": true
+    },
+    {
       "source": "/leadership",
       "destination": "/team",
       "permanent": true
