@@ -29,7 +29,7 @@ pass('mobile event list is defined',css.includes('@media(max-width:900px)')&&css
 pass('reduced motion contract exists',css.includes('@media(prefers-reduced-motion:reduce)'));
 pass('public overflow is guarded',css.includes('body{overflow-x:hidden!important;}'));
 pass('focus ring contract remains active',main.includes(':focus-visible')||read('src/v23.6-editorial-upgrade.css').includes(':focus-visible')||css.includes(':focus-visible'));
-pass('23 hub detail records exist', ['Fortissimo','BDS','VamUnique','Panache','RPH','CICR','Innovation','Zencoders','JODC','CypherX','Arcadia','Neural Nexus','GDG','Dronotics','Aakriti','Aura','Cinekala','Abhivyakti','Prismatic','Eloquence','JSA','Qriosity','JIIT OPTICA'].every(x=>new RegExp(`(?:["\'])?${x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}(?:["\'])?\s*:`).test(hubDetails)));
+pass('23 hub detail records exist', ['Fortissimo','BDS','VamUnique','Panache','RPH','CICR','Innovation','Zencoders','JODC','CypherX','Arcadia','Neural Nexus','GDG','Dronotics','Aakriti','Aura','Cinekala','Abhivyakti','Prismatic','Eloquence','JSA','Qriosity','JIIT OPTICA'].every(x=>new RegExp(`(?:["'])?${x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}(?:["'])?\s*:`).test(hubDetails)));
 pass('hub detail system is rendered for every resolved hub',main.includes('hubDetails(c.name)')&&main.includes("WHAT YOU'LL FIND HERE")&&css.includes('.hub-detail-system'));
 pass('source highlight layer is rendered',main.includes('hub-source-highlights')&&css.includes('.hub-source-highlight-grid'));
 pass('hub detail content remains compact and responsive',css.includes('.hub-detail-columns{display:grid;grid-template-columns:minmax(0,1fr) minmax(300px,.8fr)')&&css.includes('@media(max-width:760px)'));
