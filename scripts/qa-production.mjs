@@ -15,8 +15,8 @@ if(/https:\/\/[^*\s]+\.supabase\.co/.test(vercel)) fail('Vercel CSP does not har
 if(vercel.includes('X-Content-Type-Options')&&vercel.includes('X-Frame-Options')&&vercel.includes('Referrer-Policy')) pass('Baseline security headers present'); else fail('Baseline security headers incomplete');
 if(vercel.includes('Strict-Transport-Security')) pass('HSTS header present'); else fail('HSTS header missing');
 const robots=read('public/robots.txt');
-const configuredSite=(process.env.VITE_SITE_URL||process.env.SITE_URL||process.env.VERCEL_PROJECT_PRODUCTION_URL||'https://www.jiityouthclub128.in').trim().replace(/\/$/,'');
-const siteOrigin=/^[a-z]+:\/\//i.test(configuredSite)?configuredSite:`https://${configuredSite}`;
+const configuredSite=(process.env.VITE_SITE_URL||process.env.SITE_URL||process.env.VERCEL_PROJECT_PRODUCTION_URL||'https://www.jiityouthclub128.in').trim();
+const siteOrigin=(()=>{try{const candidate=/^[a-z][a-z\d+.-]*:\/\//i.test(configuredSite)?configuredSite:`https://${configuredSite}`;const parsed=new URL(candidate);if(!['http:','https:'].includes(parsed.protocol)||parsed.username||parsed.password)throw new Error('Invalid site URL');return parsed.origin}catch{throw new Error('VITE_SITE_URL/SITE_URL must be a valid HTTP(S) origin')}})();
 const sitemap=path.join(root,'public','sitemap.xml');
 if(fs.existsSync(sitemap)){
   const sitemapText=read('public/sitemap.xml');
