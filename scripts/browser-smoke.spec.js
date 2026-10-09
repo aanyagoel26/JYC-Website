@@ -352,7 +352,19 @@ test('gallery deep-link opens the requested photograph', async ({ page }) => {
   expect(key).toBeTruthy();
   await page.goto(base + '/gallery?photo=' + encodeURIComponent(key), { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'gallery photo deep-link');
-  await expect(page.locator('.jyc57-lightbox[role="dialog"]')).toBeVisible();
+  const dialog=page.locator('.jyc57-lightbox[role="dialog"]');
+  await expect(dialog).toBeVisible();
+  // Verify the lightbox opened the requested photo, not just any photo.
+  const requestedId=photoId;
+  if (requestedId) {
+    await expect(dialog.locator('.jyc57-lightbox-media img')).toHaveAttribute('data-photo-id', requestedId);
+  } else {
+    const requestedSrc=new URL(src, base).pathname;
+    await expect.poll(async () => {
+      const actual=await dialog.locator('.jyc57-lightbox-media img').getAttribute('src');
+      return actual ? new URL(actual, base).pathname : '';
+    }).toBe(requestedSrc);
+  }
 });
 
 
