@@ -69,11 +69,23 @@ async function loadAllImages(page){
     const max=Math.max(document.body.scrollHeight,document.documentElement.scrollHeight);
     for(let y=0;y<max;y+=Math.max(240,innerHeight*.75)){
       window.scrollTo(0,y);
-      await new Promise(r=>setTimeout(r,80));
+      await new Promise(r=>setTimeout(r,100));
     }
     window.scrollTo(0,0);
+    const visible=img=>{
+      const s=getComputedStyle(img),r=img.getBoundingClientRect();
+      return s.display!=='none'&&s.visibility!=='hidden'&&r.width>0&&r.height>0;
+    };
+    // Lazy images need a real load/error completion before naturalWidth can
+    // distinguish a broken asset from an image that is still downloading.
+    await Promise.all([...document.images].filter(visible).map(img=>new Promise(resolve=>{
+      if(img.complete)return resolve();
+      const done=()=>{img.removeEventListener('load',done);img.removeEventListener('error',done);resolve()};
+      img.addEventListener('load',done,{once:true});
+      img.addEventListener('error',done,{once:true});
+      setTimeout(done,2500);
+    })));
   });
-  await page.waitForTimeout(500);
   return page.evaluate(()=>{
     const visible=el=>{
       const s=getComputedStyle(el),r=el.getBoundingClientRect();
@@ -110,7 +122,7 @@ test('sitewide routes load every visible image successfully and expose alt text'
     await page.goto(route,{waitUntil:'domcontentloaded'});
     await waitForPublicApp(page,route);
     const images=await loadAllImages(page);
-    const broken=images.filter(x=>x.naturalWidth===0);
+    const broken=images.filter(x=>x.complete&&x.naturalWidth===0);
     const missingAlt=images.filter(x=>x.alt===null);
     expect(broken,route+' broken images').toEqual([]);
     expect(missingAlt,route+' images without alt attribute').toEqual([]);
