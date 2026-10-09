@@ -9,8 +9,7 @@ import {AdminTrustDashboard} from './admin-trust-dashboard.jsx';
 
 const logo='/JYC%20Logo(4).png';
 const markLogo=logo;
-let uidFallbackCounter=0;
-const uid=()=>globalThis.crypto?.randomUUID?.()||`${Date.now()}-${++uidFallbackCounter}`;
+const uid=()=>{if(typeof globalThis.crypto?.randomUUID==='function')return globalThis.crypto.randomUUID();const bytes=new Uint8Array(16);if(typeof globalThis.crypto?.getRandomValues!=='function')throw new Error('Secure random number generation is unavailable');globalThis.crypto.getRandomValues(bytes);return Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join('')};
 const empty={clubs:[],events:[],gallery:[],team:[],categories:{Technical:[], 'Non-Technical':[]},announcement:{on:false,text:'',link:''},mode:'events',fest:null,homepage:{heroTitle:'JIIT YOUTH CLUB',heroSubtitle:'READY TO SOAR',heroLead:'A student-led ecosystem connecting campus communities, creativity, technology and experiences at JIIT Sector 128.',showClubs:true,showEvents:true,showGallery:true,aboutTitle:'The JYC story belongs here.',aboutText:''},creator:CREATOR};
 const clubTemplate={name:'',type:'Technical',category:'',description:'',logo:'',banner:'',about:'',interests:[],instagram:'',whatsapp:'',website:'',linkedin:'',youtube:'',president:'',vicePresident:'',secretary:'',heads:[],recruitment:{on:false,title:'Recruitment Open',link:'',deadline:''},achievements:[],projects:[],customSections:[],theme:'jyc',pinned:false,published:false,status:'draft'};
 const eventTemplate={title:'',clubId:'',club:'',eventType:'',poster:'',description:'',date:'',start:'',end:'',venue:'',registrationMode:'external',registrationUrl:'',registrationDeadline:'',map_url:'',contactName:'',contactPhone:'',contactEmail:'',speaker:'',guest:'',highlights:[],galleryIds:[],featured:false,pinned:false,published:false,archived:false};
