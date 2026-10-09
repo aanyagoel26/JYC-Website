@@ -357,7 +357,7 @@ test('gallery deep-link opens the requested photograph', async ({ page }) => {
   // Verify the lightbox opened the requested photo, not just any photo.
   const requestedId=photoId;
   if (requestedId) {
-    await expect(dialog.locator('.jyc57-lightbox-media img')).toHaveAttribute('data-photo-id', requestedId);
+    await expect(dialog).toHaveAttribute('data-photo-id', requestedId);
   } else {
     const requestedSrc=new URL(src, base).pathname;
     await expect.poll(async () => {
