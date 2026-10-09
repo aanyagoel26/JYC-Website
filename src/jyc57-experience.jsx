@@ -113,18 +113,21 @@ export function JYC57Gallery({data}){
  useEffect(()=>{setQuery(params.get('q')||'');setAssociation(params.get('club')||'All');setYear(params.get('year')||'All');if(!pathAlbum)setAlbum(params.get('album')||'All')},[params,pathAlbum]);
  useEffect(()=>{
    const key=params.get('photo');
-   if(!key||!filtered.length)return;
-   // URLSearchParams has already decoded the query value once. Compare that exact
-   // value first; only try a second decode as a compatibility fallback for older links.
+   if(!key||!items.length)return;
+   // Resolve against the complete archive, not the currently filtered subset:
+   // shared links must work even when the photo belongs to another collection/year.
    const candidates=[key];
    try{const decoded=decodeURIComponent(key);if(decoded!==key)candidates.push(decoded)}catch{}
-   const match=filtered.find(g=>{
+   const match=items.find(g=>{
      const ids=[g.id,g.photoId,g.photo_id].filter(v=>v!==undefined&&v!==null).map(String);
      const urls=[g.url,g.src,g.image,g.imageUrl].filter(Boolean).map(String);
      return candidates.some(candidate=>ids.includes(candidate)||urls.includes(candidate));
    });
-   if(match)setSelected(match);
- },[params,filtered]);
+   if(match){
+     setQuery('');setAssociation('All');setYear('All');setAlbum('All');
+     setSelected(match);
+   }
+ },[params,items]);
  useEffect(()=>{
    if(!active)return;
    triggerRef.current=document.activeElement;setZoom(1);setCopied(false);
