@@ -10,7 +10,7 @@ const FALLBACK='/assets/hub-photos/jyc-06.webp';
 const slug=v=>String(v||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 const eventPath=e=>`/events/${slug(e?.slug||e?.title)}`;
 const media=v=>v?.url||v?.src||v?.image||v?.imageUrl||'';
-const dateMs=e=>{const d=new Date(String(e?.date||'')+'T'+String(e?.start||'00:00'));return Number.isNaN(d.getTime())?Infinity:d.getTime()};
+const dateMs=e=>{const raw=String(e?.date||'').trim();if(!raw)return Infinity;const time=String(e?.start||'').trim();const candidate=/T\d{2}:\d{2}/.test(raw)?raw:raw+'T'+(/^\d{1,2}:\d{2}$/.test(time)?time.padStart(5,'0'):'00:00');const ms=Date.parse(candidate);return Number.isFinite(ms)?ms:Infinity};
 const dateLabel=v=>{const d=new Date(String(v||''));return Number.isNaN(d.getTime())?'DATE TBA':d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});};
 const eventImage=e=>e?.poster||sourceEventMedia(e)?.photoItems?.filter(x=>x?.url).map(media)[0]||FALLBACK;
 function Img({src,alt,loading,fetchPriority,decoding='async',...props}){const resolvedLoading=loading??(fetchPriority==='high'?'eager':'lazy');return <img {...props} src={src||FALLBACK} alt={alt||''} loading={resolvedLoading} fetchPriority={fetchPriority} decoding={decoding} onError={e=>{if(e.currentTarget.dataset.fallback)return;e.currentTarget.dataset.fallback='1';e.currentTarget.src=FALLBACK;}}/>}
