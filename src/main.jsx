@@ -94,7 +94,8 @@ function LogoImage({alt='',...props}){
 const isFestMode=data=>String(data?.mode||'events').toLowerCase()==='fest';
 const recruitmentEnabled=data=>data?.flags?.recruitmentHub!==false;
 
-const uid=()=>globalThis.crypto?.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`;
+let uidFallbackCounter=0;
+const uid=()=>globalThis.crypto?.randomUUID?.()||`${Date.now()}-${++uidFallbackCounter}`;
 const storageGet=(key,fallback=null)=>{try{const value=localStorage.getItem(key);return value===null?fallback:value}catch{return fallback}};
 const storageSet=(key,value)=>{try{localStorage.setItem(key,String(value));return true}catch{return false}};
 const storageRemove=(key)=>{try{localStorage.removeItem(key);return true}catch{return false}};
