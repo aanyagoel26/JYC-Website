@@ -190,11 +190,14 @@ test('React Bits and Motion surfaces are present without horizontal overflow', a
   await page.goto('/',{waitUntil:'domcontentloaded'});
   await waitForPublicApp(page,'motion surfaces');
   const result=await page.evaluate(()=>{
-    const selectors=['.rb-rubber','.rb-bell','.depth-carousel','.drift-wall','.flip-card','.jyc-network','.jyc-innovation-motion'];
+    // The active V1 homepage is editorial-first; assert its real motion/network
+    // surfaces rather than retired component class names from earlier designs.
+    const selectors=['.jh-hero','.jyc-network','.jyc-innovation-motion','.jyc57-photo-story-frame','.jh-family-grid','.jh-activity-grid'];
     return selectors.map(selector=>({selector,count:document.querySelectorAll(selector).length}))
       .filter(x=>x.count>0);
   });
-  expect(result.length).toBeGreaterThan(0);
+  expect(result.length,'current editorial motion/content surfaces are mounted').toBeGreaterThan(0);
+  expect(result.some(x=>x.selector==='.jh-hero'||x.selector==='.jyc-network'),'V1 homepage hero or network surface is present').toBe(true);
   const geometry=await inspectViewport(page);
   expect(geometry.bodyOverflow).toBe(false);
   expect(geometry.offscreen).toEqual([]);
