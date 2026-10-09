@@ -9,7 +9,11 @@ const routes=[
 async function waitForPublicApp(page,label){
   await page.locator('#root').waitFor({state:'attached',timeout:15000});
   await expect(page.locator('body'),label).toBeVisible();
-  await page.waitForTimeout(250);
+  // The shell intentionally waits for the data/cache boot gate before mounting
+  // .public-app. Waiting only for #root races the loading screen and creates
+  // false blank-page/image failures across every viewport.
+  await page.locator('.public-app').waitFor({state:'visible',timeout:20000});
+  await expect(page.locator('.public-app h1, .public-app h2, .public-app p, .public-app a, .public-app button').first(),label+' visible public content').toBeVisible({timeout:10000});
 }
 
 async function inspectViewport(page){
@@ -65,11 +69,23 @@ async function loadAllImages(page){
     const max=Math.max(document.body.scrollHeight,document.documentElement.scrollHeight);
     for(let y=0;y<max;y+=Math.max(240,innerHeight*.75)){
       window.scrollTo(0,y);
-      await new Promise(r=>setTimeout(r,80));
+      await new Promise(r=>setTimeout(r,100));
     }
     window.scrollTo(0,0);
+    const visible=img=>{
+      const s=getComputedStyle(img),r=img.getBoundingClientRect();
+      return s.display!=='none'&&s.visibility!=='hidden'&&r.width>0&&r.height>0;
+    };
+    // Lazy images need a real load/error completion before naturalWidth can
+    // distinguish a broken asset from an image that is still downloading.
+    await Promise.all([...document.images].filter(visible).map(img=>new Promise(resolve=>{
+      if(img.complete)return resolve();
+      const done=()=>{img.removeEventListener('load',done);img.removeEventListener('error',done);resolve()};
+      img.addEventListener('load',done,{once:true});
+      img.addEventListener('error',done,{once:true});
+      setTimeout(done,2500);
+    })));
   });
-  await page.waitForTimeout(500);
   return page.evaluate(()=>{
     const visible=el=>{
       const s=getComputedStyle(el),r=el.getBoundingClientRect();
@@ -106,7 +122,7 @@ test('sitewide routes load every visible image successfully and expose alt text'
     await page.goto(route,{waitUntil:'domcontentloaded'});
     await waitForPublicApp(page,route);
     const images=await loadAllImages(page);
-    const broken=images.filter(x=>x.naturalWidth===0);
+    const broken=images.filter(x=>x.complete&&x.naturalWidth===0);
     const missingAlt=images.filter(x=>x.alt===null);
     expect(broken,route+' broken images').toEqual([]);
     expect(missingAlt,route+' images without alt attribute').toEqual([]);
@@ -174,11 +190,14 @@ test('React Bits and Motion surfaces are present without horizontal overflow', a
   await page.goto('/',{waitUntil:'domcontentloaded'});
   await waitForPublicApp(page,'motion surfaces');
   const result=await page.evaluate(()=>{
-    const selectors=['.rb-rubber','.rb-bell','.depth-carousel','.drift-wall','.flip-card','.jyc-network','.jyc-innovation-motion'];
+    // The active V1 homepage is editorial-first; assert its real motion/network
+    // surfaces rather than retired component class names from earlier designs.
+    const selectors=['.jh-hero','.jyc-network','.jyc-innovation-motion','.jyc57-photo-story-frame','.jh-family-grid','.jh-activity-grid'];
     return selectors.map(selector=>({selector,count:document.querySelectorAll(selector).length}))
       .filter(x=>x.count>0);
   });
-  expect(result.length).toBeGreaterThan(0);
+  expect(result.length,'current editorial motion/content surfaces are mounted').toBeGreaterThan(0);
+  expect(result.some(x=>x.selector==='.jh-hero'||x.selector==='.jyc-network'),'V1 homepage hero or network surface is present').toBe(true);
   const geometry=await inspectViewport(page);
   expect(geometry.bodyOverflow).toBe(false);
   expect(geometry.offscreen).toEqual([]);
