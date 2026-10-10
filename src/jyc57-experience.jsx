@@ -16,7 +16,7 @@ const syncFilters=(nav,loc,values)=>{const p=new URLSearchParams(loc.search);Obj
 const identityPalette=['#bf9c6f','#81927a','#b8785b','#8297ad','#a294b5','#a98c62'];
 const identityAccent=value=>{let hash=0;for(const ch of String(value||'JYC'))hash=(hash*31+ch.charCodeAt(0))>>>0;return identityPalette[hash%identityPalette.length]};
 const eventCardPhoto=event=>event?.poster||event?.banner||sourceEventMedia(event)?.photoItems?.find(item=>item?.url)?.url||'';
-const clubCardPhoto=club=>club?.banner||club?.logo||club?.hubPhotos?.[0]||sourceHubMedia(club)?.photoItems?.find(item=>item?.url)?.url||'';
+const clubCardPhoto=club=>{const source=sourceHubMedia(club);return club?.hubPhotos?.[0]||source?.photos?.[0]||source?.photoItems?.find(item=>item?.url)?.url||(club?.banner&&club.banner!==club.logo?club.banner:'')||club?.logo||''};
 function magneticMove(event){
  if(event.pointerType!=='mouse'||window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
  const element=event.currentTarget,rect=element.getBoundingClientRect();
