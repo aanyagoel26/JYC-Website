@@ -24,6 +24,7 @@ add('homepage family cards are media-free',home.includes('jh-family-index')&&!ho
 add('homepage activity cards are media-free',!home.includes('image:gallery['));
 add('homepage has one hero image and one featured-event image path',home.includes('jh-photo-frame')&&home.includes('jh-featured-event'));
 add('event detail defines its poster source before rendering the poster',eventDetail.includes("const eventPoster=e.poster||sourceEventMedia(e)?.photoItems?.find(item=>item?.url)?.url||'';")&&eventDetail.indexOf('const eventPoster=')<eventDetail.indexOf('{eventPoster?'));
+add('event detail receives the reminder notification callback from the route',eventDetail.includes('function EventDetail({data,id,session,notify})')&&main.includes('<EventDetail data={data} id={slugId} session={session} notify={notify}/>'));
 add('tablet event/club hero switches to a safe single-column layout',design.includes('@media(max-width:900px)')&&design.includes('.public-app .jyc57-page .jyc57-hero{')&&design.includes('overflow-wrap:normal')&&design.includes('hyphens:none'));
 add('recruitment empty state provides next-step links',extra.includes('No published club has recruitment enabled right now.')&&extra.includes('Explore clubs ↗')&&extra.includes('See events →')&&extra.includes('Join JYC updates →'));
 add('Best of JYC photo cards open their full gallery photo',experience.includes("href={'/gallery?photo='+encodeURIComponent(g.id||g.url)}")&&experience.includes('aria-label={`Open ${g.caption||\'JYC photograph\'} in the gallery`}'));
