@@ -120,50 +120,52 @@ test('reduced-motion mode disables homepage motion', async ({ page }) => {
 });
 
 
-test('brand text contrast stays readable in both themes', async ({ page }) => {
-  const contrast = await page.evaluate(() => {
-    const parse = value => {
-      const m = String(value || '').match(/rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([\d.]+))?\)/i);
-      if (!m) return null;
-      return [Number(m[1]),Number(m[2]),Number(m[3]),m[4]===undefined?1:Number(m[4])];
-    };
-    const luminance = rgb => {
-      const channels = rgb.slice(0,3).map(v => {
-        const x=v/255;
-        return x<=.03928?x/12.92:Math.pow((x+.055)/1.055,2.4);
-      });
-      return .2126*channels[0]+.7152*channels[1]+.0722*channels[2];
-    };
-    const ratio = (a,b) => {
-      const la=luminance(a),lb=luminance(b);
-      return (Math.max(la,lb)+.05)/(Math.min(la,lb)+.05);
-    };
-    const effectiveBg = el => {
-      let node=el;
-      while(node && node!==document.documentElement){
-        const bg=parse(getComputedStyle(node).backgroundColor);
-        if(bg && bg[3]>.05){
-          const alpha=bg[3];
-          if(alpha>=.95)return bg;
+test('brand text contrast stays readable in both light and dark themes', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'brand contrast');
+  for (const theme of ['light', 'dark']) {
+    await page.evaluate(value => document.documentElement.setAttribute('data-theme', value), theme);
+    const contrast = await page.evaluate(() => {
+      const parse = value => {
+        const m = String(value || '').match(/rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([\d.]+))?\)/i);
+        if (!m) return null;
+        return [Number(m[1]),Number(m[2]),Number(m[3]),m[4]===undefined?1:Number(m[4])];
+      };
+      const luminance = rgb => {
+        const channels = rgb.slice(0,3).map(v => {
+          const x=v/255;
+          return x<=.03928?x/12.92:Math.pow((x+.055)/1.055,2.4);
+        });
+        return .2126*channels[0]+.7152*channels[1]+.0722*channels[2];
+      };
+      const ratio = (a,b) => {
+        const la=luminance(a),lb=luminance(b);
+        return (Math.max(la,lb)+.05)/(Math.min(la,lb)+.05);
+      };
+      const effectiveBg = el => {
+        let node=el;
+        while(node && node!==document.documentElement){
+          const bg=parse(getComputedStyle(node).backgroundColor);
+          if(bg && bg[3]>.95)return bg;
+          node=node.parentElement;
         }
-        node=node.parentElement;
-      }
-      return parse(getComputedStyle(document.documentElement).backgroundColor)||[250,247,239,1];
-    };
-    const selectors=['.jh-hero h1','.jh-lead','.jh-overline','.nav a'];
-    return selectors.map(selector=>{
-      const el=document.querySelector(selector);
-      if(!el)return {selector,ratio:null};
-      const fg=parse(getComputedStyle(el).color);
-      const bg=effectiveBg(el);
-      return {selector,ratio:fg&&bg?ratio(fg,bg):null};
+        return parse(getComputedStyle(document.documentElement).backgroundColor)||[250,247,239,1];
+      };
+      const selectors=['.jh-hero h1','.jh-lead','.jh-overline','.nav a'];
+      return selectors.map(selector=>{
+        const el=document.querySelector(selector);
+        if(!el||getComputedStyle(el).display==='none'||getComputedStyle(el).visibility==='hidden')return {selector,ratio:null};
+        const fg=parse(getComputedStyle(el).color);
+        const bg=effectiveBg(el);
+        return {selector,ratio:fg&&bg?ratio(fg,bg):null};
+      });
     });
-  });
-  for(const item of contrast){
-    if(item.ratio!==null) expect(item.ratio, item.selector).toBeGreaterThanOrEqual(4.5);
+    for(const item of contrast){
+      if(item.ratio!==null) expect(item.ratio, theme+' '+item.selector).toBeGreaterThanOrEqual(4.5);
+    }
   }
 });
-
 
 test('mobile visual guardrails keep core content centered and inside viewport', async ({ page }) => {
   test.setTimeout(120000);
