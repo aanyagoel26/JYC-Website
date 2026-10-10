@@ -759,6 +759,7 @@ const DitherVeil = ({
     img.onerror = () => {
       container.dataset.static = '1';
       canvas.style.display = 'none';
+      renderer?.gl?.getExtension('WEBGL_lose_context')?.loseContext();
     };
     img.src = src;
 
