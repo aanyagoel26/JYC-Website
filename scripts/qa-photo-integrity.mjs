@@ -5,6 +5,9 @@ const assert=(name,ok,detail='')=>{console.log((ok?'PASS: ':'FAIL: ')+name+(deta
 const mediaSource=fs.readFileSync('src/jyc-source-media.js','utf8');
 const mainSource=fs.readFileSync('src/main.jsx','utf8');
 const browserSource=fs.readFileSync('scripts/browser-smoke.spec.js','utf8');
+const editorialHomeSource=fs.readFileSync('src/jyc-editorial-home.jsx','utf8');
+const homeCssSource=fs.readFileSync('src/jyc-editorial-home.css','utf8');
+const gallerySource=fs.readFileSync('src/jyc57-experience.jsx','utf8');
 const auditedCategories=['clubs/abhivyakti','clubs/panache','clubs/cypherx','festivals/aakriti','gallery/campus-events'];
 const auditedExclusionIds=auditedCategories.flatMap(cat=>{
   const start=mediaSource.indexOf(`'${cat}':new Set([`);
@@ -73,6 +76,10 @@ assert('every photo fallback stage updates alternative text before changing the 
 assert('failed portrait logo fallback is contained rather than cropped',teamThemeSource.includes('img[data-image-fallback-stage="1"]')&&teamThemeSource.includes('object-fit:contain!important'));
 assert('all responsive photo failures use the official logo rather than another campus photo',responsivePhotoSource.includes("fallbackSrc='/JYC%20Logo(4).png'")&&responsivePhotoSource.includes("fallbackAlt='Official JYC logo placeholder; image unavailable'"));
 assert('branded fallback images are contained across editorial surfaces',teamThemeSource.includes('.jyc-responsive-picture img[data-image-fallback-stage="2"]')&&teamThemeSource.includes('Any failed editorial image becomes an identity mark'));
+assert('club photo failures prefer the club logo and preserve decorative alt text',gallerySource.includes('fallbackSrc={c.logo||\'/JYC%20Logo(4).png\'} fallbackAlt=""'));
+assert('event photo failures prefer the event poster then the JYC logo',gallerySource.includes('fallbackSrc={e.poster||\'/JYC%20Logo(4).png\'} fallbackAlt=""'));
+assert('homepage featured event uses an official-logo fallback with accurate alt text',editorialHomeSource.includes("const FALLBACK='/JYC%20Logo(4).png'")&&editorialHomeSource.includes("Official JYC logo placeholder; event media unavailable")&&homeCssSource.includes('jh-event-image img[data-fallback="1"]'));
+
 assert('browser QA simulates failed team portrait requests',browserSource.includes('failed team portraits use the official JYC logo and accurate fallback text')&&browserSource.includes("page.route('**/assets/team/**', route => route.abort())")&&browserSource.includes('portrait unavailable'));
 assert('browser QA decodes lazy media on every long-form public route',browserSource.includes("lazy-loaded media decodes across long-form public routes")&&browserSource.includes("const broken = media.filter(img => img.src && !img.loaded)")&&browserSource.includes("const missingAlt = media.filter(img => !img.hasAlt)"));
 if(process.exitCode)process.exit(1);
