@@ -302,7 +302,7 @@ function Team({data}){
    <Suspense fallback={<div className="team-flip-loading" aria-hidden="true"/>}>
     <LazyFlipCard label={`Open profile for ${name}`} className="team-member-flip">
      <span className="team-member-face-content">
-      <span className="team-photo-editorial">{photo?<ResponsivePhoto src={photo} alt={name} loading="lazy" sizes="(max-width: 420px) 90vw, (max-width: 760px) 45vw, 25vw"/>:<LogoImage alt="JIIT Youth Club logo"/>}</span>
+      <span className="team-photo-editorial">{photo?<ResponsivePhoto src={photo} alt={name} width={600} height={720} loading="lazy" decoding="async" sizes="(max-width: 420px) 90vw, (max-width: 760px) 45vw, 25vw" fallbackSrc="/JYC%20Logo(4).png"/>:<LogoImage alt="JIIT Youth Club logo"/>}</span>
       <span className="tag">{role}</span>
       <strong className="team-member-name">{name}</strong>
       <span className="team-member-hint">Click to read profile →</span>
