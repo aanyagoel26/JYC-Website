@@ -21,14 +21,16 @@ export const JYC_SOCIALS = {
     campus: 'sector-128',
     sourcePriority: 'official-hub',
     verifiedBy: 'https://www.linkedin.com/company/vamunique-the-dance-society-jiit-noida/',
-    verifiedOn: '2026-10-03'
+    verifiedOn: '2026-10-10',
+    sourceNote: 'Official LinkedIn profile identifies VamUnique as the dance society of JIIT Sector 128 and describes cultural-fest, inter-college and community performances.'
   },
   Panache: {},
   RPH: {
     linkedin: 'https://www.linkedin.com/company/rapid-programming-hub-jiit-noida/',
     label: 'Rapid Programming Hub · JIIT Noida',
-    verifiedBy: 'https://in.linkedin.com/in/rapid-programming-hub-jiit-3188bb385',
-    verifiedOn: '2026-10-03'
+    verifiedBy: 'https://www.linkedin.com/company/rapid-programming-hub-jiit-noida/ and https://in.linkedin.com/in/rapid-programming-hub-jiit-3188bb385',
+    verifiedOn: '2026-10-10',
+    sourceNote: 'Official LinkedIn updates document Code Clash 25.2 on 2025-11-22 with 550+ student participants; this is an archived event, not an upcoming registration.'
   },
   CICR: {
     instagram: 'https://www.instagram.com/cicr_jiit/',
@@ -60,7 +62,8 @@ export const JYC_SOCIALS = {
     campus: 'sector-128',
     sourcePriority: 'official-hub',
     verifiedBy: 'https://www.linkedin.com/company/zencoders/',
-    verifiedOn: '2026-10-03'
+    verifiedOn: '2026-10-10',
+    sourceNote: 'Official LinkedIn identifies Zencoders as a JIIT coding society; current event dates were not asserted from the profile checked.'
   },
   JODC: {
     linkedin: 'https://in.linkedin.com/company/jodc/',
@@ -78,7 +81,8 @@ export const JYC_SOCIALS = {
     label: 'CypherX · JIIT-128',
     campus: 'sector-128',
     sourcePriority: 'official-hub',
-    sourceNote: 'Current LinkedIn profile states the official cybersecurity community of JIIT-128 and primary location at Jaypee Wishtown, Sector 128.'
+    verifiedOn: '2026-10-10',
+    sourceNote: 'Official LinkedIn identifies CypherX as the JIIT-128 cybersecurity community and describes workshops, CTFs, projects and industry engagement.'
   },
   Arcadia: {
     instagram: 'https://www.instagram.com/arcadia_jiit/',
