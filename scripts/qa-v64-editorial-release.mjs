@@ -43,6 +43,7 @@ const checks=[
  ['assistant dialog is labelled by its visible heading',assistant.includes('aria-labelledby="jyc-assistant-title"')&&assistant.includes('id="jyc-assistant-title"')],
  ['assistant keyboard focus is trapped and restored',assistant.includes('if(e.shiftKey&&(active===first||!root.contains(active)))')&&assistant.includes('target.focus({preventScroll:true})})};')],
  ['assistant quick routes use a compact two-column mobile layout',assistant.includes('grid-template-columns:repeat(2,minmax(0,1fr));gap:8px')],
+ ['assistant quick routes have distinct destinations and stable keys',assistant.includes("const quick=context==='clubs'?[['Explore all clubs','/clubs'],['Upcoming events','/events'],['JYC archive','/archive'],['Contact JYC','/contact']]")&&assistant.includes('key={`${label}-${path}`}')],
  ['public pages balance headings and provide visible keyboard focus',globalStyles.includes(':focus-visible')&&globalStyles.includes('text-wrap:balance')&&globalStyles.includes('text-wrap:pretty')],
  ['editorial homepage uses the JYC antique-gold accent',homeCss.includes('--jh-accent:#bf9c6f')&&!homeCss.includes('--jh-accent:#e42b35')],
  ['gold primary actions use dark readable text and visible keyboard focus',homeCss.includes('.jh-btn-primary')&&homeCss.includes('color: #151316;')&&homeCss.includes(':focus-visible')],
