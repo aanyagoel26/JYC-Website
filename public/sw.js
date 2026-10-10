@@ -1,6 +1,6 @@
-const CACHE_NAME = 'jyc-cache-v64-5-1';
+const CACHE_NAME = 'jyc-cache-v64-5-2';
 
-const APP_SHELL = ['/', '/offline.html', '/manifest.json', '/JYC%20Logo(4).png'];
+const APP_SHELL = ['/', '/offline.html', '/manifest.json', '/assets/jyc-logo.webp'];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)));
