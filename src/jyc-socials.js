@@ -52,7 +52,7 @@ export const JYC_SOCIALS = {
     sourcePriority: 'official-hub',
     verifiedBy: 'https://in.linkedin.com/company/innovation-jiit and https://www.innovationjiit.in/',
     verifiedOn: '2026-10-10',
-    sourceNote: 'Official site lists RIDE HACK 26 for 2026-11-01; campus scope should be based on current event information because company-location metadata can lag.'
+    sourceNote: 'Official site lists RIDE HACK 26 for 2026-11-01 and currently links registration; verify current status directly with the organiser because public social updates may differ and company-location metadata can lag.'
   },
   Zencoders: {
     instagram: 'https://www.instagram.com/zencodersjiit/',
