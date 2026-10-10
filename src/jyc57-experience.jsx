@@ -184,7 +184,6 @@ export function JYC57Gallery({data}){
  </section>
 }
 export function JYCBestOf({data}){
- const nav=useNavigate();
  const items=useMemo(()=>{
   const incoming=Array.isArray(data?.gallery)?data.gallery:[];
   const strict=[...incoming,...JYC_SOURCE_ARCHIVE_PHOTO_ITEMS]
