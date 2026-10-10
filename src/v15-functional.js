@@ -9,7 +9,32 @@ export const REMINDER_PREFIX = 'jyc-local-reminder-';
 const read = (key, fallback = null) => {
   try { const value = localStorage.getItem(key); return value === null ? fallback : value; } catch { return fallback; }
 };
-const write = (key, value) => { try { localStorage.setItem(key, String(value)); return true; } catch { return false; } };
+const PERSISTABLE_KEY = /^(?:jyc-site-cache-v15|jyc-site-cache-meta-v15|jyc-saved-event-[a-zA-Z0-9_-]{1,120}|jyc-saved-club-[a-zA-Z0-9_-]{1,120}|jyc-local-reminder-[a-zA-Z0-9_-]{1,120})$/;
+const PRIVATE_VALUE_FIELD = /(?:access.?token|refresh.?token|authorization|password|passwd|secret|session.?key|credential|api.?key|user.?id|account.?id|contact.?email|contact.?phone|private.?key|admin.?note)/i;
+function containsPrivateValue(value, depth = 0) {
+  if (depth > 8 || value == null || typeof value !== 'object') return false;
+  if (Array.isArray(value)) return value.some(item => containsPrivateValue(item, depth + 1));
+  return Object.entries(value).some(([key, item]) => PRIVATE_VALUE_FIELD.test(key) || containsPrivateValue(item, depth + 1));
+}
+const write = (key, value) => {
+  try {
+    if (!PERSISTABLE_KEY.test(String(key))) return false;
+    const serialized = String(value);
+    if (key === SITE_CACHE_KEY) {
+      const parsed = JSON.parse(serialized);
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed) || containsPrivateValue(parsed)) return false;
+    } else if (key.startsWith(REMINDER_PREFIX)) {
+      const parsed = JSON.parse(serialized);
+      if (!parsed || typeof parsed !== 'object' || Array.isArray(parsed) || containsPrivateValue(parsed)) return false;
+    } else if (key === SITE_CACHE_META_KEY && !Number.isFinite(Date.parse(serialized))) {
+      return false;
+    } else if ((key.startsWith(SAVED_EVENT_PREFIX) || key.startsWith(SAVED_CLUB_PREFIX)) && serialized !== '1') {
+      return false;
+    }
+    localStorage.setItem(key, serialized);
+    return true;
+  } catch { return false; }
+};
 const remove = key => { try { localStorage.removeItem(key); return true; } catch { return false; } };
 const reminderTimers = new Map();
 
