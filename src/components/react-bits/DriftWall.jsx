@@ -1,7 +1,6 @@
 import React,{useCallback,useEffect,useLayoutEffect,useMemo,useRef,useState}from'react';
 import'./DriftWall.css';
 
-const prefersReducedMotion=()=>typeof window!=='undefined'&&window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
 const columnFactor=(index,variance)=>1+variance*(((index*0.6180339887+0.35)%1)*2-1);
 
 export default function DriftWall({
