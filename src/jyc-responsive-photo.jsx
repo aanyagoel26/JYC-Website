@@ -1,6 +1,6 @@
 import React,{useEffect,useRef,useState} from 'react';
 import {photoDerivativeUrls} from './jyc-photo-intelligence.js';
-const LOGO_FALLBACK='/JYC%20Logo(4).png';
+const LOGO_FALLBACK=import.meta.env.PROD?'/assets/jyc-logo.webp':'/JYC%20Logo(4).png';
 const isDerivativeSource=url=>/^\/assets\/(?:source-archive|hub-photos|hub-photos-extra)\//.test(String(url||''));
 let imageManifestPromise=null;
 const loadImageManifest=()=>{
@@ -27,7 +27,7 @@ const fallback=(e,src,fallbackSrc,fallbackAlt)=>{
  image.removeAttribute('src');
  image.style.visibility='hidden';
 };
-export function ResponsivePhoto({src,alt='',width,height,sizes='100vw',loading='lazy',fetchPriority,decoding='async',className='',style,onError,objectPosition,fallbackSrc='/JYC%20Logo(4).png',fallbackAlt='Official JYC logo placeholder; image unavailable'}){
+export function ResponsivePhoto({src,alt='',width,height,sizes='100vw',loading='lazy',fetchPriority,decoding='async',className='',style,onError,objectPosition,fallbackSrc=LOGO_FALLBACK,fallbackAlt='Official JYC logo placeholder; image unavailable'}){
  const imageRef=useRef(null);
  const [sourceDimensions,setSourceDimensions]=useState({src:'',width:0,derivativesEligible:false});
  const intrinsicWidth=sourceDimensions.src===src&&sourceDimensions.derivativesEligible?sourceDimensions.width:0;
