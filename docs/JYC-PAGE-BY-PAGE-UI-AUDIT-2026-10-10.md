@@ -39,6 +39,7 @@ This was a DOM/geometry and interaction audit, not a substitute for human visual
 - At 768px, the events/fests hero headline's scroll width initially exceeded its text box. The new tablet breakpoint changes the hero to a single column and reduces the headline size; the fixed headline now fits its box.
 - The JAI event detail route initially entered the application recovery boundary. The deployed fix now renders the JAI title and Notify me action without the recovery screen.
 - Re-ran the full 20-route × 5-viewport matrix against the ready preview after the fixes: zero horizontal-overflow routes, broken visible images, missing `alt` attributes, unnamed controls, recovery screens, uncaught page errors or same-origin HTTP error responses.
+- The protected-preview browser environment logged CSP blocks for Vercel's injected `vercel.live` feedback script and could not fetch the external Google Fonts stylesheet. These are not app-origin HTTP failures or uncaught JavaScript exceptions; do not weaken the site's CSP merely to accommodate Vercel's injected preview script. Recheck font delivery in a normal browser/network environment.
 
 ## Changes in this branch
 
