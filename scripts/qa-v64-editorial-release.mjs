@@ -19,6 +19,7 @@ const socials=read('src/jyc-socials.js');
 const hubs=read('src/v21-hub-content.js');
 const hubDetails=read('src/v23.6-hub-details.js');
 const derivatives=read('scripts/generate-photo-derivatives.mjs');
+const imageManifestGenerator=read('scripts/generate-image-manifest.mjs');
 const bot=read('src/jyc-bot.jsx');
 const assistant=read('src/jyc-assistant.jsx');
 const browser=read('scripts/browser-smoke.spec.js');
@@ -43,7 +44,7 @@ const checks=[
  ['club logo assets are contained identity marks rather than cropped card photography',gallery.includes('jyc57-club-fallback-logo')&&!gallery.includes('||club?.logo||\'\'')&&design.includes('object-fit:contain!important')],
  ['each event card receives its own title-based visual identity',gallery.includes('eventIdentity(e).accent||identityAccent(e.title||e.slug||e.club)')&&gallery.includes('jyc57-event-card')],
  ['Dither logo fallback is eager and resilient when WebGL is unavailable',dither.includes('loading="eager" fetchPriority="high"')&&dither.includes('catch {')&&dither.includes('container.dataset.static = \'1\'')&&dither.includes('img.onerror = () =>')&&dither.includes('img.onerror = null;')&&dither.includes("renderer?.gl?.getExtension('WEBGL_lose_context')?.loseContext()")],
- ['derivative candidates use intrinsic manifest dimensions and respect source width',responsive.includes('photoDerivativeUrls(src,intrinsicWidth)')&&responsive.includes("manifest?.images?.[src]?.width")&&responsive.includes("fetch('/image-manifest.json'")&&responsive.includes('source-archive|hub-photos|hub-photos-extra')&&responsive.includes('if(!derivativesEnabled||!isDerivativeSource(src))')&&intelligence.includes('photoDerivativeUrls(url,sourceWidth)')&&intelligence.includes('width<=Number(sourceWidth)')],
+ ['derivative candidates use intrinsic manifest dimensions and only approved photo assets',responsive.includes('photoDerivativeUrls(src,intrinsicWidth)')&&responsive.includes('const entry=manifest?.images?.[src]')&&responsive.includes('entry?.derivativesEligible===true')&&responsive.includes("fetch('/image-manifest.json'")&&responsive.includes('source-archive|hub-photos|hub-photos-extra')&&responsive.includes('if(!derivativesEnabled||!isDerivativeSource(src))')&&imageManifestGenerator.includes('derivativesEligible:derivativeEligible(url)')&&imageManifestGenerator.includes('derivativeArchiveUrls.has(url)')&&intelligence.includes('photoDerivativeUrls(url,sourceWidth)')&&intelligence.includes('width<=Number(sourceWidth)')],
  ['canonical JAI slug is the only sitemap slug',sitemap.includes('/events/jai-2026-jaypee-agentic-ai-hackathon')&&!sitemap.includes('/events/agentic-ai-2026')&&!sitemap.includes('/events/codeai-hackathon')],
  ['sitemap resolves dynamic event slugs from canonical data',sitemap.includes('slug(e.slug||e.title)')],
  ['legacy JAI redirect remains explicit in runtime',main.includes("legacyEventSlugMap={'agentic-ai-2026':'jai-2026-jaypee-agentic-ai-hackathon'}")],
