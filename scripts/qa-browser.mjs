@@ -12,7 +12,7 @@ let baseUrl=env.JYC_BASE_URL;
 
 if(!baseUrl){
   baseUrl='http://127.0.0.1:4173';
-  preview=spawn(process.platform==='win32'?'npm.cmd':'npm',['run','preview','--','--host','127.0.0.1','--port','4173'],{
+  preview=spawn(process.execPath,['node_modules/vite/bin/vite.js','preview','--host','127.0.0.1','--port','4173'],{
     stdio:'inherit',
     env
   });
