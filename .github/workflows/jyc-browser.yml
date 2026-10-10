@@ -35,8 +35,31 @@ jobs:
       - name: Build production bundle
         run: npm run build
 
-      - name: Run browser smoke and responsive QA
-        run: npm run qa:browser
+      - name: Run browser smoke and responsive QA against production preview
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run preview -- --host 127.0.0.1 --port 4173 > /tmp/jyc-preview.log 2>&1 &
+          preview_pid=$!
+          trap 'kill "$preview_pid" 2>/dev/null || true' EXIT
+          ready=0
+          for attempt in $(seq 1 45); do
+            if curl --fail --silent http://127.0.0.1:4173/ >/dev/null; then
+              ready=1
+              break
+            fi
+            if ! kill -0 "$preview_pid" 2>/dev/null; then
+              cat /tmp/jyc-preview.log
+              exit 1
+            fi
+            sleep 1
+          done
+          if [ "$ready" -ne 1 ]; then
+            cat /tmp/jyc-preview.log
+            echo "Vite production preview did not become ready."
+            exit 1
+          fi
+          JYC_BASE_URL=http://127.0.0.1:4173 npm run qa:browser
 
       - name: Upload Playwright report on failure
         if: failure()
