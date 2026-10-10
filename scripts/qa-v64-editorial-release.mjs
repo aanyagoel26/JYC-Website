@@ -36,6 +36,7 @@ const checks=[
  ['photo derivative encoding uses build-friendly effort settings',derivatives.includes('.avif({quality:52,effort:2})')&&derivatives.includes('.webp({quality:82,effort:3})')&&derivatives.includes('completed%25===0')],
  ['GLB bot renders after model-viewer loads without a circular availability gate',bot.includes('modelReady&&!modelFailed?<model-viewer')&&bot.includes('onLoad={handleModelLoad}')&&bot.includes('setModelAvailable(true)')],
  ['GLB bot failure restores the safe fallback state',bot.includes('onError={handleModelError}')&&bot.includes('setModelAvailable(false)')&&bot.includes('setModelFailed(true)')],
+ ['GLB bot animation respects reduced-motion preference',bot.includes("prefers-reduced-motion: reduce")&&bot.includes("if(prefersReducedMotion()){setMotion('');return}")],
  ['GLB bot keeps the bundled local model and avoids auto-rotation',bot.includes('src="/models/jyc-spatial.glb"')&&bot.includes('camera-orbit="0deg 75deg auto"')&&bot.includes('disable-zoom')],
  ['editorial homepage uses the JYC antique-gold accent',homeCss.includes('--jh-accent:#bf9c6f')&&!homeCss.includes('--jh-accent:#e42b35')],
  ['gold primary actions use dark readable text and visible keyboard focus',homeCss.includes('.jh-btn-primary')&&homeCss.includes('color: #151316;')&&homeCss.includes(':focus-visible')],
