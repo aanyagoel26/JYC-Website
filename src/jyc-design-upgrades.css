@@ -234,7 +234,7 @@
 :root[data-theme="dark"] .team-member-face-content{background:var(--bg-card,#18161d);color:var(--text-primary,#f5f1e6)}
 :root[data-theme="dark"] .team-member-back-content{background:var(--bg-card,#18161d);color:var(--text-primary,#f5f1e6)}
 :root[data-theme="dark"] .team-social-row a{color:var(--text-primary,#f5f1e6)}
-.search-modal .search-list button.search-result-active{background:color-mix(in srgb,var(--accent-gold,#bf9c6f) 18%,var(--bg-card,#fff));border-color:var(--accent-gold,#bf9c6f);color:var(--text-primary,#1a191d)}
+.search-modal .search-list button.search-result-active{background:color-mix(in srgb,var(--accent-gold,#bf9c6f) 28%,var(--bg-card,#fff));border-color:var(--accent-gold,#bf9c6f);color:#171316}
 .search-modal .search-no-results,.search-modal .search-empty{color:var(--text-primary,#1a191d)}
 .search-modal .search-no-results p,.search-modal .search-empty p,.search-modal .search-meta,.search-modal .search-footer{color:var(--text-muted,#6e6a75)}
 .jyc-logo-fallback{display:inline-grid;place-items:center;aspect-ratio:1;min-width:0;min-height:0;border:1px solid var(--accent-gold,#bf9c6f);border-radius:50%;background:var(--bg-card,#fff);color:var(--accent-gold,#bf9c6f);font-weight:900;letter-spacing:-.08em}
