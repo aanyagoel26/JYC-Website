@@ -2214,3 +2214,7 @@ footer a:hover{
  .public-app .float-chip{display:none}
  .public-app .logo-core{width:min(250px,72vw)}
 }
+
+
+/* Contact page primary heading uses the same editorial scale as its section heading. */
+.contact-page .section-head h1{font:700 clamp(42px,6vw,78px) "Segoe UI",system-ui,sans-serif;letter-spacing:-.055em;line-height:.98;margin:13px 0 18px;}
