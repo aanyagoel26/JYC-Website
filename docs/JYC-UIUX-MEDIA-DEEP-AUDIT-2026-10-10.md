@@ -2,7 +2,7 @@
 
 ## Scope
 
-This audit covers the current `fix/ui-desktop-headline-layout` release branch, its source-media pipeline, the supplied 2026–27 All Hubs PDFs, official public club profiles/sites, and the newest available Vercel preview metadata. It distinguishes source-level verification from tests actually executed in a browser.
+This audit covers the merged V64.5.0 source and the follow-up `fix/media-fallback-state-rerender` V64.5.1 branch, its source-media pipeline, the supplied 2026–27 All Hubs PDFs, official public club profiles/sites, and the newest available Vercel preview metadata. It distinguishes source-level verification from tests actually executed in a browser.
 
 ## Implemented in the release branch
 
@@ -124,6 +124,7 @@ Use restrained, purposeful motion: Dither Veil only for the official logo; magne
 - **Derivative audit of the current READY preview manifest:** the deployed manifest contained 530 image records, of which 480 were marked derivative-eligible by folder path alone. A dimension-aware analysis found 36 of those records were unsuitable for generated photo variants. Examples included /assets/hub-photos/aakriti-01.webp at 1311×25 and /assets/hub-photos/neural-01.webp at 1500×211, plus small archive thumbnails that cannot benefit from 480w+ derivatives. These remain usable as original assets; the fix only prevents wasteful/non-useful derivative generation and incorrect eligibility claims.
 - **Shared eligibility rule:** isDerivativeDimensionEligible(width,height) is now shared by the manifest generator and derivative encoder. It requires at least 320×120 source pixels and an aspect ratio between 0.25 and 5. The manifest and generator therefore agree about which files actually receive variants; the browser continues to use the original source when a source is not eligible.
 - **Validation boundary:** source-level assertions were updated for the new contract. No fresh build or Playwright run has yet been observed for this follow-up branch. Do not call this production-verified until CI and a matching Vercel preview finish successfully.
+- **Patch release hygiene:** package.json, both package-lock root version fields, the service-worker cache namespace, README release header and CHANGELOG are synchronized to V64.5.1 on the follow-up branch.
 
 ## Next visual QA pass
 
