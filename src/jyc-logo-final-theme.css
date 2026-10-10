@@ -748,6 +748,10 @@ html[data-theme="dark"] .public-app .card:hover,html[data-theme="dark"] .public-
 .public-app .gallery-grid .gallery-item img{width:100%;aspect-ratio:4/3;object-fit:cover;object-position:center}
 .public-app .archive-story-photo{overflow:hidden}
 .public-app .archive-story-photo img{width:100%;height:100%;min-height:220px;object-fit:cover;object-position:center}
+.public-app .archive-story-photo .archive-story-image{display:block;width:100%;height:100%;min-height:220px;overflow:hidden}
+.public-app .archive-story-photo .archive-story-image img{display:block;width:100%;height:100%;min-height:220px;object-fit:cover;object-position:center}
+.public-app .hub-preview-image .hub-preview-source-image{display:block;width:100%;height:330px;overflow:hidden}
+.public-app .hub-preview-image .hub-preview-source-image img{display:block;width:100%;height:100%;min-height:300px;object-fit:cover;object-position:center;transition:transform .35s ease}
 .public-app .hub-source-photo-strip{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:14px;width:100%}
 .public-app .hub-source-photo-strip figure{margin:0;overflow:hidden;text-align:center}
 .public-app .hub-source-photo-strip img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;object-position:center}
@@ -794,7 +798,7 @@ html[data-theme="dark"] .public-app .card:hover,html[data-theme="dark"] .public-
  .public-app .jyc-feature-poster img{min-height:230px}
  .public-app .team-photo-editorial img{aspect-ratio:1/1}
  .public-app .hub-source-photo-strip{grid-template-columns:repeat(2,minmax(0,1fr))!important}
- .public-app .archive-story-photo img{min-height:180px}
+ .public-app .archive-story-photo img,.public-app .archive-story-photo .archive-story-image,.public-app .archive-story-photo .archive-story-image img{min-height:180px}
  .public-app .event-timeline-row{grid-template-columns:34px 1fr 24px!important}
  .public-app .event-timeline-media{display:none}
  .public-app .event-row-copy strong{font-size:1rem}
