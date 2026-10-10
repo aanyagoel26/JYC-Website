@@ -9,6 +9,7 @@ const editorialHomeSource=fs.readFileSync('src/jyc-editorial-home.jsx','utf8');
 const homeCssSource=fs.readFileSync('src/jyc-editorial-home.css','utf8');
 const gallerySource=fs.readFileSync('src/jyc57-experience.jsx','utf8');
 const responsiveSource=fs.readFileSync('src/jyc-responsive-photo.jsx','utf8');
+const imageManifestSource=fs.readFileSync('scripts/generate-image-manifest.mjs','utf8');
 const auditedCategories=['clubs/abhivyakti','clubs/panache','clubs/cypherx','festivals/aakriti','gallery/campus-events'];
 const auditedExclusionIds=auditedCategories.flatMap(cat=>{
   const start=mediaSource.indexOf(`'${cat}':new Set([`);
@@ -73,7 +74,7 @@ const responsivePhotoSource=fs.readFileSync('src/jyc-responsive-photo.jsx','utf8
 const teamThemeSource=fs.readFileSync('src/jyc-logo-final-theme.css','utf8');
 assert('team portraits reserve intrinsic dimensions and fall back to the official JYC logo',mainSource.includes('width={600} height={720}')&&mainSource.includes('fallbackSrc="/JYC%20Logo(4).png"')&&mainSource.includes('fallbackAlt="Official JYC logo placeholder; portrait unavailable"'));
 assert('team members without a portrait display the official logo contained, never cropped as a face photo',mainSource.includes('className="team-photo-missing-logo" alt="Official JYC logo placeholder; portrait unavailable"')&&teamThemeSource.includes('img.team-photo-missing-logo{object-fit:contain!important')&&teamThemeSource.includes('.jyc-logo-fallback.team-photo-missing-logo{display:grid;place-items:center'));
-assert('responsive derivatives are chosen from intrinsic manifest dimensions, never display width',responsiveSource.includes("fetch('/image-manifest.json'")&&responsiveSource.includes('manifest?.images?.[src]?.width')&&responsiveSource.includes('photoDerivativeUrls(src,intrinsicWidth)')&&responsiveSource.includes('if(!derivativesEnabled||!isDerivativeSource(src))'));
+assert('responsive derivatives use intrinsic dimensions and only approved photo assets',responsiveSource.includes("fetch('/image-manifest.json'")&&responsiveSource.includes('const entry=manifest?.images?.[src]')&&responsiveSource.includes('entry?.derivativesEligible===true')&&responsiveSource.includes('photoDerivativeUrls(src,intrinsicWidth)')&&responsiveSource.includes('if(!derivativesEnabled||!isDerivativeSource(src))')&&imageManifestSource.includes('derivativesEligible:derivativeEligible(url)')&&imageManifestSource.includes('derivativeArchiveUrls.has(url)'));
 assert('responsive photo fallback labels fallback media and restores source alt text',responsivePhotoSource.includes('fallbackAlt')&&responsivePhotoSource.includes("image.alt=alt")&&responsivePhotoSource.includes("image.alt=fallbackAlt??'Official JYC logo placeholder; image unavailable'"));
 assert('every photo fallback stage updates alternative text before changing the source',(responsivePhotoSource.split("image.alt=fallbackAlt??'Official JYC logo placeholder; image unavailable'").length-1)>=2);
 assert('failed portrait logo fallback is contained rather than cropped',teamThemeSource.includes('img[data-image-fallback-stage="1"]')&&teamThemeSource.includes('object-fit:contain!important'));
