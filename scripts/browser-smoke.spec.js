@@ -793,6 +793,18 @@ test('JYC Assistant search and keyboard close stay functional', async ({ page })
 
 
 
+
+test('runtime metadata keeps canonical URLs on the production domain from a preview host', async ({ page }) => {
+  const route = '/events/jai-2026-jaypee-agentic-ai-hackathon';
+  await page.goto(base + route, { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'canonical metadata on preview host');
+
+  const canonical = 'https://www.jiityouthclub128.in' + route;
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', canonical);
+  await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', canonical);
+});
+
+
 test('public route shells keep route-specific SEO content and one primary heading without JavaScript', async ({ page }) => {
   await page.route('**/*', route => {
     const pathname = new URL(route.request().url()).pathname;
