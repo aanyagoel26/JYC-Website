@@ -822,7 +822,7 @@ const DitherVeil = ({
     };
   }, [src]);
 
-  return <div ref={containerRef} className={`dither-veil ${className}`.trim()} style={style}><img className="dither-veil__fallback" src={src} alt="" aria-hidden="true" loading="lazy" decoding="async" /></div>;
+  return <div ref={containerRef} className={`dither-veil ${className}`.trim()} style={style}><img className="dither-veil__fallback" src={src} alt="" aria-hidden="true" loading="eager" fetchPriority="high" decoding="async" /></div>;
 };
 
 export default DitherVeil;
