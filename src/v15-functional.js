@@ -47,7 +47,7 @@ export function readSiteCache() {
   } catch { return null; }
 }
 
-const PRIVATE_CACHE_FIELD = /(?:^|_)(?:access.?token|refresh.?token|authorization|password|passwd|secret|session|credential|api.?key|user.?id|account.?id|contact.?email|contact.?phone|phone|email|private|submission|registration.?data|admin.?note)(?:$|_)/i;
+const PRIVATE_CACHE_FIELD = /(?:^|_)(?:access.?token|refresh.?token|authorization|password|passwd|secret|session|credential|api.?key|user.?id|account.?id|contact.?email|contact.?phone|phone|email|private|submission|registration.?data|admin.?note|certificate|certificates|client.?cert|private.?key|public.?key)(?:$|_)/i;
 
 // The offline cache is for public presentation only. Keep the data useful for
 // rendering while refusing to persist identity, authentication, or submission
