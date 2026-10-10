@@ -32,19 +32,19 @@ export function ResponsivePhoto({src,alt='',width,height,sourceWidth,sizes='100v
  const [sourceDimensions,setSourceDimensions]=useState({src:'',width:0});
  const explicitSourceWidth=Number(sourceWidth)>0?Number(sourceWidth):0;
  const intrinsicWidth=explicitSourceWidth||(sourceDimensions.src===src?sourceDimensions.width:0);
+ const derivativesEnabled=import.meta.env.PROD||import.meta.env.VITE_ENABLE_PHOTO_DERIVATIVES==='true';
  useEffect(()=>{
   let active=true;
   if(explicitSourceWidth>0){setSourceDimensions({src,width:explicitSourceWidth});return()=>{active=false}};
   setSourceDimensions({src,width:0});
-  if(!isDerivativeSource(src))return()=>{active=false};
+  if(!derivativesEnabled||!isDerivativeSource(src))return()=>{active=false};
   loadImageManifest().then(manifest=>{
    const measured=Number(manifest?.images?.[src]?.width);
    if(active&&measured>0)setSourceDimensions({src,width:measured});
   });
   return()=>{active=false};
- },[src,sourceWidth]);
+ },[src,sourceWidth,derivativesEnabled]);
  useEffect(()=>{if(imageRef.current){delete imageRef.current.dataset.imageFallbackStage;imageRef.current.style.visibility='';imageRef.current.alt=alt}},[src,fallbackSrc,alt]);
- const derivativesEnabled=import.meta.env.PROD||import.meta.env.VITE_ENABLE_PHOTO_DERIVATIVES==='true';
  const variants=derivativesEnabled?photoDerivativeUrls(src,intrinsicWidth):null;
  const fallbackImage=variants?.webp?.at(-1)?.url||src;
  const sourceSet=list=>list.map(x=>x.url+' '+x.width+'w').join(', ');
