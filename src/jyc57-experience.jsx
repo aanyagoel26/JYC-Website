@@ -2,7 +2,7 @@ import React,{useEffect,useMemo,useRef,useState} from 'react';
 import {AnimatePresence,motion,useReducedMotion} from 'motion/react';
 import {useLocation,useNavigate} from 'react-router-dom';
 import {supabase} from './lib/supabase';
-import {JYC_SOURCE_ARCHIVE_PHOTO_ITEMS,JYC_SOURCE_ARCHIVE_ALBUMS,rankJycPhotoItems} from './jyc-source-media.js';
+import {JYC_SOURCE_ARCHIVE_PHOTO_ITEMS,JYC_SOURCE_ARCHIVE_ALBUMS,rankJycPhotoItems,sourceHubMedia,sourceEventMedia} from './jyc-source-media.js';
 import {ResponsivePhoto} from './jyc-responsive-photo.jsx';
 
 const safeDate=(e)=>{const t=Date.parse(`${e?.date||''}T${e?.start||'00:00'}`);return Number.isFinite(t)?t:Infinity};
@@ -13,6 +13,21 @@ const eventPath=(e)=>`/events/${encodeURIComponent(String(e?.slug||slugify(e?.ti
 const slugify=(value)=>String(value||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 const syncFilters=(nav,loc,values)=>{const p=new URLSearchParams(loc.search);Object.entries(values).forEach(([k,v])=>{const value=String(v??'').trim();if(!value||value==='All'||(k==='status'&&value==='upcoming'))p.delete(k);else p.set(k,value)});const search=p.toString();nav({pathname:loc.pathname,search:search?'?'+search:''},{replace:true});};
 
+const identityPalette=['#bf9c6f','#81927a','#b8785b','#8297ad','#a294b5','#a98c62'];
+const identityAccent=value=>{let hash=0;for(const ch of String(value||'JYC'))hash=(hash*31+ch.charCodeAt(0))>>>0;return identityPalette[hash%identityPalette.length]};
+const eventCardPhoto=event=>event?.poster||event?.banner||sourceEventMedia(event)?.photoItems?.find(item=>item?.url)?.url||'';
+const clubCardPhoto=club=>club?.banner||club?.logo||club?.hubPhotos?.[0]||sourceHubMedia(club)?.photoItems?.find(item=>item?.url)?.url||'';
+function magneticMove(event){
+ if(event.pointerType!=='mouse'||window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
+ const element=event.currentTarget,rect=element.getBoundingClientRect();
+ if(!rect.width||!rect.height)return;
+ const x=(event.clientX-rect.left)/rect.width-.5,y=(event.clientY-rect.top)/rect.height-.5;
+ element.style.setProperty('--magnetic-x',`${(x*7).toFixed(2)}px`);
+ element.style.setProperty('--magnetic-y',`${(y*7).toFixed(2)}px`);
+ element.style.setProperty('--magnetic-rx',`${(-y*1.7).toFixed(2)}deg`);
+ element.style.setProperty('--magnetic-ry',`${(x*1.7).toFixed(2)}deg`);
+}
+function magneticReset(event){for(const property of ['--magnetic-x','--magnetic-y','--magnetic-rx','--magnetic-ry'])event.currentTarget.style.removeProperty(property)}
 function MetaPill({children,tone=''}){return <span className={`jyc57-pill ${tone}`}>{children}</span>}
 function Empty({eyebrow,title,text}){return <div className="jyc57-empty"><span className="eyebrow">{eyebrow}</span><h2>{title}</h2><p>{text}</p></div>}
 
@@ -36,7 +51,7 @@ export function JYC57Events({data}){
   <div className="visible-breadcrumbs"><button type="button" onClick={()=>nav('/')}>JYC</button><span>→</span><strong>Events</strong></div>
   <header className="jyc57-hero">
    <div><span className="eyebrow">JYC · 01 / DISCOVER</span><h1>Events that move the campus.</h1><p>Find what is happening at JIIT Sector 128, see the details that matter, and move from discovery to participation without friction.</p></div>
-   {featured&&<button type="button" className="jyc57-feature" onClick={()=>nav(eventPath(featured))}>{featured.poster?<img src={featured.poster} alt="" loading="eager"/>:<div className="jyc57-feature-fallback">JYC</div>}<div><MetaPill tone={stateOf(featured)==='live'?'live':''}>{stateOf(featured)==='live'?'LIVE NOW':'UP NEXT'}</MetaPill><strong>{featured.title}</strong><small>{featured.club||'JYC'} · {featured.venue||'JIIT Sector 128'}</small><span>Open event ↗</span></div></button>}
+   {featured&&<button type="button" className="jyc57-feature" onClick={()=>nav(eventPath(featured))}>{eventCardPhoto(featured)?<ResponsivePhoto src={eventCardPhoto(featured)} alt="" loading="eager" fetchPriority="high" sizes="(max-width: 760px) 35vw, 240px"/>:<div className="jyc57-feature-fallback">JYC</div>}<div><MetaPill tone={stateOf(featured)==='live'?'live':''}>{stateOf(featured)==='live'?'LIVE NOW':'UP NEXT'}</MetaPill><strong>{featured.title}</strong><small>{featured.club||'JYC'} · {featured.venue||'JIIT Sector 128'}</small><span>Open event ↗</span></div></button>}
   </header>
   <div className="jyc57-event-toolbar" aria-label="Event filters">
    <label className="jyc57-search"><span aria-hidden="true">⌕</span><input value={query} onChange={e=>{const v=e.target.value;setQuery(v);syncFilters(nav,loc,{q:v,category,status:scope})}} placeholder="Search events, clubs or topics" aria-label="Search events"/></label>
@@ -47,11 +62,12 @@ export function JYC57Events({data}){
   <div className="jyc57-event-layout">
    <div className="jyc57-event-list">
     <div className="jyc57-list-head"><span>{filtered.length} published {filtered.length===1?'event':'events'}</span><small>Sector 128 only</small></div>
-    {filtered.length?filtered.map((e,i)=><button type="button" className="jyc57-event-card" key={e.id||e.title||i} onClick={()=>nav(eventPath(e))}>
+    {filtered.length?filtered.map((e,i)=>{const photo=eventCardPhoto(e);return <button type="button" className="jyc57-event-card" key={e.id||e.title||i} style={{'--event-accent':identityAccent(e.club||e.eventType||e.title)}} onPointerMove={magneticMove} onPointerLeave={magneticReset} onClick={()=>nav(eventPath(e))}>
       <div className="jyc57-event-date"><b>{e.date?new Date(`${e.date}T12:00`).toLocaleDateString('en-IN',{day:'2-digit'}):'—'}</b><span>{e.date?new Date(`${e.date}T12:00`).toLocaleDateString('en-IN',{month:'short'}):'TBA'}</span></div>
+      <div className="jyc57-event-art">{photo?<ResponsivePhoto src={photo} alt="" loading="lazy" decoding="async" sizes="92px"/>:<span>{String(e.eventType||e.club||'JYC').slice(0,3).toUpperCase()}</span>}</div>
       <div className="jyc57-event-copy"><div><MetaPill tone={stateOf(e)==='live'?'live':''}>{stateOf(e)==='live'?'LIVE':stateOf(e)==='past'?'ARCHIVED':'UPCOMING'}</MetaPill>{(e.eventType||e.category)&&<MetaPill>{e.eventType||e.category}</MetaPill>}</div><h2>{e.title}</h2><p>{e.description||'Open the event for registration, schedule, venue and published details.'}</p><small>{e.club||'JYC'} · {e.venue||'JIIT Sector 128'}</small></div>
       <span className="jyc57-arrow" aria-hidden="true">↗</span>
-    </button>):<Empty eyebrow="EVENT DIRECTORY" title="Nothing matches this view." text="Try another category, status, or search term. Only published Sector-128 events are shown."/>}
+    </button>}):<Empty eyebrow="EVENT DIRECTORY" title="Nothing matches this view." text="Try another category, status, or search term. Only published Sector-128 events are shown."/>}
    </div>
    <aside className="jyc57-next"><span className="eyebrow">02 / WHAT'S NEXT</span><h2>Near-term rhythm.</h2>{upcoming.map(e=><button type="button" key={e.id||e.title} onClick={()=>nav(eventPath(e))}><span>{e.date||'TBA'}</span><strong>{e.title}</strong><small>{e.start||'Time TBA'} · {e.venue||'Venue TBA'}</small></button>)}{!upcoming.length&&<p>No upcoming published events yet.</p>}<button type="button" className="jyc57-text-link" onClick={()=>setScope('past')}>Browse the archive →</button></aside>
   </div>
@@ -65,7 +81,7 @@ export function JYC57Clubs({data}){
  return <section className="section page unified-public-page jyc57-page">
   <header className="jyc57-hero jyc57-club-hero"><div><span className="eyebrow">JYC · 02 / FIND YOUR SPACE</span><h1>Communities, not just cards.</h1><p>Explore the published JYC community index by family, interest and identity. Open a club to see its people, activities, events and official links.</p></div><div className="jyc57-club-count"><b>{clubs.length}</b><span>published communities</span></div></header>
   <div className="jyc57-event-toolbar"><label className="jyc57-search"><span>⌕</span><input value={query} onChange={e=>setQuery(e.target.value)} placeholder="Find a club or interest" aria-label="Search clubs"/></label><div className="jyc57-segment">{families.map(f=><button type="button" key={f} style={{minWidth:40,minHeight:44}} className={family===f?'active':''} onClick={()=>setFamily(f)}>{f}</button>)}</div></div>
-  <div className="jyc57-club-wall">{filtered.map((c,i)=>{const selected=active===i;const photo=c.banner||c.logo||c.hubPhotos?.[0];return <button type="button" key={c.id||c.name||i} className={`jyc57-club-card ${selected?'selected':''}`} onMouseEnter={()=>setActive(i)} onFocus={()=>setActive(i)} onClick={()=>nav('/clubs/'+encodeURIComponent(slugify(c.name)))}>{photo?<img src={photo} alt="" loading="lazy"/>:<div className="jyc57-club-fallback">{String(c.name||'JYC').slice(0,2).toUpperCase()}</div>}<span className="jyc57-club-shade"/><div className="jyc57-club-content"><MetaPill>{c.type||c.category||'JYC'}</MetaPill><h2>{c.name}</h2><p>{c.description||c.about||'A published JYC community.'}</p><span>Explore community ↗</span></div></button>})}</div>
+  <div className="jyc57-club-wall">{filtered.map((c,i)=>{const selected=active===i;const photo=clubCardPhoto(c);return <button type="button" key={c.id||c.name||i} className={`jyc57-club-card ${selected?'selected':''}`} style={{'--club-accent':identityAccent(c.name)}} onPointerMove={magneticMove} onPointerLeave={magneticReset} onMouseEnter={()=>setActive(i)} onFocus={()=>setActive(i)} onClick={()=>nav('/clubs/'+encodeURIComponent(slugify(c.name)))}>{photo?<ResponsivePhoto src={photo} alt="" loading="lazy" decoding="async" sizes="(max-width: 760px) 50vw, (max-width: 1100px) 50vw, 33vw"/>:<div className="jyc57-club-fallback">{String(c.name||'JYC').slice(0,2).toUpperCase()}</div>}<span className="jyc57-club-shade"/><div className="jyc57-club-content"><MetaPill>{c.type||c.category||'JYC'}</MetaPill><h2>{c.name}</h2><p>{c.description||c.about||'A published JYC community.'}</p><span>Explore community ↗</span></div></button>})}</div>
   {!filtered.length&&<Empty eyebrow="COMMUNITY DIRECTORY" title="No community found." text="Try a broader search or another family."/>}
  </section>
 }
