@@ -1,16 +1,35 @@
 import React,{useEffect,useRef} from 'react';
 import {photoDerivativeUrls} from './jyc-photo-intelligence.js';
-const fallback=(e,src)=>{const image=e.currentTarget;if(image.dataset.fallbackSrc===src)return;image.dataset.fallbackSrc=src;const picture=image.parentElement;if(picture?.tagName?.toLowerCase()==='picture')picture.querySelectorAll('source').forEach(source=>{source.removeAttribute('srcset');source.removeAttribute('sizes')});if(image.getAttribute('src')!==src)image.setAttribute('src',src)};
-export function ResponsivePhoto({src,alt='',width,height,sizes='100vw',loading='lazy',fetchPriority,decoding='async',className='',style,onError,objectPosition}){
+const LOGO_FALLBACK='/JYC%20Logo(4).png';
+const fallback=(e,src,fallbackSrc)=>{
+ const image=e.currentTarget;
+ const stage=image.dataset.imageFallbackStage||'0';
+ const picture=image.parentElement;
+ if(picture?.tagName?.toLowerCase()==='picture')picture.querySelectorAll('source').forEach(source=>{source.removeAttribute('srcset');source.removeAttribute('sizes')});
+ if(stage==='0'){
+  image.dataset.imageFallbackStage='1';
+  const next=fallbackSrc&&fallbackSrc!==src?fallbackSrc:(src!==LOGO_FALLBACK?LOGO_FALLBACK:'');
+  if(next){image.src=next;return}
+ }
+ if(stage!=='2'&&src!==LOGO_FALLBACK&&(image.currentSrc||image.src)!==LOGO_FALLBACK){
+  image.dataset.imageFallbackStage='2';
+  image.src=LOGO_FALLBACK;
+  return;
+ }
+ image.dataset.imageFallbackStage='failed';
+ image.removeAttribute('src');
+ image.style.visibility='hidden';
+};
+export function ResponsivePhoto({src,alt='',width,height,sizes='100vw',loading='lazy',fetchPriority,decoding='async',className='',style,onError,objectPosition,fallbackSrc='/assets/hub-photos/jyc-06.webp'}){
  const imageRef=useRef(null);
- useEffect(()=>{if(imageRef.current)delete imageRef.current.dataset.fallbackSrc},[src]);
+ useEffect(()=>{if(imageRef.current){delete imageRef.current.dataset.imageFallbackStage;imageRef.current.style.visibility=''}},[src,fallbackSrc]);
  const derivativesEnabled=import.meta.env.PROD||import.meta.env.VITE_ENABLE_PHOTO_DERIVATIVES==='true';
  const variants=derivativesEnabled?photoDerivativeUrls(src,width):null;
- const fallbackSrc=variants?.webp?.at(-1)?.url||src;
+ const fallbackImage=variants?.webp?.at(-1)?.url||src;
  const sourceSet=list=>list.map(x=>x.url+' '+x.width+'w').join(', ');
  return <picture className={className?'jyc-responsive-picture '+className:'jyc-responsive-picture'}>
   {variants&&<source type="image/avif" srcSet={sourceSet(variants.avif)} sizes={sizes}/>}
   {variants&&<source type="image/webp" srcSet={sourceSet(variants.webp)} sizes={sizes}/>}
-  <img ref={imageRef} src={variants?fallbackSrc:src} alt={alt} width={width} height={height} loading={loading} fetchPriority={fetchPriority} decoding={decoding} sizes={sizes} style={objectPosition?{...style,objectPosition}:style} onError={e=>{fallback(e,src);onError?.(e)}}/>
+  <img ref={imageRef} src={variants?fallbackImage:src} alt={alt} width={width} height={height} loading={loading} fetchPriority={fetchPriority} decoding={decoding} sizes={sizes} style={objectPosition?{...style,objectPosition}:style} onError={e=>{fallback(e,src,fallbackSrc);onError?.(e)}}/>
  </picture>;
 }
