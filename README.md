@@ -1,6 +1,6 @@
 # JIIT Youth Club 128 — Official Website
 
-> **Current release: V64.4.3 — Editorial interaction, media delivery and release hardening**
+> **Current release: V64.5.0 — Identity-first hero, magnetic discovery and media QA**
 
 [![Quality](https://github.com/kaustubhdua/JYC-Website/actions/workflows/ci.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/ci.yml) [![CodeQL](https://github.com/kaustubhdua/JYC-Website/actions/workflows/codeql.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/codeql.yml) [![JYC Quality](https://github.com/kaustubhdua/JYC-Website/actions/workflows/jyc-quality.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/jyc-quality.yml)
 
@@ -56,11 +56,15 @@ The public site does **not** provide:
 
 The private Control Center remains website-publishing infrastructure for authorised JYC editors. It is not part of the public product.
 
+The team directory uses flip cards with biography and verified public social links. Photo delivery uses responsive AVIF/WebP derivatives where available, source-safe fallbacks, lazy loading below the fold, and reduced-motion-aware interactions.
+
 ## Design direction
 
 The senior-approved visual direction is intentionally editorial and compact:
 
 - JYC logo-derived beige / champagne
+- Identity-first split hero with the official logo rendered through a lazy React Bits Dither Veil effect
+- Magnetic, keyboard-friendly activity bento; club and event cards keep their own source-grounded identities
 - Deep navy, black and white neutrals
 - Strong typography and readable line lengths
 - Real JYC photography before decorative graphics
