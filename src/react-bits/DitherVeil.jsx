@@ -1,5 +1,7 @@
 'use client';
 
+/** JYC-adapted React Bits Dither background. Upstream: https://reactbits.dev/backgrounds/dither. Local safeguards cover reduced motion, coarse pointers, WebGL loss and PNG fallback. */
+
 import { useEffect, useRef } from 'react';
 import { Renderer, Program, Mesh, Triangle, Texture, RenderTarget } from 'ogl';
 
