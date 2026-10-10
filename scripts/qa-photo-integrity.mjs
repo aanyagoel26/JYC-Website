@@ -69,7 +69,7 @@ const teamPhotoEntries=teamPhotoBlock?[...teamPhotoBlock[1].matchAll(/'([^']+)'\
 const invalidTeamPhotoPaths=teamPhotoEntries.filter(item=>!item.url.startsWith('/assets/team/')||!item.url.endsWith('.webp')||!fs.existsSync('public'+item.url));
 assert('team portrait map is explicit and non-empty',teamPhotoEntries.length>=10,'found '+teamPhotoEntries.length);
 assert('every mapped team portrait is a committed local WebP',invalidTeamPhotoPaths.length===0,invalidTeamPhotoPaths.map(x=>x.name+': '+x.url).join(', '));
-assert('team flip cards use lazy responsive portraits and safe public profile links',mainSource.includes('className="team-photo-editorial"')&&mainSource.includes('loading="lazy" sizes=')&&mainSource.includes('safeExternalUrl(m.linkedin||m.socials?.linkedin)')&&mainSource.includes('team-member-back-content'));
+assert('team flip cards use lazy responsive portraits and safe public profile links',mainSource.includes('className="team-photo-editorial"')&&mainSource.includes('loading="lazy" sizes=')&&mainSource.includes('safeExternalUrl(m.linkedin||m.linkedinUrl||m.linkedin_url||m.socials?.linkedin)')&&mainSource.includes('team-member-back-content'));
 const responsivePhotoSource=fs.readFileSync('src/jyc-responsive-photo.jsx','utf8');
 const productionMediaSource=fs.readFileSync('scripts/optimize-production-media.mjs','utf8');
 const teamThemeSource=fs.readFileSync('src/jyc-logo-final-theme.css','utf8');
