@@ -40,7 +40,7 @@ const localRefs=[...new Set(
   [...main.matchAll(/['"]((?:\/assets\/)[^'"]+)['"]/g),...media.matchAll(/['"]((?:\/assets\/)[^'"]+)['"]/g)]
   .map(m=>m[1].split('?')[0])
 )];
-const missing=localRefs.filter(p=>!fs.existsSync(path.join(process.cwd(),'public',p.replace(/^\\/,'').replaceAll('/','/'))));
+const missing=localRefs.filter(p=>!fs.existsSync(path.join(process.cwd(),'public',p.replace(/^\//,''))));
 add('all local media references resolve',missing.length===0,missing.length?missing.slice(0,12).join(', '):'');
 for(const c of checks) console.log((c.ok?'PASS: ':'FAIL: ')+c.name+(c.detail?' — '+c.detail:''));
 const failed=checks.filter(c=>!c.ok);

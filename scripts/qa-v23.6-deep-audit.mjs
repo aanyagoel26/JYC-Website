@@ -16,7 +16,7 @@ const hubNames=['Fortissimo','BDS','VamUnique','Panache','RPH','CICR','Innovatio
 pass('package version is 23.6.0',pkg.version==='23.6.0');
 pass('V23.6 consolidated CSS is the sole public CSS import',([...main.matchAll(/import\s+['"](\.\/[^'"]+\.css)['"];?/g)].map(m=>m[1])).length===1&&main.includes("import './v23.6-consolidated.css';"));
 pass('consolidated CSS contains final editorial and canonical layers',consolidated.includes('V23.6 CANONICAL SYSTEM')&&consolidated.includes('V23.6 EDITORIAL')||consolidated.includes('V23.6 CANONICAL SYSTEM')&&consolidated.includes('Hub individuality'));
-pass('all 21 hub identities exist',hubNames.every(x=>new RegExp(`(?:["\'])?${x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}(?:["\'])?\s*:`).test(ids)),`missing: ${hubNames.filter(x=>!new RegExp(`(?:["\'])?${x.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')}(?:["\'])?\s*:`).test(ids)).join(', ')}`);
+pass('all 21 hub identities exist',hubNames.every(x=>Object.prototype.hasOwnProperty.call(ids,x)),`missing: ${hubNames.filter(x=>!Object.prototype.hasOwnProperty.call(ids,x)).join(', ')}`);
 pass('hub identity styling is used by club cards',main.includes('club-identity-card')&&main.includes('identityStyle'));
 pass('hub identity styling is used by events',main.includes('event-identity-card')&&main.includes('event-identity-page'));
 pass('event pages support optional programme timeline',main.includes('Array.isArray(e.timeline)')&&main.includes('event-timeline'));

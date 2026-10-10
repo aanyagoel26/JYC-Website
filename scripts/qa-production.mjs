@@ -23,7 +23,10 @@ if(fs.existsSync(sitemap)){
   if(sitemapText.includes('<loc>'+siteOrigin+'/</loc>')&&!sitemapText.includes('example.com')) pass('Generated sitemap uses the configured production origin');
   else fail('Generated sitemap contains a stale or placeholder production origin');
 }else pass('Sitemap will be generated during the production build');
-if(!/^Sitemap:\s*https?:\/\//mi.test(robots)||robots.includes(siteOrigin+'/sitemap.xml')) pass('Robots sitemap is absent or matches the configured production origin'); else fail('Robots file points at a stale sitemap origin');
+const sitemapLine=robots.split(/\r?\n/).map(line=>line.trim()).find(line=>/^Sitemap:/i.test(line));
+let robotsSitemapMatches=false;
+if(sitemapLine){try{const sitemapUrl=new URL(sitemapLine.slice(sitemapLine.indexOf(':')+1).trim());robotsSitemapMatches=['http:','https:'].includes(sitemapUrl.protocol)&&sitemapUrl.origin===siteOrigin&&sitemapUrl.pathname==='/sitemap.xml'&&!sitemapUrl.search&&!sitemapUrl.hash&&!sitemapUrl.username&&!sitemapUrl.password}catch{robotsSitemapMatches=false}}
+if(!sitemapLine||robotsSitemapMatches) pass('Robots sitemap is absent or matches the configured production origin'); else fail('Robots file points at a stale or malformed sitemap URL');
 const env=read('.env.example');
 if(env.includes('VITE_SITE_URL=')) pass('Production canonical origin is explicitly configurable'); else fail('VITE_SITE_URL missing');
 if(read('src/main.jsx').includes('unknownRoute')&&read('src/main.jsx').includes('noindex:privateRoute||unknownRoute')) pass('Unknown SPA routes are marked noindex'); else fail('Unknown SPA routes can be indexed');

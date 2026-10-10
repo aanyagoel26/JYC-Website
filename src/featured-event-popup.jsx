@@ -37,7 +37,10 @@ export function FeaturedEventPopup(){
   },[onHome]);
 
   const dismiss=()=>{
-    try{localStorage.setItem(FEATURED_EVENT_DISMISS_KEY,String(Date.now()+FEATURED_EVENT_DISMISS_MS))}catch{}
+    try{
+      const expiry=Date.now()+FEATURED_EVENT_DISMISS_MS;
+      if(Number.isSafeInteger(expiry))localStorage.setItem(FEATURED_EVENT_DISMISS_KEY,String(expiry));
+    }catch{}
     setOpen(false);
   };
 
