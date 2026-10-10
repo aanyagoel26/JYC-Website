@@ -53,6 +53,7 @@ assert('curated featured overrides remain explicit',mediaSource.includes('const 
 assert('source gallery has maintained communities',JYC_SOURCE_MEDIA_STATS.maintainedCommunities>0);
 assert('source gallery is non-empty',gallery.length>0);
 assert('responsive runtime emits derivative URLs only after manifest-confirmed intrinsic dimensions',responsiveSource.includes('entry?.derivativesEligible===true')&&responsiveSource.includes('measured>0')&&responsiveSource.includes('derivativesEnabled&&intrinsicWidth>0?photoDerivativeUrls(src,intrinsicWidth):null')&&responsiveSource.includes('If the manifest is unavailable, keep the original source'));
+assert('original image remains the format-compatibility fallback behind AVIF/WebP sources',responsiveSource.includes('const resolvedSrc=stage===0?src:activeFallback?candidates[stage-1]:undefined;')&&!responsiveSource.includes('variants?.webp?.at(-1)?.url||src'));
 assert('gallery opens in photography mode',galleryUiSource.includes("const [filter,setFilter]=useState('All'); const [role,setRole]=useState('All'); const [visual,setVisual]=useState('photo');"));
 assert('complete supplied archive is represented',manifest.total>=873,`manifest=${manifest.total}`);
 assert('manifest total matches merged source gallery',manifest.total===gallery.length);
