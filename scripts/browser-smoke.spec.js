@@ -1005,6 +1005,7 @@ test('public route shells keep route-specific SEO content and one primary headin
     return route.continue();
   });
   const routes = [
+    { path: '/', title: 'JIIT Youth Club 128 — Official JYC Website | JIIT Wish Town, Noida' },
     { path: '/contact', title: 'Contact JIIT Youth Club 128 | JYC' },
     { path: '/clubs', title: 'JYC Communities & Clubs | JIIT Youth Club 128' },
     { path: '/events/jai-2026-jaypee-agentic-ai-hackathon', title: 'JAI 2026 — Jaypee Agentic AI Hackathon | JYC' }
