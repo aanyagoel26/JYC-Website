@@ -302,6 +302,42 @@ test('photo-led pages render real image content without broken assets', async ({
 });
 
 
+
+test('lazy-loaded media decodes across long-form public routes', async ({ page }) => {
+  test.setTimeout(180000);
+  for (const route of ['/about', '/clubs', '/events', '/team', '/gallery', '/achievements', '/best-of-jyc']) {
+    await page.goto(base + route, { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('#root .public-app, #root main', { timeout: 15000 }).catch(() => {});
+    const initialCount = await page.locator('img').count();
+    expect(initialCount, route + ' should render image elements').toBeGreaterThan(0);
+
+    await page.evaluate(async () => {
+      const step = Math.max(480, Math.floor(window.innerHeight * 0.75));
+      for (let attempt = 0, y = 0; y < document.documentElement.scrollHeight && attempt < 40; attempt++, y += step) {
+        window.scrollTo(0, y);
+        await new Promise(resolve => setTimeout(resolve, 80));
+      }
+      window.scrollTo(0, 0);
+      const images = [...document.images];
+      images.forEach(img => { img.loading = 'eager'; });
+      await Promise.all(images.map(img => img.decode().catch(() => undefined)));
+    });
+
+    const media = await page.locator('img').evaluateAll(images => images.map(img => ({
+      src: img.currentSrc || img.getAttribute('src') || img.getAttribute('srcset') || '',
+      loaded: img.complete && img.naturalWidth > 0 && img.naturalHeight > 0,
+      hasAlt: img.hasAttribute('alt'),
+      loading: img.loading,
+      width: img.naturalWidth,
+      height: img.naturalHeight
+    })));
+    const broken = media.filter(img => img.src && !img.loaded);
+    const missingAlt = media.filter(img => !img.hasAlt);
+    expect(broken, 'unloaded/broken media after lazy-load audit on ' + route).toEqual([]);
+    expect(missingAlt, 'images without an explicit alt attribute on ' + route).toEqual([]);
+  }
+});
+
 test('public pages have no empty media frames or normal-flow section overlaps', async ({ page }) => {
   test.setTimeout(120000);
   for (const route of routes) {
