@@ -586,7 +586,13 @@ test('Search and More surfaces follow the light/dark theme with readable text', 
     const search = page.locator('.search-modal');
     await expect(search).toBeVisible();
     samples[theme] = {
-      search: await search.evaluate(el => ({ background: getComputedStyle(el).backgroundColor, color: getComputedStyle(el).color })),
+      search: await search.evaluate(el => {
+        const parse = value => { const match=String(value||'').match(/rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([\d.]+))?\)/i); return match?[Number(match[1]),Number(match[2]),Number(match[3]),match[4]===undefined?1:Number(match[4])]:null; };
+        const luminance = rgb => rgb.slice(0,3).map(v=>v/255).map(v=>v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)).reduce((sum,v,i)=>sum+v*[.2126,.7152,.0722][i],0);
+        const bg=parse(getComputedStyle(el).backgroundColor),fg=parse(getComputedStyle(el).color);
+        const contrast=bg&&fg?(Math.max(luminance(bg),luminance(fg))+.05)/(Math.min(luminance(bg),luminance(fg))+.05):null;
+        return { background: getComputedStyle(el).backgroundColor, color: getComputedStyle(el).color, contrast };
+      }),
     };
     await page.keyboard.press('Escape');
     await expect(page.locator('.search-overlay')).toHaveCount(0);
@@ -594,7 +600,13 @@ test('Search and More surfaces follow the light/dark theme with readable text', 
     await page.getByRole('button', { name: 'More' }).click();
     const more = page.locator('.more-sheet');
     await expect(more).toBeVisible();
-    samples[theme].more = await more.evaluate(el => ({ background: getComputedStyle(el).backgroundColor, color: getComputedStyle(el).color }));
+    samples[theme].more = await more.evaluate(el => {
+      const parse = value => { const match=String(value||'').match(/rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([\d.]+))?\)/i); return match?[Number(match[1]),Number(match[2]),Number(match[3]),match[4]===undefined?1:Number(match[4])]:null; };
+      const luminance = rgb => rgb.slice(0,3).map(v=>v/255).map(v=>v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)).reduce((sum,v,i)=>sum+v*[.2126,.7152,.0722][i],0);
+      const bg=parse(getComputedStyle(el).backgroundColor),fg=parse(getComputedStyle(el).color);
+      const contrast=bg&&fg?(Math.max(luminance(bg),luminance(fg))+.05)/(Math.min(luminance(bg),luminance(fg))+.05):null;
+      return { background: getComputedStyle(el).backgroundColor, color: getComputedStyle(el).color, contrast };
+    });
     await page.keyboard.press('Escape');
     await expect(page.locator('.more-sheet-overlay')).toHaveCount(0);
   }
@@ -605,6 +617,7 @@ test('Search and More surfaces follow the light/dark theme with readable text', 
     for (const surface of ['search', 'more']) {
       expect(samples[theme][surface].color, theme + ' ' + surface + ' text should be visible').not.toBe('rgba(0, 0, 0, 0)');
       expect(samples[theme][surface].background, theme + ' ' + surface + ' background should be painted').not.toBe('rgba(0, 0, 0, 0)');
+      expect(samples[theme][surface].contrast, theme + ' ' + surface + ' contrast should be readable').toBeGreaterThanOrEqual(4.5);
     }
   }
 });
