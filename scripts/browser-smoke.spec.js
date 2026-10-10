@@ -1108,8 +1108,7 @@ test('runtime metadata keeps canonical URLs on the production domain from a prev
 
 
 test('static boot screen respects the saved light/dark theme before React mounts', async ({ page }) => {
-  await page.goto(base, { waitUntil: 'domcontentloaded' });
-  await page.evaluate(() => localStorage.setItem('jyc-theme', 'light'));
+  await page.addInitScript(value => localStorage.setItem('jyc-theme', value), 'light');
   await page.route('**/*', route => {
     const pathname = new URL(route.request().url()).pathname;
     if (/\.(?:js|jsx|mjs)$/.test(pathname) || pathname === '/@vite/client') return route.abort();
@@ -1118,7 +1117,7 @@ test('static boot screen respects the saved light/dark theme before React mounts
 
   const samples = {};
   for (const theme of ['light', 'dark']) {
-    await page.evaluate(value => localStorage.setItem('jyc-theme', value), theme);
+    if (theme !== 'light') await page.addInitScript(value => localStorage.setItem('jyc-theme', value), theme);
     await page.goto(base, { waitUntil: 'domcontentloaded' });
     const boot = page.locator('.boot-fallback');
     await expect(boot).toBeVisible();
