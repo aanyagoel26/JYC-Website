@@ -24,7 +24,7 @@ async function fingerprint(req:Request){
 }
 const cleanText=(v:unknown,max:number)=>String(v??'').trim().slice(0,max);
 const validEmail=(v:string)=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-const validUrl=(v:string)=>!v || /^https?:\/\//i.test(v);
+const validUrl=(v:string)=>{if(!v)return true;if(/[\u0000-\u001f\u007f]/.test(v))return false;try{const u=new URL(v);return ['http:','https:'].includes(u.protocol)&&!u.username&&!u.password&&Boolean(u.hostname)}catch{return false}};
 
 Deno.serve(async req=>{
   const origin=req.headers.get('Origin');
