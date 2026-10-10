@@ -94,7 +94,7 @@ const checks=[
  ['club, fest and event detail photography uses responsive image handling',main.includes('club-hero-photo-wall')&&main.includes('event-detail-poster-image-wrap')&&main.includes('fest-hero-photo-wall')&&main.includes("ResponsivePhoto src={e.summitLogo")],
  ['team flip focus moves between the active face controls',flip.includes('frontRef=useRef(null),backRef=useRef(null)')&&flip.includes('(flipped?backRef.current:frontRef.current)?.focus')&&flip.includes('flip-card__back-trigger')&&browser.includes("await card.locator('.flip-card__back-trigger').click()")],
  ['theme browser regression checks Search and More in both modes',browser.includes('search and More sheets keep their surfaces readable in light and dark themes')&&browser.includes("const darkSearch")&&browser.includes("const lightMore")],
- ['home photo wall browser test requires the wall to mount',browser.includes("homepage logo photo-wall surface').toBe(1)")],
+ ['home identity browser regression covers Dither Veil logo and magnetic activity Bento',browser.includes('homepage renders the official logo through Dither Veil and a magnetic activity Bento')&&browser.includes('jh-dither-mark')&&browser.includes('magic-bento-card')],
  ['team and directory media use lazy responsive images',main.includes('<ResponsivePhoto src={photo} alt={name} loading="lazy"')&&gallery.includes('ResponsivePhoto src={photo} alt="" loading="lazy"')&&gallery.includes('ResponsivePhoto src={photo} alt="" loading="lazy" decoding="async"')],
  ['About family tiles expose supplied PDF examples',main.includes('profile?.examples||[]')&&main.includes('profile?.description||')&&design.includes('.about-family-grid-v28>button>p')]
 ];
