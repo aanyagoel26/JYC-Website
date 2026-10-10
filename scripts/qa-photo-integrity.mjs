@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
 import {JYC_SOURCE_MEDIA_STATS,mergeSourceGallery,sourceEventMedia,buildJycMediaManifest,JYC_SOURCE_ARCHIVE_PHOTO_ITEMS,JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS} from '../src/jyc-source-media.js';
-import {isDerivativeDimensionEligible,parseImageDimensions} from '../src/jyc-photo-intelligence.js';
+import {isDerivativeDimensionEligible,orientedImageDimensions,parseImageDimensions} from '../src/jyc-photo-intelligence.js';
 
 const assert=(name,ok,detail='')=>{console.log((ok?'PASS: ':'FAIL: ')+name+(detail?' — '+detail:''));if(!ok)process.exitCode=1};
 const mediaSource=fs.readFileSync('src/jyc-source-media.js','utf8');
@@ -124,6 +124,43 @@ const dimensionWorkers=Array.from({length:Math.min(6,imageFiles.length)},async()
 });
 await Promise.all(dimensionWorkers);
 assert('image-header dimensions match Sharp metadata across all committed/generated PNG JPEG and WebP assets',dimensionMismatches.length===0,dimensionMismatches.slice(0,8).map(item=>JSON.stringify(item)).join('; ')||imageFiles.length+' files checked');
+
+
+const derivativeRoot=path.resolve('public/assets/photo-derivatives');
+const derivativeFiles=[];
+if(fs.existsSync(derivativeRoot)){const walkDerivatives=dir=>{for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())walkDerivatives(file);else if(/\.(?:avif|webp)$/i.test(file))derivativeFiles.push(file)}};walkDerivatives(derivativeRoot)}
+const derivativeMismatches=[];
+let derivativeCursor=0;
+const derivativeWorkers=Array.from({length:Math.min(6,derivativeFiles.length)},async()=>{
+ while(true){
+  const index=derivativeCursor++;
+  if(index>=derivativeFiles.length)return;
+  const file=derivativeFiles[index];
+  try{
+   const rel=path.relative(derivativeRoot,file).replaceAll(path.sep,'/');
+   const match=rel.match(/-(480|960|1600)\.(avif|webp)$/i);
+   if(!match){derivativeMismatches.push({file:path.relative('public',file),error:'unexpected derivative filename'});continue}
+   const requestedWidth=Number(match[1]),base=rel.replace(/-\d+\.(?:avif|webp)$/i,'');
+   const source=['.png','.jpg','.jpeg','.webp'].map(ext=>path.join(imageRoot,base+ext)).find(candidate=>fs.existsSync(candidate));
+   if(!source){derivativeMismatches.push({file:path.relative('public',file),error:'orphan derivative has no source'});continue}
+   const [sourceMeta,outputMeta]=await Promise.all([sharp(source).metadata(),sharp(file).metadata()]);
+   const display=orientedImageDimensions(sourceMeta.width,sourceMeta.height,sourceMeta.orientation);
+   if(!display||!isDerivativeDimensionEligible(display.width,display.height)||requestedWidth>display.width||outputMeta.width!==requestedWidth||Math.abs((outputMeta.height||0)-Math.round(display.height*requestedWidth/display.width))>1)derivativeMismatches.push({file:path.relative('public',file),source:path.relative('public',source),requestedWidth,sourceDisplay:display,output:{width:outputMeta.width,height:outputMeta.height}});
+  }catch(error){derivativeMismatches.push({file:path.relative('public',file),error:error?.message||String(error)})}
+ }
+});
+await Promise.all(derivativeWorkers);
+assert('every AVIF/WebP derivative has a valid source, eligible dimensions and truthful width/aspect-ratio descriptors',derivativeMismatches.length===0,derivativeMismatches.slice(0,8).map(item=>JSON.stringify(item)).join('; ')||derivativeFiles.length+' variants checked');
+const manifestPath='public/image-manifest.json';
+if(fs.existsSync(manifestPath)){
+ const builtManifest=JSON.parse(fs.readFileSync(manifestPath,'utf8'));
+ const manifestMismatches=[];
+ for(const [url,entry] of Object.entries(builtManifest.images||{})){
+  const display=orientedImageDimensions(entry.rawWidth||entry.width,entry.rawHeight||entry.height,entry.exifOrientation);
+  if(!display||display.width!==entry.width||display.height!==entry.height||entry.derivativesEligible!==isDerivativeDimensionEligible(display.width,display.height)&&entry.derivativesEligible===true)manifestMismatches.push({url,entry,display});
+ }
+ assert('generated image manifest exposes correct EXIF-oriented display dimensions and eligibility',manifestMismatches.length===0,manifestMismatches.slice(0,8).map(item=>JSON.stringify(item)).join('; ')||Object.keys(builtManifest.images||{}).length+' records checked');
+}
 
 if(process.exitCode)process.exit(1);
 console.log('Photo integrity QA: all checks passed.');
