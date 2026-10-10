@@ -789,3 +789,25 @@ test('JYC Assistant search and keyboard close stay functional', async ({ page })
   await expect(dialog).toHaveCount(0);
   await expect(bot).toHaveAttribute('aria-expanded', 'false');
 });
+
+
+test('JYC Assistant traps keyboard focus and restores focus after closing', async ({ page }) => {
+  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'JYC assistant focus management');
+  const trigger = page.getByRole('button', { name: 'Open JYC Assistant' });
+  await trigger.focus();
+  await trigger.press('Enter');
+
+  const dialog = page.getByRole('dialog', { name: 'Ask JYC. Find your route.' });
+  await expect(dialog).toBeVisible();
+  await expect(page.getByRole('textbox', { name: 'Search JYC content' })).toBeFocused();
+
+  const focusables = dialog.locator('button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])');
+  await focusables.last().focus();
+  await page.keyboard.press('Tab');
+  await expect(dialog.locator('.jyc-assistant-close')).toBeFocused();
+
+  await page.keyboard.press('Escape');
+  await expect(dialog).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+});
