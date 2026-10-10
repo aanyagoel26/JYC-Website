@@ -1064,6 +1064,36 @@ test('runtime metadata keeps canonical URLs on the production domain from a prev
 });
 
 
+
+test('static boot screen respects the saved light/dark theme before React mounts', async ({ page }) => {
+  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  await page.evaluate(() => localStorage.setItem('jyc-theme', 'light'));
+  await page.route('**/*', route => {
+    const pathname = new URL(route.request().url()).pathname;
+    if (/\.(?:js|jsx|mjs)$/.test(pathname) || pathname === '/@vite/client') return route.abort();
+    return route.continue();
+  });
+
+  const samples = {};
+  for (const theme of ['light', 'dark']) {
+    await page.evaluate(value => localStorage.setItem('jyc-theme', value), theme);
+    await page.goto(base, { waitUntil: 'domcontentloaded' });
+    const boot = page.locator('.boot-fallback');
+    await expect(boot).toBeVisible();
+    samples[theme] = await boot.evaluate(el => {
+      const parse = value => { const match=String(value||'').match(/rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i); return match?[+match[1],+match[2],+match[3]]:null; };
+      const luminance = rgb => rgb.map(v=>v/255).map(v=>v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4)).reduce((sum,v,i)=>sum+v*[.2126,.7152,.0722][i],0);
+      const contrast = (a,b) => {const x=luminance(a),y=luminance(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)};
+      const bg=parse(getComputedStyle(el).backgroundColor),fg=parse(getComputedStyle(el.querySelector('h1')).color);
+      return { theme: document.documentElement.dataset.theme, background:getComputedStyle(el).backgroundColor, heading:getComputedStyle(el.querySelector('h1')).color, contrast:bg&&fg?contrast(bg,fg):null };
+    });
+    expect(samples[theme].theme).toBe(theme);
+    expect(samples[theme].contrast).toBeGreaterThanOrEqual(7);
+  }
+  expect(samples.light.background).not.toBe(samples.dark.background);
+});
+
+
 test('public route shells keep route-specific SEO content and one primary heading without JavaScript', async ({ page }) => {
   await page.route('**/*', route => {
     const pathname = new URL(route.request().url()).pathname;
