@@ -38,8 +38,9 @@ export const JYC_SOCIALS = {
     label: 'CICR · Creative & Innovative Cell in Robotics',
     campus: 'sector-128',
     sourcePriority: 'official-hub',
-    verifiedBy: 'https://www.linkedin.com/company/cicrjiit128/',
-    verifiedOn: '2026-10-03'
+    verifiedBy: 'https://www.linkedin.com/company/cicrjiit128/ and https://www.cicr.in/',
+    verifiedOn: '2026-10-10',
+    sourceNote: 'Official LinkedIn updates on 2026-08-11 and 2026-09-21 describe AI Unlocked and ROBOSPARK; the official site lists TechTonic 2.0 with date TBA.'
   },
   Innovation: {
     linkedin: 'https://www.linkedin.com/company/innovation-jiit/',
@@ -47,7 +48,9 @@ export const JYC_SOCIALS = {
     label: 'INNOVATION JIIT',
     campus: 'sector-128',
     sourcePriority: 'official-hub',
-    sourceNote: 'Current LinkedIn recruitment and BITBOX communications identify the community as JIIT 128; company-location metadata still reports Sector 62, so event-level campus evidence must be used.'
+    verifiedBy: 'https://in.linkedin.com/company/innovation-jiit and https://www.innovationjiit.in/',
+    verifiedOn: '2026-10-10',
+    sourceNote: 'Official site lists RIDE HACK 26 for 2026-11-01; campus scope should be based on current event information because company-location metadata can lag.'
   },
   Zencoders: {
     instagram: 'https://www.instagram.com/zencodersjiit/',
