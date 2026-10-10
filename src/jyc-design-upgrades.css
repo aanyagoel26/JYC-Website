@@ -398,3 +398,70 @@
  .card.magnetic-card,.card.magnetic-card:hover,
  .club-card-visual>.club-card-photo img,.event-poster>.event-poster-photo img{transition:none!important;transform:none!important;will-change:auto}
 }
+
+
+/* Page-by-page UI audit: tablet-safe event and club directory hero. */
+@media(max-width:900px){
+  .public-app .jyc57-page .jyc57-hero{
+    grid-template-columns:minmax(0,1fr);
+    align-items:start;
+    gap:18px;
+  }
+  .public-app .jyc57-page .jyc57-hero h1{
+    max-width:14ch;
+    font-size:clamp(38px,6vw,60px);
+    line-height:1.02;
+    letter-spacing:-.055em;
+    overflow-wrap:normal;
+    word-break:normal;
+    hyphens:none;
+  }
+  .public-app .jyc57-page .jyc57-feature{
+    width:100%;
+    max-width:100%;
+    min-width:0;
+  }
+  .public-app .jyc57-page .jyc57-club-count{
+    grid-template-columns:auto minmax(0,1fr);
+    align-items:center;
+    border-left:0;
+    border-top:1px solid var(--directory-line);
+    padding:14px 0 0;
+  }
+}
+@media(max-width:420px){
+  .public-app .jyc57-page .jyc57-hero h1{
+    font-size:clamp(34px,10.2vw,42px);
+    letter-spacing:-.045em;
+  }
+  .public-app .jyc57-page .jyc57-hero{
+    padding:20px;
+  }
+}
+
+/* Horizontal collection rail: keep the intended off-canvas cards discoverable. */
+.public-app .jyc57-collection-scroller{
+  scrollbar-width:thin;
+  scrollbar-color:var(--gold) transparent;
+  scroll-padding-inline:4px;
+}
+.public-app .jyc57-collection-scroller::-webkit-scrollbar{height:8px}
+.public-app .jyc57-collection-scroller::-webkit-scrollbar-track{background:transparent}
+.public-app .jyc57-collection-scroller::-webkit-scrollbar-thumb{background:color-mix(in srgb,var(--gold) 70%,transparent);border-radius:999px}
+.public-app .jyc57-collection-rail .jyc57-section-head>span{
+  max-width:22ch;
+  color:var(--text-muted);
+  font-size:11px;
+  line-height:1.5;
+  text-align:right;
+}
+.public-app .jyc57-collection-scroller button:focus-visible,
+.public-app .jyc57-feature-card:focus-visible{
+  outline:3px solid var(--gold);
+  outline-offset:3px;
+}
+.public-app .jyc-best-of-page .jyc57-feature-card{
+  display:block;
+  color:inherit;
+  text-decoration:none;
+}
