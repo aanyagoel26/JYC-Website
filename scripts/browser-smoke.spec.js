@@ -647,6 +647,7 @@ test('team profiles flip to readable biographies and verified LinkedIn links', a
   await expect(card).toHaveAttribute('aria-expanded', 'true');
   await expect(card.locator('.team-member-back-content .team-member-about')).toBeVisible();
   await expect(card.locator('.team-member-back-content a[href*="linkedin.com"]').first()).toHaveAttribute('href', /^https:\/\/(?:www\.|in\.)?linkedin\.com\//);
+  await card.focus();
   await page.keyboard.press('Enter');
   await expect(card).not.toHaveClass(/is-flipped/);
 });
