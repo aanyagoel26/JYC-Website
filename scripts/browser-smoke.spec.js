@@ -1126,11 +1126,15 @@ test('static boot screen respects the saved light/dark theme before React mounts
       const parse = value => { const match=String(value||'').match(/rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i); return match?[+match[1],+match[2],+match[3]]:null; };
       const luminance = rgb => rgb.map(v=>v/255).map(v=>v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4)).reduce((sum,v,i)=>sum+v*[.2126,.7152,.0722][i],0);
       const contrast = (a,b) => {const x=luminance(a),y=luminance(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)};
-      const bg=parse(getComputedStyle(el).backgroundColor),fg=parse(getComputedStyle(el.querySelector('h1')).color);
-      return { theme: document.documentElement.dataset.theme, background:getComputedStyle(el).backgroundColor, heading:getComputedStyle(el.querySelector('h1')).color, contrast:bg&&fg?contrast(bg,fg):null };
+      const bg=parse(getComputedStyle(el).backgroundColor);
+      const measure=selector=>{const fg=parse(getComputedStyle(el.querySelector(selector)).color);return bg&&fg?contrast(bg,fg):null};
+      return { theme: document.documentElement.dataset.theme, background:getComputedStyle(el).backgroundColor,
+        contrast:{heading:measure('h1'),eyebrow:measure('p'),body:measure('span')} };
     });
     expect(samples[theme].theme).toBe(theme);
-    expect(samples[theme].contrast).toBeGreaterThanOrEqual(7);
+    expect(samples[theme].contrast.heading).toBeGreaterThanOrEqual(7);
+    expect(samples[theme].contrast.eyebrow).toBeGreaterThanOrEqual(4.5);
+    expect(samples[theme].contrast.body).toBeGreaterThanOrEqual(4.5);
   }
   expect(samples.light.background).not.toBe(samples.dark.background);
 });
