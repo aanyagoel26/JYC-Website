@@ -25,8 +25,8 @@ export default function FlipCard({front,back,children,className='',label='Flip c
   aria-expanded={flipped}
  >
   <span className="flip-card__inner">
-   <span className="flip-card__face flip-card__front" aria-hidden={flipped}>{frontContent}</span>
-   <span className="flip-card__face flip-card__back" aria-hidden={!flipped}>{backContent}</span>
+   <span className="flip-card__face flip-card__front" aria-hidden={flipped} inert={flipped}>{frontContent}</span>
+   <span className="flip-card__face flip-card__back" aria-hidden={!flipped} inert={!flipped}>{backContent}</span>
   </span>
   <span className="flip-card__sr-only">{flipped?'Profile details shown. Activate the card to return to the photo.':'Activate the card to read this profile.'}</span>
  </div>;
