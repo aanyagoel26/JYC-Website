@@ -13,6 +13,7 @@ const publicGate=read('supabase/migrations/202610080803_v63_2_public_gallery_rig
 const admin=read('src/admin-extra.jsx');
 const derivatives=read('scripts/generate-photo-derivatives.mjs');
 const imageManifestGenerator=read('scripts/generate-image-manifest.mjs');
+const productionMediaOptimizer=read('scripts/optimize-production-media.mjs');
 const pkg=JSON.parse(read('package.json'));
 const check=(name,ok)=>checks.push({name,ok:Boolean(ok)});
 check('editorial rubric is defined',intelligence.includes('JYC_EDITORIAL_RUBRIC')&&intelligence.includes('scoreJycPhoto'));
@@ -23,6 +24,7 @@ check('responsive derivative width descriptors never exceed intrinsic pixel widt
 check('low-resolution sources never advertise nonexistent upscaled variants',photoDerivativeUrls('/assets/hub-photos/panache-01.webp',360)===null&&photoDerivativeUrls('/assets/hub-photos/panache-01.webp',500)?.webp.map(item=>item.width).join(',')==='480'&&photoDerivativeUrls('/assets/hub-photos/panache-01.webp',1000)?.webp.map(item=>item.width).join(',')==='480,960'&&photoDerivativeUrls('/assets/hub-photos/panache-01.webp',4000)?.webp.map(item=>item.width).join(',')==='480,960,1600'&&photoDerivativeUrls('/assets/team/member.webp',600)===null);
 check('image manifest is requested only for derivative-managed asset folders',responsive.includes('source-archive|hub-photos|hub-photos-extra')&&responsive.includes('if(!derivativesEnabled||!isDerivativeSource(src))'));
 check('source-archive identity assets are excluded from photo derivative generation',imageManifestGenerator.includes('derivativeArchiveUrls.has(url)')&&imageManifestGenerator.includes('derivativesEligible:derivativeEligible(url)')&&imageManifestGenerator.includes("JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.map(item=>String(item?.url||''))"));
+check('production logo derivative is generated from the original transparent PNG',productionMediaOptimizer.includes("path.resolve('public/JYC Logo(4).png')")&&productionMediaOptimizer.includes("path.join(root,'assets','jyc-logo.webp')")&&productionMediaOptimizer.includes("webp({quality:92,effort:5,alphaQuality:100})"));
 check('AVIF/WebP derivative build is wired into production prebuild',derivatives.includes('.avif')&&derivatives.includes('.webp')&&pkg.scripts['media:derivatives']==='node scripts/generate-photo-derivatives.mjs'&&pkg.scripts.prebuild.includes('generate-photo-derivatives.mjs'));
 check('photo editorial schema exists',migration.includes('editorial_score')&&migration.includes('duplicate_group')&&migration.includes('derivative_status'));
 check('focal points are publication-gated',migration.includes('focal_x is null')&&migration.includes('focal_y is null'));
