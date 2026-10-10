@@ -203,6 +203,9 @@
 /* Flip cards use real front/back content, with touch-safe and keyboard behavior. */
 .team-layer-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;align-items:stretch}
 .team-layer-card{min-width:0}
+.flip-card__front{appearance:none;font:inherit;text-align:left;cursor:pointer;color:inherit}
+.flip-card__back-trigger{display:inline-flex;align-items:center;justify-content:center;align-self:flex-start;min-height:40px;margin-top:12px;padding:8px 12px;border:1px solid var(--border-tech,rgba(191,156,111,.35));border-radius:999px;background:transparent;color:inherit;font-size:11px;font-weight:800;cursor:pointer}
+.flip-card__back-trigger:focus-visible{outline:2px solid var(--accent-gold,#bf9c6f);outline-offset:3px}
 .team-member-flip{min-height:410px}
 .team-member-flip .flip-card__inner{min-height:410px}
 .team-member-flip .flip-card__face{padding:0}
