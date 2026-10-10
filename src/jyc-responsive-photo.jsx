@@ -27,23 +27,22 @@ const fallback=(e,src,fallbackSrc,fallbackAlt)=>{
  image.removeAttribute('src');
  image.style.visibility='hidden';
 };
-export function ResponsivePhoto({src,alt='',width,height,sourceWidth,sizes='100vw',loading='lazy',fetchPriority,decoding='async',className='',style,onError,objectPosition,fallbackSrc='/JYC%20Logo(4).png',fallbackAlt='Official JYC logo placeholder; image unavailable'}){
+export function ResponsivePhoto({src,alt='',width,height,sizes='100vw',loading='lazy',fetchPriority,decoding='async',className='',style,onError,objectPosition,fallbackSrc='/JYC%20Logo(4).png',fallbackAlt='Official JYC logo placeholder; image unavailable'}){
  const imageRef=useRef(null);
- const [sourceDimensions,setSourceDimensions]=useState({src:'',width:0});
- const explicitSourceWidth=Number(sourceWidth)>0?Number(sourceWidth):0;
- const intrinsicWidth=explicitSourceWidth||(sourceDimensions.src===src?sourceDimensions.width:0);
+ const [sourceDimensions,setSourceDimensions]=useState({src:'',width:0,derivativesEligible:false});
+ const intrinsicWidth=sourceDimensions.src===src&&sourceDimensions.derivativesEligible?sourceDimensions.width:0;
  const derivativesEnabled=import.meta.env.PROD||import.meta.env.VITE_ENABLE_PHOTO_DERIVATIVES==='true';
  useEffect(()=>{
   let active=true;
-  if(explicitSourceWidth>0){setSourceDimensions({src,width:explicitSourceWidth});return()=>{active=false}};
-  setSourceDimensions({src,width:0});
+  setSourceDimensions({src,width:0,derivativesEligible:false});
   if(!derivativesEnabled||!isDerivativeSource(src))return()=>{active=false};
   loadImageManifest().then(manifest=>{
-   const measured=Number(manifest?.images?.[src]?.width);
-   if(active&&measured>0)setSourceDimensions({src,width:measured});
+   const entry=manifest?.images?.[src];
+   const measured=Number(entry?.width);
+   if(active&&entry?.derivativesEligible===true&&measured>0)setSourceDimensions({src,width:measured,derivativesEligible:true});
   });
   return()=>{active=false};
- },[src,sourceWidth,derivativesEnabled]);
+ },[src,derivativesEnabled]);
  useEffect(()=>{if(imageRef.current){delete imageRef.current.dataset.imageFallbackStage;imageRef.current.style.visibility='';imageRef.current.alt=alt}},[src,fallbackSrc,alt]);
  const variants=derivativesEnabled?photoDerivativeUrls(src,intrinsicWidth):null;
  const fallbackImage=variants?.webp?.at(-1)?.url||src;
