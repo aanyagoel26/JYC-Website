@@ -20,8 +20,9 @@ export function ResponsivePhoto({src,alt='',width,height,sizes='100vw',loading='
  // Only emit srcset candidates after the generated manifest confirms intrinsic dimensions and derivative eligibility.
  // If the manifest is unavailable, keep the original source rather than guessing derivative URLs that may 404 or upscale.
  const variants=stage===0&&derivativesEnabled&&intrinsicWidth>0?photoDerivativeUrls(src,intrinsicWidth):null;
- const fallbackImage=variants?.webp?.at(-1)?.url||src;
- const resolvedSrc=stage===0?fallbackImage:activeFallback?candidates[stage-1]:undefined;
+ // Keep the original source in the img element as the final format-compatibility fallback;
+ // supported browsers select the optimized AVIF/WebP sources above it.
+ const resolvedSrc=stage===0?src:activeFallback?candidates[stage-1]:undefined;
  useEffect(()=>{
   let active=true;
   setSourceDimensions({src,width:0,derivativesEligible:false});
