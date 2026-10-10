@@ -791,6 +791,24 @@ test('JYC Assistant search and keyboard close stay functional', async ({ page })
 });
 
 
+
+test('JYC Assistant quick routes are distinct and navigate to their labelled destinations', async ({ page }) => {
+  await page.goto(base + '/clubs', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'JYC assistant quick routes');
+  await page.getByRole('button', { name: 'Open JYC Assistant' }).click();
+
+  const dialog = page.getByRole('dialog', { name: 'Ask JYC. Find your route.' });
+  await expect(dialog).toBeVisible();
+  const routes = dialog.locator('.jyc-assistant-quick button');
+  await expect(routes).toHaveCount(4);
+  await expect(routes).toContainText(['Explore all clubs', 'Upcoming events', 'JYC archive', 'Contact JYC']);
+
+  await routes.filter({ hasText: 'Contact JYC' }).click();
+  await expect.poll(() => new URL(page.url()).pathname).toBe('/contact');
+  await expect(dialog).toHaveCount(0);
+});
+
+
 test('JYC Assistant traps keyboard focus and restores focus after closing', async ({ page }) => {
   await page.goto(base, { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'JYC assistant focus management');
