@@ -49,7 +49,8 @@ export const JYC_HUB_DETAILS = {
   },
   Innovation:{
     label:'Innovation and entrepreneurship',
-    sourceHighlights:['RIDE Hack’26: 1 November 2026','Official Innovation JIIT programme includes RIDE Hack, CodeAI, Innovate and Climate Data Hackathon','Labs, mentorship and resources connect student ideas to real-world innovation','Current public Innovation programme also highlights startup-expo and entrepreneurship activity'],
+    officialDescription:'RIDE Innovation at JIIT Noida supports startup teams with maker spaces, prototyping and AI labs, mentorship and expert guidance.',
+    sourceHighlights:['RIDE Hack’26 is listed for 1 November 2026; confirm current registration status directly with the organiser','Official Innovation JIIT programme includes RIDE Hack, CodeAI, Innovate and Climate Data Hackathon','Labs, mentorship and resources connect student ideas to real-world innovation','Current public Innovation programme also highlights startup-expo and entrepreneurship activity'],
     activities:['Innovation programmes','Mentorship','Prototyping and fabrication','Startup-oriented learning','Hackathons','Technical and business support'],
     experience:'The Innovation JIIT ecosystem connects students with labs, mentorship, resources and entrepreneurship-oriented programmes. Its public programme history includes RIDE Hack, CodeAI, Innovate and climate-focused hackathon activity.',
     signature:['RIDE Hack','CodeAI','Innovate','Climate Data Hackathon']
