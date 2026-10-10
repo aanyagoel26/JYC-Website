@@ -284,15 +284,16 @@ test('gallery archive uses deterministic responsive image frames', async ({ page
   for (const ratio of result.ratios) expect(ratio).toBeLessThan(2.3);
 });
 
-test('photo-led pages render real image content', async ({ page }) => {
-  for (const route of ['/', '/clubs', '/events', '/gallery']) {
+test('photo-led pages render real image content without broken assets', async ({ page }) => {
+  test.setTimeout(120000);
+  for (const route of ['/', '/about', '/clubs', '/events', '/team', '/gallery', '/achievements', '/best-of-jyc']) {
     await page.goto(base + route, { waitUntil: 'domcontentloaded' });
     const images = page.locator('img');
     expect(await images.count(), route).toBeGreaterThan(0);
     await expect(page.locator('img:visible').first()).toBeVisible();
     await waitForImagesToSettle(page);
     await expect.poll(async () => images.evaluateAll(nodes => nodes.filter(img => img.complete && img.naturalWidth > 0).length), { timeout: 8000 }).toBeGreaterThan(0);
-    const broken = await images.evaluateAll(nodes => nodes.filter(img => img.complete && img.naturalWidth === 0 && !String(img.currentSrc||img.src).endsWith('/JYC%20Logo(4).png')).map(img => img.getAttribute('src')));
+    const broken = await images.evaluateAll(nodes => nodes.filter(img => img.complete && img.naturalWidth === 0).map(img => ({src:img.getAttribute('src'),alt:img.getAttribute('alt'),loading:img.loading})));
     expect(broken, 'broken images on '+route).toEqual([]);
   }
 });
