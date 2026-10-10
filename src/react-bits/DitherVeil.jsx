@@ -812,6 +812,7 @@ const DitherVeil = ({
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
       img.onload = null;
+      img.onerror = null;
       container.removeEventListener('pointermove', onMove);
       container.removeEventListener('pointerenter', onMove);
       container.removeEventListener('pointerdown', onDown);
