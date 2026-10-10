@@ -142,3 +142,12 @@ Use restrained, purposeful motion: Dither Veil only for the official logo; magne
 - Expanded photo-integrity QA to compare the parsed dimensions against Sharp's metadata for every PNG, JPEG and WebP under `public/assets`, including generated derivatives. The check runs with bounded concurrency and reports mismatched files.
 - Updated the package/lockfile version to **64.5.2** and recorded the fix in the changelog and README.
 - **Validation boundary:** source and QA wiring were inspected after editing; the test scripts and full production build still need to execute on the exact current head. No new successful CI or Vercel build is claimed for this change.
+
+## Incremental follow-up — EXIF geometry and derivative lifecycle
+
+- **Rotation-aware sizing:** JPEG EXIF orientations 5–8 swap the displayed width/height even though the encoded pixel matrix is unchanged. The manifest now records both raw and display dimensions; responsive source-set widths and derivative eligibility use the display dimensions. The encoder applies the same orientation rule before deciding which widths to generate.
+- **Stale build-output cleanup:** existing variants are reused only when their modification time is newer than the source and their actual width/height still match the expected oriented dimensions. Oversized variants are removed when a source becomes smaller or ineligible; orphaned variants are pruned if the source is removed.
+- **Collision safety:** the build now fails early if two source files in the same derivative-managed folder would map to the same output basename, avoiding concurrent overwrite and ambiguous image URLs.
+- **Full asset QA:** the photo-integrity script now compares parsed PNG/JPEG/WebP header dimensions with Sharp metadata across the entire source/generated image tree, validates each AVIF/WebP variant against its source and expected aspect ratio, checks the generated manifest, and detects basename collisions.
+- **Offline payload:** the service-worker cache namespace now matches V64.5.2 and pre-caches the generated compact WebP logo rather than the 5.9 MB original PNG. The original PNG remains available as a runtime fallback.
+- **Source-contract review:** 17/17 targeted assertions passed against the current source after these edits. They are not a substitute for executing the QA scripts against actual assets. The current branch head still has no confirmed successful CI or build: Actions jobs fail without steps/logs, and the latest READY Vercel preview predates these changes.
