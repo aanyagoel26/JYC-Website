@@ -237,13 +237,15 @@ test('homepage media composition stays editorial and non-scattered', async ({ pa
   const result = await page.evaluate(() => {
     const story = [...document.querySelectorAll('.jyc-home .jh-gallery-tile')];
     const familyImages = document.querySelectorAll('.jyc-home .jh-family-image, .jyc-home .jh-family img').length;
-    const archiveWalls = document.querySelectorAll('.jyc-home .jh-archive-section, .jyc-home .drift-wall, .jyc-home .jyc-photo-chapters-section').length;
+    const archiveWalls = document.querySelectorAll('.jyc-home .jh-archive-section, .jyc-home .jyc-photo-chapters-section').length;
+    const heroDriftWalls = document.querySelectorAll('.jyc-home .jh-hero-drift-wall .drift-wall').length;
     const activityImages = document.querySelectorAll('.jyc-home .jh-activities img').length;
     const storyOverflow = [...document.querySelectorAll('.jyc-home .jh-photo-grid')].some(el => el.scrollWidth > el.clientWidth + 1);
     return {
       storyTiles: story.length,
       familyImages,
       archiveWalls,
+      heroDriftWalls,
       activityImages,
       storyOverflow,
       storySources: story.map(el => el.querySelector('img')?.currentSrc || el.querySelector('img')?.src || null)
@@ -252,6 +254,7 @@ test('homepage media composition stays editorial and non-scattered', async ({ pa
   expect(result.storyTiles, 'homepage photo-story tiles').toBeLessThanOrEqual(1);
   expect(result.familyImages, 'homepage family image duplicates').toBe(0);
   expect(result.archiveWalls, 'homepage retired archive/photo-chapter surfaces').toBe(0);
+  expect(result.heroDriftWalls, 'homepage logo photo-wall surface').toBeLessThanOrEqual(1);
   expect(result.activityImages, 'homepage activity image duplication').toBe(0);
   expect(result.storyOverflow, 'homepage photo-story horizontal overflow').toBe(false);
   expect(result.storySources.filter(Boolean).length).toBe(result.storyTiles);
@@ -613,12 +616,52 @@ test('V1 homepage keeps the JYC palette and readable dark mode', async ({ page }
   expect(dark.color).not.toBe('rgba(0, 0, 0, 0)');
 });
 
-test('public cards do not use pointer-driven 3D tilt', async ({ page }) => {
+test('legacy public cards stay flat outside the intentional magnetic bento', async ({ page }) => {
   await page.goto(base + '/clubs', { waitUntil: 'domcontentloaded' });
   const transforms = await page.locator('.club-card-v41,.club-card-premium,.event-card-premium,.gallery-card').evaluateAll(nodes =>
     nodes.map(node => getComputedStyle(node).transform)
   );
   expect(transforms.filter(value => value && value !== 'none' && value.includes('matrix3d')).length).toBe(0);
+});
+
+test('homepage hero uses the official logo over the drifting JYC photo wall', async ({ page }) => {
+  await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'JYC hero identity');
+  const logo = page.locator('.jh-hero-logo');
+  await expect(logo).toBeVisible();
+  await expect(logo).toHaveAttribute('src', '/JYC%20Logo(4).png');
+  await expect(page.locator('.jh-hero-copy h1')).toBeVisible();
+  await expect(page.locator('.jh-hero-drift-wall')).toBeVisible();
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
+  expect(overflow).toBe(false);
+});
+
+test('team profiles flip to readable biographies and verified LinkedIn links', async ({ page }) => {
+  await page.goto(base + '/team', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'JYC team profiles');
+  const card = page.locator('.team-member-flip:has(.team-social-row a[href*="linkedin.com"])').first();
+  await expect(card).toBeVisible();
+  await expect(card.locator('.team-member-name').first()).toBeVisible();
+  await card.click({ position: { x: 18, y: 18 } });
+  await expect(card).toHaveClass(/is-flipped/);
+  await expect(card).toHaveAttribute('aria-expanded', 'true');
+  await expect(card.locator('.team-member-back-content .team-member-about')).toBeVisible();
+  await expect(card.locator('.team-member-back-content a[href*="linkedin.com"]').first()).toHaveAttribute('href', /^https:\/\/(?:www\.|in\.)?linkedin\.com\//);
+  await page.keyboard.press('Enter');
+  await expect(card).not.toHaveClass(/is-flipped/);
+});
+
+test('magnetic bento motion is limited to intended club and event cards', async ({ page }) => {
+  await page.goto(base + '/clubs', { waitUntil: 'domcontentloaded' });
+  const card = page.locator('.jyc57-club-card').first();
+  await expect(card).toBeVisible();
+  await card.hover({ position: { x: 12, y: 12 } });
+  const offset = await card.evaluate(el => el.style.getPropertyValue('--magnetic-x'));
+  expect(offset).not.toBe('');
+  await page.mouse.move(0, 0);
+  await expect.poll(() => card.evaluate(el => el.style.getPropertyValue('--magnetic-x'))).toBe('');
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
+  expect(overflow).toBe(false);
 });
 
 test('featured event popup never blocks the JYC assistant control', async ({ page }) => {
