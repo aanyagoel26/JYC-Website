@@ -12,7 +12,7 @@ const WIDTHS=[480,960,1600];
 // without oversubscribing a 2-core builder.
 sharp.concurrency(Math.min(2,Math.max(1,Number(process.env.JYC_SHARP_CONCURRENCY||2))));
 const CONCURRENCY=Math.min(2,Math.max(1,Number(process.env.JYC_DERIVATIVE_CONCURRENCY||2)));
-const ALLOWED=['source-archive','hub-photos','hub-photos-extra'];
+const ALLOWED=['source-archive','hub-photos','hub-photos-extra','events','home','team'];
 const inputFiles=[];
 const walk=dir=>{for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())walk(file);else if(/\.(jpe?g|png|webp)$/i.test(file))inputFiles.push(file)}};
 walk(root);
