@@ -7,7 +7,7 @@ const out=path.resolve('public/image-manifest.json');
 const {JYC_SOURCE_ARCHIVE_PHOTO_ITEMS,JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS}=await import('../src/jyc-source-media.js');
 const derivativeArchiveUrls=new Set(JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.map(item=>String(item?.url||'')));
 const derivativeEligible=(url,width,height)=>{
- const pathEligible=url.startsWith('/assets/source-archive/')?derivativeArchiveUrls.has(url):url.startsWith('/assets/hub-photos/')||url.startsWith('/assets/hub-photos-extra/');
+ const pathEligible=url.startsWith('/assets/source-archive/')?derivativeArchiveUrls.has(url):['/assets/hub-photos/','/assets/hub-photos-extra/','/assets/events/','/assets/home/','/assets/team/'].some(prefix=>url.startsWith(prefix));
  return pathEligible&&isDerivativeDimensionEligible(width,height);
 };
 const allowedArchiveUrls=new Set([...JYC_SOURCE_ARCHIVE_PHOTO_ITEMS,...JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS].map(item=>String(item?.url||'')));
