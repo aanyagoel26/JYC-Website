@@ -49,6 +49,7 @@ const checks=[
  ['gold primary actions use dark readable text and visible keyboard focus',homeCss.includes('.jh-btn-primary')&&homeCss.includes('color: #151316;')&&homeCss.includes(':focus-visible')],
  ['responsive photos enable derivatives in production',responsive.includes('import.meta.env.PROD')],
  ['route metadata shell generator is wired',pkg.scripts?.postbuild==='node scripts/optimize-production-media.mjs && node scripts/generate-route-shells.mjs'&&routeShells.includes("<link rel=\"canonical\" href=\"${siteOrigin}${route}\" />")&&routeShells.includes("/events/jai-2026-jaypee-agentic-ai-hackathon")],
+ ['static route shells expose route-specific headings before React hydrates',routeShells.includes('JIIT Youth Club — Clubs, Events &amp; Fests \\| JIIT Noida')&&routeShells.includes('Preparing the JYC experience…')&&routeShells.includes('const escapedTitle=meta.title.replaceAll')],
  ['route-shell canonicals use a stable production origin fallback',!routeShells.includes('process.env.VERCEL_URL')&&routeShells.includes("process.env.VITE_SITE_URL||'https://www.jiityouthclub128.in'")],
  ['sitemap uses a stable production origin fallback',!sitemap.includes('process.env.VERCEL_URL')&&sitemap.includes("process.env.VERCEL_PROJECT_PRODUCTION_URL||'https://www.jiityouthclub128.in'")],
  ['route shells cover all static public entry pages', ['/announcements','/updates','/calendar','/fests','/recruitment','/join-jyc','/achievements','/best-of-jyc'].every(route=>routeShells.includes(`'${route}':`))],
