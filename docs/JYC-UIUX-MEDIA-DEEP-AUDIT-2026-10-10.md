@@ -151,3 +151,25 @@ Use restrained, purposeful motion: Dither Veil only for the official logo; magne
 - **Full asset QA:** the photo-integrity script now compares parsed PNG/JPEG/WebP header dimensions with Sharp metadata across the entire source/generated image tree, validates each AVIF/WebP variant against its source and expected aspect ratio, checks the generated manifest, and detects basename collisions.
 - **Offline payload:** the service-worker cache namespace now matches V64.5.2 and pre-caches the generated compact WebP logo rather than the 5.9 MB original PNG. The original PNG remains available as a runtime fallback.
 - **Source-contract review:** 17/17 targeted assertions passed against the current source after these edits. They are not a substitute for executing the QA scripts against actual assets. The current branch head still has no confirmed successful CI or build: Actions jobs fail without steps/logs, and the latest READY Vercel preview predates these changes.
+
+
+## Follow-up pass — responsive delivery and official-source reconciliation (10 October 2026)
+
+### Photo pipeline correction
+- The runtime previously called `photoDerivativeUrls(src, 0)` while the manifest request was still pending or had failed. The helper interprets an unknown source width as permission to emit all candidate widths, so a page could request guessed AVIF/WebP paths that were never generated or were larger than the source.
+- The runtime now emits AVIF/WebP candidates only after `/image-manifest.json` confirms both `derivativesEligible === true` and a positive intrinsic width. If the manifest cannot be fetched, the original image URL remains the source; no guessed derivative path is emitted.
+- Added source contracts in both photo-integrity and release QA, plus a Playwright regression that blocks the manifest and observes image requests on the Team route.
+- The homepage featured-event poster now uses the same stateful `ResponsivePhoto` fallback component as the rest of the editorial surfaces. This removes a separate DOM-mutating image error handler and keeps the poster's fallback behavior consistent with React rerenders, responsive formats and lazy loading.
+- The event poster fallback styles now target the component's declarative `data-image-fallback-stage` marker instead of the retired `data-fallback` marker.
+
+### Official public source review
+- [INNOVATION JIIT LinkedIn](https://in.linkedin.com/company/innovation-jiit/) and [the official Innovation site](https://www.innovationjiit.in/) both list RIDE HACK 26 for 1 November 2026. The LinkedIn post says applications close on 5 October; the site still labels registration “NOW OPEN” on 10 October. This conflict is recorded in `src/jyc-socials.js`: the website remains the official destination, but JYC must not claim that registration is currently open or closed without organiser confirmation.
+- [CICR's official LinkedIn page](https://in.linkedin.com/company/cicrjiit128) confirms the JIIT-128 robotics identity and recent AI Unlocked activity. [CICR's official website](https://www.cicr.in/) remains the canonical destination for current workshops and event information.
+- [JODC's LinkedIn page](https://in.linkedin.com/company/jodc) explicitly identifies the Open Source Society of JIIT-128. The separately named OSDC profile should not be merged into the Sector-128 directory without independent campus evidence.
+- [Dronotics JIIT-128](https://www.linkedin.com/company/dronotics-jiit-128/) identifies the drone society and its posts place DRON-O-WAR 1.0 on 2–3 May 2026. This is archive content, not an upcoming registration.
+- [CypherX JIIT-128](https://in.linkedin.com/company/cypherx-jiit) describes its cybersecurity workshops, CTFs, projects and industry engagement. [VamUnique](https://www.linkedin.com/company/vamunique-the-dance-society-jiit-noida/) confirms its dance-society identity and performance focus. [ZENCODERS](https://www.linkedin.com/company/zencoders) identifies itself as JIIT's coding society.
+- [JYC's public LinkedIn profile](https://in.linkedin.com/in/jyc128) has a current post for JAI 2026 on 30–31 October 2026 at Sector 128. Keep that event separate from RIDE HACK 26 and from other similarly named university events.
+- Personal LinkedIn biographies should only appear when the public profile is explicitly attached to a published team record. Do not infer identity from names, scrape unrelated people, or fabricate a bio where no public profile was verified.
+
+### Validation boundary
+- The source-level checks and browser regressions are committed to the existing draft PR. They have not been executed successfully on the exact updated head yet. A green source-contract assertion is not evidence that a production build, browser run or deployed preview passed.
