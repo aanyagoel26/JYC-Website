@@ -370,6 +370,7 @@ void main() {
 
 const DitherVeil = ({
   src = DEFAULT_SRC,
+  fallbackSrc = DEFAULT_SRC,
   fit = 'contain',
   pattern = 'floyd',
   pixelSize = 2,
@@ -757,6 +758,11 @@ const DitherVeil = ({
       wake();
     };
     img.onerror = () => {
+      if (fallbackSrc && src !== fallbackSrc && img.dataset.logoFallbackAttempted !== '1') {
+        img.dataset.logoFallbackAttempted = '1';
+        img.src = fallbackSrc;
+        return;
+      }
       container.dataset.static = '1';
       canvas.style.display = 'none';
       renderer?.gl?.getExtension('WEBGL_lose_context')?.loseContext();
@@ -822,9 +828,9 @@ const DitherVeil = ({
       gl.getExtension('WEBGL_lose_context')?.loseContext();
       if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
     };
-  }, [src]);
+  }, [src, fallbackSrc]);
 
-  return <div ref={containerRef} className={`dither-veil ${className}`.trim()} style={style}><img className="dither-veil__fallback" src={src} alt="" aria-hidden="true" loading="eager" fetchPriority="high" decoding="async" /></div>;
+  return <div ref={containerRef} className={`dither-veil ${className}`.trim()} style={style}><img className="dither-veil__fallback" src={src} alt="" aria-hidden="true" loading="eager" fetchPriority="high" decoding="async" onError={event=>{const image=event.currentTarget;if(fallbackSrc&&src!==fallbackSrc&&image.dataset.logoFallbackAttempted!=='1'){image.dataset.logoFallbackAttempted='1';image.src=fallbackSrc}else image.hidden=true}} /></div>;
 };
 
 export default DitherVeil;
