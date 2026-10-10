@@ -822,6 +822,27 @@ test('responsive photos do not guess AVIF/WebP derivative URLs when the manifest
 });
 
 
+
+test('featured event poster uses the shared responsive image fallback contract', async ({ page }) => {
+  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'featured event photo fallback');
+
+  const poster = page.locator('.jh-featured-event-photo img');
+  if (await poster.count()) {
+    await expect(poster.first()).toBeVisible();
+    const state = await poster.first().evaluate(img => ({
+      loading: img.loading,
+      alt: img.alt,
+      hasPictureParent: img.parentElement?.tagName.toLowerCase() === 'picture',
+      sourceCount: img.parentElement?.querySelectorAll('source').length || 0
+    }));
+    expect(state.loading).toBe('lazy');
+    expect(state.hasPictureParent).toBeTruthy();
+    expect(state.alt.length).toBeGreaterThan(0);
+  }
+});
+
+
 test('failed team portraits fall through the optimized logo to the original PNG safely', async ({ page }) => {
   await page.route('**/assets/team/**', route => route.abort());
   await page.route('**/assets/jyc-logo.webp', route => route.abort());
