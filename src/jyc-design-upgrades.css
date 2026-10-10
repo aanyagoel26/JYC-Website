@@ -164,6 +164,12 @@
 .team-photo-editorial .jyc-responsive-picture img,.team-photo-editorial picture img{width:100%;height:100%;object-fit:cover;object-position:center 28%}
 .fest-logo-wrap .jyc-responsive-picture,.fest-logo-wrap picture{display:block;width:100%;height:100%}
 .fest-logo-wrap .jyc-responsive-picture img,.fest-logo-wrap picture img{width:100%;height:100%;object-fit:contain}
+.fest-hero-full{position:relative;isolation:isolate;overflow:hidden;background:var(--fest-bg,var(--bg-card,#fff))}
+.fest-hero-photo-wall{position:absolute;z-index:0;inset:0;overflow:hidden;pointer-events:none;background:radial-gradient(ellipse at 80% 20%,rgba(191,156,111,.18),transparent 55%)}
+.fest-hero-photo-wall picture,.fest-hero-photo-wall .jyc-responsive-picture,.fest-hero-photo-wall img{position:absolute;inset:0;display:block;width:100%;height:100%}
+.fest-hero-photo-wall img{object-fit:cover;opacity:.48;filter:saturate(.8)}
+.fest-hero-photo-wall:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--fest-bg,#f5f1e6) 0%,color-mix(in srgb,var(--fest-bg,#f5f1e6) 82%,transparent) 48%,color-mix(in srgb,var(--fest-bg,#f5f1e6) 24%,transparent) 100%);pointer-events:none}
+.fest-hero-inner{position:relative;z-index:1}
 /* Photo-backed event cards and PDF-informed About family tiles. */
 .jyc57-page .jyc57-event-art{position:relative;align-self:stretch;min-width:0;min-height:92px;overflow:hidden;border:1px solid color-mix(in srgb,var(--event-accent) 50%,transparent);border-radius:10px;background:radial-gradient(circle at 70% 25%,color-mix(in srgb,var(--event-accent) 30%,transparent),transparent 55%),linear-gradient(135deg,#272329,#111013);display:grid;place-items:center;color:var(--event-accent);font-size:18px;font-weight:900;letter-spacing:-.04em}
 .jyc57-page .jyc57-event-art picture,.jyc57-page .jyc57-event-art img{position:absolute;inset:0;width:100%;height:100%;display:block;object-fit:cover}
