@@ -342,3 +342,56 @@
   .jyc57-page .jyc57-club-card,
   .jyc57-page .jyc57-event-card{transition:none!important}
 }
+
+/* Directory cards: magnetic motion stays subtle, pointer-only and theme-safe. */
+.card.magnetic-card{
+  --magnetic-x:0px;
+  --magnetic-y:0px;
+  transform:translate3d(var(--magnetic-x),var(--magnetic-y),0);
+  transition:transform .22s var(--jyc-design-motion),box-shadow .3s ease,border-color .25s ease;
+  will-change:transform;
+}
+.card.magnetic-card:hover{
+  transform:translate3d(var(--magnetic-x),calc(var(--magnetic-y) - 4px),0);
+}
+.card.magnetic-card:focus-visible{
+  outline:2px solid var(--accent-gold,#bf9c6f);
+  outline-offset:4px;
+}
+.club-card-visual{isolation:isolate}
+.club-card-visual>.club-card-photo,
+.club-card-visual>.club-card-photo img{
+  position:absolute;
+  inset:0;
+  display:block;
+  width:100%;
+  height:100%;
+}
+.club-card-visual>.club-card-photo{z-index:0;overflow:hidden}
+.club-card-visual>.club-card-photo img{object-fit:cover;object-position:center;transition:transform .7s var(--jyc-design-motion),filter .35s ease}
+.club-card-premium:hover .club-card-visual>.club-card-photo img,
+.club-card-premium:focus-visible .club-card-visual>.club-card-photo img{transform:scale(1.035);filter:saturate(1.05)}
+.club-card-visual:after{z-index:1}
+.club-card-visual .club-logo{z-index:2}
+.event-poster{isolation:isolate;overflow:hidden}
+.event-poster>.event-poster-photo,
+.event-poster>.event-poster-photo img{
+  position:absolute;
+  inset:0;
+  display:block;
+  width:100%;
+  height:100%;
+}
+.event-poster>.event-poster-photo{z-index:0;overflow:hidden}
+.event-poster>.event-poster-photo img{object-fit:cover;object-position:center;transition:transform .65s var(--jyc-design-motion),filter .35s ease}
+.event-poster:after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(20,25,39,.08),rgba(20,25,39,.68))}
+.event-poster>span{z-index:2}
+.event-card-premium:hover .event-poster-photo img,
+.event-card-premium:focus-visible .event-poster-photo img{transform:scale(1.035);filter:saturate(1.05)}
+@media(hover:none),(pointer:coarse){
+ .card.magnetic-card{will-change:auto}
+}
+@media(prefers-reduced-motion:reduce){
+ .card.magnetic-card,.card.magnetic-card:hover,
+ .club-card-visual>.club-card-photo img,.event-poster>.event-poster-photo img{transition:none!important;transform:none!important;will-change:auto}
+}
