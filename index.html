@@ -10,6 +10,15 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f0e11" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="color-scheme" content="light dark" />
+    <script>
+      document.addEventListener('error',event=>{
+        const image=event.target;
+        if(!(image instanceof HTMLImageElement)||!image.classList.contains('boot-logo'))return;
+        const fallback=image.dataset.bootFallback;
+        if(fallback){delete image.dataset.bootFallback;image.src=fallback;return}
+        image.hidden=true;
+      },true);
+    </script>
     <style>
       .boot-fallback{min-height:100svh;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:28px;text-align:center;background:radial-gradient(ellipse at 50% 42%,rgba(191,156,111,.14),transparent 42%),#0e0d0f;color:#f8f1e5;font-family:Inter,system-ui,sans-serif}
       .boot-fallback img{width:clamp(88px,13vw,144px);height:auto;max-height:20vh;object-fit:contain;filter:drop-shadow(0 12px 28px rgba(0,0,0,.45))}
@@ -65,7 +74,7 @@
     </noscript>
     <div id="main-content"><div id="root">
       <main class="boot-fallback" aria-label="JIIT Youth Club loading" aria-busy="true" aria-live="polite">
-        <img src="/JYC%20Logo(4).png" alt="Official JIIT Youth Club 128 logo" width="128" height="128" fetchpriority="high" decoding="async" />
+        <img class="boot-logo" src="/assets/jyc-logo.webp" data-boot-fallback="/JYC%20Logo(4).png" alt="Official JIIT Youth Club 128 logo" width="128" height="128" fetchpriority="high" decoding="async" />
         <p>JIIT YOUTH CLUB · SECTOR 128</p>
         <h1>Preparing the JYC experience…</h1>
         <span>One campus. Many communities. One JYC.</span>
