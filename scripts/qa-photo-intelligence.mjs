@@ -17,6 +17,7 @@ const hardening=read('supabase/migrations/202610080802_v63_1_editorial_rights_re
 const publicGate=read('supabase/migrations/202610080803_v63_2_public_gallery_rights_gate.sql');
 const admin=read('src/admin-extra.jsx');
 const derivatives=read('scripts/generate-photo-derivatives.mjs');
+const manifestGenerator=read('scripts/generate-image-manifest.mjs');
 const imageManifestGenerator=read('scripts/generate-image-manifest.mjs');
 const productionMediaOptimizer=read('scripts/optimize-production-media.mjs');
 const pkg=JSON.parse(read('package.json'));
@@ -27,6 +28,9 @@ check('WebP VP8X extended dimensions are read exactly',JSON.stringify(parseImage
 check('WebP VP8 lossy dimensions are read exactly',JSON.stringify(parseImageDimensions(webpHeader('VP8 ')))===JSON.stringify({width:1280,height:720}));
 check('WebP VP8L lossless dimensions use the correct packed bits',JSON.stringify(parseImageDimensions(losslessWebpHeader(1500,211)))===JSON.stringify({width:1500,height:211}));
 check('unknown/truncated image data safely returns null',parseImageDimensions(new Uint8Array([0,1,2,3]))===null&&parseImageDimensions(new Uint8Array([0x89,0x50,0x4e,0x47]))===null);
+check('manifest generator uses the shared tested intrinsic-dimension parser',manifestGenerator.includes("import {isDerivativeDimensionEligible,parseImageDimensions} from '../src/jyc-photo-intelligence.js'")&&manifestGenerator.includes('const d=parseImageDimensions(fs.readFileSync(file))')&&!manifestGenerator.includes('function webp(b)'));
+check('WebP lossless dimension regression is explicitly covered',read('src/jyc-photo-intelligence.js').includes("kind==='VP8L'")&&read('src/jyc-photo-intelligence.js').includes('(bytes[23]<<2)|((bytes[24]&0x0f)<<10)')&&read('src/jyc-photo-intelligence.js').includes('(bytes[22]&0x3f)<<8'));
+check('image manifest dimension tests cover PNG JPEG VP8X VP8 and VP8L',read('scripts/qa-photo-intelligence.mjs').includes('PNG header dimensions are read exactly')&&read('scripts/qa-photo-intelligence.mjs').includes('JPEG SOF dimensions are read exactly')&&read('scripts/qa-photo-intelligence.mjs').includes('WebP VP8X extended dimensions are read exactly')&&read('scripts/qa-photo-intelligence.mjs').includes('WebP VP8 lossy dimensions are read exactly')&&read('scripts/qa-photo-intelligence.mjs').includes('WebP VP8L lossless dimensions use the correct packed bits'));
 check('editorial rubric is defined',intelligence.includes('JYC_EDITORIAL_RUBRIC')&&intelligence.includes('scoreJycPhoto'));
 check('diversity-aware ranking is wired',intelligence.includes('rankDiverseJycPhotos')&&source.includes('rankDiverseJycPhotos'));
 check('responsive picture pipeline exists',responsive.includes('<picture')&&responsive.includes('srcSet')&&intelligence.includes('photoDerivativeUrls'));
