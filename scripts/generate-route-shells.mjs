@@ -145,6 +145,16 @@ function shellFor(meta,route){
   out=out.replace(/(<h1\b[^>]*>)JIIT Youth Club — Clubs, Events &amp; Fests \| JIIT Noida(<\/h1>)/g,`$1${escapedTitle}$2`);
   out=out.replace(/(<h1\b[^>]*>)Preparing the JYC experience…(<\/h1>)/g,`$1${escapedTitle}$2`);
   out=out.replace(/(<noscript\b[^>]*>[\s\S]*?)<h1\b([^>]*)>([\s\S]*?)<\/h1>/i,'$1<p$2>$3</p>');
+  const pageSchema=JSON.stringify({
+    '@context':'https://schema.org',
+    '@type':'WebPage',
+    name:meta.title,
+    description:meta.description,
+    url:`${siteOrigin}${route}`,
+    isPartOf:{'@id':`${siteOrigin}/#website`},
+    about:{'@id':`${siteOrigin}/#organization`}
+  }).replaceAll('<','\\u003c');
+  out=out.replace('</head>',`<script type="application/ld+json">${pageSchema}</script>\\n  </head>`);
   return out;
 }
 
