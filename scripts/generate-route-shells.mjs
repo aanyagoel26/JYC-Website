@@ -144,6 +144,7 @@ function shellFor(meta,route){
   const escapedTitle=meta.title.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
   out=out.replace(/(<h1\b[^>]*>)JIIT Youth Club — Clubs, Events &amp; Fests \| JIIT Noida(<\/h1>)/g,`$1${escapedTitle}$2`);
   out=out.replace(/(<h1\b[^>]*>)Preparing the JYC experience…(<\/h1>)/g,`$1${escapedTitle}$2`);
+  out=out.replace(/(<noscript\b[^>]*>[\s\S]*?)<h1\b([^>]*)>([\s\S]*?)<\/h1>/i,'$1<p$2>$3</p>');
   return out;
 }
 
