@@ -818,6 +818,12 @@ test('responsive photos do not guess AVIF/WebP derivative URLs when the manifest
   await expect(portrait).toBeVisible();
   await portrait.scrollIntoViewIfNeeded();
   await expect.poll(() => portrait.evaluate(img => img.complete && img.naturalWidth > 0), { timeout: 10000 }).toBe(true);
+  const fallbackContract = await portrait.evaluate(img => ({
+    src: img.getAttribute('src'),
+    sourceCount: img.parentElement?.querySelectorAll('source').length || 0
+  }));
+  expect(fallbackContract.src).not.toContain('/photo-derivatives/');
+  expect(fallbackContract.sourceCount).toBe(0);
   expect(guessedDerivatives, 'a missing image manifest must not trigger guessed variant requests').toEqual([]);
 });
 
