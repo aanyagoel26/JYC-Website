@@ -793,14 +793,22 @@ test('JYC Assistant search and keyboard close stay functional', async ({ page })
 
 
 
-test('JAI event route has route-specific static SEO content without JavaScript', async ({ page }) => {
+test('public route shells keep route-specific SEO content and one primary heading without JavaScript', async ({ page }) => {
   await page.route('**/assets/*.js', route => route.abort());
-  const route = '/events/jai-2026-jaypee-agentic-ai-hackathon';
-  await page.goto(base + route, { waitUntil: 'domcontentloaded' });
+  const routes = [
+    { path: '/contact', title: 'Contact JIIT Youth Club 128 | JYC' },
+    { path: '/clubs', title: 'JYC Communities & Clubs | JIIT Youth Club 128' },
+    { path: '/events/jai-2026-jaypee-agentic-ai-hackathon', title: 'JAI 2026 — Jaypee Agentic AI Hackathon | JYC' }
+  ];
 
-  await expect(page).toHaveTitle('JAI 2026 — Jaypee Agentic AI Hackathon | JYC');
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText('JAI 2026 — Jaypee Agentic AI Hackathon | JYC');
-  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://www.jiityouthclub128.in' + route);
+  for (const { path, title } of routes) {
+    await page.goto(base + path, { waitUntil: 'domcontentloaded' });
+    await expect(page).toHaveTitle(title);
+    const primaryHeading = page.getByRole('heading', { level: 1 });
+    await expect(primaryHeading).toHaveCount(1);
+    await expect(primaryHeading).toHaveText(title);
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://www.jiityouthclub128.in' + path);
+  }
 });
 
 
