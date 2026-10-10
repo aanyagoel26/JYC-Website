@@ -89,9 +89,11 @@ import {SkipLink,InstallPrompt,MaintenanceGate,ErrorBoundary,EventTools,Download
 import {readSiteCache,writeSiteCache,siteCacheAge,formatCacheAge,armStoredReminders,googleCalendarUrl,hasLocalReminder,scheduleEventReminder,clearLocalReminder} from './v15-functional.js';
 
 const logo='/JYC%20Logo(4).png';
-const logoFallback='/JYC%20Logo(4).png';
 function LogoImage({alt='',...props}){
- return <img {...props} src={logo} alt={alt} loading={props.loading??(props.fetchPriority==='high'?'eager':'lazy')} decoding={props.decoding??'async'} onError={e=>{if(e.currentTarget.dataset.fallback==='1')return;e.currentTarget.dataset.fallback='1';e.currentTarget.src=logoFallback}}/>;
+ const [failed,setFailed]=useState(false);
+ useEffect(()=>setFailed(false),[]);
+ if(failed)return <span className={`jyc-logo-fallback ${props.className||''}`.trim()} role="img" aria-label={alt||'JIIT Youth Club logo'}>JYC</span>;
+ return <img {...props} src={logo} alt={alt} loading={props.loading??(props.fetchPriority==='high'?'eager':'lazy')} decoding={props.decoding??'async'} onError={()=>setFailed(true)}/>;
 }
 const isFestMode=data=>String(data?.mode||'events').toLowerCase()==='fest';
 const recruitmentEnabled=data=>data?.flags?.recruitmentHub!==false;
