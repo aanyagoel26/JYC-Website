@@ -219,6 +219,7 @@
 .team-member-back-content{justify-content:flex-start;overflow-y:auto;background:var(--bg-card,#fff);color:var(--text-primary,#1a191d)}
 .team-member-back-content .eyebrow{color:var(--accent-red,#a82420)}
 .team-member-about{font-size:13px;line-height:1.7;color:var(--text-muted,#6e6a75);overflow-wrap:anywhere}
+.team-member-headline{padding-left:10px;border-left:2px solid var(--accent-gold,#bf9c6f);font-size:12px;line-height:1.5;font-weight:750;color:var(--text-primary,#1a191d);overflow-wrap:anywhere}
 .team-social-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto;padding-top:10px}
 .team-social-row a{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:8px 12px;border:1px solid var(--border-tech,rgba(191,156,111,.35));border-radius:999px;color:var(--text-primary,#1a191d);font-size:12px;font-weight:750}
 .team-social-row a:hover{background:color-mix(in srgb,var(--accent-gold,#bf9c6f) 18%,var(--bg-card,#fff))}
