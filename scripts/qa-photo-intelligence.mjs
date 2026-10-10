@@ -17,6 +17,7 @@ check('editorial rubric is defined',intelligence.includes('JYC_EDITORIAL_RUBRIC'
 check('diversity-aware ranking is wired',intelligence.includes('rankDiverseJycPhotos')&&source.includes('rankDiverseJycPhotos'));
 check('responsive picture pipeline exists',responsive.includes('<picture')&&responsive.includes('srcSet')&&intelligence.includes('photoDerivativeUrls'));
 check('responsive derivatives resolve actual source widths before emitting candidate URLs',responsive.includes("fetch('/image-manifest.json'")&&responsive.includes('manifest?.images?.[src]?.width')&&responsive.includes('photoDerivativeUrls(src,intrinsicWidth)')&&responsive.includes('if(!derivativesEnabled||!isDerivativeSource(src))'));
+check('responsive derivative width descriptors never exceed intrinsic pixel width',intelligence.includes('width<=Number(sourceWidth)')&&derivatives.includes('if(width>meta.width)continue;')&&!intelligence.includes('width<=Number(sourceWidth)*1.15')&&!derivatives.includes('meta.width*1.15'));
 check('AVIF/WebP derivative build is wired into production prebuild',derivatives.includes('.avif')&&derivatives.includes('.webp')&&pkg.scripts['media:derivatives']==='node scripts/generate-photo-derivatives.mjs'&&pkg.scripts.prebuild.includes('generate-photo-derivatives.mjs'));
 check('photo editorial schema exists',migration.includes('editorial_score')&&migration.includes('duplicate_group')&&migration.includes('derivative_status'));
 check('focal points are publication-gated',migration.includes('focal_x is null')&&migration.includes('focal_y is null'));
