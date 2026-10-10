@@ -6,7 +6,7 @@ const contentFile=fs.readFileSync('src/v21-hub-content.js','utf8');
 const fail=[];
 const expect=(ok,msg)=>{if(!ok)fail.push(msg)};
 const registryNames=[...registry.matchAll(/\{name:'([^']+)'/g)].map(m=>m[1]);
-const contentNames=[...contentFile.matchAll(/^  ([A-Za-z][A-Za-z0-9 ]*):\\{/gm)].map(m=>m[1].trim());
+const contentNames=[...contentFile.matchAll(/^  ([A-Za-z][A-Za-z0-9 ]*):\{/gm)].map(m=>m[1].trim());
 const brochure=[...registry.matchAll(/status:'brochure-verified'/g)].length;
 const orientation=[...registry.matchAll(/status:'orientation-verified'/g)].length;
 const source=[...registry.matchAll(/status:'source-material'/g)].length;
