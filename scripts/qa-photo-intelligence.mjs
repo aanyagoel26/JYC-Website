@@ -11,14 +11,16 @@ const hardening=read('supabase/migrations/202610080802_v63_1_editorial_rights_re
 const publicGate=read('supabase/migrations/202610080803_v63_2_public_gallery_rights_gate.sql');
 const admin=read('src/admin-extra.jsx');
 const derivatives=read('scripts/generate-photo-derivatives.mjs');
+const imageManifestGenerator=read('scripts/generate-image-manifest.mjs');
 const pkg=JSON.parse(read('package.json'));
 const check=(name,ok)=>checks.push({name,ok:Boolean(ok)});
 check('editorial rubric is defined',intelligence.includes('JYC_EDITORIAL_RUBRIC')&&intelligence.includes('scoreJycPhoto'));
 check('diversity-aware ranking is wired',intelligence.includes('rankDiverseJycPhotos')&&source.includes('rankDiverseJycPhotos'));
 check('responsive picture pipeline exists',responsive.includes('<picture')&&responsive.includes('srcSet')&&intelligence.includes('photoDerivativeUrls'));
-check('responsive derivatives resolve actual source widths before emitting candidate URLs',responsive.includes("fetch('/image-manifest.json'")&&responsive.includes('manifest?.images?.[src]?.width')&&responsive.includes('photoDerivativeUrls(src,intrinsicWidth)')&&responsive.includes('if(!derivativesEnabled||!isDerivativeSource(src))'));
+check('responsive derivatives resolve intrinsic widths and respect manifest eligibility',responsive.includes("fetch('/image-manifest.json'")&&responsive.includes('const entry=manifest?.images?.[src]')&&responsive.includes('entry?.derivativesEligible===true')&&responsive.includes('photoDerivativeUrls(src,intrinsicWidth)')&&responsive.includes('if(!derivativesEnabled||!isDerivativeSource(src))')&&imageManifestGenerator.includes('derivativesEligible:derivativeEligible(url)'));
 check('responsive derivative width descriptors never exceed intrinsic pixel width',intelligence.includes('width<=Number(sourceWidth)')&&derivatives.includes('if(width>meta.width)continue;')&&!intelligence.includes('width<=Number(sourceWidth)*1.15')&&!derivatives.includes('meta.width*1.15'));
 check('image manifest is requested only for derivative-managed asset folders',responsive.includes('source-archive|hub-photos|hub-photos-extra')&&responsive.includes('if(!derivativesEnabled||!isDerivativeSource(src))'));
+check('source-archive identity assets are excluded from photo derivative generation',imageManifestGenerator.includes('derivativeArchiveUrls.has(url)')&&imageManifestGenerator.includes('derivativesEligible:derivativeEligible(url)')&&imageManifestGenerator.includes("JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.map(item=>String(item?.url||''))"));
 check('AVIF/WebP derivative build is wired into production prebuild',derivatives.includes('.avif')&&derivatives.includes('.webp')&&pkg.scripts['media:derivatives']==='node scripts/generate-photo-derivatives.mjs'&&pkg.scripts.prebuild.includes('generate-photo-derivatives.mjs'));
 check('photo editorial schema exists',migration.includes('editorial_score')&&migration.includes('duplicate_group')&&migration.includes('derivative_status'));
 check('focal points are publication-gated',migration.includes('focal_x is null')&&migration.includes('focal_y is null'));
