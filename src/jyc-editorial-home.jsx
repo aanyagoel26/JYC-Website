@@ -1,7 +1,7 @@
 import React,{Suspense,lazy,useMemo} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {JYC_HUB_CONTENT,JYC_HUB_FAMILIES} from './v21-hub-content.js';
-import {sourceEventMedia,mergeSourceGallery} from './jyc-source-media.js';
+import {sourceEventMedia} from './jyc-source-media.js';
 import {JYC_PUBLIC_ACTIVITIES} from './public-v1/config.js';
 const LazyDitherVeil=lazy(()=>import('./react-bits/DitherVeil.jsx'));
 const LazyMagicBento=lazy(()=>import('./components/react-bits/MagicBento.jsx'));
@@ -21,7 +21,6 @@ export function JYCEditorialHome({data}){
  const events=useMemo(()=>Array.isArray(data?.events)?data.events.filter(e=>e?.published&&!e?.archived).slice().sort((a,b)=>dateMs(a)-dateMs(b)):[],[data?.events]);
  const today=useMemo(()=>{const d=new Date();d.setHours(0,0,0,0);return d.getTime();},[]);
  const upcoming=events.filter(e=>{const t=dateMs(e);return Number.isFinite(t)&&t>=today;}).slice(0,4);
- const gallery=useMemo(()=>mergeSourceGallery(data?.gallery||[]).filter(g=>g?.url&&g?.mediaKind==='photo'),[data?.gallery]);
  const team=(data?.team||[]).filter(x=>x?.published===true).slice(0,4);
  const families=JYC_HUB_FAMILIES.map(f=>({family:f,hubs:Object.entries(JYC_HUB_CONTENT).filter(([,p])=>p.family===f).map(([name,p])=>({name,...p}))}));
  const activities=JYC_PUBLIC_ACTIVITIES;
