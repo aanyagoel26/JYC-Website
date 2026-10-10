@@ -252,6 +252,7 @@
   .jyc-editorial-home.jyc-home .jh-hero-dither-visual .jh-photo-label{left:14px;bottom:14px;font-size:8px}
   .jyc-editorial-home.jyc-home .jh-hero-dither-visual .jh-photo-index{right:14px;top:14px;font-size:8px}
   .jyc-editorial-home.jyc-home .jh-activities .magic-bento__grid{grid-template-columns:1fr;gap:12px}
+  .jyc-editorial-home.jyc-home .jh-activities .magic-bento-card:nth-child(8){grid-column:auto}
   .jyc-editorial-home.jyc-home .jh-activities .magic-bento-card{min-height:205px}
   .jyc-editorial-home.jyc-home .jh-activities .magic-bento-card__body{padding:20px}
 }
