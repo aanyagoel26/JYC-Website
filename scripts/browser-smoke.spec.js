@@ -730,6 +730,21 @@ test('team profiles flip to readable biographies and verified LinkedIn links', a
   await expect(card).toHaveClass(/is-flipped/);
 });
 
+
+test('failed team portraits use the official JYC logo and accurate fallback text', async ({ page }) => {
+  await page.route('**/assets/team/**', route => route.abort());
+  await page.goto(base + '/team', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'team portrait fallback');
+
+  const portrait = page.locator('.team-photo-editorial img').first();
+  await expect(portrait).toBeVisible();
+  await expect(portrait).toHaveAttribute('data-image-fallback-stage', '1');
+  await expect(portrait).toHaveAttribute('alt', 'Official JYC logo placeholder; portrait unavailable');
+  await expect.poll(() => portrait.evaluate(img => new URL(img.currentSrc || img.src).pathname)).toBe('/JYC%20Logo(4).png');
+  await expect.poll(() => portrait.evaluate(img => getComputedStyle(img).objectFit)).toBe('contain');
+});
+
+
 test('magnetic bento motion is limited to intended club and event cards', async ({ page }) => {
   await page.goto(base + '/clubs', { waitUntil: 'domcontentloaded' });
   const card = page.locator('.jyc57-club-card').first();
