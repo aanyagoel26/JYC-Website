@@ -7,27 +7,15 @@ export default function FlipCard({front,back,children,className='',label='Flip c
  const frontContent=front??faces[0]??null;
  const backContent=back??faces[1]??null;
  const toggle=()=>setFlipped(value=>!value);
- const handleClick=event=>{
+ const handleBackClick=event=>{
   if(event.target.closest('a,button,input,textarea,select,[data-flip-ignore]'))return;
   toggle();
  };
- const handleKeyDown=event=>{
-  if(event.target!==event.currentTarget)return;
-  if(event.key==='Enter'||event.key===' '){event.preventDefault();toggle()}
- };
- return <div
-  className={`flip-card ${flipped?'is-flipped':''} ${className}`.trim()}
-  role="group"
-  tabIndex={0}
-  onClick={handleClick}
-  onKeyDown={handleKeyDown}
-  aria-label={label}
-  aria-expanded={flipped}
- >
+ return <div className={`flip-card ${flipped?'is-flipped':''} ${className}`.trim()} role="group" aria-label={label} onClick={handleBackClick}>
   <span className="flip-card__inner">
-   <span className="flip-card__face flip-card__front" aria-hidden={flipped} inert={flipped}>{frontContent}</span>
-   <span className="flip-card__face flip-card__back" aria-hidden={!flipped} inert={!flipped}>{backContent}</span>
+   <button type="button" className="flip-card__face flip-card__front" aria-label={label} aria-expanded={flipped} aria-hidden={flipped} inert={flipped} onClick={toggle}>{frontContent}</button>
+   <span className="flip-card__face flip-card__back" aria-hidden={!flipped} inert={!flipped}>{backContent}<button type="button" className="flip-card__back-trigger" aria-label={`Return to photo for ${label}`} aria-expanded={flipped} onClick={toggle}>← Back to photo</button></span>
   </span>
-  <span className="flip-card__sr-only">{flipped?'Profile details shown. Activate the card to return to the photo.':'Activate the card to read this profile.'}</span>
+  <span className="flip-card__sr-only" aria-live="polite">{flipped?'Profile details shown.':'Photo shown.'}</span>
  </div>;
 }
