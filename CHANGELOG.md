@@ -1,11 +1,14 @@
 # Changelog
 
-## V64.5.2 — Correct image-header dimensions
+## V64.5.2 — Image metadata, orientation and derivative integrity
 
-- Fix intrinsic-dimension parsing for lossless WebP (VP8L); the previous bit extraction could read width and height from the wrong bytes, causing incorrect responsive derivative eligibility and manifest metadata.
-- Centralize PNG, JPEG SOF, WebP VP8X, WebP VP8 and WebP VP8L dimension parsing in the photo-intelligence module.
-- Add deterministic header-level regression fixtures for all supported formats and wire parser/generator parity into photo-intelligence QA.
-- This is a metadata and derivative-selection correction; original media files and their public URLs are unchanged.
+- Fix intrinsic-dimension parsing for lossless WebP (VP8L); the previous bit extraction could read width and height from the wrong packed bytes.
+- Centralize PNG, JPEG SOF, WebP VP8X, WebP VP8 and WebP VP8L dimension parsing; validate the full PNG signature.
+- Use EXIF-oriented display dimensions for manifest aspect ratios, derivative eligibility and width descriptors, preventing rotated JPEGs from advertising incorrect `srcset` widths.
+- Regenerate stale derivatives when source files change, remove oversized variants when a source becomes smaller/ineligible, and prune orphaned derivatives when source media is removed.
+- Add header fixtures for all supported formats and compare parsed dimensions with Sharp metadata across all source/generated PNG, JPEG and WebP assets. Validate each derivative's source, width and aspect ratio.
+- Version the service-worker cache to V64.5.2 and precache the optimized WebP logo instead of the 5.9 MB original PNG, preserving the original PNG as an on-demand fallback.
+- Original source media and public photo URLs remain unchanged.
 
 ## V64.5.1 — Photo fallback reliability and derivative filtering
 
