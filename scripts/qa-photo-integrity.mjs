@@ -102,8 +102,8 @@ assert('homepage editorial story uses responsive lazy images with branded fallba
 assert('homepage photo story keeps responsive geometry and reduced motion support',homeCssSource.includes('.jh-photo-story-grid.has-three .jh-story-card-1')&&homeCssSource.includes('@media(max-width:680px)')&&homeCssSource.includes('@media(prefers-reduced-motion:reduce)'));
 assert('team, event and homepage photo directories participate in responsive derivatives',fs.readFileSync('src/jyc-photo-intelligence.js','utf8').includes("'/assets/events/'")&&fs.readFileSync('src/jyc-photo-intelligence.js','utf8').includes("'/assets/home/'")&&fs.readFileSync('src/jyc-photo-intelligence.js','utf8').includes("'/assets/team/'")&&fs.readFileSync('scripts/generate-photo-derivatives.mjs','utf8').includes("'events','home','team'"));
 assert('photo derivative eligibility rejects logo strips, tiny thumbnails and extreme panoramas',isDerivativeDimensionEligible(1600,900)&&isDerivativeDimensionEligible(600,1200)&&!isDerivativeDimensionEligible(1311,25)&&!isDerivativeDimensionEligible(126,68)&&!isDerivativeDimensionEligible(1500,211)&&!isDerivativeDimensionEligible(100,200));
-assert('image manifest only marks images eligible when their intrinsic dimensions are derivative-safe',fs.readFileSync('scripts/generate-image-manifest.mjs','utf8').includes('derivativeEligible(url,d.width,d.height)')&&fs.readFileSync('scripts/generate-image-manifest.mjs','utf8').includes('isDerivativeDimensionEligible(width,height)'));
-assert('photo derivative generator skips unsuitable intrinsic dimensions before encoding',fs.readFileSync('scripts/generate-photo-derivatives.mjs','utf8').includes('!isDerivativeDimensionEligible(meta.width,meta.height)'));
+assert('image manifest only marks images eligible when their intrinsic dimensions are derivative-safe',fs.readFileSync('scripts/generate-image-manifest.mjs','utf8').includes('derivativeEligible(url,display.width,display.height)')&&fs.readFileSync('scripts/generate-image-manifest.mjs','utf8').includes('isDerivativeDimensionEligible(width,height)'));
+assert('photo derivative generator skips unsuitable intrinsic dimensions before encoding',fs.readFileSync('scripts/generate-photo-derivatives.mjs','utf8').includes('!display||!isDerivativeDimensionEligible(display.width,display.height)'));
 
 const imageRoot=path.resolve('public/assets');
 const imageFiles=[];
@@ -157,7 +157,7 @@ if(fs.existsSync(manifestPath)){
  const manifestMismatches=[];
  for(const [url,entry] of Object.entries(builtManifest.images||{})){
   const display=orientedImageDimensions(entry.rawWidth||entry.width,entry.rawHeight||entry.height,entry.exifOrientation);
-  if(!display||display.width!==entry.width||display.height!==entry.height||entry.derivativesEligible!==isDerivativeDimensionEligible(display.width,display.height)&&entry.derivativesEligible===true)manifestMismatches.push({url,entry,display});
+  const pathEligible=url.startsWith('/assets/source-archive/')?JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.some(item=>item.url===url):['/assets/hub-photos/','/assets/hub-photos-extra/','/assets/events/','/assets/home/','/assets/team/'].some(prefix=>url.startsWith(prefix));const expectedEligible=pathEligible&&isDerivativeDimensionEligible(display?.width,display?.height);if(!display||display.width!==entry.width||display.height!==entry.height||entry.derivativesEligible!==expectedEligible)manifestMismatches.push({url,entry,display,expectedEligible});
  }
  assert('generated image manifest exposes correct EXIF-oriented display dimensions and eligibility',manifestMismatches.length===0,manifestMismatches.slice(0,8).map(item=>JSON.stringify(item)).join('; ')||Object.keys(builtManifest.images||{}).length+' records checked');
 }
