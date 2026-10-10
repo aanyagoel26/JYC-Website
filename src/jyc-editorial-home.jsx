@@ -20,7 +20,7 @@ function LazyActivityBento({activities,nav}){
   observer.observe(node);
   return()=>observer.disconnect();
  },[]);
- const fallback=<div className="jh-activity-grid" aria-label="JYC activity areas">{activities.map((a,i)=><article className="jh-activity-card" key={a.id||a.title}><span>{String(i+1).padStart(2,'0')}</span><strong>{a.title}</strong><p>{a.text}</p></article>)}</div>;
+ const fallback=<div className="jh-activity-grid" aria-label="JYC activity areas">{activities.map((a,i)=><button type="button" className="jh-activity-card" key={a.id||a.title} onClick={()=>nav(a.link||'/clubs')}><span>{String(i+1).padStart(2,'0')}</span><strong>{a.title}</strong><p>{a.text}</p><b>Explore <i>↗</i></b></button>)}</div>;
  const items=activities.map((a,i)=>({id:a.id||a.title,title:a.title,description:a.text,label:`${String(i+1).padStart(2,'0')} · JYC ACTIVITY`,href:a.link||'/clubs'}));
  return <div ref={host} className="jh-activity-bento-host">{active?<Suspense fallback={fallback}><LazyMagicBento items={items} onNavigate={nav} enableMagnetism={true} enableTilt={true} enableStars={false} enableSpotlight={true} enableBorderGlow={true} clickEffect={false} particleCount={0} glowColor="191,156,111"/></Suspense>:fallback}</div>;
 }
