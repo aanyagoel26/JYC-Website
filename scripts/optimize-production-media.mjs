@@ -45,5 +45,20 @@ for(const file of raster){
     console.warn('Production media optimization failed: '+path.relative(process.cwd(),file),error?.message||error);
   }
 }
+const logoSource=path.resolve('public/JYC Logo(4).png');
+const logoOutput=path.join(root,'assets','jyc-logo.webp');
+try{
+  if(!fs.existsSync(logoSource))throw new Error('Official JYC logo source is missing: '+logoSource);
+  fs.mkdirSync(path.dirname(logoOutput),{recursive:true});
+  const temp=logoOutput+'.jyc-opt';
+  await sharp(logoSource).rotate().resize({width:1600,withoutEnlargement:true}).webp({quality:92,effort:5,alphaQuality:100}).toFile(temp);
+  const before=fs.statSync(logoSource).size;
+  const after=fs.statSync(temp).size;
+  fs.renameSync(temp,logoOutput);
+  console.log('Generated optimized official JYC logo '+before+' -> '+after+' bytes at '+path.relative(root,logoOutput));
+}catch(error){
+  failed++;
+  console.warn('Official JYC logo derivative failed:',error?.message||error);
+}
 console.log('Production media optimization: optimized='+optimized+' skipped='+skipped+' failed='+failed);
 if(failed)process.exitCode=1;
