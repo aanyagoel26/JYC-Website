@@ -1,5 +1,7 @@
 'use client';
 
+/** JYC-adapted React Bits Dither background. Upstream: https://reactbits.dev/backgrounds/dither. Local safeguards cover reduced motion, coarse pointers, WebGL loss and PNG fallback. */
+
 import { useEffect, useRef } from 'react';
 import { Renderer, Program, Mesh, Triangle, Texture, RenderTarget } from 'ogl';
 
@@ -370,6 +372,7 @@ void main() {
 
 const DitherVeil = ({
   src = DEFAULT_SRC,
+  fallbackSrc = DEFAULT_SRC,
   fit = 'contain',
   pattern = 'floyd',
   pixelSize = 2,
@@ -428,8 +431,18 @@ const DitherVeil = ({
       container.dataset.static = '1';
       return () => { delete container.dataset.static; };
     }
-    const renderer = new Renderer({ dpr: Math.min(window.devicePixelRatio || 1, 2), alpha: false, antialias: false });
-    const gl = renderer.gl;
+    let renderer;
+    try {
+      renderer = new Renderer({ dpr: Math.min(window.devicePixelRatio || 1, 2), alpha: false, antialias: false });
+    } catch {
+      container.dataset.static = '1';
+      return () => { delete container.dataset.static; };
+    }
+    const gl = renderer?.gl;
+    if (!gl) {
+      container.dataset.static = '1';
+      return () => { renderer?.gl?.getExtension('WEBGL_lose_context')?.loseContext(); delete container.dataset.static; };
+    }
     const canvas = gl.canvas;
     canvas.style.display = 'block';
     canvas.style.width = '100%';
@@ -746,6 +759,16 @@ const DitherVeil = ({
       introStart = performance.now();
       wake();
     };
+    img.onerror = () => {
+      if (fallbackSrc && src !== fallbackSrc && img.dataset.logoFallbackAttempted !== '1') {
+        img.dataset.logoFallbackAttempted = '1';
+        img.src = fallbackSrc;
+        return;
+      }
+      container.dataset.static = '1';
+      canvas.style.display = 'none';
+      renderer?.gl?.getExtension('WEBGL_lose_context')?.loseContext();
+    };
     img.src = src;
 
     const locate = e => {
@@ -798,6 +821,7 @@ const DitherVeil = ({
       resizeObserver.disconnect();
       intersectionObserver.disconnect();
       img.onload = null;
+      img.onerror = null;
       container.removeEventListener('pointermove', onMove);
       container.removeEventListener('pointerenter', onMove);
       container.removeEventListener('pointerdown', onDown);
@@ -806,9 +830,9 @@ const DitherVeil = ({
       gl.getExtension('WEBGL_lose_context')?.loseContext();
       if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
     };
-  }, [src]);
+  }, [src, fallbackSrc]);
 
-  return <div ref={containerRef} className={`dither-veil ${className}`.trim()} style={style}><img className="dither-veil__fallback" src={src} alt="" aria-hidden="true" loading="lazy" decoding="async" /></div>;
+  return <div ref={containerRef} className={`dither-veil ${className}`.trim()} style={style}><img className="dither-veil__fallback" src={src} alt="" aria-hidden="true" loading="eager" fetchPriority="high" decoding="async" onError={event=>{const image=event.currentTarget;if(fallbackSrc&&src!==fallbackSrc&&image.dataset.logoFallbackAttempted!=='1'){image.dataset.logoFallbackAttempted='1';image.src=fallbackSrc}else image.hidden=true}} /></div>;
 };
 
 export default DitherVeil;

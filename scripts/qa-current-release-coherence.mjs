@@ -14,7 +14,7 @@ const checks=[];
 const add=(name,ok,detail='')=>checks.push([name,Boolean(ok),detail]);
 add('release metadata is V64',/^64\.\d+\.\d+$/.test(pkg.version));
 add('homepage is content-first and visually consolidated',home.includes('jh-hero')&&home.includes('jh-intro')&&home.includes('jh-dark-section')&&home.includes('jh-events')&&home.includes('jh-activities')&&!home.includes('jh-archive-section'));
-add('homepage has no retired PhotoChapters mount',!home.includes('<PhotoChapters/>'));add('homepage has no heavy MagicBento mount',!home.includes('LazyMagicBento'));
+add('homepage has no retired PhotoChapters mount',!home.includes('<PhotoChapters/>'));add('homepage magnetic Bento is lazy and uses the React Router callback',home.includes('LazyMagicBento')&&home.includes('enableMagnetism={true}')&&read('src/components/react-bits/MagicBento.jsx').includes('onNavigate?onNavigate(item.href)'));
 add('homepage has no retired DriftWall mount',!home.includes('LazyDriftWall'));
 add('homepage family cards are media-free',home.includes('jh-family-index')&&!home.includes('jh-family-image'));
 add('homepage activity cards are media-free',!home.includes('image:gallery['));

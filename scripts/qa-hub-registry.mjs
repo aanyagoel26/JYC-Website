@@ -6,6 +6,7 @@ const contentFile=fs.readFileSync('src/v21-hub-content.js','utf8');
 const fail=[];
 const expect=(ok,msg)=>{if(!ok)fail.push(msg)};
 const registryNames=[...registry.matchAll(/\{name:'([^']+)'/g)].map(m=>m[1]);
+const contentNames=[...contentFile.matchAll(/^  ['"]?([A-Za-z][A-Za-z0-9 ]*)['"]?:\{/gm)].map(m=>m[1].trim());
 const brochure=[...registry.matchAll(/status:'brochure-verified'/g)].length;
 const orientation=[...registry.matchAll(/status:'orientation-verified'/g)].length;
 const source=[...registry.matchAll(/status:'source-material'/g)].length;
@@ -13,6 +14,7 @@ expect(registryNames.length===23,'expected 23 registry entries, found '+registry
 expect(brochure===2,'expected 2 brochure-verified entries, found '+brochure);
 expect(orientation===21,'expected 21 orientation-verified entries, found '+orientation);
 expect(source===0,'expected 0 source-material entries, found '+source);
+expect(registryNames.every(name=>contentNames.includes(name)),'registry/content canonical name mismatch: '+registryNames.filter(name=>!contentNames.includes(name)).join(', '));
 expect(!registry.includes("status:'verified-current'"),'stale verified-current status remains');
 expect(identities.includes('Qriosity:') && identities.includes("'JIIT OPTICA':"),'Qriosity/OPTICA identity coverage missing');
 expect(contentFile.includes('Qriosity:') && contentFile.includes("'JIIT OPTICA':"),'Qriosity/OPTICA content coverage missing');

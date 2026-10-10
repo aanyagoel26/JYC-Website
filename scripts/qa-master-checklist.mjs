@@ -19,7 +19,8 @@ add('hub and event detail routes remain canonical',main.includes("/clubs/")&&mai
 add('gallery album/deep-link experience exists',gallery.includes('/gallery/')&&gallery.includes('ArrowRight')&&gallery.includes('ArrowLeft'));
 add('strict photo pool is used',gallery.includes('JYC_SOURCE_ARCHIVE_PHOTO_ITEMS'));
 add('JYC network signature interaction is mounted',home.includes("./jyc-network.jsx")&&home.includes('<JYCNetwork />')&&network.includes('JYC')&&network.includes('EVENTS'));
-add('legacy decorative dither is not mounted',!home.includes('LazyDitherVeil')&&!home.includes('<LazyDitherVeil'));
+add('homepage activity discovery uses lazy magnetic Bento with router navigation',home.includes('LazyMagicBento')&&home.includes('enableMagnetism={true}')&&read('src/components/react-bits/MagicBento.jsx').includes('onNavigate?onNavigate(item.href)'));
+add('official JYC hero logo uses the lazy React Bits Dither Veil with static fallback',home.includes('LazyDitherVeil')&&home.includes('jh-dither-mark')&&home.includes('src="/JYC%20Logo(4).png"')&&!home.includes('LazyDriftWall'));
 add('red hero palette is removed',!homeCss.includes('#a82420')&&!homeCss.includes('168,36,32'));
 add('reduced motion is covered',networkCss.includes('prefers-reduced-motion')&&homeCss.includes('prefers-reduced-motion'));
 add('production media boundary is configured',vite.includes('sourceArchivePruner')&&vite.includes('production-media-boundary.json'));

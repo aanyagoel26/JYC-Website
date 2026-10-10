@@ -1,6 +1,6 @@
 # JYC Website — 100% Completion Roadmap
 
-Updated: 2026-10-07
+Updated: 2026-10-10
 
 This is the execution ledger for taking the JIIT Youth Club 128 website from the current codebase to a release-ready state. Items marked **DONE** are implemented in the repository; **BLOCKED/MANUAL** items require a GitHub/Vercel/Supabase account action that the code connector cannot perform.
 
@@ -153,12 +153,12 @@ For each route verify:
 ## J. Release
 
 - [x] GitHub main contains the current final source
-- [x] Quality Gate, CI and CodeQL are green on the latest main commit; browser QA is still running
+- [ ] Latest PR Quality Gate, CI, CodeQL and Browser QA need a usable successful run; recent runs failed before job steps/logs were exposed
 - [ ] CodeQL open findings = 0, or every remaining finding has a documented justified disposition
 - [ ] Dependabot alerts = 0 high/critical
 - [ ] Supabase security advisor = 0 high/critical
 - [x] Vercel production deployment is READY for the current main line
-- [ ] latest main commit is the deployed production commit — current production is READY from f1482acf; later commits are QA-only
+- [ ] verify the exact current main SHA is the production deployment; the current PR preview is separate from production
 - [ ] production HTTP/security headers verified
 - [ ] all public routes smoke-tested on production
 - [ ] production media/link/content check complete
@@ -184,3 +184,33 @@ The website is 100% done only when sections A–J are either implemented and gre
 - Vercel runtime observability shows one low-impact Node deprecation warning group on `/api/jyc-updates` (`url.parse()` warning), with no application exception group reported in the last 24h.
 - The screenshot-reported 142 open CodeQL findings remain an account-level disposition task; the current CodeQL workflow itself is green, so each historical alert still needs individual remediation/dismissal/verification in GitHub Security.
 - Do not declare 100% release-ready until browser QA, production route/security checks, CodeQL alert disposition, and the remaining manual GitHub/Supabase checks are closed.
+
+## Continued UI/media pass (2026-10-10)
+
+### Implemented in PR #193 (not yet production-verified)
+
+- The homepage uses the actual JYC logo through a lazy React Bits Dither Veil and a viewport-deferred magnetic Magic Bento. Expensive effects disable on coarse/mobile pointers and reduced-motion settings.
+- The homepage now has explicit light-theme styling rather than remaining dark regardless of the user's saved theme. Contrast regression checks cover the hero heading, primary CTA and closing CTA in both themes.
+- Gold CTA text and event-image badges use dark ink for accessible contrast; the closing CTA adapts between a dark and gold surface without white-on-gold body text.
+- Club-card image failure now falls back to that club's own logo when available. Event-card failure falls back to that event's own poster when distinct, then the official JYC logo. It no longer substitutes an unrelated JYC archive photograph as an event poster.
+- Existing photo QA covers source archive exclusions, duplicate URLs, provenance/alt metadata, team portrait existence, responsive derivatives, logo fallbacks, gallery lazy-media decode, intrinsic dimensions and responsive frame geometry.
+- Team profiles already use click/keyboard-operable flip cards; available biography/headline fields and safe LinkedIn/Instagram URLs appear on the back. Do not fabricate bios or personal profile URLs when no verified public record exists.
+- Official public profile research is wired into hub content/social records for JYC, CICR, Innovation JIIT, OSDC/JODC, CypherX, Dronotics, GDG and other reviewed communities. RIDE HACK 26 content now notes the 5 October 2026 application deadline and does not claim applications remain open as of 10 October without an explicit reopening.
+
+### Validation status — do not overstate
+
+- Targeted source-contract checks are being expanded alongside each change. These are not equivalent to a production build or successful browser run.
+- GitHub Actions runs for the latest PR revisions have failed before exposing usable job steps/logs. The latest full npm build and Playwright result therefore remain unknown.
+- A Vercel preview for the light-theme CSS commit reached READY, but its deployment is protected by Vercel authentication in the available browser fetch; the exact latest PR head has not been visually verified in a browser.
+- Manual Vercel deployment was previously blocked by the deployment-rate limit. Do not promote or merge until a preview for the exact head is built and tested.
+- Custom-domain verification/routing and production-domain visual QA remain open; do not change DNS without verified ownership/authorization.
+
+### Animation and design follow-up priorities
+
+1. **P0 — release evidence:** successful npm ci, full npm run qa, production build, Playwright at 320/360/390/430/768/1024/1280/1440/1920px, and light/dark visual inspection on the exact branch head.
+2. **P0 — media integrity:** verify every visible image request decodes on Home, Club Detail, Event Detail, Gallery, Team, Archive and About; check alt text, natural dimensions, crop/focal point, poster-vs-photo classification and fallback chain. Never use another event's image as a fallback.
+3. **P1 — real-world performance:** measure LCP, CLS, INP and long tasks on a mid-range Android device; keep Dither Veil off the critical main-thread path, preserve a static logo fallback and keep Magic Bento pointer motion frame-coalesced.
+4. **P1 — animation placement:** use Dither Veil only for the hero brand mark; Magic Bento for a short discovery set; flip cards for team profiles; shared-layout transitions for gallery/event media; restrained magnetic tilt only on desktop fine pointers. Avoid simultaneous continuous motion, autoplay carousels, or parallax behind reading-heavy content.
+5. **P1 — content trust:** continue validating official club/social links, current event dates, registration windows and photo provenance. Keep campus-ambiguous accounts review-only and separate source-material copy from verified current club records.
+6. **P2 — accessibility:** test keyboard-only flows, reduced motion, 200%/400% zoom, focus visibility, screen-reader labels, contrast and touch targets. Theme switching must preserve all section contrast, not only the homepage hero.
+7. **P2 — editorial quality:** select one strong, verified lead photograph per club/event; use each club's identity accent/motif as supporting design, not a substitute for its actual logo or photography; keep archive presentation assets, logos and posters out of the photographic gallery.

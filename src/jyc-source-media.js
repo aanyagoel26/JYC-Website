@@ -151,7 +151,7 @@ export function mergeSourceGallery(gallery){
 const ARCHIVE_CATEGORY_ASSOCIATIONS={
   'clubs/abhivyakti':'Abhivyakti','clubs/arcadia':'Arcadia','clubs/aura':'Aura','clubs/bds':'BDS','clubs/cicr':'CICR',
   'clubs/cine-film':'Cinekala','clubs/cypherx':'CypherX','clubs/dronotics':'Dronotics','clubs/eloquence':'Eloquence',
-  'clubs/innovation':'Innovation Club','clubs/jodc':'JODC','clubs/jsa':'JSA','clubs/neural-nexus':'Neural Nexus',
+  'clubs/innovation':'Innovation','clubs/jodc':'JODC','clubs/jsa':'JSA','clubs/neural-nexus':'Neural Nexus',
   'clubs/panache':'Panache','clubs/prismatic':'Prismatic','clubs/rph':'RPH','clubs/vamunique':'VamUnique','clubs/zencoders':'Zencoders',
   'festivals/aakriti':'Aakriti','sports':'JSA','gallery/campus-events':'JYC Archive','archive/presentation-assets':'JYC Archive','design-assets':'JYC Archive'
 };

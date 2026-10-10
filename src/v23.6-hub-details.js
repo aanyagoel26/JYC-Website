@@ -21,7 +21,7 @@ export const JYC_HUB_DETAILS = {
   },
   VamUnique:{
     label:'Dance and choreography',
-    sourceHighlights:['The supplied 2026–27 induction material presents VamUnique as the official college dance community','Genres shown include hip hop, contemporary, Bollywood and classical','The presentation frames dance as both a shared passion and a team/family experience'],
+    sourceHighlights:['The supplied 2026–27 induction material presents VamUnique as the official college dance community','Official LinkedIn identifies VamUnique as the dance society of JIIT Sector 128','Genres shown include hip hop, contemporary, Bollywood and classical','The presentation frames dance as both a shared passion and a team/family experience'],
     activities:['Hip hop','Contemporary','Bollywood','Classical','Performances','Induction','Workshops and flashmobs'],
     experience:'The supplied 2026–27 material presents VamUnique as a dance community where multiple styles share one stage, with performances, induction activity, workshops, flashmobs and a strong team culture.',
     signature:['Induction','Stage performances','Workshops','Flashmobs']
@@ -35,33 +35,36 @@ export const JYC_HUB_DETAILS = {
   },
   RPH:{
     label:'Coding and problem solving',
-    sourceHighlights:['Code Clash 25.1: two contests with 850+ participants','Code Clash 25.2: 500+ participants','Sessions for 1st & 2nd-year students focused on DSA, Competitive Programming and C++','Senior success stories include placements at Google, Amazon and Zomato'],
+    sourceHighlights:['Code Clash 25.1: two contests with 850+ participants','Code Clash 25.2: supplied hub material records 500+ participants; public LinkedIn post reports 550+ students','Sessions for 1st & 2nd-year students focused on DSA, Competitive Programming and C++','Senior success stories include placements at Google, Amazon and Zomato'],
     activities:['DSA','Competitive Programming','C++ learning','Coding contests','Mentorship','Technical interview preparation'],
     experience:'The supplied RPH material focuses on DSA and Competitive Programming, with workshops, mentorship, hands-on problem solving and preparation for contests, internships, placements and technical interviews.',
     signature:['Code Clash 2025','Code Clash 25.1','Code Clash 25.2']
   },
   CICR:{
     label:'Robotics and prototyping',
-    sourceHighlights:['Officially presented as the Robotics Hub of JIIT-128','TechTonic 2.0 is listed as a three-day AI/ML + robotics workshop experience','Circuit Rush and Robo Soccer appear in the public event archive','Hands-on projects, advanced labs and electronics prototyping form the technical identity'],
+    sourceHighlights:['Officially presented as the Robotics Hub of JIIT-128','Official 2026 updates include AI Unlocked (11 August) and ROBOSPARK (21 September)','TechTonic 2.0 is listed as a three-day AI/ML + robotics workshop experience','Circuit Rush and Robo Soccer appear in the public event archive','Hands-on projects, advanced labs and electronics prototyping form the technical identity'],
     activities:['Robotics projects','Hands-on learning','Advanced labs','Electronics design and prototyping','Workshops','Competitions'],
     experience:'CICR is the robotics hub of JIIT-128. Its official club material centres hands-on projects, learning, prototyping, labs and a technical community around robotics.',
     signature:['TechTonic','Circuit Rush','Robo Soccer','Converge robotics competitions']
   },
   Innovation:{
     label:'Innovation and entrepreneurship',
-    sourceHighlights:['RIDE Hack’26: 1 November 2026','Official Innovation JIIT programme includes RIDE Hack, CodeAI, Innovate and Climate Data Hackathon','Labs, mentorship and resources connect student ideas to real-world innovation','Current public Innovation programme also highlights startup-expo and entrepreneurship activity'],
+    officialDescription:'RIDE Innovation at JIIT Noida supports startup teams with maker spaces, prototyping and AI labs, mentorship and expert guidance.',
+    sourceHighlights:['RIDE Hack’26 is listed for 1 November 2026; confirm current registration status directly with the organiser','Official Innovation JIIT programme includes RIDE Hack, CodeAI, Innovate and Climate Data Hackathon','Labs, mentorship and resources connect student ideas to real-world innovation','Current public Innovation programme also highlights startup-expo and entrepreneurship activity'],
     activities:['Innovation programmes','Mentorship','Prototyping and fabrication','Startup-oriented learning','Hackathons','Technical and business support'],
     experience:'The Innovation JIIT ecosystem connects students with labs, mentorship, resources and entrepreneurship-oriented programmes. Its public programme history includes RIDE Hack, CodeAI, Innovate and climate-focused hackathon activity.',
     signature:['RIDE Hack','CodeAI','Innovate','Climate Data Hackathon']
   },
   Zencoders:{
     label:'Programming and development',
+    sourceHighlights:['Official LinkedIn identifies Zencoders as a JIIT coding society','Recent public updates cover community milestones and team transitions','No upcoming event date was asserted from the public profile checked'],
     activities:['Coding practice','Practical sessions','Open-source participation','Coding bootcamps','Study groups','Hackathons and coding challenges'],
     experience:'The supplied ZenCoders material frames coding excellence around confidence, practical learning and collaboration, with open-source participation, resources and hands-on challenges.',
     signature:['Code your dreams','Practical sessions','Open-source projects']
   },
   JODC:{
     label:'Open-source development',
+    sourceHighlights:['Official LinkedIn identifies JODC as the Open Source Society of JIIT-128','The profile highlights contribution, collaboration and developer networking','Meetups, dev-sprints and hackathons support learning and open-source participation'],
     activities:['Open-source contribution','Developer collaboration','Repositories and projects','Community learning'],
     experience:'JODC is listed in the supplied JYC material as the open-source developer circle. The dedicated club repository also centres contribution-oriented developer workflows and community project discovery; public-facing club facts should remain tied to approved JODC records.',
     signature:['Open source','Contributions','Developer community']

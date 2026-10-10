@@ -120,50 +120,52 @@ test('reduced-motion mode disables homepage motion', async ({ page }) => {
 });
 
 
-test('brand text contrast stays readable in both themes', async ({ page }) => {
-  const contrast = await page.evaluate(() => {
-    const parse = value => {
-      const m = String(value || '').match(/rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([\d.]+))?\)/i);
-      if (!m) return null;
-      return [Number(m[1]),Number(m[2]),Number(m[3]),m[4]===undefined?1:Number(m[4])];
-    };
-    const luminance = rgb => {
-      const channels = rgb.slice(0,3).map(v => {
-        const x=v/255;
-        return x<=.03928?x/12.92:Math.pow((x+.055)/1.055,2.4);
-      });
-      return .2126*channels[0]+.7152*channels[1]+.0722*channels[2];
-    };
-    const ratio = (a,b) => {
-      const la=luminance(a),lb=luminance(b);
-      return (Math.max(la,lb)+.05)/(Math.min(la,lb)+.05);
-    };
-    const effectiveBg = el => {
-      let node=el;
-      while(node && node!==document.documentElement){
-        const bg=parse(getComputedStyle(node).backgroundColor);
-        if(bg && bg[3]>.05){
-          const alpha=bg[3];
-          if(alpha>=.95)return bg;
+test('brand text contrast stays readable in both light and dark themes', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'brand contrast');
+  for (const theme of ['light', 'dark']) {
+    await page.evaluate(value => document.documentElement.setAttribute('data-theme', value), theme);
+    const contrast = await page.evaluate(() => {
+      const parse = value => {
+        const m = String(value || '').match(/rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([\d.]+))?\)/i);
+        if (!m) return null;
+        return [Number(m[1]),Number(m[2]),Number(m[3]),m[4]===undefined?1:Number(m[4])];
+      };
+      const luminance = rgb => {
+        const channels = rgb.slice(0,3).map(v => {
+          const x=v/255;
+          return x<=.03928?x/12.92:Math.pow((x+.055)/1.055,2.4);
+        });
+        return .2126*channels[0]+.7152*channels[1]+.0722*channels[2];
+      };
+      const ratio = (a,b) => {
+        const la=luminance(a),lb=luminance(b);
+        return (Math.max(la,lb)+.05)/(Math.min(la,lb)+.05);
+      };
+      const effectiveBg = el => {
+        let node=el;
+        while(node && node!==document.documentElement){
+          const bg=parse(getComputedStyle(node).backgroundColor);
+          if(bg && bg[3]>.95)return bg;
+          node=node.parentElement;
         }
-        node=node.parentElement;
-      }
-      return parse(getComputedStyle(document.documentElement).backgroundColor)||[250,247,239,1];
-    };
-    const selectors=['.jh-hero h1','.jh-lead','.jh-overline','.nav a'];
-    return selectors.map(selector=>{
-      const el=document.querySelector(selector);
-      if(!el)return {selector,ratio:null};
-      const fg=parse(getComputedStyle(el).color);
-      const bg=effectiveBg(el);
-      return {selector,ratio:fg&&bg?ratio(fg,bg):null};
+        return parse(getComputedStyle(document.documentElement).backgroundColor)||[250,247,239,1];
+      };
+      const selectors=['.jh-hero h1','.jh-lead','.jh-overline','.nav a'];
+      return selectors.map(selector=>{
+        const el=document.querySelector(selector);
+        if(!el||getComputedStyle(el).display==='none'||getComputedStyle(el).visibility==='hidden')return {selector,ratio:null};
+        const fg=parse(getComputedStyle(el).color);
+        const bg=effectiveBg(el);
+        return {selector,ratio:fg&&bg?ratio(fg,bg):null};
+      });
     });
-  });
-  for(const item of contrast){
-    if(item.ratio!==null) expect(item.ratio, item.selector).toBeGreaterThanOrEqual(4.5);
+    for(const item of contrast){
+      if(item.ratio!==null) expect(item.ratio, theme+' '+item.selector).toBeGreaterThanOrEqual(4.5);
+    }
   }
 });
-
 
 test('mobile visual guardrails keep core content centered and inside viewport', async ({ page }) => {
   test.setTimeout(120000);
@@ -231,30 +233,55 @@ test('event and gallery navigation use canonical, shareable URLs', async ({ page
   expect(eagerImages).toBeLessThanOrEqual(4);
 });
 
-test('homepage media composition stays editorial and non-scattered', async ({ page }) => {
+test('homepage renders the official logo through Dither Veil and a magnetic activity Bento', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 960 });
   await page.goto(base, { waitUntil: 'domcontentloaded' });
-  await waitForAppMount(page, 'homepage media composition');
+  await waitForAppMount(page, 'homepage identity and activity design');
+  await expect(page.locator('.jh-dither-mark .dither-veil')).toHaveCount(1, { timeout: 15000 });
+  await expect(page.getByRole('img', { name: 'Official JIIT Youth Club 128 logo with an interactive Dither Veil effect' })).toBeVisible();
+  const ditherSource=page.locator('.jh-dither-mark .dither-veil__fallback');
+  await expect(ditherSource).toHaveAttribute('src', '/assets/jyc-logo.avif');
+  await expect.poll(()=>ditherSource.evaluate(img=>img.complete&&img.naturalWidth>0)).toBe(true);
+
+  const themeSamples = {};
+  for (const theme of ['light', 'dark']) {
+    await page.evaluate(value => document.documentElement.setAttribute('data-theme', value), theme);
+    themeSamples[theme] = await page.evaluate(() => {
+      const parse = value => { const match=String(value||'').match(/rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i); return match?[+match[1],+match[2],+match[3]]:null; };
+      const luminance = rgb => rgb.map(v=>v/255).map(v=>v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4)).reduce((sum,v,i)=>sum+v*[.2126,.7152,.0722][i],0);
+      const contrast = (a,b) => {const x=luminance(a),y=luminance(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)};
+      const home=document.querySelector('.jyc-home'),heading=home?.querySelector('.jh-hero h1'),cta=home?.querySelector('.jh-btn-primary'),finalSection=home?.querySelector('.jh-final'),finalHeading=finalSection?.querySelector('h2');
+      const bg=parse(getComputedStyle(home).backgroundColor),fg=parse(getComputedStyle(heading).color),ctaBg=parse(getComputedStyle(cta).backgroundColor),ctaFg=parse(getComputedStyle(cta).color),finalBg=parse(getComputedStyle(finalSection).backgroundColor),finalFg=parse(getComputedStyle(finalHeading).color);
+      return {background:getComputedStyle(home).backgroundColor,headingContrast:bg&&fg?contrast(bg,fg):null,ctaContrast:ctaBg&&ctaFg?contrast(ctaBg,ctaFg):null,finalContrast:finalBg&&finalFg?contrast(finalBg,finalFg):null};
+    });
+    expect(themeSamples[theme].headingContrast, theme+' homepage heading contrast').toBeGreaterThanOrEqual(4.5);
+    expect(themeSamples[theme].ctaContrast, theme+' primary CTA contrast').toBeGreaterThanOrEqual(4.5);
+    expect(themeSamples[theme].finalContrast, theme+' final CTA section contrast').toBeGreaterThanOrEqual(4.5);
+  }
+  expect(themeSamples.light.background, 'light theme uses the light editorial surface').not.toBe(themeSamples.dark.background);
+
+  await page.locator('.jh-activities').scrollIntoViewIfNeeded();
+  await expect(page.locator('.jh-activities .magic-bento-card').first()).toBeVisible({ timeout: 15000 });
+
   const result = await page.evaluate(() => {
     const story = [...document.querySelectorAll('.jyc-home .jh-gallery-tile')];
     const familyImages = document.querySelectorAll('.jyc-home .jh-family-image, .jyc-home .jh-family img').length;
-    const archiveWalls = document.querySelectorAll('.jyc-home .jh-archive-section, .jyc-home .drift-wall, .jyc-home .jyc-photo-chapters-section').length;
+    const archiveWalls = document.querySelectorAll('.jyc-home .jh-archive-section, .jyc-home .jyc-photo-chapters-section').length;
+    const heroDitherMarks = document.querySelectorAll('.jyc-home .jh-dither-mark .dither-veil').length;
+    const heroDriftWalls = document.querySelectorAll('.jyc-home .jh-hero-drift-wall .drift-wall').length;
+    const bentoCards = document.querySelectorAll('.jyc-home .jh-activities .magic-bento-card').length;
     const activityImages = document.querySelectorAll('.jyc-home .jh-activities img').length;
     const storyOverflow = [...document.querySelectorAll('.jyc-home .jh-photo-grid')].some(el => el.scrollWidth > el.clientWidth + 1);
-    return {
-      storyTiles: story.length,
-      familyImages,
-      archiveWalls,
-      activityImages,
-      storyOverflow,
-      storySources: story.map(el => el.querySelector('img')?.currentSrc || el.querySelector('img')?.src || null)
-    };
+    return { storyTiles: story.length, familyImages, archiveWalls, heroDitherMarks, heroDriftWalls, bentoCards, activityImages, storyOverflow };
   });
-  expect(result.storyTiles, 'homepage photo-story tiles').toBeLessThanOrEqual(1);
+  expect(result.heroDitherMarks, 'one lazy Dither Veil for the actual JYC logo').toBe(1);
+  expect(result.heroDriftWalls, 'continuous hero photo-wall engine removed to reduce load').toBe(0);
+  expect(result.bentoCards, 'magnetic activity cards').toBeGreaterThan(0);
   expect(result.familyImages, 'homepage family image duplicates').toBe(0);
   expect(result.archiveWalls, 'homepage retired archive/photo-chapter surfaces').toBe(0);
-  expect(result.activityImages, 'homepage activity image duplication').toBe(0);
+  expect(result.activityImages, 'homepage activity cards avoid unrelated stock/gallery imagery').toBe(0);
   expect(result.storyOverflow, 'homepage photo-story horizontal overflow').toBe(false);
-  expect(result.storySources.filter(Boolean).length).toBe(result.storyTiles);
+  expect(result.storyTiles).toBeLessThanOrEqual(1);
 });
 
 test('gallery archive uses deterministic responsive image frames', async ({ page }) => {
@@ -281,19 +308,56 @@ test('gallery archive uses deterministic responsive image frames', async ({ page
   for (const ratio of result.ratios) expect(ratio).toBeLessThan(2.3);
 });
 
-test('photo-led pages render real image content', async ({ page }) => {
-  for (const route of ['/', '/clubs', '/events', '/gallery']) {
+test('photo-led pages render real image content without broken assets', async ({ page }) => {
+  test.setTimeout(120000);
+  for (const route of ['/', '/about', '/clubs', '/events', '/team', '/gallery', '/achievements', '/best-of-jyc']) {
     await page.goto(base + route, { waitUntil: 'domcontentloaded' });
     const images = page.locator('img');
     expect(await images.count(), route).toBeGreaterThan(0);
-    await expect(images.first()).toBeVisible();
+    await expect(page.locator('img:visible').first()).toBeVisible();
     await waitForImagesToSettle(page);
     await expect.poll(async () => images.evaluateAll(nodes => nodes.filter(img => img.complete && img.naturalWidth > 0).length), { timeout: 8000 }).toBeGreaterThan(0);
-    const broken = await images.evaluateAll(nodes => nodes.filter(img => img.complete && img.naturalWidth === 0 && !String(img.currentSrc||img.src).endsWith('/JYC%20Logo(4).png')).map(img => img.getAttribute('src')));
+    const broken = await images.evaluateAll(nodes => nodes.filter(img => img.complete && img.naturalWidth === 0).map(img => ({src:img.getAttribute('src'),alt:img.getAttribute('alt'),loading:img.loading})));
     expect(broken, 'broken images on '+route).toEqual([]);
   }
 });
 
+
+
+test('lazy-loaded media decodes across long-form public routes', async ({ page }) => {
+  test.setTimeout(180000);
+  for (const route of ['/about', '/clubs', '/events', '/team', '/gallery', '/achievements', '/best-of-jyc']) {
+    await page.goto(base + route, { waitUntil: 'domcontentloaded' });
+    await page.waitForSelector('#root .public-app, #root main', { timeout: 15000 }).catch(() => {});
+    const initialCount = await page.locator('img').count();
+    expect(initialCount, route + ' should render image elements').toBeGreaterThan(0);
+
+    await page.evaluate(async () => {
+      const step = Math.max(480, Math.floor(window.innerHeight * 0.75));
+      for (let attempt = 0, y = 0; y < document.documentElement.scrollHeight && attempt < 40; attempt++, y += step) {
+        window.scrollTo(0, y);
+        await new Promise(resolve => setTimeout(resolve, 80));
+      }
+      window.scrollTo(0, 0);
+      const images = [...document.images];
+      images.forEach(img => { img.loading = 'eager'; });
+      await Promise.all(images.map(img => img.decode().catch(() => undefined)));
+    });
+
+    const media = await page.locator('img').evaluateAll(images => images.map(img => ({
+      src: img.currentSrc || img.getAttribute('src') || img.getAttribute('srcset') || '',
+      loaded: img.complete && img.naturalWidth > 0 && img.naturalHeight > 0,
+      hasAlt: img.hasAttribute('alt'),
+      loading: img.loading,
+      width: img.naturalWidth,
+      height: img.naturalHeight
+    })));
+    const broken = media.filter(img => img.src && !img.loaded);
+    const missingAlt = media.filter(img => !img.hasAlt);
+    expect(broken, 'unloaded/broken media after lazy-load audit on ' + route).toEqual([]);
+    expect(missingAlt, 'images without an explicit alt attribute on ' + route).toEqual([]);
+  }
+});
 
 test('public pages have no empty media frames or normal-flow section overlaps', async ({ page }) => {
   test.setTimeout(120000);
@@ -529,6 +593,57 @@ test('global search opens, accepts keyboard input, and closes cleanly', async ({
   await expect(dialog).toHaveCount(0);
 });
 
+
+test('Search and More surfaces follow the light/dark theme with readable text', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'theme-aware search and More');
+
+  const samples = {};
+  for (const theme of ['light', 'dark']) {
+    await page.evaluate(value => document.documentElement.setAttribute('data-theme', value), theme);
+
+    await page.keyboard.press(process.platform === 'darwin' ? 'Meta+K' : 'Control+K');
+    const search = page.locator('.search-modal');
+    await expect(search).toBeVisible();
+    samples[theme] = {
+      search: await search.evaluate(el => {
+        const parse = value => { const match=String(value||'').match(/rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([\d.]+))?\)/i); return match?[Number(match[1]),Number(match[2]),Number(match[3]),match[4]===undefined?1:Number(match[4])]:null; };
+        const luminance = rgb => rgb.slice(0,3).map(v=>v/255).map(v=>v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)).reduce((sum,v,i)=>sum+v*[.2126,.7152,.0722][i],0);
+        const bg=parse(getComputedStyle(el).backgroundColor),fg=parse(getComputedStyle(el).color);
+        const contrast=bg&&fg?(Math.max(luminance(bg),luminance(fg))+.05)/(Math.min(luminance(bg),luminance(fg))+.05):null;
+        return { background: getComputedStyle(el).backgroundColor, color: getComputedStyle(el).color, contrast };
+      }),
+    };
+    await page.keyboard.press('Escape');
+    await expect(page.locator('.search-overlay')).toHaveCount(0);
+
+    await page.getByRole('button', { name: 'More' }).click();
+    const more = page.locator('.more-sheet');
+    await expect(more).toBeVisible();
+    samples[theme].more = await more.evaluate(el => {
+      const parse = value => { const match=String(value||'').match(/rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([\d.]+))?\)/i); return match?[Number(match[1]),Number(match[2]),Number(match[3]),match[4]===undefined?1:Number(match[4])]:null; };
+      const luminance = rgb => rgb.slice(0,3).map(v=>v/255).map(v=>v<=.03928?v/12.92:Math.pow((v+.055)/1.055,2.4)).reduce((sum,v,i)=>sum+v*[.2126,.7152,.0722][i],0);
+      const bg=parse(getComputedStyle(el).backgroundColor),fg=parse(getComputedStyle(el).color);
+      const contrast=bg&&fg?(Math.max(luminance(bg),luminance(fg))+.05)/(Math.min(luminance(bg),luminance(fg))+.05):null;
+      return { background: getComputedStyle(el).backgroundColor, color: getComputedStyle(el).color, contrast };
+    });
+    await page.keyboard.press('Escape');
+    await expect(page.locator('.more-sheet-overlay')).toHaveCount(0);
+  }
+
+  expect(samples.light.search.background).not.toBe(samples.dark.search.background);
+  expect(samples.light.more.background).not.toBe(samples.dark.more.background);
+  for (const theme of ['light', 'dark']) {
+    for (const surface of ['search', 'more']) {
+      expect(samples[theme][surface].color, theme + ' ' + surface + ' text should be visible').not.toBe('rgba(0, 0, 0, 0)');
+      expect(samples[theme][surface].background, theme + ' ' + surface + ' background should be painted').not.toBe('rgba(0, 0, 0, 0)');
+      expect(samples[theme][surface].contrast, theme + ' ' + surface + ' contrast should be readable').toBeGreaterThanOrEqual(4.5);
+    }
+  }
+});
+
+
 test('keyboard can reach the skip link and primary navigation', async ({ page }) => {
   await page.goto(base, { waitUntil: 'domcontentloaded' });
   await page.locator('.jyc-home').waitFor({ state: 'visible', timeout: 15000 });
@@ -554,7 +669,7 @@ test('public images load, stay inside the viewport, and use centered focal posit
       .map(img => img.complete ? true : new Promise(resolve => { const done=()=>resolve(true); img.addEventListener('load',done,{once:true}); img.addEventListener('error',done,{once:true}); setTimeout(done,10000); }))));
     const result = await page.locator('main img, footer img').evaluateAll(images => images
       .filter(img => {
-        if((img.currentSrc||img.src).endsWith('/JYC%20Logo(4).png')) return false;
+        if(['/JYC%20Logo(4).png','/assets/jyc-logo.webp'].includes(new URL(img.currentSrc||img.src,window.location.href).pathname)) return false;
         const r=img.getBoundingClientRect();
         return r.bottom>0 && r.top<window.innerHeight && r.width>0 && r.height>0;
       })
@@ -613,12 +728,108 @@ test('V1 homepage keeps the JYC palette and readable dark mode', async ({ page }
   expect(dark.color).not.toBe('rgba(0, 0, 0, 0)');
 });
 
-test('public cards do not use pointer-driven 3D tilt', async ({ page }) => {
+test('legacy public cards stay flat outside the intentional magnetic bento', async ({ page }) => {
   await page.goto(base + '/clubs', { waitUntil: 'domcontentloaded' });
   const transforms = await page.locator('.club-card-v41,.club-card-premium,.event-card-premium,.gallery-card').evaluateAll(nodes =>
     nodes.map(node => getComputedStyle(node).transform)
   );
   expect(transforms.filter(value => value && value !== 'none' && value.includes('matrix3d')).length).toBe(0);
+});
+
+test('homepage hero uses the official JYC logo through Dither Veil without a continuous photo wall', async ({ page }) => {
+  await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'JYC hero identity');
+  await expect(page.locator('.jh-hero-copy h1')).toBeVisible();
+  await expect(page.locator('.jh-dither-mark')).toBeVisible();
+  await expect(page.locator('.jh-dither-mark .dither-veil')).toHaveCount(1, { timeout: 15000 });
+  await expect(page.getByRole('img', { name: 'Official JIIT Youth Club 128 logo with an interactive Dither Veil effect' })).toBeVisible();
+  await expect(page.locator('.jh-hero-drift-wall')).toHaveCount(0);
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
+  expect(overflow).toBe(false);
+});
+
+test('search and More sheets keep their surfaces readable in light and dark themes', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(base + '/clubs', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'theme-aware overlays');
+  const theme = page.locator('.theme-toggle');
+  const currentTheme = await page.locator('html').getAttribute('data-theme');
+  if (currentTheme === 'dark') await theme.click();
+
+  await page.locator('.search-trigger').click();
+  const search = page.locator('.search-modal');
+  await expect(search).toBeVisible();
+  const lightSearch = await search.evaluate(el => ({ bg:getComputedStyle(el).backgroundColor, color:getComputedStyle(el).color }));
+  await page.locator('.search-close').click();
+  await theme.click();
+  await page.locator('.search-trigger').click();
+  await expect(search).toBeVisible();
+  const darkSearch = await search.evaluate(el => ({ bg:getComputedStyle(el).backgroundColor, color:getComputedStyle(el).color }));
+  expect(darkSearch.bg).not.toBe(lightSearch.bg);
+  expect(darkSearch.color).not.toBe('rgba(0, 0, 0, 0)');
+  await page.locator('.search-close').click();
+
+  await page.locator('.nav-more-trigger').click();
+  const more = page.locator('.more-sheet');
+  await expect(more).toBeVisible();
+  const darkMore = await more.evaluate(el => ({ bg:getComputedStyle(el).backgroundColor, color:getComputedStyle(el).color }));
+  await page.locator('.sheet-close').click();
+  await theme.click();
+  await page.locator('.nav-more-trigger').click();
+  await expect(more).toBeVisible();
+  const lightMore = await more.evaluate(el => ({ bg:getComputedStyle(el).backgroundColor, color:getComputedStyle(el).color }));
+  expect(darkMore.bg).not.toBe(lightMore.bg);
+  expect(lightMore.color).not.toBe('rgba(0, 0, 0, 0)');
+});
+
+test('team profiles flip to readable biographies and verified LinkedIn links', async ({ page }) => {
+  await page.goto(base + '/team', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'JYC team profiles');
+  const card = page.locator('.team-member-flip:has(.team-social-row a[href*="linkedin.com"])').first();
+  await expect(card).toBeVisible();
+  await expect(card.locator('.team-member-name').first()).toBeVisible();
+  await expect(card.locator('.team-member-face-content .tag').first()).toBeVisible();
+  await expect(card.locator('.team-photo-editorial img').first()).toBeVisible();
+  await card.click({ position: { x: 18, y: 18 } });
+  await expect(card).toHaveClass(/is-flipped/);
+  await expect(card.locator('.flip-card__front')).toHaveAttribute('aria-expanded', 'true');
+  await expect(card.locator('.team-member-back-content .team-member-about')).toBeVisible();
+  await expect(card.locator('.team-member-back-content a[href*="linkedin.com"]').first()).toHaveAttribute('href', /^https:\/\/(?:www\.|in\.)?linkedin\.com\//);
+  await card.locator('.flip-card__back-trigger').click();
+  await expect(card).not.toHaveClass(/is-flipped/);
+  await card.locator('.flip-card__front').focus();
+  await page.keyboard.press('Enter');
+  await expect(card).toHaveClass(/is-flipped/);
+});
+
+
+test('failed team portraits fall through the optimized logo to the original PNG safely', async ({ page }) => {
+  await page.route('**/assets/team/**', route => route.abort());
+  await page.route('**/assets/jyc-logo.webp', route => route.abort());
+  await page.goto(base + '/team', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'team portrait fallback');
+
+  const portrait = page.locator('.team-photo-editorial img').first();
+  await expect(portrait).toBeVisible();
+  await expect(portrait).toHaveAttribute('data-image-fallback-stage', '2');
+  await expect(portrait).toHaveAttribute('alt', 'Official JYC logo placeholder; portrait unavailable');
+  await expect.poll(() => portrait.evaluate(img => new URL(img.currentSrc || img.src).pathname)).toBe('/JYC%20Logo(4).png');
+  await expect.poll(() => portrait.evaluate(img => getComputedStyle(img).objectFit)).toBe('contain');
+  await expect.poll(() => portrait.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+});
+
+
+test('magnetic bento motion is limited to intended club and event cards', async ({ page }) => {
+  await page.goto(base + '/clubs', { waitUntil: 'domcontentloaded' });
+  const card = page.locator('.jyc57-club-card').first();
+  await expect(card).toBeVisible();
+  await card.hover({ position: { x: 12, y: 12 } });
+  const offset = await card.evaluate(el => el.style.getPropertyValue('--magnetic-x'));
+  expect(offset).not.toBe('');
+  await page.mouse.move(0, 0);
+  await expect.poll(() => card.evaluate(el => el.style.getPropertyValue('--magnetic-x'))).toBe('');
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
+  expect(overflow).toBe(false);
 });
 
 test('featured event popup never blocks the JYC assistant control', async ({ page }) => {
@@ -766,4 +977,106 @@ test('gallery load-more control expands the archive without replacing the route'
     await expect.poll(() => page.locator('.jyc57-photo').count()).toBeGreaterThan(before);
     await expect(new URL(page.url()).pathname).toBe('/gallery');
   }
+});
+
+
+test('JYC Assistant search and keyboard close stay functional', async ({ page }) => {
+  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'JYC assistant');
+  const bot = page.getByRole('button', { name: 'Open JYC Assistant' });
+  await expect(bot).toBeVisible();
+  await bot.click();
+
+  const dialog = page.locator('.jyc-assistant-overlay[role="dialog"]');
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toHaveAttribute('aria-modal', 'true');
+
+  const search = page.getByRole('textbox', { name: 'Search JYC content' });
+  await expect(search).toBeFocused();
+  await search.fill('JAI 2026');
+  await expect(page.locator('.jyc-assistant-result').first()).toBeVisible();
+
+  await page.keyboard.press('Escape');
+  await expect(dialog).toHaveCount(0);
+  await expect(bot).toHaveAttribute('aria-expanded', 'false');
+});
+
+
+
+
+
+test('runtime metadata keeps canonical URLs on the production domain from a preview host', async ({ page }) => {
+  const route = '/events/jai-2026-jaypee-agentic-ai-hackathon';
+  await page.goto(base + route, { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'canonical metadata on preview host');
+
+  const canonical = 'https://www.jiityouthclub128.in' + route;
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', canonical);
+  await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', canonical);
+});
+
+
+test('public route shells keep route-specific SEO content and one primary heading without JavaScript', async ({ page }) => {
+  await page.route('**/*', route => {
+    const pathname = new URL(route.request().url()).pathname;
+    if (/\.(?:js|jsx|mjs)$/.test(pathname) || pathname === '/@vite/client') return route.abort();
+    return route.continue();
+  });
+  const routes = [
+    { path: '/', title: 'JIIT Youth Club 128 — Official JYC Website | JIIT Wish Town, Noida' },
+    { path: '/contact', title: 'Contact JIIT Youth Club 128 | JYC' },
+    { path: '/clubs', title: 'JYC Communities & Clubs | JIIT Youth Club 128' },
+    { path: '/events/jai-2026-jaypee-agentic-ai-hackathon', title: 'JAI 2026 — Jaypee Agentic AI Hackathon | JYC' }
+  ];
+
+  for (const { path, title } of routes) {
+    await page.goto(base + path, { waitUntil: 'domcontentloaded' });
+    await expect(page).toHaveTitle(title);
+    const primaryHeading = page.getByRole('heading', { level: 1 });
+    await expect(primaryHeading).toHaveCount(1);
+    await expect(primaryHeading).toHaveText(title);
+    const canonical = 'https://www.jiityouthclub128.in' + path;
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', canonical);
+    const schemas = await page.locator('script[type="application/ld+json"]').evaluateAll(nodes => nodes.map(node => JSON.parse(node.textContent || '{}')));
+    expect(schemas.some(schema => schema['@type'] === 'WebPage' && schema.name === title && schema.url === canonical)).toBeTruthy();
+  }
+});
+
+
+test('JYC Assistant quick routes are distinct and navigate to their labelled destinations', async ({ page }) => {
+  await page.goto(base + '/clubs', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'JYC assistant quick routes');
+  await page.getByRole('button', { name: 'Open JYC Assistant' }).click();
+
+  const dialog = page.getByRole('dialog', { name: 'Ask JYC. Find your route.' });
+  await expect(dialog).toBeVisible();
+  const routes = dialog.locator('.jyc-assistant-quick button');
+  await expect(routes).toHaveCount(4);
+  await expect(routes).toContainText(['Explore all clubs', 'Upcoming events', 'JYC archive', 'Contact JYC']);
+
+  await routes.filter({ hasText: 'Contact JYC' }).click();
+  await expect.poll(() => new URL(page.url()).pathname).toBe('/contact');
+  await expect(dialog).toHaveCount(0);
+});
+
+
+test('JYC Assistant traps keyboard focus and restores focus after closing', async ({ page }) => {
+  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'JYC assistant focus management');
+  const trigger = page.getByRole('button', { name: 'Open JYC Assistant' });
+  await trigger.focus();
+  await trigger.press('Enter');
+
+  const dialog = page.getByRole('dialog', { name: 'Ask JYC. Find your route.' });
+  await expect(dialog).toBeVisible();
+  await expect(page.getByRole('textbox', { name: 'Search JYC content' })).toBeFocused();
+
+  const focusables = dialog.locator('button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])');
+  await focusables.last().focus();
+  await page.keyboard.press('Tab');
+  await expect(dialog.locator('.jyc-assistant-close')).toBeFocused();
+
+  await page.keyboard.press('Escape');
+  await expect(dialog).toHaveCount(0);
+  await expect(trigger).toBeFocused();
 });

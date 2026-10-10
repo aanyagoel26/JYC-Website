@@ -13,8 +13,12 @@ if(!fs.existsSync(index)){
 }
 
 const html=fs.readFileSync(index,'utf8');
-const siteOrigin=(process.env.VITE_SITE_URL||'https://www.jiityouthclub128.in').replace(/\/$/,'');
+const siteOrigin=new URL(process.env.VITE_CANONICAL_ORIGIN||process.env.JYC_CANONICAL_ORIGIN||'https://www.jiityouthclub128.in').origin;
 const routes={
+  '/':{
+    title:'JIIT Youth Club 128 — Official JYC Website | JIIT Wish Town, Noida',
+    description:'Official JIIT Youth Club 128 website for JIIT Wish Town Campus, Sector 128, Noida — discover JYC clubs, events, leadership, achievements and official campus memories.'
+  },
   '/about':{
     title:'About JIIT Youth Club 128 | JYC',
     description:'Learn about JIIT Youth Club 128, its purpose, community families, activities and role across the JIIT Wish Town campus.'
@@ -138,9 +142,33 @@ function shellFor(meta,route){
       out=out.replace(/<meta name="twitter:description" content="[^"]*"\s*\/>/i,`<meta name="twitter:description" content="${esc}" />`);
     }
   }
-  out=out.replace(/<meta property="og:url" content="[^"]*"\s*\/>/i,`<meta property="og:url" content="__JYC_CANONICAL_ROUTE__" />`);
-  out=out.replace('__JYC_CANONICAL_ROUTE__',`${siteOrigin}${route}`);
-  out=out.replace(/<link rel="canonical" href="[^"]*"\s*\/>/i,`<link rel="canonical" href="${siteOrigin}${route}" />`);
+  const canonicalUrl=`${siteOrigin}${route}`;
+  const canonicalTag=`<link rel="canonical" href="${canonicalUrl}" />`;
+  if(/<link rel="canonical" href="[^"]*"\s*\/>/i.test(out)){
+    out=out.replace(/<link rel="canonical" href="[^"]*"\s*\/>/i,canonicalTag);
+  }else{
+    out=out.replace('</head>',`  ${canonicalTag}\n  </head>`);
+  }
+  const ogUrlTag=`<meta property="og:url" content="${canonicalUrl}" />`;
+  if(/<meta property="og:url" content="[^"]*"\s*\/>/i.test(out)){
+    out=out.replace(/<meta property="og:url" content="[^"]*"\s*\/>/i,ogUrlTag);
+  }else{
+    out=out.replace('</head>',`  ${ogUrlTag}\n  </head>`);
+  }
+  const escapedTitle=meta.title.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+  out=out.replace(/(<h1\b[^>]*>)JIIT Youth Club — Clubs, Events &amp; Fests \| JIIT Noida(<\/h1>)/g,`$1${escapedTitle}$2`);
+  out=out.replace(/(<h1\b[^>]*>)Preparing the JYC experience…(<\/h1>)/g,`$1${escapedTitle}$2`);
+  out=out.replace(/(<noscript\b[^>]*>[\s\S]*?)<h1\b([^>]*)>([\s\S]*?)<\/h1>/i,'$1<p$2>$3</p>');
+  const pageSchema=JSON.stringify({
+    '@context':'https://schema.org',
+    '@type':'WebPage',
+    name:meta.title,
+    description:meta.description,
+    url:`${siteOrigin}${route}`,
+    isPartOf:{'@id':`${siteOrigin}/#website`},
+    about:{'@id':`${siteOrigin}/#organization`}
+  }).replaceAll('<','\\u003c');
+  out=out.replace('</head>',`<script type="application/ld+json">${pageSchema}</script>\n  </head>`);
   return out;
 }
 

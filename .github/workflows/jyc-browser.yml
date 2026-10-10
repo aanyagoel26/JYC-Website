@@ -35,9 +35,8 @@ jobs:
       - name: Build production bundle
         run: npm run build
 
-      - name: Run browser smoke and responsive QA
+      - name: Run browser smoke and responsive QA against production preview
         run: npm run qa:browser
-
       - name: Upload Playwright report on failure
         if: failure()
         uses: actions/upload-artifact@v6

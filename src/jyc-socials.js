@@ -21,14 +21,18 @@ export const JYC_SOCIALS = {
     campus: 'sector-128',
     sourcePriority: 'official-hub',
     verifiedBy: 'https://www.linkedin.com/company/vamunique-the-dance-society-jiit-noida/',
-    verifiedOn: '2026-10-03'
+    verifiedOn: '2026-10-10',
+    sourceNote: 'Official LinkedIn profile identifies VamUnique as the dance society of JIIT Sector 128 and describes cultural-fest, inter-college and community performances.'
   },
   Panache: {},
   RPH: {
     linkedin: 'https://www.linkedin.com/company/rapid-programming-hub-jiit-noida/',
-    label: 'Rapid Programming Hub · JIIT Noida',
-    verifiedBy: 'https://in.linkedin.com/in/rapid-programming-hub-jiit-3188bb385',
-    verifiedOn: '2026-10-03'
+    label: 'Rapid Programming Hub · JIIT-128',
+    campus: 'sector-128',
+    sourcePriority: 'official-hub',
+    verifiedBy: 'https://www.linkedin.com/company/rapid-programming-hub-jiit-noida/ and https://in.linkedin.com/in/rapid-programming-hub-jiit-3188bb385',
+    verifiedOn: '2026-10-10',
+    sourceNote: 'Official LinkedIn records Code Clash 25.2 on 2025-11-22 with 550+ student participants; a separate public post describes Freshmen Clash at JIIT Wish Town Campus. This supports the JIIT-128 identity, but the dated contest is archived, not an upcoming registration.'
   },
   CICR: {
     instagram: 'https://www.instagram.com/cicr_jiit/',
@@ -38,8 +42,9 @@ export const JYC_SOCIALS = {
     label: 'CICR · Creative & Innovative Cell in Robotics',
     campus: 'sector-128',
     sourcePriority: 'official-hub',
-    verifiedBy: 'https://www.linkedin.com/company/cicrjiit128/',
-    verifiedOn: '2026-10-03'
+    verifiedBy: 'https://www.linkedin.com/company/cicrjiit128/ and https://www.cicr.in/',
+    verifiedOn: '2026-10-10',
+    sourceNote: 'Official LinkedIn updates on 2026-08-11 and 2026-09-21 describe AI Unlocked and ROBOSPARK; the official site lists TechTonic 2.0 with date TBA.'
   },
   Innovation: {
     linkedin: 'https://www.linkedin.com/company/innovation-jiit/',
@@ -47,7 +52,9 @@ export const JYC_SOCIALS = {
     label: 'INNOVATION JIIT',
     campus: 'sector-128',
     sourcePriority: 'official-hub',
-    sourceNote: 'Current LinkedIn recruitment and BITBOX communications identify the community as JIIT 128; company-location metadata still reports Sector 62, so event-level campus evidence must be used.'
+    verifiedBy: 'https://in.linkedin.com/company/innovation-jiit and https://www.innovationjiit.in/',
+    verifiedOn: '2026-10-10',
+    sourceNote: 'Official site lists RIDE HACK 26 for 2026-11-01 and currently links registration; verify current status directly with the organiser because public social updates may differ and company-location metadata can lag.'
   },
   Zencoders: {
     instagram: 'https://www.instagram.com/zencodersjiit/',
@@ -57,7 +64,8 @@ export const JYC_SOCIALS = {
     campus: 'sector-128',
     sourcePriority: 'official-hub',
     verifiedBy: 'https://www.linkedin.com/company/zencoders/',
-    verifiedOn: '2026-10-03'
+    verifiedOn: '2026-10-10',
+    sourceNote: 'Official LinkedIn identifies Zencoders as a JIIT coding society; current event dates were not asserted from the profile checked.'
   },
   JODC: {
     linkedin: 'https://in.linkedin.com/company/jodc/',
@@ -65,7 +73,7 @@ export const JYC_SOCIALS = {
     campus: 'sector-128',
     sourcePriority: 'official-hub',
     verifiedBy: 'https://www.linkedin.com/company/jodc/',
-    verifiedOn: '2026-10-03',
+    verifiedOn: '2026-10-10',
     sourceNote: 'Current LinkedIn profile states Open Source Society of JIIT-128 and primary location JIIT Sector 128, Noida.'
   },
   CypherX: {
@@ -75,7 +83,8 @@ export const JYC_SOCIALS = {
     label: 'CypherX · JIIT-128',
     campus: 'sector-128',
     sourcePriority: 'official-hub',
-    sourceNote: 'Current LinkedIn profile states the official cybersecurity community of JIIT-128 and primary location at Jaypee Wishtown, Sector 128.'
+    verifiedOn: '2026-10-10',
+    sourceNote: 'Official LinkedIn identifies CypherX as the JIIT-128 cybersecurity community and describes workshops, CTFs, projects and industry engagement.'
   },
   Arcadia: {
     instagram: 'https://www.instagram.com/arcadia_jiit/',

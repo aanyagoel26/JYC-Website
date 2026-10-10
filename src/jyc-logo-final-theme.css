@@ -748,6 +748,10 @@ html[data-theme="dark"] .public-app .card:hover,html[data-theme="dark"] .public-
 .public-app .gallery-grid .gallery-item img{width:100%;aspect-ratio:4/3;object-fit:cover;object-position:center}
 .public-app .archive-story-photo{overflow:hidden}
 .public-app .archive-story-photo img{width:100%;height:100%;min-height:220px;object-fit:cover;object-position:center}
+.public-app .archive-story-photo .archive-story-image{display:block;width:100%;height:100%;min-height:220px;overflow:hidden}
+.public-app .archive-story-photo .archive-story-image img{display:block;width:100%;height:100%;min-height:220px;object-fit:cover;object-position:center}
+.public-app .hub-preview-image .hub-preview-source-image{display:block;width:100%;height:330px;overflow:hidden}
+.public-app .hub-preview-image .hub-preview-source-image img{display:block;width:100%;height:100%;min-height:300px;object-fit:cover;object-position:center;transition:transform .35s ease}
 .public-app .hub-source-photo-strip{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:14px;width:100%}
 .public-app .hub-source-photo-strip figure{margin:0;overflow:hidden;text-align:center}
 .public-app .hub-source-photo-strip img{display:block;width:100%;aspect-ratio:4/3;object-fit:cover;object-position:center}
@@ -794,7 +798,7 @@ html[data-theme="dark"] .public-app .card:hover,html[data-theme="dark"] .public-
  .public-app .jyc-feature-poster img{min-height:230px}
  .public-app .team-photo-editorial img{aspect-ratio:1/1}
  .public-app .hub-source-photo-strip{grid-template-columns:repeat(2,minmax(0,1fr))!important}
- .public-app .archive-story-photo img{min-height:180px}
+ .public-app .archive-story-photo img,.public-app .archive-story-photo .archive-story-image,.public-app .archive-story-photo .archive-story-image img{min-height:180px}
  .public-app .event-timeline-row{grid-template-columns:34px 1fr 24px!important}
  .public-app .event-timeline-media{display:none}
  .public-app .event-row-copy strong{font-size:1rem}
@@ -1018,3 +1022,40 @@ html,body,#root,.app-frame,.app.public-app,.route-stage{max-width:100%;min-width
 
 /* V56.15.2 visual archive rails */
 .event-drift-wall-section,.club-drift-wall-section{margin:clamp(28px,5vw,72px) 0;overflow:hidden}.event-drift-wall-section .section-inline-head,.club-drift-wall-section .section-inline-head{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:22px}.event-drift-wall-section .section-inline-head>div,.club-drift-wall-section .section-inline-head>div{max-width:760px}.event-drift-wall-section .section-inline-head h2,.club-drift-wall-section .section-inline-head h2{margin:.35rem 0 .55rem}.event-drift-wall-section .section-inline-head p,.club-drift-wall-section .section-inline-head p{max-width:680px}.event-drift-wall-section .drift-wall,.club-drift-wall-section .drift-wall{height:clamp(430px,55vw,620px);border:1px solid var(--jyc-light-line);border-radius:18px;background:linear-gradient(180deg,color-mix(in srgb,var(--jyc-light-surface) 88%,transparent),color-mix(in srgb,var(--jyc-light-muted) 14%,transparent));box-shadow:0 20px 60px rgba(17,19,24,.08)}.event-drift-wall-section .drift-wall__tile,.club-drift-wall-section .drift-wall__tile{filter:saturate(.94)}.event-drift-wall-section .drift-wall__inner,.club-drift-wall-section .drift-wall__inner{box-shadow:0 18px 45px rgba(17,19,24,.13)}.drift-wall-loading{height:clamp(430px,55vw,620px);border-radius:18px;background:linear-gradient(90deg,rgba(24,22,29,.04),rgba(191,156,111,.14),rgba(24,22,29,.04));animation:jyc-drift-loading 1.8s ease-in-out infinite}@keyframes jyc-drift-loading{0%,100%{opacity:.5}50%{opacity:1}}@media(max-width:700px){.event-drift-wall-section .section-inline-head,.club-drift-wall-section .section-inline-head{align-items:flex-start;flex-direction:column;gap:10px}.event-drift-wall-section .drift-wall,.club-drift-wall-section .drift-wall,.drift-wall-loading{height:420px}}@media(prefers-reduced-motion:reduce){.drift-wall-loading{animation:none}}
+
+/* Flip profiles keep long bios scrollable and reserve room for the persistent return control. */
+.jyc-team-page .team-member-back-content{padding-bottom:78px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin}
+.jyc-team-page .team-member-back-content .team-member-about{display:block;max-width:100%;overflow-wrap:anywhere}
+.jyc-team-page .team-member-back-content .team-social-row{display:flex;flex-wrap:wrap;gap:10px}
+.jyc-team-page .team-member-back-content .team-social-row a{display:inline-flex;align-items:center;min-height:40px;padding:8px 12px;border:1px solid rgba(191,156,111,.42);border-radius:999px;background:rgba(191,156,111,.08);font-weight:750}
+.jyc-team-page .team-member-back-content .team-social-row a:focus-visible{outline:2px solid #d2b48c;outline-offset:3px}
+@media(max-width:700px){.jyc-team-page .team-member-back-content{padding-bottom:76px}}
+
+
+/* V68 — failed portraits fall back to the official mark, never an unrelated event photo. */
+.jyc-team-page .team-photo-editorial .jyc-responsive-picture{
+  display:block;
+  width:100%;
+  height:100%;
+  min-height:0;
+}
+.jyc-team-page .team-photo-editorial img[data-image-fallback-stage="1"]{
+  object-fit:contain!important;
+  object-position:center!important;
+  padding:clamp(18px,3vw,34px);
+  background:var(--jyc-surface,#fff);
+}
+@media(prefers-reduced-motion:reduce){
+  .jyc-team-page .team-photo-editorial img{transition:none!important}
+}
+
+
+/* Any failed editorial image becomes an identity mark, never a different event's photo. */
+.jyc-responsive-picture img[data-image-fallback-stage="1"],
+.jyc-responsive-picture img[data-image-fallback-stage="2"],
+.jyc-responsive-picture img[data-image-fallback-stage="3"]{
+  object-fit:contain!important;
+  object-position:center!important;
+  padding:clamp(14px,2.5vw,28px);
+  background:var(--jyc-surface,#f8f1e5);
+}

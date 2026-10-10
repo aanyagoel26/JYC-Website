@@ -1,6 +1,6 @@
 # JIIT Youth Club 128 — Official Website
 
-> **Current release: V64.4.3 — Editorial interaction, media delivery and release hardening**
+> **Current release: V64.5.0 — Identity-first hero, magnetic discovery and media QA**
 
 [![Quality](https://github.com/kaustubhdua/JYC-Website/actions/workflows/ci.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/ci.yml) [![CodeQL](https://github.com/kaustubhdua/JYC-Website/actions/workflows/codeql.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/codeql.yml) [![JYC Quality](https://github.com/kaustubhdua/JYC-Website/actions/workflows/jyc-quality.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/jyc-quality.yml)
 
@@ -56,11 +56,15 @@ The public site does **not** provide:
 
 The private Control Center remains website-publishing infrastructure for authorised JYC editors. It is not part of the public product.
 
+The team directory uses flip cards with biography and verified public social links. Photo delivery uses responsive AVIF/WebP derivatives where available, source-safe fallbacks, lazy loading below the fold, and reduced-motion-aware interactions.
+
 ## Design direction
 
 The senior-approved visual direction is intentionally editorial and compact:
 
 - JYC logo-derived beige / champagne
+- Identity-first split hero with the official logo rendered through a lazy React Bits Dither Veil effect
+- Magnetic, keyboard-friendly activity bento; club and event cards keep their own source-grounded identities
 - Deep navy, black and white neutrals
 - Strong typography and readable line lengths
 - Real JYC photography before decorative graphics
@@ -297,9 +301,11 @@ The remaining production gates are operational: configure required third-party E
 
 ## Current release status
 
-**V64.4.3 is the current code release.** V62 is a checklist/release-governance pass: it adds the restrained JYC Network hero interaction, removes the legacy dither hero layer, restores the beige/champagne editorial accent system, and adds the master checklist to the static QA suite.
+- **Latest UI/media review:** [JYC UI/UX, Photography & Source Audit — 10 October 2026](docs/JYC-UIUX-MEDIA-DEEP-AUDIT-2026-10-10.md). It records current official-source checks, image QA additions, and remaining release gates.
 
-The release boundary is aligned across package metadata, the service-worker cache, final product QA, final hygiene QA and public discovery files. The current operational/deployment state is documented in `docs/JYC-RELEASE-STATE-2026-10-07.md`; production deployment verification remains a separate gate from source-control QA.
+**V64.5.0 is the current source release.** This pass introduces the official JYC logo as a lazy React Bits Dither Veil hero treatment, adds a magnetic activity Bento with reduced-motion and mobile safeguards, improves team profile flips and social links, gives each event its own visual accent, and prevents club logos from being cropped as photographs. It also refreshes verified CICR, Innovation JIIT and JODC profile details and expands photo regression coverage. Team portraits reserve intrinsic dimensions, load lazily, and fall back to the official JYC logo with accurate alternative text if a portrait request fails; a Playwright regression deliberately aborts team-photo requests to exercise that path.
+
+Package metadata, lockfile and the service-worker cache namespace are synchronized. Source-contract assertions are not a substitute for a successful production build or browser run. The latest GitHub Actions runs are failing before job steps/logs are exposed, and Vercel deployment limits/domain routing remain operational release gates; do not treat this branch as deployed or production-verified until those checks are green.
 
 The highest-value remaining production work is operational/editorial rather than architectural:
 

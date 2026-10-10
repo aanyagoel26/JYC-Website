@@ -10,6 +10,25 @@
     <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0f0e11" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="color-scheme" content="light dark" />
+    <script>
+      document.addEventListener('error',event=>{
+        const image=event.target;
+        if(!(image instanceof HTMLImageElement)||!image.classList.contains('boot-logo'))return;
+        const fallback=image.dataset.bootFallback;
+        if(fallback){delete image.dataset.bootFallback;image.src=fallback;return}
+        image.hidden=true;
+      },true);
+    </script>
+    <style>
+      .boot-fallback{min-height:100svh;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:28px;text-align:center;background:radial-gradient(ellipse at 50% 42%,rgba(191,156,111,.14),transparent 42%),#0e0d0f;color:#f8f1e5;font-family:Inter,system-ui,sans-serif}
+      .boot-fallback img{width:clamp(88px,13vw,144px);height:auto;max-height:20vh;object-fit:contain;filter:drop-shadow(0 12px 28px rgba(0,0,0,.45))}
+      .boot-fallback p{margin:0;color:#bf9c6f;font-size:10px;font-weight:800;letter-spacing:.24em;text-transform:uppercase}
+      .boot-fallback h1{margin:0;font-size:clamp(26px,4vw,42px);line-height:1.05;letter-spacing:-.04em;max-width:16ch}
+      .boot-fallback span{color:#aaa29a;font-size:13px;line-height:1.6}
+      .boot-fallback:after{content:"";width:100px;height:2px;background:linear-gradient(90deg,transparent,#bf9c6f,transparent);animation:jyc-loader-sheen 1.7s ease-in-out infinite}
+      @keyframes jyc-loader-sheen{0%,100%{opacity:.35;transform:scaleX(.55)}50%{opacity:1;transform:scaleX(1)}}
+      @media(prefers-reduced-motion:reduce){.boot-fallback:after{animation:none;opacity:.65}}
+    </style>
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-title" content="JYC" />
@@ -54,7 +73,8 @@
       </main>
     </noscript>
     <div id="main-content"><div id="root">
-      <main class="boot-fallback" aria-label="JIIT Youth Club loading">
+      <main class="boot-fallback" aria-label="JIIT Youth Club loading" aria-busy="true" aria-live="polite">
+        <img class="boot-logo" src="/assets/jyc-logo.avif" data-boot-fallback="/JYC%20Logo(4).png" alt="Official JIIT Youth Club 128 logo" width="128" height="128" fetchpriority="high" decoding="async" />
         <p>JIIT YOUTH CLUB · SECTOR 128</p>
         <h1>Preparing the JYC experience…</h1>
         <span>One campus. Many communities. One JYC.</span>

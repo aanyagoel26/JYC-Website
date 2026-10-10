@@ -26,20 +26,20 @@ const processFile=async file=>{
   const meta=await sharp(file).metadata();
   if(!meta.width||!meta.height){skipped++;return}
   for(const width of WIDTHS){
-   if(width>meta.width*1.15)continue;
+   if(width>meta.width)continue;
    for(const format of ['avif','webp']){
     const out=path.join(outDir,path.basename(base)+'-'+width+'.'+format);
     if(fs.existsSync(out))continue;
     const pipeline=sharp(file).rotate().resize({width,withoutEnlargement:true});
-    if(format==='avif')await pipeline.avif({quality:52,effort:4}).toFile(out);
-    else await pipeline.webp({quality:82,effort:4}).toFile(out);
+    if(format==='avif')await pipeline.avif({quality:52,effort:2}).toFile(out);
+    else await pipeline.webp({quality:82,effort:3}).toFile(out);
     generated++;
    }
   }
  }catch(error){failed++;console.warn('Derivative failed:',rel,error?.message||error)}
  finally{
   completed++;
-  if(completed%50===0||completed===sourceFiles.length)console.log('Photo derivatives: '+completed+'/'+sourceFiles.length+' files processed');
+  if(completed%25===0||completed===sourceFiles.length)console.log('Photo derivatives: '+completed+'/'+sourceFiles.length+' files processed');
  }
 };
 let cursor=0;

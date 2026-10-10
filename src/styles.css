@@ -2214,3 +2214,17 @@ footer a:hover{
  .public-app .float-chip{display:none}
  .public-app .logo-core{width:min(250px,72vw)}
 }
+
+
+/* Contact page primary heading uses the same editorial scale as its section heading. */
+.contact-page .section-head h1{font:700 clamp(42px,6vw,78px) "Segoe UI",system-ui,sans-serif;letter-spacing:-.055em;line-height:.98;margin:13px 0 18px;}
+
+/* V66.2 UI polish: readable line lengths, balanced headings and keyboard focus. */
+.public-app :where(a,button,[role="button"],input,textarea,select):focus-visible{outline:2px solid var(--accent-gold,#bf9c6f);outline-offset:3px}
+.public-app :where(h1,h2,h3){text-wrap:balance}
+.public-app :where(p,li){text-wrap:pretty}
+.public-app .section-head{margin-inline:auto}
+.public-app .section-head :where(h1,h2){max-width:18ch;line-height:1.04;letter-spacing:-.035em}
+.public-app .section-head p{max-width:62ch;line-height:1.7}
+@media(max-width:620px){.public-app .section-head{margin-bottom:26px}.public-app .section-head :where(h1,h2){max-width:16ch;letter-spacing:-.03em}}
+@media(prefers-reduced-motion:reduce){.public-app :where(a,button,[role="button"]){scroll-behavior:auto}}

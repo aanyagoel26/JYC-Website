@@ -8,7 +8,8 @@ Set these in Vercel for the Production environment:
 
 - `VITE_SUPABASE_URL`
 - `VITE_SUPABASE_PUBLISHABLE_KEY`
-- `VITE_SITE_URL`
+- `VITE_CANONICAL_ORIGIN=https://www.jiityouthclub128.in` — shared production origin for runtime metadata, generated route shells and sitemap URLs. Do not set this to a Vercel preview hostname.
+- `VITE_SITE_URL` — legacy setting retained for older tooling; it no longer controls canonical URLs.
 - `VITE_VAPID_PUBLIC_KEY` when web push is enabled
 - `VITE_ENABLE_ANALYTICS=false` unless the analytics schema is deployed
 
