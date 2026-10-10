@@ -231,33 +231,33 @@ test('event and gallery navigation use canonical, shareable URLs', async ({ page
   expect(eagerImages).toBeLessThanOrEqual(4);
 });
 
-test('homepage media composition stays editorial and non-scattered', async ({ page }) => {
+test('homepage renders the official logo through Dither Veil and a magnetic activity Bento', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 960 });
   await page.goto(base, { waitUntil: 'domcontentloaded' });
-  await waitForAppMount(page, 'homepage media composition');
+  await waitForAppMount(page, 'homepage identity and activity design');
+  await expect(page.locator('.jh-dither-mark .dither-veil')).toHaveCount(1, { timeout: 15000 });
+  await expect(page.getByRole('img', { name: 'Official JIIT Youth Club 128 logo with an interactive Dither Veil effect' })).toBeVisible();
+  await expect(page.locator('.jh-activities .magic-bento-card').first()).toBeVisible({ timeout: 15000 });
+
   const result = await page.evaluate(() => {
     const story = [...document.querySelectorAll('.jyc-home .jh-gallery-tile')];
     const familyImages = document.querySelectorAll('.jyc-home .jh-family-image, .jyc-home .jh-family img').length;
     const archiveWalls = document.querySelectorAll('.jyc-home .jh-archive-section, .jyc-home .jyc-photo-chapters-section').length;
+    const heroDitherMarks = document.querySelectorAll('.jyc-home .jh-dither-mark .dither-veil').length;
     const heroDriftWalls = document.querySelectorAll('.jyc-home .jh-hero-drift-wall .drift-wall').length;
+    const bentoCards = document.querySelectorAll('.jyc-home .jh-activities .magic-bento-card').length;
     const activityImages = document.querySelectorAll('.jyc-home .jh-activities img').length;
     const storyOverflow = [...document.querySelectorAll('.jyc-home .jh-photo-grid')].some(el => el.scrollWidth > el.clientWidth + 1);
-    return {
-      storyTiles: story.length,
-      familyImages,
-      archiveWalls,
-      heroDriftWalls,
-      activityImages,
-      storyOverflow,
-      storySources: story.map(el => el.querySelector('img')?.currentSrc || el.querySelector('img')?.src || null)
-    };
+    return { storyTiles: story.length, familyImages, archiveWalls, heroDitherMarks, heroDriftWalls, bentoCards, activityImages, storyOverflow };
   });
-  expect(result.storyTiles, 'homepage photo-story tiles').toBeLessThanOrEqual(1);
+  expect(result.heroDitherMarks, 'one lazy Dither Veil for the actual JYC logo').toBe(1);
+  expect(result.heroDriftWalls, 'continuous hero photo-wall engine removed to reduce load').toBe(0);
+  expect(result.bentoCards, 'magnetic activity cards').toBeGreaterThan(0);
   expect(result.familyImages, 'homepage family image duplicates').toBe(0);
   expect(result.archiveWalls, 'homepage retired archive/photo-chapter surfaces').toBe(0);
-  expect(result.heroDriftWalls, 'homepage logo photo-wall surface').toBe(1);
-  expect(result.activityImages, 'homepage activity image duplication').toBe(0);
+  expect(result.activityImages, 'homepage activity cards avoid unrelated stock/gallery imagery').toBe(0);
   expect(result.storyOverflow, 'homepage photo-story horizontal overflow').toBe(false);
-  expect(result.storySources.filter(Boolean).length).toBe(result.storyTiles);
+  expect(result.storyTiles).toBeLessThanOrEqual(1);
 });
 
 test('gallery archive uses deterministic responsive image frames', async ({ page }) => {
