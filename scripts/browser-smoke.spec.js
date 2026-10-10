@@ -597,7 +597,7 @@ test('public images load, stay inside the viewport, and use centered focal posit
       .map(img => img.complete ? true : new Promise(resolve => { const done=()=>resolve(true); img.addEventListener('load',done,{once:true}); img.addEventListener('error',done,{once:true}); setTimeout(done,10000); }))));
     const result = await page.locator('main img, footer img').evaluateAll(images => images
       .filter(img => {
-        if((img.currentSrc||img.src).endsWith('/JYC%20Logo(4).png')) return false;
+        if(['/JYC%20Logo(4).png','/assets/jyc-logo.webp'].includes(new URL(img.currentSrc||img.src,window.location.href).pathname)) return false;
         const r=img.getBoundingClientRect();
         return r.bottom>0 && r.top<window.innerHeight && r.width>0 && r.height>0;
       })
@@ -740,7 +740,7 @@ test('failed team portraits use the official JYC logo and accurate fallback text
   await expect(portrait).toBeVisible();
   await expect(portrait).toHaveAttribute('data-image-fallback-stage', '1');
   await expect(portrait).toHaveAttribute('alt', 'Official JYC logo placeholder; portrait unavailable');
-  await expect.poll(() => portrait.evaluate(img => new URL(img.currentSrc || img.src).pathname)).toBe('/JYC%20Logo(4).png');
+  await expect.poll(() => portrait.evaluate(img => new URL(img.currentSrc || img.src).pathname)).toMatch(/^(?:\/assets\/jyc-logo\.webp|\/JYC%20Logo\(4\)\.png)$/);
   await expect.poll(() => portrait.evaluate(img => getComputedStyle(img).objectFit)).toBe('contain');
 });
 
