@@ -225,7 +225,7 @@
  .jyc57-page .jyc57-event-toolbar{align-items:stretch}
  .jyc57-page .jyc57-segment{width:100%}
  .jyc57-page .jyc57-segment button{flex:1 1 auto}
- .jyc57-page .jyc57-event-card{grid-template-columns:52px minmax(0,1fr) 18px;gap:10px;padding:14px}
+ .jyc57-page .jyc57-event-card{grid-template-columns:52px 68px minmax(0,1fr) 18px;gap:10px;padding:14px}
  .jyc57-page .jyc57-event-date b{font-size:22px}
  .jyc57-page .jyc57-feature{grid-template-columns:96px minmax(0,1fr);gap:10px}
  .jyc57-page .jyc57-feature img{min-height:130px}
