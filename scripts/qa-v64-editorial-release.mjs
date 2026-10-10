@@ -11,6 +11,11 @@ const envExample=read('.env.example');
 const gallery=read('src/jyc57-experience.jsx');
 const responsive=read('src/jyc-responsive-photo.jsx');
 const homeCss=read('src/jyc-editorial-home.css');
+const design=read('src/jyc-design-upgrades.css');
+const editorialHome=read('src/jyc-editorial-home.jsx');
+const flip=read('src/components/react-bits/FlipCard.jsx');
+const indexHtml=read('index.html');
+const socials=read('src/jyc-socials.js');
 const derivatives=read('scripts/generate-photo-derivatives.mjs');
 const bot=read('src/jyc-bot.jsx');
 const assistant=read('src/jyc-assistant.jsx');
@@ -70,7 +75,20 @@ const checks=[
  ['canonical origin is documented for Vite and build-time generators',envExample.includes('VITE_CANONICAL_ORIGIN=https://www.jiityouthclub128.in')],
  ['production origin QA and sitemap contract use canonical override',productionQa.includes('process.env.VITE_CANONICAL_ORIGIN')&&productionQa.includes("env.includes('VITE_CANONICAL_ORIGIN=')")&&sitemapContract.includes('JYC_CANONICAL_ORIGIN:site')],
  ['route shells cover all static public entry pages', ['/announcements','/updates','/calendar','/fests','/recruitment','/join-jyc','/achievements','/best-of-jyc'].every(route=>routeShells.includes(`'${route}':`))],
- ['route shells cover maintained public hubs',routeShells.includes('JYC_HUB_SOURCE_REGISTRY')&&routeShells.includes("'/clubs/'+String(hub.name).toLowerCase().replace(/[^a-z0-9]+/g,'-')")]
+ ['route shells cover maintained public hubs',routeShells.includes('JYC_HUB_SOURCE_REGISTRY')&&routeShells.includes("'/clubs/'+String(hub.name).toLowerCase().replace(/[^a-z0-9]+/g,'-')")],
+ ['homepage hero places the actual JYC logo above a lazy photo wall',editorialHome.includes('LazyDriftWall')&&editorialHome.includes('wallItems')&&editorialHome.includes('jh-hero-logo-plaque')&&editorialHome.includes('src="/JYC%20Logo(4).png"')&&design.includes('.jh-hero-drift-wall')],
+ ['team flip-card renders children as front/back and keeps hidden links inert',flip.includes('Children.toArray(children)')&&flip.includes('frontContent=front??faces[0]')&&flip.includes('backContent=back??faces[1]')&&flip.includes('inert={!flipped}')&&main.includes('team-member-back-content')&&main.includes('safeExternalUrl(m.linkedin)')],
+ ['responsive photo fallback removes failed derivative source sets',responsive.includes("querySelectorAll('source')")&&responsive.includes("removeAttribute('srcset')")&&responsive.includes("image.setAttribute('src',src)")],
+ ['club cards use real responsive hub photos and magnetic interaction',gallery.includes('clubCardPhoto(c)')&&gallery.includes('sourceHubMedia')&&gallery.includes('onPointerMove={magneticMove}')&&gallery.includes('identityAccent(c.name)')],
+ ['event cards use source photography and unique visual accents',gallery.includes('eventCardPhoto(e)')&&gallery.includes('sourceEventMedia')&&gallery.includes('jyc57-event-art')&&gallery.includes('identityAccent(e.club||e.eventType||e.title)')],
+ ['public directories have responsive bento and reduced-motion contracts',design.includes('.jyc57-club-wall{display:grid')&&design.includes('.jyc57-club-card:nth-child')&&design.includes('@media(max-width:760px)')&&design.includes('@media(prefers-reduced-motion:reduce)')],
+ ['about family cards use supplied orientation descriptions and community examples',main.includes('JYC_ORIENTATION_FAMILIES.find(item=>item.name===family)')&&main.includes('profile?.description')&&main.includes('profile?.examples')],
+ ['search and More overlays use theme-aware surface tokens',design.includes('.search-modal,.more-sheet{background:var(--bg-card')&&design.includes(':root[data-theme="dark"] .search-modal')&&design.includes(':root[data-theme="dark"] .more-sheet')],
+ ['boot screen shows the official logo and respects reduced motion',indexHtml.includes('<img src="/JYC%20Logo(4).png"')&&indexHtml.includes('.boot-fallback:after')&&indexHtml.includes('@media(prefers-reduced-motion:reduce)')],
+ ['browser regression covers hero logo wall and team profile flip',browser.includes('homepage hero uses the official logo over the drifting JYC photo wall')&&browser.includes('team profiles flip to readable biographies and verified LinkedIn links')],
+ ['browser regression covers intended magnetic card movement',browser.includes('magnetic bento motion is limited to intended club and event cards')&&browser.includes('legacy public cards stay flat outside the intentional magnetic bento')],
+ ['team flip browser test includes an official LinkedIn profile',browser.includes('team-member-flip:has(.team-social-row a[href*="linkedin.com"])')&&browser.includes("toHaveAttribute('href', /^https:\\/\\/(?:www\\.|in\\.)?linkedin\\.com\\//)")],
+ ['hub social links remain separated by verified identity',socials.includes("Fortissimo: {},")&&socials.includes("Panache: {},")&&socials.includes("Prismatic: {},")&&socials.includes("JYC_SOCIAL_SOURCE_POLICY")]
 ];
 let failed=0;
 for(const [name,ok] of checks){console.log((ok?'PASS':'FAIL')+' · '+name);if(!ok)failed++}
