@@ -292,3 +292,53 @@
  .jyc-home .jh-hero-logo,.jyc-home .jh-family,.jyc-home .jh-activity-card,.jyc-home .jh-event-list button,.jyc-home .jh-update-list button{animation:none;transition:none}
  .jyc57-page .jyc57-club-card,.jyc57-page .jyc57-club-card img,.jyc57-page .jyc57-event-card,.jyc57-page .jyc57-photo-card,.team-member-flip .flip-card__inner{transition:none;transform:none!important}
 }
+
+
+/* Source-media integrity: never crop a club logo as though it were event photography. */
+.jyc57-page .jyc57-club-fallback{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 50% 38%,color-mix(in srgb,var(--club-accent,#bf9c6f) 24%,transparent),transparent 46%),
+    linear-gradient(145deg,#242027,#121114 76%);
+  color:var(--club-accent,#bf9c6f);
+  font:800 clamp(56px,8vw,104px)/.9 Inter,system-ui,sans-serif;
+  letter-spacing:-.08em;
+}
+.jyc57-page .jyc57-club-fallback>span{
+  position:absolute;
+  inset:auto 0 17%;
+  text-align:center;
+  opacity:.72;
+}
+.jyc57-page .jyc57-club-fallback .jyc57-club-fallback-logo{
+  position:absolute;
+  inset:13% 22% auto;
+  width:56%;
+  height:58%;
+  margin:auto;
+  z-index:1;
+  border:1px solid color-mix(in srgb,var(--club-accent,#bf9c6f) 38%,transparent);
+  border-radius:16px;
+  background:rgba(12,11,13,.56);
+  padding:12px;
+}
+.jyc57-page .jyc57-club-fallback .jyc57-club-fallback-logo img{
+  position:relative;
+  inset:auto;
+  width:100%;
+  height:100%;
+  object-fit:contain!important;
+  object-position:center;
+  filter:none;
+}
+.jyc57-page .jyc57-club-fallback .jyc57-club-fallback-logo:has(img[src]){
+  box-shadow:0 16px 42px rgba(0,0,0,.18);
+}
+@media(prefers-reduced-motion:reduce){
+  .jyc57-page .jyc57-club-card,
+  .jyc57-page .jyc57-event-card{transition:none!important}
+}
