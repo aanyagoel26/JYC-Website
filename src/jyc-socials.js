@@ -68,7 +68,7 @@ export const JYC_SOCIALS = {
     campus: 'sector-128',
     sourcePriority: 'official-hub',
     verifiedBy: 'https://www.linkedin.com/company/jodc/',
-    verifiedOn: '2026-10-03',
+    verifiedOn: '2026-10-10',
     sourceNote: 'Current LinkedIn profile states Open Source Society of JIIT-128 and primary location JIIT Sector 128, Noida.'
   },
   CypherX: {
