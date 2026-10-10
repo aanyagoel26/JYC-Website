@@ -1,5 +1,12 @@
 # Changelog
 
+## V64.5.2 — Correct image-header dimensions
+
+- Fix intrinsic-dimension parsing for lossless WebP (VP8L); the previous bit extraction could read width and height from the wrong bytes, causing incorrect responsive derivative eligibility and manifest metadata.
+- Centralize PNG, JPEG SOF, WebP VP8X, WebP VP8 and WebP VP8L dimension parsing in the photo-intelligence module.
+- Add deterministic header-level regression fixtures for all supported formats and wire parser/generator parity into photo-intelligence QA.
+- This is a metadata and derivative-selection correction; original media files and their public URLs are unchanged.
+
 ## V64.5.1 — Photo fallback reliability and derivative filtering
 
 - Make ResponsivePhoto fallback source, alt text, and fallback stage React-state driven so later parent renders cannot restore a broken portrait or failed derivative URL.
