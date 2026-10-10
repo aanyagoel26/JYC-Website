@@ -28,7 +28,7 @@ let robotsSitemapMatches=false;
 if(sitemapLine){try{const sitemapUrl=new URL(sitemapLine.slice(sitemapLine.indexOf(':')+1).trim());robotsSitemapMatches=['http:','https:'].includes(sitemapUrl.protocol)&&sitemapUrl.origin===siteOrigin&&sitemapUrl.pathname==='/sitemap.xml'&&!sitemapUrl.search&&!sitemapUrl.hash&&!sitemapUrl.username&&!sitemapUrl.password}catch{robotsSitemapMatches=false}}
 if(!sitemapLine||robotsSitemapMatches) pass('Robots sitemap is absent or matches the configured production origin'); else fail('Robots file points at a stale or malformed sitemap URL');
 const env=read('.env.example');
-if(env.includes('VITE_SITE_URL=')) pass('Production canonical origin is explicitly configurable'); else fail('VITE_SITE_URL missing');
+if(env.includes('VITE_CANONICAL_ORIGIN=')&&env.includes('JYC_CANONICAL_ORIGIN=')) pass('Runtime and generated metadata share an explicit canonical origin'); else fail('Canonical origin variables are missing from .env.example');
 if(read('src/main.jsx').includes('unknownRoute')&&read('src/main.jsx').includes('noindex:privateRoute||unknownRoute')) pass('Unknown SPA routes are marked noindex'); else fail('Unknown SPA routes can be indexed');
 if(read('src/extra-features.jsx').includes("if(item.date&&item.end)eventGraph.endDate")) pass('Event schema does not invent an end time'); else fail('Event schema end time fallback remains');
 const ai=read('supabase/functions/ai-content-assist/index.ts');
