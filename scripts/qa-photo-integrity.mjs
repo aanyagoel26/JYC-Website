@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import {JYC_SOURCE_MEDIA_STATS,mergeSourceGallery,sourceEventMedia,buildJycMediaManifest,JYC_SOURCE_ARCHIVE_PHOTO_ITEMS,JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS} from '../src/jyc-source-media.js';
+import {isDerivativeDimensionEligible} from '../src/jyc-photo-intelligence.js';
 
 const assert=(name,ok,detail='')=>{console.log((ok?'PASS: ':'FAIL: ')+name+(detail?' — '+detail:''));if(!ok)process.exitCode=1};
 const mediaSource=fs.readFileSync('src/jyc-source-media.js','utf8');
@@ -97,5 +98,8 @@ assert('responsive picture wrappers retain the archive, hub-preview and album fr
 assert('homepage editorial story uses only published event/club photo records',editorialHomeSource.includes('const photoStories=useMemo')&&editorialHomeSource.includes("item?.mediaKind!=='photo'")&&editorialHomeSource.includes("!['event','club'].includes(role)")&&editorialHomeSource.includes('item?.published===false')&&editorialHomeSource.includes('seen.has(association.toLowerCase())'));
 assert('homepage editorial story uses responsive lazy images with branded fallback',editorialHomeSource.includes('ResponsivePhoto className="jh-story-photo"')&&editorialHomeSource.includes('loading="lazy" decoding="async"')&&editorialHomeSource.includes('fallbackSrc={FALLBACK}')&&editorialHomeSource.includes("onClick={()=>nav('/gallery')}"));
 assert('homepage photo story keeps responsive geometry and reduced motion support',homeCssSource.includes('.jh-photo-story-grid.has-three .jh-story-card-1')&&homeCssSource.includes('@media(max-width:680px)')&&homeCssSource.includes('@media(prefers-reduced-motion:reduce)'));
+assert('photo derivative eligibility rejects logo strips, tiny thumbnails and extreme panoramas',isDerivativeDimensionEligible(1600,900)&&isDerivativeDimensionEligible(600,1200)&&!isDerivativeDimensionEligible(1311,25)&&!isDerivativeDimensionEligible(126,68)&&!isDerivativeDimensionEligible(1500,211)&&!isDerivativeDimensionEligible(100,200));
+assert('image manifest only marks images eligible when their intrinsic dimensions are derivative-safe',fs.readFileSync('scripts/generate-image-manifest.mjs','utf8').includes('derivativeEligible(url,d.width,d.height)')&&fs.readFileSync('scripts/generate-image-manifest.mjs','utf8').includes('isDerivativeDimensionEligible(width,height)'));
+assert('photo derivative generator skips unsuitable intrinsic dimensions before encoding',fs.readFileSync('scripts/generate-photo-derivatives.mjs','utf8').includes('!isDerivativeDimensionEligible(meta.width,meta.height)'));
 if(process.exitCode)process.exit(1);
 console.log('Photo integrity QA: all checks passed.');
