@@ -154,7 +154,7 @@ function shellFor(meta,route){
     isPartOf:{'@id':`${siteOrigin}/#website`},
     about:{'@id':`${siteOrigin}/#organization`}
   }).replaceAll('<','\\u003c');
-  out=out.replace('</head>',`<script type="application/ld+json">${pageSchema}</script>\\n  </head>`);
+  out=out.replace('</head>',`<script type="application/ld+json">${pageSchema}</script>\n  </head>`);
   return out;
 }
 
