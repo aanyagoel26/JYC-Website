@@ -17,6 +17,18 @@ const inputFiles=[];
 const walk=dir=>{for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())walk(file);else if(/\.(jpe?g|png|webp)$/i.test(file))inputFiles.push(file)}};
 walk(root);
 const sourceFiles=inputFiles.filter(file=>{if(file.includes(path.join('photo-derivatives',path.sep)))return false;const url='/assets/'+path.relative(root,file).replaceAll(path.sep,'/');if(url.startsWith('/assets/source-archive/'))return allowedArchive.has(url);return ALLOWED.some(folder=>url.startsWith('/assets/'+folder+'/'));});
+const derivativeBaseOwners=new Map();
+const duplicateDerivativeBases=[];
+for(const file of sourceFiles){
+ const rel=path.relative(root,file).replaceAll(path.sep,'/').replace(/\.(jpe?g|png|webp)$/i,'');
+ const previous=derivativeBaseOwners.get(rel);
+ if(previous)duplicateDerivativeBases.push({base:rel,files:[previous,path.relative(root,file).replaceAll(path.sep,'/') ]});
+ else derivativeBaseOwners.set(rel,path.relative(root,file).replaceAll(path.sep,'/'));
+}
+if(duplicateDerivativeBases.length){
+ console.error('Photo derivative output-name collisions: '+JSON.stringify(duplicateDerivativeBases.slice(0,12)));
+ process.exit(1);
+}
 let generated=0,failed=0,skipped=0,completed=0,removed=0,reused=0;
 const expectedDerivativeBases=new Set(sourceFiles.map(file=>path.relative(root,file).replaceAll(path.sep,'/').replace(/\.(jpe?g|png|webp)$/i,'')));
 const pruneOrphanDerivatives=dir=>{if(!fs.existsSync(dir))return;for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory()){pruneOrphanDerivatives(file);continue}if(!/\.(?:avif|webp)$/i.test(entry.name))continue;const rel=path.relative(outputRoot,file).replaceAll(path.sep,'/');const match=rel.match(/-(\d+)\.(?:avif|webp)$/i);if(!match||!WIDTHS.includes(Number(match[1]))||!expectedDerivativeBases.has(rel.replace(/-\d+\.(?:avif|webp)$/i,''))){fs.rmSync(file,{force:true});removed++}}};
