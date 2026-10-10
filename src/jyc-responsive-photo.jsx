@@ -2,7 +2,7 @@ import React,{useEffect,useLayoutEffect,useState} from 'react';
 import {photoDerivativeUrls} from './jyc-photo-intelligence.js';
 const LOGO_FALLBACK=import.meta.env.PROD?'/assets/jyc-logo.webp':'/JYC%20Logo(4).png';
 const ORIGINAL_LOGO='/JYC%20Logo(4).png';
-const isDerivativeSource=url=>/^\/assets\/(?:source-archive|hub-photos|hub-photos-extra)\//.test(String(url||''));
+const isDerivativeSource=url=>/^\/assets\/(?:source-archive|hub-photos|hub-photos-extra|events|home|team)\//.test(String(url||''));
 let imageManifestPromise=null;
 const loadImageManifest=()=>{
  if(!imageManifestPromise)imageManifestPromise=fetch('/image-manifest.json',{cache:'force-cache'}).then(response=>response.ok?response.json():null).catch(()=>null);
