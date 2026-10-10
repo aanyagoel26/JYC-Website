@@ -67,9 +67,12 @@ async function inspectViewport(page){
 async function loadAllImages(page){
   await page.evaluate(async()=>{
     const max=Math.max(document.body.scrollHeight,document.documentElement.scrollHeight);
-    for(let y=0;y<max;y+=Math.max(240,innerHeight*.75)){
+    const step=Math.max(600,Math.floor(innerHeight*1.5));
+    for(let y=0;y<max;y+=step){
       window.scrollTo(0,y);
-      await new Promise(r=>setTimeout(r,100));
+      // Two frames let the viewport and native lazy-image observer settle
+      // without sleeping 100ms for every scroll position.
+      await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
     }
     window.scrollTo(0,0);
     const visible=img=>{
@@ -117,6 +120,9 @@ test('sitewide routes have no overflow, clipping, off-screen content or fixed-co
 });
 
 test('sitewide routes load every visible image successfully and expose alt text', async ({page})=>{
+  // This audit intentionally visits every public route and waits for all rendered
+  // images; allow it more than the default 30s when the media-heavy gallery runs in CI.
+  test.setTimeout(90000);
   test.skip(!['mobile-390','mobile-430','tablet-768','desktop-1280','desktop-1440'].includes(test.info().project.name));
   for(const route of routes){
     await page.goto(route,{waitUntil:'domcontentloaded'});

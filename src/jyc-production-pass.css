@@ -29,3 +29,14 @@ a,button{-webkit-tap-highlight-color:transparent}
  .public-app .btn,.public-app .card-grid>*,.public-app .clubs-grid-premium>*,.public-app .event-grid-premium>*,.public-app .gallery-grid>*,.public-app .team-layer-grid>*,.public-app img,.nav-inner nav a::after{transition:none!important}
  .public-app .btn:hover,.public-app .card-grid>*:hover,.public-app .clubs-grid-premium>*:hover,.public-app .event-grid-premium>*:hover,.public-app .gallery-grid>*:hover,.public-app .team-layer-grid>*:hover{transform:none}
 }
+
+/* Release QA follow-up: prevent headline and network labels from clipping. */
+.jh-hero h1{max-width:100%;white-space:normal;overflow-wrap:anywhere;word-break:normal}
+@media(max-width:1000px){.jh-hero h1{font-size:clamp(2.15rem,6.4vw,3.8rem);letter-spacing:-.035em}}
+.jyc-network-node{max-width:calc(100% - 8px);padding-inline:2px;box-sizing:border-box;letter-spacing:.04em;font-size:clamp(7px,.7vw,9px)}
+.jyc57-page .jyc57-event-toolbar button,.jyc57-page .jyc57-category-row button,.jyc57-page .visible-breadcrumbs button{min-height:44px;min-width:40px}
+.jyc57-page .jyc57-segment button{padding-inline:12px}
+/* Browser QA fixes: allow hero text fragments to wrap and preserve touch target size. */
+.jh-hero h1,.jh-hero h1 *{white-space:normal!important;overflow-wrap:anywhere;word-break:normal;max-width:100%}
+.jyc-network-node{letter-spacing:0!important;overflow-wrap:anywhere;word-break:normal;line-height:1.1}
+.public-app button{min-width:40px;min-height:44px}

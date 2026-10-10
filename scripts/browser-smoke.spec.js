@@ -591,6 +591,14 @@ test('V1 homepage sections become visible and do not remain transparent', async 
 test('V1 homepage keeps the JYC palette and readable dark mode', async ({ page }) => {
   await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
   await page.locator('.jyc-home').waitFor({ state: 'visible', timeout: 15000 });
+  // The featured-event dialog intentionally captures input while open.
+  // Dismiss it before testing the independent global theme control.
+  await page.waitForTimeout(550);
+  const featuredClose = page.locator('.jyc-featured-event-close');
+  if (await featuredClose.isVisible().catch(() => false)) {
+    await featuredClose.click();
+    await expect(page.locator('.jyc-featured-event-overlay')).toHaveCount(0);
+  }
   const light = await page.locator('.jyc-home').evaluate(el => {
     const s = getComputedStyle(el);
     return { bg:s.backgroundColor, color:s.color };

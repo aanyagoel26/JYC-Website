@@ -45,3 +45,12 @@
  .jh-hero-copy,.jh-hero-visual,.jh-featured-event,.jh-event-copy{min-width:0}
  .jh-event-meta{overflow-wrap:anywhere}
 }
+
+
+/* Release QA: keep headline lines inside the copy column on desktop widths. */
+@media(min-width:1001px){
+ .jh-hero h1{font-size:clamp(54px,5vw,92px)}
+}
+@media(max-width:900px) and (min-width:681px){
+ .jh-hero-visual .jyc-network{right:8px;bottom:8px}
+}
