@@ -205,7 +205,7 @@ function App(){const loc=useLocation();const nav=useNavigate();const [data,setDa
    return()=>observer.disconnect();
  },[loc.pathname,data]);
  useEffect(()=>{if(!('serviceWorker' in navigator))return; if(import.meta.env.DEV){navigator.serviceWorker.getRegistrations().then(rs=>Promise.all(rs.map(r=>r.unregister()))).catch(()=>{}); if('caches' in window)caches.keys().then(keys=>Promise.all(keys.map(k=>caches.delete(k)))).catch(()=>{}); return;} navigator.serviceWorker.register('/sw.js').catch(()=>{})},[]);
- useEffect(()=>{try{const key='jyc-pageviews';const views=JSON.parse(storageGet(key,'{}'));views[loc.pathname]=(views[loc.pathname]||0)+1;views.total=(views.total||0)+1;storageSet(key,JSON.stringify(views))}catch{}},[loc.pathname]);
+ useEffect(()=>{try{const views={};const key='jyc-pageviews';const parsed=JSON.parse(storageGet(key,'{}'));if(parsed&&typeof parsed==='object'&&!Array.isArray(parsed)){for(const [route,count] of Object.entries(parsed)){if(route==='total'||(route.startsWith('/')&&Number.isSafeInteger(count)&&count>=0))views[route]=count;}}const route=loc.pathname;views[route]=(Number.isSafeInteger(views[route])?views[route]:0)+1;views.total=(Number.isSafeInteger(views.total)&&views.total>=0?views.total:0)+1;storageSet(key,JSON.stringify(views))}catch{}},[loc.pathname]);
  useEffect(()=>{if(import.meta.env.VITE_ENABLE_ANALYTICS!=='true'||!data.flags?.analytics)return;let sessionKey=storageGet('jyc-analytics-session');if(!sessionKey){sessionKey=uid();storageSet('jyc-analytics-session',sessionKey)}supabase.from('jyc_page_views').insert({path:loc.pathname,referrer:document.referrer||null,session_key:sessionKey}).then(()=>{}).catch(()=>{})},[loc.pathname,data.flags?.analytics]);
  useEffect(()=>{
    const onImageError=e=>{
