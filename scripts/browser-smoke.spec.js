@@ -794,7 +794,11 @@ test('JYC Assistant search and keyboard close stay functional', async ({ page })
 
 
 test('public route shells keep route-specific SEO content and one primary heading without JavaScript', async ({ page }) => {
-  await page.route('**/assets/*.js', route => route.abort());
+  await page.route('**/*', route => {
+    const pathname = new URL(route.request().url()).pathname;
+    if (/\\.(?:js|jsx|mjs)$/.test(pathname) || pathname === '/@vite/client') return route.abort();
+    return route.continue();
+  });
   const routes = [
     { path: '/contact', title: 'Contact JIIT Youth Club 128 | JYC' },
     { path: '/clubs', title: 'JYC Communities & Clubs | JIIT Youth Club 128' },
