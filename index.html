@@ -11,6 +11,20 @@
     <meta name="format-detection" content="telephone=no" />
     <meta name="color-scheme" content="light dark" />
     <script>
+      (() => {
+        let theme = 'light';
+        try {
+          const saved = localStorage.getItem('jyc-theme');
+          theme = saved === 'dark' || saved === 'light'
+            ? saved
+            : (window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        } catch {
+          theme = window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+    <script>
       document.addEventListener('error',event=>{
         const image=event.target;
         if(!(image instanceof HTMLImageElement)||!image.classList.contains('boot-logo'))return;
@@ -25,6 +39,10 @@
       .boot-fallback p{margin:0;color:#bf9c6f;font-size:10px;font-weight:800;letter-spacing:.24em;text-transform:uppercase}
       .boot-fallback h1{margin:0;font-size:clamp(26px,4vw,42px);line-height:1.05;letter-spacing:-.04em;max-width:16ch}
       .boot-fallback span{color:#aaa29a;font-size:13px;line-height:1.6}
+      html[data-theme="light"] .boot-fallback{background:radial-gradient(ellipse at 50% 42%,rgba(164,123,67,.15),transparent 42%),#f5f1e6;color:#1a191d}
+      html[data-theme="light"] .boot-fallback p{color:#825f2b}
+      html[data-theme="light"] .boot-fallback span{color:#625c64}
+      html[data-theme="light"] .boot-fallback img{filter:drop-shadow(0 12px 28px rgba(74,55,30,.14))}
       .boot-fallback:after{content:"";width:100px;height:2px;background:linear-gradient(90deg,transparent,#bf9c6f,transparent);animation:jyc-loader-sheen 1.7s ease-in-out infinite}
       @keyframes jyc-loader-sheen{0%,100%{opacity:.35;transform:scaleX(.55)}50%{opacity:1;transform:scaleX(1)}}
       @media(prefers-reduced-motion:reduce){.boot-fallback:after{animation:none;opacity:.65}}
