@@ -1124,7 +1124,7 @@ test('Best of JYC frames navigate into the matching gallery photo', async ({ pag
 
 
 test('updates API returns a JSON fallback instead of a function crash', async ({ request }) => {
-  test.skip(/^(127\\.0\\.0\\.1|localhost)$/.test(new URL(base).hostname), 'Vite preview does not serve Vercel serverless API routes; run this check against a deployed preview.');
+  test.skip(/^(127\.0\.0\.1|localhost)$/.test(new URL(base).hostname), 'Vite preview does not serve Vercel serverless API routes; run this check against a deployed preview.');
   const response = await request.get(base + '/api/jyc-updates');
   expect(response.status(), 'updates API must remain available even when connectors are not configured').toBe(200);
   const payload = await response.json();
