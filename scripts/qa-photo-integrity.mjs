@@ -88,5 +88,6 @@ assert('production build generates WebP and compact AVIF derivatives from the or
 
 assert('browser QA forces both portrait and optimized-logo failure before validating the original PNG fallback',browserSource.includes('failed team portraits fall through the optimized logo to the original PNG safely')&&browserSource.includes("page.route('**/assets/team/**', route => route.abort())")&&browserSource.includes("page.route('**/assets/jyc-logo.webp', route => route.abort())")&&browserSource.includes("toBe('/JYC%20Logo(4).png')")&&browserSource.includes('portrait unavailable'));
 assert('browser QA decodes lazy media on every long-form public route',browserSource.includes("lazy-loaded media decodes across long-form public routes")&&browserSource.includes("const broken = media.filter(img => img.src && !img.loaded)")&&browserSource.includes("const missingAlt = media.filter(img => !img.hasAlt)"));
+assert('archive stories, hub preview and album covers use responsive photo delivery',mainSource.includes('ResponsivePhoto className="archive-story-image"')&&mainSource.includes('ResponsivePhoto className="hub-preview-source-image"')&&gallerySource.includes('ResponsivePhoto className="jyc57-album-hero"')&&gallerySource.includes('sizes="220px"'));
 if(process.exitCode)process.exit(1);
 console.log('Photo integrity QA: all checks passed.');
