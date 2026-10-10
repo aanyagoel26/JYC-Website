@@ -1,5 +1,15 @@
 # Changelog
 
+## V64.5.0 — Identity-first hero, magnetic discovery and photo QA
+
+- Replaced the continuously animated homepage photo wall with a lazy React Bits Dither Veil treatment of the actual JYC logo; WebGL failures, reduced motion, coarse pointers and constrained hardware retain a static logo fallback.
+- Added a lazy React Bits MagicBento to homepage activity discovery, using React Router navigation and desktop-only magnetic tilt that resets cleanly on pointer leave.
+- Improved club and event visual identity: each event gets its own deterministic accent; club logos are contained identity marks rather than cropped as photography.
+- Hardened team flip cards with biography field fallbacks, safe public LinkedIn/Instagram links, scrollable long profiles and a persistent return-to-photo control.
+- Enriched CICR, Innovation JIIT and JODC profiles using the supplied hub material and checked official public sources; date-sensitive event registration remains linked to the official hub.
+- Expanded browser media QA across homepage, About, clubs, events, team, gallery, achievements and Best of JYC, including logo failures.
+- Rotated the service-worker cache namespace and synchronized package, lockfile, README and release metadata.
+
 ## V64.4.2 — Whole-site layout regression hardening
 
 - Removed a stale missing CSS import from the active public stylesheet chain.
