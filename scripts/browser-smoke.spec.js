@@ -254,7 +254,7 @@ test('homepage media composition stays editorial and non-scattered', async ({ pa
   expect(result.storyTiles, 'homepage photo-story tiles').toBeLessThanOrEqual(1);
   expect(result.familyImages, 'homepage family image duplicates').toBe(0);
   expect(result.archiveWalls, 'homepage retired archive/photo-chapter surfaces').toBe(0);
-  expect(result.heroDriftWalls, 'homepage logo photo-wall surface').toBeLessThanOrEqual(1);
+  expect(result.heroDriftWalls, 'homepage logo photo-wall surface').toBe(1);
   expect(result.activityImages, 'homepage activity image duplication').toBe(0);
   expect(result.storyOverflow, 'homepage photo-story horizontal overflow').toBe(false);
   expect(result.storySources.filter(Boolean).length).toBe(result.storyTiles);
@@ -634,6 +634,40 @@ test('homepage hero uses the official logo over the drifting JYC photo wall', as
   await expect(page.locator('.jh-hero-drift-wall')).toBeVisible();
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
   expect(overflow).toBe(false);
+});
+
+test('search and More sheets keep their surfaces readable in light and dark themes', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(base + '/clubs', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'theme-aware overlays');
+  const theme = page.locator('.theme-toggle');
+  const currentTheme = await page.locator('html').getAttribute('data-theme');
+  if (currentTheme === 'dark') await theme.click();
+
+  await page.locator('.search-trigger').click();
+  const search = page.locator('.search-modal');
+  await expect(search).toBeVisible();
+  const lightSearch = await search.evaluate(el => ({ bg:getComputedStyle(el).backgroundColor, color:getComputedStyle(el).color }));
+  await page.locator('.search-close').click();
+  await theme.click();
+  await page.locator('.search-trigger').click();
+  await expect(search).toBeVisible();
+  const darkSearch = await search.evaluate(el => ({ bg:getComputedStyle(el).backgroundColor, color:getComputedStyle(el).color }));
+  expect(darkSearch.bg).not.toBe(lightSearch.bg);
+  expect(darkSearch.color).not.toBe('rgba(0, 0, 0, 0)');
+  await page.locator('.search-close').click();
+
+  await page.locator('.nav-more-trigger').click();
+  const more = page.locator('.more-sheet');
+  await expect(more).toBeVisible();
+  const darkMore = await more.evaluate(el => ({ bg:getComputedStyle(el).backgroundColor, color:getComputedStyle(el).color }));
+  await page.locator('.sheet-close').click();
+  await theme.click();
+  await page.locator('.nav-more-trigger').click();
+  await expect(more).toBeVisible();
+  const lightMore = await more.evaluate(el => ({ bg:getComputedStyle(el).backgroundColor, color:getComputedStyle(el).color }));
+  expect(darkMore.bg).not.toBe(lightMore.bg);
+  expect(lightMore.color).not.toBe('rgba(0, 0, 0, 0)');
 });
 
 test('team profiles flip to readable biographies and verified LinkedIn links', async ({ page }) => {
