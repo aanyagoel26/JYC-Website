@@ -11,6 +11,8 @@ const derivatives=read('scripts/generate-photo-derivatives.mjs');
 const bot=read('src/jyc-bot.jsx');
 const assistant=read('src/jyc-assistant.jsx');
 const browser=read('scripts/browser-smoke.spec.js');
+const browserRunner=read('scripts/qa-browser.mjs');
+const browserWorkflow=read('.github/workflows/jyc-browser.yml');
 const globalStyles=read('src/styles.css');
 const intelligence=read('src/jyc-photo-intelligence.js');
 const routeShells=read('scripts/generate-route-shells.mjs');
@@ -54,6 +56,8 @@ const checks=[
  ['route shells add valid route-specific WebPage JSON-LD',routeShells.includes("'@type':'WebPage'")&&routeShells.includes("url:`${siteOrigin}${route}`")&&routeShells.includes('isPartOf')&&routeShells.includes('application/ld+json')],
  ['browser suite guards static SEO across public route types with one H1',browser.includes('public route shells keep route-specific SEO content and one primary heading without JavaScript')&&browser.includes('JYC Communities & Clubs | JIIT Youth Club 128')&&browser.includes('JAI 2026 — Jaypee Agentic AI Hackathon | JYC')&&browser.includes('toHaveCount(1)')&&browser.includes('toHaveTitle(title)')&&browser.includes('link[rel="canonical"]')],
  ['browser suite validates route-specific WebPage structured data',browser.includes("schema['@type'] === 'WebPage'")&&browser.includes('schema.name === title && schema.url === canonical')],
+ ['browser QA launches a production preview when no base URL is supplied',browserRunner.includes("npm run preview")&&browserRunner.includes("'--port','4173'")&&browserRunner.includes('JYC_BASE_URL:baseUrl')],
+ ['browser workflow builds production before running browser QA',browserWorkflow.includes('name: Build production bundle')&&browserWorkflow.includes('run: npm run build')&&browserWorkflow.includes('run: npm run qa:browser')],
  ['static SEO browser regression blocks Vite and all JavaScript module formats',browser.includes("/\.(?:js|jsx|mjs)$/")&&browser.includes("pathname === '/@vite/client'")&&browser.includes('return route.abort()')],
  ['route-shell canonicals use a stable production origin fallback',!routeShells.includes('process.env.VERCEL_URL')&&routeShells.includes("process.env.VITE_SITE_URL||'https://www.jiityouthclub128.in'")],
  ['sitemap uses a stable production origin fallback',!sitemap.includes('process.env.VERCEL_URL')&&sitemap.includes("process.env.VERCEL_PROJECT_PRODUCTION_URL||'https://www.jiityouthclub128.in'")],
