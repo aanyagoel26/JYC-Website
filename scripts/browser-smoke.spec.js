@@ -239,6 +239,9 @@ test('homepage renders the official logo through Dither Veil and a magnetic acti
   await waitForAppMount(page, 'homepage identity and activity design');
   await expect(page.locator('.jh-dither-mark .dither-veil')).toHaveCount(1, { timeout: 15000 });
   await expect(page.getByRole('img', { name: 'Official JIIT Youth Club 128 logo with an interactive Dither Veil effect' })).toBeVisible();
+  const ditherSource=page.locator('.jh-dither-mark .dither-veil__fallback');
+  await expect(ditherSource).toHaveAttribute('src', '/assets/jyc-logo.avif');
+  await expect.poll(()=>ditherSource.evaluate(img=>img.complete&&img.naturalWidth>0)).toBe(true);
   await page.locator('.jh-activities').scrollIntoViewIfNeeded();
   await expect(page.locator('.jh-activities .magic-bento-card').first()).toBeVisible({ timeout: 15000 });
 
