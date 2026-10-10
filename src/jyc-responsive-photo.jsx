@@ -17,10 +17,10 @@ const fallback=(e,src,fallbackSrc,fallbackAlt)=>{
   const next=fallbackSrc&&fallbackSrc!==src?fallbackSrc:(src!==LOGO_FALLBACK?LOGO_FALLBACK:'');
   if(next){image.alt=fallbackAlt??'Official JYC logo placeholder; image unavailable';image.src=next;return}
  }
- if(stage!=='2'&&src!==LOGO_FALLBACK&&(image.currentSrc||image.src)!==LOGO_FALLBACK){
+ if(stage==='1'&&LOGO_FALLBACK!=="/JYC%20Logo(4).png"){
   image.dataset.imageFallbackStage='2';
   image.alt=fallbackAlt??'Official JYC logo placeholder; image unavailable';
-  image.src=LOGO_FALLBACK;
+  image.src="/JYC%20Logo(4).png";
   return;
  }
  image.dataset.imageFallbackStage='failed';
