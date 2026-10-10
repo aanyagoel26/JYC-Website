@@ -1,4 +1,4 @@
-import React,{useEffect,useState} from 'react';
+import React,{useEffect,useLayoutEffect,useState} from 'react';
 import {photoDerivativeUrls} from './jyc-photo-intelligence.js';
 const LOGO_FALLBACK=import.meta.env.PROD?'/assets/jyc-logo.webp':'/JYC%20Logo(4).png';
 const ORIGINAL_LOGO='/JYC%20Logo(4).png';
@@ -10,7 +10,7 @@ const loadImageManifest=()=>{
 };
 export function ResponsivePhoto({src,alt='',width,height,sizes='100vw',loading='lazy',fetchPriority,decoding='async',className='',style,onError,objectPosition,fallbackSrc=LOGO_FALLBACK,fallbackAlt='Official JYC logo placeholder; image unavailable'}){
  const [sourceDimensions,setSourceDimensions]=useState({src:'',width:0,derivativesEligible:false});
- const [fallbackState,setFallbackState]=useState({src:'',fallbackSrc:'',stage:0});
+ const [fallbackState,setFallbackState]=useState(()=>({src,fallbackSrc,stage:0}));
  const intrinsicWidth=sourceDimensions.src===src&&sourceDimensions.derivativesEligible?sourceDimensions.width:0;
  const derivativesEnabled=import.meta.env.PROD||import.meta.env.VITE_ENABLE_PHOTO_DERIVATIVES==='true';
  const stage=fallbackState.src===src&&fallbackState.fallbackSrc===fallbackSrc?fallbackState.stage:0;
@@ -31,7 +31,7 @@ export function ResponsivePhoto({src,alt='',width,height,sizes='100vw',loading='
   });
   return()=>{active=false};
  },[src,derivativesEnabled]);
- useEffect(()=>{setFallbackState({src,fallbackSrc,stage:0})},[src,fallbackSrc]);
+ useLayoutEffect(()=>{setFallbackState({src,fallbackSrc,stage:0})},[src,fallbackSrc]);
  const baseStyle=objectPosition?{...style,objectPosition}:style;
  const sourceSet=list=>list.map(x=>x.url+' '+x.width+'w').join(', ');
  const handleError=e=>{
