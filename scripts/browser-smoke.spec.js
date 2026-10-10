@@ -627,14 +627,14 @@ test('legacy public cards stay flat outside the intentional magnetic bento', asy
   expect(transforms.filter(value => value && value !== 'none' && value.includes('matrix3d')).length).toBe(0);
 });
 
-test('homepage hero uses the official logo over the drifting JYC photo wall', async ({ page }) => {
+test('homepage hero uses the official JYC logo through Dither Veil without a continuous photo wall', async ({ page }) => {
   await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'JYC hero identity');
-  const logo = page.locator('.jh-hero-logo');
-  await expect(logo).toBeVisible();
-  await expect(logo).toHaveAttribute('src', '/JYC%20Logo(4).png');
   await expect(page.locator('.jh-hero-copy h1')).toBeVisible();
-  await expect(page.locator('.jh-hero-drift-wall')).toBeVisible();
+  await expect(page.locator('.jh-dither-mark')).toBeVisible();
+  await expect(page.locator('.jh-dither-mark .dither-veil')).toHaveCount(1, { timeout: 15000 });
+  await expect(page.getByRole('img', { name: 'Official JIIT Youth Club 128 logo with an interactive Dither Veil effect' })).toBeVisible();
+  await expect(page.locator('.jh-hero-drift-wall')).toHaveCount(0);
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
   expect(overflow).toBe(false);
 });
