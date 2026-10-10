@@ -145,3 +145,118 @@
     line-height: 1.7;
   }
 }
+
+
+/* V64.5 — identity-first hero: Dither Veil is reserved for the real JYC mark. */
+.jyc-editorial-home.jyc-home .jh-hero-dither-visual{
+  isolation:isolate;
+  min-height:clamp(450px,44vw,640px);
+  border:1px solid rgba(191,156,111,.42);
+  background:#121114;
+  box-shadow:0 28px 90px rgba(0,0,0,.24);
+}
+.jyc-editorial-home.jyc-home .jh-hero-dither-backdrop{
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(ellipse at 50% 42%,rgba(191,156,111,.2),transparent 44%),
+    radial-gradient(ellipse at 50% 110%,rgba(130,151,173,.12),transparent 56%),
+    linear-gradient(145deg,#201b1c 0%,#121114 54%,#09090b 100%);
+}
+.jyc-editorial-home.jyc-home .jh-hero-dither-visual:before,
+.jyc-editorial-home.jyc-home .jh-hero-dither-visual:after{
+  content:"";
+  position:absolute;
+  pointer-events:none;
+  z-index:1;
+}
+.jyc-editorial-home.jyc-home .jh-hero-dither-visual:before{
+  inset:14px;
+  border:1px solid rgba(248,241,229,.1);
+}
+.jyc-editorial-home.jyc-home .jh-hero-dither-visual:after{
+  inset:0;
+  background:radial-gradient(ellipse at center,transparent 28%,rgba(7,7,9,.48) 100%);
+}
+.jyc-editorial-home.jyc-home .jh-hero-dither-visual .jh-hero-logo-plaque{
+  inset:8% 9%;
+  z-index:2;
+  border-color:rgba(191,156,111,.22);
+  background:linear-gradient(145deg,rgba(12,11,13,.24),rgba(12,11,13,.1));
+  backdrop-filter:none;
+}
+.jyc-editorial-home.jyc-home .jh-dither-mark{
+  position:relative;
+  width:clamp(190px,27vw,360px);
+  aspect-ratio:1;
+  max-width:82%;
+  flex:0 1 auto;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+  isolation:isolate;
+}
+.jyc-editorial-home.jyc-home .jh-dither-mark .dither-veil,
+.jyc-editorial-home.jyc-home .jh-dither-mark .jh-dither-veil-effect{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  background:transparent;
+}
+.jyc-editorial-home.jyc-home .jh-dither-mark .dither-veil canvas{
+  display:block;
+  width:100%;
+  height:100%;
+}
+.jyc-editorial-home.jyc-home .jh-dither-mark .dither-veil__fallback{
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+.jyc-editorial-home.jyc-home .jh-hero-dither-visual .jh-photo-label,
+.jyc-editorial-home.jyc-home .jh-hero-dither-visual .jh-photo-index{z-index:3}
+.jyc-editorial-home.jyc-home .jh-hero-dither-visual .jh-photo-label{left:22px;bottom:20px}
+.jyc-editorial-home.jyc-home .jh-hero-dither-visual .jh-photo-index{right:22px;top:20px}
+
+/* React Bits MagicBento: magnetic movement is desktop-only and restrained to activity discovery. */
+.jyc-editorial-home.jyc-home .jh-activities .magic-bento{margin-top:30px}
+.jyc-editorial-home.jyc-home .jh-activities .magic-bento__grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.jyc-editorial-home.jyc-home .jh-activities .magic-bento-card{
+  min-height:245px;
+  border-radius:4px;
+  border-color:rgba(191,156,111,.32);
+  background:linear-gradient(145deg,#211d21,#121114);
+  box-shadow:0 18px 44px rgba(12,10,12,.12);
+  transition:border-color .2s ease,box-shadow .2s ease;
+}
+.jyc-editorial-home.jyc-home .jh-activities .magic-bento-card:nth-child(1),
+.jyc-editorial-home.jyc-home .jh-activities .magic-bento-card:nth-child(4){grid-column:span 1}
+.jyc-editorial-home.jyc-home .jh-activities .magic-bento-card__media>span{
+  background:linear-gradient(145deg,rgba(191,156,111,.12),rgba(18,17,20,.1) 38%,rgba(12,11,13,.94));
+}
+.jyc-editorial-home.jyc-home .jh-activities .magic-bento-card__body{padding:24px}
+.jyc-editorial-home.jyc-home .jh-activities .magic-bento-card h3{font-size:clamp(22px,2.1vw,31px);line-height:1.04;overflow-wrap:anywhere}
+.jyc-editorial-home.jyc-home .jh-activities .magic-bento-card p{font-size:14px;line-height:1.65;color:rgba(248,241,229,.78)}
+.jyc-editorial-home.jyc-home .jh-activities .magic-bento-card__label{color:#d8bd96}
+.jyc-editorial-home.jyc-home .jh-activities .magic-bento-card button{border-radius:3px;background:var(--jh-accent);border-color:var(--jh-accent);color:#151316;font-weight:800}
+.jyc-editorial-home.jyc-home .jh-activities .magic-bento-card button:focus-visible{outline:2px solid #f8f1e5;outline-offset:3px}
+@media(max-width:1000px){
+  .jyc-editorial-home.jyc-home .jh-hero-dither-visual{min-height:clamp(380px,58vw,520px)}
+  .jyc-editorial-home.jyc-home .jh-activities .magic-bento__grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:680px){
+  .jyc-editorial-home.jyc-home .jh-hero-dither-visual{min-height:clamp(330px,94vw,430px)}
+  .jyc-editorial-home.jyc-home .jh-hero-dither-visual .jh-hero-logo-plaque{inset:8% 6%;gap:14px}
+  .jyc-editorial-home.jyc-home .jh-dither-mark{width:min(70vw,280px)}
+  .jyc-editorial-home.jyc-home .jh-hero-dither-visual .jh-photo-label{left:14px;bottom:14px;font-size:8px}
+  .jyc-editorial-home.jyc-home .jh-hero-dither-visual .jh-photo-index{right:14px;top:14px;font-size:8px}
+  .jyc-editorial-home.jyc-home .jh-activities .magic-bento__grid{grid-template-columns:1fr;gap:12px}
+  .jyc-editorial-home.jyc-home .jh-activities .magic-bento-card{min-height:205px}
+  .jyc-editorial-home.jyc-home .jh-activities .magic-bento-card__body{padding:20px}
+}
+@media(prefers-reduced-motion:reduce){
+  .jyc-editorial-home.jyc-home .jh-hero-dither-visual *,
+  .jyc-editorial-home.jyc-home .jh-activities .magic-bento-card{animation:none!important;transition:none!important;transform:none!important}
+}
