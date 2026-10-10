@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import {photoDerivativeUrls,parseImageDimensions} from '../src/jyc-photo-intelligence.js';
+import {photoDerivativeUrls,parseImageDimensions,orientedImageDimensions} from '../src/jyc-photo-intelligence.js';
 const read=p=>fs.readFileSync(p,'utf8');
 const checks=[];
 
@@ -27,6 +27,9 @@ check('JPEG SOF dimensions are read exactly',JSON.stringify(parseImageDimensions
 check('WebP VP8X extended dimensions are read exactly',JSON.stringify(parseImageDimensions(webpHeader('VP8X')))===JSON.stringify({width:1339,height:211}));
 check('WebP VP8 lossy dimensions are read exactly',JSON.stringify(parseImageDimensions(webpHeader('VP8 ')))===JSON.stringify({width:1280,height:720}));
 check('WebP VP8L lossless dimensions use the correct packed bits',JSON.stringify(parseImageDimensions(losslessWebpHeader(1500,211)))===JSON.stringify({width:1500,height:211}));
+check('EXIF orientations 5–8 swap display dimensions before responsive selection',JSON.stringify(orientedImageDimensions(4000,3000,6))===JSON.stringify({width:3000,height:4000})&&JSON.stringify(orientedImageDimensions(500,2000,8))===JSON.stringify({width:2000,height:500}));
+check('non-rotating EXIF orientations preserve dimensions',JSON.stringify(orientedImageDimensions(4000,3000,3))===JSON.stringify({width:4000,height:3000})&&JSON.stringify(orientedImageDimensions(4000,3000,undefined))===JSON.stringify({width:4000,height:3000}));
+check('invalid intrinsic dimensions safely return null',orientedImageDimensions(0,300,6)===null&&orientedImageDimensions(Number.NaN,300,1)===null);
 check('unknown/truncated image data safely returns null',parseImageDimensions(new Uint8Array([0,1,2,3]))===null&&parseImageDimensions(new Uint8Array([0x89,0x50,0x4e,0x47]))===null);
 check('PNG dimension parser rejects an invalid full signature',parseImageDimensions(new Uint8Array([...pngHeader().slice(0,4),...new Uint8Array(20)]))===null);
 check('manifest generator uses the shared tested intrinsic-dimension parser',manifestGenerator.includes("import {isDerivativeDimensionEligible,parseImageDimensions} from '../src/jyc-photo-intelligence.js'")&&manifestGenerator.includes('const d=parseImageDimensions(fs.readFileSync(file))')&&!manifestGenerator.includes('function webp(b)'));
@@ -41,6 +44,9 @@ check('low-resolution sources never advertise nonexistent upscaled variants',pho
 check('image manifest is requested only for derivative-managed asset folders',responsive.includes('source-archive|hub-photos|hub-photos-extra')&&responsive.includes('if(!derivativesEnabled||!isDerivativeSource(src))'));
 check('source-archive identity assets are excluded from photo derivative generation',imageManifestGenerator.includes('derivativeArchiveUrls.has(url)')&&imageManifestGenerator.includes('derivativesEligible:derivativeEligible(url)')&&imageManifestGenerator.includes("JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.map(item=>String(item?.url||''))"));
 check('production logo derivative is generated from the original transparent PNG',productionMediaOptimizer.includes("path.resolve('public/JYC Logo(4).png')")&&productionMediaOptimizer.includes("path.join(root,'assets','jyc-logo.webp')")&&productionMediaOptimizer.includes("webp({quality:92,effort:5,alphaQuality:100})"));
+check('manifest uses oriented dimensions for aspect ratio and derivative eligibility',manifestGenerator.includes('orientedImageDimensions(d.width,d.height,metadata.orientation)')&&manifestGenerator.includes('rawWidth:d.width,rawHeight:d.height')&&manifestGenerator.includes('derivativeEligible(url,display.width,display.height)'));
+check('derivative generator sizes against display orientation and removes stale oversized variants',derivatives.includes('orientedImageDimensions(meta.width,meta.height,meta.orientation)')&&derivatives.includes('if(width>display.width)')&&derivatives.includes('removeVariant(width,format)'));
+check('derivative generator prunes orphaned variants and regenerates stale source outputs',derivatives.includes('pruneOrphanDerivatives(outputRoot)')&&derivatives.includes('expectedDerivativeBases')&&derivatives.includes('outStat.mtimeMs>=sourceStat.mtimeMs')&&derivatives.includes('reused++'));
 check('AVIF/WebP derivative build is wired into production prebuild',derivatives.includes('.avif')&&derivatives.includes('.webp')&&pkg.scripts['media:derivatives']==='node scripts/generate-photo-derivatives.mjs'&&pkg.scripts.prebuild.includes('generate-photo-derivatives.mjs'));
 check('photo editorial schema exists',migration.includes('editorial_score')&&migration.includes('duplicate_group')&&migration.includes('derivative_status'));
 check('focal points are publication-gated',migration.includes('focal_x is null')&&migration.includes('focal_y is null'));
