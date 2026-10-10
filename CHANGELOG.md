@@ -5,6 +5,7 @@
 - Make ResponsivePhoto fallback source, alt text, and fallback stage React-state driven so later parent renders cannot restore a broken portrait or failed derivative URL.
 - Keep responsive AVIF/WebP source sets disabled while a branded fallback is active, and reset fallback state only when the requested source or contextual fallback changes.
 - Share intrinsic-dimension eligibility rules between the image manifest and photo derivative generator; skip tiny images, logo strips and extreme panoramas that do not benefit from photo variants.
+- Extend responsive AVIF/WebP variants to curated team portraits, event posters and homepage photos, while preserving originals as fallbacks.
 - Add photo-integrity and release-contract assertions for derivative eligibility, plus a browser regression that forces portrait and optimized-logo failures and verifies the original JYC PNG remains after a theme rerender.
 
 ## V64.5.0 — Identity-first hero, magnetic discovery and photo QA
