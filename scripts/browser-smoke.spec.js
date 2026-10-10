@@ -767,3 +767,25 @@ test('gallery load-more control expands the archive without replacing the route'
     await expect(new URL(page.url()).pathname).toBe('/gallery');
   }
 });
+
+
+test('JYC Assistant search and keyboard close stay functional', async ({ page }) => {
+  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'JYC assistant');
+  const bot = page.getByRole('button', { name: 'Open JYC Assistant' });
+  await expect(bot).toBeVisible();
+  await bot.click();
+
+  const dialog = page.locator('.jyc-assistant-overlay[role="dialog"]');
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toHaveAttribute('aria-modal', 'true');
+
+  const search = page.getByRole('textbox', { name: 'Search JYC content' });
+  await expect(search).toBeFocused();
+  await search.fill('JAI 2026');
+  await expect(page.locator('.jyc-assistant-result').first()).toBeVisible();
+
+  await page.keyboard.press('Escape');
+  await expect(dialog).toHaveCount(0);
+  await expect(bot).toHaveAttribute('aria-expanded', 'false');
+});
