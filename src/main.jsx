@@ -295,9 +295,10 @@ function Team({data}){
   const name=m.name||'JYC Team Member';
   const role=m.role||m.position||'JYC Team';
   const photo=teamPhotoFor(m);
-  const about=m.bio||m.about||m.description||'Official JYC leadership profile. More details will be published as the organisation updates its public people records.';
-  const linkedin=safeExternalUrl(m.linkedin||m.socials?.linkedin);
-  const instagram=safeExternalUrl(m.instagram||m.socials?.instagram);
+  const linkedinHeadline=m.linkedinHeadline||m.linkedin_headline||m.headline||m.tagline||'';
+  const about=m.bio||m.about||m.description||m.linkedinBio||m.linkedin_bio||linkedinHeadline||'Official JYC leadership profile. More details will be published as the organisation updates its public people records.';
+  const linkedin=safeExternalUrl(m.linkedin||m.linkedinUrl||m.linkedin_url||m.socials?.linkedin);
+  const instagram=safeExternalUrl(m.instagram||m.instagramUrl||m.instagram_url||m.socials?.instagram);
   return <article className="team-layer-card team-flip-member reveal" key={m.id||name||index}>
    <Suspense fallback={<div className="team-flip-loading" aria-hidden="true"/>}>
     <LazyFlipCard label={`Open profile for ${name}`} className="team-member-flip">
@@ -310,6 +311,7 @@ function Team({data}){
      <span className="team-member-face-content team-member-back-content">
       <span className="eyebrow">ABOUT · {role}</span>
       <strong>{name}</strong>
+      {linkedinHeadline&&linkedinHeadline!==about&&<span className="team-member-headline">{linkedinHeadline}</span>}
       <span className="team-member-about">{about}</span>
       <span className="team-member-back-note">Tap / click again to return to the photo.</span>
       <span className="team-social-row">{linkedin&&<a href={linkedin} target="_blank" rel="noopener noreferrer" aria-label={`Open ${name} LinkedIn profile`} onClick={e=>e.stopPropagation()}>LinkedIn profile ↗</a>}{instagram&&<a href={instagram} target="_blank" rel="noopener noreferrer" aria-label={`Open ${name} Instagram profile`} onClick={e=>e.stopPropagation()}>Instagram ↗</a>}</span>
