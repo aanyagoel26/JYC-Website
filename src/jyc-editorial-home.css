@@ -260,3 +260,12 @@
   .jyc-editorial-home.jyc-home .jh-hero-dither-visual *,
   .jyc-editorial-home.jyc-home .jh-activities .magic-bento-card{animation:none!important;transition:none!important;transform:none!important}
 }
+
+
+/* Failed featured-event posters use the official mark, not a different event's photo. */
+.jyc-editorial-home.jyc-home .jh-event-image img[data-fallback="1"]{
+  object-fit:contain!important;
+  object-position:center!important;
+  padding:clamp(16px,3vw,34px);
+  background:#f8f1e5;
+}
