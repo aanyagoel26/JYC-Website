@@ -59,8 +59,8 @@ const checks=[
  ['browser QA launches a production preview when no base URL is supplied',browserRunner.includes("npm run preview")&&browserRunner.includes("'--port','4173'")&&browserRunner.includes('JYC_BASE_URL:baseUrl')],
  ['browser workflow builds production before running browser QA',browserWorkflow.includes('name: Build production bundle')&&browserWorkflow.includes('run: npm run build')&&browserWorkflow.includes('run: npm run qa:browser')],
  ['static SEO browser regression blocks Vite and all JavaScript module formats',browser.includes("/\.(?:js|jsx|mjs)$/")&&browser.includes("pathname === '/@vite/client'")&&browser.includes('return route.abort()')],
- ['route-shell canonicals use a stable production origin fallback',!routeShells.includes('process.env.VERCEL_URL')&&routeShells.includes("process.env.VITE_SITE_URL||'https://www.jiityouthclub128.in'")],
- ['sitemap uses a stable production origin fallback',!sitemap.includes('process.env.VERCEL_URL')&&sitemap.includes("process.env.VERCEL_PROJECT_PRODUCTION_URL||'https://www.jiityouthclub128.in'")],
+ ['route-shell canonicals ignore preview URL environment variables',routeShells.includes("process.env.JYC_CANONICAL_ORIGIN||'https://www.jiityouthclub128.in'")&&!routeShells.includes('process.env.VERCEL_URL')&&!routeShells.includes('process.env.VITE_SITE_URL')],
+ ['sitemap canonicals ignore preview URL environment variables',sitemap.includes("process.env.JYC_CANONICAL_ORIGIN||'https://www.jiityouthclub128.in'")&&!sitemap.includes('process.env.VERCEL_URL')&&!sitemap.includes('process.env.VERCEL_PROJECT_PRODUCTION_URL')&&!sitemap.includes('process.env.VITE_SITE_URL')],
  ['route shells cover all static public entry pages', ['/announcements','/updates','/calendar','/fests','/recruitment','/join-jyc','/achievements','/best-of-jyc'].every(route=>routeShells.includes(`'${route}':`))],
  ['route shells cover maintained public hubs',routeShells.includes('JYC_HUB_SOURCE_REGISTRY')&&routeShells.includes("'/clubs/'+String(hub.name).toLowerCase().replace(/[^a-z0-9]+/g,'-')")]
 ];
