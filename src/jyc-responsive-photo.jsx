@@ -13,6 +13,7 @@ const fallback=(e,src,fallbackSrc,fallbackAlt)=>{
  }
  if(stage!=='2'&&src!==LOGO_FALLBACK&&(image.currentSrc||image.src)!==LOGO_FALLBACK){
   image.dataset.imageFallbackStage='2';
+  image.alt=fallbackAlt||'JYC image fallback';
   image.src=LOGO_FALLBACK;
   return;
  }
