@@ -27,10 +27,12 @@ export const JYC_SOCIALS = {
   Panache: {},
   RPH: {
     linkedin: 'https://www.linkedin.com/company/rapid-programming-hub-jiit-noida/',
-    label: 'Rapid Programming Hub · JIIT Noida',
+    label: 'Rapid Programming Hub · JIIT-128',
+    campus: 'sector-128',
+    sourcePriority: 'official-hub',
     verifiedBy: 'https://www.linkedin.com/company/rapid-programming-hub-jiit-noida/ and https://in.linkedin.com/in/rapid-programming-hub-jiit-3188bb385',
     verifiedOn: '2026-10-10',
-    sourceNote: 'Official LinkedIn updates document Code Clash 25.2 on 2025-11-22 with 550+ student participants; this is an archived event, not an upcoming registration.'
+    sourceNote: 'Official LinkedIn records Code Clash 25.2 on 2025-11-22 with 550+ student participants; a separate public post describes Freshmen Clash at JIIT Wish Town Campus. This supports the JIIT-128 identity, but the dated contest is archived, not an upcoming registration.'
   },
   CICR: {
     instagram: 'https://www.instagram.com/cicr_jiit/',
