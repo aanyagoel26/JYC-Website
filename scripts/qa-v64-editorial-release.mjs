@@ -22,6 +22,10 @@ const assistant=read('src/jyc-assistant.jsx');
 const browser=read('scripts/browser-smoke.spec.js');
 const browserRunner=read('scripts/qa-browser.mjs');
 const browserWorkflow=read('.github/workflows/jyc-browser.yml');
+const dither=read('src/react-bits/DitherVeil.jsx');
+const bento=read('src/components/react-bits/MagicBento.jsx');
+const bentoCss=read('src/components/react-bits/MagicBento.css');
+const identities=read('src/hub-identities.js');
 const globalStyles=read('src/styles.css');
 const intelligence=read('src/jyc-photo-intelligence.js');
 const routeShells=read('scripts/generate-route-shells.mjs');
@@ -95,6 +99,10 @@ const checks=[
  ['team flip focus moves between the active face controls',flip.includes('frontRef=useRef(null),backRef=useRef(null)')&&flip.includes('(flipped?backRef.current:frontRef.current)?.focus')&&flip.includes('flip-card__back-trigger')&&browser.includes("await card.locator('.flip-card__back-trigger').click()")],
  ['theme browser regression checks Search and More in both modes',browser.includes('search and More sheets keep their surfaces readable in light and dark themes')&&browser.includes("const darkSearch")&&browser.includes("const lightMore")],
  ['home identity browser regression covers Dither Veil logo and magnetic activity Bento',browser.includes('homepage renders the official logo through Dither Veil and a magnetic activity Bento')&&browser.includes('jh-dither-mark')&&browser.includes('magic-bento-card')],
+ ['hero Dither Veil uses the real JYC logo, lazily and with reduced-motion/mobile fallback',editorialHome.includes('LazyDitherVeil')&&editorialHome.includes('src="/JYC%20Logo(4).png"')&&editorialHome.includes('jh-dither-mark')&&dither.includes('reducedMotion || coarsePointer')&&dither.includes('dither-veil__fallback')],
+ ['activity Bento magnetism is desktop-only and router-safe',editorialHome.includes('LazyMagicBento')&&editorialHome.includes('enableMagnetism={true}')&&bento.includes('onNavigate?onNavigate(item.href)')&&bento.includes('reducedMotion')&&bentoCss.includes('.magic-bento-card')],
+ ['club identities remain distinct while staying inside the JYC palette',identities.includes('const BASE=')&&identities.includes('accent:')&&identities.includes('motif:')&&homeCss.includes('--jh-accent:#bf9c6f')],
+ ['team flip-back reads biography and accessible public social links',main.includes('m.bio||m.about||m.description')&&main.includes('safeExternalUrl(m.linkedin||m.socials?.linkedin)')&&main.includes('aria-label={`Open ${name} LinkedIn profile`}')&&flip.includes('aria-expanded={flipped}')],
  ['team and directory media use lazy responsive images',main.includes('<ResponsivePhoto src={photo} alt={name} loading="lazy"')&&gallery.includes('ResponsivePhoto src={photo} alt="" loading="lazy"')&&gallery.includes('ResponsivePhoto src={photo} alt="" loading="lazy" decoding="async"')],
  ['About family tiles expose supplied PDF examples',main.includes('profile?.examples||[]')&&main.includes('profile?.description||')&&design.includes('.about-family-grid-v28>button>p')]
 ];
