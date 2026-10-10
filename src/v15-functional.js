@@ -47,34 +47,13 @@ export function readSiteCache() {
   } catch { return null; }
 }
 
-const PRIVATE_CACHE_FIELD = /(?:^|_)(?:access.?token|refresh.?token|authorization|password|passwd|secret|session|credential|api.?key|user.?id|account.?id|contact.?email|contact.?phone|phone|email|private|submission|registration.?data|admin.?note|certificate|certificates|client.?cert|private.?key|public.?key)(?:$|_)/i;
-
-// The offline cache is for public presentation only. Keep the data useful for
-// rendering while refusing to persist identity, authentication, or submission
-// fields that might be added to the RPC response in a future schema change.
-function publicCacheSnapshot(value, depth = 0) {
-  if (depth > 8) return undefined;
-  if (value == null || typeof value !== 'object') {
-    return typeof value === 'function' || typeof value === 'symbol' ? undefined : value;
-  }
-  if (Array.isArray(value)) return value.map(item => publicCacheSnapshot(item, depth + 1)).filter(item => item !== undefined);
-  const safe = {};
-  for (const [key, item] of Object.entries(value)) {
-    const normalizedKey = key.replace(/[A-Z]/g, letter => '_' + letter.toLowerCase()).toLowerCase();
-    if (PRIVATE_CACHE_FIELD.test(normalizedKey)) continue;
-    const sanitized = publicCacheSnapshot(item, depth + 1);
-    if (sanitized !== undefined) safe[key] = sanitized;
-  }
-  return safe;
-}
-
-export function writeSiteCache(data) {
-  try {
-    const snapshot = publicCacheSnapshot(data);
-    if (!snapshot || typeof snapshot !== 'object') return;
-    write(SITE_CACHE_KEY, JSON.stringify(snapshot));
-    write(SITE_CACHE_META_KEY, new Date().toISOString());
-  } catch {}
+export function writeSiteCache(_data) {
+  // The public RPC can contain certificate material that static field filtering
+  // cannot reliably classify. Do not persist the RPC payload in browser storage.
+  // Site rendering continues to use the live response; saved flags/reminders use
+  // their separately validated, non-sensitive keys.
+  remove(SITE_CACHE_KEY);
+  remove(SITE_CACHE_META_KEY);
 }
 
 export function siteCacheAge() {

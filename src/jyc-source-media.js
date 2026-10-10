@@ -181,7 +181,6 @@ const EVENT_ALIASES={
   'Code Clash 25.2':['Code Clash 25.2','Code Clash 25.2 · RPH'],
   'TechTonic 2.0':['TechTonic 2.0','TechTonic']
 };
-const token=v=>normalise(v);
 const EVENT_ASSOCIATIONS=new Map(Object.entries(EVENT_ALIASES).flatMap(([event,aliases])=>aliases.map(alias=>[normalise(alias),event])));
 const sourceEventAlias=name=>{
   const key=normalise(name);

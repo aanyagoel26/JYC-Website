@@ -1,7 +1,7 @@
 import {jycToast} from './lib/ui';
 import {useState} from 'react';
 import {useParams} from 'react-router-dom';
-const safe=(v)=>{try{const u=new URL(String(v||''),window.location.origin);return ['http:','https:'].includes(u.protocol)?u.href:''}catch{return ''}};
+const safe=(v)=>{try{const raw=String(v||'').trim();if(!raw||/[\u0000-\u001f\u007f]/.test(raw))return '';const u=new URL(raw,window.location.origin);return ['http:','https:'].includes(u.protocol)&&!u.username&&!u.password?u.href:''}catch{return ''}};
 
 const CAMPUSES={
   '62':{id:'62',label:'Sector 62',short:'62',subtitle:'Main campus · A-10, Sector-62, Noida',lat:28.630000,lng:77.372267,address:'A-10, Sector-62, Noida-201 309, Uttar Pradesh, India',pulse:'https://jiit-pulse.vercel.app/',bbox:'77.366,28.626,77.379,28.634'},

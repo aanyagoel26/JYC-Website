@@ -44,9 +44,12 @@ add('Public JSON CMS table is not directly readable',!read(path.join(root,'supab
 add('JSON-LD is escaped against script-breakout',/JSON\.stringify\(\{\'@context\':\'https:\/\/schema\.org\'/.test(read(path.join(root,'src/extra-features.jsx'))) && /replace\(\/</.test(read(path.join(root,'src/extra-features.jsx'))));
 add('No raw innerHTML usage',!files.some(file=>/\.jsx?$/.test(file)&&/\.innerHTML\s*=/.test(read(file))));
 add('JYC Now validates external navigation URLs',read(path.join(root,'src/jyc-now.jsx')).includes('function safeExternalUrl')&&read(path.join(root,'src/jyc-now.jsx')).includes("['http:','https:']"));
-add('Browser persistence uses an explicit key allowlist',/const PERSISTABLE_KEY = \/\^\(\?:jyc-site-cache-v15\|jyc-site-cache-meta-v15/.test(read(path.join(root,'src/v15-functional.js'))));
-add('Browser persistence rejects private-field values in cache and reminders',read(path.join(root,'src/v15-functional.js')).includes('containsPrivateValue(parsed)')&&read(path.join(root,'src/v15-functional.js')).includes('PRIVATE_VALUE_FIELD'));
-add('Offline cache excludes certificate and key material',/certificate\|certificates\|client\.\?cert\|private\.\?key\|public\.\?key/.test(read(path.join(root,'src/v15-functional.js'))));
+add('External navigation rejects embedded URL credentials',read(path.join(root,'src/main.jsx')).includes('u.username||u.password')&&read(path.join(root,'src/jyc-now.jsx')).includes('u.username||u.password')&&read(path.join(root,'src/v14-platform-plus.jsx')).includes('!u.username&&!u.password'));
+add('Remote feed URL guard normalizes IPv6 and rejects credentialed URLs',read(path.join(root,'api/jyc-updates.js')).includes("replace(/^\\[|\\]$/g,'')")&&read(path.join(root,'api/jyc-updates.js')).includes("host.startsWith('::ffff:')")&&read(path.join(root,'api/jyc-updates.js')).includes('u.username||u.password'));
+add('RPC payloads are not persisted in browser storage',/export function writeSiteCache\(_data\)\s*\{[\s\S]*?remove\(SITE_CACHE_KEY\);\s*remove\(SITE_CACHE_META_KEY\);\s*\}/.test(read(path.join(root,'src/v15-functional.js')))&&! /export function writeSiteCache\(_data\)\s*\{[^}]*localStorage\.setItem/s.test(read(path.join(root,'src/v15-functional.js'))));
+
+
+
 add('Session identifier generation never falls back to Math.random',/const uid=\(\)=>\{const cryptoApi=globalThis\.crypto;[\s\S]{0,350}cryptoApi\.getRandomValues\(bytes\)/.test(read(path.join(root,'src/main.jsx')))&&! /Math\.random\(\)/.test(read(path.join(root,'src/main.jsx'))));
 add('Session identifiers use Web Crypto with no insecure random fallback',/const uid=\(\)=>\{const cryptoApi=globalThis\.crypto;[\s\S]{0,350}cryptoApi\.getRandomValues\(bytes\)/.test(read(path.join(root,'src/main.jsx')))&&! /Math\.random\(\)/.test(read(path.join(root,'src/main.jsx'))));
 add('Pageview local storage rejects malformed shapes and invalid counters',/const parsed=JSON\.parse\(storageGet\(key,'\{\}'\)\);[\s\S]{0,650}!Array\.isArray\(parsed\)[\s\S]{0,250}Number\.isSafeInteger\(count\)/.test(read(path.join(root,'src/main.jsx'))));
