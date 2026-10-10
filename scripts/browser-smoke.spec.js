@@ -731,17 +731,19 @@ test('team profiles flip to readable biographies and verified LinkedIn links', a
 });
 
 
-test('failed team portraits use the official JYC logo and accurate fallback text', async ({ page }) => {
+test('failed team portraits fall through the optimized logo to the original PNG safely', async ({ page }) => {
   await page.route('**/assets/team/**', route => route.abort());
+  await page.route('**/assets/jyc-logo.webp', route => route.abort());
   await page.goto(base + '/team', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'team portrait fallback');
 
   const portrait = page.locator('.team-photo-editorial img').first();
   await expect(portrait).toBeVisible();
-  await expect(portrait).toHaveAttribute('data-image-fallback-stage', '1');
+  await expect(portrait).toHaveAttribute('data-image-fallback-stage', '2');
   await expect(portrait).toHaveAttribute('alt', 'Official JYC logo placeholder; portrait unavailable');
-  await expect.poll(() => portrait.evaluate(img => new URL(img.currentSrc || img.src).pathname)).toMatch(/^(?:\/assets\/jyc-logo\.webp|\/JYC%20Logo\(4\)\.png)$/);
+  await expect.poll(() => portrait.evaluate(img => new URL(img.currentSrc || img.src).pathname)).toBe('/JYC%20Logo(4).png');
   await expect.poll(() => portrait.evaluate(img => getComputedStyle(img).objectFit)).toBe('contain');
+  await expect.poll(() => portrait.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
 });
 
 
