@@ -42,6 +42,8 @@ const LazyFlipCard=lazy(()=>import('./components/react-bits/FlipCard.jsx'));
 
 
 
+import './jyc-design-upgrades.css';
+
 const PUBLIC_ACTIVITIES=JYC_PUBLIC_ACTIVITIES;
 function mergePublicFallback(d,{allowContentFallback=true}={}){
  const x=norm(d||{});
