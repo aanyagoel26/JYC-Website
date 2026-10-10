@@ -132,7 +132,7 @@ function urlBase64ToUint8Array(base64String){const padding='='.repeat((4-base64S
 
 function eventState(e){if(!e?.date)return 'draft';const start=Date.parse(`${e.date}T${e.start||'00:00'}`);const effectiveEndDate=e.dateEnd||e.date;const end=Date.parse(`${effectiveEndDate}T${e.end||'23:59'}`);const now=Date.now();if(!Number.isFinite(start)||!Number.isFinite(end))return 'draft';if(now<start)return 'upcoming';if(now<=end)return 'live';return 'past'}
 function fmtDate(s){if(!s)return 'Date TBA';return new Date(`${s}T12:00`).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})}
-function safeExternalUrl(value){const raw=String(value||'').trim();if(!raw)return '';try{const u=new URL(raw,window.location.origin);return ['http:','https:'].includes(u.protocol)?u.href:''}catch{return ''}}
+function safeExternalUrl(value){const raw=String(value||'').trim();if(!raw||/[\u0000-\u001f\u007f]/.test(raw))return '';try{const u=new URL(raw,window.location.origin);if(!['http:','https:'].includes(u.protocol)||u.username||u.password)return '';return u.href}catch{return ''}}
 function slug(s){return String(s||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
 const findEntity=(rows,key)=>rows.find(x=>x.id===key||slug(x.name||x.title)===slug(key));
 
