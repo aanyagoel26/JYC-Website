@@ -88,7 +88,15 @@ const checks=[
  ['browser regression covers hero logo wall and team profile flip',browser.includes('homepage hero uses the official logo over the drifting JYC photo wall')&&browser.includes('team profiles flip to readable biographies and verified LinkedIn links')],
  ['browser regression covers intended magnetic card movement',browser.includes('magnetic bento motion is limited to intended club and event cards')&&browser.includes('legacy public cards stay flat outside the intentional magnetic bento')],
  ['team flip browser test includes an official LinkedIn profile',browser.includes('team-member-flip:has(.team-social-row a[href*="linkedin.com"])')&&browser.includes("toHaveAttribute('href', /^https:\\/\\/(?:www\\.|in\\.)?linkedin\\.com\\//)")],
- ['hub social links remain separated by verified identity',socials.includes("Fortissimo: {},")&&socials.includes("Panache: {},")&&socials.includes("Prismatic: {},")&&socials.includes("JYC_SOCIAL_SOURCE_POLICY")]
+ ['hub social links remain separated by verified identity',socials.includes("Fortissimo: {},")&&socials.includes("Panache: {},")&&socials.includes("Prismatic: {},")&&socials.includes("JYC_SOCIAL_SOURCE_POLICY")],
+ ['hero DriftWall retains component-driven transforms',editorialHome.includes('LazyDriftWall')&&!design.includes('.jh-drift-wall-backdrop .drift-wall__plane{transform:')],
+ ['official hero logo never falls back to an unrelated photo',editorialHome.includes('<img className="jh-hero-logo"')&&editorialHome.includes("onError={event=>{event.currentTarget.hidden=true}}")&&!editorialHome.includes('<Img className="jh-hero-logo"')],
+ ['club, fest and event detail photography uses responsive image handling',main.includes('club-hero-photo-wall')&&main.includes('event-detail-poster-image-wrap')&&main.includes('fest-hero-photo-wall')&&main.includes("ResponsivePhoto src={e.summitLogo")],
+ ['team flip focus moves between the active face controls',flip.includes('frontRef=useRef(null),backRef=useRef(null)')&&flip.includes('(flipped?backRef.current:frontRef.current)?.focus')&&flip.includes('flip-card__back-trigger')&&browser.includes("await card.locator('.flip-card__back-trigger').click()")],
+ ['theme browser regression checks Search and More in both modes',browser.includes('search and More sheets keep their surfaces readable in light and dark themes')&&browser.includes("const darkSearch")&&browser.includes("const lightMore")],
+ ['home photo wall browser test requires the wall to mount',browser.includes("homepage logo photo-wall surface').toBe(1)")],
+ ['team and directory media use lazy responsive images',main.includes('<ResponsivePhoto src={photo} alt={name} loading="lazy"')&&gallery.includes('ResponsivePhoto src={photo} alt="" loading="lazy"')&&gallery.includes('ResponsivePhoto src={photo} alt="" loading="lazy" decoding="async"')],
+ ['About family tiles expose supplied PDF examples',main.includes('profile?.examples||[]')&&main.includes('profile?.description||')&&design.includes('.about-family-grid-v28>button>p')]
 ];
 let failed=0;
 for(const [name,ok] of checks){console.log((ok?'PASS':'FAIL')+' · '+name);if(!ok)failed++}
