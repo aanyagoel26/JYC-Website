@@ -849,6 +849,42 @@ test('featured event poster uses the shared responsive image fallback contract',
 });
 
 
+
+test('team flip-card biographies and LinkedIn links remain readable in both themes', async ({ page }) => {
+  await page.goto(base + '/team', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'team flip-card theme contrast');
+
+  const card = page.locator('.team-member-flip:has(.team-social-row a[href*="linkedin.com"])').first();
+  await expect(card).toBeVisible();
+  for (const theme of ['light', 'dark']) {
+    await page.evaluate(value => document.documentElement.setAttribute('data-theme', value), theme);
+    await card.locator('.flip-card__front').click();
+    await expect(card).toHaveClass(/is-flipped/);
+    const contrast = await card.locator('.flip-card__back').evaluate(back => {
+      const parse = value => {
+        const match = String(value || '').match(/rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([\d.]+))?\)/i);
+        return match ? [Number(match[1]), Number(match[2]), Number(match[3]), match[4] === undefined ? 1 : Number(match[4])] : null;
+      };
+      const luminance = rgb => rgb.map(v => v / 255).map(v => v <= .04045 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4)).reduce((sum, v, i) => sum + v * [.2126, .7152, .0722][i], 0);
+      const composite = (foreground, background) => foreground.slice(0, 3).map((value, i) => value * foreground[3] + background[i] * (1 - foreground[3]));
+      const ratio = (foreground, background) => {
+        const a = luminance(foreground), b = luminance(background);
+        return (Math.max(a, b) + .05) / (Math.min(a, b) + .05);
+      };
+      const background = parse(getComputedStyle(back).backgroundColor);
+      const bio = parse(getComputedStyle(back.querySelector('.team-member-about')).color);
+      const link = parse(getComputedStyle(back.querySelector('a[href*="linkedin.com"]')).color);
+      return { bio: background && bio ? ratio(composite(bio, background), background.slice(0, 3)) : null,
+        link: background && link ? ratio(composite(link, background), background.slice(0, 3)) : null };
+    });
+    expect(contrast.bio, theme + ' team biography contrast').toBeGreaterThanOrEqual(4.5);
+    expect(contrast.link, theme + ' LinkedIn contrast').toBeGreaterThanOrEqual(4.5);
+    await card.locator('.flip-card__back-trigger').click();
+    await expect(card).not.toHaveClass(/is-flipped/);
+  }
+});
+
+
 test('failed team portraits fall through the optimized logo to the original PNG safely', async ({ page }) => {
   await page.route('**/assets/team/**', route => route.abort());
   await page.route('**/assets/jyc-logo.webp', route => route.abort());
