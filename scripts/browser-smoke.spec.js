@@ -680,6 +680,8 @@ test('team profiles flip to readable biographies and verified LinkedIn links', a
   const card = page.locator('.team-member-flip:has(.team-social-row a[href*="linkedin.com"])').first();
   await expect(card).toBeVisible();
   await expect(card.locator('.team-member-name').first()).toBeVisible();
+  await expect(card.locator('.team-member-face-content .tag').first()).toBeVisible();
+  await expect(card.locator('.team-photo-editorial img').first()).toBeVisible();
   await card.click({ position: { x: 18, y: 18 } });
   await expect(card).toHaveClass(/is-flipped/);
   await expect(card).toHaveAttribute('aria-expanded', 'true');
