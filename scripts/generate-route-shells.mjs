@@ -141,6 +141,9 @@ function shellFor(meta,route){
   out=out.replace(/<meta property="og:url" content="[^"]*"\s*\/>/i,`<meta property="og:url" content="__JYC_CANONICAL_ROUTE__" />`);
   out=out.replace('__JYC_CANONICAL_ROUTE__',`${siteOrigin}${route}`);
   out=out.replace(/<link rel="canonical" href="[^"]*"\s*\/>/i,`<link rel="canonical" href="${siteOrigin}${route}" />`);
+  const escapedTitle=meta.title.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+  out=out.replace(/(<h1\b[^>]*>)JIIT Youth Club — Clubs, Events &amp; Fests \| JIIT Noida(<\/h1>)/g,`$1${escapedTitle}$2`);
+  out=out.replace(/(<h1\b[^>]*>)Preparing the JYC experience…(<\/h1>)/g,`$1${escapedTitle}$2`);
   return out;
 }
 
