@@ -7,20 +7,18 @@ const loadImageManifest=()=>{
  if(!imageManifestPromise)imageManifestPromise=fetch('/image-manifest.json',{cache:'force-cache'}).then(response=>response.ok?response.json():null).catch(()=>null);
  return imageManifestPromise;
 };
+const ORIGINAL_LOGO='/JYC%20Logo(4).png';
 const fallback=(e,src,fallbackSrc,fallbackAlt)=>{
  const image=e.currentTarget;
- const stage=image.dataset.imageFallbackStage||'0';
+ const stage=Number(image.dataset.imageFallbackStage||0);
  const picture=image.parentElement;
  if(picture?.tagName?.toLowerCase()==='picture')picture.querySelectorAll('source').forEach(source=>{source.removeAttribute('srcset');source.removeAttribute('sizes')});
- if(stage==='0'){
-  image.dataset.imageFallbackStage='1';
-  const next=fallbackSrc&&fallbackSrc!==src?fallbackSrc:(src!==LOGO_FALLBACK?LOGO_FALLBACK:'');
-  if(next){image.alt=fallbackAlt??'Official JYC logo placeholder; image unavailable';image.src=next;return}
- }
- if(stage==='1'&&LOGO_FALLBACK!=="/JYC%20Logo(4).png"){
-  image.dataset.imageFallbackStage='2';
+ const candidates=[fallbackSrc,LOGO_FALLBACK,ORIGINAL_LOGO].filter((url,index,all)=>Boolean(url)&&url!==src&&all.indexOf(url)===index);
+ const next=candidates[stage];
+ if(next){
+  image.dataset.imageFallbackStage=String(stage+1);
   image.alt=fallbackAlt??'Official JYC logo placeholder; image unavailable';
-  image.src="/JYC%20Logo(4).png";
+  image.src=next;
   return;
  }
  image.dataset.imageFallbackStage='failed';
