@@ -44,6 +44,9 @@ add('Public JSON CMS table is not directly readable',!read(path.join(root,'supab
 add('JSON-LD is escaped against script-breakout',/JSON\.stringify\(\{\'@context\':\'https:\/\/schema\.org\'/.test(read(path.join(root,'src/extra-features.jsx'))) && /replace\(\/</.test(read(path.join(root,'src/extra-features.jsx'))));
 add('No raw innerHTML usage',!files.some(file=>/\.jsx?$/.test(file)&&/\.innerHTML\s*=/.test(read(file))));
 add('JYC Now validates external navigation URLs',read(path.join(root,'src/jyc-now.jsx')).includes('function safeExternalUrl')&&read(path.join(root,'src/jyc-now.jsx')).includes("['http:','https:']"));
+add('Session identifiers use Web Crypto with no insecure random fallback',/const uid=\(\)=>\{const cryptoApi=globalThis\.crypto;[\s\S]{0,350}cryptoApi\.getRandomValues\(bytes\)/.test(read(path.join(root,'src/main.jsx')))&&! /Math\.random\(\)/.test(read(path.join(root,'src/main.jsx'))));
+add('Pageview local storage rejects malformed shapes and invalid counters',/const parsed=JSON\.parse\(storageGet\(key,'\{\}'\)\);[\s\S]{0,650}!Array\.isArray\(parsed\)[\s\S]{0,250}Number\.isSafeInteger\(count\)/.test(read(path.join(root,'src/main.jsx'))));
+add('Featured-event dismissal storage writes only a safe integer timestamp',/const expiry=Date\.now\(\)\+FEATURED_EVENT_DISMISS_MS;[\s\S]{0,160}Number\.isSafeInteger\(expiry\)/.test(read(path.join(root,'src/featured-event-popup.jsx'))));
 add('Updates API validates remote URLs before persistence',read(path.join(root,'api/jyc-updates.js')).includes('const safeRemoteUrl=')&&read(path.join(root,'api/jyc-updates.js')).includes("169.254.169.254")&&read(path.join(root,'api/jyc-updates.js')).includes("safeRemoteUrl(feedUrl)"));
 if(checks.some(x=>!x.ok)){for(const c of checks)console.log(`${c.ok?'PASS':'FAIL'}: ${c.name}${c.detail?` — ${c.detail}`:''}`);process.exit(1)}
 for(const c of checks)console.log(`PASS: ${c.name}${c.detail?` — ${c.detail}`:''}`);
