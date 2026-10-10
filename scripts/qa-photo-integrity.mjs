@@ -52,6 +52,7 @@ assert('source overrides cannot reference audited archive exclusions',qualityOve
 assert('curated featured overrides remain explicit',mediaSource.includes('const QUALITY_OVERRIDES=')&&mediaSource.includes("Aakriti:[")&&mediaSource.includes("Panache:[")&&mediaSource.includes("CICR:[")&&mediaSource.includes("Innovation:["));
 assert('source gallery has maintained communities',JYC_SOURCE_MEDIA_STATS.maintainedCommunities>0);
 assert('source gallery is non-empty',gallery.length>0);
+assert('responsive runtime emits derivative URLs only after manifest-confirmed intrinsic dimensions',responsiveSource.includes('entry?.derivativesEligible===true')&&responsiveSource.includes('measured>0')&&responsiveSource.includes('derivativesEnabled&&intrinsicWidth>0?photoDerivativeUrls(src,intrinsicWidth):null')&&responsiveSource.includes('If the manifest is unavailable, keep the original source'));
 assert('gallery opens in photography mode',galleryUiSource.includes("const [filter,setFilter]=useState('All'); const [role,setRole]=useState('All'); const [visual,setVisual]=useState('photo');"));
 assert('complete supplied archive is represented',manifest.total>=873,`manifest=${manifest.total}`);
 assert('manifest total matches merged source gallery',manifest.total===gallery.length);
