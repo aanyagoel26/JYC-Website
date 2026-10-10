@@ -67,7 +67,7 @@ const checks=[
  ['sitemap canonicals ignore preview URL environment variables',sitemap.includes("process.env.JYC_CANONICAL_ORIGIN||'https://www.jiityouthclub128.in'")&&!sitemap.includes('process.env.VERCEL_URL')&&!sitemap.includes('process.env.VERCEL_PROJECT_PRODUCTION_URL')&&!sitemap.includes('process.env.VITE_SITE_URL')],
  ['runtime canonical and Open Graph metadata ignore preview hostnames',metadata.includes("import.meta.env.VITE_CANONICAL_ORIGIN||'https://www.jiityouthclub128.in'")&&!metadata.includes('const origin=(import.meta.env.VITE_SITE_URL||window.location.origin)')],
  ['canonical origin is documented for Vite and build-time generators',envExample.includes('VITE_CANONICAL_ORIGIN=https://www.jiityouthclub128.in')&&envExample.includes('JYC_CANONICAL_ORIGIN=https://www.jiityouthclub128.in')],
- ['production origin QA and sitemap contract use canonical override',productionQa.includes('process.env.JYC_CANONICAL_ORIGIN')&&sitemapContract.includes('JYC_CANONICAL_ORIGIN:site')],
+ ['production origin QA and sitemap contract use canonical override',productionQa.includes('process.env.JYC_CANONICAL_ORIGIN')&&productionQa.includes("env.includes('VITE_CANONICAL_ORIGIN=')")&&sitemapContract.includes('JYC_CANONICAL_ORIGIN:site')],
  ['route shells cover all static public entry pages', ['/announcements','/updates','/calendar','/fests','/recruitment','/join-jyc','/achievements','/best-of-jyc'].every(route=>routeShells.includes(`'${route}':`))],
  ['route shells cover maintained public hubs',routeShells.includes('JYC_HUB_SOURCE_REGISTRY')&&routeShells.includes("'/clubs/'+String(hub.name).toLowerCase().replace(/[^a-z0-9]+/g,'-')")]
 ];
