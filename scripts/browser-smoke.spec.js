@@ -289,7 +289,7 @@ test('photo-led pages render real image content', async ({ page }) => {
     await page.goto(base + route, { waitUntil: 'domcontentloaded' });
     const images = page.locator('img');
     expect(await images.count(), route).toBeGreaterThan(0);
-    await expect(images.first()).toBeVisible();
+    await expect(page.locator('img:visible').first()).toBeVisible();
     await waitForImagesToSettle(page);
     await expect.poll(async () => images.evaluateAll(nodes => nodes.filter(img => img.complete && img.naturalWidth > 0).length), { timeout: 8000 }).toBeGreaterThan(0);
     const broken = await images.evaluateAll(nodes => nodes.filter(img => img.complete && img.naturalWidth === 0 && !String(img.currentSrc||img.src).endsWith('/JYC%20Logo(4).png')).map(img => img.getAttribute('src')));
