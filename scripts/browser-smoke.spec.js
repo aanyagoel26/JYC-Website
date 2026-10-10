@@ -808,7 +808,7 @@ test('responsive photos do not guess AVIF/WebP derivative URLs when the manifest
   const guessedDerivatives = [];
   page.on('request', request => {
     const pathname = new URL(request.url()).pathname;
-    if ( /-(?:480|960|1600)\\.(?:avif|webp)$/i.test(pathname)) guessedDerivatives.push(pathname);
+    if ( /-(?:480|960|1600)\.(?:avif|webp)$/i.test(pathname)) guessedDerivatives.push(pathname);
   });
   await page.route('**/image-manifest.json', route => route.abort());
   await page.goto(base + '/team', { waitUntil: 'domcontentloaded' });
