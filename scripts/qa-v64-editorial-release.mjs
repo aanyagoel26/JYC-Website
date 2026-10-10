@@ -4,6 +4,10 @@ import path from 'node:path';
 const root=process.cwd();
 const read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const main=read('src/main.jsx');
+const metadata=read('src/extra-features.jsx');
+const productionQa=read('scripts/qa-production.mjs');
+const sitemapContract=read('scripts/qa-sitemap-contract.mjs');
+const envExample=read('.env.example');
 const gallery=read('src/jyc57-experience.jsx');
 const responsive=read('src/jyc-responsive-photo.jsx');
 const homeCss=read('src/jyc-editorial-home.css');
@@ -61,6 +65,9 @@ const checks=[
  ['static SEO browser regression blocks Vite and all JavaScript module formats',browser.includes("/\.(?:js|jsx|mjs)$/")&&browser.includes("pathname === '/@vite/client'")&&browser.includes('return route.abort()')],
  ['route-shell canonicals ignore preview URL environment variables',routeShells.includes("process.env.JYC_CANONICAL_ORIGIN||'https://www.jiityouthclub128.in'")&&!routeShells.includes('process.env.VERCEL_URL')&&!routeShells.includes('process.env.VITE_SITE_URL')],
  ['sitemap canonicals ignore preview URL environment variables',sitemap.includes("process.env.JYC_CANONICAL_ORIGIN||'https://www.jiityouthclub128.in'")&&!sitemap.includes('process.env.VERCEL_URL')&&!sitemap.includes('process.env.VERCEL_PROJECT_PRODUCTION_URL')&&!sitemap.includes('process.env.VITE_SITE_URL')],
+ ['runtime canonical and Open Graph metadata ignore preview hostnames',metadata.includes("import.meta.env.VITE_CANONICAL_ORIGIN||'https://www.jiityouthclub128.in'")&&!metadata.includes('const origin=(import.meta.env.VITE_SITE_URL||window.location.origin)')],
+ ['canonical origin is documented for Vite and build-time generators',envExample.includes('VITE_CANONICAL_ORIGIN=https://www.jiityouthclub128.in')&&envExample.includes('JYC_CANONICAL_ORIGIN=https://www.jiityouthclub128.in')],
+ ['production origin QA and sitemap contract use canonical override',productionQa.includes('process.env.JYC_CANONICAL_ORIGIN')&&sitemapContract.includes('JYC_CANONICAL_ORIGIN:site')],
  ['route shells cover all static public entry pages', ['/announcements','/updates','/calendar','/fests','/recruitment','/join-jyc','/achievements','/best-of-jyc'].every(route=>routeShells.includes(`'${route}':`))],
  ['route shells cover maintained public hubs',routeShells.includes('JYC_HUB_SOURCE_REGISTRY')&&routeShells.includes("'/clubs/'+String(hub.name).toLowerCase().replace(/[^a-z0-9]+/g,'-')")]
 ];
