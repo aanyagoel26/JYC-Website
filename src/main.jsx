@@ -94,7 +94,7 @@ function LogoImage({alt='',...props}){
  const [failed,setFailed]=useState(false);
  useEffect(()=>setFailed(false),[]);
  if(failed)return <span className={`jyc-logo-fallback ${props.className||''}`.trim()} role="img" aria-label={alt||'JIIT Youth Club logo'}>JYC</span>;
- return <img {...props} src={logo} alt={alt} loading={props.loading??(props.fetchPriority==='high'?'eager':'lazy')} decoding={props.decoding??'async'} onError={()=>setFailed(true)}/>;
+ return <img {...props} src={logo} alt={alt} loading={props.loading??(props.fetchPriority==='high'?'eager':'lazy')} decoding={props.decoding??'async'} onError={event=>{const image=event.currentTarget;if(logo!=='/JYC%20Logo(4).png'&&image.dataset.logoFallback!=='1'){image.dataset.logoFallback='1';image.src='/JYC%20Logo(4).png';return}setFailed(true)}}/>
 }
 const isFestMode=data=>String(data?.mode||'events').toLowerCase()==='fest';
 const recruitmentEnabled=data=>data?.flags?.recruitmentHub!==false;
