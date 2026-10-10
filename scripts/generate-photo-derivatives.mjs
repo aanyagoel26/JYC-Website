@@ -26,7 +26,7 @@ const processFile=async file=>{
   const meta=await sharp(file).metadata();
   if(!meta.width||!meta.height){skipped++;return}
   for(const width of WIDTHS){
-   if(width>meta.width*1.15)continue;
+   if(width>meta.width)continue;
    for(const format of ['avif','webp']){
     const out=path.join(outDir,path.basename(base)+'-'+width+'.'+format);
     if(fs.existsSync(out))continue;
