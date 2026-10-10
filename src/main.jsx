@@ -94,7 +94,7 @@ function LogoImage({alt='',...props}){
 const isFestMode=data=>String(data?.mode||'events').toLowerCase()==='fest';
 const recruitmentEnabled=data=>data?.flags?.recruitmentHub!==false;
 
-const uid=()=>{if(typeof globalThis.crypto?.randomUUID==='function')return globalThis.crypto.randomUUID();const bytes=new Uint8Array(16);if(typeof globalThis.crypto?.getRandomValues!=='function')throw new Error('Secure random number generation is unavailable');globalThis.crypto.getRandomValues(bytes);return Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join('')};
+const uid=()=>{const cryptoApi=globalThis.crypto;if(typeof cryptoApi?.randomUUID==='function')return cryptoApi.randomUUID();if(typeof cryptoApi?.getRandomValues!=='function')throw new Error('Secure random number generation is unavailable');const bytes=new Uint8Array(16);cryptoApi.getRandomValues(bytes);return Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join('')};
 const storageGet=(key,fallback=null)=>{try{const value=localStorage.getItem(key);return value===null?fallback:value}catch{return fallback}};
 const storageSet=(key,value)=>{try{localStorage.setItem(key,String(value));return true}catch{return false}};
 const storageRemove=(key)=>{try{localStorage.removeItem(key);return true}catch{return false}};
