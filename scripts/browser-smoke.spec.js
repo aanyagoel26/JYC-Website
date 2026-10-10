@@ -792,6 +792,18 @@ test('JYC Assistant search and keyboard close stay functional', async ({ page })
 
 
 
+
+test('JAI event route has route-specific static SEO content without JavaScript', async ({ page }) => {
+  await page.route('**/assets/*.js', route => route.abort());
+  const route = '/events/jai-2026-jaypee-agentic-ai-hackathon';
+  await page.goto(base + route, { waitUntil: 'domcontentloaded' });
+
+  await expect(page).toHaveTitle('JAI 2026 — Jaypee Agentic AI Hackathon | JYC');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('JAI 2026 — Jaypee Agentic AI Hackathon | JYC');
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://www.jiityouthclub128.in' + route);
+});
+
+
 test('JYC Assistant quick routes are distinct and navigate to their labelled destinations', async ({ page }) => {
   await page.goto(base + '/clubs', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'JYC assistant quick routes');
