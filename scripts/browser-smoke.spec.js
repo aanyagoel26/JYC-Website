@@ -572,6 +572,44 @@ test('global search opens, accepts keyboard input, and closes cleanly', async ({
   await expect(dialog).toHaveCount(0);
 });
 
+
+test('Search and More surfaces follow the light/dark theme with readable text', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'theme-aware search and More');
+
+  const samples = {};
+  for (const theme of ['light', 'dark']) {
+    await page.evaluate(value => document.documentElement.setAttribute('data-theme', value), theme);
+
+    await page.keyboard.press(process.platform === 'darwin' ? 'Meta+K' : 'Control+K');
+    const search = page.locator('.search-modal');
+    await expect(search).toBeVisible();
+    samples[theme] = {
+      search: await search.evaluate(el => ({ background: getComputedStyle(el).backgroundColor, color: getComputedStyle(el).color })),
+    };
+    await page.keyboard.press('Escape');
+    await expect(page.locator('.search-overlay')).toHaveCount(0);
+
+    await page.getByRole('button', { name: 'More' }).click();
+    const more = page.locator('.more-sheet');
+    await expect(more).toBeVisible();
+    samples[theme].more = await more.evaluate(el => ({ background: getComputedStyle(el).backgroundColor, color: getComputedStyle(el).color }));
+    await page.keyboard.press('Escape');
+    await expect(page.locator('.more-sheet-overlay')).toHaveCount(0);
+  }
+
+  expect(samples.light.search.background).not.toBe(samples.dark.search.background);
+  expect(samples.light.more.background).not.toBe(samples.dark.more.background);
+  for (const theme of ['light', 'dark']) {
+    for (const surface of ['search', 'more']) {
+      expect(samples[theme][surface].color, theme + ' ' + surface + ' text should be visible').not.toBe('rgba(0, 0, 0, 0)');
+      expect(samples[theme][surface].background, theme + ' ' + surface + ' background should be painted').not.toBe('rgba(0, 0, 0, 0)');
+    }
+  }
+});
+
+
 test('keyboard can reach the skip link and primary navigation', async ({ page }) => {
   await page.goto(base, { waitUntil: 'domcontentloaded' });
   await page.locator('.jyc-home').waitFor({ state: 'visible', timeout: 15000 });
