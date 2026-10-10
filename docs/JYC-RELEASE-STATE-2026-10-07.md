@@ -55,6 +55,10 @@
 8. Capture production Core Web Vitals (LCP, INP and CLS) on representative desktop and mid-range mobile hardware after the correct production release is live.
 9. Update this state record only when the corresponding evidence is available. Do not call the site 100% production-ready while any P0 gate above is blocked.
 
+## Additional visual reference used — Innovation JIIT
+
+The companion audit `docs/JYC-UIUX-MEDIA-DEEP-AUDIT-2026-10-10.md` now documents a reference review of `Omtripathi007/Innovationjiit.in` and the publicly indexed Innovation JIIT site. Patterns selected for JYC are editorial photography, asymmetric featured-story hierarchy, rich event detail structure, clear cross-navigation among clubs/events/gallery/team, warm editorial typography, and deliberate mobile navigation. These principles are being adapted to JYC's existing champagne/beige and ivory/navy identity; reference code, assets, palette and unverified content are not copied. The supplied `share.google` link did not resolve to an identifiable destination during this pass, so no claims are attributed to it.
+
 ## Animation and design placement
 
 - **Hero:** Dither Veil only on the official JYC logo, with static fallback.
