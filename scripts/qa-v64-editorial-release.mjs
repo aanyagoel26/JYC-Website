@@ -6,6 +6,7 @@ const read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const main=read('src/main.jsx');
 const gallery=read('src/jyc57-experience.jsx');
 const responsive=read('src/jyc-responsive-photo.jsx');
+const homeCss=read('src/jyc-editorial-home.css');
 const intelligence=read('src/jyc-photo-intelligence.js');
 const routeShells=read('scripts/generate-route-shells.mjs');
 const sitemap=read('scripts/generate-sitemap.mjs');
@@ -26,6 +27,9 @@ const checks=[
  ['new V64 QA is wired',pkg.scripts?.['qa:v64-editorial']==='node scripts/qa-v64-editorial-release.mjs'],
  ['release metadata is V64',/^64\.\d+\.\d+$/.test(pkg.version)],
  ['production prebuild generates real photo derivatives',pkg.scripts?.prebuild?.includes('generate-photo-derivatives.mjs')],
+ ['desktop homepage headline is constrained to its copy column',homeCss.includes('font-size: clamp(48px, 4.5vw, 78px) !important;')&&homeCss.includes('line-height: .9 !important;')],
+ ['tablet homepage headline has its own responsive scale',homeCss.includes('font-size: clamp(58px, 8.5vw, 92px) !important;')],
+ ['mobile hero CTAs use equal flexible columns',homeCss.includes('grid-template-columns: repeat(2, minmax(0, 1fr));')&&homeCss.includes('min-height: 48px;')],
  ['responsive photos enable derivatives in production',responsive.includes('import.meta.env.PROD')],
  ['route metadata shell generator is wired',pkg.scripts?.postbuild==='node scripts/optimize-production-media.mjs && node scripts/generate-route-shells.mjs'&&routeShells.includes("<link rel=\"canonical\" href=\"${siteOrigin}${route}\" />")&&routeShells.includes("/events/jai-2026-jaypee-agentic-ai-hackathon")],
  ['route-shell canonicals use a stable production origin fallback',!routeShells.includes('process.env.VERCEL_URL')&&routeShells.includes("process.env.VITE_SITE_URL||'https://www.jiityouthclub128.in'")],
