@@ -129,6 +129,19 @@ assert('image-header dimensions match Sharp metadata across all committed/genera
 
 
 const derivativeRoot=path.resolve('public/assets/photo-derivatives');
+const allowedDerivativeFolders=['hub-photos/','hub-photos-extra/','events/','home/','team/'];
+const allowedArchiveSourceUrls=new Set(JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.map(item=>String(item?.url||'')));
+const derivativeBaseOwners=new Map(),duplicateDerivativeBases=[];
+for(const file of imageFiles){
+ if(file.startsWith(derivativeRoot+path.sep))continue;
+ const rel=path.relative(imageRoot,file).replaceAll(path.sep,'/'),url='/assets/'+rel;
+ const isAllowed=url.startsWith('/assets/source-archive/')?allowedArchiveSourceUrls.has(url):allowedDerivativeFolders.some(prefix=>rel.startsWith(prefix));
+ if(!isAllowed)continue;
+ const base=rel.replace(/\.(?:png|jpe?g|webp)$/i,'');
+ const previous=derivativeBaseOwners.get(base);
+ if(previous)duplicateDerivativeBases.push({base,files:[previous,rel]});else derivativeBaseOwners.set(base,rel);
+}
+assert('derivative-managed source files have unique output basenames',duplicateDerivativeBases.length===0,duplicateDerivativeBases.slice(0,8).map(item=>JSON.stringify(item)).join('; '));
 const derivativeFiles=[];
 if(fs.existsSync(derivativeRoot)){const walkDerivatives=dir=>{for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())walkDerivatives(file);else if(/\.(?:avif|webp)$/i.test(file))derivativeFiles.push(file)}};walkDerivatives(derivativeRoot)}
 const derivativeMismatches=[];
