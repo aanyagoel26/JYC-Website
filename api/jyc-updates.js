@@ -28,7 +28,7 @@ async function youtube(hub,channelId){
  const channel=(await r.json()).items?.[0];const playlist=channel?.contentDetails?.relatedPlaylists?.uploads;if(!playlist)return [];
  const p=new URL('https://www.googleapis.com/youtube/v3/playlistItems');p.searchParams.set('part','snippet,contentDetails');p.searchParams.set('playlistId',playlist);p.searchParams.set('maxResults','8');p.searchParams.set('key',key);
  const pr=await fetchWithTimeout(p);if(!pr.ok)throw Error('YouTube playlist '+pr.status);
- return ((await pr.json()).items||[]).map(x=>({externalId:x.contentDetails?.videoId,hub,platform:'YouTube',type:'Video',title:x.snippet?.title||hub+' video',summary:cleanText(x.snippet?.description).slice(0,220),publishedAt:x.snippet?.publishedAt,url:x.contentDetails?.videoId?safeRemoteUrl('https://www.youtube.com/watch?v='+x.contentDetails.videoId):'',image:safeRemoteUrl(x.snippet?.thumbnails?.high?.url||x.snippet?.thumbnails?.medium?.url||''),verified:true})));
+ return ((await pr.json()).items||[]).map(x=>({externalId:x.contentDetails?.videoId,hub,platform:'YouTube',type:'Video',title:x.snippet?.title||hub+' video',summary:cleanText(x.snippet?.description).slice(0,220),publishedAt:x.snippet?.publishedAt,url:x.contentDetails?.videoId?safeRemoteUrl('https://www.youtube.com/watch?v='+x.contentDetails.videoId):'',image:safeRemoteUrl(x.snippet?.thumbnails?.high?.url||x.snippet?.thumbnails?.medium?.url||''),verified:true}));
 }
 async function linkedin(hub,org){
  const token=process.env.LINKEDIN_ACCESS_TOKEN;if(!token||!org)return [];

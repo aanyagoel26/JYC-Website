@@ -552,7 +552,7 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
  if(clean==='/')return <>{schema}<Home data={data}/></>;
  if(clean==='/history')return <>{schema}<JYCHistory data={data}/></>;
  if(clean==='/about')return <>{schema}<About data={data}/></>;if(clean==='/clubs')return <>{schema}<JYC57Clubs data={data}/></>;if(club)return <>{schema}<ClubDetail data={data} id={slugId} virtualName={hubKey||undefined}/></>;
- if(clean==='/events')return <>{schema}<JYC57Events data={data}/></>;if(clean==='/fests')return isFestMode(data)?<>{schema}<FestsPage data={data}/></>:<Navigate to="/events" replace/>;if(clean.startsWith('/events/')&&legacyEventRedirect)return <Navigate to={'/events/'+legacyEventRedirect} replace/>;if(event&&parts[2]==='register')return <><RegistrationPage data={data} id={slugId} session={session}/></>;if(event)return <>{schema}<EventDetail data={data} id={slugId} session={session}/></>;
+ if(clean==='/events')return <>{schema}<JYC57Events data={data}/></>;if(clean==='/fests')return isFestMode(data)?<>{schema}<FestsPage data={data}/></>:<Navigate to="/events" replace/>;if(clean.startsWith('/events/')&&legacyEventRedirect)return <Navigate to={'/events/'+legacyEventRedirect} replace/>;if(event&&parts[2]==='register')return <><RegistrationPage data={data} id={slugId} session={session}/></>;if(event)return <>{schema}<EventDetail data={data} id={slugId} session={session} notify={notify}/></>;
  if(clean==='/gallery'||clean.startsWith('/gallery/'))return <>{schema}<JYC57Gallery data={data}/></>;if(clean==='/leadership')return <Navigate to="/team" replace/>;if(clean==='/team')return <>{schema}<Team data={data}/></>;if(clean==='/contact')return <>{schema}<Contact data={data}/></>;if(clean==='/archive')return <>{schema}<JYC57Archive data={data}/></>;
  if(clean==='/announcements')return <>{schema}<Announcements data={data}/></>;
  if(clean==='/updates')return <>{schema}<JYCNowPage data={data}/></>;
@@ -1022,11 +1022,12 @@ function EventTimelinePreview({events}){
  const items=[...events].slice(0,8);
  return <section className="event-timeline-preview reveal"><div className="event-timeline-head"><div><span className="eyebrow">EVENT TIMELINE</span><h2>Experiences with their own visual language.</h2><p>Every published event carries its own identity. Hover a row to see its organiser, date and source poster when one exists.</p></div><a className="text-link" href="/events">Open full archive →</a></div><div className="event-timeline-list">{items.map((e,i)=>{const identity=eventIdentity(e);return <button type="button" key={e.id||i} className="event-timeline-row" style={{'--hub-accent':identity.accent,'--hub-accent-soft':`color-mix(in srgb, ${identity.accent} 12%, transparent)`}} onClick={()=>nav('/events/'+slug(e.slug||e.title))}><span className="event-timeline-number">{String(i+1).padStart(2,'0')}</span><span className="event-timeline-date">{fmtDate(e.date)}</span><span className="event-timeline-title"><small>{identity.motif}</small><strong>{e.title}</strong></span><span className="event-timeline-club">{e.club||'JYC'}</span><span className="event-timeline-media">{e.poster?<img src={e.poster} alt="" loading="lazy"/>:<i>{identity.glyph}</i>}</span><b>↗</b></button>})}</div></section>
 }
-function EventDetail({data,id,session}){
+function EventDetail({data,id,session,notify}){
  const shouldReduceMotion=useReducedMotion();
  const e=findEntity(data.events,id);
  if(!e||(!e.published&&!e.publicStatus)||e.archived)return <section className="section page"><Back label="Back to events" to="/events"/><State title="Event not found." text="This event may be unpublished or archived."/></section>;
  const state=eventState(e);
+ const eventPoster=e.poster||sourceEventMedia(e)?.photoItems?.find(item=>item?.url)?.url||'';
  const related=[...data.gallery.filter(g=>e.galleryIds?.includes(g.id)||g.eventId===e.id),...PDF_HUB_EXTRA_GALLERY.filter(g=>{const a=String(g.association||'').toLowerCase();const t=String(e.title||'').toLowerCase();const club=String(e.club||'').toLowerCase();return (t&&a&&t.includes(a))||(club&&a&&club.includes(a))||(a&&t.includes(a.split(' · ')[0]||'___'));})].filter((g,i,a)=>a.findIndex(x=>x.id===g.id)===i);
  const relatedClub=data.clubs.find(c=>String(c.id)===String(e.clubId)||String(c.name||'').trim().toLowerCase()===String(e.club||'').trim().toLowerCase());
  const identity=eventIdentity(e);

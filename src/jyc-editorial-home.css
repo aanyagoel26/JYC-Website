@@ -355,3 +355,60 @@
   .jyc-editorial-home.jyc-home .jh-event-list button,
   .jyc-editorial-home.jyc-home .jh-update-list button{transition:none!important}
 }
+
+
+/* Innovation JIIT reference adaptation: source-backed editorial photo story. */
+.jyc-editorial-home.jyc-home .jh-photo-story{padding:8px 0 108px}
+.jyc-editorial-home.jyc-home .jh-photo-story-head{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,.65fr);align-items:end;gap:40px;margin-bottom:30px}
+.jyc-editorial-home.jyc-home .jh-photo-story-head h2{font:750 clamp(42px,5.5vw,76px)/.98 'Arial Black',Impact,system-ui,sans-serif;letter-spacing:-.065em;margin:18px 0 0}
+.jyc-editorial-home.jyc-home .jh-photo-story-head h2 em{font-family:Georgia,serif;font-weight:400}
+.jyc-editorial-home.jyc-home .jh-photo-story-intro{max-width:440px;justify-self:end}
+.jyc-editorial-home.jyc-home .jh-photo-story-intro p{color:var(--jh-muted);font-size:14px;line-height:1.8;margin:0 0 12px}
+.jyc-editorial-home.jyc-home .jh-photo-story-grid{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);grid-auto-rows:minmax(210px,1fr);gap:14px}
+.jyc-editorial-home.jyc-home .jh-story-card{position:relative;display:block;isolation:isolate;overflow:hidden;min-width:0;min-height:0;padding:0;aspect-ratio:16/10;text-align:left;background:#211e20;border:1px solid var(--jh-line);color:#fff;cursor:pointer;transform:translateZ(0);transition:border-color .24s ease,transform .24s var(--jh-ease),box-shadow .24s ease}
+.jyc-editorial-home.jyc-home .jh-photo-story-grid.has-three .jh-story-card-1{grid-row:span 2;aspect-ratio:auto;min-height:455px}
+.jyc-editorial-home.jyc-home .jh-story-photo,.jyc-editorial-home.jyc-home .jh-story-photo img{position:absolute;inset:0;width:100%;height:100%;display:block}
+.jyc-editorial-home.jyc-home .jh-story-photo img{object-fit:cover;object-position:center;transition:transform .55s var(--jh-ease),filter .3s ease}
+.jyc-editorial-home.jyc-home .jh-story-photo img[data-image-fallback-stage]{object-fit:contain!important;padding:36px;background:#f8f1e5}
+.jyc-editorial-home.jyc-home .jh-story-shade{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(8,7,8,.08) 10%,rgba(8,7,8,.04) 36%,rgba(8,7,8,.83) 100%);transition:opacity .25s ease}
+.jyc-editorial-home.jyc-home .jh-story-copy{position:absolute;z-index:2;left:clamp(18px,2.4vw,30px);right:clamp(18px,2.4vw,30px);bottom:clamp(18px,2.4vw,30px);display:grid;gap:10px;pointer-events:none}
+.jyc-editorial-home.jyc-home .jh-story-copy small{font:800 9px/1.5 Inter,system-ui,sans-serif;letter-spacing:.15em;text-transform:uppercase;color:#f0ddc3}
+.jyc-editorial-home.jyc-home .jh-story-copy small i{font-style:normal;color:var(--jh-accent);padding:0 3px}
+.jyc-editorial-home.jyc-home .jh-story-copy strong{font-size:clamp(18px,2.5vw,28px);font-weight:760;line-height:1.12;letter-spacing:-.035em;text-wrap:balance;max-width:24ch;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.jyc-editorial-home.jyc-home .jh-story-copy>b{display:flex;align-items:center;gap:9px;font-size:10px;font-weight:800;letter-spacing:.03em;color:#fff}
+.jyc-editorial-home.jyc-home .jh-story-copy>b span{color:#f0c996;transition:transform .2s ease}
+.jyc-editorial-home.jyc-home .jh-story-index{position:absolute;z-index:2;top:16px;right:16px;color:#fff;font:800 10px/1 Inter,system-ui,sans-serif;letter-spacing:.1em;padding:8px 9px;border:1px solid rgba(255,255,255,.48);background:rgba(12,10,12,.2)}
+.jyc-editorial-home.jyc-home .jh-story-card:hover{transform:translateY(-3px);border-color:var(--jh-accent);box-shadow:0 18px 48px rgba(0,0,0,.15)}
+.jyc-editorial-home.jyc-home .jh-story-card:hover .jh-story-photo img{transform:scale(1.035)}
+.jyc-editorial-home.jyc-home .jh-story-card:hover .jh-story-copy>b span{transform:translate(3px,-2px)}
+.jyc-editorial-home.jyc-home .jh-story-card:focus-visible{outline:3px solid var(--jh-accent);outline-offset:4px}
+.jyc-editorial-home.jyc-home .jh-featured-event{grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr)}
+.jyc-editorial-home.jyc-home .jh-event-image{min-height:430px}
+.jyc-editorial-home.jyc-home .jh-featured-event .jh-event-copy h3{max-width:15ch;text-wrap:balance}
+@media(max-width:900px){
+ .jyc-editorial-home.jyc-home .jh-photo-story{padding-bottom:82px}
+ .jyc-editorial-home.jyc-home .jh-photo-story-head{grid-template-columns:1fr minmax(240px,.8fr);gap:24px}
+ .jyc-editorial-home.jyc-home .jh-photo-story-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-auto-rows:minmax(205px,28vw)}
+ .jyc-editorial-home.jyc-home .jh-photo-story-grid.has-three .jh-story-card-1{min-height:420px}
+ .jyc-editorial-home.jyc-home .jh-story-copy strong{font-size:clamp(17px,2.7vw,23px)}
+ .jyc-editorial-home.jyc-home .jh-featured-event{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+ .jyc-editorial-home.jyc-home .jh-event-image{min-height:350px}
+}
+@media(max-width:680px){
+ .jyc-editorial-home.jyc-home .jh-photo-story{padding-top:0;padding-bottom:68px}
+ .jyc-editorial-home.jyc-home .jh-photo-story-head{grid-template-columns:1fr;gap:14px;margin-bottom:22px}
+ .jyc-editorial-home.jyc-home .jh-photo-story-intro{justify-self:start;max-width:100%}
+ .jyc-editorial-home.jyc-home .jh-photo-story-grid{grid-template-columns:1fr;grid-auto-rows:auto;gap:12px}
+ .jyc-editorial-home.jyc-home .jh-photo-story-grid.has-three .jh-story-card-1{grid-row:auto;min-height:0;aspect-ratio:4/4.2}
+ .jyc-editorial-home.jyc-home .jh-story-card{aspect-ratio:4/3.1;min-height:230px}
+ .jyc-editorial-home.jyc-home .jh-story-copy{left:18px;right:18px;bottom:18px}
+ .jyc-editorial-home.jyc-home .jh-story-copy strong{font-size:22px}
+ .jyc-editorial-home.jyc-home .jh-story-index{top:12px;right:12px}
+ .jyc-editorial-home.jyc-home .jh-featured-event{grid-template-columns:1fr}
+ .jyc-editorial-home.jyc-home .jh-event-image{min-height:0;aspect-ratio:4/3}
+}
+@media(prefers-reduced-motion:reduce){
+ .jyc-editorial-home.jyc-home .jh-story-card,
+ .jyc-editorial-home.jyc-home .jh-story-photo img,
+ .jyc-editorial-home.jyc-home .jh-story-copy>b span{transition:none!important;transform:none!important}
+}

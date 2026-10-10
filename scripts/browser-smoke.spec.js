@@ -1080,3 +1080,53 @@ test('JYC Assistant traps keyboard focus and restores focus after closing', asyn
   await expect(dialog).toHaveCount(0);
   await expect(trigger).toBeFocused();
 });
+
+
+test('published JAI event detail renders without entering the recovery boundary', async ({ page }) => {
+  await page.goto(base + '/events/jai-2026-jaypee-agentic-ai-hackathon', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'published JAI event detail');
+  await expect(page.locator('.event-detail-page')).toBeVisible();
+  await expect(page.locator('.event-detail-page h1')).toContainText(/JAI 2026/i);
+  await expect(page.getByText('That page hit a problem.')).toHaveCount(0);
+});
+
+test('tablet events hero keeps the headline inside its text frame', async ({ page }) => {
+  await page.setViewportSize({ width: 768, height: 900 });
+  await page.goto(base + '/events', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'tablet events directory');
+  const geometry = await page.locator('.jyc57-page .jyc57-hero h1').evaluate(el => {
+    const rect = el.getBoundingClientRect();
+    return { client: el.clientWidth, scroll: el.scrollWidth, left: rect.left, right: rect.right, viewport: innerWidth };
+  });
+  expect(geometry.scroll, 'event headline text must not clip inside its box').toBeLessThanOrEqual(geometry.client + 2);
+  expect(geometry.left).toBeGreaterThanOrEqual(0);
+  expect(geometry.right).toBeLessThanOrEqual(geometry.viewport + 2);
+});
+
+test('closed recruitment state still offers useful next steps', async ({ page }) => {
+  await page.goto(base + '/recruitment', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'recruitment directory');
+  await expect(page.getByText('No published club has recruitment enabled right now.')).toBeVisible();
+  await expect(page.getByRole('button', { name: /Explore clubs/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: /See events/ })).toBeVisible();
+  await expect(page.getByRole('button', { name: /Join JYC updates/ })).toBeVisible();
+});
+
+test('Best of JYC frames navigate into the matching gallery photo', async ({ page }) => {
+  await page.goto(base + '/best-of-jyc', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'Best of JYC editorial selection');
+  const card = page.locator('.jyc-best-of-page .jyc57-feature-card').first();
+  await expect(card).toBeVisible();
+  await card.click();
+  await expect(page).toHaveURL(/\/gallery\?photo=/);
+  await expect(page.locator('.jyc57-gallery-page')).toBeVisible();
+});
+
+
+test('updates API returns a JSON fallback instead of a function crash', async ({ request }) => {
+  test.skip(/^(127\.0\.0\.1|localhost)$/.test(new URL(base).hostname), 'Vite preview does not serve Vercel serverless API routes; run this check against a deployed preview.');
+  const response = await request.get(base + '/api/jyc-updates');
+  expect(response.status(), 'updates API must remain available even when connectors are not configured').toBe(200);
+  const payload = await response.json();
+  expect(Array.isArray(payload.items), 'updates API must always return an items array').toBe(true);
+});
