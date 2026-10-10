@@ -65,6 +65,12 @@ const invalidTeamPhotoPaths=teamPhotoEntries.filter(item=>!item.url.startsWith('
 assert('team portrait map is explicit and non-empty',teamPhotoEntries.length>=10,'found '+teamPhotoEntries.length);
 assert('every mapped team portrait is a committed local WebP',invalidTeamPhotoPaths.length===0,invalidTeamPhotoPaths.map(x=>x.name+': '+x.url).join(', '));
 assert('team flip cards use lazy responsive portraits and safe public profile links',mainSource.includes('className="team-photo-editorial"')&&mainSource.includes('loading="lazy" sizes=')&&mainSource.includes('safeExternalUrl(m.linkedin||m.socials?.linkedin)')&&mainSource.includes('team-member-back-content'));
+const responsivePhotoSource=fs.readFileSync('src/jyc-responsive-photo.jsx','utf8');
+const teamThemeSource=fs.readFileSync('src/jyc-logo-final-theme.css','utf8');
+assert('team portraits reserve intrinsic dimensions and fall back to the official JYC logo',mainSource.includes('width={600} height={720}')&&mainSource.includes('fallbackSrc="/JYC%20Logo(4).png"')&&mainSource.includes('fallbackAlt="Official JYC logo placeholder; portrait unavailable"'));
+assert('responsive photo fallback labels fallback media and restores source alt text',responsivePhotoSource.includes('fallbackAlt')&&responsivePhotoSource.includes("image.alt=alt")&&responsivePhotoSource.includes("image.alt=fallbackAlt||'JYC image fallback'"));
+assert('failed portrait logo fallback is contained rather than cropped',teamThemeSource.includes('img[data-image-fallback-stage="1"]')&&teamThemeSource.includes('object-fit:contain!important'));
+assert('browser QA simulates failed team portrait requests',browserSource.includes('failed team portraits use the official JYC logo and accurate fallback text')&&browserSource.includes("page.route('**/assets/team/**', route => route.abort())")&&browserSource.includes('portrait unavailable'));
 assert('browser QA decodes lazy media on every long-form public route',browserSource.includes("lazy-loaded media decodes across long-form public routes")&&browserSource.includes("const broken = media.filter(img => img.src && !img.loaded)")&&browserSource.includes("const missingAlt = media.filter(img => !img.hasAlt)"));
 if(process.exitCode)process.exit(1);
 console.log('Photo integrity QA: all checks passed.');
