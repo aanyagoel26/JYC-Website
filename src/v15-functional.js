@@ -68,13 +68,13 @@ function publicCacheSnapshot(value, depth = 0) {
   return safe;
 }
 
-export function writeSiteCache(data) {
-  try {
-    const snapshot = publicCacheSnapshot(data);
-    if (!snapshot || typeof snapshot !== 'object') return;
-    write(SITE_CACHE_KEY, JSON.stringify(snapshot));
-    write(SITE_CACHE_META_KEY, new Date().toISOString());
-  } catch {}
+export function writeSiteCache(_data) {
+  // The public RPC can contain certificate material that static field filtering
+  // cannot reliably classify. Do not persist the RPC payload in browser storage.
+  // Site rendering continues to use the live response; saved flags/reminders use
+  // their separately validated, non-sensitive keys.
+  remove(SITE_CACHE_KEY);
+  remove(SITE_CACHE_META_KEY);
 }
 
 export function siteCacheAge() {
