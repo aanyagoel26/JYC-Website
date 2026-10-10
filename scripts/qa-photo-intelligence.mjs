@@ -3,7 +3,7 @@ import {photoDerivativeUrls,parseImageDimensions} from '../src/jyc-photo-intelli
 const read=p=>fs.readFileSync(p,'utf8');
 const checks=[];
 
-const pngHeader=()=>{const b=new Uint8Array(24);b.set([0x89,0x50,0x4e,0x47],0);new DataView(b.buffer).setUint32(16,2048,false);new DataView(b.buffer).setUint32(20,1024,false);return b};
+const pngHeader=()=>{const b=new Uint8Array(24);b.set([0x89,0x50,0x4e,0x47,0x0d,0x0a,0x1a,0x0a],0);new DataView(b.buffer).setUint32(16,2048,false);new DataView(b.buffer).setUint32(20,1024,false);return b};
 const jpegHeader=()=>{const b=new Uint8Array(15);b.set([0xff,0xd8,0xff,0xc0,0x00,0x0b,0x08,0x02,0xd0,0x05,0x00,0x01,0x11,0x00,0xff]);return b};
 const webpHeader=kind=>{const b=new Uint8Array(30);b.set([...Buffer.from('RIFF')],0);b.set([...Buffer.from('WEBP')],8);b.set([...Buffer.from(kind)],12);if(kind==='VP8X'){b[24]=0x3b;b[25]=0x05;b[26]=0x00;b[27]=0xd2;b[28]=0x00;b[29]=0x00;}else if(kind==='VP8 '){b[23]=0x9d;b[24]=0x01;b[25]=0x2a;b[26]=0x00;b[27]=0x05;b[28]=0xd0;b[29]=0x02;}return b};
 const losslessWebpHeader=(width,height)=>{const b=new Uint8Array(26);b.set([...Buffer.from('RIFF')],0);b.set([...Buffer.from('WEBP')],8);b.set([...Buffer.from('VP8L')],12);b[20]=0x2f;const w=width-1,h=height-1;b[21]=w&255;b[22]=((w>>8)&0x3f)|((h&3)<<6);b[23]=(h>>2)&255;b[24]=(h>>10)&15;return b};
@@ -28,6 +28,7 @@ check('WebP VP8X extended dimensions are read exactly',JSON.stringify(parseImage
 check('WebP VP8 lossy dimensions are read exactly',JSON.stringify(parseImageDimensions(webpHeader('VP8 ')))===JSON.stringify({width:1280,height:720}));
 check('WebP VP8L lossless dimensions use the correct packed bits',JSON.stringify(parseImageDimensions(losslessWebpHeader(1500,211)))===JSON.stringify({width:1500,height:211}));
 check('unknown/truncated image data safely returns null',parseImageDimensions(new Uint8Array([0,1,2,3]))===null&&parseImageDimensions(new Uint8Array([0x89,0x50,0x4e,0x47]))===null);
+check('PNG dimension parser rejects an invalid full signature',parseImageDimensions(new Uint8Array([...pngHeader().slice(0,4),...new Uint8Array(20)]))===null);
 check('manifest generator uses the shared tested intrinsic-dimension parser',manifestGenerator.includes("import {isDerivativeDimensionEligible,parseImageDimensions} from '../src/jyc-photo-intelligence.js'")&&manifestGenerator.includes('const d=parseImageDimensions(fs.readFileSync(file))')&&!manifestGenerator.includes('function webp(b)'));
 check('WebP lossless dimension regression is explicitly covered',read('src/jyc-photo-intelligence.js').includes("kind==='VP8L'")&&read('src/jyc-photo-intelligence.js').includes('(bytes[23]<<2)|((bytes[24]&0x0f)<<10)')&&read('src/jyc-photo-intelligence.js').includes('(bytes[22]&0x3f)<<8'));
 check('image manifest dimension tests cover PNG JPEG VP8X VP8 and VP8L',read('scripts/qa-photo-intelligence.mjs').includes('PNG header dimensions are read exactly')&&read('scripts/qa-photo-intelligence.mjs').includes('JPEG SOF dimensions are read exactly')&&read('scripts/qa-photo-intelligence.mjs').includes('WebP VP8X extended dimensions are read exactly')&&read('scripts/qa-photo-intelligence.mjs').includes('WebP VP8 lossy dimensions are read exactly')&&read('scripts/qa-photo-intelligence.mjs').includes('WebP VP8L lossless dimensions use the correct packed bits'));
