@@ -15,8 +15,8 @@ if(/https:\/\/[^*\s]+\.supabase\.co/.test(vercel)) fail('Vercel CSP does not har
 if(vercel.includes('X-Content-Type-Options')&&vercel.includes('X-Frame-Options')&&vercel.includes('Referrer-Policy')) pass('Baseline security headers present'); else fail('Baseline security headers incomplete');
 if(vercel.includes('Strict-Transport-Security')) pass('HSTS header present'); else fail('HSTS header missing');
 const robots=read('public/robots.txt');
-const configuredSite=(process.env.JYC_CANONICAL_ORIGIN||'https://www.jiityouthclub128.in').trim();
-const siteOrigin=(()=>{try{const candidate=/^[a-z][a-z\d+.-]*:\/\//i.test(configuredSite)?configuredSite:`https://${configuredSite}`;const parsed=new URL(candidate);if(!['http:','https:'].includes(parsed.protocol)||parsed.username||parsed.password)throw new Error('Invalid site URL');return parsed.origin}catch{throw new Error('JYC_CANONICAL_ORIGIN must be a valid HTTP(S) origin')}})();
+const configuredSite=(process.env.VITE_CANONICAL_ORIGIN||'https://www.jiityouthclub128.in').trim();
+const siteOrigin=(()=>{try{const candidate=/^[a-z][a-z\d+.-]*:\/\//i.test(configuredSite)?configuredSite:`https://${configuredSite}`;const parsed=new URL(candidate);if(!['http:','https:'].includes(parsed.protocol)||parsed.username||parsed.password)throw new Error('Invalid site URL');return parsed.origin}catch{throw new Error('VITE_CANONICAL_ORIGIN must be a valid HTTP(S) origin')}})();
 const sitemap=path.join(root,'public','sitemap.xml');
 if(fs.existsSync(sitemap)){
   const sitemapText=read('public/sitemap.xml');
@@ -28,7 +28,7 @@ let robotsSitemapMatches=false;
 if(sitemapLine){try{const sitemapUrl=new URL(sitemapLine.slice(sitemapLine.indexOf(':')+1).trim());robotsSitemapMatches=['http:','https:'].includes(sitemapUrl.protocol)&&sitemapUrl.origin===siteOrigin&&sitemapUrl.pathname==='/sitemap.xml'&&!sitemapUrl.search&&!sitemapUrl.hash&&!sitemapUrl.username&&!sitemapUrl.password}catch{robotsSitemapMatches=false}}
 if(!sitemapLine||robotsSitemapMatches) pass('Robots sitemap is absent or matches the configured production origin'); else fail('Robots file points at a stale or malformed sitemap URL');
 const env=read('.env.example');
-if(env.includes('VITE_CANONICAL_ORIGIN=')&&env.includes('JYC_CANONICAL_ORIGIN=')) pass('Runtime and generated metadata share an explicit canonical origin'); else fail('Canonical origin variables are missing from .env.example');
+if(env.includes('VITE_CANONICAL_ORIGIN=')) pass('Runtime and generated metadata share an explicit canonical origin'); else fail('Canonical origin variables are missing from .env.example');
 if(read('src/main.jsx').includes('unknownRoute')&&read('src/main.jsx').includes('noindex:privateRoute||unknownRoute')) pass('Unknown SPA routes are marked noindex'); else fail('Unknown SPA routes can be indexed');
 if(read('src/extra-features.jsx').includes("if(item.date&&item.end)eventGraph.endDate")) pass('Event schema does not invent an end time'); else fail('Event schema end time fallback remains');
 const ai=read('supabase/functions/ai-content-assist/index.ts');
