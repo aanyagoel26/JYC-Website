@@ -1048,7 +1048,8 @@ html,body,#root,.app-frame,.app.public-app,.route-stage{max-width:100%;min-width
 
 /* Any failed editorial image becomes an identity mark, never a different event's photo. */
 .jyc-responsive-picture img[data-image-fallback-stage="1"],
-.jyc-responsive-picture img[data-image-fallback-stage="2"]{
+.jyc-responsive-picture img[data-image-fallback-stage="2"],
+.jyc-responsive-picture img[data-image-fallback-stage="3"]{
   object-fit:contain!important;
   object-position:center!important;
   padding:clamp(14px,2.5vw,28px);
