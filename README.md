@@ -301,9 +301,9 @@ The remaining production gates are operational: configure required third-party E
 
 ## Current release status
 
-**V64.4.3 is the current code release.** V62 is a checklist/release-governance pass: it adds the restrained JYC Network hero interaction, removes the legacy dither hero layer, restores the beige/champagne editorial accent system, and adds the master checklist to the static QA suite.
+**V64.5.0 is the current source release.** This pass introduces the official JYC logo as a lazy React Bits Dither Veil hero treatment, adds a magnetic activity Bento with reduced-motion and mobile safeguards, improves team profile flips and social links, gives each event its own visual accent, and prevents club logos from being cropped as photographs. It also refreshes verified CICR, Innovation JIIT and JODC profile details and expands photo regression coverage.
 
-The release boundary is aligned across package metadata, the service-worker cache, final product QA, final hygiene QA and public discovery files. The current operational/deployment state is documented in `docs/JYC-RELEASE-STATE-2026-10-07.md`; production deployment verification remains a separate gate from source-control QA.
+Package metadata, lockfile and the service-worker cache namespace are synchronized. Source-contract assertions are not a substitute for a successful production build or browser run. The latest GitHub Actions runs are failing before job steps/logs are exposed, and Vercel deployment limits/domain routing remain operational release gates; do not treat this branch as deployed or production-verified until those checks are green.
 
 The highest-value remaining production work is operational/editorial rather than architectural:
 
