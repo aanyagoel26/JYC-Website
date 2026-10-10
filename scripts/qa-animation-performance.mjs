@@ -22,4 +22,4 @@ check('MagicBento does not permanently reserve transform compositing',read('src/
 check('Homepage non-critical imagery stays lazy',home.includes('loading="lazy"'));
 check('Hero WebGL effect is lazy and has a non-WebGL fallback while Bento is coarse-pointer/reduced-motion safe',home.includes('LazyDitherVeil')&&home.includes('Suspense fallback={<img')&&bento.includes("'(pointer:coarse)'")&&bento.includes("'(prefers-reduced-motion: reduce)'")&&bento.includes('const disabled=disableAnimations||mobile||reducedMotion'));
 if(failures.length)process.exit(1);
-console.log('JYC animation/media performance contract: '+(11-failures.length)+'/11');
+console.log('JYC animation/media performance contract: '+(10-failures.length)+'/10');
