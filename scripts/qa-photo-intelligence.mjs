@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import {photoDerivativeUrls} from '../src/jyc-photo-intelligence.js';
 const read=p=>fs.readFileSync(p,'utf8');
 const checks=[];
 const source=read('src/jyc-source-media.js');
@@ -19,6 +20,7 @@ check('diversity-aware ranking is wired',intelligence.includes('rankDiverseJycPh
 check('responsive picture pipeline exists',responsive.includes('<picture')&&responsive.includes('srcSet')&&intelligence.includes('photoDerivativeUrls'));
 check('responsive derivatives resolve intrinsic widths and respect manifest eligibility',responsive.includes("fetch('/image-manifest.json'")&&responsive.includes('const entry=manifest?.images?.[src]')&&responsive.includes('entry?.derivativesEligible===true')&&responsive.includes('photoDerivativeUrls(src,intrinsicWidth)')&&responsive.includes('if(!derivativesEnabled||!isDerivativeSource(src))')&&imageManifestGenerator.includes('derivativesEligible:derivativeEligible(url)'));
 check('responsive derivative width descriptors never exceed intrinsic pixel width',intelligence.includes('width<=Number(sourceWidth)')&&derivatives.includes('if(width>meta.width)continue;')&&!intelligence.includes('width<=Number(sourceWidth)*1.15')&&!derivatives.includes('meta.width*1.15'));
+check('low-resolution sources never advertise nonexistent upscaled variants',photoDerivativeUrls('/assets/hub-photos/panache-01.webp',360)===null&&photoDerivativeUrls('/assets/hub-photos/panache-01.webp',500)?.webp.map(item=>item.width).join(',')==='480'&&photoDerivativeUrls('/assets/hub-photos/panache-01.webp',1000)?.webp.map(item=>item.width).join(',')==='480,960'&&photoDerivativeUrls('/assets/hub-photos/panache-01.webp',4000)?.webp.map(item=>item.width).join(',')==='480,960,1600'&&photoDerivativeUrls('/assets/team/member.webp',600)===null);
 check('image manifest is requested only for derivative-managed asset folders',responsive.includes('source-archive|hub-photos|hub-photos-extra')&&responsive.includes('if(!derivativesEnabled||!isDerivativeSource(src))'));
 check('source-archive identity assets are excluded from photo derivative generation',imageManifestGenerator.includes('derivativeArchiveUrls.has(url)')&&imageManifestGenerator.includes('derivativesEligible:derivativeEligible(url)')&&imageManifestGenerator.includes("JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.map(item=>String(item?.url||''))"));
 check('AVIF/WebP derivative build is wired into production prebuild',derivatives.includes('.avif')&&derivatives.includes('.webp')&&pkg.scripts['media:derivatives']==='node scripts/generate-photo-derivatives.mjs'&&pkg.scripts.prebuild.includes('generate-photo-derivatives.mjs'));
