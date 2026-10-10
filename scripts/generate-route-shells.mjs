@@ -13,7 +13,7 @@ if(!fs.existsSync(index)){
 }
 
 const html=fs.readFileSync(index,'utf8');
-const siteOrigin=new URL(process.env.JYC_CANONICAL_ORIGIN||'https://www.jiityouthclub128.in').origin;
+const siteOrigin=new URL(process.env.VITE_CANONICAL_ORIGIN||'https://www.jiityouthclub128.in').origin;
 const routes={
   '/about':{
     title:'About JIIT Youth Club 128 | JYC',
