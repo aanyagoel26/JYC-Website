@@ -16,7 +16,6 @@
 .jyc-home .jh-drift-wall-backdrop,.jyc-home .jh-drift-wall-vignette{position:absolute;inset:0;overflow:hidden}
 .jyc-home .jh-drift-wall-backdrop{opacity:.92}
 .jyc-home .jh-drift-wall-backdrop .drift-wall{height:100%;min-height:100%;width:100%;mask-image:linear-gradient(90deg,transparent 0%,#000 12%,#000 88%,transparent 100%);-webkit-mask-image:linear-gradient(90deg,transparent 0%,#000 12%,#000 88%,transparent 100%)}
-.jyc-home .jh-drift-wall-backdrop .drift-wall__plane{transform:translate(-50%,-50%) scale(1.04)!important}
 .jyc-home .jh-drift-wall-vignette{z-index:1;pointer-events:none;background:radial-gradient(ellipse at center,rgba(16,14,17,.08) 0%,rgba(16,14,17,.16) 40%,rgba(10,9,11,.76) 100%),linear-gradient(145deg,rgba(191,156,111,.12),transparent 45%);box-shadow:inset 0 0 0 1px rgba(248,241,229,.08)}
 .jyc-home .jh-drift-wall-vignette:after{content:"";position:absolute;inset:0;opacity:.16;background-image:radial-gradient(rgba(248,241,229,.42) .45px,transparent .65px);background-size:4px 4px;mix-blend-mode:soft-light}
 .jyc-home .jh-drift-wall-fallback{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,#39302b 0%,#171518 52%,#0b0a0c 100%)}
