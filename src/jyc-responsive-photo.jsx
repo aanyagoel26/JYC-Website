@@ -17,7 +17,9 @@ export function ResponsivePhoto({src,alt='',width,height,sizes='100vw',loading='
  const candidates=[fallbackSrc,LOGO_FALLBACK,ORIGINAL_LOGO].filter((url,index,all)=>Boolean(url)&&url!==src&&all.indexOf(url)===index);
  const failed=stage>candidates.length;
  const activeFallback=stage>0&&!failed;
- const variants=stage===0&&derivativesEnabled?photoDerivativeUrls(src,intrinsicWidth):null;
+ // Only emit srcset candidates after the generated manifest confirms intrinsic dimensions and derivative eligibility.
+ // If the manifest is unavailable, keep the original source rather than guessing derivative URLs that may 404 or upscale.
+ const variants=stage===0&&derivativesEnabled&&intrinsicWidth>0?photoDerivativeUrls(src,intrinsicWidth):null;
  const fallbackImage=variants?.webp?.at(-1)?.url||src;
  const resolvedSrc=stage===0?fallbackImage:activeFallback?candidates[stage-1]:undefined;
  useEffect(()=>{
