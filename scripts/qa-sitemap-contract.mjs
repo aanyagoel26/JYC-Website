@@ -11,7 +11,7 @@ const slug=value=>String(value||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'
 const allowed=new Set(core);
 for(const hub of JYC_HUB_SOURCE_REGISTRY) allowed.add('/clubs/'+slug(hub.name));
 
-const run=spawnSync(process.execPath,['scripts/generate-sitemap.mjs'],{cwd:root,env:{...process.env,VITE_SITE_URL:site},encoding:'utf8'});
+const run=spawnSync(process.execPath,['scripts/generate-sitemap.mjs'],{cwd:root,env:{...process.env,JYC_CANONICAL_ORIGIN:site},encoding:'utf8'});
 if(run.status!==0){console.error(run.stdout||'');console.error(run.stderr||'');process.exit(run.status||1)}
 const xml=fs.readFileSync(sitemapPath,'utf8');
 const locs=[...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>m[1].replace(site,''));
