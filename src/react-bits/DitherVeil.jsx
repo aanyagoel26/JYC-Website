@@ -428,8 +428,18 @@ const DitherVeil = ({
       container.dataset.static = '1';
       return () => { delete container.dataset.static; };
     }
-    const renderer = new Renderer({ dpr: Math.min(window.devicePixelRatio || 1, 2), alpha: false, antialias: false });
-    const gl = renderer.gl;
+    let renderer;
+    try {
+      renderer = new Renderer({ dpr: Math.min(window.devicePixelRatio || 1, 2), alpha: false, antialias: false });
+    } catch {
+      container.dataset.static = '1';
+      return () => { delete container.dataset.static; };
+    }
+    const gl = renderer?.gl;
+    if (!gl) {
+      container.dataset.static = '1';
+      return () => { renderer?.gl?.getExtension('WEBGL_lose_context')?.loseContext(); delete container.dataset.static; };
+    }
     const canvas = gl.canvas;
     canvas.style.display = 'block';
     canvas.style.width = '100%';
@@ -745,6 +755,10 @@ const DitherVeil = ({
       } catch {}
       introStart = performance.now();
       wake();
+    };
+    img.onerror = () => {
+      container.dataset.static = '1';
+      canvas.style.display = 'none';
     };
     img.src = src;
 
