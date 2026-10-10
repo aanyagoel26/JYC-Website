@@ -1,6 +1,12 @@
-import React,{useEffect,useRef} from 'react';
+import React,{useEffect,useRef,useState} from 'react';
 import {photoDerivativeUrls} from './jyc-photo-intelligence.js';
 const LOGO_FALLBACK='/JYC%20Logo(4).png';
+const isDerivativeSource=url=>/^\/assets\/(?:source-archive|hub-photos|hub-photos-extra)\//.test(String(url||''));
+let imageManifestPromise=null;
+const loadImageManifest=()=>{
+ if(!imageManifestPromise)imageManifestPromise=fetch('/image-manifest.json',{cache:'force-cache'}).then(response=>response.ok?response.json():null).catch(()=>null);
+ return imageManifestPromise;
+};
 const fallback=(e,src,fallbackSrc,fallbackAlt)=>{
  const image=e.currentTarget;
  const stage=image.dataset.imageFallbackStage||'0';
@@ -21,11 +27,25 @@ const fallback=(e,src,fallbackSrc,fallbackAlt)=>{
  image.removeAttribute('src');
  image.style.visibility='hidden';
 };
-export function ResponsivePhoto({src,alt='',width,height,sizes='100vw',loading='lazy',fetchPriority,decoding='async',className='',style,onError,objectPosition,fallbackSrc='/JYC%20Logo(4).png',fallbackAlt='Official JYC logo placeholder; image unavailable'}){
+export function ResponsivePhoto({src,alt='',width,height,sourceWidth,sizes='100vw',loading='lazy',fetchPriority,decoding='async',className='',style,onError,objectPosition,fallbackSrc='/JYC%20Logo(4).png',fallbackAlt='Official JYC logo placeholder; image unavailable'}){
  const imageRef=useRef(null);
+ const [sourceDimensions,setSourceDimensions]=useState({src:'',width:0});
+ const explicitSourceWidth=Number(sourceWidth)>0?Number(sourceWidth):0;
+ const intrinsicWidth=explicitSourceWidth||(sourceDimensions.src===src?sourceDimensions.width:0);
+ useEffect(()=>{
+  let active=true;
+  if(explicitSourceWidth>0){setSourceDimensions({src,width:explicitSourceWidth});return()=>{active=false}};
+  setSourceDimensions({src,width:0});
+  if(!isDerivativeSource(src))return()=>{active=false};
+  loadImageManifest().then(manifest=>{
+   const measured=Number(manifest?.images?.[src]?.width);
+   if(active&&measured>0)setSourceDimensions({src,width:measured});
+  });
+  return()=>{active=false};
+ },[src,sourceWidth]);
  useEffect(()=>{if(imageRef.current){delete imageRef.current.dataset.imageFallbackStage;imageRef.current.style.visibility='';imageRef.current.alt=alt}},[src,fallbackSrc,alt]);
  const derivativesEnabled=import.meta.env.PROD||import.meta.env.VITE_ENABLE_PHOTO_DERIVATIVES==='true';
- const variants=derivativesEnabled?photoDerivativeUrls(src,width):null;
+ const variants=derivativesEnabled?photoDerivativeUrls(src,intrinsicWidth):null;
  const fallbackImage=variants?.webp?.at(-1)?.url||src;
  const sourceSet=list=>list.map(x=>x.url+' '+x.width+'w').join(', ');
  return <picture className={className?'jyc-responsive-picture '+className:'jyc-responsive-picture'}>
