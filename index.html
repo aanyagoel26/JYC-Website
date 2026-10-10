@@ -22,6 +22,8 @@
           theme = window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         }
         document.documentElement.dataset.theme = theme;
+        const themeColor = document.querySelector('meta[name="theme-color"]');
+        if (themeColor) themeColor.content = theme === 'dark' ? '#0f0e11' : '#f5f1e6';
       })();
     </script>
     <script>
