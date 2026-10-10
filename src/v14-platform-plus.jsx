@@ -1,4 +1,3 @@
-import {jycToast} from './lib/ui';
 import {useState} from 'react';
 import {useParams} from 'react-router-dom';
 const safe=(v)=>{try{const u=new URL(String(v||''),window.location.origin);return ['http:','https:'].includes(u.protocol)?u.href:''}catch{return ''}};
