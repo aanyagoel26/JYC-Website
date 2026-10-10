@@ -7,7 +7,7 @@ const LazyDitherVeil=lazy(()=>import('./react-bits/DitherVeil.jsx'));
 const LazyMagicBento=lazy(()=>import('./components/react-bits/MagicBento.jsx'));
 import './jyc-editorial-home.css';
 
-const FALLBACK='/assets/hub-photos/jyc-06.webp';
+const FALLBACK='/JYC%20Logo(4).png';
 function LazyActivityBento({activities,nav}){
  const host=useRef(null),[active,setActive]=useState(false);
  useEffect(()=>{
@@ -29,8 +29,8 @@ const eventPath=e=>`/events/${slug(e?.slug||e?.title)}`;
 const media=v=>v?.url||v?.src||v?.image||v?.imageUrl||'';
 const dateMs=e=>{const raw=String(e?.date||'').trim();if(!raw)return Infinity;const time=String(e?.start||'').trim();const candidate=/T\d{2}:\d{2}/.test(raw)?raw:raw+'T'+(/^\d{1,2}:\d{2}$/.test(time)?time.padStart(5,'0'):'00:00');const ms=Date.parse(candidate);return Number.isFinite(ms)?ms:Infinity};
 const dateLabel=v=>{const d=new Date(String(v||''));return Number.isNaN(d.getTime())?'DATE TBA':d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});};
-const eventImage=e=>e?.poster||sourceEventMedia(e)?.photoItems?.filter(x=>x?.url).map(media)[0]||FALLBACK;
-function Img({src,alt,loading,fetchPriority,decoding='async',...props}){const resolvedLoading=loading??(fetchPriority==='high'?'eager':'lazy');return <img {...props} src={src||FALLBACK} alt={alt||''} loading={resolvedLoading} fetchPriority={fetchPriority} decoding={decoding} onError={e=>{if(e.currentTarget.dataset.fallback)return;e.currentTarget.dataset.fallback='1';e.currentTarget.src=FALLBACK;}}/>}
+const eventImage=e=>e?.poster||sourceEventMedia(e)?.photoItems?.filter(x=>x?.url).map(media)[0]||'';
+function Img({src,alt,loading,fetchPriority,decoding='async',...props}){const resolvedLoading=loading??(fetchPriority==='high'?'eager':'lazy');const hasMedia=Boolean(src);return <img {...props} src={src||FALLBACK} alt={hasMedia?(alt||''):'Official JYC logo placeholder; event media unavailable'} loading={resolvedLoading} fetchPriority={fetchPriority} decoding={decoding} onError={e=>{const image=e.currentTarget;if(image.dataset.fallback){image.hidden=true;return}image.dataset.fallback='1';image.alt='Official JYC logo placeholder; image unavailable';image.src=FALLBACK;}}/>}
 
 export function JYCEditorialHome({data}){
  const nav=useNavigate();
