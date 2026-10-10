@@ -17,6 +17,7 @@ const flip=read('src/components/react-bits/FlipCard.jsx');
 const indexHtml=read('index.html');
 const socials=read('src/jyc-socials.js');
 const hubs=read('src/v21-hub-content.js');
+const hubDetails=read('src/v23.6-hub-details.js');
 const derivatives=read('scripts/generate-photo-derivatives.mjs');
 const bot=read('src/jyc-bot.jsx');
 const assistant=read('src/jyc-assistant.jsx');
@@ -97,7 +98,7 @@ const checks=[
  ['browser regression covers intended magnetic card movement',browser.includes('magnetic bento motion is limited to intended club and event cards')&&browser.includes('legacy public cards stay flat outside the intentional magnetic bento')],
  ['team flip browser test includes an official LinkedIn profile',browser.includes('team-member-flip:has(.team-social-row a[href*="linkedin.com"])')&&browser.includes("toHaveAttribute('href', /^https:\\/\\/(?:www\\.|in\\.)?linkedin\\.com\\//)")],
  ['hub social links remain separated by verified identity',socials.includes("Fortissimo: {},")&&socials.includes("Panache: {},")&&socials.includes("Prismatic: {},")&&socials.includes("JYC_SOCIAL_SOURCE_POLICY")],
- ['official club profiles and event history are source-verified without inventing upcoming events',socials.includes("verifiedOn: '2026-10-10'")&&socials.includes('TechTonic 2.0 with date TBA')&&socials.includes('Code Clash 25.2')&&socials.includes('VamUnique as the dance society of JIIT Sector 128')&&hubs.includes('550 students')&&hubs.includes('current auditions and performance dates')&&hubs.includes('newly established in 2026')],
+ ['official club profiles and event history are source-verified without inventing upcoming events',socials.includes("verifiedOn: '2026-10-10'")&&socials.includes('TechTonic 2.0 with date TBA')&&socials.includes('Code Clash 25.2')&&socials.includes('VamUnique as the dance society of JIIT Sector 128')&&hubs.includes('550+ students')&&hubs.includes('current auditions and performance dates')&&hubs.includes('newly established in 2026')&&hubDetails.includes('AI Unlocked (11 August) and ROBOSPARK (21 September)')&&hubDetails.includes('The profile highlights contribution, collaboration and developer networking')],
  ['hero DriftWall retains component-driven transforms',editorialHome.includes('LazyDriftWall')&&!design.includes('.jh-drift-wall-backdrop .drift-wall__plane{transform:')],
  ['official hero logo never falls back to an unrelated photo',editorialHome.includes('<img className="jh-hero-logo"')&&editorialHome.includes("onError={event=>{event.currentTarget.hidden=true}}")&&!editorialHome.includes('<Img className="jh-hero-logo"')],
  ['club, fest and event detail photography uses responsive image handling',main.includes('club-hero-photo-wall')&&main.includes('event-detail-poster-image-wrap')&&main.includes('fest-hero-photo-wall')&&main.includes("ResponsivePhoto src={e.summitLogo")],
