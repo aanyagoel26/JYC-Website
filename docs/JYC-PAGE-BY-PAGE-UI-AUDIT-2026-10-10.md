@@ -36,8 +36,9 @@ This was a DOM/geometry and interaction audit, not a substitute for human visual
 - No horizontal **document** overflow was found across the audited route/viewport matrix.
 - No broken visible images, missing `alt` attributes or unnamed interactive controls were detected in the route-level scan.
 - At 320px and 390px, collection cards outside the viewport belong to the intended horizontal gallery collection scroller; they are not document overflow. The scroller now has a clearer affordance.
-- At 768px, the events/fests hero headline's scroll width exceeded its text box. The new tablet breakpoint changes the hero to a single column and reduces the headline size to prevent clipping.
-- The JAI event detail route was the only route found in the matrix that entered the application recovery boundary.
+- At 768px, the events/fests hero headline's scroll width initially exceeded its text box. The new tablet breakpoint changes the hero to a single column and reduces the headline size; the fixed headline now fits its box.
+- The JAI event detail route initially entered the application recovery boundary. The deployed fix now renders the JAI title and Notify me action without the recovery screen.
+- Re-ran the full 20-route × 5-viewport matrix against the ready preview after the fixes: zero horizontal-overflow routes, broken visible images, missing `alt` attributes, unnamed controls, recovery screens, uncaught page errors or same-origin HTTP error responses.
 
 ## Changes in this branch
 
@@ -47,12 +48,12 @@ This was a DOM/geometry and interaction audit, not a substitute for human visual
 4. Improve gallery collection rail discoverability with a scroll hint and scrollbar styling.
 5. Make Best of JYC cards open the matching gallery photo.
 6. Add useful navigation actions to the closed-recruitment empty state.
-7. Add browser regression tests for JAI event detail rendering, tablet headline geometry, closed recruitment actions and Best of JYC gallery navigation.
-8. Add current-release coherence assertions for the route-level fixes.
+7. Add browser regression tests for JAI event detail rendering, tablet headline geometry, closed recruitment actions, Best of JYC gallery navigation and the Updates API response.
+8. Add current-release coherence assertions, including `node --check` for the serverless Updates API.
 
 ## Release gates still open
 
 - The live custom domain `www.jiityouthclub128.in` returned JAI 2026 summit content for the homepage and sampled JYC routes during the public-site check, while Vercel reports both `jiityouthclub128.in` and `www.jiityouthclub128.in` as unverified on the JYC project. Resolve domain/DNS ownership and routing before treating the custom domain as the verified JYC production site.
-- The preview's `/api/jyc-updates` request returned HTTP 500 because of a syntax error in the YouTube mapper. The source is fixed and now parses; a fresh deployment is building. The endpoint must still be confirmed with HTTP 200 on the new ready deployment.
-- Vercel has automatically started preview builds for later branch commits. The deployment containing the API syntax fix (`928f0158c810ab0ecdbdcec1dcfa38571f24b600`) is still BUILDING; the newest PR head (`4321c8f761df28400ad3b9ed8a9897e5a2a4a65c`) is newer still and needs its own READY deployment. The first READY build (`405ede839153ba4615c45889350aba68b0be083a`) predates these fixes and is not a valid preview of the current PR head.
-- A manual deployment request was rejected by Vercel with HTTP 402 `api-deployments-free-per-day` (more than 100 deployment API calls; retry after 24 hours). Git-linked automatic preview builds are appearing for commits, but the latest head still needs to finish deploying. Do not merge until the current head is deployed and browser/quality checks are green.
+- The Updates API is now HTTP 200 and returns valid JSON: `{\"items\":[],\"live\":false,\"configured\":false}`. The parser crash is fixed. This preview has no update connector environment configured, so live aggregated updates are not active; configure the approved feed credentials/settings to enable them.
+- The Vercel preview for commit `928f0158c810ab0ecdbdcec1dcfa38571f24b600` is READY and contains all application-source fixes. A GitHub compare confirmed that the subsequent commits through the current PR head only modify the audit document and QA/test scripts, not the application bundle. The exact latest head still has no green CI result.
+- A manual deployment request was rejected by Vercel with HTTP 402 `api-deployments-free-per-day` (more than 100 deployment API calls; retry after 24 hours). Automatic Git-linked deployment succeeded for the app-code fix commit. Do not merge until CI/quality checks are green.
