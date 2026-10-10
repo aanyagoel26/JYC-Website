@@ -133,3 +133,12 @@ Use restrained, purposeful motion: Dither Veil only for the official logo; magne
 2. Inspect a representative sample from every hub and event: square identity mark, portrait photo, landscape event poster, panorama, missing image, broken URL, transparent PNG and low-resolution original. Confirm logos use contain, photos use the intended crop, and no non-photo strip is treated as a full-width photograph.
 3. Run the browser image-failure and theme-toggle tests on the built production preview; record natural dimensions, currentSrc, layout shift, and console/network errors rather than relying only on static assertions.
 4. Measure mobile LCP/CLS and desktop INP before adding further animation. Keep Dither Veil limited to the logo and magnetic motion limited to the Bento/intentional club-event cards; avoid adding another continuously animated full-page background.
+
+## Incremental follow-up — V64.5.2 image-header integrity
+
+- **Found and fixed a real metadata defect:** the previous lossless WebP (VP8L) parser extracted width/height from the wrong packed bytes. This could write incorrect intrinsic dimensions into `image-manifest.json`, which is the source of truth for responsive derivative selection.
+- Centralized dimension parsing in `src/jyc-photo-intelligence.js` for PNG, JPEG SOF, WebP VP8X, VP8 and VP8L; PNG detection now validates the complete eight-byte signature.
+- Added synthetic header fixtures for each supported format and malformed/truncated inputs. Photo-intelligence QA asserts the manifest generator uses the shared parser.
+- Expanded photo-integrity QA to compare the parsed dimensions against Sharp's metadata for every PNG, JPEG and WebP under `public/assets`, including generated derivatives. The check runs with bounded concurrency and reports mismatched files.
+- Updated the package/lockfile version to **64.5.2** and recorded the fix in the changelog and README.
+- **Validation boundary:** source and QA wiring were inspected after editing; the test scripts and full production build still need to execute on the exact current head. No new successful CI or Vercel build is claimed for this change.
