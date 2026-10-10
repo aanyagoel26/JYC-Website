@@ -807,7 +807,10 @@ test('public route shells keep route-specific SEO content and one primary headin
     const primaryHeading = page.getByRole('heading', { level: 1 });
     await expect(primaryHeading).toHaveCount(1);
     await expect(primaryHeading).toHaveText(title);
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://www.jiityouthclub128.in' + path);
+    const canonical = 'https://www.jiityouthclub128.in' + path;
+    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', canonical);
+    const schemas = await page.locator('script[type="application/ld+json"]').evaluateAll(nodes => nodes.map(node => JSON.parse(node.textContent || '{}')));
+    expect(schemas.some(schema => schema['@type'] === 'WebPage' && schema.name === title && schema.url === canonical)).toBeTruthy();
   }
 });
 
