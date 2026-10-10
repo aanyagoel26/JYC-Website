@@ -219,7 +219,7 @@ function App(){const loc=useLocation();const nav=useNavigate();const [data,setDa
      img.dataset.jycFallback='1';
      img.dataset.jycFallbackApplied='1';
      img.removeAttribute('srcset');
-     img.src='/JYC%20Logo(4).png';
+     img.src=logo;
    };
    document.addEventListener('error',onImageError,true);
    return()=>document.removeEventListener('error',onImageError,true);
