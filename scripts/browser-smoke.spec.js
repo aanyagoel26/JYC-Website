@@ -1121,3 +1121,11 @@ test('Best of JYC frames navigate into the matching gallery photo', async ({ pag
   await expect(page).toHaveURL(/\/gallery\?photo=/);
   await expect(page.locator('.jyc57-gallery-page')).toBeVisible();
 });
+
+
+test('updates API returns a JSON fallback instead of a function crash', async ({ request }) => {
+  const response = await request.get(base + '/api/jyc-updates');
+  expect(response.status(), 'updates API must remain available even when connectors are not configured').toBe(200);
+  const payload = await response.json();
+  expect(Array.isArray(payload.items), 'updates API must always return an items array').toBe(true);
+});
