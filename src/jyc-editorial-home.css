@@ -54,3 +54,62 @@
 @media(max-width:900px) and (min-width:681px){
  .jh-hero-visual .jyc-network{right:8px;bottom:8px}
 }
+
+
+/* V64.4.4 visual QA fix: keep the editorial headline inside its grid column.
+   The shared public theme applies a more specific display-heading size, so these
+   scoped overrides intentionally win without changing headings on other routes. */
+@media (min-width:1001px) {
+  .jyc-editorial-home.jyc-home .jh-hero h1 {
+    font-size: clamp(48px, 4.5vw, 78px) !important;
+    line-height: .9 !important;
+    letter-spacing: -.065em !important;
+    overflow-wrap: normal;
+    text-wrap: balance;
+  }
+  .jyc-editorial-home.jyc-home .jh-hero h1 span:nth-child(2) {
+    white-space: nowrap;
+  }
+}
+@media (min-width:681px) and (max-width:1000px) {
+  .jyc-editorial-home.jyc-home .jh-hero h1 {
+    font-size: clamp(58px, 8.5vw, 92px) !important;
+    line-height: .9 !important;
+    letter-spacing: -.065em !important;
+    text-wrap: balance;
+  }
+}
+@media (max-width:680px) {
+  .jyc-editorial-home.jyc-home .jh-hero h1 {
+    font-size: clamp(44px, 13.2vw, 62px) !important;
+    line-height: .9 !important;
+    letter-spacing: -.065em !important;
+  }
+  .jyc-editorial-home.jyc-home .jh-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: stretch;
+  }
+  .jyc-editorial-home.jyc-home .jh-actions .jh-btn {
+    min-width: 0;
+    min-height: 48px;
+    padding-inline: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    text-align: left;
+    overflow-wrap: anywhere;
+  }
+  .jyc-editorial-home.jyc-home .jh-actions .jh-btn span {
+    margin-left: 0;
+    flex: 0 0 auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .jyc-editorial-home.jyc-home .jh-hero h1,
+  .jyc-editorial-home.jyc-home .jh-btn {
+    animation: none !important;
+    transition: none !important;
+  }
+}
