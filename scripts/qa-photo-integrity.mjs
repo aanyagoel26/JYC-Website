@@ -3,6 +3,7 @@ import {JYC_SOURCE_MEDIA_STATS,mergeSourceGallery,sourceEventMedia,buildJycMedia
 
 const assert=(name,ok,detail='')=>{console.log((ok?'PASS: ':'FAIL: ')+name+(detail?' — '+detail:''));if(!ok)process.exitCode=1};
 const mediaSource=fs.readFileSync('src/jyc-source-media.js','utf8');
+const mainSource=fs.readFileSync('src/main.jsx','utf8');
 const auditedCategories=['clubs/abhivyakti','clubs/panache','clubs/cypherx','festivals/aakriti','gallery/campus-events'];
 const auditedExclusionIds=auditedCategories.flatMap(cat=>{
   const start=mediaSource.indexOf(`'${cat}':new Set([`);
@@ -57,5 +58,11 @@ assert('newly audited non-photo archive assets stay out of photo pool',auditedEx
 assert('event photo rail exposes only explicit photography',eventPhotoItems.every(x=>x?.mediaKind==='photo'));
 assert('identity assets are preserved in the broader source gallery',gallery.some(x=>x.mediaKind==='identity'));
 assert('event media still retains broader source records separately',event.items.length>=eventPhotoItems.length);
+const teamPhotoBlock=mainSource.match(/const TEAM_LOCAL_PHOTOS=\\{([\\s\\S]*?)\\};/);
+const teamPhotoEntries=teamPhotoBlock?[...teamPhotoBlock[1].matchAll(/'([^']+)'\\s*:\\s*'([^']+)'/g)].map(match=>({name:match[1],url:match[2]})):[];
+const invalidTeamPhotoPaths=teamPhotoEntries.filter(item=>!item.url.startsWith('/assets/team/')||!item.url.endsWith('.webp')||!fs.existsSync('public'+item.url));
+assert('team portrait map is explicit and non-empty',teamPhotoEntries.length>=10,'found '+teamPhotoEntries.length);
+assert('every mapped team portrait is a committed local WebP',invalidTeamPhotoPaths.length===0,invalidTeamPhotoPaths.map(x=>x.name+': '+x.url).join(', '));
+assert('team flip cards use lazy responsive portraits and safe public profile links',mainSource.includes('className="team-photo-editorial"')&&mainSource.includes('loading="lazy" sizes=')&&mainSource.includes('safeExternalUrl(m.linkedin||m.socials?.linkedin)')&&mainSource.includes('team-member-back-content'));
 if(process.exitCode)process.exit(1);
 console.log('Photo integrity QA: all checks passed.');
