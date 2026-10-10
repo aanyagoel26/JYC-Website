@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
+import {isDerivativeDimensionEligible} from '../src/jyc-photo-intelligence.js';
 const {JYC_SOURCE_ARCHIVE_PHOTO_ITEMS}=await import('../src/jyc-source-media.js');
 const allowedArchive=new Set(JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.map(item=>String(item?.url||'')));
 const root=path.resolve('public/assets');
@@ -24,7 +25,7 @@ const processFile=async file=>{
  fs.mkdirSync(outDir,{recursive:true});
  try{
   const meta=await sharp(file).metadata();
-  if(!meta.width||!meta.height){skipped++;return}
+  if(!meta.width||!meta.height||!isDerivativeDimensionEligible(meta.width,meta.height)){skipped++;return}
   for(const width of WIDTHS){
    if(width>meta.width)continue;
    for(const format of ['avif','webp']){
