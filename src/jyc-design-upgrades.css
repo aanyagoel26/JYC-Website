@@ -193,12 +193,16 @@
 .search-modal .modal-head,.more-sheet .more-sheet-head{border-color:var(--border-tech,rgba(191,156,111,.35))}
 .search-modal .search-subtitle,.more-sheet .more-sheet-head p{color:var(--text-muted,#6e6a75)}
 .search-modal .search-input-wrap,.search-modal input{background:var(--bg-main,#f5f1e6);color:var(--text-primary,#1a191d);border-color:var(--border-tech,rgba(191,156,111,.35))}
-.search-modal .search-result,.search-modal .search-results button,.more-sheet .more-sheet-grid button{background:var(--bg-card,#fff);color:var(--text-primary,#1a191d);border-color:var(--border-tech,rgba(191,156,111,.35))}
-.search-modal .search-result:hover,.search-modal .search-results button:hover,.more-sheet .more-sheet-grid button:hover{background:color-mix(in srgb,var(--accent-gold,#bf9c6f) 14%,var(--bg-card,#fff))}
+.search-modal .search-result,.search-modal .search-list button,.search-modal .search-suggestions button,.search-modal .search-recent button,.search-modal .search-empty-actions button,.more-sheet .more-sheet-grid button{background:var(--bg-card,#fff);color:var(--text-primary,#1a191d);border-color:var(--border-tech,rgba(191,156,111,.35))}
+.search-modal .search-result:hover,.search-modal .search-list button:hover,.search-modal .search-suggestions button:hover,.search-modal .search-recent button:hover,.search-modal .search-empty-actions button:hover,.more-sheet .more-sheet-grid button:hover{background:color-mix(in srgb,var(--accent-gold,#bf9c6f) 14%,var(--bg-card,#fff))}
 .search-modal :where(input,button):focus-visible,.more-sheet :where(a,button):focus-visible{outline:2px solid var(--accent-gold,#bf9c6f);outline-offset:3px}
 :root[data-theme="dark"] .team-member-face-content{background:var(--bg-card,#18161d);color:var(--text-primary,#f5f1e6)}
 :root[data-theme="dark"] .team-member-back-content{background:var(--bg-card,#18161d);color:var(--text-primary,#f5f1e6)}
 :root[data-theme="dark"] .team-social-row a{color:var(--text-primary,#f5f1e6)}
+.search-modal .search-list button.search-result-active{background:color-mix(in srgb,var(--accent-gold,#bf9c6f) 18%,var(--bg-card,#fff));border-color:var(--accent-gold,#bf9c6f);color:var(--text-primary,#1a191d)}
+.search-modal .search-no-results,.search-modal .search-empty{color:var(--text-primary,#1a191d)}
+.search-modal .search-no-results p,.search-modal .search-empty p,.search-modal .search-meta,.search-modal .search-footer{color:var(--text-muted,#6e6a75)}
+.jyc-logo-fallback{display:inline-grid;place-items:center;aspect-ratio:1;min-width:0;min-height:0;border:1px solid var(--accent-gold,#bf9c6f);border-radius:50%;background:var(--bg-card,#fff);color:var(--accent-gold,#bf9c6f);font-weight:900;letter-spacing:-.08em}
 @media(max-width:1100px){
  .jyc57-page .jyc57-club-wall{grid-template-columns:repeat(6,minmax(0,1fr))}
  .jyc57-page .jyc57-club-card,.jyc57-page .jyc57-club-card:nth-child(7n+1),.jyc57-page .jyc57-club-card:nth-child(7n+5){grid-column:span 3;min-height:320px}
