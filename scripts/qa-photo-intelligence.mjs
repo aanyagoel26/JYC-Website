@@ -1,7 +1,12 @@
 import fs from 'node:fs';
-import {photoDerivativeUrls} from '../src/jyc-photo-intelligence.js';
+import {photoDerivativeUrls,parseImageDimensions} from '../src/jyc-photo-intelligence.js';
 const read=p=>fs.readFileSync(p,'utf8');
 const checks=[];
+
+const pngHeader=()=>{const b=new Uint8Array(24);b.set([0x89,0x50,0x4e,0x47],0);new DataView(b.buffer).setUint32(16,2048,false);new DataView(b.buffer).setUint32(20,1024,false);return b};
+const jpegHeader=()=>{const b=new Uint8Array(15);b.set([0xff,0xd8,0xff,0xc0,0x00,0x0b,0x08,0x02,0xd0,0x05,0x00,0x01,0x11,0x00,0xff]);return b};
+const webpHeader=(kind,payloadSize=10)=>{const b=new Uint8Array(30);b.set([...Buffer.from('RIFF')],0);b.set([...Buffer.from('WEBP')],8);b.set([...Buffer.from(kind)],12);if(kind==='VP8X'){b[24]=0x3b;b[25]=0x05;b[26]=0x00;b[27]=0xd2;b[28]=0x00;b[29]=0x00;}else if(kind==='VP8 '){b[23]=0x9d;b[24]=0x01;b[25]=0x2a;b[26]=0x00;b[27]=0x05;b[28]=0xd0;b[29]=0x02;}return b};
+const losslessWebpHeader=(width,height)=>{const b=new Uint8Array(26);b.set([...Buffer.from('RIFF')],0);b.set([...Buffer.from('WEBP')],8);b.set([...Buffer.from('VP8L')],12);b[20]=0x2f;const w=width-1,h=height-1;b[21]=w&255;b[22]=((w>>8)&0x3f)|((h&3)<<6);b[23]=(h>>2)&255;b[24]=(h>>10)&15;return b};
 const source=read('src/jyc-source-media.js');
 const intelligence=read('src/jyc-photo-intelligence.js');
 const responsive=read('src/jyc-responsive-photo.jsx');
@@ -16,6 +21,12 @@ const imageManifestGenerator=read('scripts/generate-image-manifest.mjs');
 const productionMediaOptimizer=read('scripts/optimize-production-media.mjs');
 const pkg=JSON.parse(read('package.json'));
 const check=(name,ok)=>checks.push({name,ok:Boolean(ok)});
+check('PNG header dimensions are read exactly',JSON.stringify(parseImageDimensions(pngHeader()))===JSON.stringify({width:2048,height:1024}));
+check('JPEG SOF dimensions are read exactly',JSON.stringify(parseImageDimensions(jpegHeader()))===JSON.stringify({width:1280,height:720}));
+check('WebP VP8X extended dimensions are read exactly',JSON.stringify(parseImageDimensions(webpHeader('VP8X')))===JSON.stringify({width:1339,height:211}));
+check('WebP VP8 lossy dimensions are read exactly',JSON.stringify(parseImageDimensions(webpHeader('VP8 ')))===JSON.stringify({width:1280,height:720}));
+check('WebP VP8L lossless dimensions use the correct packed bits',JSON.stringify(parseImageDimensions(losslessWebpHeader(1500,211)))===JSON.stringify({width:1500,height:211}));
+check('unknown/truncated image data safely returns null',parseImageDimensions(new Uint8Array([0,1,2,3]))===null&&parseImageDimensions(new Uint8Array([0x89,0x50,0x4e,0x47]))===null);
 check('editorial rubric is defined',intelligence.includes('JYC_EDITORIAL_RUBRIC')&&intelligence.includes('scoreJycPhoto'));
 check('diversity-aware ranking is wired',intelligence.includes('rankDiverseJycPhotos')&&source.includes('rankDiverseJycPhotos'));
 check('responsive picture pipeline exists',responsive.includes('<picture')&&responsive.includes('srcSet')&&intelligence.includes('photoDerivativeUrls'));
