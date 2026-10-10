@@ -40,3 +40,9 @@ a,button{-webkit-tap-highlight-color:transparent}
 .jh-hero h1,.jh-hero h1 *{white-space:normal!important;overflow-wrap:anywhere;word-break:normal;max-width:100%}
 .jyc-network-node{letter-spacing:0!important;overflow-wrap:anywhere;word-break:normal;line-height:1.1}
 .public-app button{min-width:40px;min-height:44px}
+/* Follow-up: target the current v57 page shell, whose route root may not be .public-app. */
+.jyc57-page button{min-width:40px;min-height:44px;box-sizing:border-box}
+.jyc57-page .jyc57-event-toolbar .jyc57-segment{display:flex;flex-wrap:wrap;gap:6px;min-width:0}
+.jyc57-page .jyc57-event-toolbar .jyc57-segment button{flex:0 0 auto;min-width:44px;padding-inline:10px;white-space:normal}
+.jyc-network-node{min-width:0;max-width:calc(100% - 4px);padding-inline:3px;letter-spacing:0!important;overflow-wrap:anywhere;word-break:normal;line-height:1.1;box-sizing:border-box}
+.jh-hero h1,.jh-hero h1 *{min-width:0;white-space:normal!important;overflow-wrap:anywhere;word-break:normal;max-width:100%}
