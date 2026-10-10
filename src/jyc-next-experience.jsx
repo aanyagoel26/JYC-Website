@@ -167,7 +167,6 @@ export function HubSignalRail({data}){
  const hubs=useMemo(()=>JYC_HUB_SOURCE_REGISTRY.map(meta=>{const canonical=canonicalHubName(meta.name);const p=JYC_HUB_CONTENT[canonical]||{};return {...meta,canonicalName:canonical,...p,media:sourceHubMedia(canonical)}}),[]);
  const visible=useMemo(()=>family==='All'?hubs:hubs.filter(h=>h.family===family),[family,hubs]);
  const currentCount=JYC_HUB_VERIFIED_CURRENT.length;
- const sourceOnlyCount=JYC_HUB_SOURCE_ONLY.length;
  const sourceMaterialCount=JYC_HUB_SOURCE_ONLY.filter(h=>h.status==='source-material').length;
  return <section className="section jyc-hub-signal-section reveal">
   <div className="jyc-hub-signal-head">
