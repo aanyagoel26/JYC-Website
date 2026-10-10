@@ -143,3 +143,8 @@ Reference inspected: `Omtripathi007/Innovationjiit.in`, including its `innovatio
 2. Verify every adopted pattern against both themes, keyboard-only use and reduced-motion mode.
 3. Prefer verified JYC imagery and content. Do not copy Innovation Club photos, logos, code or private team information.
 4. Keep source-derived visual inspiration separate from factual JYC content; use official/attributable sources before adding claims, people, dates or registration states.
+
+
+## Second reference supplied in this request — unresolved share link
+
+The shortened link `https://share.google/bgNM6MWanvi9Q2alm` was checked alongside the Innovation JIIT source. It exposes a Google share-link landing page in the available browser result, not the original content. Its destination remains unknown, so this audit does not attribute design or product recommendations to it. If the source is a screenshot, another website, or a design reference, the direct destination URL or uploaded image is needed to review it reliably.
