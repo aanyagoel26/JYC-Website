@@ -152,6 +152,7 @@ const checks=[
  ['homepage editorial photo story has responsive layout and reduced-motion safeguards',homeCss.includes('.jh-photo-story-grid.has-three .jh-story-card-1')&&homeCss.includes('@media(max-width:680px)')&&homeCss.includes('@media(prefers-reduced-motion:reduce)')&&homeCss.includes('jh-story-card:hover .jh-story-photo img')]
  ['JYC Now fallback reflects the current JAI deadline and flags conflicting RIDE status',now.includes('Unstop registration closes 15 October 2026')&&now.includes('RIDE Hack\\'26 · check registration status')&&now.includes('verified:false')],
  ['JYC Now cards and filters have dark-theme contrast and reduced-motion overrides',now.includes('html[data-theme="dark"] .jyc-now-card')&&now.includes('var(--jyc-muted-live')&&now.includes('prefers-reduced-motion:reduce')],
+ ['browser suite verifies JYC Now light/dark contrast',browser.includes('JYC Now fallback cards and filters keep readable contrast in light and dark themes')&&browser.includes('cardTextContrast')&&browser.includes('paragraphContrast')&&browser.includes("toBeGreaterThanOrEqual(4.5)")],
 ];
 let failed=0;
 for(const [name,ok] of checks){console.log((ok?'PASS':'FAIL')+' · '+name);if(!ok)failed++}
