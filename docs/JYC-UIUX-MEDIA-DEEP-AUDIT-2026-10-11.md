@@ -19,7 +19,7 @@ The V64.5.9 branch contains the identity-first homepage, React Bits Dither Veil 
 ### Event source correction
 - Current JYC-128 LinkedIn content advertises JAI 2026 for 30–31 October 2026, with four thematic tracks and the flagship hackathon.
 - The official JAI website displays the 30–31 October dates, ₹15 lakh hackathon prize pool and ₹1 crore pre-seed pool.
-- The Unstop listing gives a registration deadline of 15 October 2026, 11:59 PM IST. A prior migration had set 10 October; the new migration corrects this while preserving the authenticated editorial approval gate.
+- The Unstop listing gives a registration deadline of 15 October 2026, 11:59 PM IST. A prior migration had set 10 October; the new migration corrects this while preserving the live row's existing publication and verification statuses.
 - Innovation JIIT's official site and LinkedIn remain inconsistent about RIDE HACK 26 registration status: LinkedIn states an application close date of 5 October while the site still shows “Registrations are NOW OPEN.” Do not display an unqualified open/closed state until the organizer confirms.
 - The JIIT Youth Club LinkedIn company page describes Sector 62; the separate JYC-128 profile is the correct source for the Wish Town/Sector-128 site. Likewise, JODC identifies itself as the JIIT-128 open-source society, while the separately named OSDC profile is associated with Sector 62. Do not mix their people, photos, events or claims.
 
