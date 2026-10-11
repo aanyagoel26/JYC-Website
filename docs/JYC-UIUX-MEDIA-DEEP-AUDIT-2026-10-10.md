@@ -212,6 +212,7 @@ Use restrained, purposeful motion: Dither Veil only for the official logo; magne
 - `src/jyc-image-manifest.js` now accepts only a non-empty object at `payload.images`; invalid/empty payloads clear the shared promise and return `null`, allowing a later route mount to retry.
 - Added a browser regression that returns an HTTP 200 with a malformed manifest on the Team route, then navigates to Gallery and verifies a second request restores verified responsive image sources. The source-contract checks now guard this regression as well.
 - The shared loader still uses `cache: 'no-cache'`; gallery album/photo metadata and `ResponsivePhoto` source sets share the same request and cannot drift to separate stale snapshots.
+- **Offline boot-logo mismatch fixed:** the static pre-React screen previously requested AVIF while the service worker only precached the compact WebP logo, so an offline first load could hide the logo before React mounted. The boot screen now requests the precached WebP and retains the original PNG as its compatibility fallback; the no-JavaScript browser regression checks the logo actually decodes.
 
 ### Current release gate
 - Targeted cross-file source assertions pass for the shared loader, declarative image fallback, manifest eligibility, photo QA wiring, theme/hero/team design contracts and release metadata.
