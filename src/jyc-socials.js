@@ -245,6 +245,24 @@ export const JYC_SOCIAL_SOURCE_POLICY = {
   ]
 };
 
+const normalizeSocialIdentity=value=>{
+  try{
+    const url=new URL(String(value||''));
+    let host=url.hostname.toLowerCase().replace(/^www\\./,'');
+    if(host==='in.linkedin.com')host='linkedin.com';
+    const pathname=url.pathname.replace(/\\/+$/,'');
+    return host+pathname.toLowerCase();
+  }catch{
+    return String(value||'').trim().replace(/\\/+$/,'').toLowerCase();
+  }
+};
+
 export function is128SocialProfile(profile){
-  return Boolean(profile && profile.campus === 'sector-128' && profile.sourcePriority && (profile.verifiedBy || JYC_SOCIAL_SOURCE_POLICY.approvedIdentities.includes(profile.linkedin) || JYC_SOCIAL_SOURCE_POLICY.approvedIdentities.includes(profile.instagram)) && !JYC_SOCIAL_SOURCE_POLICY.blockedIdentities.includes(profile.linkedin));
+  if(!profile||profile.campus!=='sector-128'||!profile.sourcePriority)return false;
+  const normalize=normalizeSocialIdentity;
+  const blocked=new Set(JYC_SOCIAL_SOURCE_POLICY.blockedIdentities.map(normalize));
+  const approved=new Set(JYC_SOCIAL_SOURCE_POLICY.approvedIdentities.map(normalize));
+  const urls=[profile.linkedin,profile.instagram,profile.website,profile.official].filter(Boolean).map(normalize);
+  const hasApprovedIdentity=Boolean(profile.verifiedBy||approved.has(normalize(profile.linkedin))||approved.has(normalize(profile.instagram)));
+  return hasApprovedIdentity&&!urls.some(url=>blocked.has(url));
 }
