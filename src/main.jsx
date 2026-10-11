@@ -365,6 +365,13 @@ function Contact({data}){
  const [sent,setSent]=useState(false);
  const [sending,setSending]=useState(false);
  const [submitError,setSubmitError]=useState('');
+ const copyEmail=(text,label)=>{
+  if(navigator?.clipboard?.writeText){
+   navigator.clipboard.writeText(text).then(()=>jycToast(label+' copied to clipboard!')).catch(()=>jycToast(text));
+  }else{
+   jycToast(text);
+  }
+ };
  const submit=async e=>{e.preventDefault();setSubmitError('');if(!form.name.trim()||!form.email.trim()||!form.message.trim())return;setSending(true);try{
    if(!supabase.__configured){
      setSubmitError('The live contact inbox is not configured yet. Please use Instagram, LinkedIn or WhatsApp below.');
@@ -376,7 +383,82 @@ function Contact({data}){
    console.warn('JYC contact submission unavailable:',err);
    setSubmitError('The live contact inbox is not configured yet. Please use Instagram or WhatsApp below.');
  }finally{setSending(false)}};
- return <section className="section page contact-page"><Back label="Back to home" to="/"/><SectionHead level={1} eyebrow="CONTACT" title="Stay connected with JYC." text="Follow official channels for updates, events and opportunities."/><div className="contact-grid"><a className="contact-card" href={JYC_CONTACTS.official} target="_blank" rel="noreferrer"><span>01</span><h3>Official JYC links</h3><p>Verified JYC 128 links.</p>↗</a><a className="contact-card" href={JYC_CONTACTS.linkedin} target="_blank" rel="noreferrer"><span>02</span><h3>LinkedIn</h3><p>Official JYC organisation page.</p>↗</a><a className="contact-card" href={JYC_CONTACTS.whatsapp} target="_blank" rel="noreferrer"><span>03</span><h3>WhatsApp Community</h3><p>Join the JYC community.</p>↗</a><div className="contact-card"><span>04</span><h3>Website Creator</h3><p>{data.creator.name} · {data.creator.role}</p><div className="social-row"><a href={data.creator.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a><a href={data.creator.instagram} target="_blank" rel="noopener noreferrer">Instagram ↗</a><a href={data.creator.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a></div><p>{data.creator.email}</p></div></div><div className="contact-location reveal"><span className="eyebrow">JYC 128 · OFFICIAL CAMPUS</span><h3>Jaypee Institute of Information Technology, Sector 128</h3><p>Jaypee Wish Town Village, Sultanpur, Noida–201304, Uttar Pradesh, India.</p><a className="text-link" href="https://www.jiit.ac.in/contact-us" target="_blank" rel="noopener noreferrer">Verify campus contact details on JIIT ↗</a></div><div className="contact-form-container reveal"><div className="contact-form-card"><div className="contact-form-head"><span className="eyebrow">SEND A MESSAGE</span><h3>Write to JYC.</h3><p>Use this form to reach JYC when public submissions are enabled. Official social channels remain available below.</p></div>{sent?<div className="contact-form-success" role="status"><b>Thanks, {form.name.split(' ')[0]||'friend'}!</b><p>Your message has been received. JYC channels are also available below if you need a faster response.</p><button type="button" className="btn" onClick={()=>{setSent(false);setForm({name:'',email:'',message:''})}}>Send another message</button></div>:<form className="contact-form" onSubmit={submit} noValidate><label><span>Name</span><input name="name" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} placeholder="Your full name" required autoComplete="name"/></label><label><span>Email</span><input name="email" type="email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} placeholder="you@email.com" required autoComplete="email"/></label><label><span>Message</span><textarea name="message" rows="5" value={form.message} onChange={e=>setForm({...form,message:e.target.value})} placeholder="How can JYC help you?" required/></label>{submitError&&<p className="contact-form-error" role="alert">{submitError}</p>}<button className="btn primary" type="submit" disabled={sending}>{sending?'Sending…':'Send message →'}</button></form>}</div></div></section>}
+ return <section className="section page contact-page">
+  <Back label="Back to home" to="/"/>
+  <SectionHead level={1} eyebrow="COMMUNICATION HUB" title="Stay connected with JYC." text="Official portals, verified community channels, and campus assistance."/>
+  <div className="contact-sla-banner reveal">
+   <span className="sla-dot"/>
+   <strong>STUDENT DESK ACTIVE</strong>
+   <span>Monday – Saturday · 9:00 AM – 6:00 PM IST · Verified JIIT Sector 128 Channels</span>
+  </div>
+  <div className="contact-grid">
+   <a className="contact-card" href={JYC_CONTACTS.official} target="_blank" rel="noreferrer">
+    <span>01</span>
+    <h3>Official Links</h3>
+    <p>Verified Linktree directory with registration portals.</p>
+    <span className="contact-arrow">↗</span>
+   </a>
+   <a className="contact-card" href={JYC_CONTACTS.instagram} target="_blank" rel="noreferrer">
+    <span>02</span>
+    <h3>Official Instagram</h3>
+    <p>@jiityouthclub128 · Live story broadcasts, reels & recaps.</p>
+    <span className="contact-arrow">↗</span>
+   </a>
+   <a className="contact-card" href={JYC_CONTACTS.linkedin} target="_blank" rel="noreferrer">
+    <span>03</span>
+    <h3>LinkedIn Page</h3>
+    <p>Professional updates, hackathons & achievements.</p>
+    <span className="contact-arrow">↗</span>
+   </a>
+   <a className="contact-card" href={JYC_CONTACTS.whatsapp} target="_blank" rel="noreferrer">
+    <span>04</span>
+    <h3>WhatsApp Community</h3>
+    <p>Official broadcast group for enrolled JIIT students.</p>
+    <span className="contact-arrow">↗</span>
+   </a>
+   <div className="contact-card contact-creator-card">
+    <span>05</span>
+    <h3>Website Creator</h3>
+    <p>{data.creator.name} · {data.creator.role}</p>
+    <div className="social-row">
+     <a href={data.creator.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+     <a href={data.creator.instagram} target="_blank" rel="noopener noreferrer">Instagram ↗</a>
+     <a href={data.creator.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+    </div>
+    <div className="contact-email-copy-row">
+     <code>{data.creator.email}</code>
+     <button type="button" className="btn-copy-mini" onClick={()=>copyEmail(data.creator.email,'Creator email')}>Copy Email 📋</button>
+    </div>
+   </div>
+  </div>
+  <div className="contact-location reveal">
+   <span className="eyebrow">JYC 128 · OFFICIAL CAMPUS</span>
+   <h3>Jaypee Institute of Information Technology, Sector 128</h3>
+   <p>Jaypee Wish Town Village, Sultanpur, Noida–201304, Uttar Pradesh, India.</p>
+   <a className="text-link" href="https://www.jiit.ac.in/contact-us" target="_blank" rel="noopener noreferrer">Verify campus contact details on JIIT ↗</a>
+  </div>
+  <div className="contact-form-container reveal">
+   <div className="contact-form-card">
+    <div className="contact-form-head">
+     <span className="eyebrow">DIRECT DISPATCH</span>
+     <h3>Write to JYC.</h3>
+     <p>Send an inquiry to the student body. Official social channels remain available above for immediate assistance.</p>
+    </div>
+    {sent?<div className="contact-form-success" role="status">
+     <b>Thanks, {form.name.split(' ')[0]||'friend'}!</b>
+     <p>Your message has been received. JYC channels are also available above if you need a faster response.</p>
+     <button type="button" className="btn" onClick={()=>{setSent(false);setForm({name:'',email:'',message:''})}}>Send another message</button>
+    </div>:<form className="contact-form" onSubmit={submit} noValidate>
+     <label><span>Name</span><input name="name" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} placeholder="Your full name" required autoComplete="name"/></label>
+     <label><span>Email</span><input name="email" type="email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} placeholder="you@email.com" required autoComplete="email"/></label>
+     <label><span>Message</span><textarea name="message" rows="5" value={form.message} onChange={e=>setForm({...form,message:e.target.value})} placeholder="How can JYC help you?" required/></label>
+     {submitError&&<p className="contact-form-error" role="alert">{submitError}</p>}
+     <button className="btn primary" type="submit" disabled={sending}>{sending?'Sending…':'Send message →'}</button>
+    </form>}
+   </div>
+  </div>
+ </section>
+}
 function FestsPage({data}){
  const nav=useNavigate();
  const fests=data.events.filter(e=>e.published&&isSector128Venue(e.venue)&&(/fest|impressions|converge|ebullience/i.test(`${e.title} ${e.eventType||''}`))).sort((a,b)=>`${b.date} ${b.start}`.localeCompare(`${a.date} ${a.start}`));
@@ -889,22 +971,50 @@ function JoinJYC(){
   <Breadcrumbs items={[{label:'Join JYC'}]}/><EcosystemContextRail/>
   <div className="join-soon-hero reveal">
    <div className="join-soon-mark"><LogoImage alt="JIIT Youth Club logo"/></div>
-   <span className="eyebrow">JYC · 2026–27</span>
-   <h1>Join JYC.</h1>
-   <p>The next JYC recruitment cycle is being prepared. When applications open, this page will become the official starting point for opportunities across the JYC apex body, committees and communities.</p>
+   <span className="eyebrow">JYC 128 · ACADEMIC YEAR 2026–27</span>
+   <h1>Ready to Soar.<br/><em>Join the JYC Student Ecosystem.</em></h1>
+   <p>The annual induction and recruitment cycle opens for first-year and second-year students every semester. Explore your domain, prepare your portfolio, and become part of JIIT's apex student life.</p>
+   <div className="join-notify-box">
+    <button type="button" className="btn primary" onClick={e=>{e.currentTarget.textContent='✓ Alert Registered — We will remind you!';e.currentTarget.classList.add('secondary')}}>
+     Notify Me When Recruitment Opens 🔔
+    </button>
+    <small>Zero spam. You will be notified via browser notice when registrations go live.</small>
+   </div>
    <div className="hero-actions" style={{justifyContent:'center',marginTop:24}}>
-    <Button onClick={()=>nav('/clubs')}>Explore communities ↗</Button>
-    <Button secondary onClick={()=>nav('/events')}>See JYC in action →</Button>
+    <Button onClick={()=>nav('/clubs')}>Explore All 23 Communities ↗</Button>
+    <Button secondary onClick={()=>nav('/events')}>See Live Experiences →</Button>
    </div>
   </div>
-  <div className="join-benefits reveal">
-   <article><b>01</b><h3>Leadership</h3><p>Discover how students coordinate people, programmes and campus experiences.</p></article>
-   <article><b>02</b><h3>Communities</h3><p>Find the cultural, technical, creative, literary and sports spaces that fit you.</p></article>
-   <article><b>03</b><h3>Opportunities</h3><p>Official application links and deadlines will appear here once the next cycle is published.</p></article>
-  </div>
-  <section className="section-inline-head reveal" style={{marginTop:40,textAlign:'center'}}>
-   <div><span className="eyebrow">UNTIL THEN</span><h2>Explore first. Join when the door opens.</h2><p>Use Clubs and Events to understand the JYC ecosystem before applications go live.</p></div>
+  <section className="join-roadmap-section reveal">
+   <div className="section-inline-head" style={{marginBottom:28}}>
+    <div><span className="eyebrow">APPLICATION ROADMAP</span><h2>How induction works.</h2><p>Four structured phases from campus newcomer to official community member.</p></div>
+   </div>
+   <div className="join-roadmap-grid">
+    {[{num:'01',title:'Explore Societies',text:'Discover all 23 active clubs across 5 community families.'},{num:'02',title:'Orientation & Inductions',text:'Attend live introductory workshops and interact with society heads.'},{num:'03',title:'Auditions & Code Sprints',text:'Showcase your coding, performance, design, writing or management skills.'},{num:'04',title:'Join the Cohort',text:'Receive your official badge, join the WhatsApp groups, and start organizing.'}].map(s=><article key={s.num} className="join-roadmap-card">
+     <span className="roadmap-num">{s.num}</span>
+     <h3>{s.title}</h3>
+     <p>{s.text}</p>
+    </article>)}
+   </div>
   </section>
+  <section className="join-domains-section reveal">
+   <div className="section-inline-head" style={{marginBottom:24}}>
+    <div><span className="eyebrow">ACTIVE RECRUITMENT DOMAINS</span><h2>Find where your passion belongs.</h2><p>Whether you write code, fly drones, dance, direct plays, design or play sports, there is a dedicated space for you.</p></div>
+    <a className="text-link" href="/clubs">All clubs →</a>
+   </div>
+   <div className="join-domain-grid">
+    {[{name:'AI & Software Dev',hub:'OSDC / ZenCoders / RPH',family:'Technical',accent:'#38bdf8'},{name:'Robotics & Drone Tech',hub:'CICR / Dronotics',family:'Technical',accent:'#00e5ff'},{name:'Performing Arts & Dance',hub:'VamUnique / BDS / Jhankaar',family:'Cultural',accent:'#f43f5e'},{name:'Music & Band',hub:'Fortissimo',family:'Cultural',accent:'#fbbf24'},{name:'Fashion & Runway',hub:'Panache',family:'Cultural',accent:'#e11d48'},{name:'Fine Arts & Design',hub:'Aakriti / Prismatic',family:'Creative',accent:'#a855f7'},{name:'Photography & Visuals',hub:'Aura',family:'Creative',accent:'#38bdf8'},{name:'Debate & Literature',hub:'Eloquence / Parola',family:'Literary',accent:'#10b981'},{name:'Competitive Sports',hub:'JSA / Sports Club',family:'Sports',accent:'#f59e0b'}].map(d=><button type="button" key={d.name} className="join-domain-card" style={{'--domain-accent':d.accent}} onClick={()=>nav('/clubs')}>
+     <div className="domain-top"><small>{d.family}</small><span className="domain-arrow">↗</span></div>
+     <h3>{d.name}</h3>
+     <p>{d.hub}</p>
+    </button>)}
+   </div>
+  </section>
+  <div className="join-benefits reveal">
+   <article><b>01</b><h3>Apex Leadership</h3><p>Develop real-world leadership coordinating national hackathons, cultural fests and college operations.</p></article>
+   <article><b>02</b><h3>Lifelong Friendships</h3><p>Connect with passionate peers, seniors, and alumni across technical, cultural and athletic domains.</p></article>
+   <article><b>03</b><h3>Official Recognition</h3><p>Earn verified university leadership credits, awards and certificates of merit on your resume.</p></article>
+  </div>
  </section>
 }
 

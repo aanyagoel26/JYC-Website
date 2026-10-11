@@ -2242,4 +2242,441 @@
   transform: rotate(15deg);
 }
 
+/* --------------------------------------------------------------------------
+   JOIN JYC ONBOARDING PORTAL (INSPIRATION: OSDC & INNOVATION JIIT)
+   -------------------------------------------------------------------------- */
+.join-jyc-page {
+  padding-bottom: 90px;
+}
+
+.join-soon-hero {
+  position: relative;
+  text-align: center;
+  padding: clamp(48px, 6vw, 84px) 24px;
+  background: radial-gradient(circle at 50% 0%, rgba(56, 189, 248, 0.12), transparent 60%), var(--tech-surface);
+  border: 1px solid var(--tech-border);
+  border-radius: var(--tech-radius-lg);
+  margin-bottom: 36px;
+  overflow: hidden;
+}
+
+.join-soon-mark {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: var(--tech-surface-elevated);
+  border: 1px solid var(--tech-border-glow);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 32px rgba(56, 189, 248, 0.2);
+}
+
+.join-soon-mark img {
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+}
+
+.join-soon-hero h1 {
+  font: 800 clamp(36px, 5vw, 64px)/1.08 'Space Grotesk', system-ui, sans-serif;
+  letter-spacing: -0.03em;
+  color: #fff;
+  margin: 12px 0 16px;
+}
+
+.join-soon-hero h1 em {
+  font-style: normal;
+  color: var(--tech-gold);
+}
+
+.join-soon-hero p {
+  max-width: 680px;
+  margin: 0 auto 24px;
+  color: var(--tech-text-secondary);
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.join-notify-box {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 24px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--tech-radius-md);
+  margin: 8px auto 16px;
+}
+
+.join-notify-box small {
+  color: var(--tech-text-muted);
+  font-size: 11px;
+}
+
+.join-roadmap-section {
+  margin: 48px 0;
+}
+
+.join-roadmap-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+.join-roadmap-card {
+  position: relative;
+  padding: 28px 24px;
+  background: var(--tech-surface);
+  border: 1px solid var(--tech-border);
+  border-radius: var(--tech-radius-md);
+  transition: all 0.25s var(--tech-ease);
+}
+
+.join-roadmap-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--tech-cyan);
+  box-shadow: 0 16px 36px -10px rgba(56, 189, 248, 0.2);
+}
+
+.roadmap-num {
+  display: inline-block;
+  font: 800 28px/1 'Space Grotesk', monospace;
+  color: var(--tech-gold);
+  margin-bottom: 14px;
+}
+
+.join-roadmap-card h3 {
+  font: 700 18px 'Space Grotesk', system-ui, sans-serif;
+  color: #fff;
+  margin: 0 0 8px;
+}
+
+.join-roadmap-card p {
+  color: var(--tech-text-secondary);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.join-domains-section {
+  margin: 48px 0;
+}
+
+.join-domain-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+}
+
+.join-domain-card {
+  position: relative;
+  padding: 20px;
+  background: var(--tech-surface);
+  border: 1px solid var(--tech-border);
+  border-radius: var(--tech-radius-md);
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+  transition: all 0.25s var(--tech-ease);
+}
+
+.join-domain-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--domain-accent, var(--tech-cyan));
+  box-shadow: 0 12px 30px -8px color-mix(in srgb, var(--domain-accent, var(--tech-cyan)) 25%, transparent);
+}
+
+.domain-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.domain-top small {
+  font: 700 10px 'Space Grotesk', sans-serif;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--domain-accent, var(--tech-gold));
+}
+
+.domain-arrow {
+  font-size: 14px;
+  color: var(--tech-text-muted);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.join-domain-card:hover .domain-arrow {
+  transform: translate(2px, -2px);
+  color: #fff;
+}
+
+.join-domain-card h3 {
+  font: 700 16px 'Space Grotesk', system-ui, sans-serif;
+  color: #fff;
+  margin: 0 0 6px;
+}
+
+.join-domain-card p {
+  font-size: 12px;
+  color: var(--tech-text-secondary);
+  margin: 0;
+}
+
+.join-benefits {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  border: 1px solid var(--tech-border);
+  border-radius: var(--tech-radius-md);
+  background: var(--tech-surface);
+  overflow: hidden;
+  margin-top: 40px;
+}
+
+.join-benefits article {
+  padding: 28px;
+  border-right: 1px solid var(--tech-border);
+}
+
+.join-benefits article:last-child {
+  border-right: 0;
+}
+
+.join-benefits b {
+  display: block;
+  font: 800 22px 'Space Grotesk', monospace;
+  color: var(--tech-gold);
+  margin-bottom: 8px;
+}
+
+.join-benefits h3 {
+  font: 700 18px 'Space Grotesk', sans-serif;
+  color: #fff;
+  margin: 0 0 8px;
+}
+
+.join-benefits p {
+  color: var(--tech-text-secondary);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* --------------------------------------------------------------------------
+   CONTACT PAGE CYBER ELEVATION
+   -------------------------------------------------------------------------- */
+.contact-page {
+  padding-bottom: 90px;
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 18px;
+  margin-bottom: 36px;
+}
+
+.contact-card {
+  position: relative;
+  padding: 30px 26px;
+  background: var(--tech-surface);
+  border: 1px solid var(--tech-border);
+  border-radius: var(--tech-radius-md);
+  color: inherit;
+  text-decoration: none;
+  transition: all 0.25s var(--tech-ease);
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--tech-cyan);
+  box-shadow: 0 16px 40px -10px rgba(56, 189, 248, 0.25);
+}
+
+.contact-card span:first-child {
+  font: 800 22px 'Space Grotesk', monospace;
+  color: var(--tech-gold);
+  margin-bottom: 12px;
+}
+
+.contact-card h3 {
+  font: 700 20px 'Space Grotesk', sans-serif;
+  color: #fff;
+  margin: 0 0 8px;
+}
+
+.contact-card p {
+  color: var(--tech-text-secondary);
+  font-size: 13px;
+  line-height: 1.6;
+  margin: 0;
+  flex: 1;
+}
+
+.contact-location {
+  padding: 28px;
+  background: var(--tech-surface);
+  border: 1px solid var(--tech-border);
+  border-radius: var(--tech-radius-md);
+  margin-bottom: 36px;
+}
+
+.contact-location h3 {
+  font: 700 20px 'Space Grotesk', sans-serif;
+  color: #fff;
+  margin: 8px 0 6px;
+}
+
+.contact-location p {
+  color: var(--tech-text-secondary);
+  margin: 0 0 12px;
+}
+
+.contact-form-card {
+  padding: 36px;
+  background: var(--tech-surface);
+  border: 1px solid var(--tech-border);
+  border-radius: var(--tech-radius-lg);
+  box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.5);
+}
+
+.contact-form label span {
+  font: 700 11px/1 'Space Grotesk', sans-serif;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--tech-text-secondary);
+  margin-bottom: 6px;
+  display: block;
+}
+
+.contact-form input,
+.contact-form textarea {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--tech-surface-elevated);
+  border: 1px solid var(--tech-border);
+  border-radius: var(--tech-radius-sm);
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  margin-bottom: 16px;
+  transition: all 0.2s ease;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+  outline: none;
+  border-color: var(--tech-cyan);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.18);
+}
+
+/* --------------------------------------------------------------------------
+   ACHIEVEMENTS WALL OF FAME
+   -------------------------------------------------------------------------- */
+.achievements-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  padding: clamp(36px, 4vw, 56px) 32px;
+  background: var(--tech-surface);
+  border: 1px solid var(--tech-border);
+  border-radius: var(--tech-radius-lg);
+  margin-bottom: 36px;
+}
+
+.achievements-seal {
+  text-align: center;
+  padding: 20px 24px;
+  background: var(--tech-surface-elevated);
+  border: 1px solid var(--tech-gold);
+  border-radius: var(--tech-radius-md);
+  box-shadow: 0 0 24px rgba(251, 191, 36, 0.15);
+}
+
+.achievements-seal span {
+  display: block;
+  font: 800 36px/1 'Space Grotesk', monospace;
+  color: var(--tech-gold);
+}
+
+.achievements-seal strong {
+  display: block;
+  font: 700 11px 'Space Grotesk', sans-serif;
+  letter-spacing: 0.16em;
+  color: #fff;
+}
+
+.achievements-seal small {
+  font-size: 10px;
+  color: var(--tech-text-muted);
+}
+
+.achievement-feature {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 24px 28px;
+  background: var(--tech-surface);
+  border: 1px solid var(--tech-border);
+  border-radius: var(--tech-radius-md);
+  margin-bottom: 14px;
+  transition: all 0.25s var(--tech-ease);
+}
+
+.achievement-feature:hover {
+  transform: translateX(4px);
+  border-color: var(--tech-gold);
+  box-shadow: 0 12px 30px -8px rgba(251, 191, 36, 0.2);
+}
+
+.achievement-number {
+  font: 800 24px/1 'Space Grotesk', monospace;
+  color: var(--tech-gold);
+}
+
+/* --------------------------------------------------------------------------
+   ANNOUNCEMENTS FEED
+   -------------------------------------------------------------------------- */
+.announcements-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 30px;
+  padding: clamp(36px, 4vw, 56px) 32px;
+  background: var(--tech-surface);
+  border: 1px solid var(--tech-border);
+  border-radius: var(--tech-radius-lg);
+  margin-bottom: 36px;
+}
+
+.announcement-card {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  padding: 24px 28px;
+  background: var(--tech-surface);
+  border: 1px solid var(--tech-border);
+  border-radius: var(--tech-radius-md);
+  margin-bottom: 14px;
+  transition: all 0.25s var(--tech-ease);
+}
+
+.announcement-card:hover {
+  transform: translateX(4px);
+  border-color: var(--tech-cyan);
+  box-shadow: 0 12px 30px -8px rgba(56, 189, 248, 0.2);
+}
+
+.announcement-card>span {
+  font: 800 24px/1 'Space Grotesk', monospace;
+  color: var(--tech-cyan);
+}
+
+
 
