@@ -5,63 +5,78 @@
    This is the final public override layer; historical CSS remains for reference.
 */
 :root{
-  --jyc-navy:#18161d;
-  --jyc-navy-deep:#0f0e11;
-  --jyc-navy-soft:#242126;
-  --jyc-champagne:#bf9c6f;
-  --jyc-champagne-soft:#f5f1e6;
-  --jyc-ivory:#ffffff;
-  --jyc-cream:#f5f1e6;
-  --jyc-bronze:#78593b;
-  --jyc-ink:#1a191d;
-  --jyc-muted:#6e6a75;
-  --jyc-line:rgba(191,156,111,.35);
-  --jyc-line-dark:rgba(210,180,140,.25);
-  --jyc-shadow:0 18px 55px rgba(23,21,19,.10);
-  --jyc-shadow-dark:0 22px 65px rgba(0,0,0,.34);
+  --jyc-navy:#050a14;
+  --jyc-navy-deep:#030710;
+  --jyc-navy-soft:#0b1329;
+  --jyc-champagne:#38bdf8;
+  --jyc-champagne-soft:#111c38;
+  --jyc-ivory:#f8fafc;
+  --jyc-cream:#050a14;
+  --jyc-bronze:#0284c7;
+  --jyc-ink:#f8fafc;
+  --jyc-muted:#94a3b8;
+  --jyc-line:rgba(255,255,255,.1);
+  --jyc-line-dark:rgba(255,255,255,.08);
+  --jyc-shadow:0 18px 55px rgba(0,0,0,.35);
+  --jyc-shadow-dark:0 22px 65px rgba(0,0,0,.5);
   --jyc-ease:cubic-bezier(.22,.8,.24,1);
-  --jyc-content:min(1180px,calc(100vw - 40px));
-  --accent-gold:var(--jyc-champagne);
-  --accent-red:#a82420;
-  --club-red:#a82420;
-  --club-gold:var(--jyc-champagne);
-  --jyc-gold:var(--jyc-champagne);
-  --bg-main:var(--jyc-cream);
-  --bg-card:var(--jyc-ivory);
-  --text-primary:var(--jyc-ink);
-  --text-muted:var(--jyc-muted);
+  --jyc-content:min(1240px,calc(100vw - 40px));
+  --accent-gold:#fbbf24;
+  --accent-red:#ef4444;
+  --club-red:#ef4444;
+  --club-gold:#fbbf24;
+  --jyc-gold:#fbbf24;
+  --bg-main:#050a14;
+  --bg-card:#0b1329;
+  --text-primary:#f8fafc;
+  --text-muted:#94a3b8;
   --border-tech:var(--jyc-line);
 }
 html[data-theme="light"]{
   color-scheme:light;
-  --jyc-bg:var(--jyc-cream);
-  --jyc-surface:var(--jyc-ivory);
-  --jyc-text:var(--jyc-ink);
-  --jyc-muted-live:var(--jyc-muted);
-  --jyc-border:var(--jyc-line);
+  --jyc-bg:#f8fafc;
+  --jyc-surface:#ffffff;
+  --jyc-text:#0f172a;
+  --jyc-muted-live:#475569;
+  --jyc-border:rgba(203,213,225,.7);
+  --accent-gold:#d97706;
+  --accent-red:#dc2626;
+  --club-red:#dc2626;
+  --club-gold:#d97706;
+  --jyc-gold:#d97706;
+  --bg-main:#f8fafc;
+  --bg-card:#ffffff;
+  --text-primary:#0f172a;
+  --text-muted:#475569;
+  --border-tech:rgba(203,213,225,.7);
 }
 html[data-theme="dark"]{
   color-scheme:dark;
-  --jyc-bg:#0f0e11;
-  --jyc-surface:#18161d;
-  --jyc-text:#FFFFFF;
-  --jyc-muted-live:#a8a3b0;
-  --jyc-border:var(--jyc-line-dark);
+  --jyc-bg:#050a14;
+  --jyc-surface:#0b1329;
+  --jyc-text:#f8fafc;
+  --jyc-muted-live:#94a3b8;
+  --jyc-border:rgba(255,255,255,.1);
 }
 html,body,#root{min-width:0;overflow-x:hidden}
 html{background:var(--jyc-bg);scroll-padding-top:78px}
 body{
   margin:0;
   background:
-    radial-gradient(circle at 50% -12%,rgba(191,156,111,.14),transparent 34%),
-    linear-gradient(180deg,var(--jyc-bg) 0%,color-mix(in srgb,var(--jyc-bg) 86%,#f5f1e6) 100%);
+    radial-gradient(circle at 50% -12%,rgba(56,189,248,.08),transparent 35%),
+    linear-gradient(180deg,#050a14 0%,#090d16 100%);
   color:var(--jyc-text);
   transition:background-color .35s ease,color .25s ease;
 }
+html[data-theme="light"] body{
+  background:
+    radial-gradient(circle at 50% -12%,rgba(2,132,199,.06),transparent 35%),
+    linear-gradient(180deg,#f8fafc 0%,#f1f5f9 100%);
+}
 html[data-theme="dark"] body{
   background:
-    radial-gradient(circle at 50% -12%,rgba(210,180,140,.08),transparent 32%),
-    linear-gradient(180deg,#0f0e11 0%,#0f0e11 62%,#18161d 100%);
+    radial-gradient(circle at 50% -12%,rgba(56,189,248,.08),transparent 35%),
+    linear-gradient(180deg,#050a14 0%,#080f1e 100%);
 }
 .public-app,.home,.page{
   --bg-main:var(--jyc-bg)!important;
