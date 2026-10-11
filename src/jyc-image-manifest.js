@@ -8,6 +8,11 @@ export function loadJycImageManifest(){
     if(!response.ok)throw new Error('Image manifest unavailable');
     return response.json();
    })
+   .then(payload=>{
+    if(payload?.images&&typeof payload.images==='object')return payload;
+    imageManifestPromise=null;
+    return null;
+   })
    .catch(()=>{
     // Allow later route mounts to retry after transient HTTP, network or JSON failures.
     imageManifestPromise=null;
