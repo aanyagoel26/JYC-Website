@@ -29,6 +29,7 @@ const assistant=read('src/jyc-assistant.jsx');
 const browser=read('scripts/browser-smoke.spec.js');
 const browserRunner=read('scripts/qa-browser.mjs');
 const browserWorkflow=read('.github/workflows/jyc-browser.yml');
+const playwrightConfig=read('playwright.config.mjs');
 const dither=read('src/react-bits/DitherVeil.jsx');
 const bento=read('src/components/react-bits/MagicBento.jsx');
 const bentoCss=read('src/components/react-bits/MagicBento.css');
@@ -88,7 +89,7 @@ const checks=[
  ['browser suite guards static SEO across public route types including homepage with one H1',browser.includes('public route shells keep route-specific SEO content and one primary heading without JavaScript')&&browser.includes('JIIT Youth Club 128 — Official JYC Website | JIIT Wish Town, Noida')&&browser.includes('JYC Communities & Clubs | JIIT Youth Club 128')&&browser.includes('JAI 2026 — Jaypee Agentic AI Hackathon | JYC')&&browser.includes("{ path: '/', title:")&&browser.includes('toHaveCount(1)')&&browser.includes('toHaveTitle(title)')&&browser.includes('link[rel="canonical"]')],
  ['browser suite validates route-specific WebPage structured data',browser.includes("schema['@type'] === 'WebPage'")&&browser.includes('schema.name === title && schema.url === canonical')],
  ['browser suite protects runtime canonical and Open Graph hosts on previews',browser.includes('runtime metadata keeps canonical URLs on the production domain from a preview host')&&browser.includes('meta[property="og:url"]')&&browser.includes('https://www.jiityouthclub128.in')],
- ['browser QA launches a production preview when no base URL is supplied',browserRunner.includes('node_modules/vite/bin/vite.js')&&browserRunner.includes("'--port','4173'")&&browserRunner.includes('JYC_BASE_URL:baseUrl')&&browserRunner.includes("preview.kill('SIGTERM')")],
+ ['browser QA delegates preview lifecycle to Playwright without duplicating Vite',browserRunner.includes('JYC_BASE_URL:baseUrl')&&!browserRunner.includes('node_modules/vite/bin/vite.js')&&playwrightConfig.includes('npm run preview -- --host 127.0.0.1 --port 5173')&&playwrightConfig.includes('npm run dev -- --host 127.0.0.1')],
  ['browser workflow builds production before running browser QA',browserWorkflow.includes('name: Build production bundle')&&browserWorkflow.includes('run: npm run build')&&browserWorkflow.includes('run: npm run qa:browser')],
  ['static SEO browser regression blocks Vite and all JavaScript module formats',browser.includes("/\.(?:js|jsx|mjs)$/")&&browser.includes("pathname === '/@vite/client'")&&browser.includes('return route.abort()')],
  ['route-shell canonicals ignore preview URL environment variables',routeShells.includes("process.env.VITE_CANONICAL_ORIGIN||process.env.JYC_CANONICAL_ORIGIN||'https://www.jiityouthclub128.in'")&&!routeShells.includes('process.env.VERCEL_URL')&&!routeShells.includes('process.env.VITE_SITE_URL')],
