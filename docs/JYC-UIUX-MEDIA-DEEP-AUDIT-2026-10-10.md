@@ -9,6 +9,7 @@ This audit covers the merged V64.5.0 design source and the follow-up `fix/media-
 - Changed the responsive-image and gallery manifest fetches from `cache: 'force-cache'` to `cache: 'no-cache'`. The manifest has `max-age=0, must-revalidate` semantics; forcing a stale entry across deploys can advertise variants that no longer exist or have changed dimensions.
 - Added a browser regression that blocks all generated AVIF/WebP derivative requests and asserts that a team portrait resolves to a real original/branded fallback rather than leaving a broken image.
 - The shared manifest loader now clears its cached promise after transient HTTP/network/JSON failures; a browser regression verifies a later gallery route can retry and resume responsive sources.
+- Dimension audit found two ultra-wide supplied assets (Aakriti 1311×25 and Neural Nexus 1500×211) that were being forced into the photo pool. They are now kept out of club photo cards; other source material remains available as visual/archive content.
 - Added a source-level media contract for both fresh manifest reads and derivative-failure recovery.
 - Rotated the service-worker cache namespace and release metadata to V64.5.3 so returning clients don't retain the old shell.
 
