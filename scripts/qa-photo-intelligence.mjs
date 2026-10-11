@@ -10,6 +10,7 @@ const losslessWebpHeader=(width,height)=>{const b=new Uint8Array(26);b.set([...B
 const source=read('src/jyc-source-media.js');
 const intelligence=read('src/jyc-photo-intelligence.js');
 const responsive=read('src/jyc-responsive-photo.jsx');
+const manifestLoader=read('src/jyc-image-manifest.js');
 const gallery=read('src/jyc57-experience.jsx');
 const css=read('src/styles/public-system.css');
 const migration=read('supabase/migrations/202610080800_v63_photo_editorial_intelligence.sql');
@@ -38,7 +39,7 @@ check('image manifest dimension tests cover PNG JPEG VP8X VP8 and VP8L',read('sc
 check('editorial rubric is defined',intelligence.includes('JYC_EDITORIAL_RUBRIC')&&intelligence.includes('scoreJycPhoto'));
 check('diversity-aware ranking is wired',intelligence.includes('rankDiverseJycPhotos')&&source.includes('rankDiverseJycPhotos'));
 check('responsive picture pipeline exists',responsive.includes('<picture')&&responsive.includes('srcSet')&&intelligence.includes('photoDerivativeUrls'));
-check('responsive derivatives resolve intrinsic widths and respect manifest eligibility',responsive.includes("fetch('/image-manifest.json'")&&responsive.includes('const entry=manifest?.images?.[src]')&&responsive.includes('entry?.derivativesEligible===true')&&responsive.includes('photoDerivativeUrls(src,intrinsicWidth)')&&responsive.includes('if(!derivativesEnabled||!isDerivativeSource(src))')&&imageManifestGenerator.includes('derivativesEligible:derivativeEligible(url)'));
+check('responsive derivatives resolve intrinsic widths and respect manifest eligibility',manifestLoader.includes("fetch('/image-manifest.json',{cache:'no-cache'})")&&responsive.includes('loadJycImageManifest()')&&responsive.includes('const entry=manifest?.images?.[src]')&&responsive.includes('entry?.derivativesEligible===true')&&responsive.includes('photoDerivativeUrls(src,intrinsicWidth)')&&responsive.includes('if(!derivativesEnabled||!isDerivativeSource(src))')&&imageManifestGenerator.includes('derivativesEligible:derivativeEligible(url)'));
 check('responsive derivative width descriptors never exceed intrinsic pixel width',intelligence.includes('width<=Number(sourceWidth)')&&derivatives.includes('if(width>display.width)')&&derivatives.includes('orientedImageDimensions(meta.width,meta.height,meta.orientation)')&&!intelligence.includes('width<=Number(sourceWidth)*1.15')&&!derivatives.includes('meta.width*1.15'));
 check('low-resolution sources never advertise nonexistent upscaled variants',photoDerivativeUrls('/assets/hub-photos/panache-01.webp',360)===null&&photoDerivativeUrls('/assets/hub-photos/panache-01.webp',500)?.webp.map(item=>item.width).join(',')==='480'&&photoDerivativeUrls('/assets/hub-photos/panache-01.webp',1000)?.webp.map(item=>item.width).join(',')==='480,960'&&photoDerivativeUrls('/assets/hub-photos/panache-01.webp',4000)?.webp.map(item=>item.width).join(',')==='480,960,1600'&&photoDerivativeUrls('/assets/team/member.webp',600)===null);
 check('image manifest is requested only for derivative-managed asset folders',responsive.includes('source-archive|hub-photos|hub-photos-extra')&&responsive.includes('if(!derivativesEnabled||!isDerivativeSource(src))'));
