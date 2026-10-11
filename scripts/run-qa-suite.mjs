@@ -34,7 +34,8 @@ const scripts = [
   'qa-v1-public-journey.mjs',
   'qa-reference-archive-readiness.mjs',
   'qa-current-release-coherence.mjs',
-  'qa-current-release-integrity.mjs'
+  'qa-current-release-integrity.mjs',
+  'qa-public-ux-refinements.mjs'
 ];
 
 for (const script of scripts) {
