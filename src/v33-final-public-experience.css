@@ -873,6 +873,9 @@ html[data-theme="dark"] .public-app .nav nav button.active{
 .event-jai-qr{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
 .event-jai-qr img{width:118px;height:118px;object-fit:contain;border-radius:12px;background:#fff;padding:6px}
 .event-jai-qr span{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--jyc33-muted)}
+.event-jai-qr-link{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:9px 12px;border:1px solid var(--jyc33-brand);border-radius:999px;color:var(--jyc33-brand);font-size:11px;font-weight:850;text-decoration:none;text-underline-offset:4px}
+.event-jai-qr-link:hover{text-decoration:underline}
+.event-jai-qr-link:focus-visible{outline:2px solid var(--jyc33-brand);outline-offset:3px}
 .event-jai-support h3{margin:4px 0 7px}
 .event-jai-support p{margin:0 0 10px;font-size:12px;line-height:1.55;color:var(--jyc33-muted)}
 .event-jai-contact{display:flex;flex-wrap:wrap;gap:8px}
