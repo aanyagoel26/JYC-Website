@@ -26,6 +26,7 @@ const productionMediaOptimizer=read('scripts/optimize-production-media.mjs');
 const imageManifestGenerator=read('scripts/generate-image-manifest.mjs');
 const bot=read('src/jyc-bot.jsx');
 const assistant=read('src/jyc-assistant.jsx');
+const now=read('src/jyc-now.jsx');
 const browser=read('scripts/browser-smoke.spec.js');
 const browserRunner=read('scripts/qa-browser.mjs');
 const browserWorkflow=read('.github/workflows/jyc-browser.yml');
@@ -149,6 +150,8 @@ const checks=[
  ['featured event poster uses the shared stateful ResponsivePhoto fallback',editorialHome.includes('<ResponsivePhoto className="jh-featured-event-photo"')&&!editorialHome.includes('function Img(')&&homeCss.includes('jh-event-image img[data-image-fallback-stage="1"]')],
  ['browser suite guards against guessed derivative requests during a manifest outage',browser.includes('responsive photos do not guess AVIF/WebP derivative URLs when the manifest fails')&&browser.includes("page.route('**/image-manifest.json', route => route.abort())")&&browser.includes('guessedDerivatives')],
  ['homepage editorial photo story has responsive layout and reduced-motion safeguards',homeCss.includes('.jh-photo-story-grid.has-three .jh-story-card-1')&&homeCss.includes('@media(max-width:680px)')&&homeCss.includes('@media(prefers-reduced-motion:reduce)')&&homeCss.includes('jh-story-card:hover .jh-story-photo img')]
+ ['JYC Now fallback reflects the current JAI deadline and flags conflicting RIDE status',now.includes('Unstop registration closes 15 October 2026')&&now.includes('RIDE Hack\\'26 · check registration status')&&now.includes('verified:false')],
+ ['JYC Now cards and filters have dark-theme contrast and reduced-motion overrides',now.includes('html[data-theme="dark"] .jyc-now-card')&&now.includes('var(--jyc-muted-live')&&now.includes('prefers-reduced-motion:reduce')],
 ];
 let failed=0;
 for(const [name,ok] of checks){console.log((ok?'PASS':'FAIL')+' · '+name);if(!ok)failed++}
