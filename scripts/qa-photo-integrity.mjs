@@ -198,6 +198,7 @@ assert('every AVIF/WebP derivative has a valid source, eligible dimensions and t
 const manifestPath='public/image-manifest.json';
 if(fs.existsSync(manifestPath)){
  const builtManifest=JSON.parse(fs.readFileSync(manifestPath,'utf8'));
+ assert('generated image manifest passes the same strict runtime schema validator',isValidJycImageManifest(builtManifest));
  const manifestMismatches=[];
  for(const [url,entry] of Object.entries(builtManifest.images||{})){
   const display=orientedImageDimensions(entry.rawWidth||entry.width,entry.rawHeight||entry.height,entry.exifOrientation);
