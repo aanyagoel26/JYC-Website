@@ -8,6 +8,7 @@
 - Make the Dither Veil hero fall back from AVIF to the same precached official WebP logo instead of a large, uncached PNG, and add a browser regression for AVIF failure.
 - Reduce gallery render churn by initializing `ResponsivePhoto` state against its current source and preserving fallback state when source props have not changed.
 - Add browser and source-contract regressions for malformed-manifest retry, service-worker routing, decoded no-JavaScript boot logo and redundant photo render prevention.
+- Normalize campus-linked URLs before applying the legacy-identity block list, and reject the old Sector-62 JYC LinkedIn/Instagram identity even when it appears in a website or alternate social field.
 - Rotate package/lockfile release metadata and the service-worker cache namespace to V64.5.4.
 
 Validation note: source-level checks passed, but the exact current head still needs a successful full build and Playwright run. The most recent Vercel preview predates these final changes, and the Vercel deployment API returned HTTP 402 `api-deployments-free-per-day`; do not treat the earlier preview as proof of V64.5.4.
