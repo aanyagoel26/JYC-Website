@@ -33,11 +33,14 @@ jobs:
       - name: Dependency vulnerability gate
         run: npm audit --audit-level=high
 
+      # Build first so photo-integrity QA validates generated manifest/derivative outputs.
+      - name: Build production bundle and media derivatives
+        run: npm run build
+
       - run: npm run qa
       - run: npm run qa:seo
       - run: npm run qa:v64-editorial
       - run: npm run qa:photo-intelligence
-      - run: npm run build
       - name: Run production media optimizer
         run: node scripts/optimize-production-media.mjs
       - name: Enforce production media/performance budget
