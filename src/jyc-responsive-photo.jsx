@@ -5,37 +5,39 @@ const LOGO_FALLBACK=import.meta.env.PROD?'/assets/jyc-logo.webp':'/JYC%20Logo(4)
 const ORIGINAL_LOGO='/JYC%20Logo(4).png';
 const isDerivativeSource=url=>/^\/assets\/(?:source-archive|hub-photos|hub-photos-extra|events|home|team)\//.test(String(url||''));
 export function ResponsivePhoto({src,alt='',width,height,sizes='100vw',loading='lazy',fetchPriority,decoding='async',className='',style,onError,objectPosition,fallbackSrc=LOGO_FALLBACK,fallbackAlt='Official JYC logo placeholder; image unavailable'}){
- const [sourceDimensions,setSourceDimensions]=useState(()=>({src,width:0,derivativesEligible:false}));
- const [fallbackState,setFallbackState]=useState(()=>({src,fallbackSrc,stage:0}));
- const intrinsicWidth=sourceDimensions.src===src&&sourceDimensions.derivativesEligible?sourceDimensions.width:0;
+ // An empty src makes browsers request the current document as an image. Normalize it to a branded local asset before any state, manifest lookup or <img> is created.
+ const source=typeof src==='string'&&src.trim()?src.trim():(fallbackSrc||LOGO_FALLBACK);
+ const [sourceDimensions,setSourceDimensions]=useState(()=>({src:source,width:0,derivativesEligible:false}));
+ const [fallbackState,setFallbackState]=useState(()=>({src:source,fallbackSrc,stage:0}));
+ const intrinsicWidth=sourceDimensions.src===source&&sourceDimensions.derivativesEligible?sourceDimensions.width:0;
  const derivativesEnabled=import.meta.env.PROD||import.meta.env.VITE_ENABLE_PHOTO_DERIVATIVES==='true';
- const stage=fallbackState.src===src&&fallbackState.fallbackSrc===fallbackSrc?fallbackState.stage:0;
- const candidates=[fallbackSrc,LOGO_FALLBACK,ORIGINAL_LOGO].filter((url,index,all)=>Boolean(url)&&url!==src&&all.indexOf(url)===index);
+ const stage=fallbackState.src===source&&fallbackState.fallbackSrc===fallbackSrc?fallbackState.stage:0;
+ const candidates=[fallbackSrc,LOGO_FALLBACK,ORIGINAL_LOGO].filter((url,index,all)=>Boolean(url)&&url!==source&&all.indexOf(url)===index);
  const failed=stage>candidates.length;
  const activeFallback=stage>0&&!failed;
  // Only emit srcset candidates after the generated manifest confirms intrinsic dimensions and derivative eligibility.
  // If the manifest is unavailable, keep the original source rather than guessing derivative URLs that may 404 or upscale.
- const variants=stage===0&&derivativesEnabled&&intrinsicWidth>0?photoDerivativeUrls(src,intrinsicWidth):null;
+ const variants=stage===0&&derivativesEnabled&&intrinsicWidth>0?photoDerivativeUrls(source,intrinsicWidth):null;
  // Keep the original source in the img element as the final format-compatibility fallback;
  // supported browsers select the optimized AVIF/WebP sources above it.
- const resolvedSrc=stage===0?src:activeFallback?candidates[stage-1]:undefined;
+ const resolvedSrc=stage===0?source:activeFallback?candidates[stage-1]:undefined;
  useEffect(()=>{
   let active=true;
-  if(!derivativesEnabled||!isDerivativeSource(src))return()=>{active=false};
+  if(!derivativesEnabled||!isDerivativeSource(source))return()=>{active=false};
   loadJycImageManifest().then(manifest=>{
-   const entry=manifest?.images?.[src];
+   const entry=manifest?.images?.[source];
    const measured=Number(entry?.width);
-   if(active&&entry?.derivativesEligible===true&&measured>0)setSourceDimensions({src,width:measured,derivativesEligible:true});
+   if(active&&entry?.derivativesEligible===true&&measured>0)setSourceDimensions({src:source,width:measured,derivativesEligible:true});
   });
   return()=>{active=false};
- },[src,derivativesEnabled]);
- useLayoutEffect(()=>{setFallbackState(previous=>previous.src===src&&previous.fallbackSrc===fallbackSrc?previous:{src,fallbackSrc,stage:0})},[src,fallbackSrc]);
+ },[source,derivativesEnabled]);
+ useLayoutEffect(()=>{setFallbackState(previous=>previous.src===source&&previous.fallbackSrc===fallbackSrc?previous:{src:source,fallbackSrc,stage:0})},[source,fallbackSrc]);
  const baseStyle=objectPosition?{...style,objectPosition}:style;
  const sourceSet=list=>list.map(x=>x.url+' '+x.width+'w').join(', ');
  const handleError=e=>{
   setFallbackState(previous=>{
-   const currentStage=previous.src===src&&previous.fallbackSrc===fallbackSrc?previous.stage:0;
-   return {src,fallbackSrc,stage:currentStage+1};
+   const currentStage=previous.src===source&&previous.fallbackSrc===fallbackSrc?previous.stage:0;
+   return {src:source,fallbackSrc,stage:currentStage+1};
   });
   onError?.(e);
  };
