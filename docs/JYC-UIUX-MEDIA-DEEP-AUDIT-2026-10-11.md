@@ -16,6 +16,11 @@ The V64.5.9 branch contains the identity-first homepage, React Bits Dither Veil 
 - Added source-contract assertions for normalized fallback URLs, placeholder markup/CSS and the release contract; added a Playwright test that intercepts image requests and checks the final accessible placeholder.
 - Rotated the service-worker cache namespace to `jyc-cache-v64-5-8` and synchronized package.json, package-lock.json, README and changelog.
 
+### JYC Now fallback and theme behavior
+- The public `/api/jyc-updates` endpoint currently returns HTTP 200 with `items: []`, `live: false` and `configured: false` in the latest READY Vercel preview. The frontend does retain curated fallback cards, so the page should not go blank, but external social connectors are not configured there.
+- Updated the fallback card to show JAI's 15 October deadline and four thematic tracks, and changed RIDE Hack to a transparent status-check card because the official website and LinkedIn disagree. The fallback no longer presents the uncertain RIDE registration state as verified.
+- Added dark-mode token overrides for JYC Now cards, filter buttons, status/empty states and hub spotlights, plus a reduced-motion guard. A Playwright test now checks card and paragraph contrast in both themes; it has been added but has not executed successfully because current GitHub Actions runs have no usable runner logs.
+
 ### Event source correction
 - Current JYC-128 LinkedIn content advertises JAI 2026 for 30–31 October 2026, with four thematic tracks and the flagship hackathon.
 - The official JAI website displays the 30–31 October dates, ₹15 lakh hackathon prize pool and ₹1 crore pre-seed pool.
