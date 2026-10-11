@@ -128,8 +128,21 @@ export function JYCEditorialHome({ data }) {
     return selected;
   }, [data?.gallery]);
 
+  const handleSpotlight = e => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
+    e.currentTarget.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+  };
+
   return (
     <main className="jyc-editorial-home jyc-home">
+      {/* AMBIENT CYBER BACKDROP */}
+      <div className="jh-ambient-backdrop" aria-hidden="true">
+        <div className="jh-ambient-orb jh-ambient-orb-1" />
+        <div className="jh-ambient-orb jh-ambient-orb-2" />
+        <div className="jh-ambient-grid" />
+      </div>
+
       {/* HERO SECTION */}
       <section className="jh-hero" aria-labelledby="jh-title">
         <div className="jh-hero-copy">
@@ -161,19 +174,19 @@ export function JYCEditorialHome({ data }) {
 
           {/* LIVE STATS STRIP */}
           <div className="jh-hero-stats-row">
-            <div className="jh-stat-item">
+            <div className="jh-stat-item" onMouseMove={handleSpotlight}>
               <strong>23<i>+</i></strong>
               <span>Hubs & Societies</span>
             </div>
-            <div className="jh-stat-item">
+            <div className="jh-stat-item" onMouseMove={handleSpotlight}>
               <strong>50<i>+</i></strong>
               <span>Annual Events</span>
             </div>
-            <div className="jh-stat-item">
+            <div className="jh-stat-item" onMouseMove={handleSpotlight}>
               <strong>5,000<i>+</i></strong>
               <span>Students Reached</span>
             </div>
-            <div className="jh-stat-item">
+            <div className="jh-stat-item" onMouseMove={handleSpotlight}>
               <strong>15<i>+</i></strong>
               <span>Years Legacy</span>
             </div>
@@ -239,6 +252,7 @@ export function JYCEditorialHome({ data }) {
               key={p.id}
               className={`jh-pillar-card jh-pillar-${p.id}`}
               onClick={() => nav(p.id === 'fests' ? '/events' : `/clubs`)}
+              onMouseMove={handleSpotlight}
             >
               <div className="jh-pillar-head">
                 <span className="jh-pillar-icon">{p.icon}</span>
@@ -268,7 +282,7 @@ export function JYCEditorialHome({ data }) {
           </button>
         </div>
         {featured ? (
-          <article className="jh-featured-event">
+          <article className="jh-featured-event" onMouseMove={handleSpotlight}>
             <div className="jh-event-image">
               <ResponsivePhoto
                 className="jh-featured-event-photo"
@@ -342,6 +356,7 @@ export function JYCEditorialHome({ data }) {
                 className={`jh-story-card jh-story-card-${index + 1}`}
                 key={story.id || story.url}
                 onClick={() => nav('/gallery')}
+                onMouseMove={handleSpotlight}
                 aria-label={`Explore ${story.association} photography in the JYC gallery`}
               >
                 <ResponsivePhoto
