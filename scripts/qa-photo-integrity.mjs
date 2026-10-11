@@ -7,15 +7,15 @@ import {isValidJycImageManifest} from '../src/jyc-image-manifest.js';
 import {JYC_HUB_CONTENT} from '../src/v21-hub-content.js';
 
 const assert=(name,ok,detail='')=>{console.log((ok?'PASS: ':'FAIL: ')+name+(detail?' — '+detail:''));if(!ok)process.exitCode=1};
-const validManifestFixture={version:1,images:{'/assets/example.webp':{width:960,height:640,aspectRatio:1.5,orientation:'landscape',derivativesEligible:true}}};
+const validManifestFixture={version:1,images:{'/assets/hub-photos/example.webp':{width:960,height:640,aspectRatio:1.5,orientation:'landscape',derivativesEligible:true}}};
 assert('image manifest schema accepts a valid intrinsic-dimension record',isValidJycImageManifest(validManifestFixture));
 assert('image manifest schema rejects missing version, empty lists and non-object images',!isValidJycImageManifest({images:validManifestFixture.images})&&!isValidJycImageManifest({version:1,images:{}})&&!isValidJycImageManifest({version:1,images:[]}));
 assert('image manifest schema rejects non-positive dimensions and malformed aspect ratios',!isValidJycImageManifest({version:1,images:{'/assets/bad.webp':{width:0,height:640,aspectRatio:0,orientation:'landscape',derivativesEligible:true}}})&&!isValidJycImageManifest({version:1,images:{'/assets/bad.webp':{width:960,height:640,aspectRatio:9,orientation:'landscape',derivativesEligible:true}}}));
 assert('image manifest schema rejects numeric dimensions encoded as strings',!isValidJycImageManifest({version:1,images:{'/assets/bad.webp':{width:'960',height:640,aspectRatio:1.5,orientation:'landscape',derivativesEligible:true}}}));
-assert('image manifest schema rejects unsafe URLs and false orientation labels',!isValidJycImageManifest({version:1,images:{'/assets/../secret.webp':validManifestFixture.images['/assets/example.webp']}})&&!isValidJycImageManifest({version:1,images:{'/assets/bad.webp':{...validManifestFixture.images['/assets/example.webp'],orientation:'portrait'}}}));
+assert('image manifest schema rejects unsafe URLs and false orientation labels',!isValidJycImageManifest({version:1,images:{'/assets/../secret.webp':validManifestFixture.images['/assets/hub-photos/example.webp']}})&&!isValidJycImageManifest({version:1,images:{'/assets/bad.webp':{...validManifestFixture.images['/assets/hub-photos/example.webp'],orientation:'portrait'}}}));
 assert('image manifest schema rejects encoded traversal, encoded separators, backslashes and controls',[
  '/assets/%2e%2e/secret.webp','/assets/%2E%2E/secret.webp','/assets/%252e%252e/secret.webp','/assets/photo%2fsecret.webp','/assets/photo%5csecret.webp','/assets/photo\\secret.webp','/assets/photo.webp?width=100','/assets/photo.webp#preview','/assets/photo'+String.fromCharCode(10)+'.webp'
-].every(url=>!isValidJycImageManifest({version:1,images:{[url]:validManifestFixture.images['/assets/example.webp']}})));
+].every(url=>!isValidJycImageManifest({version:1,images:{[url]:validManifestFixture.images['/assets/hub-photos/example.webp']}})));
 const mediaSource=fs.readFileSync('src/jyc-source-media.js','utf8');
 const hubPresentationSource=fs.readFileSync('src/pdf-hub-content.js','utf8');
 const mainSource=fs.readFileSync('src/main.jsx','utf8');
