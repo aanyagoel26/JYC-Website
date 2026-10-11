@@ -1349,6 +1349,36 @@ test('updates API returns a JSON fallback instead of a function crash', async ({
 });
 
 
+test('responsive photos retry the original source when a derivative returns HTML with HTTP 200', async ({ page, browser }) => {
+  const context = await browser.newContext({
+    serviceWorkers: 'block',
+    viewport: page.viewportSize() || { width: 390, height: 844 }
+  });
+  const testPage = await context.newPage();
+  let derivativeRequests = 0;
+
+  await testPage.route('**/assets/photo-derivatives/**', async route => {
+    derivativeRequests += 1;
+    await route.fulfill({
+      status: 200,
+      contentType: 'text/html',
+      body: '<!doctype html><html><body>Not an image</body></html>'
+    });
+  });
+
+  await testPage.goto(base + '/team', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(testPage, 'derivative HTTP 200 HTML fallback');
+  const picture = testPage.locator('.team-photo-editorial .jyc-responsive-picture').first();
+  await picture.scrollIntoViewIfNeeded();
+  await expect.poll(() => derivativeRequests, { timeout: 12000 }).toBeGreaterThan(0);
+
+  const image = picture.locator('img');
+  await expect.poll(() => image.evaluate(img => img.complete && img.naturalWidth > 0), { timeout: 12000 }).toBeTruthy();
+  await expect(image).toHaveAttribute('data-image-fallback-stage', 'original');
+  await expect(image).not.toHaveAttribute('src', /photo-derivatives/);
+  await context.close();
+});
+
 test('responsive photos keep a visible accessible identity when every image fallback fails', async ({ page }) => {
   await page.route('**/*', route => {
     const pathname = new URL(route.request().url()).pathname;
