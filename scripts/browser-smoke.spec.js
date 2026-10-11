@@ -842,6 +842,8 @@ test('responsive photo manifest retries after a transient request failure', asyn
   await page.goto(base + '/team', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'transient image manifest failure');
   await expect.poll(() => attempts).toBe(1);
+  // Let the first aborted request reject and clear the shared promise before mounting new photos.
+  await page.waitForTimeout(200);
 
   await page.locator('a[href="/gallery"]').first().click();
   await expect(page.locator('.jyc57-gallery-page')).toBeVisible();
