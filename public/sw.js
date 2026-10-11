@@ -3,7 +3,7 @@ const CACHE_NAME = 'jyc-cache-v64-5-5';
 const APP_SHELL = ['/', '/offline.html', '/manifest.json', '/assets/jyc-logo.webp'];
 
 const isRecord = (value) => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
-const isSafeManifestAssetUrl = (url) => typeof url === 'string' && url.startsWith('/assets/') && !url.includes('..') && !url.includes('\\\\') && !/[?#\\x00-\\x1f\\x7f]/.test(url) && !/%(?:2e|2f|5c)/i.test(url);
+const isSafeManifestAssetUrl = (url) => typeof url === 'string' && url.startsWith('/assets/') && !url.includes('..') && !url.includes('\\') && !/[?#\x00-\x1f\x7f]/.test(url) && !/%(?:2e|2f|5c)/i.test(url);
 const isValidImageManifest = (payload) => {
   if (!isRecord(payload) || payload.version !== 1 || !isRecord(payload.images)) return false;
   const entries = Object.entries(payload.images);
