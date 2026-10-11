@@ -11,6 +11,7 @@
 - Reject empty or malformed `images` manifest payloads, reset the shared request promise and verify a later Gallery mount retries successfully.
 - Keep the initial boot screen on the compact WebP logo already precached by the service worker, retaining the original PNG as a compatibility fallback for no-JavaScript/offline startup.
 - Avoid redundant `ResponsivePhoto` mount renders by initializing state to the current source and preserving unchanged fallback state.
+- Make the service worker network-first for `/image-manifest.json`, with a last-known-good cached response only as an offline fallback, so `cache: 'no-cache'` actually reaches the network.
 - Add a Playwright regression that deliberately aborts generated AVIF/WebP requests and verifies the team portrait still decodes through a valid original or branded fallback.
 - Extend photo-integrity QA to guard both fresh manifest reads and derivative-failure recovery.
 - Add a browser regression that returns an HTTP 200 with an invalid manifest shape, then verifies the next gallery route retries the request and restores verified AVIF/WebP sources.
