@@ -317,6 +317,8 @@ test('photo-led pages render real image content without broken assets', async ({
     await expect(page.locator('img:visible').first()).toBeVisible();
     await waitForImagesToSettle(page);
     await expect.poll(async () => images.evaluateAll(nodes => nodes.filter(img => img.complete && img.naturalWidth > 0).length), { timeout: 8000 }).toBeGreaterThan(0);
+    const emptyPictureSources = await page.locator('picture.jyc-responsive-picture > img').evaluateAll(nodes => nodes.filter(img => img.getAttribute('src') === '').map(img => img.outerHTML));
+    expect(emptyPictureSources, 'responsive photos must not request the current document as an image on '+route).toEqual([]);
     const broken = await images.evaluateAll(nodes => nodes.filter(img => img.complete && img.naturalWidth === 0).map(img => ({src:img.getAttribute('src'),alt:img.getAttribute('alt'),loading:img.loading})));
     expect(broken, 'broken images on '+route).toEqual([]);
   }
@@ -748,6 +750,17 @@ test('homepage hero uses the official JYC logo through Dither Veil without a con
   expect(overflow).toBe(false);
 });
 
+
+test('Dither Veil keeps the official logo visible when AVIF is unavailable', async ({ page }) => {
+  await page.route('**/assets/jyc-logo.avif', route => route.abort('failed'));
+  await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'Dither logo format fallback');
+  const fallback = page.locator('.jh-dither-mark .dither-veil__fallback');
+  await expect(fallback).toHaveAttribute('src', '/assets/jyc-logo.webp');
+  await expect.poll(() => fallback.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+});
+
+
 test('search and More sheets keep their surfaces readable in light and dark themes', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto(base + '/clubs', { waitUntil: 'domcontentloaded' });
@@ -803,6 +816,166 @@ test('team profiles flip to readable biographies and verified LinkedIn links', a
 });
 
 
+
+test('responsive photos do not guess AVIF/WebP derivative URLs when the manifest fails', async ({ page }) => {
+  const guessedDerivatives = [];
+  page.on('request', request => {
+    const pathname = new URL(request.url()).pathname;
+    if ( /-(?:480|960|1600)\.(?:avif|webp)$/i.test(pathname)) guessedDerivatives.push(pathname);
+  });
+  await page.route('**/image-manifest.json', route => route.abort());
+  await page.goto(base + '/team', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'responsive photo manifest fallback');
+
+  const portrait = page.locator('.team-photo-editorial img').first();
+  await expect(portrait).toBeVisible();
+  await portrait.scrollIntoViewIfNeeded();
+  await expect.poll(() => portrait.evaluate(img => img.complete && img.naturalWidth > 0), { timeout: 10000 }).toBe(true);
+  const fallbackContract = await portrait.evaluate(img => ({
+    src: img.getAttribute('src'),
+    sourceCount: img.parentElement?.querySelectorAll('source').length || 0
+  }));
+  expect(fallbackContract.src).not.toContain('/photo-derivatives/');
+  expect(fallbackContract.sourceCount).toBe(0);
+  expect(guessedDerivatives, 'a missing image manifest must not trigger guessed variant requests').toEqual([]);
+});
+
+
+
+
+
+test('responsive photo manifest retries after a transient request failure', async ({ page }) => {
+  let attempts = 0;
+  await page.route('**/image-manifest.json', route => {
+    attempts += 1;
+    if (attempts === 1) return route.abort();
+    return route.continue();
+  });
+
+  await page.goto(base + '/team', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'transient image manifest failure');
+  await expect.poll(() => attempts).toBe(1);
+  // Let the first aborted request reject and clear the shared promise before mounting new photos.
+  await page.waitForTimeout(200);
+
+  await page.locator('a[href="/gallery"]').first().click();
+  await expect(page.locator('.jyc57-gallery-page')).toBeVisible();
+  await expect.poll(() => attempts).toBeGreaterThan(1);
+  await expect.poll(() => page.locator('.jyc57-gallery-page picture source').count()).toBeGreaterThan(0);
+});
+
+
+
+test('responsive photo manifest retries after a successful but malformed payload', async ({ page }) => {
+  let attempts = 0;
+  await page.route('**/image-manifest.json', route => {
+    attempts += 1;
+    if (attempts === 1) {
+      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ version: 1, images: { '/assets/hub-photos/not-real.webp': { width: 0, height: 640, aspectRatio: 0, orientation: 'landscape', derivativesEligible: true } } }) });
+    }
+    return route.continue();
+  });
+
+  await page.goto(base + '/team', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'malformed image manifest payload');
+  await expect.poll(() => attempts).toBe(1);
+  await page.waitForTimeout(150);
+  await page.locator('a[href="/gallery"]').first().click();
+  await expect(page.locator('.jyc57-gallery-page')).toBeVisible();
+  await expect.poll(() => attempts).toBeGreaterThan(1);
+  await expect.poll(() => page.locator('.jyc57-gallery-page picture source[srcset]').count()).toBeGreaterThan(0);
+});
+
+
+test('responsive pictures recover when generated AVIF and WebP derivatives all fail', async ({ page }) => {
+  const failedVariants = [];
+  page.on('request', request => {
+    const pathname = new URL(request.url()).pathname;
+    if (pathname.startsWith('/assets/photo-derivatives/')) failedVariants.push(pathname);
+  });
+  await page.route('**/assets/photo-derivatives/**', route => route.abort());
+  await page.goto(base + '/team', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'responsive picture derivative failure');
+
+  const portrait = page.locator('.team-photo-editorial img').first();
+  await expect(portrait).toBeVisible();
+  await portrait.scrollIntoViewIfNeeded();
+  await expect.poll(() => portrait.evaluate(img => img.parentElement?.querySelectorAll('source').length || 0), { timeout: 15000 }).toBeGreaterThan(0);
+  await expect.poll(() => portrait.evaluate(img => img.complete && img.naturalWidth > 0), { timeout: 15000 }).toBe(true);
+
+  const state = await portrait.evaluate(img => ({
+    naturalWidth: img.naturalWidth,
+    currentSrc: new URL(img.currentSrc || img.src, window.location.href).pathname,
+    originalSrc: new URL(img.src, window.location.href).pathname,
+    fallbackStage: img.getAttribute('data-image-fallback-stage'),
+    alt: img.alt,
+    pictureSources: img.parentElement?.querySelectorAll('source').length || 0
+  }));
+  expect(failedVariants.length, 'test must exercise the generated responsive candidates').toBeGreaterThan(0);
+  expect(state.naturalWidth).toBeGreaterThan(0);
+  expect(state.currentSrc, 'a failed derivative must not remain the displayed image').not.toContain('/photo-derivatives/');
+  expect(state.originalSrc).not.toContain('/photo-derivatives/');
+  expect(state.alt.length).toBeGreaterThan(0);
+  expect(state.fallbackStage).not.toBe('failed');
+});
+
+
+test('featured event poster uses the shared responsive image fallback contract', async ({ page }) => {
+  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'featured event photo fallback');
+
+  const poster = page.locator('.jh-featured-event-photo img');
+  if (await poster.count()) {
+    await expect(poster.first()).toBeVisible();
+    const state = await poster.first().evaluate(img => ({
+      loading: img.loading,
+      alt: img.alt,
+      hasPictureParent: img.parentElement?.tagName.toLowerCase() === 'picture',
+      sourceCount: img.parentElement?.querySelectorAll('source').length || 0
+    }));
+    expect(state.loading).toBe('lazy');
+    expect(state.hasPictureParent).toBeTruthy();
+    expect(state.alt.length).toBeGreaterThan(0);
+  }
+});
+
+
+
+test('team flip-card biographies and LinkedIn links remain readable in both themes', async ({ page }) => {
+  await page.goto(base + '/team', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'team flip-card theme contrast');
+
+  const card = page.locator('.team-member-flip:has(.team-social-row a[href*="linkedin.com"])').first();
+  await expect(card).toBeVisible();
+  for (const theme of ['light', 'dark']) {
+    await page.evaluate(value => document.documentElement.setAttribute('data-theme', value), theme);
+    await card.locator('.flip-card__front').click();
+    await expect(card).toHaveClass(/is-flipped/);
+    const contrast = await card.locator('.flip-card__back').evaluate(back => {
+      const parse = value => {
+        const match = String(value || '').match(/rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)(?:\s*,\s*([\d.]+))?\)/i);
+        return match ? [Number(match[1]), Number(match[2]), Number(match[3]), match[4] === undefined ? 1 : Number(match[4])] : null;
+      };
+      const luminance = rgb => rgb.map(v => v / 255).map(v => v <= .04045 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4)).reduce((sum, v, i) => sum + v * [.2126, .7152, .0722][i], 0);
+      const composite = (foreground, background) => foreground.slice(0, 3).map((value, i) => value * foreground[3] + background[i] * (1 - foreground[3]));
+      const ratio = (foreground, background) => {
+        const a = luminance(foreground), b = luminance(background);
+        return (Math.max(a, b) + .05) / (Math.min(a, b) + .05);
+      };
+      const background = parse(getComputedStyle(back).backgroundColor);
+      const bio = parse(getComputedStyle(back.querySelector('.team-member-about')).color);
+      const link = parse(getComputedStyle(back.querySelector('a[href*="linkedin.com"]')).color);
+      return { bio: background && bio ? ratio(composite(bio, background), background.slice(0, 3)) : null,
+        link: background && link ? ratio(composite(link, background), background.slice(0, 3)) : null };
+    });
+    expect(contrast.bio, theme + ' team biography contrast').toBeGreaterThanOrEqual(4.5);
+    expect(contrast.link, theme + ' LinkedIn contrast').toBeGreaterThanOrEqual(4.5);
+    await card.locator('.flip-card__back-trigger').click();
+    await expect(card).not.toHaveClass(/is-flipped/);
+  }
+});
+
+
 test('failed team portraits fall through the optimized logo to the original PNG safely', async ({ page }) => {
   await page.route('**/assets/team/**', route => route.abort());
   await page.route('**/assets/jyc-logo.webp', route => route.abort());
@@ -816,6 +989,14 @@ test('failed team portraits fall through the optimized logo to the original PNG 
   await expect.poll(() => portrait.evaluate(img => new URL(img.currentSrc || img.src).pathname)).toBe('/JYC%20Logo(4).png');
   await expect.poll(() => portrait.evaluate(img => getComputedStyle(img).objectFit)).toBe('contain');
   await expect.poll(() => portrait.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+
+  // A parent/theme render must not restore the failed original portrait URL.
+  const themeToggle = page.locator('.theme-toggle').first();
+  await expect(themeToggle).toBeVisible();
+  await themeToggle.click();
+  await expect(portrait).toHaveAttribute('data-image-fallback-stage', '2');
+  await expect(portrait).toHaveAttribute('alt', 'Official JYC logo placeholder; portrait unavailable');
+  await expect.poll(() => portrait.evaluate(img => new URL(img.currentSrc || img.src).pathname)).toBe('/JYC%20Logo(4).png');
 });
 
 
@@ -1016,6 +1197,42 @@ test('runtime metadata keeps canonical URLs on the production domain from a prev
 });
 
 
+
+test('static boot screen respects the saved light/dark theme before React mounts', async ({ page }) => {
+  await page.addInitScript(value => localStorage.setItem('jyc-theme', value), 'light');
+  await page.route('**/*', route => {
+    const pathname = new URL(route.request().url()).pathname;
+    if (/\.(?:js|jsx|mjs)$/.test(pathname) || pathname === '/@vite/client') return route.abort();
+    return route.continue();
+  });
+
+  const samples = {};
+  for (const theme of ['light', 'dark']) {
+    if (theme !== 'light') await page.addInitScript(value => localStorage.setItem('jyc-theme', value), theme);
+    await page.goto(base, { waitUntil: 'domcontentloaded' });
+    const boot = page.locator('.boot-fallback');
+    await expect(boot).toBeVisible();
+    const bootLogo = boot.locator('img.boot-logo');
+    await expect(bootLogo).toHaveAttribute('src', '/assets/jyc-logo.webp');
+    await expect.poll(() => bootLogo.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+    samples[theme] = await boot.evaluate(el => {
+      const parse = value => { const match=String(value||'').match(/rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i); return match?[+match[1],+match[2],+match[3]]:null; };
+      const luminance = rgb => rgb.map(v=>v/255).map(v=>v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4)).reduce((sum,v,i)=>sum+v*[.2126,.7152,.0722][i],0);
+      const contrast = (a,b) => {const x=luminance(a),y=luminance(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)};
+      const bg=parse(getComputedStyle(el).backgroundColor);
+      const measure=selector=>{const fg=parse(getComputedStyle(el.querySelector(selector)).color);return bg&&fg?contrast(bg,fg):null};
+      return { theme: document.documentElement.dataset.theme, background:getComputedStyle(el).backgroundColor,
+        contrast:{heading:measure('h1'),eyebrow:measure('p'),body:measure('span')} };
+    });
+    expect(samples[theme].theme).toBe(theme);
+    expect(samples[theme].contrast.heading).toBeGreaterThanOrEqual(7);
+    expect(samples[theme].contrast.eyebrow).toBeGreaterThanOrEqual(4.5);
+    expect(samples[theme].contrast.body).toBeGreaterThanOrEqual(4.5);
+  }
+  expect(samples.light.background).not.toBe(samples.dark.background);
+});
+
+
 test('public route shells keep route-specific SEO content and one primary heading without JavaScript', async ({ page }) => {
   await page.route('**/*', route => {
     const pathname = new URL(route.request().url()).pathname;
@@ -1129,4 +1346,97 @@ test('updates API returns a JSON fallback instead of a function crash', async ({
   expect(response.status(), 'updates API must remain available even when connectors are not configured').toBe(200);
   const payload = await response.json();
   expect(Array.isArray(payload.items), 'updates API must always return an items array').toBe(true);
+});
+
+
+test('responsive photos retry the original source when a derivative returns HTML with HTTP 200', async ({ page, browser }) => {
+  const context = await browser.newContext({
+    serviceWorkers: 'block',
+    viewport: page.viewportSize() || { width: 390, height: 844 }
+  });
+  const testPage = await context.newPage();
+  let derivativeRequests = 0;
+
+  await testPage.route('**/assets/photo-derivatives/**', async route => {
+    derivativeRequests += 1;
+    await route.fulfill({
+      status: 200,
+      contentType: 'text/html',
+      body: '<!doctype html><html><body>Not an image</body></html>'
+    });
+  });
+
+  await testPage.goto(base + '/team', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(testPage, 'derivative HTTP 200 HTML fallback');
+  const picture = testPage.locator('.team-photo-editorial .jyc-responsive-picture').first();
+  await picture.scrollIntoViewIfNeeded();
+  await expect.poll(() => derivativeRequests, { timeout: 12000 }).toBeGreaterThan(0);
+
+  const image = picture.locator('img');
+  await expect.poll(() => image.evaluate(img => img.complete && img.naturalWidth > 0), { timeout: 12000 }).toBeTruthy();
+  await expect(image).toHaveAttribute('data-image-fallback-stage', 'original');
+  await expect(image).not.toHaveAttribute('src', /photo-derivatives/);
+  await context.close();
+});
+
+test('responsive photos keep a visible accessible identity when every image fallback fails', async ({ page }) => {
+  await page.route('**/*', route => {
+    const pathname = new URL(route.request().url()).pathname;
+    if (/\.(?:avif|webp|png|jpe?g)$/i.test(pathname)) return route.abort();
+    return route.continue();
+  });
+
+  await page.goto(base + '/team', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'fully failed responsive photo fallback');
+  const picture = page.locator('.team-photo-editorial .jyc-responsive-picture').first();
+  await expect(picture).toBeVisible();
+  await expect(picture).toHaveAttribute('data-image-failed', 'true', { timeout: 10000 });
+  await expect(picture).toHaveAttribute('data-image-fallback-label', 'Image unavailable');
+  await expect(picture).toHaveAttribute('role', 'img');
+  await expect(picture).toHaveAttribute('aria-label', /image unavailable/i);
+  const visualFallback = await picture.evaluate(el => ({ before: getComputedStyle(el, '::before').content, after: getComputedStyle(el, '::after').content }));
+  expect(visualFallback.before).toContain('JYC');
+  expect(visualFallback.after).toContain('Image unavailable');
+  await expect(picture.locator('img')).toHaveAttribute('data-image-fallback-stage', 'failed');
+});
+
+
+test('JYC Now fallback cards and filters keep readable contrast in light and dark themes', async ({ page }) => {
+  await page.goto(base + '/updates', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'JYC Now theme contrast');
+  const card = page.locator('.jyc-now-card').first();
+  await expect(card).toBeVisible();
+  await expect(card.locator('h3')).toContainText(/JAI 2026|RIDE Hack|CICR/);
+  const filter = page.locator('.jyc-now-filter-group button').first();
+  await expect(filter).toBeVisible();
+
+  const samples = {};
+  for (const theme of ['light', 'dark']) {
+    await page.evaluate(value => document.documentElement.setAttribute('data-theme', value), theme);
+    samples[theme] = await card.evaluate(el => {
+      const rgb = value => {
+        const m = String(value || '').match(/rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i);
+        return m ? [+m[1], +m[2], +m[3]] : null;
+      };
+      const lum = c => c.map(v => v / 255).map(v => v <= .04045 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4)).reduce((sum, v, i) => sum + v * [.2126, .7152, .0722][i], 0);
+      const contrast = (a, b) => {
+        if (!a || !b) return 0;
+        const x = lum(a), y = lum(b);
+        return (Math.max(x, y) + .05) / (Math.min(x, y) + .05);
+      };
+      const bg = rgb(getComputedStyle(el).backgroundColor);
+      const fg = rgb(getComputedStyle(el).color);
+      const paragraph = rgb(getComputedStyle(el.querySelector('p')).color);
+      const button = el.ownerDocument.querySelector('.jyc-now-filter-group button');
+      return {
+        cardTextContrast: contrast(fg, bg),
+        paragraphContrast: contrast(paragraph, bg),
+        filterBackground: button ? getComputedStyle(button).backgroundColor : '',
+        filterText: button ? getComputedStyle(button).color : ''
+      };
+    });
+    expect(samples[theme].cardTextContrast, theme + ' card text contrast').toBeGreaterThanOrEqual(4.5);
+    expect(samples[theme].paragraphContrast, theme + ' paragraph contrast').toBeGreaterThanOrEqual(4.5);
+  }
+  expect(samples.dark.filterBackground).not.toBe(samples.light.filterBackground);
 });

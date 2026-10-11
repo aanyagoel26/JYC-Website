@@ -1,5 +1,99 @@
 # Changelog
 
+## V64.5.9 — Semantic image fallback and release-source correction
+
+- Render the terminal JYC image placeholder with valid `<picture>` semantics using CSS pseudo-elements and an accessible label; avoid injecting a `span` into the picture content model.
+- Keep fallback URL normalization and the original-source retry when a generated derivative fails, before falling through to the contextual/JYC logo chain.
+- Refresh JAI 2026 registration deadline to 15 October 2026, 23:59 IST based on the current JYC-128 LinkedIn announcement and Unstop listing. The migration records provenance and preserves the authenticated editorial approval gate.
+- Add browser regression coverage for terminal image failures and the visible/accessible placeholder; update source-contract checks and the service-worker cache namespace to `jyc-cache-v64-5-9`.
+- Refresh the JYC Now fallback cards: surface the verified JAI registration deadline and explicitly flag conflicting RIDE Hack registration sources rather than presenting an uncertain status as verified.
+- Add dark-theme contrast overrides for JYC Now cards, filters, empty states and community spotlights, with reduced-motion-safe card hover behavior and a browser contrast regression.
+- Keep exact-head build/browser verification and production-domain/API checks as release blockers until CI and preview evidence is available.
+
+## V64.5.8 — Accessible terminal image fallback
+
+- Normalize whitespace-only custom fallback URLs to the official local JYC logo before any image element is rendered.
+- Preserve the original photo and contextual-logo → optimized JYC logo → original PNG fallback sequence without guessing responsive derivatives.
+- If every source fails, keep the media frame visibly branded and expose a descriptive accessible image-unavailable label instead of leaving a silent blank frame.
+- Add browser regression coverage that fails every raster image endpoint and verifies the final placeholder, plus source-level release guards.
+- Rotate the service-worker cache namespace to `jyc-cache-v64-5-8` so clients do not retain the prior fallback stylesheet/runtime.
+- Refresh the JAI 2026 registration deadline from the stale 10 October value to 15 October 2026, 23:59 IST, corroborated by the current JYC-128 LinkedIn announcement and Unstop listing. Keep the event editorial-approval gate intact and record the source provenance in a new migration.
+
+## V64.5.7 — Empty-source fallback and release-contract alignment
+
+- Normalize empty or whitespace-only responsive image sources to a local JYC-branded fallback before rendering, avoiding accidental requests for the current document as an image.
+- Reject derivative-eligible manifest flags when the asset folder or intrinsic dimensions/aspect ratio are unsafe, in both the runtime loader and service worker; cover ultra-wide wordmarks, thin banners and undersized images with QA fixtures.
+- Add source-contract and browser regression coverage to prevent empty `src` values on shared responsive-photo elements.
+- Align photo-integrity and photo-intelligence QA with the actual shared responsive-image state model and service-worker cache namespace.
+- Rotate the service-worker cache namespace to `jyc-cache-v64-5-7` so returning clients do not reuse manifest cache state from the previous release.
+
+## V64.5.6 — Manifest path hardening and branded photo fallbacks
+
+- Reject encoded traversal and unsafe path characters before image-manifest records are trusted or cached.
+- Use manifest-confirmed source dimensions for AVIF/WebP candidates; keep the original image and official JYC logo as the predictable fallback chain.
+- Expand image-failure coverage for event posters, team portraits, hub artwork, JYC Now and archive surfaces.
+
+## V64.5.5 — Strict image manifest validation and photo fallback safety
+
+- Validate manifest version, safe local asset paths, positive integer dimensions, truthful aspect ratios/orientation labels, and the derivative-eligibility flag before the shared loader accepts the manifest.
+- Make the service worker apply the same schema rules before caching image metadata; malformed non-empty JSON can no longer replace the last known-good offline manifest.
+- Expand photo-integrity checks with positive and negative schema fixtures, and strengthen the browser regression to return HTTP 200 with a non-empty but invalid manifest before confirming that a later gallery route retries and restores verified responsive sources.
+- Rotate package/lockfile release metadata and the service-worker cache namespace to V64.5.5 so clients install the hardened worker cleanly.
+
+Validation note: targeted source-contract assertions were updated, but full CI and Playwright results remain unconfirmed. Do not treat the PR as production-ready until the exact current head has a successful build, green browser/CI checks, and the production API/domain blockers listed in the audit are resolved.
+
+## V64.5.4 — Network-first manifest recovery and offline boot reliability
+
+- Route `/image-manifest.json` through a service-worker network-first branch so page-level `cache: 'no-cache'` is not defeated by the generic cache-first handler; cache only non-empty, valid JSON manifests, await the cache write without masking a successful network response if Cache API storage fails, and retain the last known-good manifest only as an offline fallback.
+- Reject empty or malformed manifest schemas and clear the shared request promise so later routes can retry after HTTP, network, JSON or schema failures.
+- Keep the initial no-JavaScript boot screen on the compact WebP logo already precached by the service worker, with the original PNG as a compatibility fallback.
+- Make the Dither Veil hero fall back from AVIF to the same precached official WebP logo instead of a large, uncached PNG, and add a browser regression for AVIF failure.
+- Reduce gallery render churn by initializing `ResponsivePhoto` state against its current source and preserving fallback state when source props have not changed.
+- Add browser and source-contract regressions for malformed-manifest retry, service-worker routing, decoded no-JavaScript boot logo and redundant photo render prevention.
+- Normalize campus-linked URLs before applying the legacy-identity block list, and reject the old Sector-62 JYC LinkedIn/Instagram identity even when it appears in a website or alternate social field.
+- Let Playwright's configured webServer own the browser-test preview lifecycle instead of launching a second Vite preview from qa-browser, avoiding a redundant server and its memory/CPU overhead in CI.
+- Rotate package/lockfile release metadata and the service-worker cache namespace to V64.5.4.
+
+Validation note: source-level checks passed, but the exact current head still needs a successful full build and Playwright run. The most recent Vercel preview predates these final changes, and the Vercel deployment API returned HTTP 402 `api-deployments-free-per-day`; do not treat the earlier preview as proof of V64.5.4.
+
+## V64.5.3 — Fresh media manifests and derivative-failure recovery
+
+- Revalidate `/image-manifest.json` instead of forcing potentially stale cached metadata; responsive image candidates must match the current deployment's source dimensions and derivative eligibility.
+- Reset the shared manifest promise after transient HTTP/network/JSON failures so later photo mounts can retry rather than permanently disabling optimized sources for the entire page session.
+- Reject empty or malformed manifest payloads and reset the shared request promise, preventing a successful-but-invalid response from disabling responsive sources for the remainder of the session.
+- Remove two ultra-wide banner/wordmark assets from the Aakriti and Neural Nexus photo-card pools; retain their source material as visuals rather than cropping them as photographs.
+- Audit every unique hub photo-pool source with Sharp metadata and EXIF-oriented dimensions; fail media QA on missing/unreadable sources or banner-like aspect ratios.
+- Apply the same manifest cache policy to the gallery's archive dimension/crop metadata so a deployment cannot keep using a stale manifest for the lifetime of a cached page.
+- Reject empty or malformed `images` manifest payloads, reset the shared request promise and verify a later Gallery mount retries successfully.
+- Keep the initial boot screen on the compact WebP logo already precached by the service worker, retaining the original PNG as a compatibility fallback for no-JavaScript/offline startup.
+- Avoid redundant `ResponsivePhoto` mount renders by initializing state to the current source and preserving unchanged fallback state.
+- Make the service worker network-first for `/image-manifest.json`, with a last-known-good cached response only as an offline fallback, so `cache: 'no-cache'` actually reaches the network.
+- Add a Playwright regression that deliberately aborts generated AVIF/WebP requests and verifies the team portrait still decodes through a valid original or branded fallback.
+- Extend photo-integrity QA to guard both fresh manifest reads and derivative-failure recovery.
+- Add a browser regression that returns an HTTP 200 with an invalid manifest shape, then verifies the next gallery route retries the request and restores verified AVIF/WebP sources.
+- Bump the app release and service-worker cache namespace so returning clients fetch the updated photo behavior.
+
+Validation note: source contracts and asset availability checks are not a substitute for a green Playwright run. GitHub Actions has repeatedly failed before exposing runner steps/logs; the new browser regression still needs a successful run.
+
+
+## V64.5.2 — Image metadata, orientation and derivative integrity
+
+- Fix intrinsic-dimension parsing for lossless WebP (VP8L); the previous bit extraction could read width and height from the wrong packed bytes.
+- Centralize PNG, JPEG SOF, WebP VP8X, WebP VP8 and WebP VP8L dimension parsing; validate the full PNG signature.
+- Use EXIF-oriented display dimensions for manifest aspect ratios, derivative eligibility and width descriptors, preventing rotated JPEGs from advertising incorrect `srcset` widths.
+- Regenerate stale derivatives when source files change, remove oversized variants when a source becomes smaller/ineligible, and prune orphaned derivatives when source media is removed.
+- Add header fixtures for all supported formats and compare parsed dimensions with Sharp metadata across all source/generated PNG, JPEG and WebP assets. Validate each derivative's source, width and aspect ratio.
+- Version the service-worker cache to V64.5.2 and precache the optimized WebP logo instead of the 5.9 MB original PNG, preserving the original PNG as an on-demand fallback.
+- Original source media and public photo URLs remain unchanged.
+
+## V64.5.1 — Photo fallback reliability and derivative filtering
+
+- Make ResponsivePhoto fallback source, alt text, and fallback stage React-state driven so later parent renders cannot restore a broken portrait or failed derivative URL.
+- Keep responsive AVIF/WebP source sets disabled while a branded fallback is active, and reset fallback state only when the requested source or contextual fallback changes.
+- Share intrinsic-dimension eligibility rules between the image manifest and photo derivative generator; skip tiny images, logo strips and extreme panoramas that do not benefit from photo variants.
+- Extend responsive AVIF/WebP variants to curated team portraits, event posters and homepage photos, while preserving originals as fallbacks.
+- Add photo-integrity and release-contract assertions for derivative eligibility, plus a browser regression that forces portrait and optimized-logo failures and verifies the original JYC PNG remains after a theme rerender.
+
 ## V64.5.0 — Identity-first hero, magnetic discovery and photo QA
 
 - Replaced the continuously animated homepage photo wall with a lazy React Bits Dither Veil treatment of the actual JYC logo; WebGL failures, reduced motion, coarse pointers and constrained hardware retain a static logo fallback.

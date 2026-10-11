@@ -166,8 +166,8 @@ export function LivingPhoto({items=[],seed=0,interval=6000,className='',altFallb
   const label=current.caption||current.title||current.association||altFallback;
   return <div className={`jyc-living-photo ${className}`} onMouseEnter={()=>setPaused(true)} onMouseLeave={()=>setPaused(false)} onFocusCapture={()=>setPaused(true)} onBlurCapture={()=>setPaused(false)}>
     <div className="jyc-living-photo-stage" aria-live="polite">
-      {outgoing?.url&&<img className="jyc-living-photo-image is-outgoing" src={outgoing.url} alt="" aria-hidden="true" loading="eager" decoding="async" sizes="(max-width: 700px) calc(100vw - 24px), min(1180px, calc(100vw - 32px))"/>}
-      <img className={`jyc-living-photo-image is-current ${ready?'is-ready':''}`} src={current.url} alt={current.alt||label} loading="eager" decoding="async" fetchPriority="high" sizes="(max-width: 700px) calc(100vw - 24px), min(1180px, calc(100vw - 32px))"/>
+      {outgoing?.url&&<img className="jyc-living-photo-image is-outgoing" src={outgoing.url} alt="" aria-hidden="true" loading="eager" decoding="async" sizes="(max-width: 700px) calc(100vw - 24px), min(1180px, calc(100vw - 32px))" onError={event=>{const image=event.currentTarget;image.style.opacity="0";image.alt="";image.setAttribute("aria-hidden","true")}}/>}
+      <img className={`jyc-living-photo-image is-current ${ready?'is-ready':''}`} data-source={current.url} src={current.url} alt={current.alt||label} loading="eager" decoding="async" fetchPriority="high" sizes="(max-width: 700px) calc(100vw - 24px), min(1180px, calc(100vw - 32px))" onError={event=>{const image=event.currentTarget;const source=image.dataset.source||current.url;if(image.dataset.fallbackSource!==source){image.dataset.fallbackSource=source;image.dataset.fallback="1";image.src="/assets/jyc-logo.webp";image.alt="Official JYC logo placeholder; archive photo unavailable";image.style.objectFit="contain";image.style.padding="18px";image.style.background="#f8f1e5";setError(true);return}if(image.dataset.fallback==="1"){image.dataset.fallback="2";image.src="/JYC%20Logo(4).png";image.alt="Official JYC logo placeholder; archive photo unavailable";image.style.objectFit="contain";image.style.padding="18px";image.style.background="#f8f1e5";return}image.style.opacity="0";image.alt="";image.setAttribute("aria-hidden","true");setError(true)}}/>
       <div className="jyc-living-photo-scrim" aria-hidden="true"/>
       <div className="jyc-living-photo-meta"><span>{current.association||current.sourceLabel||'JYC Archive'}{current.year?' · '+current.year:''}</span><strong>{label}</strong></div>
       <div className="jyc-living-photo-controls">
@@ -175,7 +175,7 @@ export function LivingPhoto({items=[],seed=0,interval=6000,className='',altFallb
         <button type="button" onClick={()=>setPaused(v=>!v)} aria-pressed={paused} aria-label={paused?'Resume automatic photo transition':'Pause automatic photo transition'}>{paused?'▶':'Ⅱ'}</button>
         <button type="button" onClick={()=>advance(1)} aria-label="Next related photograph">›</button>
       </div>
-      {error&&<span className="jyc-living-photo-status" role="status">Photo transition unavailable — staying on this frame.</span>}
+      {error&&<span className="jyc-living-photo-status" role="status">A photo could not load; the current image or official JYC mark remains in place.</span>}
     </div>
   </div>;
 }

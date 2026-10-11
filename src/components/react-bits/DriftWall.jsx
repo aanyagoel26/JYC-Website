@@ -174,7 +174,7 @@ export default function DriftWall({
         }}
        >
         <span className="drift-wall__inner">
-         <img src={item.image} alt={item.title||''} loading="lazy" decoding="async" draggable="false" onError={event=>{const image=event.currentTarget;if(image.dataset.fallback==='1'){image.style.opacity='0';return}image.dataset.fallback='1';image.src='/assets/hub-photos/jyc-06.webp'}} style={{objectPosition:`${Number.isFinite(Number(item.focalX))?Math.max(0,Math.min(100,Number(item.focalX))):50}% ${Number.isFinite(Number(item.focalY))?Math.max(0,Math.min(100,Number(item.focalY))):50}%`}}/>
+         <img src={item.image} alt={item.title||''} loading="lazy" decoding="async" draggable="false" onError={event=>{const image=event.currentTarget;if(image.dataset.fallback==='1'){image.style.opacity='0';image.alt='';image.setAttribute('aria-hidden','true');return}image.dataset.fallback='1';image.src='/assets/jyc-logo.webp';image.alt='Official JYC logo placeholder; archive photo unavailable';image.style.objectFit='contain';image.style.padding='18px';image.style.background='#f8f1e5'}} style={{objectPosition:`${Number.isFinite(Number(item.focalX))?Math.max(0,Math.min(100,Number(item.focalX))):50}% ${Number.isFinite(Number(item.focalY))?Math.max(0,Math.min(100,Number(item.focalY))):50}%`}}/>
          <span className="drift-wall__overlay"/>
         </span>
        </button>;

@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
+import {isDerivativeDimensionEligible,orientedImageDimensions} from '../src/jyc-photo-intelligence.js';
 const {JYC_SOURCE_ARCHIVE_PHOTO_ITEMS}=await import('../src/jyc-source-media.js');
 const allowedArchive=new Set(JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.map(item=>String(item?.url||'')));
 const root=path.resolve('public/assets');
@@ -11,25 +12,54 @@ const WIDTHS=[480,960,1600];
 // without oversubscribing a 2-core builder.
 sharp.concurrency(Math.min(2,Math.max(1,Number(process.env.JYC_SHARP_CONCURRENCY||2))));
 const CONCURRENCY=Math.min(2,Math.max(1,Number(process.env.JYC_DERIVATIVE_CONCURRENCY||2)));
-const ALLOWED=['source-archive','hub-photos','hub-photos-extra'];
+const ALLOWED=['source-archive','hub-photos','hub-photos-extra','events','home','team'];
 const inputFiles=[];
 const walk=dir=>{for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())walk(file);else if(/\.(jpe?g|png|webp)$/i.test(file))inputFiles.push(file)}};
 walk(root);
 const sourceFiles=inputFiles.filter(file=>{if(file.includes(path.join('photo-derivatives',path.sep)))return false;const url='/assets/'+path.relative(root,file).replaceAll(path.sep,'/');if(url.startsWith('/assets/source-archive/'))return allowedArchive.has(url);return ALLOWED.some(folder=>url.startsWith('/assets/'+folder+'/'));});
-let generated=0,failed=0,skipped=0,completed=0;
+const derivativeBaseOwners=new Map();
+const duplicateDerivativeBases=[];
+for(const file of sourceFiles){
+ const rel=path.relative(root,file).replaceAll(path.sep,'/').replace(/\.(jpe?g|png|webp)$/i,'');
+ const previous=derivativeBaseOwners.get(rel);
+ if(previous)duplicateDerivativeBases.push({base:rel,files:[previous,path.relative(root,file).replaceAll(path.sep,'/') ]});
+ else derivativeBaseOwners.set(rel,path.relative(root,file).replaceAll(path.sep,'/'));
+}
+if(duplicateDerivativeBases.length){
+ console.error('Photo derivative output-name collisions: '+JSON.stringify(duplicateDerivativeBases.slice(0,12)));
+ process.exit(1);
+}
+let generated=0,failed=0,skipped=0,completed=0,removed=0,reused=0;
+const expectedDerivativeBases=new Set(sourceFiles.map(file=>path.relative(root,file).replaceAll(path.sep,'/').replace(/\.(jpe?g|png|webp)$/i,'')));
+const pruneOrphanDerivatives=dir=>{if(!fs.existsSync(dir))return;for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory()){pruneOrphanDerivatives(file);continue}if(!/\.(?:avif|webp)$/i.test(entry.name))continue;const rel=path.relative(outputRoot,file).replaceAll(path.sep,'/');const match=rel.match(/-(\d+)\.(?:avif|webp)$/i);if(!match||!WIDTHS.includes(Number(match[1]))||!expectedDerivativeBases.has(rel.replace(/-\d+\.(?:avif|webp)$/i,''))){fs.rmSync(file,{force:true});removed++}}};
+pruneOrphanDerivatives(outputRoot);
 const processFile=async file=>{
  const rel=path.relative(root,file).replaceAll(path.sep,'/');
  const base=rel.replace(/\.(jpe?g|png|webp)$/i,'');
  const outDir=path.join(outputRoot,path.dirname(rel));
+ const sourceStat=fs.statSync(file);
  fs.mkdirSync(outDir,{recursive:true});
+ const outputPath=(width,format)=>path.join(outDir,path.basename(base)+'-'+width+'.'+format);
+ const removeVariant=(width,format)=>{const out=outputPath(width,format);if(fs.existsSync(out)){fs.rmSync(out);removed++}};
  try{
   const meta=await sharp(file).metadata();
-  if(!meta.width||!meta.height){skipped++;return}
+  const display=orientedImageDimensions(meta.width,meta.height,meta.orientation);
+  if(!display||!isDerivativeDimensionEligible(display.width,display.height)){
+   for(const width of WIDTHS)for(const format of ['avif','webp'])removeVariant(width,format);
+   skipped++;
+   return;
+  }
   for(const width of WIDTHS){
-   if(width>meta.width)continue;
+   if(width>display.width){for(const format of ['avif','webp'])removeVariant(width,format);continue}
    for(const format of ['avif','webp']){
-    const out=path.join(outDir,path.basename(base)+'-'+width+'.'+format);
-    if(fs.existsSync(out))continue;
+    const out=outputPath(width,format);
+    if(fs.existsSync(out)){
+     try{
+      const [outStat,outMeta]=await Promise.all([fs.promises.stat(out),sharp(out).metadata()]);
+      const expectedHeight=Math.round(display.height*width/display.width);
+      if(outStat.mtimeMs>=sourceStat.mtimeMs&&outMeta.width===width&&Math.abs((outMeta.height||0)-expectedHeight)<=1){reused++;continue}
+     }catch{}
+    }
     const pipeline=sharp(file).rotate().resize({width,withoutEnlargement:true});
     if(format==='avif')await pipeline.avif({quality:52,effort:2}).toFile(out);
     else await pipeline.webp({quality:82,effort:3}).toFile(out);
@@ -51,5 +81,5 @@ const workers=Array.from({length:Math.min(CONCURRENCY,sourceFiles.length)},async
  }
 });
 await Promise.all(workers);
-console.log('Photo derivatives: generated='+generated+' skipped='+skipped+' failed='+failed+' concurrency='+Math.min(CONCURRENCY,sourceFiles.length));
+console.log('Photo derivatives: generated='+generated+' skipped='+skipped+' failed='+failed+' removed='+removed+' reused='+reused+' concurrency='+Math.min(CONCURRENCY,sourceFiles.length));
 if(failed>0)process.exitCode=1;

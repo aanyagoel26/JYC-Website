@@ -551,7 +551,12 @@ body{background:var(--bg)!important;color:var(--ink)!important}
 /* V63 PHOTO ARCHIVE — editorial archive IA + restrained Motion-inspired transitions.
    The interaction language borrows the good parts of open-source Motion, Embla and
    responsive photo-album patterns without adding a second visual design system. */
-.jyc-responsive-picture{display:block;width:100%;height:100%;min-width:0}
+.jyc-responsive-picture{position:relative;display:block;width:100%;height:100%;min-width:0}
+.jyc-responsive-picture[data-image-failed="true"]{border:1px dashed var(--border-tech,rgba(191,156,111,.45));background:radial-gradient(ellipse at 50% 25%,rgba(191,156,111,.13),transparent 68%),var(--bg-main,#f8f1e5);overflow:hidden}
+.jyc-responsive-picture[data-image-failed="true"]::before,.jyc-responsive-picture[data-image-failed="true"]::after{position:absolute;z-index:1;pointer-events:none}
+.jyc-responsive-picture[data-image-failed="true"]::before{content:"JYC";display:grid;place-items:center;top:calc(50% - 30px);left:calc(50% - 21px);width:42px;height:42px;border:1px solid var(--accent-gold,#bf9c6f);border-radius:50%;color:var(--accent-gold,#bf9c6f);font:900 10px/1 Inter,system-ui,sans-serif;letter-spacing:.06em}
+.jyc-responsive-picture[data-image-failed="true"]::after{content:attr(data-image-fallback-label);top:calc(50% + 20px);left:12px;right:12px;color:var(--text-muted,#6e6a75);font:800 9px/1.4 Inter,system-ui,sans-serif;letter-spacing:.13em;text-align:center;text-transform:uppercase;overflow-wrap:anywhere}
+@media(prefers-reduced-motion:reduce){.jyc-responsive-picture[data-image-failed="true"]::before,.jyc-responsive-picture[data-image-failed="true"]::after{transition:none!important;animation:none!important}}
 .jyc-responsive-picture img{width:100%;height:100%;display:block;object-fit:cover;object-position:50% 50%}
 .jyc57-archive-nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:20px 0 14px;padding:6px;border:1px solid var(--line);border-radius:999px;background:color-mix(in srgb,var(--surface) 94%,transparent);position:sticky;top:74px;z-index:12;backdrop-filter:blur(14px)}
 .jyc57-archive-nav a,.jyc57-archive-nav button{appearance:none;border:0;background:transparent;color:var(--muted);padding:9px 13px;border-radius:999px;font:800 10px/1 inherit;letter-spacing:.14em;text-transform:uppercase;cursor:pointer;text-decoration:none}

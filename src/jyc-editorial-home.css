@@ -263,7 +263,9 @@
 
 
 /* Failed featured-event posters use the official mark, not a different event's photo. */
-.jyc-editorial-home.jyc-home .jh-event-image img[data-fallback="1"]{
+.jyc-editorial-home.jyc-home .jh-event-image img[data-image-fallback-stage="1"],
+.jyc-editorial-home.jyc-home .jh-event-image img[data-image-fallback-stage="2"],
+.jyc-editorial-home.jyc-home .jh-event-image img[data-image-fallback-stage="3"]{
   object-fit:contain!important;
   object-position:center!important;
   padding:clamp(16px,3vw,34px);

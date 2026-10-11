@@ -2,6 +2,38 @@
    Editorial assistance only. Scores never imply rights clearance or publication.
 */
 export const JYC_EDITORIAL_RUBRIC={composition:5,peopleMoment:5,jycRelevance:5,technicalQuality:5,uniqueness:5,storyValue:5};
+
+const ascii=(bytes,start,end)=>String.fromCharCode(...bytes.subarray(start,end));
+const dimensionResult=(width,height)=>width>0&&height>0?{width,height}:null;
+
+/** Read intrinsic dimensions from the image headers used by the JYC media pipeline.
+ * Accepts Uint8Array/Buffer and intentionally avoids decoding full image pixels.
+ */
+export function parseImageDimensions(input){
+ const bytes=input instanceof Uint8Array?input:new Uint8Array(input||[]);
+ if(bytes.length>=24&&bytes[0]===0x89&&ascii(bytes,1,4)==='PNG'&&bytes[4]===0x0d&&bytes[5]===0x0a&&bytes[6]===0x1a&&bytes[7]===0x0a)return dimensionResult(new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength).getUint32(16,false),new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength).getUint32(20,false));
+ if(bytes.length>=30&&ascii(bytes,0,4)==='RIFF'&&ascii(bytes,8,12)==='WEBP'){
+  const kind=ascii(bytes,12,16);
+  if(kind==='VP8X')return dimensionResult(1+(bytes[24]|bytes[25]<<8|bytes[26]<<16),1+(bytes[27]|bytes[28]<<8|bytes[29]<<16));
+  if(kind==='VP8 '&&bytes.length>=30&&bytes[23]===0x9d&&bytes[24]===0x01&&bytes[25]===0x2a)return dimensionResult((bytes[26]|bytes[27]<<8)&0x3fff,(bytes[28]|bytes[29]<<8)&0x3fff);
+  if(kind==='VP8L'&&bytes.length>=26&&bytes[20]===0x2f)return dimensionResult(1+(bytes[21]|(bytes[22]&0x3f)<<8),1+((bytes[22]>>6)|(bytes[23]<<2)|((bytes[24]&0x0f)<<10)));
+ }
+ if(bytes.length>=4&&bytes[0]===0xff&&bytes[1]===0xd8){
+  let offset=2;
+  while(offset+3<bytes.length){
+   if(bytes[offset]!==0xff){offset++;continue}
+   const marker=bytes[offset+1];offset+=2;
+   if(marker===0xd8||marker===0xd9||marker===0x01||(marker>=0xd0&&marker<=0xd7))continue;
+   if(offset+2>bytes.length)break;
+   const size=(bytes[offset]<<8)|bytes[offset+1];
+   if(size<2||offset+size>bytes.length)break;
+   if([0xc0,0xc1,0xc2,0xc3,0xc5,0xc6,0xc7,0xc9,0xca,0xcb,0xcd,0xce,0xcf].includes(marker)&&size>=7)return dimensionResult((bytes[offset+5]<<8)|bytes[offset+6],(bytes[offset+3]<<8)|bytes[offset+4]);
+   if(marker===0xda||marker===0xd9)break;
+   offset+=size;
+  }
+ }
+ return null;
+}
 export const JYC_EDITORIAL_BANDS=[
  {min:24,max:30,key:'hero',label:'Hero / editorial'},
  {min:19,max:23,key:'featured',label:'Featured gallery'},
@@ -33,5 +65,7 @@ export function rankDiverseJycPhotos(items=[],{limit=24,seed=0,maxPerAssociation
  return out;
 }
 export function diversityAudit(items=[]){const rows=[...new Set((items||[]).map(x=>String(x.association||'JYC Archive')))].map(association=>({association,count:(items||[]).filter(x=>String(x.association||'JYC Archive')===association).length})).sort((a,b)=>b.count-a.count);return{total:items.length,collections:rows,largestCollection:rows[0]||null}}
-export function photoVariantBase(url){const value=String(url||'');if(!(value.startsWith('/assets/source-archive/')||value.startsWith('/assets/hub-photos/')||value.startsWith('/assets/hub-photos-extra/')))return null;return '/assets/photo-derivatives/'+value.slice('/assets/'.length).replace(/\.(jpe?g|png|webp)$/i,'')}
+export function photoVariantBase(url){const value=String(url||'');const prefixes=['/assets/source-archive/','/assets/hub-photos/','/assets/hub-photos-extra/','/assets/events/','/assets/home/','/assets/team/'];if(!prefixes.some(prefix=>value.startsWith(prefix)))return null;return '/assets/photo-derivatives/'+value.slice('/assets/'.length).replace(/\.(jpe?g|png|webp)$/i,'')}
+export function isDerivativeDimensionEligible(width,height){const w=Number(width),h=Number(height);if(!Number.isFinite(w)||!Number.isFinite(h)||w<320||h<120)return false;const ratio=w/h;return ratio>=0.25&&ratio<=5;}
+export function orientedImageDimensions(width,height,orientation){const w=Number(width),h=Number(height),o=Number(orientation);if(!Number.isFinite(w)||!Number.isFinite(h)||w<=0||h<=0)return null;return o>=5&&o<=8?{width:h,height:w}:{width:w,height:h};}
 export function photoDerivativeUrls(url,sourceWidth){const base=photoVariantBase(url);if(!base)return null;const widths=[480,960,1600].filter(width=>!Number.isFinite(Number(sourceWidth))||width<=Number(sourceWidth));if(!widths.length)return null;return{avif:widths.map(width=>({url:base+'-'+width+'.avif',width})),webp:widths.map(width=>({url:base+'-'+width+'.webp',width}))}}
