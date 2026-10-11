@@ -16,17 +16,16 @@ Reviewed public repository metadata, READMEs, package definitions, representativ
 
 ## High-value ideas for JYC
 
-### 1. JODC Fromroots — identity, contribution storytelling, live projects
+### 1. JODC Fromroots — identity and reusable design system
 
-The README documents a logo-derived design system, reusable components, reduced-motion-aware interactive backdrop, a written-scroll-stroke moment, and a Repo of the Week feature with a submission/review loop and GitHub metadata sync.
+The README documents a logo-derived design system, reusable components, reduced-motion-aware interactive backdrop, and a written-scroll-stroke moment.
 
 Adopt the concepts, not the exact branding:
-- Add richer hub profiles explaining what each hub does, beginner-friendly entry points, what members build, verified events, the team and ways to participate.
-- Consider a “JYC Community Spotlight” or “Hub of the Month” slot backed by explicitly approved data; no fake usage metrics or automatically inferred winners.
+- Refine existing hub profiles with clear descriptions, beginner-friendly entry points, verified events, team information and ways to participate; improve existing content rather than creating a new curated spotlight feature.
 - Keep event/date and club content in typed, source-backed data modules rather than spreading copy across components.
 - Extend design tokens and reusable UI patterns; keep JYC charcoal/cream/gold rather than copying JODC orange.
 - Make motion a progressive enhancement: pointer/GPU/reduced-motion checks, viewport pause, frame-budget fallback, and no mandatory WebGL on mobile.
-- If a project-submission feature is added, it needs authenticated submissions, admin moderation, rate limits, audit trail, and correct RLS.
+- Do not add curated project or achievement spotlights. Any future user-submitted content workflow would require a separate approved scope, authenticated submissions, moderation, rate limits, audit trail and correct RLS.
 
 ### 2. Dron-o-War / Dronotics — event campaign storytelling
 
@@ -46,8 +45,7 @@ Do not treat dates or prize values from a historical event README as current JYC
 Its README describes a broad operations app: projects, events, meetings, members/hierarchy, inventory, learning programmes, issue tracking, communications, admin, and health/readiness endpoints, with separately deployed frontend/backend.
 
 Adopt only when JYC public website needs a matching workflow:
-- A lightweight projects/achievements directory with approved owners, status, tags, links and update dates.
-- A faculty/student hierarchy view based on a verified current roster.
+- Improve existing public hub/team content using a verified current roster and approved copy.
 - Clear internal status pages/health probes if JYC gains a server API.
 - Deployment/rollback documentation and explicit API boundaries.
 - Keep privileged workflows separate from public pages.
@@ -95,8 +93,7 @@ They overlap in scripts/browser-smoke.spec.js and scripts/qa-v64-editorial-relea
 - Provide event detail resource/rulebook/FAQ sections for organisers who need campaign pages.
 
 ### P2 — meaningful community features
-- Add a verified project/achievement showcase with category filtering and a clear last-updated date.
-- Add a moderated hub spotlight authored from approved club content.
+- Improve existing hub profiles and event storytelling using verified club/event content; do not add curated project or achievement spotlight sections.
 - Consider event filters (upcoming, registration open, archived, hub, type), clear status badges, and downloadable resource links.
 - New content must come from approved source records; historical PDFs and README details do not become live event state by themselves.
 
