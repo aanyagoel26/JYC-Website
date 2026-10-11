@@ -8,8 +8,8 @@ const LazyDitherVeil=lazy(()=>import('./react-bits/DitherVeil.jsx'));
 const LazyMagicBento=lazy(()=>import('./components/react-bits/MagicBento.jsx'));
 import './jyc-editorial-home.css';
 
-const FALLBACK=import.meta.env.PROD?'/assets/jyc-logo.webp':'/JYC%20Logo(4).png';
-const DITHER_SOURCE=import.meta.env.PROD?'/assets/jyc-logo.avif':FALLBACK;
+const FALLBACK='/jyc-logo-official.webp';
+const DITHER_SOURCE='/jyc-logo-official.webp';
 function LazyActivityBento({activities,nav}){
  const host=useRef(null),[active,setActive]=useState(false);
  useEffect(()=>{

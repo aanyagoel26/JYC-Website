@@ -44,6 +44,7 @@ const LazyFlipCard=lazy(()=>import('./components/react-bits/FlipCard.jsx'));
 
 
 import './jyc-design-upgrades.css';
+import './styles/jyc-pro-redesign.css';
 
 const PUBLIC_ACTIVITIES=JYC_PUBLIC_ACTIVITIES;
 function mergePublicFallback(d,{allowContentFallback=true}={}){
@@ -296,26 +297,43 @@ function Team({data}){
   const role=m.role||m.position||'JYC Team';
   const photo=teamPhotoFor(m);
   const linkedinHeadline=m.linkedinHeadline||m.linkedin_headline||m.headline||m.tagline||'';
-  const about=m.bio||m.about||m.description||m.linkedinBio||m.linkedin_bio||linkedinHeadline||'Official JYC leadership profile. More details will be published as the organisation updates its public people records.';
+  const about=m.bio||m.about||m.description||m.linkedinBio||m.linkedin_bio||linkedinHeadline||'Official JYC leadership profile.';
   const linkedin=safeExternalUrl(m.linkedin||m.linkedinUrl||m.linkedin_url||m.socials?.linkedin);
-  const instagram=safeExternalUrl(m.instagram||m.instagramUrl||m.instagram_url||m.socials?.instagram);
   return <article className="team-layer-card team-flip-member reveal" key={m.id||name||index}>
    <Suspense fallback={<div className="team-flip-loading" aria-hidden="true"/>}>
     <LazyFlipCard label={`Open profile for ${name}`} className="team-member-flip">
-     <span className="team-member-face-content">
-      <span className="team-photo-editorial">{photo?<ResponsivePhoto src={photo} alt={name} width={600} height={720} loading="lazy" decoding="async" sizes="(max-width: 420px) 90vw, (max-width: 760px) 45vw, 25vw" fallbackSrc={logo} fallbackAlt="Official JYC logo placeholder; portrait unavailable"/>:<LogoImage className="team-photo-missing-logo" alt="Official JYC logo placeholder; portrait unavailable"/>}</span>
-      <strong className="team-member-name">{name}</strong>
-      <span className="tag">{role}</span>
-      <span className="team-member-hint">Click to read profile →</span>
-     </span>
-     <span className="team-member-face-content team-member-back-content">
-      <span className="eyebrow">ABOUT · {role}</span>
-      <strong>{name}</strong>
-      {linkedinHeadline&&linkedinHeadline!==about&&<span className="team-member-headline">{linkedinHeadline}</span>}
-      <span className="team-member-about">{about}</span>
-      <span className="team-member-back-note">Tap / click again to return to the photo.</span>
-      <span className="team-social-row">{linkedin&&<a href={linkedin} target="_blank" rel="noopener noreferrer" aria-label={`Open ${name} LinkedIn profile`} onClick={e=>e.stopPropagation()}>LinkedIn profile ↗</a>}{instagram&&<a href={instagram} target="_blank" rel="noopener noreferrer" aria-label={`Open ${name} Instagram profile`} onClick={e=>e.stopPropagation()}>Instagram ↗</a>}</span>
-     </span>
+     {/* Front Face: High-Res Portrait, Name, Position, Flip Trigger */}
+     <div className="team-member-face-content" style={{position:'relative',width:'100%',height:'100%',overflow:'hidden',padding:0}}>
+      <div className="team-photo-editorial">
+       {photo?<ResponsivePhoto src={photo} alt={name} width={600} height={720} loading="lazy" decoding="async" sizes="(max-width: 420px) 90vw, (max-width: 760px) 45vw, 25vw" fallbackSrc={logo} fallbackAlt="Official JYC logo placeholder; portrait unavailable"/>:<LogoImage className="team-photo-missing-logo" alt="Official JYC logo placeholder; portrait unavailable"/>}
+      </div>
+      <div className="team-front-overlay">
+       <span className="team-role-tag">{role}</span>
+       <h3 className="team-name-front">{name}</h3>
+       <span className="team-flip-indicator">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" width="13" height="13"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
+        Click to view bio
+       </span>
+      </div>
+     </div>
+     {/* Back Face: Role, Name, Bio, LinkedIn Button, Return Trigger */}
+     <div className="team-back-content">
+      <div>
+       <span className="team-back-role-eyebrow">{role} · JYC 128</span>
+       <h3 className="team-back-name">{name}</h3>
+       {linkedinHeadline&&linkedinHeadline!==about&&<div className="team-back-headline">{linkedinHeadline}</div>}
+      </div>
+      <p className="team-back-bio">{about}</p>
+      <div className="team-back-actions">
+       {linkedin&&<a href={linkedin} target="_blank" rel="noopener noreferrer" className="team-linkedin-btn" onClick={e=>e.stopPropagation()}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.6 1.6 0 0 0-1.6 1.6 1.6 1.6 0 0 0 1.6 1.6 1.6 1.6 0 0 0 1.6-1.6 1.6 1.6 0 0 0-1.6-1.6Z"/></svg>
+        LinkedIn Profile ↗
+       </a>}
+       <button type="button" className="team-back-return-btn" onClick={e=>{e.stopPropagation();e.currentTarget.closest('.flip-card')?.click()}}>
+        ← Back to photo
+       </button>
+      </div>
+     </div>
     </LazyFlipCard>
    </Suspense>
   </article>;
