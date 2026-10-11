@@ -21,6 +21,18 @@ self.addEventListener('fetch', (event) => {
   // Never cache same-origin API responses. Public JYC Now uses /api/jyc-updates and
   // must be allowed to refresh even when an older service-worker cache exists.
   if (requestUrl.origin === self.location.origin && requestUrl.pathname.startsWith('/api/')) return;
+  // The image manifest is deployment metadata: always revalidate it before
+  // allowing ResponsivePhoto to advertise generated AVIF/WebP candidates.
+  // Keep the last known-good manifest only as an offline fallback.
+  if (requestUrl.origin === self.location.origin && requestUrl.pathname === '/image-manifest.json') {
+    event.respondWith(
+      fetch(new Request(request, { cache: 'no-cache' })).then((response) => {
+        if (response.ok) caches.open(CACHE_NAME).then((cache) => cache.put(request, response.clone()));
+        return response;
+      }).catch(() => caches.match(request).then((cached) => cached || Response.error()))
+    );
+    return;
+  }
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request).then((response) => {
