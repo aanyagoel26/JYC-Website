@@ -31,7 +31,7 @@ assert('ultra-wide hub wordmarks stay out of club photo cards',!aakritiPhotoUrls
 const hubPhotoUrls=[...new Set(Object.keys(JYC_HUB_CONTENT).flatMap(name=>sourceHubMedia(name).photoItems.map(item=>item.url)))];
 const hubPhotoAspectOutliers=[];
 for(const url of hubPhotoUrls){
- const file=path.join('public',String(url||'').replace(/^\\//,''));
+ const file=path.join('public',String(url||'').slice(1));
  try{const metadata=await sharp(file).metadata();const dimensions=orientedImageDimensions(metadata.width,metadata.height,metadata.orientation);if(dimensions&&(dimensions.width/dimensions.height>5||dimensions.width/dimensions.height<.25))hubPhotoAspectOutliers.push({url,width:dimensions.width,height:dimensions.height})}catch{hubPhotoAspectOutliers.push({url,error:'missing or unreadable image'})}
 }
 assert('all hub photo-only pools exclude banner-like aspect ratios and unreadable sources',hubPhotoAspectOutliers.length===0,hubPhotoAspectOutliers.slice(0,10).map(item=>JSON.stringify(item)).join('; ')||hubPhotoUrls.length+' unique photos checked');
