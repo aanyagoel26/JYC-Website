@@ -2,7 +2,7 @@
 
 ## V64.5.4 — Network-first manifest recovery and offline boot reliability
 
-- Route `/image-manifest.json` through a service-worker network-first branch so page-level `cache: 'no-cache'` is not defeated by the generic cache-first handler; cache only non-empty, valid JSON manifests, await the cache write, and retain the last known-good manifest only as an offline fallback.
+- Route `/image-manifest.json` through a service-worker network-first branch so page-level `cache: 'no-cache'` is not defeated by the generic cache-first handler; cache only non-empty, valid JSON manifests, await the cache write without masking a successful network response if Cache API storage fails, and retain the last known-good manifest only as an offline fallback.
 - Reject empty or malformed manifest schemas and clear the shared request promise so later routes can retry after HTTP, network, JSON or schema failures.
 - Keep the initial no-JavaScript boot screen on the compact WebP logo already precached by the service worker, with the original PNG as a compatibility fallback.
 - Make the Dither Veil hero fall back from AVIF to the same precached official WebP logo instead of a large, uncached PNG, and add a browser regression for AVIF failure.
