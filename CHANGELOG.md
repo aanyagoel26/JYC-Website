@@ -1,5 +1,13 @@
 # Changelog
 
+## V64.5.9 — Semantic image fallback and release-source correction
+
+- Render the terminal JYC image placeholder with valid `<picture>` semantics using CSS pseudo-elements and an accessible label; avoid injecting a `span` into the picture content model.
+- Keep fallback URL normalization and the original-source retry when a generated derivative fails, before falling through to the contextual/JYC logo chain.
+- Refresh JAI 2026 registration deadline to 15 October 2026, 23:59 IST based on the current JYC-128 LinkedIn announcement and Unstop listing. The migration records provenance and preserves the authenticated editorial approval gate.
+- Add browser regression coverage for terminal image failures and the visible/accessible placeholder; update source-contract checks and the service-worker cache namespace to `jyc-cache-v64-5-9`.
+- Keep exact-head build/browser verification and production-domain/API checks as release blockers until CI and preview evidence is available.
+
 ## V64.5.8 — Accessible terminal image fallback
 
 - Normalize whitespace-only custom fallback URLs to the official local JYC logo before any image element is rendered.
