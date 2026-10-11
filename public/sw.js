@@ -31,7 +31,7 @@ self.addEventListener('fetch', (event) => {
           const payload = await response.clone().json().catch(() => null);
           const validManifest = payload?.images && typeof payload.images === 'object' &&
             !Array.isArray(payload.images) && Object.keys(payload.images).length > 0;
-          if (validManifest) await caches.open(CACHE_NAME).then((cache) => cache.put(request, response.clone()));
+          if (validManifest) await caches.open(CACHE_NAME).then((cache) => cache.put(request, response.clone())).catch(() => null);
         }
         return response;
       }).catch(() => caches.match(request).then((cached) => cached || Response.error()))
