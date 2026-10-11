@@ -7,6 +7,7 @@
 - If every source fails, keep the media frame visibly branded and expose a descriptive accessible image-unavailable label instead of leaving a silent blank frame.
 - Add browser regression coverage that fails every raster image endpoint and verifies the final placeholder, plus source-level release guards.
 - Rotate the service-worker cache namespace to `jyc-cache-v64-5-8` so clients do not retain the prior fallback stylesheet/runtime.
+- Refresh the JAI 2026 registration deadline from the stale 10 October value to 15 October 2026, 23:59 IST, corroborated by the current JYC-128 LinkedIn announcement and Unstop listing. Keep the event editorial-approval gate intact and record the source provenance in a new migration.
 
 ## V64.5.7 — Empty-source fallback and release-contract alignment
 
