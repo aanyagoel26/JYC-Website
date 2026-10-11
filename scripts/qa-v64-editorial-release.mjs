@@ -61,7 +61,7 @@ const checks=[
  ['Sector 128 event boundary remains enforced',main.includes('isSector128Venue')&&main.includes('events.filter(e=>isSector128Venue')],
  ['editorial QA remains wired',pkg.scripts?.['qa:editorial']==='node scripts/qa-editorial-system.mjs'],
  ['new V64 QA is wired',pkg.scripts?.['qa:v64-editorial']==='node scripts/qa-v64-editorial-release.mjs'],
- ['CI builds generated image manifest before running photo-integrity QA',ciWorkflow.indexOf('run: npm run build')>=0&&ciWorkflow.indexOf('run: npm run build')<ciWorkflow.indexOf('      - run: npm run qa\\n')&&ciWorkflow.indexOf('      - run: npm run qa\\n')>=0],
+ ['CI builds generated image manifest before running photo-integrity QA',ciWorkflow.indexOf('run: npm run build')>=0&&ciWorkflow.indexOf('run: npm run build')<ciWorkflow.indexOf('      - run: npm run qa\n')&&ciWorkflow.indexOf('      - run: npm run qa\n')>=0],
  ['release metadata is V64',/^64\.\d+\.\d+$/.test(pkg.version)],
  ['production prebuild generates real photo derivatives',pkg.scripts?.prebuild?.includes('generate-photo-derivatives.mjs')],
  ['desktop homepage headline is constrained to its copy column',homeCss.includes('font-size: clamp(48px, 4.5vw, 78px) !important;')&&homeCss.includes('line-height: .9 !important;')],
