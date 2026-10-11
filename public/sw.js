@@ -2,6 +2,23 @@ const CACHE_NAME = 'jyc-cache-v64-5-4';
 
 const APP_SHELL = ['/', '/offline.html', '/manifest.json', '/assets/jyc-logo.webp'];
 
+const isRecord = (value) => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
+const isValidImageManifest = (payload) => {
+  if (!isRecord(payload) || payload.version !== 1 || !isRecord(payload.images)) return false;
+  const entries = Object.entries(payload.images);
+  if (!entries.length) return false;
+  return entries.every(([url, entry]) => {
+    if (!url.startsWith('/assets/') || url.includes('..') || url.includes('?') || url.includes('#') || !isRecord(entry)) return false;
+    const width = Number(entry.width);
+    const height = Number(entry.height);
+    const ratio = Number(entry.aspectRatio);
+    if (!Number.isInteger(width) || width <= 0 || !Number.isInteger(height) || height <= 0 || typeof entry.derivativesEligible !== 'boolean') return false;
+    if (!Number.isFinite(ratio) || Math.abs(ratio - Number((width / height).toFixed(5))) > 0.000001) return false;
+    const orientation = width === height ? 'square' : width > height ? 'landscape' : 'portrait';
+    return entry.orientation === orientation;
+  });
+};
+
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)));
   self.skipWaiting();
@@ -29,8 +46,7 @@ self.addEventListener('fetch', (event) => {
       fetch(new Request(request, { cache: 'no-cache' })).then(async (response) => {
         if (response.ok && response.headers.get('content-type')?.includes('application/json')) {
           const payload = await response.clone().json().catch(() => null);
-          const validManifest = payload?.images && typeof payload.images === 'object' &&
-            !Array.isArray(payload.images) && Object.keys(payload.images).length > 0;
+          const validManifest = isValidImageManifest(payload);
           if (validManifest) await caches.open(CACHE_NAME).then((cache) => cache.put(request, response.clone())).catch(() => null);
         }
         return response;
