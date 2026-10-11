@@ -1,11 +1,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
-import {JYC_SOURCE_MEDIA_STATS,mergeSourceGallery,sourceEventMedia,buildJycMediaManifest,JYC_SOURCE_ARCHIVE_PHOTO_ITEMS,JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS} from '../src/jyc-source-media.js';
+import {JYC_SOURCE_MEDIA_STATS,mergeSourceGallery,sourceEventMedia,sourceHubMedia,buildJycMediaManifest,JYC_SOURCE_ARCHIVE_PHOTO_ITEMS,JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS} from '../src/jyc-source-media.js';
 import {isDerivativeDimensionEligible,orientedImageDimensions,parseImageDimensions} from '../src/jyc-photo-intelligence.js';
 
 const assert=(name,ok,detail='')=>{console.log((ok?'PASS: ':'FAIL: ')+name+(detail?' — '+detail:''));if(!ok)process.exitCode=1};
 const mediaSource=fs.readFileSync('src/jyc-source-media.js','utf8');
+const hubPresentationSource=fs.readFileSync('src/pdf-hub-content.js','utf8');
 const mainSource=fs.readFileSync('src/main.jsx','utf8');
 const browserSource=fs.readFileSync('scripts/browser-smoke.spec.js','utf8');
 const editorialHomeSource=fs.readFileSync('src/jyc-editorial-home.jsx','utf8');
@@ -23,6 +24,9 @@ const auditedExclusionIds=auditedCategories.flatMap(cat=>{
 
 
 assert('non-photographic club override cleanup',mediaSource.includes("CypherX:[]")&&mediaSource.includes("Zencoders:[]")&&mediaSource.includes("NeuralNexus:[]")&&mediaSource.includes("Arcadia:[]")&&mediaSource.includes("Dronotics:[]")&&mediaSource.includes("Eloquence:[]"));
+const aakritiPhotoUrls=sourceHubMedia('Aakriti').photoItems.map(item=>item.url);
+const neuralNexusPhotoUrls=sourceHubMedia('Neural Nexus').photoItems.map(item=>item.url);
+assert('ultra-wide hub wordmarks stay out of club photo cards',!aakritiPhotoUrls.includes('/assets/hub-photos/aakriti-01.webp')&&!neuralNexusPhotoUrls.includes('/assets/hub-photos/neural-01.webp')&&hubPresentationSource.includes('1311×25 wordmark/banner')&&hubPresentationSource.includes("Aakriti:['/assets/hub-photos/aakriti-02.webp','/assets/hub-photos/aakriti-03.webp']")&&!hubPresentationSource.includes("'Neural Nexus':['/assets/hub-photos/neural-01.webp']"));
 assert('visual archive exclusions include Aakriti and Panache',mediaSource.includes("'festivals/aakriti':new Set")&&mediaSource.includes("'clubs/panache':new Set"));
 assert('event gallery placements include Dron-O-War and Converge',mediaSource.includes("'Dron-O-War'")&&mediaSource.includes("'Converge'"));
 const gallery=mergeSourceGallery([]);
