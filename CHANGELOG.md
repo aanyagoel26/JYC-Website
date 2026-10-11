@@ -1,5 +1,18 @@
 # Changelog
 
+## V64.5.7 — Empty-source fallback and release-contract alignment
+
+- Normalize empty or whitespace-only responsive image sources to a local JYC-branded fallback before rendering, avoiding accidental requests for the current document as an image.
+- Add source-contract and browser regression coverage to prevent empty `src` values on shared responsive-photo elements.
+- Align photo-integrity and photo-intelligence QA with the actual shared responsive-image state model and service-worker cache namespace.
+- Rotate the service-worker cache namespace to `jyc-cache-v64-5-7` so returning clients do not reuse manifest cache state from the previous release.
+
+## V64.5.6 — Manifest path hardening and branded photo fallbacks
+
+- Reject encoded traversal and unsafe path characters before image-manifest records are trusted or cached.
+- Use manifest-confirmed source dimensions for AVIF/WebP candidates; keep the original image and official JYC logo as the predictable fallback chain.
+- Expand image-failure coverage for event posters, team portraits, hub artwork, JYC Now and archive surfaces.
+
 ## V64.5.5 — Strict image manifest validation and photo fallback safety
 
 - Validate manifest version, safe local asset paths, positive integer dimensions, truthful aspect ratios/orientation labels, and the derivative-eligibility flag before the shared loader accepts the manifest.
