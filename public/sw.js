@@ -1,4 +1,4 @@
-const CACHE_NAME = 'jyc-cache-v64-5-8';
+const CACHE_NAME = 'jyc-cache-v64-5-9';
 
 const APP_SHELL = ['/', '/offline.html', '/manifest.json', '/assets/jyc-logo.webp'];
 
@@ -10,6 +10,17 @@ const isDerivativeDimensionEligible = (width, height) => {
   if (!Number.isFinite(w) || !Number.isFinite(h) || w < 320 || h < 120) return false;
   const ratio = w / h;
   return ratio >= 0.25 && ratio <= 5;
+};
+const IMAGE_MIME_BY_EXTENSION = Object.freeze({
+  '.avif': 'image/avif', '.gif': 'image/gif', '.jpeg': 'image/jpeg', '.jpg': 'image/jpeg',
+  '.png': 'image/png', '.svg': 'image/svg+xml', '.webp': 'image/webp'
+});
+const isExpectedImageResponse = (pathname, response) => {
+  const extension = pathname.match(/\\.[^.]+$/)?.[0]?.toLowerCase();
+  const expected = IMAGE_MIME_BY_EXTENSION[extension];
+  if (!expected) return true;
+  const actual = (response.headers.get('content-type') || '').split(';')[0].trim().toLowerCase();
+  return actual === expected;
 };
 const isValidImageManifest = (payload) => {
   if (!isRecord(payload) || payload.version !== 1 || !isRecord(payload.images)) return false;
@@ -73,7 +84,8 @@ self.addEventListener('fetch', (event) => {
   }
   event.respondWith(
     caches.match(request).then((cached) => cached || fetch(request).then((response) => {
-      if (response.ok && new URL(request.url).origin === self.location.origin) {
+      if (response.ok && new URL(request.url).origin === self.location.origin && isExpectedImageResponse(requestUrl.pathname, response)) {
+        // A missing image URL can be rewritten to index.html with HTTP 200. Never cache that HTML under an image key.
         caches.open(CACHE_NAME).then((cache) => cache.put(request, response.clone()));
       }
       return response;
