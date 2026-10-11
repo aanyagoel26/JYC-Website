@@ -1352,7 +1352,7 @@ test('updates API returns a JSON fallback instead of a function crash', async ({
 test('responsive photos keep a visible accessible identity when every image fallback fails', async ({ page }) => {
   await page.route('**/*', route => {
     const pathname = new URL(route.request().url()).pathname;
-    if (/\\.(?:avif|webp|png|jpe?g)$/i.test(pathname)) return route.abort();
+    if (/\.(?:avif|webp|png|jpe?g)$/i.test(pathname)) return route.abort();
     return route.continue();
   });
 
