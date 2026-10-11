@@ -5,7 +5,7 @@ const LOGO_FALLBACK=import.meta.env.PROD?'/assets/jyc-logo.webp':'/JYC%20Logo(4)
 const ORIGINAL_LOGO='/JYC%20Logo(4).png';
 const isDerivativeSource=url=>/^\/assets\/(?:source-archive|hub-photos|hub-photos-extra|events|home|team)\//.test(String(url||''));
 export function ResponsivePhoto({src,alt='',width,height,sizes='100vw',loading='lazy',fetchPriority,decoding='async',className='',style,onError,objectPosition,fallbackSrc=LOGO_FALLBACK,fallbackAlt='Official JYC logo placeholder; image unavailable'}){
- const [sourceDimensions,setSourceDimensions]=useState({src:'',width:0,derivativesEligible:false});
+ const [sourceDimensions,setSourceDimensions]=useState(()=>({src,width:0,derivativesEligible:false}));
  const [fallbackState,setFallbackState]=useState(()=>({src,fallbackSrc,stage:0}));
  const intrinsicWidth=sourceDimensions.src===src&&sourceDimensions.derivativesEligible?sourceDimensions.width:0;
  const derivativesEnabled=import.meta.env.PROD||import.meta.env.VITE_ENABLE_PHOTO_DERIVATIVES==='true';
@@ -21,7 +21,6 @@ export function ResponsivePhoto({src,alt='',width,height,sizes='100vw',loading='
  const resolvedSrc=stage===0?src:activeFallback?candidates[stage-1]:undefined;
  useEffect(()=>{
   let active=true;
-  setSourceDimensions({src,width:0,derivativesEligible:false});
   if(!derivativesEnabled||!isDerivativeSource(src))return()=>{active=false};
   loadJycImageManifest().then(manifest=>{
    const entry=manifest?.images?.[src];
@@ -30,7 +29,7 @@ export function ResponsivePhoto({src,alt='',width,height,sizes='100vw',loading='
   });
   return()=>{active=false};
  },[src,derivativesEnabled]);
- useLayoutEffect(()=>{setFallbackState({src,fallbackSrc,stage:0})},[src,fallbackSrc]);
+ useLayoutEffect(()=>{setFallbackState(previous=>previous.src===src&&previous.fallbackSrc===fallbackSrc?previous:{src,fallbackSrc,stage:0})},[src,fallbackSrc]);
  const baseStyle=objectPosition?{...style,objectPosition}:style;
  const sourceSet=list=>list.map(x=>x.url+' '+x.width+'w').join(', ');
  const handleError=e=>{
