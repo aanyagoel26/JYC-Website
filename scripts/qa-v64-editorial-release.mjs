@@ -40,6 +40,7 @@ const routeShells=read('scripts/generate-route-shells.mjs');
 const sitemap=read('scripts/generate-sitemap.mjs');
 const pkg=JSON.parse(read('package.json'));
 const ciWorkflow=read('.github/workflows/ci.yml');
+const qualityWorkflow=read('.github/workflows/jyc-quality.yml');
 const checks=[
  ['society detail exposes organisation, activities, events, people and photography',/function ClubDetail/.test(main)&&/HUB PROFILE/.test(main)&&/ACTIVITIES/.test(main)&&/EVENTS/.test(main)&&/PEOPLE/.test(main)&&/CLUB PHOTOGRAPHY/.test(main)],
  ['event detail has lifecycle state and participation action',/eventState\(e\)/.test(main)&&/LIVE NOW/.test(main)&&/REGISTER NOW/.test(main)&&/REGISTRATION CLOSED/.test(main)],
@@ -62,6 +63,7 @@ const checks=[
  ['editorial QA remains wired',pkg.scripts?.['qa:editorial']==='node scripts/qa-editorial-system.mjs'],
  ['new V64 QA is wired',pkg.scripts?.['qa:v64-editorial']==='node scripts/qa-v64-editorial-release.mjs'],
  ['CI builds generated image manifest before running photo-integrity QA',ciWorkflow.indexOf('run: npm run build')>=0&&ciWorkflow.indexOf('run: npm run build')<ciWorkflow.indexOf('      - run: npm run qa\n')&&ciWorkflow.indexOf('      - run: npm run qa\n')>=0],
+ ['CI avoids re-running the postbuild media optimizer',pkg.scripts?.postbuild?.includes('node scripts/optimize-production-media.mjs')&&!ciWorkflow.includes('node scripts/optimize-production-media.mjs')&&!qualityWorkflow.includes('node scripts/optimize-production-media.mjs')],
  ['release metadata is V64',/^64\.\d+\.\d+$/.test(pkg.version)],
  ['production prebuild generates real photo derivatives',pkg.scripts?.prebuild?.includes('generate-photo-derivatives.mjs')],
  ['desktop homepage headline is constrained to its copy column',homeCss.includes('font-size: clamp(48px, 4.5vw, 78px) !important;')&&homeCss.includes('line-height: .9 !important;')],
