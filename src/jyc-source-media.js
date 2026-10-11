@@ -16,7 +16,7 @@ const HUB_ALIASES={
   jiityouthclub128:'JYC'
 };
 export const canonicalHubName=name=>{
-  const raw=String(name||'').trim();
+  const raw=typeof name==='object'&&name!==null?String(name.name||name.label||name.title||'').trim():String(name||'').trim();
   const alias=HUB_ALIASES[normalise(raw)];
   if(alias)return alias;
   return Object.keys(JYC_HUB_CONTENT).find(k=>normalise(k)===normalise(raw))||raw;

@@ -834,8 +834,20 @@
 
 .jh-photo-story-grid {
   display: grid;
-  grid-template-columns: 1.3fr 0.85fr 0.85fr;
-  gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+@media (max-width: 900px) {
+  .jh-photo-story-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .jh-photo-story-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .jh-story-card {
@@ -846,7 +858,30 @@
   border: 1px solid var(--jh-line);
   cursor: pointer;
   padding: 0;
-  background: #111016;
+  background: var(--jh-surface);
+  transition: transform 0.35s var(--jh-ease), border-color 0.35s var(--jh-ease), box-shadow 0.35s var(--jh-ease);
+}
+
+.jh-story-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(56, 189, 248, 0.22), transparent 65%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.jh-story-card:hover::before {
+  opacity: 1;
+}
+
+.jh-story-card:hover {
+  transform: translateY(-6px);
+  border-color: rgba(56, 189, 248, 0.45);
+  box-shadow: 0 20px 48px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(56, 189, 248, 0.15);
 }
 
 .jh-story-photo {

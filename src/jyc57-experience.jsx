@@ -20,7 +20,7 @@ const LOGO_FALLBACK=import.meta.env.PROD?'/assets/jyc-logo.webp':'/JYC%20Logo(4)
 const identityPalette=['#bf9c6f','#81927a','#b8785b','#8297ad','#a294b5','#a98c62'];
 const identityAccent=value=>{let hash=0;for(const ch of String(value||'JYC'))hash=(hash*31+ch.charCodeAt(0))>>>0;return identityPalette[hash%identityPalette.length]};
 const eventCardPhoto=event=>event?.poster||event?.banner||sourceEventMedia(event)?.photoItems?.find(item=>item?.url)?.url||'';
-const clubCardPhoto=club=>{const source=sourceHubMedia(club);return club?.hubPhotos?.[0]||source?.photos?.[0]||source?.photoItems?.find(item=>item?.url)?.url||(club?.banner&&club.banner!==club.logo?club.banner:'')||''};
+const clubCardPhoto=club=>{const clubName=typeof club==='object'&&club!==null?club.name:club;const source=sourceHubMedia(clubName);return club?.hubPhotos?.[0]||source?.photos?.[0]||source?.photoItems?.find(item=>item?.url)?.url||source?.visuals?.[0]||(club?.banner&&club.banner!==club.logo?club.banner:'')||''};
 function magneticMove(event){
  if(event.pointerType!=='mouse'||window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
  const element=event.currentTarget,rect=element.getBoundingClientRect();
@@ -208,15 +208,6 @@ export function JYC57Gallery({data}){
 
   const eventMemories = [
     {
-      id: 'induction-2026',
-      title: 'Induction 2026',
-      subtitle: 'Welcoming Freshers to JIIT Wish Town',
-      category: 'Induction',
-      year: '2026',
-      count: '128 Photos · 4 Videos',
-      cover: '/assets/home/ebullience.webp'
-    },
-    {
       id: 'converge-2026',
       title: 'Converge 2026',
       subtitle: 'Annual Cultural & Technical Flagship Fest',
@@ -237,10 +228,10 @@ export function JYC57Gallery({data}){
     {
       id: 'drono-war-2026',
       title: 'Dron-O-War 2026',
-      subtitle: 'National Drone Racing & FPV Championship',
+      subtitle: 'National Drone Racing & Combat Robotics',
       category: 'Competitions',
       year: '2026',
-      count: '54 Photos',
+      count: '54 Photos · Arena Combat',
       cover: '/assets/home/dron-o-war-1.webp'
     },
     {
@@ -251,6 +242,42 @@ export function JYC57Gallery({data}){
       year: '2025',
       count: '72 Photos',
       cover: '/assets/home/ebullience.webp'
+    },
+    {
+      id: 'kshitij-sports-2026',
+      title: 'Kshitij Sports 2026',
+      subtitle: 'Annual Intra & Inter-College Sports Championship',
+      category: 'Sports',
+      year: '2026',
+      count: '48 Photos · Kshitij Meet',
+      cover: '/assets/hub-photos/sports-02.webp'
+    },
+    {
+      id: 'vamunique-dance-2026',
+      title: 'VamUnique & BDS Dance',
+      subtitle: 'Stage Choreography & Flashmobs',
+      category: 'Festivals',
+      year: '2026',
+      count: '52 Photos · Live Performing Arts',
+      cover: '/assets/hub-photos/vamunique-02.webp'
+    },
+    {
+      id: 'panache-fashion-2026',
+      title: 'Panache Runway',
+      subtitle: 'Annual Fashion & Design Showcase',
+      category: 'Festivals',
+      year: '2026',
+      count: '44 Photos · Stage Runway',
+      cover: '/assets/hub-photos/panache-01.webp'
+    },
+    {
+      id: 'cicr-robotics-2026',
+      title: 'CICR Robotics Arena',
+      subtitle: 'Robotics Innovations & Hardware Showcase',
+      category: 'Competitions',
+      year: '2026',
+      count: '56 Photos · Robotics Lab',
+      cover: '/assets/hub-photos/cicr-01.webp'
     }
   ];
 
