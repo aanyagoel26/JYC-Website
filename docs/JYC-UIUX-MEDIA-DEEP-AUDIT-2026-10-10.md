@@ -262,3 +262,13 @@ This is the follow-up research plan, not a claim that the current head has passe
 - Preserve the existing React Bits Dither Veil, Magic Bento and Motion/FlipCard stack. Adding another animation dependency should require a measured benefit; avoid shipping effects that increase bundle size without solving a user task.
 - Keep cards photo-led and content-led. Do not place ultrawide banners, logos, poster strips or screenshots into portrait photo pools. Every image source must have a clear subject, contextual alt text, correct aspect ratio, an appropriate crop and a predictable failure fallback.
 - The next design review should use screenshots and interaction recordings from the exact current deployment—not the earlier preview—and should compare light/dark, reduced-motion, touch and keyboard paths side by side.
+
+
+## Current preview spot-check — V64.5.4 runtime code
+
+- Vercel marks preview commit 81fab47704c1c4b599395ddb7d6d8570ac1065fb as READY at jyc-website-4tufc4266-jyc-website.vercel.app. The current branch has identical Git blob SHAs for the key runtime files checked (ResponsivePhoto, shared image manifest, service worker, homepage hero, social policy, browser runner/spec, release QA, index and package metadata); commits after that preview are documentation-only.
+- Nine route-shell requests returned HTTP 200: home, about, history, clubs, events, team, gallery, contact and JAI 2026. Each had one route-specific H1, matching title, canonical production URL and WebPage JSON-LD.
+- The live image manifest parsed successfully and reported 530 image records, 476 derivative-eligible. The service-worker response contained the V64.5.4 cache namespace, network-first manifest route, valid-schema cache guard and awaited cache write.
+- Fifteen representative image endpoints returned HTTP 200 with expected WebP/AVIF content types, including the official logo, team portrait, homepage image, hub photo, archive photo, JAI poster and generated event/team/home/hub/archive variants.
+- The preview’s /api/jyc-updates endpoint returned HTTP 200 JSON but had configured=false and an empty item list because preview credentials are not configured. This does not verify the live configured feed; production still needs a fresh deployment and endpoint check.
+- These were direct HTTP/source checks, **not** a full browser interaction run. The Firecrawl execution environment used for this pass did not have Playwright installed, and GitHub Actions has not exposed usable runner steps/logs. Do not mark browser QA as passed on the strength of these checks alone.
