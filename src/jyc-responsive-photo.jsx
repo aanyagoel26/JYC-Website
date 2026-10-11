@@ -5,7 +5,7 @@ const ORIGINAL_LOGO='/JYC%20Logo(4).png';
 const isDerivativeSource=url=>/^\/assets\/(?:source-archive|hub-photos|hub-photos-extra|events|home|team)\//.test(String(url||''));
 let imageManifestPromise=null;
 const loadImageManifest=()=>{
- if(!imageManifestPromise)imageManifestPromise=fetch('/image-manifest.json',{cache:'no-cache'}).then(response=>response.ok?response.json():null).catch(()=>null);
+ if(!imageManifestPromise)imageManifestPromise=fetch('/image-manifest.json',{cache:'no-cache'}).then(response=>{if(!response.ok)throw new Error('Image manifest unavailable');return response.json()}).catch(()=>{imageManifestPromise=null;return null});
  return imageManifestPromise;
 };
 export function ResponsivePhoto({src,alt='',width,height,sizes='100vw',loading='lazy',fetchPriority,decoding='async',className='',style,onError,objectPosition,fallbackSrc=LOGO_FALLBACK,fallbackAlt='Official JYC logo placeholder; image unavailable'}){
