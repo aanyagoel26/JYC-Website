@@ -26,8 +26,13 @@ self.addEventListener('fetch', (event) => {
   // Keep the last known-good manifest only as an offline fallback.
   if (requestUrl.origin === self.location.origin && requestUrl.pathname === '/image-manifest.json') {
     event.respondWith(
-      fetch(new Request(request, { cache: 'no-cache' })).then((response) => {
-        if (response.ok) caches.open(CACHE_NAME).then((cache) => cache.put(request, response.clone()));
+      fetch(new Request(request, { cache: 'no-cache' })).then(async (response) => {
+        if (response.ok && response.headers.get('content-type')?.includes('application/json')) {
+          const payload = await response.clone().json().catch(() => null);
+          const validManifest = payload?.images && typeof payload.images === 'object' &&
+            !Array.isArray(payload.images) && Object.keys(payload.images).length > 0;
+          if (validManifest) caches.open(CACHE_NAME).then((cache) => cache.put(request, response.clone()));
+        }
         return response;
       }).catch(() => caches.match(request).then((cached) => cached || Response.error()))
     );
