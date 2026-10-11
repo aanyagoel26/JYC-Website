@@ -2,7 +2,7 @@
 
 ## V64.5.4 — Network-first manifest recovery and offline boot reliability
 
-- Route `/image-manifest.json` through a service-worker network-first branch so page-level `cache: 'no-cache'` is not defeated by the generic cache-first handler; retain the last known-good manifest only as an offline fallback.
+- Route `/image-manifest.json` through a service-worker network-first branch so page-level `cache: 'no-cache'` is not defeated by the generic cache-first handler; cache only non-empty, valid JSON manifests and retain the last known-good manifest only as an offline fallback.
 - Reject empty or malformed manifest schemas and clear the shared request promise so later routes can retry after HTTP, network, JSON or schema failures.
 - Keep the initial no-JavaScript boot screen on the compact WebP logo already precached by the service worker, with the original PNG as a compatibility fallback.
 - Reduce gallery render churn by initializing `ResponsivePhoto` state against its current source and preserving fallback state when source props have not changed.
