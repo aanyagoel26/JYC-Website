@@ -289,3 +289,36 @@ This is the follow-up research plan, not a claim that the current head has passe
 - Twenty-two representative image endpoints returned HTTP 200 with expected WebP/AVIF content types, including the official logo, team portrait, homepage image, hub photo, archive photo, JAI poster and generated event/team/home/hub/archive variants.
 - The preview’s /api/jyc-updates endpoint returned HTTP 200 JSON but had configured=false and an empty item list because preview credentials are not configured. This does not verify the live configured feed; production still needs a fresh deployment and endpoint check.
 - These were direct HTTP/source checks, **not** a full browser interaction run. The Firecrawl execution environment used for this pass did not have Playwright installed, and GitHub Actions has not exposed usable runner steps/logs. Do not mark browser QA as passed on the strength of these checks alone.
+
+
+## Additional visual-reference audit — Innovation JIIT website (10 October 2026)
+
+Reference inspected: `Omtripathi007/Innovationjiit.in`, including its `innovation-2.0/index.html`, `innovation-2.0/css/main.css`, and `innovation-2.0/js/main.js`, plus the currently indexed official site at https://www.innovationjiit.in/.
+
+### Patterns worth adapting to JYC (not copying)
+
+- **Editorial photography:** the reference uses real event photographs as part of the hero and featured projects instead of treating imagery as decoration. JYC should continue using its own approved archive with editorial captions, meaningful alt text, image-credit/provenance metadata and clear photo-vs-logo-vs-poster roles.
+- **Asymmetric feature storytelling:** a large lead story followed by smaller supporting stories creates hierarchy. Apply this selectively to JYC's featured event and photo-story surfaces, while retaining the existing restrained editorial grid and avoiding arbitrary card imbalance.
+- **Event pages that tell the full story:** event pages in the reference combine purpose, tracks/activities, event logistics, eligibility, prizes, registration, timeline and results. JYC can improve its event detail pages by surfacing only verified applicable fields from the published record, and by clearly distinguishing upcoming events, closed registration and archived results.
+- **Club-specific experience:** the reference separates projects, domains/teams, events, gallery and team. JYC already supports clubs/hubs, events, gallery and team; use those connections to make cross-navigation more obvious, with the club's own verified photos, activities, related events and public links.
+- **Warm editorial colour and display typography:** its warm off-white background, high-contrast dark type, serif display headlines and compact geometric sans-serif body text show how an editorial site can feel handcrafted. Translate the principle into JYC's existing beige/champagne, ivory and navy/black palette, rather than importing the reference's coral/teal/purple palette or changing the JYC brand.
+- **Deliberate navigation states:** the reference reduces navigation density on scroll and uses a clear mobile menu with an explicit expanded state, outside-click close and Escape handling. Keep JYC navigation compact, and regression-test its existing mobile navigation/theme state rather than introducing a second competing menu implementation.
+- **Progressive motion:** the reference uses viewport-triggered reveals and image sliders. JYC should prefer one-shot, viewport-triggered reveals and manually controlled gallery/event image navigation. Avoid copying its random collage rotation, always-running tape animations, multiple competing IntersectionObservers per element or auto-moving sliders; these can create motion discomfort and wasted work. Every effect must respect `prefers-reduced-motion`, remain keyboard-accessible and avoid blocking content visibility if JavaScript/observers fail.
+
+### Reference-site caveats
+
+- Its README documents a static HTML/CSS/JavaScript implementation, with multiple historical/alternate site folders in the same repository. Do not import the reference repository wholesale or copy its assets, generated content, CSS, JavaScript or third-party dependencies into JYC.
+- The inspected `index.html` includes old 2026 event dates in a commented popup. The public reference currently presents RIDE HACK 26 as upcoming on 1 November 2026, while a LinkedIn source recorded an application deadline of 5 October 2026. This discrepancy was already flagged in the source audit. JYC should link to the official Innovation source for this hub event and should not assert that registration is open without organiser confirmation.
+- The user also supplied a `share.google` short link. The public resolution available to this audit revealed only the Google share-link landing page, not the underlying destination. No visual or product conclusions have been attributed to that link; revisit it if the direct destination URL becomes available.
+
+### JYC-specific follow-up
+
+1. Compare the live JYC preview with the reference's editorial hierarchy at desktop and mobile widths: hero balance, photo focal points, section rhythm, featured event density, navigation and footer.
+2. Verify every adopted pattern against both themes, keyboard-only use and reduced-motion mode.
+3. Prefer verified JYC imagery and content. Do not copy Innovation Club photos, logos, code or private team information.
+4. Keep source-derived visual inspiration separate from factual JYC content; use official/attributable sources before adding claims, people, dates or registration states.
+
+
+## Second reference supplied in this request — unresolved share link
+
+The shortened link `https://share.google/bgNM6MWanvi9Q2alm` was checked alongside the Innovation JIIT source. It exposes a Google share-link landing page in the available browser result, not the original content. Its destination remains unknown, so this audit does not attribute design or product recommendations to it. If the source is a screenshot, another website, or a design reference, the direct destination URL or uploaded image is needed to review it reliably.
