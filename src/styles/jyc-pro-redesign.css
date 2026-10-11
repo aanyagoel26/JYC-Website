@@ -178,6 +178,29 @@
   z-index: 0;
 }
 
+.jh-logo-halo {
+  position: absolute;
+  inset: -14%;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg at 50% 50%, #38bdf8, #818cf8, #fbbf24, #ef4444, #38bdf8);
+  filter: blur(32px);
+  opacity: 0.45;
+  animation: jycHaloSpin 12s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes jycHaloSpin {
+  0% { transform: rotate(0deg) scale(0.96); }
+  50% { transform: rotate(180deg) scale(1.04); }
+  100% { transform: rotate(360deg) scale(0.96); }
+}
+
+:root[data-theme="light"] .jh-logo-halo {
+  opacity: 0.22;
+  filter: blur(36px);
+}
+
 .jh-hero-logo-plaque {
   position: relative;
   z-index: 1;
@@ -573,18 +596,32 @@
 }
 
 .team-flip-indicator {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 6px;
-  font: 600 11px/1 inherit;
-  color: var(--tech-text-secondary);
-  margin-top: 4px;
+  font: 700 11px/1 'Space Grotesk', system-ui, sans-serif;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.35);
+  border-radius: 999px;
+  padding: 6px 12px;
+  margin-top: 6px;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.18);
+  transition: all 0.25s ease;
+  width: fit-content;
+}
+
+.team-member-flip:hover .team-flip-indicator {
+  background: rgba(56, 189, 248, 0.24);
+  border-color: #38bdf8;
+  box-shadow: 0 0 22px rgba(56, 189, 248, 0.42);
+  transform: translateY(-1px);
 }
 
 .team-flip-indicator svg {
   width: 12px;
   height: 12px;
-  color: var(--tech-gold);
+  color: #38bdf8;
 }
 
 /* BACK FACE */
@@ -649,18 +686,20 @@
   justify-content: center;
   gap: 8px;
   min-height: 40px;
-  padding: 0 14px;
-  background: #0077b5;
+  padding: 0 16px;
+  background: linear-gradient(135deg, #0284c7 0%, #0077b5 100%);
   color: #fff;
   border-radius: var(--tech-radius-sm);
   font: 700 12px 'Space Grotesk', system-ui, sans-serif;
   text-decoration: none;
-  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 18px rgba(0, 119, 181, 0.35);
+  transition: all 0.25s ease;
 }
 
 .team-linkedin-btn:hover {
-  opacity: 0.92;
-  transform: translateY(-1px);
+  opacity: 1;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(56, 189, 248, 0.45);
 }
 
 .team-back-return-btn {
@@ -715,18 +754,18 @@
    LIGHT THEME SUPPORT
    -------------------------------------------------------------------------- */
 :root[data-theme="light"] {
-  --tech-bg: #faf9f5;
+  --tech-bg: #f8fafc;
   --tech-surface: #ffffff;
-  --tech-surface-elevated: #f4f1ea;
-  --tech-surface-glass: rgba(255, 255, 255, 0.88);
-  --tech-border: rgba(20, 18, 24, 0.09);
-  --tech-border-glow: rgba(166, 120, 40, 0.4);
-  --tech-gold: #a67828;
-  --tech-gold-glow: rgba(166, 120, 40, 0.16);
+  --tech-surface-elevated: #f1f5f9;
+  --tech-surface-glass: rgba(255, 255, 255, 0.92);
+  --tech-border: rgba(15, 23, 42, 0.08);
+  --tech-border-glow: rgba(2, 132, 199, 0.35);
+  --tech-gold: #b45309;
+  --tech-gold-glow: rgba(180, 83, 9, 0.14);
   --tech-cyan: #0284c7;
-  --tech-text-primary: #121115;
-  --tech-text-secondary: #585461;
-  --tech-text-muted: #888392;
+  --tech-text-primary: #0f172a;
+  --tech-text-secondary: #475569;
+  --tech-text-muted: #64748b;
 }
 
 :root[data-theme="light"] .jh-hero-logo-plaque {
@@ -746,9 +785,9 @@
 }
 
 :root[data-theme="light"] .jyc-search-input {
-  background: #f8f6f1;
-  color: #121115;
-  border-color: rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  color: #0f172a;
+  border-color: rgba(15, 23, 42, 0.12);
 }
 
 :root[data-theme="light"] .team-member-flip .flip-card__face {
