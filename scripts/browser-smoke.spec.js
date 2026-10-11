@@ -843,6 +843,7 @@ test('responsive pictures recover when generated AVIF and WebP derivatives all f
   const portrait = page.locator('.team-photo-editorial img').first();
   await expect(portrait).toBeVisible();
   await portrait.scrollIntoViewIfNeeded();
+  await expect.poll(() => portrait.evaluate(img => img.parentElement?.querySelectorAll('source').length || 0), { timeout: 15000 }).toBeGreaterThan(0);
   await expect.poll(() => portrait.evaluate(img => img.complete && img.naturalWidth > 0), { timeout: 15000 }).toBe(true);
 
   const state = await portrait.evaluate(img => ({
