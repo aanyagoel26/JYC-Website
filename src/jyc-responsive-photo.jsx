@@ -49,8 +49,7 @@ export function ResponsivePhoto({src,alt='',width,height,sizes='100vw',loading='
   });
   onError?.(e);
  };
- return <picture className={className?'jyc-responsive-picture '+className:'jyc-responsive-picture'} data-image-failed={failed?'true':undefined}>
-  {failed&&<span className="jyc-responsive-photo-placeholder" role={alt?'img':undefined} aria-label={alt?alt+' (image unavailable)':undefined} aria-hidden={alt?undefined:true}><span className="jyc-responsive-photo-placeholder-mark" aria-hidden="true">JYC</span><span className="jyc-responsive-photo-placeholder-label">{alt?'Image unavailable':'JYC'}</span></span>}
+ return <picture className={className?'jyc-responsive-picture '+className:'jyc-responsive-picture'} data-image-failed={failed?'true':undefined} data-image-fallback-label={failed?(alt?'Image unavailable':''):undefined} role={failed&&alt?'img':undefined} aria-label={failed&&alt?alt+' (image unavailable)':undefined} aria-hidden={failed&&!alt?true:undefined}>
   {variants&&<source type="image/avif" srcSet={sourceSet(variants.avif)} sizes={sizes}/>}
   {variants&&<source type="image/webp" srcSet={sourceSet(variants.webp)} sizes={sizes}/>}
   <img src={resolvedSrc} alt={activeFallback?fallbackAlt:alt} width={width} height={height} loading={loading} fetchPriority={fetchPriority} decoding={decoding} sizes={sizes} data-image-fallback-stage={failed?'failed':usingOriginalRetry?'original':activeFallback?String(stage):undefined} style={failed?{...baseStyle,visibility:'hidden'}:baseStyle} onError={handleError}/>
