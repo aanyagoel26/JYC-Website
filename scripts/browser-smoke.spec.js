@@ -830,6 +830,26 @@ test('responsive photos do not guess AVIF/WebP derivative URLs when the manifest
 
 
 
+
+test('responsive photo manifest retries after a transient request failure', async ({ page }) => {
+  let attempts = 0;
+  await page.route('**/image-manifest.json', route => {
+    attempts += 1;
+    if (attempts === 1) return route.abort();
+    return route.continue();
+  });
+
+  await page.goto(base + '/team', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'transient image manifest failure');
+  await expect.poll(() => attempts).toBe(1);
+
+  await page.locator('a[href="/gallery"]').first().click();
+  await expect(page.locator('.jyc57-gallery-page')).toBeVisible();
+  await expect.poll(() => attempts).toBeGreaterThan(1);
+  await expect.poll(() => page.locator('.jyc57-gallery-page picture source').count()).toBeGreaterThan(0);
+});
+
+
 test('responsive pictures recover when generated AVIF and WebP derivatives all fail', async ({ page }) => {
   const failedVariants = [];
   page.on('request', request => {
