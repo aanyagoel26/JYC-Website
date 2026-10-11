@@ -1,5 +1,16 @@
 # Changelog
 
+## V64.5.3 — Fresh media manifests and derivative-failure recovery
+
+- Revalidate `/image-manifest.json` instead of forcing potentially stale cached metadata; responsive image candidates must match the current deployment's source dimensions and derivative eligibility.
+- Apply the same manifest cache policy to the gallery's archive dimension/crop metadata so a deployment cannot keep using a stale manifest for the lifetime of a cached page.
+- Add a Playwright regression that deliberately aborts generated AVIF/WebP requests and verifies the team portrait still decodes through a valid original or branded fallback.
+- Extend photo-integrity QA to guard both fresh manifest reads and derivative-failure recovery.
+- Bump the app release and service-worker cache namespace so returning clients fetch the updated photo behavior.
+
+Validation note: source contracts and asset availability checks are not a substitute for a green Playwright run. GitHub Actions has repeatedly failed before exposing runner steps/logs; the new browser regression still needs a successful run.
+
+
 ## V64.5.2 — Image metadata, orientation and derivative integrity
 
 - Fix intrinsic-dimension parsing for lossless WebP (VP8L); the previous bit extraction could read width and height from the wrong packed bytes.
