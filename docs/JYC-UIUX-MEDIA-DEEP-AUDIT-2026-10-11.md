@@ -2,9 +2,9 @@
 
 ## Executive status
 
-The V64.5.8 branch contains the identity-first homepage, React Bits Dither Veil using the official JYC logo, magnetic Bento interactions, team profile flip cards, themed search/More surfaces, responsive photo delivery, curated gallery/event/club identities, and a strict image-manifest pipeline. This audit adds a terminal image-failure state and refreshes the JAI registration deadline from the stale 10 October value to 15 October 2026, 23:59 IST.
+The V64.5.9 branch contains the identity-first homepage, React Bits Dither Veil using the official JYC logo, magnetic Bento interactions, team profile flip cards, themed search/More surfaces, responsive photo delivery, curated gallery/event/club identities, and a strict image-manifest pipeline. This audit adds a terminal image-failure state and refreshes the JAI registration deadline from the stale 10 October value to 15 October 2026, 23:59 IST.
 
-**This is not a production sign-off.** The latest READY Vercel preview located during this pass is an older V64.5.7 commit, not the current V64.5.8 head. GitHub Actions jobs for the current branch are failing before producing executable steps/logs, so no full build or Playwright pass can be claimed.
+**This is not a production sign-off.** The latest READY Vercel preview located during this pass is an older V64.5.7 commit, not the current V64.5.9 head. GitHub Actions jobs for the current branch are failing before producing executable steps/logs, so no full build or Playwright pass can be claimed.
 
 ## Work completed in this follow-up
 
@@ -39,7 +39,7 @@ Avoid adding more animation libraries or a second 3D framework. Motion/GSAP/OGL/
 
 ## Next actions, ordered by impact
 
-1. **Exact-head verification:** obtain a fresh successful `npm ci`, production build, photo-integrity QA, source QA, Playwright suite and CodeQL run on V64.5.8. Preserve logs and Playwright artifacts. Current Actions results are not usable because jobs expose no steps/logs.
+1. **Exact-head verification:** obtain a fresh successful `npm ci`, production build, photo-integrity QA, source QA, Playwright suite and CodeQL run on V64.5.9. Preserve logs and Playwright artifacts. Current Actions results are not usable because jobs expose no steps/logs.
 2. **Preview verification:** deploy the exact reviewed head to a READY Vercel preview; confirm the manifest, original images, AVIF/WebP derivatives, GLB, static route shells, canonical tags and JAI page before approving.
 3. **Visual matrix:** test 320, 360, 390, 430, 768, 1024, 1280 and 1440+ widths; light/dark; reduced motion; keyboard only; slow image loading; failed image and manifest; coarse pointer and WebGL unavailable. Capture screenshots and inspect actual crops, not only overflow.
 4. **Media audit:** inspect every source archive record, team portrait, club logo, event poster and gallery item for file readability, aspect ratio, descriptive alt text, ownership/attribution and correct association. Preserve the photo-vs-logo-vs-banner classification.
@@ -63,4 +63,4 @@ Avoid adding more animation libraries or a second 3D framework. Motion/GSAP/OGL/
 
 ## Final release boundary
 
-Source-level checks are useful, but they are not equivalent to a build, browser run or verified deployment. This branch remains draft until current-head CI logs are available, the V64.5.8 preview is tested, the new SQL migration is reviewed/applied by the authorized Supabase owner, and the production domain/API are confirmed.
+Source-level checks are useful, but they are not equivalent to a build, browser run or verified deployment. This branch remains draft until current-head CI logs are available, the V64.5.9 preview is tested, the new SQL migration is reviewed/applied by the authorized Supabase owner, and the production domain/API are confirmed.
