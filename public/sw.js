@@ -4,6 +4,13 @@ const APP_SHELL = ['/', '/offline.html', '/manifest.json', '/assets/jyc-logo.web
 
 const isRecord = (value) => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 const isSafeManifestAssetUrl = (url) => typeof url === 'string' && url.startsWith('/assets/') && !url.includes('..') && !url.includes('\\') && !/[?#\x00-\x1f\x7f]/.test(url) && !/%(?:25|2e|2f|5c)/i.test(url);
+const isDerivativeManifestPath = (url) => ['/assets/source-archive/', '/assets/hub-photos/', '/assets/hub-photos-extra/', '/assets/events/', '/assets/home/', '/assets/team/'].some((prefix) => url.startsWith(prefix));
+const isDerivativeDimensionEligible = (width, height) => {
+  const w = Number(width), h = Number(height);
+  if (!Number.isFinite(w) || !Number.isFinite(h) || w < 320 || h < 120) return false;
+  const ratio = w / h;
+  return ratio >= 0.25 && ratio <= 5;
+};
 const isValidImageManifest = (payload) => {
   if (!isRecord(payload) || payload.version !== 1 || !isRecord(payload.images)) return false;
   const entries = Object.entries(payload.images);
@@ -13,6 +20,8 @@ const isValidImageManifest = (payload) => {
     const { width, height, aspectRatio: ratio } = entry;
     if (typeof width !== 'number' || !Number.isInteger(width) || width <= 0 || typeof height !== 'number' || !Number.isInteger(height) || height <= 0 || typeof ratio !== 'number' || typeof entry.derivativesEligible !== 'boolean') return false;
     if (!Number.isFinite(ratio) || Math.abs(ratio - Number((width / height).toFixed(5))) > 0.000001) return false;
+    // A stale manifest must not authorize derivatives for wordmarks, banners or tiny thumbnails.
+    if (entry.derivativesEligible && (!isDerivativeManifestPath(url) || !isDerivativeDimensionEligible(width, height))) return false;
     const orientation = width === height ? 'square' : width > height ? 'landscape' : 'portrait';
     return entry.orientation === orientation;
   });
