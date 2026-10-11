@@ -1347,3 +1347,24 @@ test('updates API returns a JSON fallback instead of a function crash', async ({
   const payload = await response.json();
   expect(Array.isArray(payload.items), 'updates API must always return an items array').toBe(true);
 });
+
+
+test('responsive photos keep a visible accessible identity when every image fallback fails', async ({ page }) => {
+  await page.route('**/*', route => {
+    const pathname = new URL(route.request().url()).pathname;
+    if (/\\.(?:avif|webp|png|jpe?g)$/i.test(pathname)) return route.abort();
+    return route.continue();
+  });
+
+  await page.goto(base + '/team', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'fully failed responsive photo fallback');
+  const picture = page.locator('.team-photo-editorial .jyc-responsive-picture').first();
+  await expect(picture).toBeVisible();
+  await expect(picture).toHaveAttribute('data-image-failed', 'true', { timeout: 10000 });
+  const placeholder = picture.locator('.jyc-responsive-photo-placeholder');
+  await expect(placeholder).toBeVisible();
+  await expect(placeholder).toContainText('Image unavailable');
+  await expect(placeholder).toHaveAttribute('role', 'img');
+  await expect(placeholder).toHaveAttribute('aria-label', /image unavailable/i);
+  await expect(picture.locator('img')).toHaveAttribute('data-image-fallback-stage', 'failed');
+});
