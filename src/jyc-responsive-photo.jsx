@@ -9,19 +9,23 @@ export function ResponsivePhoto({src,alt='',width,height,sizes='100vw',loading='
  const normalizedFallbackSrc=typeof fallbackSrc==='string'&&fallbackSrc.trim()?fallbackSrc.trim():LOGO_FALLBACK;
  const source=typeof src==='string'&&src.trim()?src.trim():normalizedFallbackSrc;
  const [sourceDimensions,setSourceDimensions]=useState(()=>({src:source,width:0,derivativesEligible:false}));
- const [fallbackState,setFallbackState]=useState(()=>({src:source,fallbackSrc:normalizedFallbackSrc,stage:0}));
+ const [fallbackState,setFallbackState]=useState(()=>({src:source,fallbackSrc:normalizedFallbackSrc,stage:0,preferOriginal:false}));
  const intrinsicWidth=sourceDimensions.src===source&&sourceDimensions.derivativesEligible?sourceDimensions.width:0;
  const derivativesEnabled=import.meta.env.PROD||import.meta.env.VITE_ENABLE_PHOTO_DERIVATIVES==='true';
- const stage=fallbackState.src===source&&fallbackState.fallbackSrc===normalizedFallbackSrc?fallbackState.stage:0;
- const candidates=[normalizedFallbackSrc,LOGO_FALLBACK,ORIGINAL_LOGO].filter((url,index,all)=>Boolean(url)&&url!==source&&all.indexOf(url)===index);
+ const fallbackStateMatches=fallbackState.src===source&&fallbackState.fallbackSrc===normalizedFallbackSrc;
+ const stage=fallbackStateMatches?fallbackState.stage:0;
+ const preferOriginal=fallbackStateMatches&&fallbackState.preferOriginal===true;
+ const candidatePool=preferOriginal?[source,normalizedFallbackSrc,LOGO_FALLBACK,ORIGINAL_LOGO]:[normalizedFallbackSrc,LOGO_FALLBACK,ORIGINAL_LOGO];
+ const candidates=candidatePool.filter((url,index,all)=>Boolean(url)&&(preferOriginal||url!==source)&&all.indexOf(url)===index);
  const failed=stage>candidates.length;
- const activeFallback=stage>0&&!failed;
+ const usingOriginalRetry=preferOriginal&&stage===1&&candidates[0]===source;
+ const activeFallback=stage>0&&!failed&&!usingOriginalRetry;
  // Only emit srcset candidates after the generated manifest confirms intrinsic dimensions and derivative eligibility.
  // If the manifest is unavailable, keep the original source rather than guessing derivative URLs that may 404 or upscale.
  const variants=stage===0&&derivativesEnabled&&intrinsicWidth>0?photoDerivativeUrls(source,intrinsicWidth):null;
  // Keep the original source in the img element as the final format-compatibility fallback;
  // supported browsers select the optimized AVIF/WebP sources above it.
- const resolvedSrc=stage===0?source:activeFallback?candidates[stage-1]:undefined;
+ const resolvedSrc=stage===0?source:!failed?candidates[stage-1]:undefined;
  useEffect(()=>{
   let active=true;
   if(!derivativesEnabled||!isDerivativeSource(source))return()=>{active=false};
@@ -32,13 +36,16 @@ export function ResponsivePhoto({src,alt='',width,height,sizes='100vw',loading='
   });
   return()=>{active=false};
  },[source,derivativesEnabled]);
- useLayoutEffect(()=>{setFallbackState(previous=>previous.src===source&&previous.fallbackSrc===normalizedFallbackSrc?previous:{src:source,fallbackSrc:normalizedFallbackSrc,stage:0})},[source,normalizedFallbackSrc]);
+ useLayoutEffect(()=>{setFallbackState(previous=>previous.src===source&&previous.fallbackSrc===normalizedFallbackSrc?previous:{src:source,fallbackSrc:normalizedFallbackSrc,stage:0,preferOriginal:false})},[source,normalizedFallbackSrc]);
  const baseStyle=objectPosition?{...style,objectPosition}:style;
  const sourceSet=list=>list.map(x=>x.url+' '+x.width+'w').join(', ');
  const handleError=e=>{
+  const failedUrl=String(e?.currentTarget?.currentSrc||'');
   setFallbackState(previous=>{
-   const currentStage=previous.src===source&&previous.fallbackSrc===normalizedFallbackSrc?previous.stage:0;
-   return {src:source,fallbackSrc:normalizedFallbackSrc,stage:currentStage+1};
+   const currentMatches=previous.src===source&&previous.fallbackSrc===normalizedFallbackSrc;
+   const current=currentMatches?previous:{src:source,fallbackSrc:normalizedFallbackSrc,stage:0,preferOriginal:false};
+   const derivativeFailed=currentMatches&&current.stage===0&&!source.startsWith('/assets/photo-derivatives/')&&failedUrl.includes('/assets/photo-derivatives/');
+   return {src:source,fallbackSrc:normalizedFallbackSrc,stage:current.stage+1,preferOriginal:current.preferOriginal||derivativeFailed};
   });
   onError?.(e);
  };
@@ -46,6 +53,6 @@ export function ResponsivePhoto({src,alt='',width,height,sizes='100vw',loading='
   {failed&&<span className="jyc-responsive-photo-placeholder" role={alt?'img':undefined} aria-label={alt?alt+' (image unavailable)':undefined} aria-hidden={alt?undefined:true}><span className="jyc-responsive-photo-placeholder-mark" aria-hidden="true">JYC</span><span className="jyc-responsive-photo-placeholder-label">{alt?'Image unavailable':'JYC'}</span></span>}
   {variants&&<source type="image/avif" srcSet={sourceSet(variants.avif)} sizes={sizes}/>}
   {variants&&<source type="image/webp" srcSet={sourceSet(variants.webp)} sizes={sizes}/>}
-  <img src={resolvedSrc} alt={activeFallback?fallbackAlt:alt} width={width} height={height} loading={loading} fetchPriority={fetchPriority} decoding={decoding} sizes={sizes} data-image-fallback-stage={failed?'failed':activeFallback?String(stage):undefined} style={failed?{...baseStyle,visibility:'hidden'}:baseStyle} onError={handleError}/>
+  <img src={resolvedSrc} alt={activeFallback?fallbackAlt:alt} width={width} height={height} loading={loading} fetchPriority={fetchPriority} decoding={decoding} sizes={sizes} data-image-fallback-stage={failed?'failed':usingOriginalRetry?'original':activeFallback?String(stage):undefined} style={failed?{...baseStyle,visibility:'hidden'}:baseStyle} onError={handleError}/>
  </picture>;
 }
