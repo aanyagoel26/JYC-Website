@@ -1391,10 +1391,11 @@ test('responsive photos keep a visible accessible identity when every image fall
   const picture = page.locator('.team-photo-editorial .jyc-responsive-picture').first();
   await expect(picture).toBeVisible();
   await expect(picture).toHaveAttribute('data-image-failed', 'true', { timeout: 10000 });
-  const placeholder = picture.locator('.jyc-responsive-photo-placeholder');
-  await expect(placeholder).toBeVisible();
-  await expect(placeholder).toContainText('Image unavailable');
-  await expect(placeholder).toHaveAttribute('role', 'img');
-  await expect(placeholder).toHaveAttribute('aria-label', /image unavailable/i);
+  await expect(picture).toHaveAttribute('data-image-fallback-label', 'Image unavailable');
+  await expect(picture).toHaveAttribute('role', 'img');
+  await expect(picture).toHaveAttribute('aria-label', /image unavailable/i);
+  const visualFallback = await picture.evaluate(el => ({ before: getComputedStyle(el, '::before').content, after: getComputedStyle(el, '::after').content }));
+  expect(visualFallback.before).toContain('JYC');
+  expect(visualFallback.after).toContain('Image unavailable');
   await expect(picture.locator('img')).toHaveAttribute('data-image-fallback-stage', 'failed');
 });
