@@ -27,7 +27,7 @@ const auditedExclusionIds=auditedCategories.flatMap(cat=>{
 assert('non-photographic club override cleanup',mediaSource.includes("CypherX:[]")&&mediaSource.includes("Zencoders:[]")&&mediaSource.includes("NeuralNexus:[]")&&mediaSource.includes("Arcadia:[]")&&mediaSource.includes("Dronotics:[]")&&mediaSource.includes("Eloquence:[]"));
 const aakritiPhotoUrls=sourceHubMedia('Aakriti').photoItems.map(item=>item.url);
 const neuralNexusPhotoUrls=sourceHubMedia('Neural Nexus').photoItems.map(item=>item.url);
-assert('ultra-wide hub wordmarks stay out of club photo cards',!aakritiPhotoUrls.includes('/assets/hub-photos/aakriti-01.webp')&&!neuralNexusPhotoUrls.includes('/assets/hub-photos/neural-01.webp')&&hubPresentationSource.includes('1311×25 wordmark/banner')&&hubPresentationSource.includes("Aakriti:['/assets/hub-photos/aakriti-02.webp','/assets/hub-photos/aakriti-03.webp']")&&!hubPresentationSource.includes("'Neural Nexus':['/assets/hub-photos/neural-01.webp']"));
+assert('ultra-wide hub wordmarks stay out of club photo cards',!aakritiPhotoUrls.includes('/assets/hub-photos/aakriti-01.webp')&&!neuralNexusPhotoUrls.includes('/assets/hub-photos/neural-01.webp')&&hubPresentationSource.includes('1311×25 wordmark/banner')&&hubPresentationSource.includes('neural-01 (1500×211) is also an ultra-wide graphic')&&hubPresentationSource.includes("Aakriti:['/assets/hub-photos/aakriti-02.webp','/assets/hub-photos/aakriti-03.webp']")&&!hubPresentationSource.includes("'Neural Nexus':['/assets/hub-photos/neural-01.webp']"));
 const hubPhotoUrls=[...new Set(Object.keys(JYC_HUB_CONTENT).flatMap(name=>sourceHubMedia(name).photoItems.map(item=>item.url)))];
 const hubPhotoAspectOutliers=[];
 for(const url of hubPhotoUrls){
