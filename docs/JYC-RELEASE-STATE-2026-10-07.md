@@ -1,9 +1,10 @@
-# JYC Website — Release State — 2026-10-10
+# JYC Website — Release State — 2026-10-11
 
 ## Current source release
 
-- Package release: `64.5.0`
-- Current main commit: `11057d73bd4f69984dc76f1a951d62aa18209157`
+- Package release: `64.5.7`
+- Current main commit: `ab3764ba19d3539b1428cb64956ef2cec01dfcfd`
+- Active media/photo reliability PR: [#196 — prevent guessed variants and unify photo fallbacks](https://github.com/kaustubhdua/JYC-Website/pull/196), branch `fix/media-fallback-state-rerender` (draft). The branch now contains current `main`; the GitHub API confirms it is mergeable, but release checks are still red/unusable.
 - UI/media work: merged by pull request [#193 — identity-first UI, photo QA and GLB assistant fixes](https://github.com/kaustubhdua/JYC-Website/pull/193).
 - The source changes are merged into `main`; do not describe PR #193 as open.
 - Package version, lockfile version and service-worker cache namespace are synchronized.
@@ -22,8 +23,8 @@
 
 ### Vercel preview build
 
-- Latest observed preview deployment: `dpl_8mbMftXJDafezjFMH4LhV224mCAp`.
-- State: **READY** for branch `fix/ui-desktop-headline-layout`, source commit `2e12750901c7d4e0fb734e986de1db6ec62bff60`.
+- Latest observed READY preview deployment: `dpl_5619EWGbre1L2BLqjsTEcZJGUDmY` (`https://jyc-website-lf9fd8ii6-jyc-website.vercel.app`), branch `fix/media-and-photo-qa-hardening`, source commit `fbedaefc679efc2ab8f1f142debd076ff1647be8`.
+- This preview is **not** the current PR head (`fix/media-fallback-state-rerender`); it is useful for baseline endpoint checks only and does not validate the latest changes.
 - The deployment log confirms the Vite build completed, production media optimization reported `optimized=1 skipped=1115 failed=0`, and 48 route-specific HTML shells were generated.
 - The preview deployment has only its branch-specific Vercel alias. It is **not** a production-target deployment and does not prove the custom domain is serving this release.
 - The source commit is part of the merged UI/media change; nevertheless, a production deployment and production-domain smoke test remain separate release gates.
@@ -66,3 +67,13 @@ The companion audit `docs/JYC-UIUX-MEDIA-DEEP-AUDIT-2026-10-10.md` now documents
 - **Team:** explicit click/keyboard flip with a visible return-to-photo control.
 - **Gallery/event media:** controlled shared-layout transitions and accessible lightbox, not autoplay.
 - **Everywhere:** respect reduced motion, preserve keyboard focus and contrast, and avoid adding continuous effects until real-device performance is measured.
+
+## V64.5.7 follow-up — 11 October 2026
+
+- Normalized empty and whitespace-only `ResponsivePhoto` sources to a local branded fallback before rendering. This avoids the browser interpreting an empty image URL as a request for the current document.
+- Added browser coverage that rejects empty `src` values on shared responsive-image elements, and updated source contracts to match the normalized-source state model.
+- Synchronized package and lockfile versions at V64.5.7, documented the 64.5.6 and 64.5.7 changes, and rotated the service-worker cache namespace to `jyc-cache-v64-5-7`. Photo-integrity and photo-intelligence contracts now expect the same namespace.
+- Targeted source-contract verification: 18/18 checks passed for version/cache synchronization, normalized image fallback, manifest schema validation, service-worker caching and the browser regression wiring. A separate 18-check design contract pass returned 16 matches and 2 inconclusive string matches caused by checking the wrong content file/format; these are not counted as passing behavior tests.
+- GitHub Actions for the exact updated head still conclude failure before usable job steps or logs are returned. No full build or Playwright run is claimed.
+- A fresh Vercel preview deployment request for the exact head was blocked by the `api-deployments-free-per-day` limit (HTTP 402; retry after 24 hours). The latest READY preview predates the current PR head.
+- Custom production domains and `/api/jyc-updates` credentials remain independent release gates. Do not change DNS without verified domain ownership, and do not merge or label the release production-ready until exact-head build/browser evidence is available.
