@@ -248,12 +248,12 @@ export const JYC_SOCIAL_SOURCE_POLICY = {
 const normalizeSocialIdentity=value=>{
   try{
     const url=new URL(String(value||''));
-    let host=url.hostname.toLowerCase().replace(/^www\\./,'');
+    let host=url.hostname.toLowerCase().replace(/^www\./,'');
     if(host==='in.linkedin.com')host='linkedin.com';
-    const pathname=url.pathname.replace(/\\/+$/,'');
+    const pathname=url.pathname.replace(/\/+$/,'');
     return host+pathname.toLowerCase();
   }catch{
-    return String(value||'').trim().replace(/\\/+$/,'').toLowerCase();
+    return String(value||'').trim().replace(/\/+$/,'').toLowerCase();
   }
 };
 
