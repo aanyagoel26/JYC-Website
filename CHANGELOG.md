@@ -3,6 +3,7 @@
 ## V64.5.7 — Empty-source fallback and release-contract alignment
 
 - Normalize empty or whitespace-only responsive image sources to a local JYC-branded fallback before rendering, avoiding accidental requests for the current document as an image.
+- Reject derivative-eligible manifest flags when the asset folder or intrinsic dimensions/aspect ratio are unsafe, in both the runtime loader and service worker; cover ultra-wide wordmarks, thin banners and undersized images with QA fixtures.
 - Add source-contract and browser regression coverage to prevent empty `src` values on shared responsive-photo elements.
 - Align photo-integrity and photo-intelligence QA with the actual shared responsive-image state model and service-worker cache namespace.
 - Rotate the service-worker cache namespace to `jyc-cache-v64-5-7` so returning clients do not reuse manifest cache state from the previous release.
