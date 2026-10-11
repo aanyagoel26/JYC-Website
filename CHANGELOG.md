@@ -1,5 +1,13 @@
 # Changelog
 
+## V64.5.8 — Accessible terminal image fallback
+
+- Normalize whitespace-only custom fallback URLs to the official local JYC logo before any image element is rendered.
+- Preserve the original photo and contextual-logo → optimized JYC logo → original PNG fallback sequence without guessing responsive derivatives.
+- If every source fails, keep the media frame visibly branded and expose a descriptive accessible image-unavailable label instead of leaving a silent blank frame.
+- Add browser regression coverage that fails every raster image endpoint and verifies the final placeholder, plus source-level release guards.
+- Rotate the service-worker cache namespace to `jyc-cache-v64-5-8` so clients do not retain the prior fallback stylesheet/runtime.
+
 ## V64.5.7 — Empty-source fallback and release-contract alignment
 
 - Normalize empty or whitespace-only responsive image sources to a local JYC-branded fallback before rendering, avoiding accidental requests for the current document as an image.
