@@ -317,6 +317,8 @@ test('photo-led pages render real image content without broken assets', async ({
     await expect(page.locator('img:visible').first()).toBeVisible();
     await waitForImagesToSettle(page);
     await expect.poll(async () => images.evaluateAll(nodes => nodes.filter(img => img.complete && img.naturalWidth > 0).length), { timeout: 8000 }).toBeGreaterThan(0);
+    const emptyPictureSources = await page.locator('picture.jyc-responsive-picture > img').evaluateAll(nodes => nodes.filter(img => img.getAttribute('src') === '').map(img => img.outerHTML));
+    expect(emptyPictureSources, 'responsive photos must not request the current document as an image on '+route).toEqual([]);
     const broken = await images.evaluateAll(nodes => nodes.filter(img => img.complete && img.naturalWidth === 0).map(img => ({src:img.getAttribute('src'),alt:img.getAttribute('alt'),loading:img.loading})));
     expect(broken, 'broken images on '+route).toEqual([]);
   }
