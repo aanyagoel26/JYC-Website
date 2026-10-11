@@ -222,3 +222,41 @@ Use restrained, purposeful motion: Dither Veil only for the official logo; magne
 - Targeted cross-file source assertions pass for the shared loader, declarative image fallback, manifest eligibility, photo QA wiring, theme/hero/team design contracts and release metadata.
 - **The malformed-payload browser test has not been executed successfully on the exact current head.** GitHub Actions has not provided usable runner steps/logs, and the Vercel deployment API previously rejected fresh deployments at the daily deployment limit. Do not call this a production pass until the exact head has a successful build and browser run.
 - The next useful design work is measurement-driven rather than adding more ambient animation: verify LCP/CLS/INP on a fresh preview, audit image bytes and decode sizes at mobile breakpoints, and keep high-cost WebGL/magnetic effects scoped to the hero mark and intentional Bento/cards. Keep any newly discovered hub/social profile campus-gated until an official source confirms it.
+
+## Post-release roadmap — what to improve next, and where motion belongs
+
+This is the follow-up research plan, not a claim that the current head has passed release QA.
+
+### P0 — prove the exact release
+1. Obtain one successful Vercel deployment for the exact PR head, then record its commit SHA and deployment URL in the release notes. The currently READY preview predates the V64.5.4 service-worker, boot-logo and social-policy changes.
+2. Run npm ci, npm run build, npm run qa:photo-integrity, npm run qa:photo-intelligence, npm run qa:v64-editorial and npm run qa:browser against the built preview. Do not treat source-string assertions as a substitute for running the browser tests.
+3. Repeat the route matrix at 320, 360, 390, 768, 1024, 1280, 1440 and 1920 CSS pixels in both themes. Capture horizontal overflow, clipped text, missing alt text, failed image decode, duplicate H1, focus loss and browser console errors.
+4. Verify the service-worker update lifecycle: fresh install, update from V64.5.3 to V64.5.4, offline first paint, manifest revalidation, offline fallback, and recovery after reconnect.
+5. Confirm production /api/jyc-updates returns a successful response on the exact deployment; the previous production deployment had a mapper syntax error that was fixed in source but still requires a fresh production endpoint check.
+6. Resolve the custom-domain ownership/routing issue with the domain owner. Do not change DNS or verification records without explicit authorization.
+
+### P1 — measure performance before adding more effects
+- Collect mobile and desktop field data for LCP, INP and CLS. Use the Core Web Vitals “good” thresholds as release targets: LCP ≤ 2.5 s, INP ≤ 200 ms and CLS ≤ 0.1 at the 75th percentile.
+- Record transfer bytes and decode dimensions for the hero, team portraits, featured-event posters and first gallery row. Keep only the first-view hero/logo eager; lazy-load below-the-fold gallery and club imagery.
+- Profile React renders while changing themes, filtering clubs, opening Search/More and moving through gallery albums. Confirm that magnetic effects and WebGL stop when offscreen and do not cause continuous work after navigation.
+- Track missing/unverified official social profiles in editorial QA rather than filling them with same-name LinkedIn results. Keep the JODC (Sector 128) and OSDC (Sector 62) identities separate.
+- Add an organiser-confirmed status field for events whose deadline or registration state conflicts across official sources. Do not infer that an event registration is open just because an old CTA remains available.
+
+### Animation placement matrix
+| Area | Recommended motion | Guardrails |
+| --- | --- | --- |
+| Homepage hero logo | Dither Veil on the right; static official WebP fallback | One hero canvas only; stop on reduced motion/coarse pointers; never hide the logo if AVIF/WebGL fails. |
+| Community/club discovery Bento | Magnetic pointer attraction on selected cards | Fine-pointer devices only; small translation/tilt; no page-wide cursor physics; disable for touch and reduced motion. |
+| Team cards | Click/keyboard-triggered 3D flip | Never hover-only; preserve focus; front always shows portrait/name/role; back stays readable and includes only verified profile links. |
+| Gallery | Shared-element transition into the lightbox, subtle image crossfade | Arrow keys, Escape, focus restoration and scroll lock; no navigation-to-top; zero-duration motion when reduced motion is requested. |
+| Section entrances | One-time opacity + 8–12 px vertical reveal on major section headers only | Avoid animating every card and paragraph; no scroll-jacking or long parallax. |
+| Buttons, chips and filters | 100–160 ms color/border/scale feedback | Keep the hit target stable; do not animate layout dimensions; maintain visible keyboard focus. |
+| Loading screen | Brief opacity fade only when the app genuinely needs time to mount | Do not impose a minimum delay; show useful fallback content immediately; honor saved/system theme. |
+| Event cards | Poster-to-detail shared transition and subtle status accent | Identity comes from the event poster, hub color and verified status—not constant pulsing or autoplay. |
+
+### Visual system recommendations from the reference review
+- Keep the design hierarchy editorial: one large hero message, one clear primary action, distinct club/event identities and a consistent page rhythm. Do not add another decorative full-width background wall.
+- Use the existing antique-gold accent with ink/cream surfaces; introduce category colors only as restrained accents tied to hub identity, never as competing full-page palettes.
+- Preserve the existing React Bits Dither Veil, Magic Bento and Motion/FlipCard stack. Adding another animation dependency should require a measured benefit; avoid shipping effects that increase bundle size without solving a user task.
+- Keep cards photo-led and content-led. Do not place ultrawide banners, logos, poster strips or screenshots into portrait photo pools. Every image source must have a clear subject, contextual alt text, correct aspect ratio, an appropriate crop and a predictable failure fallback.
+- The next design review should use screenshots and interaction recordings from the exact current deployment—not the earlier preview—and should compare light/dark, reduced-motion, touch and keyboard paths side by side.
