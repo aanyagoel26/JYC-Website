@@ -1,6 +1,6 @@
 # JIIT Youth Club 128 — Official Website
 
-> **Current release: V64.5.7 — Empty-source fallback and manifest cache alignment**
+> **Current release: V64.5.7 — Derivative-safe manifests and branded photo fallbacks**
 
 [![Quality](https://github.com/kaustubhdua/JYC-Website/actions/workflows/ci.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/ci.yml) [![CodeQL](https://github.com/kaustubhdua/JYC-Website/actions/workflows/codeql.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/codeql.yml) [![JYC Quality](https://github.com/kaustubhdua/JYC-Website/actions/workflows/jyc-quality.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/jyc-quality.yml)
 
