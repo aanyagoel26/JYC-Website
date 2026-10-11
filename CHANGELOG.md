@@ -1,5 +1,16 @@
 # Changelog
 
+## V64.5.4 — Network-first manifest recovery and offline boot reliability
+
+- Route `/image-manifest.json` through a service-worker network-first branch so page-level `cache: 'no-cache'` is not defeated by the generic cache-first handler; retain the last known-good manifest only as an offline fallback.
+- Reject empty or malformed manifest schemas and clear the shared request promise so later routes can retry after HTTP, network, JSON or schema failures.
+- Keep the initial no-JavaScript boot screen on the compact WebP logo already precached by the service worker, with the original PNG as a compatibility fallback.
+- Reduce gallery render churn by initializing `ResponsivePhoto` state against its current source and preserving fallback state when source props have not changed.
+- Add browser and source-contract regressions for malformed-manifest retry, service-worker routing, decoded no-JavaScript boot logo and redundant photo render prevention.
+- Rotate package/lockfile release metadata and the service-worker cache namespace to V64.5.4.
+
+Validation note: source-level checks passed, but the exact current head still needs a successful full build and Playwright run. The most recent Vercel preview predates these final changes, and the Vercel deployment API returned HTTP 402 `api-deployments-free-per-day`; do not treat the earlier preview as proof of V64.5.4.
+
 ## V64.5.3 — Fresh media manifests and derivative-failure recovery
 
 - Revalidate `/image-manifest.json` instead of forcing potentially stale cached metadata; responsive image candidates must match the current deployment's source dimensions and derivative eligibility.
