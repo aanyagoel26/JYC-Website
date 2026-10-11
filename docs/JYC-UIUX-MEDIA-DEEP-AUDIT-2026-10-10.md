@@ -2,7 +2,7 @@
 
 ## Scope
 
-This audit covers the merged V64.5.0 design source and the follow-up `fix/media-fallback-state-rerender` V64.5.3 media reliability branch, its source-media pipeline, the supplied 2026–27 All Hubs PDFs, official public club profiles/sites, and the newest available Vercel preview metadata. It distinguishes source-level verification, HTTP asset probes, and tests actually executed in a browser.
+This audit covers the merged V64.5.0 design source and the follow-up `fix/media-fallback-state-rerender` V64.5.4 media/PWA reliability branch, its source-media pipeline, the supplied 2026–27 All Hubs PDFs, official public club profiles/sites, and the newest available Vercel preview metadata. It distinguishes source-level verification, HTTP asset probes, and tests actually executed in a browser.
 
 ## V64.5.3 media follow-up
 
