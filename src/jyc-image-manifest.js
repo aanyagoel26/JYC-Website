@@ -2,6 +2,7 @@
 let imageManifestPromise=null;
 
 const isRecord=value=>Boolean(value)&&typeof value==='object'&&!Array.isArray(value);
+const isSafeManifestAssetUrl=url=>typeof url==='string'&&url.startsWith('/assets/')&&!url.includes('..')&&!url.includes('\\')&&!/[?#\\u0000-\\u001f\\u007f]/.test(url)&&!/%(?:2e|2f|5c)/i.test(url);
 
 // Do not trust a non-empty `images` object alone: a stale/error page can still
 // return HTTP 200 JSON. Every advertised record must carry dimensions and the
@@ -11,7 +12,7 @@ export function isValidJycImageManifest(payload){
  const entries=Object.entries(payload.images);
  if(!entries.length)return false;
  return entries.every(([url,entry])=>{
-  if(!url.startsWith('/assets/')||url.includes('..')||url.includes('?')||url.includes('#')||!isRecord(entry))return false;
+  if(!isSafeManifestAssetUrl(url)||!isRecord(entry))return false;
   const {width,height,aspectRatio:ratio}=entry;
   if(typeof width!=='number'||!Number.isInteger(width)||width<=0||typeof height!=='number'||!Number.isInteger(height)||height<=0||typeof ratio!=='number'||typeof entry.derivativesEligible!=='boolean')return false;
   if(!Number.isFinite(ratio)||Math.abs(ratio-Number((width/height).toFixed(5)))>0.000001)return false;
