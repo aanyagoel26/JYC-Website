@@ -59,4 +59,5 @@ export const PDF_HUB_STORIES=[
 ];
 export const HUB_PHOTO_MAP={
 // Exclude aakriti-01 (1311×25 wordmark/banner) from the photo pool; keep the visual available in the source material.
+// neural-01 (1500×211) is also an ultra-wide graphic; retain it as a visual, not a photo-map entry.
 Aakriti:['/assets/hub-photos/aakriti-02.webp','/assets/hub-photos/aakriti-03.webp'],Aura:['/assets/hub-photos/aura-01.webp'],Panache:['/assets/hub-photos/panache-01.webp','/assets/hub-photos/panache-02.webp'],CICR:['/assets/hub-photos/cicr-01.webp','/assets/hub-photos/cicr-02.webp'],RPH:['/assets/hub-photos/rph-01.webp','/assets/hub-photos/rph-02.webp'],Dronotics:['/assets/hub-photos/dronotics-01.webp'],CypherX:['/assets/hub-photos/cypherx-01.webp','/assets/hub-photos/cypherx-02.webp'],VamUnique:['/assets/hub-photos/vamunique-01.webp','/assets/hub-photos/vamunique-02.webp','/assets/hub-photos/vamunique-03.webp','/assets/hub-photos/vamunique-04.webp'],Arcadia:['/assets/hub-photos/arcadia-01.webp']};
