@@ -829,6 +829,39 @@ test('responsive photos do not guess AVIF/WebP derivative URLs when the manifest
 
 
 
+
+test('responsive pictures recover when generated AVIF and WebP derivatives all fail', async ({ page }) => {
+  const failedVariants = [];
+  page.on('request', request => {
+    const pathname = new URL(request.url()).pathname;
+    if (pathname.startsWith('/assets/photo-derivatives/')) failedVariants.push(pathname);
+  });
+  await page.route('**/assets/photo-derivatives/**', route => route.abort());
+  await page.goto(base + '/team', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'responsive picture derivative failure');
+
+  const portrait = page.locator('.team-photo-editorial img').first();
+  await expect(portrait).toBeVisible();
+  await portrait.scrollIntoViewIfNeeded();
+  await expect.poll(() => portrait.evaluate(img => img.complete && img.naturalWidth > 0), { timeout: 15000 }).toBe(true);
+
+  const state = await portrait.evaluate(img => ({
+    naturalWidth: img.naturalWidth,
+    currentSrc: new URL(img.currentSrc || img.src, window.location.href).pathname,
+    originalSrc: new URL(img.src, window.location.href).pathname,
+    fallbackStage: img.getAttribute('data-image-fallback-stage'),
+    alt: img.alt,
+    pictureSources: img.parentElement?.querySelectorAll('source').length || 0
+  }));
+  expect(failedVariants.length, 'test must exercise the generated responsive candidates').toBeGreaterThan(0);
+  expect(state.naturalWidth).toBeGreaterThan(0);
+  expect(state.currentSrc, 'a failed derivative must not remain the displayed image').not.toContain('/photo-derivatives/');
+  expect(state.originalSrc).not.toContain('/photo-derivatives/');
+  expect(state.alt.length).toBeGreaterThan(0);
+  expect(state.fallbackStage).not.toBe('failed');
+});
+
+
 test('featured event poster uses the shared responsive image fallback contract', async ({ page }) => {
   await page.goto(base, { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'featured event photo fallback');
