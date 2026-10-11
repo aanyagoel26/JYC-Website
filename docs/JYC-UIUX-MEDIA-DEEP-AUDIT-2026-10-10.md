@@ -274,7 +274,14 @@ This is the follow-up research plan, not a claim that the current head has passe
 - The next design review should use screenshots and interaction recordings from the exact current deployment—not the earlier preview—and should compare light/dark, reduced-motion, touch and keyboard paths side by side.
 
 
-## Current preview spot-check — V64.5.4 runtime code
+## V64.5.5 preview checkpoint
+
+- A READY Vercel build was produced for commit `a6feb0978fc9bcb228d7a0337d60f9e23a836183`, which has package version 64.5.5 and the initial strict-manifest validator shape. Its deployment hostname is `jyc-website-m96jj5be2-jyc-website.vercel.app`.
+- On that READY preview, `/`, the canonical JAI event route, `/image-manifest.json`, the official logo WebP, and a team AVIF derivative returned HTTP 200. The JAI route returned a route-specific title/H1. The manifest contained 530 records, 476 marked derivative-eligible.
+- The 530 live manifest records independently passed the new schema checks for safe asset paths, positive integer dimensions, aspect-ratio consistency, orientation labels and explicit eligibility. Sixteen representative image/derivative endpoint probes also returned HTTP 200 with the expected PNG/WebP/AVIF file signatures.
+- **This is not an exact-head build.** The preview commit predates the final numeric-type enforcement, matching service-worker cache namespace bump, and latest QA assertions. Do not treat it as validation of the current PR head. The newest commits need a fresh build and browser/CI run.
+
+## Earlier preview spot-check — V64.5.4 runtime code (superseded)
 
 - Vercel marks preview commit 415c276966937f44b561ac482917eb4745d98853 as READY at jyc-website-9xwdtath6-jyc-website.vercel.app. The current branch has identical Git blob SHAs for the key runtime files checked (ResponsivePhoto, shared image manifest, service worker, homepage hero, social policy, browser runner/spec, release QA, index and package metadata); commits after that preview are documentation-only.
 - Nine route-shell requests returned HTTP 200: home, about, history, clubs, events, team, gallery, contact and JAI 2026. Each had one route-specific H1, matching title, canonical production URL and WebPage JSON-LD.
