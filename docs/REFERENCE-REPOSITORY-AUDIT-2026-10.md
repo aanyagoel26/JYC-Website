@@ -119,5 +119,5 @@ The references were inspected through public GitHub repository pages/API content
 1. Fix Actions runner/execution so checks can run.
 2. Resolve overlap and validate PRs #201–#203.
 3. Add an event-page/resource template from the event microsite pattern.
-4. Improve verified hub profiles and a project/achievement spotlight using JODC/Innovation editorial patterns.
+4. Improve existing hub profiles and event storytelling using JODC/Innovation editorial patterns; do not add curated project or achievement spotlights.
 5. Add measured responsive/accessibility/performance checks before release.
