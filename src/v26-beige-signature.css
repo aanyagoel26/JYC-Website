@@ -2140,6 +2140,9 @@ html[data-theme="dark"] .home-layout>.section:nth-child(even){
   object-fit:cover!important;
   display:block!important;
 }
+.supplied-programme-card>.supplied-programme-photo{display:block!important;width:100%!important;height:145px!important;overflow:hidden!important;background:var(--bg-main)!important}
+.supplied-programme-card>.supplied-programme-photo img{width:100%!important;height:145px!important;object-fit:contain!important;padding:12px!important;display:block!important}
+.supplied-programme-card>.supplied-programme-photo img[data-image-fallback-stage]:not([data-image-fallback-stage="failed"]){object-fit:contain!important;background:var(--bg-main)!important;padding:16px!important}
 .supplied-programme-card>div{
   padding:14px!important;
 }
