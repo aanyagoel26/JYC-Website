@@ -1062,3 +1062,19 @@ html,body,#root,.app-frame,.app.public-app,.route-stage{max-width:100%;min-width
   padding:clamp(14px,2.5vw,28px);
   background:var(--jyc-surface,#f8f1e5);
 }
+
+
+/* V64.5.6 — source artwork stays contained; fallback media never impersonates a photo. */
+.public-app .supplied-programme-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:12px!important;min-width:0}
+.public-app .supplied-programme-card{min-width:0;overflow:hidden;border:1px solid var(--border-tech,rgba(25,25,24,.14));border-top:3px solid var(--hub-accent,#bf9c6f);border-radius:16px;background:var(--bg-card,#fff)}
+.public-app .supplied-programme-card>.supplied-programme-photo{display:block!important;width:100%!important;height:145px!important;overflow:hidden!important;background:var(--bg-main,#f8f1e5)!important}
+.public-app .supplied-programme-card>.supplied-programme-photo img{display:block!important;width:100%!important;height:145px!important;object-fit:contain!important;padding:12px!important}
+.public-app .supplied-programme-card>.supplied-programme-photo img[data-image-fallback-stage]:not([data-image-fallback-stage="failed"]){object-fit:contain!important;background:var(--bg-main,#f8f1e5)!important;padding:16px!important}
+.public-app .supplied-programme-card>div{padding:14px;min-width:0}
+.public-app .supplied-programme-card h3{margin:7px 0 5px;font-size:18px;line-height:1.1;overflow-wrap:anywhere}
+.public-app .supplied-programme-card p{margin:0 0 10px;color:var(--text-muted,#6b6259);font-size:12px;line-height:1.55}
+.public-app .event-jai-qr-link{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:9px 12px;border:1px solid var(--jyc33-brand,#bf9c6f);border-radius:999px;color:var(--jyc33-brand,#bf9c6f);font-size:11px;font-weight:850;text-decoration:none;text-underline-offset:4px}
+.public-app .event-jai-qr-link:hover{text-decoration:underline}
+.public-app .event-jai-qr-link:focus-visible{outline:2px solid var(--jyc33-brand,#bf9c6f);outline-offset:3px}
+@media(max-width:1024px){.public-app .supplied-programme-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:600px){.public-app .supplied-programme-grid{grid-template-columns:minmax(0,1fr)!important}.public-app .supplied-programme-card>.supplied-programme-photo,.public-app .supplied-programme-card>.supplied-programme-photo img{height:180px!important}}
