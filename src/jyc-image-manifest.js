@@ -2,7 +2,7 @@
 let imageManifestPromise=null;
 
 const isRecord=value=>Boolean(value)&&typeof value==='object'&&!Array.isArray(value);
-const isSafeManifestAssetUrl=url=>typeof url==='string'&&url.startsWith('/assets/')&&!url.includes('..')&&!url.includes('\\')&&!/[?#\x00-\x1f\x7f]/.test(url)&&!/%(?:2e|2f|5c)/i.test(url);
+const isSafeManifestAssetUrl=url=>typeof url==='string'&&url.startsWith('/assets/')&&!url.includes('..')&&!url.includes('\\')&&!/[?#\x00-\x1f\x7f]/.test(url)&&!/%(?:25|2e|2f|5c)/i.test(url);
 
 // Do not trust a non-empty `images` object alone: a stale/error page can still
 // return HTTP 200 JSON. Every advertised record must carry dimensions and the
