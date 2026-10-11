@@ -44,6 +44,17 @@ html[data-theme="dark"] .jyc-now-strip-section,html[data-theme="dark"] .jyc-now-
 @media(max-width:760px){.jyc-now-strip-section.is-compact{width:min(100% - 32px,1320px);padding-inline:0}.jyc-now-strip-section.is-compact .jyc-now-grid{grid-template-columns:1fr}.jyc-now-strip-section.is-compact .jyc-now-card:not(:first-child) .jyc-now-card-copy{padding-left:0;border-left:0}.jyc-now-strip-section.is-compact .jyc-now-card-copy{padding:16px 0}.jyc-now-strip-section.is-compact .jyc-now-head{display:block}.jyc-now-strip-section.is-compact .jyc-now-head .reference-view-all{display:inline-block;margin-top:12px}}
 @media(prefers-reduced-motion:reduce){.jyc-now-strip-section.is-compact .jyc-now-card:hover{transform:none}}
 
+/* V64.5.9: complete dark-mode contrast for all JYC Now surfaces. */
+html[data-theme="dark"] .jyc-now-strip-section{border-color:var(--jyc-border,#3b3740)!important;background:linear-gradient(135deg,var(--jyc-surface,#18161d),color-mix(in srgb,var(--jyc-champagne,#bf9c6f) 6%,var(--jyc-surface,#18161d)))!important;color:var(--jyc-text,#fff)!important}
+html[data-theme="dark"] .jyc-now-card,html[data-theme="dark"] .jyc-now-empty,html[data-theme="dark"] .jyc-spotlight-grid button,html[data-theme="dark"] .jyc-now-principles article{background:var(--jyc-surface,#18161d)!important;color:var(--jyc-text,#fff)!important;border-color:var(--jyc-border,#3b3740)!important}
+html[data-theme="dark"] .jyc-now-card p,html[data-theme="dark"] .jyc-now-head p,html[data-theme="dark"] .jyc-now-meta,html[data-theme="dark"] .jyc-now-status-line,html[data-theme="dark"] .jyc-now-empty p,html[data-theme="dark"] .jyc-now-principles p,html[data-theme="dark"] .jyc-spotlight-grid small{color:var(--jyc-muted-live,#a8a3b0)!important}
+html[data-theme="dark"] .jyc-now-card strong,html[data-theme="dark"] .jyc-now-meta b,html[data-theme="dark"] .jyc-spotlight-grid small{color:var(--jyc-champagne,#d2b48c)!important}
+html[data-theme="dark"] .jyc-now-filter-group button{color:var(--jyc-text,#fff)!important;border-color:var(--jyc-border,#3b3740)!important;background:transparent}
+html[data-theme="dark"] .jyc-now-filter-group button:hover,html[data-theme="dark"] .jyc-now-filter-group button.active{background:var(--jyc-champagne,#d2b48c)!important;color:#17151a!important;border-color:var(--jyc-champagne,#d2b48c)!important}
+html[data-theme="dark"] .jyc-now-status-line,html[data-theme="dark"] .jyc-now-spotlight,html[data-theme="dark"] .jyc-now-principles{border-color:var(--jyc-border,#3b3740)!important}
+html[data-theme="dark"] .jyc-now-media,html[data-theme="dark"] .jyc-spotlight-grid button>div{background:var(--jyc-bg,#0f0e11)!important}
+@media(prefers-reduced-motion:reduce){.jyc-now-card{transition:none!important}.jyc-now-card:hover{transform:none!important;box-shadow:none!important}}
+
 `;
 
 function formatDate(value){const d=new Date(value||'');if(Number.isNaN(d.getTime()))return 'RECENT';return d.toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});}
