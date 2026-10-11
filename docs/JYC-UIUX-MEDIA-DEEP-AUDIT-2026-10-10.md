@@ -49,6 +49,22 @@ This audit covers the merged V64.5.0 design source and the follow-up `fix/media-
 - JODC identifies itself as the Open Source Society of JIIT-128 and describes contributions, collaboration, developer networking, GSoC/GSoD/Outreachy preparation, meetups, dev-sprints and hackathons.
 - A separately named **Open Source Developers Community (OSDC)** appears on LinkedIn at https://in.linkedin.com/company/os-dc and is associated with JIIT Sector 62. Do not merge that profile's events, leadership, photos or links into the Sector-128 JYC/JODC record without independent venue/identity evidence.
 
+### LinkedIn identity cross-check — 11 October 2026
+
+The latest public search reconfirmed the following campus-specific profile links already recorded in `src/jyc-socials.js` and the hub descriptions:
+
+- VamUnique: https://www.linkedin.com/company/vamunique-the-dance-society-jiit-noida/ — explicitly says JIIT Sector 128 and describes dance, cultural fests and inter-college/community performances.
+- Rapid Programming Hub: https://www.linkedin.com/company/rapid-programming-hub-jiit-noida/ — Code Clash 25.2 is dated 22 November 2025 and remains archive content, not a current registration.
+- CICR: https://www.linkedin.com/company/cicrjiit128/ — current robotics/electronics/AI workshops and ROBOSPARK updates; TechTonic 2.0 has no confirmed date in the checked official source.
+- Innovation JIIT: https://in.linkedin.com/company/innovation-jiit/ — RIDE HACK 26 has the 5 October application deadline / 15 October shortlist / 1 November final conflict described above.
+- JODC: https://in.linkedin.com/company/jodc/ — explicitly identifies the Open Source Society of JIIT-128.
+- JYC: https://www.linkedin.com/company/jiityouthclub/ and the campus-specific public profile https://in.linkedin.com/in/jyc128 — use the supplied orientation material's `@jiityouthclub128` identity for Sector 128 event sourcing.
+- CypherX: https://www.linkedin.com/company/cypherx-jiit/ — JIIT-128 cybersecurity community.
+- OSDC: https://in.linkedin.com/company/os-dc — the separate profile is associated with Sector 62 and must not be used for JODC/128.
+- GDG JIIT: https://in.linkedin.com/company/dsc-jiit/ — recent posts mention Sector 128 events, but the LinkedIn location metadata still says Sector 62; the record remains review-gated.
+
+A fresh search for Fortissimo, BDS, Panache, Arcadia, Aakriti, Aura, Abhivyakti, Prismatic and JSA did not produce a confidently matching JIIT-128 LinkedIn profile for every name; several results belonged to unrelated institutions or businesses. **Do not fill missing links by guessing from a shared club name.** Keep these links absent until the club or JYC confirms its official URL. Hub descriptions should continue to use the supplied All Hubs material when no trustworthy public profile is available.
+
 ### JYC 128 and JAI 2026
 
 - JYC 128 public profile: https://in.linkedin.com/in/jyc128
