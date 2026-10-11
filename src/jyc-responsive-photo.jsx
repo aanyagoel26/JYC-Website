@@ -1,13 +1,9 @@
 import React,{useEffect,useLayoutEffect,useState} from 'react';
 import {photoDerivativeUrls} from './jyc-photo-intelligence.js';
+import {loadJycImageManifest} from './jyc-image-manifest.js';
 const LOGO_FALLBACK=import.meta.env.PROD?'/assets/jyc-logo.webp':'/JYC%20Logo(4).png';
 const ORIGINAL_LOGO='/JYC%20Logo(4).png';
 const isDerivativeSource=url=>/^\/assets\/(?:source-archive|hub-photos|hub-photos-extra|events|home|team)\//.test(String(url||''));
-let imageManifestPromise=null;
-const loadImageManifest=()=>{
- if(!imageManifestPromise)imageManifestPromise=fetch('/image-manifest.json',{cache:'no-cache'}).then(response=>{if(!response.ok)throw new Error('Image manifest unavailable');return response.json()}).catch(()=>{imageManifestPromise=null;return null});
- return imageManifestPromise;
-};
 export function ResponsivePhoto({src,alt='',width,height,sizes='100vw',loading='lazy',fetchPriority,decoding='async',className='',style,onError,objectPosition,fallbackSrc=LOGO_FALLBACK,fallbackAlt='Official JYC logo placeholder; image unavailable'}){
  const [sourceDimensions,setSourceDimensions]=useState({src:'',width:0,derivativesEligible:false});
  const [fallbackState,setFallbackState]=useState(()=>({src,fallbackSrc,stage:0}));
@@ -27,7 +23,7 @@ export function ResponsivePhoto({src,alt='',width,height,sizes='100vw',loading='
   let active=true;
   setSourceDimensions({src,width:0,derivativesEligible:false});
   if(!derivativesEnabled||!isDerivativeSource(src))return()=>{active=false};
-  loadImageManifest().then(manifest=>{
+  loadJycImageManifest().then(manifest=>{
    const entry=manifest?.images?.[src];
    const measured=Number(entry?.width);
    if(active&&entry?.derivativesEligible===true&&measured>0)setSourceDimensions({src,width:measured,derivativesEligible:true});
