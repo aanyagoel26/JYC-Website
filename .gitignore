@@ -7,3 +7,4 @@ dist/
 .DS_Store
 Thumbs.db
 public/image-manifest.json
+public/assets/photo-derivatives/

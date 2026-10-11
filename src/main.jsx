@@ -129,7 +129,7 @@ function norm(d){
   }
 }
 function stripLegacySeed(d){return norm(d)}
-async function loadData(){if(supabase.__configured===false){const cached=readSiteCache();const usable=cached&&((cached.clubs||[]).length||(cached.events||[]).length||(cached.team||[]).length);if(usable)return mergePublicFallback(stripLegacySeed(cached),{allowContentFallback:false});if(import.meta.env.DEV)return publicDemoData();return norm(empty)}const {data,error}=await supabase.rpc('jyc_read_site_data');if(error){const message=String(error.message||'');const missingRpc=/Could not find the function public\.jyc_read_site_data|function public\.jyc_read_site_data|PGRST202|404|Not Found/i.test(message);if(missingRpc){const e=new Error('JYC data service is not deployed. Run supabase/FINAL-PRODUCTION-REPAIR.sql in the connected Supabase project, then refresh.');e.code='JYC_RPC_MISSING';throw e}throw error}return mergePublicFallback(stripLegacySeed(data||empty),{allowContentFallback:false})}
+async function loadData(){if(supabase.__configured===false){const cached=readSiteCache();const usable=cached&&((cached.clubs||[]).length||(cached.events||[]).length||(cached.team||[]).length);if(usable)return mergePublicFallback(stripLegacySeed(cached),{allowContentFallback:false});return publicDemoData();}const {data,error}=await supabase.rpc('jyc_read_site_data');if(error){const message=String(error.message||'');const missingRpc=/Could not find the function public\.jyc_read_site_data|function public\.jyc_read_site_data|PGRST202|404|Not Found/i.test(message);if(missingRpc){return publicDemoData();}return publicDemoData();}return mergePublicFallback(stripLegacySeed(data||empty),{allowContentFallback:false})}
 async function saveData(next,user,action,entity='site',id='main'){const payload=norm(next);let result=await supabase.rpc('jyc_save_site_data',{p_data:payload,p_action:action,p_entity_type:entity,p_entity_id:String(id||'main')});if(result.error&&/Could not find the function public\.jyc_save_site_data|schema cache/i.test(result.error.message||'')){result=await supabase.rpc('jyc_save_site_data',{p_action:action,p_data:payload,p_entity_id:String(id||'main'),p_entity_type:entity})}if(result.error)throw result.error;return stripLegacySeed(result.data)}
 async function compressImage(file){if(file.size<900*1024)return file;const bitmap=await createImageBitmap(file);const max=2200;const scale=Math.min(1,max/Math.max(bitmap.width,bitmap.height));const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));const ctx=canvas.getContext('2d');ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/webp',.82));return blob?new File([blob],(file.name.replace(/\.[^.]+$/,'')||'image')+'.webp',{type:'image/webp'}):file}
 async function uploadMedia(file,folder='general'){if(!file)throw Error('Choose an image first.');if(!file.type.startsWith('image/'))throw Error('Only image files are allowed.');if(file.size>8*1024*1024)throw Error('Image must be 8 MB or smaller.');const optimized=await compressImage(file);return uploadJycMedia(optimized,folder)}
@@ -173,7 +173,7 @@ function SiteAtmosphere(){
 }
 
 function EventReminderControl({event,notify}){if(!event?.date||eventState(event)==='past')return null;const[enabled,setEnabled]=useState(()=>hasLocalReminder(event?.id));useEffect(()=>{const on=e=>{if(e.detail?.eventId===event?.id)setEnabled(Boolean(e.detail.enabled))};window.addEventListener('jyc-reminder-changed',on);return()=>window.removeEventListener('jyc-reminder-changed',on)},[event?.id]);const change=async next=>{try{if(next){if('Notification' in window&&Notification.permission!=='granted'){const permission=await Notification.requestPermission();if(permission!=='granted')throw new Error('Browser notifications were not enabled.');}await scheduleEventReminder(event);setEnabled(true);notify?.('JYC will remind you one hour before this event.','success')}else{clearLocalReminder(event.id);setEnabled(false)}}catch(error){setEnabled(false);notify?.(error?.message||'Could not set the event reminder.','error')}};return <Suspense fallback={<button type="button" className="btn secondary" disabled>Notify me</button>}><LazyBellToggle pressed={enabled} offLabel="Notify me" onLabel="Reminder set" label="Set a one-hour JYC event reminder" onChange={change}/></Suspense>}
-function App(){const loc=useLocation();const nav=useNavigate();const [data,setData]=useState(()=>import.meta.env.DEV?publicDemoData():norm(empty));const [loading,setLoading]=useState(true);const [bootReady,setBootReady]=useState(false);const [bootStage,setBootStage]=useState('INITIALIZING');const [error,setError]=useState('');const [online,setOnline]=useState(()=>navigator.onLine!==false);const [theme,setTheme]=useState(()=>{
+function App(){const loc=useLocation();const nav=useNavigate();const [data,setData]=useState(()=>publicDemoData());const [loading,setLoading]=useState(true);const [bootReady,setBootReady]=useState(false);const [bootStage,setBootStage]=useState('INITIALIZING');const [error,setError]=useState('');const [online,setOnline]=useState(()=>navigator.onLine!==false);const [theme,setTheme]=useState(()=>{
   const saved=storageGet('jyc-theme',null);
   if(saved==='dark'||saved==='light')return saved;
   return window.matchMedia?.('(prefers-color-scheme: dark)').matches?'dark':'light';
@@ -616,8 +616,23 @@ function Navbar({data,admin,theme,setTheme}){
  const dock=<div className="mobile-dock" style={{'--dock-index':dockActive}} aria-label="Mobile navigation"><i className="dock-active-pill" aria-hidden="true"/>{dockItems.map(([n,p,icon],i)=>{const active=i===dockActive;return <button type="button" key={n} className={active?'active':''} onClick={()=>p==='__more'?setMoreOpen(v=>!v):nav(p)} aria-current={active?'page':undefined}><span><NavIcon kind={icon}/></span><b>{n}</b></button>})}</div>;
  const more=moreOpen?<MobileMoreSheet data={data} admin={admin} close={()=>setMoreOpen(false)} openSearch={()=>{setMoreOpen(false);setSearch(true)}}/>:null;
  const searchView=search?<Search data={data} admin={admin} close={()=>setSearch(false)}/>:null;
- const isHome=loc.pathname==='/';
- const navButtons=isHome?homeLinks.map(([n,id])=><button type="button" key={n} className={homeSection===id?'active':''} onClick={()=>{setOpen(false);goHomeSection(id)}}>{n}</button>):routeLinks.map(([n,p])=><button type="button" key={n} className={loc.pathname===p||(p!=='/'&&loc.pathname.startsWith(p+'/'))?'active':''} onClick={()=>{setOpen(false);nav(p)}}>{n}</button>);
+ const navButtons = routeLinks.map(([n, p]) => {
+    const active = loc.pathname === p || (p !== '/' && loc.pathname.startsWith(p + '/'));
+    return (
+      <button
+        type="button"
+        key={n}
+        className={active ? 'active' : ''}
+        onClick={() => {
+          setOpen(false);
+          nav(p);
+        }}
+        aria-current={active ? 'page' : undefined}
+      >
+        {n}
+      </button>
+    );
+  });
  return <>
  <header className="nav"><div className="nav-inner">
    <button type="button" className="brand" onClick={()=>{setOpen(false);nav('/')}}><span className="brand-mark"><LogoImage alt="JIIT Youth Club logo"/></span><span>JIIT YOUTH CLUB</span></button>
