@@ -1399,3 +1399,44 @@ test('responsive photos keep a visible accessible identity when every image fall
   expect(visualFallback.after).toContain('Image unavailable');
   await expect(picture.locator('img')).toHaveAttribute('data-image-fallback-stage', 'failed');
 });
+
+
+test('JYC Now fallback cards and filters keep readable contrast in light and dark themes', async ({ page }) => {
+  await page.goto(base + '/updates', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'JYC Now theme contrast');
+  const card = page.locator('.jyc-now-card').first();
+  await expect(card).toBeVisible();
+  await expect(card.locator('h3')).toContainText(/JAI 2026|RIDE Hack|CICR/);
+  const filter = page.locator('.jyc-now-filter-group button').first();
+  await expect(filter).toBeVisible();
+
+  const samples = {};
+  for (const theme of ['light', 'dark']) {
+    await page.evaluate(value => document.documentElement.setAttribute('data-theme', value), theme);
+    samples[theme] = await card.evaluate(el => {
+      const rgb = value => {
+        const m = String(value || '').match(/rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i);
+        return m ? [+m[1], +m[2], +m[3]] : null;
+      };
+      const lum = c => c.map(v => v / 255).map(v => v <= .04045 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4)).reduce((sum, v, i) => sum + v * [.2126, .7152, .0722][i], 0);
+      const contrast = (a, b) => {
+        if (!a || !b) return 0;
+        const x = lum(a), y = lum(b);
+        return (Math.max(x, y) + .05) / (Math.min(x, y) + .05);
+      };
+      const bg = rgb(getComputedStyle(el).backgroundColor);
+      const fg = rgb(getComputedStyle(el).color);
+      const paragraph = rgb(getComputedStyle(el.querySelector('p')).color);
+      const button = el.ownerDocument.querySelector('.jyc-now-filter-group button');
+      return {
+        cardTextContrast: contrast(fg, bg),
+        paragraphContrast: contrast(paragraph, bg),
+        filterBackground: button ? getComputedStyle(button).backgroundColor : '',
+        filterText: button ? getComputedStyle(button).color : ''
+      };
+    });
+    expect(samples[theme].cardTextContrast, theme + ' card text contrast').toBeGreaterThanOrEqual(4.5);
+    expect(samples[theme].paragraphContrast, theme + ' paragraph contrast').toBeGreaterThanOrEqual(4.5);
+  }
+  expect(samples.dark.filterBackground).not.toBe(samples.light.filterBackground);
+});
