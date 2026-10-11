@@ -78,7 +78,7 @@ Adopt:
 ## JYC-specific implementation priorities
 
 ### P0 — restore reliable validation first
-The latest observed JYC CI, Quality Gate, Browser QA and CodeQL reruns terminate before any runner is assigned (runner_id 0, empty steps array). This is a GitHub Actions execution/runner issue; it does not tell us whether the code compiles. Diagnose repository Actions availability/runners or run the exact Node 24 commands in an authorized environment. Do not bypass checks or merge unvalidated code.
+The latest observed JYC CI, Quality Gate, Browser QA and CodeQL reruns terminate before any runner is assigned (runner_id 0, empty steps array). A retry of the new audit-document commit's Browser QA job also failed before steps. This is a GitHub Actions execution/runner issue; it does not tell us whether the code compiles. Diagnose repository Actions availability/runners or run the exact Node 24 commands in an authorized environment. Do not bypass checks or merge unvalidated code.
 
 ### P1 — finish three current draft PRs safely
 - PR #201: native event registration path and malformed QA-contract fix.
@@ -115,7 +115,7 @@ They overlap in scripts/browser-smoke.spec.js and scripts/qa-v64-editorial-relea
 
 ## Current status at audit time
 
-The references were inspected through public GitHub repository pages/API content. The full projects were not cloned and built in this environment. JYC Actions reruns were attempted, but the latest known jobs still fail immediately with no runner or steps. The three JYC PRs remain open drafts, and no production deployment or merge is claimed by this audit.
+The references were inspected through public GitHub repository pages/API content. The full projects were not cloned and built in this environment. JYC Actions reruns were attempted, but the latest known jobs still fail immediately with no runner or steps. The audit document was committed on main; its own Browser QA workflow also encountered the same runner failure. The three JYC PRs remain open drafts, and no production deployment or merge is claimed by this audit.
 
 ## Recommended order
 
