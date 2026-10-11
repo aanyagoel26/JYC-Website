@@ -869,7 +869,7 @@ test('responsive photo manifest retries after a successful but malformed payload
   await page.route('**/image-manifest.json', route => {
     attempts += 1;
     if (attempts === 1) {
-      return route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify({ version: 1, images: { '/assets/hub-photos/not-real.webp': { width: 0, height: 640, aspectRatio: 0, orientation: 'landscape', derivativesEligible: true } } }) });
     }
     return route.continue();
   });
