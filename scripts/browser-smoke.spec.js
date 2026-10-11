@@ -1199,6 +1199,9 @@ test('static boot screen respects the saved light/dark theme before React mounts
     await page.goto(base, { waitUntil: 'domcontentloaded' });
     const boot = page.locator('.boot-fallback');
     await expect(boot).toBeVisible();
+    const bootLogo = boot.locator('img.boot-logo');
+    await expect(bootLogo).toHaveAttribute('src', '/assets/jyc-logo.webp');
+    await expect.poll(() => bootLogo.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
     samples[theme] = await boot.evaluate(el => {
       const parse = value => { const match=String(value||'').match(/rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i); return match?[+match[1],+match[2],+match[3]]:null; };
       const luminance = rgb => rgb.map(v=>v/255).map(v=>v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4)).reduce((sum,v,i)=>sum+v*[.2126,.7152,.0722][i],0);
