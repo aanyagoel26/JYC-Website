@@ -9,6 +9,7 @@
 - Reduce gallery render churn by initializing `ResponsivePhoto` state against its current source and preserving fallback state when source props have not changed.
 - Add browser and source-contract regressions for malformed-manifest retry, service-worker routing, decoded no-JavaScript boot logo and redundant photo render prevention.
 - Normalize campus-linked URLs before applying the legacy-identity block list, and reject the old Sector-62 JYC LinkedIn/Instagram identity even when it appears in a website or alternate social field.
+- Let Playwright's configured webServer own the browser-test preview lifecycle instead of launching a second Vite preview from qa-browser, avoiding a redundant server and its memory/CPU overhead in CI.
 - Rotate package/lockfile release metadata and the service-worker cache namespace to V64.5.4.
 
 Validation note: source-level checks passed, but the exact current head still needs a successful full build and Playwright run. The most recent Vercel preview predates these final changes, and the Vercel deployment API returned HTTP 402 `api-deployments-free-per-day`; do not treat the earlier preview as proof of V64.5.4.
