@@ -221,6 +221,7 @@ Use restrained, purposeful motion: Dither Veil only for the official logo; magne
 
 ### Current release gate
 - Targeted cross-file source assertions pass for the shared loader, declarative image fallback, manifest eligibility, photo QA wiring, theme/hero/team design contracts and release metadata.
+- The latest focused review passed 29 cross-file source assertions covering the media pipeline, boot/Dither fallback, release metadata, theme/hero/team contracts and single-preview browser orchestration. Six additional positive/negative policy cases passed for the campus social URL normalizer (canonical JYC-128 identity accepted; blocked LinkedIn/Instagram/website aliases and non-128 campus rejected). These are source/function checks, not a production build or browser run.
 - **The malformed-payload browser test has not been executed successfully on the exact current head.** GitHub Actions has not provided usable runner steps/logs, and the Vercel deployment API previously rejected fresh deployments at the daily deployment limit. Do not call this a production pass until the exact head has a successful build and browser run.
 - The next useful design work is measurement-driven rather than adding more ambient animation: verify LCP/CLS/INP on a fresh preview, audit image bytes and decode sizes at mobile breakpoints, and keep high-cost WebGL/magnetic effects scoped to the hero mark and intentional Bento/cards. Keep any newly discovered hub/social profile campus-gated until an official source confirms it.
 
