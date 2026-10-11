@@ -12,6 +12,7 @@ const editorialHomeSource=fs.readFileSync('src/jyc-editorial-home.jsx','utf8');
 const homeCssSource=fs.readFileSync('src/jyc-editorial-home.css','utf8');
 const gallerySource=fs.readFileSync('src/jyc57-experience.jsx','utf8');
 const responsiveSource=fs.readFileSync('src/jyc-responsive-photo.jsx','utf8');
+const manifestLoaderSource=fs.readFileSync('src/jyc-image-manifest.js','utf8');
 const imageManifestSource=fs.readFileSync('scripts/generate-image-manifest.mjs','utf8');
 const auditedCategories=['clubs/abhivyakti','clubs/panache','clubs/cypherx','festivals/aakriti','gallery/campus-events'];
 const auditedExclusionIds=auditedCategories.flatMap(cat=>{
@@ -53,7 +54,7 @@ assert('curated featured overrides remain explicit',mediaSource.includes('const 
 assert('source gallery has maintained communities',JYC_SOURCE_MEDIA_STATS.maintainedCommunities>0);
 assert('source gallery is non-empty',gallery.length>0);
 assert('responsive runtime emits derivative URLs only after manifest-confirmed intrinsic dimensions',responsiveSource.includes('entry?.derivativesEligible===true')&&responsiveSource.includes('measured>0')&&responsiveSource.includes('derivativesEnabled&&intrinsicWidth>0?photoDerivativeUrls(src,intrinsicWidth):null')&&responsiveSource.includes('If the manifest is unavailable, keep the original source'));
-assert('responsive photo and gallery consumers revalidate the versioned manifest after deployments',responsiveSource.includes("fetch('/image-manifest.json',{cache:'no-cache'})")&&gallerySource.includes("fetch('/image-manifest.json',{cache:'no-cache'})")&&!responsiveSource.includes("cache:'force-cache'")&&!gallerySource.includes("cache:'force-cache'"));
+assert('responsive photo and gallery share one deployment-fresh manifest loader',manifestLoaderSource.includes("fetch('/image-manifest.json',{cache:'no-cache'})")&&responsiveSource.includes('loadJycImageManifest()')&&gallerySource.includes('loadJycImageManifest()')&&!responsiveSource.includes("fetch('/image-manifest.json'")&&!gallerySource.includes("fetch('/image-manifest.json'")&&!responsiveSource.includes("cache:'force-cache'")&&!gallerySource.includes("cache:'force-cache'"));
 assert('responsive photo manifest promise resets after transient HTTP or network failures',responsiveSource.includes("if(!response.ok)throw new Error('Image manifest unavailable')")&&responsiveSource.includes('catch(()=>{imageManifestPromise=null;return null})')&&browserSource.includes('responsive photo manifest retries after a transient request failure')&&browserSource.includes("await expect.poll(() => page.locator('.jyc57-gallery-page picture source').count()).toBeGreaterThan(0)"));
 assert('original image remains the format-compatibility fallback behind AVIF/WebP sources',responsiveSource.includes('const resolvedSrc=stage===0?src:activeFallback?candidates[stage-1]:undefined;')&&!responsiveSource.includes('variants?.webp?.at(-1)?.url||src'));
 assert('gallery opens in photography mode',galleryUiSource.includes("const [filter,setFilter]=useState('All'); const [role,setRole]=useState('All'); const [visual,setVisual]=useState('photo');"));
