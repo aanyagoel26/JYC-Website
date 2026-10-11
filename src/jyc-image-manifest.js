@@ -1,8 +1,10 @@
+import {isDerivativeDimensionEligible} from './jyc-photo-intelligence.js';
 // Shared, deployment-fresh image manifest loader for gallery metadata and responsive <picture> sources.
 let imageManifestPromise=null;
 
 const isRecord=value=>Boolean(value)&&typeof value==='object'&&!Array.isArray(value);
 const isSafeManifestAssetUrl=url=>typeof url==='string'&&url.startsWith('/assets/')&&!url.includes('..')&&!url.includes('\\')&&!/[?#\x00-\x1f\x7f]/.test(url)&&!/%(?:25|2e|2f|5c)/i.test(url);
+const isDerivativeManifestPath=url=>['/assets/source-archive/','/assets/hub-photos/','/assets/hub-photos-extra/','/assets/events/','/assets/home/','/assets/team/'].some(prefix=>url.startsWith(prefix));
 
 // Do not trust a non-empty `images` object alone: a stale/error page can still
 // return HTTP 200 JSON. Every advertised record must carry dimensions and the
@@ -16,6 +18,9 @@ export function isValidJycImageManifest(payload){
   const {width,height,aspectRatio:ratio}=entry;
   if(typeof width!=='number'||!Number.isInteger(width)||width<=0||typeof height!=='number'||!Number.isInteger(height)||height<=0||typeof ratio!=='number'||typeof entry.derivativesEligible!=='boolean')return false;
   if(!Number.isFinite(ratio)||Math.abs(ratio-Number((width/height).toFixed(5)))>0.000001)return false;
+  // A stale manifest can be valid JSON while still marking a banner, wordmark or tiny thumbnail as derivative-safe.
+  // Never trust a positive eligibility flag unless the URL is in an approved media folder and the dimensions are safe.
+  if(entry.derivativesEligible&&(!isDerivativeManifestPath(url)||!isDerivativeDimensionEligible(width,height)))return false;
   const orientation=width===height?'square':width>height?'landscape':'portrait';
   return entry.orientation===orientation;
  });
