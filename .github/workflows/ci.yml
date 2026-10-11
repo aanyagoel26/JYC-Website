@@ -41,7 +41,5 @@ jobs:
       - run: npm run qa:seo
       - run: npm run qa:v64-editorial
       - run: npm run qa:photo-intelligence
-      - name: Run production media optimizer
-        run: node scripts/optimize-production-media.mjs
       - name: Enforce production media/performance budget
         run: node scripts/qa-performance.mjs
