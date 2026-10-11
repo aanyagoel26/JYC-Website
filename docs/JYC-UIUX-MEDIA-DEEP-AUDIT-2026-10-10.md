@@ -1,5 +1,15 @@
 # JYC UI/UX, Photography & Source Audit — 11 October 2026
 
+## V64.5.5 follow-up — manifest schema integrity
+
+- The shared image-manifest loader now requires version 1, a non-empty plain-object `images` map, safe same-origin asset paths, positive integer intrinsic dimensions, an accurate five-decimal aspect ratio, a truthful orientation label, and an explicit boolean `derivativesEligible` value on every entry.
+- The service worker applies the same checks before caching a fresh manifest. It remains network-first and falls back to the last known-good cache only when the network request fails; cache-storage failures do not mask a successful response.
+- Photo integrity QA now includes valid and invalid schema fixtures. The Playwright malformed-manifest regression uses HTTP 200 with a non-empty but invalid image record, then checks that a later gallery mount retries and restores verified responsive sources.
+- Package and lockfile metadata, README release header, changelog, and service-worker cache namespace have been advanced to V64.5.5.
+
+**Evidence boundary:** these edits are committed to the PR branch, but the browser suite has not produced a usable green result and the current deployment preview must be checked against the new runtime commit. Production API configuration and custom-domain attachment/routing remain independent release blockers.
+
+
 ## Scope
 
 This audit covers the merged V64.5.0 design source and the follow-up `fix/media-fallback-state-rerender` V64.5.4 media/PWA reliability branch, its source-media pipeline, the supplied 2026–27 All Hubs PDFs, official public club profiles/sites, and the newest available Vercel preview metadata. It distinguishes source-level verification, HTTP asset probes, and tests actually executed in a browser.
