@@ -96,7 +96,7 @@ export function JYC57Gallery({data}){
  const [albums,setAlbums]=useState(JYC_SOURCE_ARCHIVE_ALBUMS),[imageManifest,setImageManifest]=useState({});
  const [selected,setSelected]=useState(null),[visibleCount,setVisibleCount]=useState(36),[zoom,setZoom]=useState(1),[copied,setCopied]=useState(false),[storyIndex,setStoryIndex]=useState(0);
  const dialogRef=useRef(null),triggerRef=useRef(null),touchStart=useRef(null),lastTap=useRef(0),shouldReduceMotion=useReducedMotion();
- useEffect(()=>{let alive=true;fetch('/image-manifest.json',{cache:'force-cache'}).then(r=>r.ok?r.json():null).then(payload=>{if(alive&&payload?.images)setImageManifest(payload.images)}).catch(()=>{});return()=>{alive=false}},[]);
+ useEffect(()=>{let alive=true;fetch('/image-manifest.json',{cache:'no-cache'}).then(r=>r.ok?r.json():null).then(payload=>{if(alive&&payload?.images)setImageManifest(payload.images)}).catch(()=>{});return()=>{alive=false}},[]);
  useEffect(()=>{let alive=true;supabase.from('jyc_media_albums').select('id,name,slug,cover_url,hero_url,narrative,description,scope_type,club_id,event_id').eq('is_published',true).order('created_at',{ascending:false}).then(({data:rows})=>{if(alive)setAlbums([...JYC_SOURCE_ARCHIVE_ALBUMS,...(rows||[])].reduce((acc,row)=>{if(!acc.some(x=>x.slug===row.slug))acc.push(row);return acc},[]))});return()=>{alive=false}},[]);
  const albumMatches=(g)=>{if(album==='All')return true;const key=String(g.albumId||g.album_id||'');const selectedAlbum=albums.find(a=>String(a.id)===String(album)||String(a.slug)===String(album));return key===String(selectedAlbum?.id||album)||String(g.album||g.albumSlug||'')===String(album)};
  const items=useMemo(()=>{
