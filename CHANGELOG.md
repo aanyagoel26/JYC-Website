@@ -1,5 +1,14 @@
 # Changelog
 
+## V64.5.5 — Strict image manifest validation and photo fallback safety
+
+- Validate manifest version, safe local asset paths, positive integer dimensions, truthful aspect ratios/orientation labels, and the derivative-eligibility flag before the shared loader accepts the manifest.
+- Make the service worker apply the same schema rules before caching image metadata; malformed non-empty JSON can no longer replace the last known-good offline manifest.
+- Expand photo-integrity checks with positive and negative schema fixtures, and strengthen the browser regression to return HTTP 200 with a non-empty but invalid manifest before confirming that a later gallery route retries and restores verified responsive sources.
+- Rotate package/lockfile release metadata and the service-worker cache namespace to V64.5.5 so clients install the hardened worker cleanly.
+
+Validation note: targeted source-contract assertions were updated, but full CI and Playwright results remain unconfirmed. Do not treat the PR as production-ready until the exact current head has a successful build, green browser/CI checks, and the production API/domain blockers listed in the audit are resolved.
+
 ## V64.5.4 — Network-first manifest recovery and offline boot reliability
 
 - Route `/image-manifest.json` through a service-worker network-first branch so page-level `cache: 'no-cache'` is not defeated by the generic cache-first handler; cache only non-empty, valid JSON manifests, await the cache write without masking a successful network response if Cache API storage fails, and retain the last known-good manifest only as an offline fallback.
