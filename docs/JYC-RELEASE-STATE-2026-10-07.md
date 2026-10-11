@@ -2,9 +2,9 @@
 
 ## Current source release
 
-- Package release: `64.5.7`
+- Package release: `64.5.8`
 - Current main commit: `ab3764ba19d3539b1428cb64956ef2cec01dfcfd`
-- Active media/photo reliability PR: [#196 — prevent guessed variants and unify photo fallbacks](https://github.com/kaustubhdua/JYC-Website/pull/196), branch `fix/media-fallback-state-rerender` (draft). The branch now contains current `main`; the GitHub API confirms it is mergeable, but release checks are still red/unusable.
+- Active media/photo reliability PR: [#196 — validate derivative eligibility and unify photo fallbacks](https://github.com/kaustubhdua/JYC-Website/pull/196), branch `fix/media-fallback-state-rerender` (draft). The branch now contains current `main`; the GitHub API confirms it is mergeable, but release checks are still red/unusable.
 - UI/media work: merged by pull request [#193 — identity-first UI, photo QA and GLB assistant fixes](https://github.com/kaustubhdua/JYC-Website/pull/193).
 - The source changes are merged into `main`; do not describe PR #193 as open.
 - Package version, lockfile version and service-worker cache namespace are synchronized.
@@ -78,3 +78,13 @@ The companion audit `docs/JYC-UIUX-MEDIA-DEEP-AUDIT-2026-10-10.md` now documents
 - GitHub Actions for the exact updated head still conclude failure before usable job steps or logs are returned. No full build or Playwright run is claimed.
 - A fresh Vercel preview deployment request for the exact head was blocked by the `api-deployments-free-per-day` limit (HTTP 402; retry after 24 hours). The latest READY preview predates the current PR head.
 - Custom production domains and `/api/jyc-updates` credentials remain independent release gates. Do not change DNS without verified domain ownership, and do not merge or label the release production-ready until exact-head build/browser evidence is available.
+
+## V64.5.8 follow-up — 11 October 2026
+
+- Normalized both the source URL and caller-supplied fallback URL. Empty/whitespace sources and blank fallback props now resolve to the official local JYC logo before rendering; no empty image URL can trigger a request for the current document.
+- Added a visible, accessible JYC identity placeholder after all image fallbacks fail, instead of leaving a blank or broken portrait/photo slot. The fallback remains in React state and does not mutate the DOM imperatively.
+- Rotated the service-worker cache namespace to `jyc-cache-v64-5-8`; package.json, package-lock, README, changelog and QA expectations are synchronized at V64.5.8.
+- Corrected the photo-intelligence contract that incorrectly expected a 600px source portrait to have no derivative; it now expects only the truthful 480px derivative. The photo QA also checks unsafe derivative eligibility in the runtime manifest loader and service worker.
+- Targeted source-contract checks: 23/23 photo/version/cache/fallback assertions and 18/18 design assertions passed. These validate source wiring and contract strings, not an executed build or Playwright run.
+- Exact-head GitHub Actions still fail before executing steps (`runner_id=0`, zero steps, no logs). The current branch remains mergeable but the PR stays draft until green checks are produced.
+- Vercel's exact-head preview request remains blocked by the daily deployment limit. The READY preview and its manifest are from another branch, so they are not proof that V64.5.8 is deployed or visually verified.
