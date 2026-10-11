@@ -6,6 +6,8 @@
 - Keep fallback URL normalization and the original-source retry when a generated derivative fails, before falling through to the contextual/JYC logo chain.
 - Refresh JAI 2026 registration deadline to 15 October 2026, 23:59 IST based on the current JYC-128 LinkedIn announcement and Unstop listing. The migration records provenance and preserves the authenticated editorial approval gate.
 - Add browser regression coverage for terminal image failures and the visible/accessible placeholder; update source-contract checks and the service-worker cache namespace to `jyc-cache-v64-5-9`.
+- Refresh the JYC Now fallback cards: surface the verified JAI registration deadline and explicitly flag conflicting RIDE Hack registration sources rather than presenting an uncertain status as verified.
+- Add dark-theme contrast overrides for JYC Now cards, filters, empty states and community spotlights, with reduced-motion-safe card hover behavior and a browser contrast regression.
 - Keep exact-head build/browser verification and production-domain/API checks as release blockers until CI and preview evidence is available.
 
 ## V64.5.8 — Accessible terminal image fallback
