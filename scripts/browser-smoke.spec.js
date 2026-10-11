@@ -852,6 +852,28 @@ test('responsive photo manifest retries after a transient request failure', asyn
 });
 
 
+
+test('responsive photo manifest retries after a successful but malformed payload', async ({ page }) => {
+  let attempts = 0;
+  await page.route('**/image-manifest.json', route => {
+    attempts += 1;
+    if (attempts === 1) {
+      return route.fulfill({ status: 200, contentType: 'application/json', body: '{}' });
+    }
+    return route.continue();
+  });
+
+  await page.goto(base + '/team', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'malformed image manifest payload');
+  await expect.poll(() => attempts).toBe(1);
+  await page.waitForTimeout(150);
+  await page.locator('a[href="/gallery"]').first().click();
+  await expect(page.locator('.jyc57-gallery-page')).toBeVisible();
+  await expect.poll(() => attempts).toBeGreaterThan(1);
+  await expect.poll(() => page.locator('.jyc57-gallery-page picture source[srcset]').count()).toBeGreaterThan(0);
+});
+
+
 test('responsive pictures recover when generated AVIF and WebP derivatives all fail', async ({ page }) => {
   const failedVariants = [];
   page.on('request', request => {
