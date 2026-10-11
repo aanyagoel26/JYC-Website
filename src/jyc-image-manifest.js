@@ -9,7 +9,7 @@ export function loadJycImageManifest(){
     return response.json();
    })
    .then(payload=>{
-    if(payload?.images&&typeof payload.images==='object')return payload;
+    if(payload?.images&&typeof payload.images==='object'&&!Array.isArray(payload.images)&&Object.keys(payload.images).length>0)return payload;
     imageManifestPromise=null;
     return null;
    })
