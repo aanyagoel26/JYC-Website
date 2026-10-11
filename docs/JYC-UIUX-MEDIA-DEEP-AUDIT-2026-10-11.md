@@ -4,7 +4,7 @@
 
 The V64.5.9 branch contains the identity-first homepage, React Bits Dither Veil using the official JYC logo, magnetic Bento interactions, team profile flip cards, themed search/More surfaces, responsive photo delivery, curated gallery/event/club identities, and a strict image-manifest pipeline. This audit adds a terminal image-failure state and refreshes the JAI registration deadline from the stale 10 October value to 15 October 2026, 23:59 IST.
 
-**This is not a production sign-off.** The latest READY Vercel preview located during this pass is an older V64.5.7 commit, not the current V64.5.9 head. GitHub Actions jobs for the current branch are failing before producing executable steps/logs, so no full build or Playwright pass can be claimed.
+**This is not a production sign-off.** The latest READY Vercel preview located during this pass is [jyc-website-5no2h8gpi](https://jyc-website-5no2h8gpi-jyc-website.vercel.app), commit `78755d0`, still V64.5.8—not the current V64.5.9 head. GitHub Actions jobs for the current branch are failing before producing executable steps/logs, so no full build or Playwright pass can be claimed.
 
 ## Work completed in this follow-up
 
