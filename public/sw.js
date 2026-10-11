@@ -9,10 +9,8 @@ const isValidImageManifest = (payload) => {
   if (!entries.length) return false;
   return entries.every(([url, entry]) => {
     if (!url.startsWith('/assets/') || url.includes('..') || url.includes('?') || url.includes('#') || !isRecord(entry)) return false;
-    const width = Number(entry.width);
-    const height = Number(entry.height);
-    const ratio = Number(entry.aspectRatio);
-    if (!Number.isInteger(width) || width <= 0 || !Number.isInteger(height) || height <= 0 || typeof entry.derivativesEligible !== 'boolean') return false;
+    const { width, height, aspectRatio: ratio } = entry;
+    if (typeof width !== 'number' || !Number.isInteger(width) || width <= 0 || typeof height !== 'number' || !Number.isInteger(height) || height <= 0 || typeof ratio !== 'number' || typeof entry.derivativesEligible !== 'boolean') return false;
     if (!Number.isFinite(ratio) || Math.abs(ratio - Number((width / height).toFixed(5))) > 0.000001) return false;
     const orientation = width === height ? 'square' : width > height ? 'landscape' : 'portrait';
     return entry.orientation === orientation;
