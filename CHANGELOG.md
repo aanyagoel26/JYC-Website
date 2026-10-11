@@ -4,11 +4,13 @@
 
 - Revalidate `/image-manifest.json` instead of forcing potentially stale cached metadata; responsive image candidates must match the current deployment's source dimensions and derivative eligibility.
 - Reset the shared manifest promise after transient HTTP/network/JSON failures so later photo mounts can retry rather than permanently disabling optimized sources for the entire page session.
+- Reject empty or malformed manifest payloads and reset the shared request promise, preventing a successful-but-invalid response from disabling responsive sources for the remainder of the session.
 - Remove two ultra-wide banner/wordmark assets from the Aakriti and Neural Nexus photo-card pools; retain their source material as visuals rather than cropping them as photographs.
 - Audit every unique hub photo-pool source with Sharp metadata and EXIF-oriented dimensions; fail media QA on missing/unreadable sources or banner-like aspect ratios.
 - Apply the same manifest cache policy to the gallery's archive dimension/crop metadata so a deployment cannot keep using a stale manifest for the lifetime of a cached page.
 - Add a Playwright regression that deliberately aborts generated AVIF/WebP requests and verifies the team portrait still decodes through a valid original or branded fallback.
 - Extend photo-integrity QA to guard both fresh manifest reads and derivative-failure recovery.
+- Add a browser regression that returns an HTTP 200 with an invalid manifest shape, then verifies the next gallery route retries the request and restores verified AVIF/WebP sources.
 - Bump the app release and service-worker cache namespace so returning clients fetch the updated photo behavior.
 
 Validation note: source contracts and asset availability checks are not a substitute for a green Playwright run. GitHub Actions has repeatedly failed before exposing runner steps/logs; the new browser regression still needs a successful run.
