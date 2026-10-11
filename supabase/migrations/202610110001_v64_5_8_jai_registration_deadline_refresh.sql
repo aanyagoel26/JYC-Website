@@ -9,7 +9,8 @@ update public.jyc_events
 set registration_deadline = '2026-10-15 23:59:00+05:30'
 where slug = 'jai-2026-jaypee-agentic-ai-hackathon'
   and registration_url is not null
-  and date = '2026-10-30';
+  and start_at >= '2026-10-30 00:00:00+05:30'::timestamptz
+  and start_at < '2026-10-31 00:00:00+05:30'::timestamptz;
 
 -- Refresh provenance without treating external evidence as authenticated JYC
 -- approval. The record remains review-gated until an authorised verifier signs off.
