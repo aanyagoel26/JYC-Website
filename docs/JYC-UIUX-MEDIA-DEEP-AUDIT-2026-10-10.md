@@ -203,3 +203,17 @@ Use restrained, purposeful motion: Dither Veil only for the official logo; magne
 
 ### Validation boundary
 - The source-level checks and browser regressions are committed to the existing draft PR. They have not been executed successfully on the exact updated head yet. A green source-contract assertion is not evidence that a production build, browser run or deployed preview passed.
+
+
+## Follow-up pass — malformed manifest recovery and release boundary (11 October 2026)
+
+### Additional failure mode found
+- A response could be HTTP 200 and valid JSON but still have an unusable schema (for example, `{}` or an empty `images` array). HTTP/network/JSON error handling alone would then cache a resolved-but-invalid promise for the rest of the page session.
+- `src/jyc-image-manifest.js` now accepts only a non-empty object at `payload.images`; invalid/empty payloads clear the shared promise and return `null`, allowing a later route mount to retry.
+- Added a browser regression that returns an HTTP 200 with a malformed manifest on the Team route, then navigates to Gallery and verifies a second request restores verified responsive image sources. The source-contract checks now guard this regression as well.
+- The shared loader still uses `cache: 'no-cache'`; gallery album/photo metadata and `ResponsivePhoto` source sets share the same request and cannot drift to separate stale snapshots.
+
+### Current release gate
+- Targeted cross-file source assertions pass for the shared loader, declarative image fallback, manifest eligibility, photo QA wiring, theme/hero/team design contracts and release metadata.
+- **The malformed-payload browser test has not been executed successfully on the exact current head.** GitHub Actions has not provided usable runner steps/logs, and the Vercel deployment API previously rejected fresh deployments at the daily deployment limit. Do not call this a production pass until the exact head has a successful build and browser run.
+- The next useful design work is measurement-driven rather than adding more ambient animation: verify LCP/CLS/INP on a fresh preview, audit image bytes and decode sizes at mobile breakpoints, and keep high-cost WebGL/magnetic effects scoped to the hero mark and intentional Bento/cards. Keep any newly discovered hub/social profile campus-gated until an official source confirms it.
