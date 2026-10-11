@@ -293,7 +293,7 @@
 }
 @media(prefers-reduced-motion:reduce){
  .jyc-home .jh-hero-logo,.jyc-home .jh-family,.jyc-home .jh-activity-card,.jyc-home .jh-event-list button,.jyc-home .jh-update-list button{animation:none;transition:none}
- .jyc57-page .jyc57-club-card,.jyc57-page .jyc57-club-card img,.jyc57-page .jyc57-event-card,.jyc57-page .jyc57-photo-card,.team-member-flip .flip-card__inner{transition:none;transform:none!important}
+ .jyc57-page .jyc57-club-card,.jyc57-page .jyc57-club-card img,.jyc57-page .jyc57-event-card,.jyc57-page .jyc57-photo-card{transition:none;transform:none!important}\n .team-member-flip .flip-card__inner{transition:none!important}
 }
 
 
