@@ -175,7 +175,7 @@ export function LivingPhoto({items=[],seed=0,interval=6000,className='',altFallb
         <button type="button" onClick={()=>setPaused(v=>!v)} aria-pressed={paused} aria-label={paused?'Resume automatic photo transition':'Pause automatic photo transition'}>{paused?'▶':'Ⅱ'}</button>
         <button type="button" onClick={()=>advance(1)} aria-label="Next related photograph">›</button>
       </div>
-      {error&&<span className="jyc-living-photo-status" role="status">Photo transition unavailable — staying on this frame.</span>}
+      {error&&<span className="jyc-living-photo-status" role="status">A photo could not load; the current image or official JYC mark remains in place.</span>}
     </div>
   </div>;
 }
