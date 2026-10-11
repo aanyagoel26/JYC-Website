@@ -16,7 +16,7 @@ const IMAGE_MIME_BY_EXTENSION = Object.freeze({
   '.png': 'image/png', '.svg': 'image/svg+xml', '.webp': 'image/webp'
 });
 const isExpectedImageResponse = (pathname, response) => {
-  const extension = pathname.match(/\\.[^.]+$/)?.[0]?.toLowerCase();
+  const extension = pathname.match(/\.[^.]+$/)?.[0]?.toLowerCase();
   const expected = IMAGE_MIME_BY_EXTENSION[extension];
   if (!expected) return true;
   const actual = (response.headers.get('content-type') || '').split(';')[0].trim().toLowerCase();
