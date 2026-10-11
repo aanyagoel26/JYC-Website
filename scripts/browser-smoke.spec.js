@@ -748,6 +748,17 @@ test('homepage hero uses the official JYC logo through Dither Veil without a con
   expect(overflow).toBe(false);
 });
 
+
+test('Dither Veil keeps the official logo visible when AVIF is unavailable', async ({ page }) => {
+  await page.route('**/assets/jyc-logo.avif', route => route.abort('failed'));
+  await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'Dither logo format fallback');
+  const fallback = page.locator('.jh-dither-mark .dither-veil__fallback');
+  await expect(fallback).toHaveAttribute('src', '/assets/jyc-logo.webp');
+  await expect.poll(() => fallback.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+});
+
+
 test('search and More sheets keep their surfaces readable in light and dark themes', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.goto(base + '/clubs', { waitUntil: 'domcontentloaded' });
