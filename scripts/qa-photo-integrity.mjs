@@ -3,9 +3,15 @@ import path from 'node:path';
 import sharp from 'sharp';
 import {JYC_SOURCE_MEDIA_STATS,mergeSourceGallery,sourceEventMedia,sourceHubMedia,buildJycMediaManifest,JYC_SOURCE_ARCHIVE_PHOTO_ITEMS,JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS} from '../src/jyc-source-media.js';
 import {isDerivativeDimensionEligible,orientedImageDimensions,parseImageDimensions} from '../src/jyc-photo-intelligence.js';
+import {isValidJycImageManifest} from '../src/jyc-image-manifest.js';
 import {JYC_HUB_CONTENT} from '../src/v21-hub-content.js';
 
 const assert=(name,ok,detail='')=>{console.log((ok?'PASS: ':'FAIL: ')+name+(detail?' — '+detail:''));if(!ok)process.exitCode=1};
+const validManifestFixture={version:1,images:{'/assets/example.webp':{width:960,height:640,aspectRatio:1.5,orientation:'landscape',derivativesEligible:true}}};
+assert('image manifest schema accepts a valid intrinsic-dimension record',isValidJycImageManifest(validManifestFixture));
+assert('image manifest schema rejects missing version, empty lists and non-object images',!isValidJycImageManifest({images:validManifestFixture.images})&&!isValidJycImageManifest({version:1,images:{}})&&!isValidJycImageManifest({version:1,images:[]}));
+assert('image manifest schema rejects non-positive dimensions and malformed aspect ratios',!isValidJycImageManifest({version:1,images:{'/assets/bad.webp':{width:0,height:640,aspectRatio:0,orientation:'landscape',derivativesEligible:true}}})&&!isValidJycImageManifest({version:1,images:{'/assets/bad.webp':{width:960,height:640,aspectRatio:9,orientation:'landscape',derivativesEligible:true}}}));
+assert('image manifest schema rejects unsafe URLs and false orientation labels',!isValidJycImageManifest({version:1,images:{'/assets/../secret.webp':validManifestFixture.images['/assets/example.webp']}})&&!isValidJycImageManifest({version:1,images:{'/assets/bad.webp':{...validManifestFixture.images['/assets/example.webp'],orientation:'portrait'}}}));
 const mediaSource=fs.readFileSync('src/jyc-source-media.js','utf8');
 const hubPresentationSource=fs.readFileSync('src/pdf-hub-content.js','utf8');
 const mainSource=fs.readFileSync('src/main.jsx','utf8');
