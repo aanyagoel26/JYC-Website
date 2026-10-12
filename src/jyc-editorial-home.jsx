@@ -1,14 +1,27 @@
 import React, { Suspense, lazy, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { JYC_HUB_CONTENT, JYC_HUB_FAMILIES } from './v21-hub-content.js';
-import { sourceEventMedia } from './jyc-source-media.js';
+import { sourceEventMedia, sourceHubMedia } from './jyc-source-media.js';
+import { teamPhotoFor } from './jyc-team-media.js';
+import { rankDiverseJycPhotos } from './jyc-photo-intelligence.js';
 import { ResponsivePhoto } from './jyc-responsive-photo.jsx';
 import { JYCSpotlight } from './jyc-spotlight.jsx';
+import { JYCNowStrip } from './jyc-now.jsx';
 const LazyDitherVeil = lazy(() => import('./react-bits/DitherVeil.jsx'));
+const LazyMagicBento = lazy(() => import('./components/react-bits/MagicBento.jsx'));
 import './jyc-editorial-home.css';
 
-const FALLBACK = '/jyc-logo-official.webp';
-const DITHER_SOURCE = '/jyc-logo-official.webp';
+const ORIGINAL_LOGO = '/JYC%20Logo(4).png';
+const FALLBACK = import.meta.env.PROD ? '/assets/jyc-logo.webp' : ORIGINAL_LOGO;
+const DITHER_SOURCE = import.meta.env.PROD ? '/assets/jyc-logo.avif' : FALLBACK;
+const handleHeroLogoFallback = event => {
+  const image = event.currentTarget;
+  const candidates = [FALLBACK, ORIGINAL_LOGO];
+  let next = Number(image.dataset.logoFallbackStage || 0);
+  while (next < candidates.length && new URL(candidates[next], window.location.href).href === image.src) next += 1;
+  if (next < candidates.length) { image.dataset.logoFallbackStage = String(next + 1); image.src = candidates[next]; }
+  else image.hidden = true;
+};
 
 const slug = v => String(v || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const eventPath = e => `/events/${slug(e?.slug||e?.title)}`;
@@ -55,8 +68,7 @@ const PILLARS = [
     title: 'Technical & Innovation',
     tag: 'AI · ROBOTICS · CP · WEB · CYBERSEC',
     desc: 'Hackathons, open-source dev-sprints, AI research, and combat robotics across OSDC, Knuth, CICR, GDG & uCR.',
-    icon: '⚡',
-    count: '10 Hubs'
+    icon: '⚡'
   },
   {
     id: 'cultural',
@@ -64,8 +76,7 @@ const PILLARS = [
     title: 'Cultural & Performing Arts',
     tag: 'DRAMATICS · DANCE · BANDS · CLASSICAL',
     desc: 'Street play, stage dramatics, western & classical dance, and live acoustics with Abhivyakti, Jhankaar, Fortissmo & Crescendo.',
-    icon: '🎭',
-    count: '5 Societies'
+    icon: '🎭'
   },
   {
     id: 'literary',
@@ -73,17 +84,15 @@ const PILLARS = [
     title: 'Literary, MUN & Speaking',
     tag: 'DEBATES · QUIZZING · MUN · WRITING',
     desc: 'Parliamentary debates, National Model United Nations, literary journals, and inter-college quiz championships.',
-    icon: '🖋️',
-    count: '3 Societies'
+    icon: '🖋️'
   },
   {
     id: 'fests',
     family: 'Flagship',
     title: 'Flagship Campus Fests',
     tag: 'CONVERGE · DRON-O-WAR · INDUCTION',
-    desc: 'Annual multi-day festivals uniting thousands of students across North India for competition and celebrated headliners.',
-    icon: '🎪',
-    count: '7 Flagships'
+    desc: 'Campus festivals, showcases, competitions and student-led experiences throughout the academic year.',
+    icon: '🎪'
   },
   {
     id: 'sports',
@@ -91,8 +100,7 @@ const PILLARS = [
     title: 'Sports & Athletics',
     tag: 'CRICKET · FOOTBALL · BASKETBALL · CHESS',
     desc: 'High-intensity athletic tournaments, intra-college leagues, table tennis, badminton, and outdoor sports championships.',
-    icon: '🏆',
-    count: '5 Arenas'
+    icon: '🏆'
   },
   {
     id: 'creative',
@@ -100,13 +108,52 @@ const PILLARS = [
     title: 'Media, Design & Outreach',
     tag: 'UI/UX · GRAPHICS · PHOTO · SOCIAL',
     desc: 'Visual arts, graphic design, photography, campus coverage, community service, and youth social outreach.',
-    icon: '🎨',
-    count: '4 Hubs'
+    icon: '🎨'
   }
 ];
 
+function LazyActivityBento({ activities, nav }) {
+  const rootRef = useRef(null);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    const root = rootRef.current;
+    if (!root) return;
+    if (typeof IntersectionObserver === 'undefined') {
+      setReady(true);
+      return;
+    }
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        setReady(true);
+        observer.disconnect();
+      }
+    }, { rootMargin:'360px 0px' });
+    observer.observe(root);
+    return () => observer.disconnect();
+  }, []);
+
+  return <div ref={rootRef} className="jh-activity-bento-shell" aria-label="Explore JYC activities">
+    {ready
+      ? <Suspense fallback={<div className="jh-bento-loading" role="status">Loading activity discovery…</div>}>
+          <LazyMagicBento items={activities} enableMagnetism={true} enableTilt={true} enableStars={false} enableSpotlight={true} enableBorderGlow={false} particleCount={0} onNavigate={nav} glowColor="191,156,111" />
+        </Suspense>
+      : <div className="jh-bento-loading" aria-hidden="true">
+          {activities.map(activity => <div key={activity.id} className="jh-bento-loading-card"><span>{activity.label}</span><strong>{activity.title}</strong><p>{activity.description}</p></div>)}
+        </div>}
+  </div>;
+}
+
 export function JYCEditorialHome({ data }) {
   const nav = useNavigate();
+  const activities = useMemo(() => {
+    const photoHubs = { technical: 'CICR', cultural: 'VamUnique', literary: 'Eloquence', fests: 'Aakriti', sports: 'Sports', creative: 'Aura' };
+    return PILLARS.map(p => {
+      const source = sourceHubMedia(photoHubs[p.id]);
+      const image = source.photoItems.find(item => item?.url)?.url || '';
+      return { id:p.id, label:p.family.toUpperCase(), title:p.title, description:p.desc, href:p.id === 'fests' ? '/events' : '/clubs', image };
+    });
+  }, []);
   const events = useMemo(() => Array.isArray(data?.events) ? data.events.filter(e => e?.published && !e?.archived).slice().sort((a, b) => dateMs(a) - dateMs(b)) : [], [data?.events]);
   const today = useMemo(() => { const d = new Date(); d.setHours(0, 0, 0, 0); return d.getTime(); }, []);
   const upcoming = events.filter(e => { const t = dateMs(e); return Number.isFinite(t) && t >= today; }).slice(0, 4);
@@ -115,52 +162,20 @@ export function JYCEditorialHome({ data }) {
   const featuredRegistration = registrationState(featured);
 
   const photoStories = useMemo(() => {
-    const defaultFlagships = [
-      { id: 'flag-converge', url: '/assets/events/converge-2026.webp', association: 'Converge Fest', year: '2026', caption: 'Converge 2026 · Annual Cultural & Technical Flagship Fest' },
-      { id: 'flag-jai', url: '/assets/events/jai-2026.webp', association: 'JAI Summit', year: '2026', caption: 'JAI · Jaypee Agentic AI International Hackathon' },
-      { id: 'flag-drono', url: '/assets/home/dron-o-war-1.webp', association: 'Dron-O-War', year: '2026', caption: 'Dronotics & CICR · National Combat Robotics Championship' },
-      { id: 'flag-ebullience', url: '/assets/home/ebullience.webp', association: "Ebullience '25", year: '2025', caption: "Ebullience · Fresher's Induction & Stage Arts" },
-      { id: 'flag-sports', url: '/assets/hub-photos/sports-02.webp', association: 'Kshitij Sports', year: '2026', caption: 'JSA · Annual Campus Sports & Football Championship' },
-      { id: 'flag-dance', url: '/assets/hub-photos/vamunique-02.webp', association: 'VamUnique Dance', year: '2026', caption: 'VamUnique · Classical & Contemporary Performing Arts' },
-    ];
     const items = Array.isArray(data?.gallery) ? data.gallery : [];
     const seen = new Set();
     const selected = [];
-    for (const item of items) {
+    for (const item of rankDiverseJycPhotos(items, { limit: items.length, maxPerAssociation: 1 })) {
       const url = String(item?.url || '').trim();
       const association = String(item?.association || item?.albumName || '').trim();
-      if (!url || !association || item?.published === false || item?.archived === true || seen.has(association.toLowerCase())) continue;
+      const role = String(item?.role || '').toLowerCase();
+      if (!url || !association || item?.mediaKind !== 'photo' || !['event','club'].includes(role) || item?.published === false || item?.archived === true || /jyc archive|source archive/i.test(association) || seen.has(association.toLowerCase())) continue;
       seen.add(association.toLowerCase());
       selected.push({ ...item, association });
-      if (selected.length === 6) break;
+      if (selected.length === 3) break;
     }
-    return selected.length >= 4 ? selected : defaultFlagships;
+    return selected;
   }, [data?.gallery]);
-
-  const [countdown, setCountdown] = useState(() => {
-    const target = new Date('2026-11-15T09:00:00+05:30').getTime();
-    const diff = Math.max(0, target - Date.now());
-    return {
-      days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-      hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-      mins: Math.floor((diff / 1000 / 60) % 60),
-      secs: Math.floor((diff / 1000) % 60),
-    };
-  });
-
-  useEffect(() => {
-    const target = new Date('2026-11-15T09:00:00+05:30').getTime();
-    const timer = setInterval(() => {
-      const diff = Math.max(0, target - Date.now());
-      setCountdown({
-        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
-        mins: Math.floor((diff / 1000 / 60) % 60),
-        secs: Math.floor((diff / 1000) % 60),
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
 
   const handleSpotlight = e => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -168,47 +183,26 @@ export function JYCEditorialHome({ data }) {
     e.currentTarget.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
   };
 
-  const handleCardTilt = e => {
-    handleSpotlight(e);
-    const card = e.currentTarget;
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left - rect.width / 2;
-    const y = e.clientY - rect.top - rect.height / 2;
-    const rotX = (y / (rect.height / 2)) * -5;
-    const rotY = (x / (rect.width / 2)) * 5;
-    card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.01, 1.01, 1.01)`;
-  };
 
-  const resetCardTilt = e => {
-    e.currentTarget.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-  };
 
   return (
     <main className="jyc-editorial-home jyc-home">
-      {/* AMBIENT CYBER BACKDROP */}
-      <div className="jh-ambient-backdrop" aria-hidden="true">
-        <div className="jh-ambient-orb jh-ambient-orb-1" />
-        <div className="jh-ambient-orb jh-ambient-orb-2" />
-        <div className="jh-ambient-orb jh-ambient-orb-3" />
-        <div className="jh-ambient-grid" />
-      </div>
-
       {/* HERO SECTION */}
       <section className="jh-hero" aria-labelledby="jh-title">
         <div className="jh-hero-copy">
           <div className="jh-cyber-badge">
             <span className="jh-live-pulse-dot" />
-            <span>JIIT YOUTH CLUB · SECTOR 128 NOIDA</span>
+            <span>THE JIIT 128 COMMUNITY</span>
             <b>AY 2026–27</b>
           </div>
           <p className="jh-overline">JAYPEE INSTITUTE OF INFORMATION TECHNOLOGY · WISH TOWN</p>
           <h1 id="jh-title">
-            <span>THE VOICE.</span>
-            <span>THE TALENT.</span>
-            <em className="jh-title-gradient">THE SPIRIT OF JIIT.</em>
+            <span>Find your people.</span>
+            <span>Make your mark.</span>
+            <em className="jh-title-gradient">At JIIT 128.</em>
           </h1>
           <p className="jh-lead">
-            The student-powered body uniting 23+ hubs, technical societies, flagship fests, cultural arts, and athletic excellence at JIIT Sector 128.
+            From clubs and competitions to performances, projects and campus traditions, JYC helps you find the people and experiences that make JIIT feel like yours.
           </p>
           <div className="jh-actions jh-hero-actions">
             <button type="button" className="jh-btn jh-btn-primary" onClick={() => nav('/events')}>
@@ -222,60 +216,7 @@ export function JYCEditorialHome({ data }) {
             </button>
           </div>
 
-          {/* LIVE STATS STRIP */}
-          <div className="jh-hero-stats-row">
-            <div className="jh-stat-item" onMouseMove={handleSpotlight}>
-              <strong>23<i>+</i></strong>
-              <span>Hubs & Societies</span>
-            </div>
-            <div className="jh-stat-item" onMouseMove={handleSpotlight}>
-              <strong>50<i>+</i></strong>
-              <span>Annual Events</span>
-            </div>
-            <div className="jh-stat-item" onMouseMove={handleSpotlight}>
-              <strong>5,000<i>+</i></strong>
-              <span>Students Reached</span>
-            </div>
-            <div className="jh-stat-item" onMouseMove={handleSpotlight}>
-              <strong>15<i>+</i></strong>
-              <span>Years Legacy</span>
-            </div>
-          </div>
 
-          {/* FLAGSHIP COUNTDOWN HUD */}
-          <div className="jh-flagship-countdown-strip" onMouseMove={handleSpotlight}>
-            <div className="jh-countdown-label">
-              <span className="jh-live-pulse-dot" />
-              <div>
-                <small>CAMPUS FLAGSHIP COUNTDOWN</small>
-                <strong>CONVERGE '26 &amp; DRON-O-WAR</strong>
-              </div>
-            </div>
-            <div className="jh-countdown-timer">
-              <div className="jh-timer-segment">
-                <b>{String(countdown.days).padStart(2, '0')}</b>
-                <span>DAYS</span>
-              </div>
-              <span className="jh-timer-sep">:</span>
-              <div className="jh-timer-segment">
-                <b>{String(countdown.hours).padStart(2, '0')}</b>
-                <span>HOURS</span>
-              </div>
-              <span className="jh-timer-sep">:</span>
-              <div className="jh-timer-segment">
-                <b>{String(countdown.mins).padStart(2, '0')}</b>
-                <span>MINS</span>
-              </div>
-              <span className="jh-timer-sep">:</span>
-              <div className="jh-timer-segment">
-                <b>{String(countdown.secs).padStart(2, '0')}</b>
-                <span>SECS</span>
-              </div>
-            </div>
-            <button type="button" className="jh-countdown-cta" onClick={() => nav('/events')}>
-              Lineup ↗
-            </button>
-          </div>
         </div>
 
         {/* HERO DITHERVEIL VISUAL PLAQUE */}
@@ -284,25 +225,24 @@ export function JYCEditorialHome({ data }) {
           <div className="jh-hero-logo-plaque">
             <span className="jh-logo-halo" aria-hidden="true" />
             <div className="jh-dither-mark" role="img" aria-label="Official JIIT Youth Club 128 logo with an interactive Dither Veil effect">
-              <Suspense fallback={
-                <img className="jh-hero-logo" src={FALLBACK} alt="JYC Official Logo" loading="eager" fetchPriority="high" decoding="async" />
-              }>
+              <Suspense fallback={<img className="jh-hero-logo jh-dither-suspense-fallback" src={DITHER_SOURCE} alt="" aria-hidden="true" loading="eager" fetchPriority="high" decoding="async" onError={handleHeroLogoFallback} />}>
                 <LazyDitherVeil
                   src={DITHER_SOURCE}
                   fallbackSrc={FALLBACK}
+                  originalFallbackSrc={ORIGINAL_LOGO}
                   fit="contain"
                   pattern="floyd"
                   pixelSize={2}
                   levels={3}
                   palette="duotone"
-                  inkColor="#050a14"
-                  paperColor="#f8fafc"
+                  inkColor="#18161d"
+                  paperColor="#fffdf8"
                   contrast={1.25}
                   brightness={0.04}
                   revealRadius={250}
                   softness={0.7}
                   linger={1.2}
-                  rimColor="#38bdf8"
+                  rimColor="#a82420"
                   rim={0.28}
                   wander={false}
                   clickBurst={true}
@@ -312,108 +252,96 @@ export function JYCEditorialHome({ data }) {
             </div>
             <div className="jh-plaque-footer">
               <span className="jh-logo-caption">JIIT YOUTH CLUB <b>·</b> 128</span>
-              <span className="jh-status-live-tag">● ONLINE</span>
+              <span className="jh-status-live-tag">OFFICIAL MARK</span>
             </div>
           </div>
-          <span className="jh-photo-label">JYC 128 / APEX HUB</span>
+          <span className="jh-photo-label">JYC 128 / CAMPUS COMMUNITY</span>
           <span className="jh-photo-index">01 — IDENTITY</span>
         </div>
       </section>
 
-      {/* 3D SPATIAL ASSISTANT SHOWCASE */}
-      <section className="jh-assistant-spotlight jh-container">
-        <div className="jh-assistant-spotlight-card" onMouseMove={handleCardTilt} onMouseLeave={resetCardTilt}>
-          <div className="jh-assistant-visual">
-            <model-viewer
-              className="jh-assistant-3d-model"
-              src="/models/jyc-spatial.glb"
-              poster="/JYC%20Logo(4).png"
-              camera-orbit="0deg 75deg auto"
-              auto-rotate
-              rotation-per-second="22deg"
-              loading="lazy"
-              reveal="auto"
-              disable-zoom
-              disable-pan
-              interaction-prompt="none"
-              shadow-intensity="0.5"
-              shadow-softness="0.8"
-              exposure="1.15"
-              alt="Interactive 3D JYC spatial figure"
-            ></model-viewer>
-            <div className="jh-assistant-badge-live">
-              <span className="jh-live-pulse-dot" />
-              <span>3D SPATIAL AGENT</span>
-            </div>
-            <div className="jh-assistant-soundwave" aria-hidden="true">
-              <span/><span/><span/><span/><span/><span/><span/><span/>
-            </div>
-          </div>
-          <div className="jh-assistant-info">
-            <div className="jh-section-number">AI INTELLIGENCE · CAMPUS COMPANION</div>
-            <h2>Got questions? Meet the<br /><em className="jh-title-gradient">JYC Spatial Assistant.</em></h2>
-            <p>
-              Navigate all 23 societies, find upcoming hackathons, check registration deadlines, or learn about faculty advisors and student coordinators.
-            </p>
-            <div className="jh-assistant-prompts">
-              <button type="button" onClick={() => { const btn = document.querySelector('.jyc-bot-orb'); if (btn) btn.click(); }}>
-                ⚡ Explore Upcoming Hackathons
-              </button>
-              <button type="button" onClick={() => { const btn = document.querySelector('.jyc-bot-orb'); if (btn) btn.click(); }}>
-                🏆 Converge &amp; Dron-O-War Dates
-              </button>
-              <button type="button" onClick={() => { const btn = document.querySelector('.jyc-bot-orb'); if (btn) btn.click(); }}>
-                👥 Meet Apex Student Leadership
-              </button>
-              <button type="button" onClick={() => { const btn = document.querySelector('.jyc-bot-orb'); if (btn) btn.click(); }}>
-                🎯 Which society matches my domain?
-              </button>
+      {/* V1 EDITORIAL INTRO: context before the discovery content. */}
+      <section className="jh-about-editorial jh-container" aria-labelledby="jh-about-title">
+        <div className="jh-about-kicker">01 / MORE THAN A CLUB DIRECTORY</div>
+        <div className="jh-about-editorial-grid">
+          <h2 id="jh-about-title">A campus is made<br /><em>by the people in it.</em></h2>
+          <div className="jh-about-editorial-copy">
+            <p>JIIT Youth Club brings student communities together across technology, culture, performance, service and sport. Find the people, projects and experiences that make campus life feel like yours.</p>
+            <div className="jh-about-editorial-actions">
+              <button type="button" className="jh-text-link" onClick={() => nav('/about')}>How JYC works <span>↗</span></button>
+              <button type="button" className="jh-text-link" onClick={() => nav('/clubs')}>Explore communities <span>↗</span></button>
             </div>
           </div>
         </div>
       </section>
+
+      {photoStories.length > 0 && (
+        <section className="jh-photo-story jh-container" aria-labelledby="jh-photo-story-title">
+          <div className="jh-photo-story-head">
+            <div>
+              <div className="jh-section-number">02 / CAMPUS LIFE IN FRAME</div>
+              <h2 id="jh-photo-story-title">Campus life,<br /><em className="jh-title-gradient">as it happened.</em></h2>
+            </div>
+            <div className="jh-photo-story-intro">
+              <p>From packed stages to the moments between them — real photographs from JYC clubs, events and campus life.</p>
+              <button type="button" className="jh-text-link" onClick={() => nav('/gallery')}>
+                Open full gallery <span>↗</span>
+              </button>
+            </div>
+          </div>
+          <div className={`jh-photo-story-grid ${photoStories.length === 3 ? 'has-three' : 'has-fewer'}`}>
+            {photoStories.map((story, index) => (
+              <button
+                type="button"
+                className={`jh-story-card jh-story-card-${index + 1}`}
+                key={story.id || story.url}
+                onClick={() => nav('/gallery')}
+                onMouseMove={handleSpotlight}
+                aria-label={`Explore ${story.association} photography in the JYC gallery`}
+              >
+                <ResponsivePhoto
+                  className="jh-story-photo"
+                  src={story.url}
+                  alt={story.alt || story.caption || `${story.association} photography`}
+                  loading="lazy"
+                  decoding="async"
+                  sizes={index === 0 ? '(max-width: 760px) 100vw, 58vw' : '(max-width: 760px) 100vw, 34vw'}
+                  fallbackSrc={FALLBACK}
+                  fallbackAlt="Official JYC logo placeholder; photograph unavailable"
+                />
+                <span className="jh-story-shade" aria-hidden="true" />
+                <span className="jh-story-copy">
+                  <small>{story.year || 'JYC ARCHIVE'} <i>·</i> {story.association}</small>
+                  <strong>{story.caption || story.association}</strong>
+                  <b>Explore album <span aria-hidden="true">↗</span></b>
+                </span>
+                <span className="jh-story-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* PILLARS / WHAT JYC DOES BENTO GRID */}
       <section className="jh-pillars-section jh-container">
         <div className="jh-section-head">
           <div>
-            <div className="jh-section-number">01 / WHAT WE DO</div>
-            <h2>Built for builders, creators<br /><em className="jh-title-gradient">&amp; performers.</em></h2>
+            <div className="jh-section-number">03 / FIND YOUR PEOPLE</div>
+            <h2>Find your kind<br /><em className="jh-title-gradient">of people.</em></h2>
           </div>
           <button type="button" className="jh-text-link" onClick={() => nav('/clubs')}>
             Explore all 23 societies <span>↗</span>
           </button>
         </div>
-        <div className="jh-pillars-bento">
-          {PILLARS.map(p => (
-            <article
-              key={p.id}
-              className={`jh-pillar-card jh-pillar-${p.id}`}
-              onClick={() => nav(p.id === 'fests' ? '/events' : `/clubs`)}
-              onMouseMove={handleSpotlight}
-            >
-              <div className="jh-pillar-head">
-                <span className="jh-pillar-icon">{p.icon}</span>
-                <span className="jh-pillar-count">{p.count}</span>
-              </div>
-              <span className="jh-pillar-tag">{p.tag}</span>
-              <h3>{p.title}</h3>
-              <p>{p.desc}</p>
-              <div className="jh-pillar-footer">
-                <span>Explore Communities</span>
-                <b aria-hidden="true">↗</b>
-              </div>
-            </article>
-          ))}
-        </div>
+        <LazyActivityBento activities={activities} nav={nav} />
       </section>
 
       {/* FEATURED & UPCOMING EVENTS */}
       <section className="jh-container jh-events">
         <div className="jh-section-head">
           <div>
-            <div className="jh-section-number">02 / WHAT’S NEXT</div>
-            <h2>Upcoming flagship<br /><em className="jh-title-gradient">campus experiences.</em></h2>
+            <div className="jh-section-number">04 / WHAT’S HAPPENING</div>
+            <h2>Next up at<br /><em className="jh-title-gradient">JIIT 128.</em></h2>
           </div>
           <button type="button" className="jh-text-link" onClick={() => nav('/events')}>
             View event directory <span>↗</span>
@@ -430,6 +358,7 @@ export function JYCEditorialHome({ data }) {
                 decoding="async"
                 sizes="(max-width: 680px) 100vw, 50vw"
                 fallbackSrc={FALLBACK}
+                fallbackAlt="Official JYC logo placeholder; event media unavailable"
               />
               <span className="jh-featured-badge">FEATURED EXPERIENCE</span>
             </div>
@@ -472,64 +401,23 @@ export function JYCEditorialHome({ data }) {
         )}
       </section>
 
+      {/* Editorial update feed: source-linked updates instead of invented activity counters. */}
+      <JYCNowStrip limit={3} compact={false} />
+
       {/* LIVING JYC SPOTLIGHT */}
       <JYCSpotlight data={data} />
 
       {/* REAL MOMENTS & VISUAL ARCHIVE */}
-      {photoStories.length > 0 && (
-        <section className="jh-photo-story jh-container" aria-labelledby="jh-photo-story-title">
-          <div className="jh-photo-story-head">
-            <div>
-              <div className="jh-section-number">03 / EVENT MEMORIES</div>
-              <h2 id="jh-photo-story-title">From the visual<br /><em className="jh-title-gradient">JYC record.</em></h2>
-            </div>
-            <div className="jh-photo-story-intro">
-              <p>People, performances, competitions, and memories from the moments that make JIIT vibrant.</p>
-              <button type="button" className="jh-text-link" onClick={() => nav('/gallery')}>
-                Open full gallery <span>↗</span>
-              </button>
-            </div>
-          </div>
-          <div className={`jh-photo-story-grid ${photoStories.length === 3 ? 'has-three' : 'has-fewer'}`}>
-            {photoStories.map((story, index) => (
-              <button
-                type="button"
-                className={`jh-story-card jh-story-card-${index + 1}`}
-                key={story.id || story.url}
-                onClick={() => nav('/gallery')}
-                onMouseMove={handleSpotlight}
-                aria-label={`Explore ${story.association} photography in the JYC gallery`}
-              >
-                <ResponsivePhoto
-                  className="jh-story-photo"
-                  src={story.url}
-                  alt={story.alt || story.caption || `${story.association} photography`}
-                  loading="lazy"
-                  decoding="async"
-                  sizes={index === 0 ? '(max-width: 760px) 100vw, 58vw' : '(max-width: 760px) 100vw, 34vw'}
-                  fallbackSrc={FALLBACK}
-                />
-                <span className="jh-story-shade" aria-hidden="true" />
-                <span className="jh-story-copy">
-                  <small>{story.year || 'JYC ARCHIVE'} <i>·</i> {story.association}</small>
-                  <strong>{story.caption || story.association}</strong>
-                  <b>Explore album <span aria-hidden="true">↗</span></b>
-                </span>
-                <span className="jh-story-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
+
 
       {/* LEADERSHIP & APEX BODY */}
       <section className="jh-community">
         <div className="jh-container jh-community-grid">
           <div className="jh-community-copy">
-            <div className="jh-section-number">04 / STUDENT LEADERSHIP</div>
-            <h2>Built by students.<br /><em className="jh-title-gradient">Led with purpose.</em></h2>
+            <div className="jh-section-number">05 / THE PEOPLE BEHIND IT</div>
+            <h2>The people<br /><em className="jh-title-gradient">behind JYC.</em></h2>
             <p>
-              Faculty guidance, apex student coordinators, committee heads, and society presidents form the operational leadership of JYC Sector 128.
+              Meet the student team coordinating JYC's clubs, events and campus communities.
             </p>
             <div className="jh-actions">
               <button type="button" className="jh-btn jh-btn-primary" onClick={() => nav('/team')}>
@@ -549,7 +437,9 @@ export function JYCEditorialHome({ data }) {
               team.map((m, i) => (
                 <button type="button" key={m.id || i} onClick={() => nav('/team')}>
                   <span className="jh-team-monogram" aria-hidden="true">
-                    {String(m.name || 'JYC').trim().split(/\s+/).map(x => x[0]).slice(0, 2).join('').toUpperCase()}
+                    {teamPhotoFor(m)
+                      ? <ResponsivePhoto className="jh-team-thumb" src={teamPhotoFor(m)} alt="" loading="lazy" decoding="async" sizes="48px" fallbackSrc="/assets/jyc-logo.webp" fallbackAlt="" />
+                      : String(m.name || 'JYC').trim().split(/\s+/).map(x => x[0]).slice(0, 2).join('').toUpperCase()}
                   </span>
                   <span>
                     <small>{m.role || m.position || 'JYC Apex'}</small>
@@ -575,11 +465,11 @@ export function JYCEditorialHome({ data }) {
       <section className="jh-final">
         <div className="jh-container jh-final-grid">
           <div>
-            <div className="jh-section-number">05 / GET INVOLVED</div>
-            <h2>Find your community<br /><em className="jh-title-gradient">at JIIT 128.</em></h2>
+            <div className="jh-section-number">06 / GET INVOLVED</div>
+            <h2>Find your place<br /><em className="jh-title-gradient">in campus life.</em></h2>
           </div>
           <div>
-            <p>Ready to build, perform, organize or compete? Explore the hubs and get involved in the campus ecosystem.</p>
+            <p>Explore a community, show up for an event, or meet the people building something at JIIT. Your next step starts here.</p>
             <div className="jh-actions">
               <button type="button" className="jh-btn jh-btn-primary" onClick={() => nav('/clubs')}>
                 Explore Clubs <span>↗</span>

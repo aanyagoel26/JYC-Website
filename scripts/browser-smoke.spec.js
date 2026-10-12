@@ -250,44 +250,48 @@ test('homepage renders the official logo through Dither Veil and a magnetic acti
       const parse = value => { const match=String(value||'').match(/rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i); return match?[+match[1],+match[2],+match[3]]:null; };
       const luminance = rgb => rgb.map(v=>v/255).map(v=>v<=.04045?v/12.92:Math.pow((v+.055)/1.055,2.4)).reduce((sum,v,i)=>sum+v*[.2126,.7152,.0722][i],0);
       const contrast = (a,b) => {const x=luminance(a),y=luminance(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05)};
-      const home=document.querySelector('.jyc-home'),heading=home?.querySelector('.jh-hero h1'),cta=home?.querySelector('.jh-btn-primary'),finalSection=home?.querySelector('.jh-final'),finalHeading=finalSection?.querySelector('h2');
-      const bg=parse(getComputedStyle(home).backgroundColor),fg=parse(getComputedStyle(heading).color),ctaBg=parse(getComputedStyle(cta).backgroundColor),ctaFg=parse(getComputedStyle(cta).color),finalBg=parse(getComputedStyle(finalSection).backgroundColor),finalFg=parse(getComputedStyle(finalHeading).color);
-      return {background:getComputedStyle(home).backgroundColor,headingContrast:bg&&fg?contrast(bg,fg):null,ctaContrast:ctaBg&&ctaFg?contrast(ctaBg,ctaFg):null,finalContrast:finalBg&&finalFg?contrast(finalBg,finalFg):null};
+      const home=document.querySelector('.jyc-home'),heading=home?.querySelector('.jh-hero h1'),cta=home?.querySelector('.jh-btn-primary'),finalSection=home?.querySelector('.jh-final'),finalHeading=finalSection?.querySelector('h2'),finalCopy=finalSection?.querySelector('p'),finalCta=finalSection?.querySelector('.jh-btn-primary');
+      const bg=parse(getComputedStyle(home).backgroundColor),fg=parse(getComputedStyle(heading).color),ctaBg=parse(getComputedStyle(cta).backgroundColor),ctaFg=parse(getComputedStyle(cta).color),finalBg=parse(getComputedStyle(finalSection).backgroundColor),finalFg=parse(getComputedStyle(finalHeading).color),finalCopyFg=parse(getComputedStyle(finalCopy).color),finalCtaBg=parse(getComputedStyle(finalCta).backgroundColor),finalCtaFg=parse(getComputedStyle(finalCta).color);
+      return {background:getComputedStyle(home).backgroundColor,headingContrast:bg&&fg?contrast(bg,fg):null,ctaContrast:ctaBg&&ctaFg?contrast(ctaBg,ctaFg):null,finalContrast:finalBg&&finalFg?contrast(finalBg,finalFg):null,finalCopyContrast:finalBg&&finalCopyFg?contrast(finalBg,finalCopyFg):null,finalButtonContrast:finalCtaBg&&finalCtaFg?contrast(finalCtaBg,finalCtaFg):null};
     });
     expect(themeSamples[theme].headingContrast, theme+' homepage heading contrast').toBeGreaterThanOrEqual(4.5);
     expect(themeSamples[theme].ctaContrast, theme+' primary CTA contrast').toBeGreaterThanOrEqual(4.5);
     expect(themeSamples[theme].finalContrast, theme+' final CTA section contrast').toBeGreaterThanOrEqual(4.5);
+    expect(themeSamples[theme].finalCopyContrast, theme+' final CTA body copy contrast').toBeGreaterThanOrEqual(4.5);
+    expect(themeSamples[theme].finalButtonContrast, theme+' final CTA primary button contrast').toBeGreaterThanOrEqual(4.5);
   }
   expect(themeSamples.light.background, 'light theme uses the light editorial surface').not.toBe(themeSamples.dark.background);
 
-  await page.locator('.jh-activities').scrollIntoViewIfNeeded();
-  await expect(page.locator('.jh-activities .magic-bento-card').first()).toBeVisible({ timeout: 15000 });
+  await page.locator('.jh-activity-bento-shell').scrollIntoViewIfNeeded();
+  await expect(page.locator('.jh-activity-bento-shell .magic-bento-card').first()).toBeVisible({ timeout: 15000 });
 
   const result = await page.evaluate(() => {
-    const story = [...document.querySelectorAll('.jyc-home .jh-gallery-tile')];
+    const story = [...document.querySelectorAll('.jyc-home .jh-story-card')];
     const familyImages = document.querySelectorAll('.jyc-home .jh-family-image, .jyc-home .jh-family img').length;
     const archiveWalls = document.querySelectorAll('.jyc-home .jh-archive-section, .jyc-home .jyc-photo-chapters-section').length;
     const heroDitherMarks = document.querySelectorAll('.jyc-home .jh-dither-mark .dither-veil').length;
     const heroDriftWalls = document.querySelectorAll('.jyc-home .jh-hero-drift-wall .drift-wall').length;
-    const bentoCards = document.querySelectorAll('.jyc-home .jh-activities .magic-bento-card').length;
-    const activityImages = document.querySelectorAll('.jyc-home .jh-activities img').length;
-    const storyOverflow = [...document.querySelectorAll('.jyc-home .jh-photo-grid')].some(el => el.scrollWidth > el.clientWidth + 1);
+    const bentoCards = document.querySelectorAll('.jyc-home .jh-activity-bento-shell .magic-bento-card').length;
+    const activityImages = document.querySelectorAll('.jyc-home .jh-activity-bento-shell img').length;
+    const storyOverflow = [...document.querySelectorAll('.jyc-home .jh-photo-story-grid')].some(el => el.scrollWidth > el.clientWidth + 1);
     return { storyTiles: story.length, familyImages, archiveWalls, heroDitherMarks, heroDriftWalls, bentoCards, activityImages, storyOverflow };
   });
   expect(result.heroDitherMarks, 'one lazy Dither Veil for the actual JYC logo').toBe(1);
   expect(result.heroDriftWalls, 'continuous hero photo-wall engine removed to reduce load').toBe(0);
   expect(result.bentoCards, 'magnetic activity cards').toBeGreaterThan(0);
+  const activityPhotoSources = await page.locator('.jh-activity-bento-shell .magic-bento-card__media img').evaluateAll(images => images.map(img => img.getAttribute('src') || ''));
+  expect(activityPhotoSources.filter(src => src.startsWith('/assets/') && !/logo/i.test(src)).length, 'activity cards use real local archive photography, not logo placeholders').toBeGreaterThanOrEqual(4);
   expect(result.familyImages, 'homepage family image duplicates').toBe(0);
   expect(result.archiveWalls, 'homepage retired archive/photo-chapter surfaces').toBe(0);
-  expect(result.activityImages, 'homepage activity cards avoid unrelated stock/gallery imagery').toBe(0);
+  expect(result.activityImages, 'activity discovery uses curated source photography instead of text-only cards').toBeGreaterThanOrEqual(4);
   expect(result.storyOverflow, 'homepage photo-story horizontal overflow').toBe(false);
-  expect(result.storyTiles).toBeLessThanOrEqual(1);
+  expect(result.storyTiles).toBeLessThanOrEqual(3);
 });
 
 test('gallery archive uses deterministic responsive image frames', async ({ page }) => {
   await page.goto(base + '/gallery', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'gallery layout');
-  await page.locator('.jyc57-archive-nav').waitFor({ state: 'visible', timeout: 10000 });
+  await page.locator('.jyc-gallery-hero').waitFor({ state: 'visible', timeout: 10000 });
   const result = await page.evaluate(() => {
     const grid = document.querySelector('.public-app .jyc57-masonry');
     const items = [...document.querySelectorAll('.public-app .jyc57-masonry .jyc57-photo')].slice(0, 12);
@@ -328,6 +332,7 @@ test('photo-led pages render real image content without broken assets', async ({
 
 test('lazy-loaded media decodes across long-form public routes', async ({ page }) => {
   test.setTimeout(180000);
+  test.skip([430, 1280].includes(page.viewportSize()?.width), 'Run the exhaustive lazy-media decode sweep at mobile, tablet and large-desktop breakpoints; the other projects still run the full interaction suite.');
   for (const route of ['/about', '/clubs', '/events', '/team', '/gallery', '/achievements', '/best-of-jyc']) {
     await page.goto(base + route, { waitUntil: 'domcontentloaded' });
     await page.waitForSelector('#root .public-app, #root main', { timeout: 15000 }).catch(() => {});
@@ -363,6 +368,7 @@ test('lazy-loaded media decodes across long-form public routes', async ({ page }
 
 test('public pages have no empty media frames or normal-flow section overlaps', async ({ page }) => {
   test.setTimeout(120000);
+  test.skip(page.viewportSize()?.width !== 1280, 'This exhaustive route/overlap scan explicitly checks both 390px and 1280px layouts, so run it once rather than repeating the same scan in every browser project.');
   for (const route of routes) {
     for (const width of [390, 1280]) {
       await page.setViewportSize({ width, height: 900 });
@@ -437,9 +443,9 @@ test('gallery deep-link opens the requested photograph', async ({ page }) => {
 test('gallery album routes are shareable and filter the archive', async ({ page }) => {
   await page.goto(base + '/gallery', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'gallery album route');
-  const albumButton=page.locator('.jyc57-filter-group').filter({ hasText: 'Album' }).locator('button').nth(1);
+  const albumButton=page.locator('.jyc-memories-grid .jyc-memory-card').first();
   await expect(albumButton).toBeVisible();
-  const label=(await albumButton.innerText()).trim();
+  const label=(await albumButton.locator('.jyc-memory-title').innerText()).trim();
   await albumButton.click();
   await expect.poll(() => new URL(page.url()).pathname, { timeout: 5000 }).toMatch(/^\/gallery\/[^/]+$/);
   await expect(page.locator('h1').first()).toContainText(label);
@@ -798,16 +804,18 @@ test('search and More sheets keep their surfaces readable in light and dark them
 test('team profiles flip to readable biographies and verified LinkedIn links', async ({ page }) => {
   await page.goto(base + '/team', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'JYC team profiles');
-  const card = page.locator('.team-member-flip:has(.team-social-row a[href*="linkedin.com"])').first();
+  const card = page.locator('.team-member-flip:has(.team-back-actions a[href*="linkedin.com"])').first();
   await expect(card).toBeVisible();
-  await expect(card.locator('.team-member-name').first()).toBeVisible();
-  await expect(card.locator('.team-member-face-content .tag').first()).toBeVisible();
+  await expect(card.locator('.team-name-front').first()).toBeVisible();
+  await expect(card.locator('.team-member-face-content .team-role-tag').first()).toBeVisible();
   await expect(card.locator('.team-photo-editorial img').first()).toBeVisible();
   await card.click({ position: { x: 18, y: 18 } });
   await expect(card).toHaveClass(/is-flipped/);
-  await expect(card.locator('.flip-card__front')).toHaveAttribute('aria-expanded', 'true');
-  await expect(card.locator('.team-member-back-content .team-member-about')).toBeVisible();
-  await expect(card.locator('.team-member-back-content a[href*="linkedin.com"]').first()).toHaveAttribute('href', /^https:\/\/(?:www\.|in\.)?linkedin\.com\//);
+    await expect(card).toHaveAttribute('aria-expanded', 'true');
+    await expect(card.locator('.flip-card__back')).toHaveAttribute('aria-hidden', 'false');
+  await expect(card).toHaveAttribute('aria-expanded', 'true');
+  await expect(card.locator('.team-back-content .team-back-bio')).toBeVisible();
+  await expect(card.locator('.team-back-content a[href*="linkedin.com"]').first()).toHaveAttribute('href', /^https:\/\/(?:www\.|in\.)?linkedin\.com\//);
   await card.locator('.flip-card__back-trigger').click();
   await expect(card).not.toHaveClass(/is-flipped/);
   await card.locator('.flip-card__front').focus();
@@ -963,7 +971,7 @@ test('team flip-card biographies and LinkedIn links remain readable in both them
         return (Math.max(a, b) + .05) / (Math.min(a, b) + .05);
       };
       const background = parse(getComputedStyle(back).backgroundColor);
-      const bio = parse(getComputedStyle(back.querySelector('.team-member-about')).color);
+      const bio = parse(getComputedStyle(back.querySelector('.team-back-bio')).color);
       const link = parse(getComputedStyle(back.querySelector('a[href*="linkedin.com"]')).color);
       return { bio: background && bio ? ratio(composite(bio, background), background.slice(0, 3)) : null,
         link: background && link ? ratio(composite(link, background), background.slice(0, 3)) : null };
@@ -972,6 +980,9 @@ test('team flip-card biographies and LinkedIn links remain readable in both them
     expect(contrast.link, theme + ' LinkedIn contrast').toBeGreaterThanOrEqual(4.5);
     await card.locator('.flip-card__back-trigger').click();
     await expect(card).not.toHaveClass(/is-flipped/);
+    await expect(card).toHaveAttribute('aria-expanded', 'false');
+    await expect(card.locator('.flip-card__front')).toBeFocused();
+    await expect(card.locator('.flip-card__back')).toHaveAttribute('inert', '');
   }
 });
 
@@ -1191,7 +1202,7 @@ test('runtime metadata keeps canonical URLs on the production domain from a prev
   await page.goto(base + route, { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'canonical metadata on preview host');
 
-  const canonical = 'https://www.jiityouthclub128.in' + route;
+  const canonical = 'https://jyc-website-eight.vercel.app' + route;
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', canonical);
   await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', canonical);
 });
@@ -1252,7 +1263,7 @@ test('public route shells keep route-specific SEO content and one primary headin
     const primaryHeading = page.getByRole('heading', { level: 1 });
     await expect(primaryHeading).toHaveCount(1);
     await expect(primaryHeading).toHaveText(title);
-    const canonical = 'https://www.jiityouthclub128.in' + path;
+    const canonical = 'https://jyc-website-eight.vercel.app' + path;
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', canonical);
     const schemas = await page.locator('script[type="application/ld+json"]').evaluateAll(nodes => nodes.map(node => JSON.parse(node.textContent || '{}')));
     expect(schemas.some(schema => schema['@type'] === 'WebPage' && schema.name === title && schema.url === canonical)).toBeTruthy();
