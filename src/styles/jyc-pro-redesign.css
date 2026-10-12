@@ -2678,5 +2678,141 @@
   color: var(--tech-cyan);
 }
 
+/* --------------------------------------------------------------------------
+   CONTACT ENHANCEMENTS & ACTIONS
+   -------------------------------------------------------------------------- */
+.contact-sla-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  border-radius: var(--tech-radius-md);
+  margin-bottom: 28px;
+  font-size: 13px;
+  color: var(--tech-text-secondary);
+}
 
+.contact-sla-banner .sla-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 10px #10b981;
+  flex-shrink: 0;
+  animation: slaPulse 2s ease infinite;
+}
 
+@keyframes slaPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.85); }
+}
+
+.contact-sla-banner strong {
+  color: #fff;
+  font: 700 11px/1 'Space Grotesk', sans-serif;
+  letter-spacing: 0.12em;
+}
+
+.contact-creator-card .social-row {
+  display: flex;
+  gap: 12px;
+  margin: 12px 0 8px;
+  flex-wrap: wrap;
+}
+
+.contact-creator-card .social-row a {
+  color: var(--tech-cyan);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  background: rgba(56, 189, 248, 0.08);
+  border: 1px solid rgba(56, 189, 248, 0.2);
+  border-radius: var(--tech-radius-sm);
+  transition: all 0.2s ease;
+}
+
+.contact-creator-card .social-row a:hover {
+  background: rgba(56, 189, 248, 0.2);
+  border-color: var(--tech-cyan);
+  color: #fff;
+}
+
+.contact-email-copy-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 10px;
+  padding: 8px 12px;
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--tech-radius-sm);
+}
+
+.contact-email-copy-row code {
+  color: var(--tech-gold);
+  font-size: 12px;
+  font-family: monospace;
+}
+
+.btn-copy-mini {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(229, 184, 105, 0.1));
+  border: 1px solid var(--tech-gold);
+  color: #fff;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font: 600 11px 'Space Grotesk', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-copy-mini:hover {
+  background: var(--tech-gold);
+  color: #000;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE BREAKPOINTS (MOBILE & TABLET VERIFICATION)
+   -------------------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .contact-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .join-roadmap-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .join-domain-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+  .contact-sla-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .join-roadmap-grid {
+    grid-template-columns: 1fr;
+  }
+  .join-domain-grid {
+    grid-template-columns: 1fr;
+  }
+  .achievements-hero,
+  .announcements-hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .achievements-seal {
+    width: 100%;
+  }
+  .contact-form-card {
+    padding: 24px 18px;
+  }
+}

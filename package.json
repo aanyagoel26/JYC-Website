@@ -17,6 +17,7 @@
     "qa:build-preflight": "node scripts/qa-build-preflight.mjs",
     "qa:best-jyc": "npm run qa",
     "qa:mobile-first": "npm run qa",
+    "qa:responsive": "node scripts/qa-responsive-breakpoints.mjs",
     "qa:security": "node scripts/qa-security.mjs",
     "prebuild": "node scripts/generate-sitemap.mjs && node scripts/generate-image-manifest.mjs && node scripts/generate-photo-derivatives.mjs",
     "qa:performance": "npm run build && node scripts/qa-performance.mjs",
