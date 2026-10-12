@@ -243,6 +243,56 @@ export function JYCEditorialHome({ data }) {
         </div>
       </section>
 
+      {/* 3D SPATIAL ASSISTANT SHOWCASE */}
+      <section className="jh-assistant-spotlight jh-container">
+        <div className="jh-assistant-spotlight-card" onMouseMove={handleSpotlight}>
+          <div className="jh-assistant-visual">
+            <model-viewer
+              className="jh-assistant-3d-model"
+              src="/models/jyc-spatial.glb"
+              poster="/JYC%20Logo(4).png"
+              camera-orbit="0deg 75deg auto"
+              auto-rotate
+              rotation-per-second="22deg"
+              loading="lazy"
+              reveal="auto"
+              disable-zoom
+              disable-pan
+              interaction-prompt="none"
+              shadow-intensity="0.5"
+              shadow-softness="0.8"
+              exposure="1.15"
+              alt="Interactive 3D JYC spatial figure"
+            ></model-viewer>
+            <div className="jh-assistant-badge-live">
+              <span className="jh-live-pulse-dot" />
+              <span>3D SPATIAL AGENT</span>
+            </div>
+          </div>
+          <div className="jh-assistant-info">
+            <div className="jh-section-number">AI INTELLIGENCE · CAMPUS COMPANION</div>
+            <h2>Got questions? Meet the<br /><em className="jh-title-gradient">JYC Spatial Assistant.</em></h2>
+            <p>
+              Navigate all 23 societies, find upcoming hackathons, check registration deadlines, or learn about faculty advisors and student coordinators.
+            </p>
+            <div className="jh-assistant-prompts">
+              <button type="button" onClick={() => { const btn = document.querySelector('.jyc-bot-orb'); if (btn) btn.click(); }}>
+                ⚡ Explore Upcoming Hackathons
+              </button>
+              <button type="button" onClick={() => { const btn = document.querySelector('.jyc-bot-orb'); if (btn) btn.click(); }}>
+                🏆 Converge &amp; Dron-O-War Dates
+              </button>
+              <button type="button" onClick={() => { const btn = document.querySelector('.jyc-bot-orb'); if (btn) btn.click(); }}>
+                👥 Meet Apex Student Leadership
+              </button>
+              <button type="button" onClick={() => { const btn = document.querySelector('.jyc-bot-orb'); if (btn) btn.click(); }}>
+                🎯 Which society matches my domain?
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* PILLARS / WHAT JYC DOES BENTO GRID */}
       <section className="jh-pillars-section jh-container">
         <div className="jh-section-head">

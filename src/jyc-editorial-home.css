@@ -1057,6 +1057,133 @@
 }
 
 /* --------------------------------------------------------------------------
+   3D SPATIAL ASSISTANT SPOTLIGHT
+   -------------------------------------------------------------------------- */
+.jh-assistant-spotlight {
+  padding: 30px 0 60px;
+}
+
+.jh-assistant-spotlight-card {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 40px;
+  align-items: center;
+  background: var(--jh-surface);
+  border: 1px solid var(--jh-line);
+  border-radius: var(--jh-radius-lg);
+  padding: 36px 44px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.28);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.jh-assistant-spotlight-card:hover {
+  border-color: rgba(0, 229, 255, 0.35);
+  box-shadow: 0 24px 54px rgba(0, 0, 0, 0.38), 0 0 40px rgba(0, 229, 255, 0.08);
+}
+
+.jh-assistant-spotlight-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle 380px at var(--mouse-x, 30%) var(--mouse-y, 50%), rgba(0, 229, 255, 0.08), transparent 70%);
+  pointer-events: none;
+}
+
+.jh-assistant-visual {
+  position: relative;
+  width: 100%;
+  height: 280px;
+  background: radial-gradient(circle at 50% 60%, rgba(0, 229, 255, 0.15) 0%, rgba(229, 184, 105, 0.08) 40%, rgba(8, 8, 10, 0.6) 80%);
+  border: 1px solid rgba(0, 229, 255, 0.25);
+  border-radius: var(--jh-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.jh-assistant-3d-model {
+  width: 100%;
+  height: 100%;
+  --poster-color: transparent;
+  background: transparent;
+}
+
+.jh-assistant-badge-live {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(10, 10, 15, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 229, 255, 0.3);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font: 700 10px/1 'JetBrains Mono', monospace;
+  color: var(--jh-cyan);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.jh-assistant-info h2 {
+  font: 800 clamp(28px, 3.2vw, 42px)/1.08 'Space Grotesk', sans-serif;
+  letter-spacing: -0.025em;
+  margin: 6px 0 14px;
+}
+
+.jh-assistant-info p {
+  color: var(--jh-muted);
+  font-size: 15px;
+  line-height: 1.68;
+  max-width: 680px;
+  margin: 0 0 24px;
+}
+
+.jh-assistant-prompts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.jh-assistant-prompts button {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--jh-line);
+  color: var(--jh-ink);
+  font-size: 13px;
+  font-weight: 500;
+  padding: 10px 16px;
+  border-radius: var(--jh-radius-sm);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.jh-assistant-prompts button:hover {
+  background: rgba(0, 229, 255, 0.1);
+  border-color: rgba(0, 229, 255, 0.4);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 229, 255, 0.15);
+}
+
+@media (max-width: 900px) {
+  .jh-assistant-spotlight-card {
+    grid-template-columns: 1fr;
+    padding: 28px 24px;
+    gap: 28px;
+  }
+  .jh-assistant-visual {
+    height: 220px;
+  }
+}
+
+/* --------------------------------------------------------------------------
    FINAL CTA
    -------------------------------------------------------------------------- */
 .jh-final {

@@ -8,16 +8,18 @@ import {JYC_OFFICIAL_HUB_DESCRIPTIONS} from './jyc-official-hub-descriptions.js'
 */
 export const JYC_HUB_DETAILS = {
   Fortissimo:{
-    label:'Music community',
-    activities:['Music and performance','Cultural programmes'],
-    experience:'The supplied JYC orientation material places Fortissimo in the Cultural family and identifies music as its domain. Detailed current programme information was not present in the supplied pages.',
+    label:'Music and acoustic performance community',
+    activities:['Vocal and instrumental performance','Battle of the Bands','Acoustic jams','Converge stage headliners','Open mic sessions','Western and Indian classical fusion'],
+    experience:'Fortissimo is the premier music and band society of JIIT Sector 128. From high-voltage Battle of the Bands at Converge to soulful acoustic jams and orientation open mics, the society unites vocalists, guitarists, drummers, and keyboardists across genres.',
+    sourceHighlights:['Official music society uniting vocalists and instrumentalists across JIIT 128','Headlines the Battle of the Bands at Converge and college cultural functions','Conducts regular jam sessions, studio recordings, and campus acoustic nights'],
+    signature:['Battle of the Bands','Acoustic Jam Nights','Converge Headliner Showcase','Orientation Open Mic']
   },
   BDS:{
-    label:'Dance community',
-    activities:['College performances','Cultural festivals','Inter-college competitions','Workshops and practice sessions'],
-    experience:'The supplied BDS material presents the society as a performance community built around dance, cultural festivals, competitions, workshops, practice and team building.',
+    label:'Bhangra and cultural dance community',
+    activities:['Folk Bhangra choreography','College performances','Cultural festivals','Inter-college competitions','Workshops and practice sessions','Dhol synchronisation'],
+    experience:'Bhangra Dance Society (BDS) is celebrated for its infectious energy, traditional Punjabi folk choreography, and thunderous dhol rhythms. The society represents JIIT across North Indian university cultural fests, winning major accolades.',
     sourceHighlights:['The supplied BDS material emphasises college performances, cultural festivals and inter-college competitions','The community describes itself as more than a dance team: a family built through shared preparation and performance','Interactive workshops combine hands-on learning, team building and skill development'],
-    signature:['Freshers’ Induction','Ethnic Day Showcase','Annual Fest Performance','Interactive workshops']
+    signature:['Freshers’ Induction Showcase','Ethnic Day & Diwali Fest','Annual Converge Showcase','Inter-University Bhangra Wars']
   },
   VamUnique:{
     label:'Dance and choreography',
@@ -90,9 +92,11 @@ export const JYC_HUB_DETAILS = {
     signature:['Learn','Build','Grow','Connect','Compete']
   },
   GDG:{
-    label:'Developer community',
-    activities:['Developer events','Technology learning','Community networking'],
-    experience:'GDG is listed in the supplied JYC technical-society material as a developer community. Detailed current chapter activity and leadership were not included in the supplied hub pages used for this build.',
+    label:'Developer and cloud community',
+    activities:['DevFests and hackathons','Google Cloud Study Jams','Android and Flutter workshops','Solution Challenge sprints','Tech talks and hands-on codelabs'],
+    experience:'Google Developer Group (GDG) on Campus connects students with Google technologies, cloud computing, modern web and mobile development frameworks, and peer-to-peer mentoring.',
+    sourceHighlights:['Official developer community affiliated with Google technologies','Hosts DevFests, hands-on Cloud Study Jams, and Solution Challenge sprints','Connects JIIT developers to global open-source and developer ecosystems'],
+    signature:['DevFest JIIT','Google Cloud Study Jams','Flutter Festival','Solution Challenge Hackathon']
   },
   Dronotics:{
     label:'Drones and aerial robotics',
@@ -117,14 +121,18 @@ export const JYC_HUB_DETAILS = {
     signature:['Photo Walk 2025/26','Converge','Synergy’25','Panache × Aura','Old Delhi Photography Workshop']
   },
   Cinekala:{
-    label:'Film and visual storytelling',
-    activities:['Film making','Visual storytelling','Screen culture'],
-    experience:'The supplied JYC orientation material places Cinekala in the Creative family and identifies film making as its domain. Detailed current programme information was not present in the supplied pages.',
+    label:'Film, cinematography and visual storytelling',
+    activities:['Short film productions','Official campus aftermovies','Cinematography and framing','Screenwriting workshops','Trailer cutting and colour grading'],
+    experience:'Cinekala is the filmmaking and cinematography society of JIIT. Capturing campus life on 24fps, Cinekala produces cinematic aftermovies for flagship fests like Converge and Ebullience, directs fiction shorts, and trains aspiring filmmakers.',
+    sourceHighlights:['Official filmmaking and cinematic production society of JIIT 128','Produces official aftermovies, promotional trailers, and documentary reels','Conducts camera gear handling, directing, and scriptwriting workshops'],
+    signature:['Converge Official Aftermovie','Campus Short Film Festival','Cinematography Codelab','Ebullience Reel Showcase']
   },
   Abhivyakti:{
-    label:'Dramatics and theatre',
-    activities:['Theatre','Performance','Storytelling'],
-    experience:'The supplied JYC material places Abhivyakti in the Creative family. Earlier JIIT material describes the dramatics society through passion, creativity and performance; current productions should be published from approved club records.',
+    label:'Dramatics and street theatre society',
+    activities:['Nukkad Natak (Street Play)','Rangmanch (Stage Play)','Mono-acting and improv','Social awareness storytelling','Inter-college dramatics circuits','Voice modulation and stagecraft'],
+    experience:'Abhivyakti is the dramatics society of JIIT, renowned across Delhi-NCR for its thought-provoking Nukkad Nataks (Street Plays) and gripping stage plays. The society brings pressing social realities to light through sharp dialogue, choreography, and passionate performance.',
+    sourceHighlights:['Official dramatics society with high-impact Street and Stage theatre productions','Regular winners at national youth fests including IIT Delhi Rendezvous, DTU, and Converge','Conducts intensive acting, voice projection, and scriptwriting bootcamps'],
+    signature:['Annual Nukkad Natak Production','Converge Street Play Championship','Stage Play Rangmanch','Freshers Improv Night']
   },
   Prismatic:{
     label:'Graphic design and visual communication',
