@@ -3138,3 +3138,89 @@ body::before {
   border-color: var(--jyc-red, #dc2626);
   box-shadow: 0 6px 18px rgba(220, 38, 38, 0.35);
 }
+
+/* Quick Family Filter Ribbon */
+.jyc-quick-family-pills {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 6px 2px 14px;
+  margin-top: 10px;
+  scrollbar-width: none;
+}
+
+.jyc-quick-family-pills::-webkit-scrollbar {
+  display: none;
+}
+
+.jyc-quick-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 15px;
+  border-radius: 999px;
+  background: var(--tech-surface, #12131a);
+  border: 1px solid var(--tech-border, rgba(255, 255, 255, 0.08));
+  color: var(--tech-text-muted, #94a3b8);
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.jyc-quick-pill small {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: inherit;
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.jyc-quick-pill:hover {
+  background: color-mix(in srgb, var(--jyc-red, #dc2626) 12%, var(--tech-surface, #12131a));
+  border-color: color-mix(in srgb, var(--jyc-red, #dc2626) 40%, transparent);
+  color: var(--tech-text, #fff);
+  transform: translateY(-1px);
+}
+
+.jyc-quick-pill.is-active {
+  background: var(--jyc-red, #dc2626);
+  border-color: var(--jyc-red, #dc2626);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(220, 38, 38, 0.35);
+}
+
+.jyc-quick-pill.is-active small {
+  background: rgba(0, 0, 0, 0.25);
+  color: #fff;
+}
+
+/* Event List Registration & Live Radar Badges */
+.jyc57-reg-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--jyc-red, #dc2626) 18%, transparent);
+  color: var(--jyc-red, #ef4444);
+  border: 1px solid color-mix(in srgb, var(--jyc-red, #dc2626) 40%, transparent);
+  animation: jyc-pulse-subtle 2s infinite ease-in-out;
+}
+
+@keyframes jyc-pulse-subtle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.85; transform: scale(0.98); }
+}
+

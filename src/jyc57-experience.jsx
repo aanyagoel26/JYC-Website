@@ -69,7 +69,7 @@ export function JYC57Events({data}){
     {filtered.length?filtered.map((e,i)=>{const photo=eventCardPhoto(e);return <button type="button" className="jyc57-event-card" key={e.id||e.title||i} style={{'--event-accent':eventIdentity(e).accent||identityAccent(e.title||e.slug||e.club)}} onPointerMove={magneticMove} onPointerLeave={magneticReset} onClick={()=>nav(eventPath(e))}>
       <div className="jyc57-event-date"><b>{e.date?new Date(`${e.date}T12:00`).toLocaleDateString('en-IN',{day:'2-digit'}):'—'}</b><span>{e.date?new Date(`${e.date}T12:00`).toLocaleDateString('en-IN',{month:'short'}):'TBA'}</span></div>
       <div className="jyc57-event-art">{photo?<ResponsivePhoto src={photo} alt="" loading="lazy" decoding="async" sizes="92px" fallbackSrc={e.poster||LOGO_FALLBACK} fallbackAlt=""/>:<span>{String(e.eventType||e.club||'JYC').slice(0,3).toUpperCase()}</span>}</div>
-      <div className="jyc57-event-copy"><div><MetaPill tone={stateOf(e)==='live'?'live':''}>{stateOf(e)==='live'?'LIVE':stateOf(e)==='past'?'ARCHIVED':'UPCOMING'}</MetaPill>{(e.eventType||e.category)&&<MetaPill>{e.eventType||e.category}</MetaPill>}</div><h2>{e.title}</h2><p>{e.description||'Open the event for registration, schedule, venue and published details.'}</p><small>{e.club||'JYC'} · {e.venue||'JIIT Sector 128'}</small></div>
+      <div className="jyc57-event-copy"><div style={{display:'flex',gap:6,alignItems:'center',flexWrap:'wrap'}}><MetaPill tone={stateOf(e)==='live'?'live':''}>{stateOf(e)==='live'?'● LIVE NOW':stateOf(e)==='past'?'ARCHIVED':'UPCOMING'}</MetaPill>{(e.eventType||e.category)&&<MetaPill>{e.eventType||e.category}</MetaPill>}{e.registrationUrl&&stateOf(e)!=='past'&&<span className="jyc57-reg-pill">REGISTRATION OPEN ↗</span>}</div><h2>{e.title}</h2><p>{e.description||'Open the event for registration, schedule, venue and published details.'}</p><small>{e.club||'JYC'} · {e.venue||'JIIT Sector 128'}{e.start?` · ${e.start}`:''}</small></div>
       <span className="jyc57-arrow" aria-hidden="true">↗</span>
     </button>}):<Empty eyebrow="EVENT DIRECTORY" title="Nothing matches this view." text="Try another category, status, or search term. Only published Sector-128 events are shown."/>}
    </div>
@@ -142,6 +142,24 @@ export function JYC57Clubs({data}){
     {activeFilterCount>0&&<span className="filter-badge">{activeFilterCount}</span>}
     <span>{filtersOpen?'▲':'▼'}</span>
    </button>
+  </div>
+
+  {/* Quick Family Filter Ribbon */}
+  <div className="jyc-quick-family-pills" aria-label="Quick family filter">
+   {families.map(f=>{
+     const count = f === 'All' ? clubs.length : clubs.filter(c => c.type === f || c.category === f || (c.interests||[]).includes(f)).length;
+     return (
+       <button
+         type="button"
+         key={f}
+         className={`jyc-quick-pill ${family === f ? 'is-active' : ''}`}
+         onClick={() => setFamily(f)}
+       >
+         <span>{f}</span>
+         <small>{count}</small>
+       </button>
+     );
+   })}
   </div>
 
   {/* Expandable Filter Drawer */}

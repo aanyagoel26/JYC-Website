@@ -188,6 +188,7 @@ export function JYCEditorialHome({ data }) {
       <div className="jh-ambient-backdrop" aria-hidden="true">
         <div className="jh-ambient-orb jh-ambient-orb-1" />
         <div className="jh-ambient-orb jh-ambient-orb-2" />
+        <div className="jh-ambient-orb jh-ambient-orb-3" />
         <div className="jh-ambient-grid" />
       </div>
 

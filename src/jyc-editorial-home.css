@@ -78,17 +78,26 @@
   right: -100px;
   width: 650px;
   height: 650px;
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.45) 0%, rgba(0, 229, 255, 0.1) 60%, transparent 80%);
+  background: radial-gradient(circle, rgba(220, 38, 38, 0.25) 0%, rgba(168, 36, 32, 0.08) 50%, transparent 75%);
   animation: jh-float-1 14s ease-in-out infinite alternate;
 }
 
 .jh-ambient-orb-2 {
-  top: 400px;
+  top: 450px;
   left: -200px;
   width: 550px;
   height: 550px;
-  background: radial-gradient(circle, rgba(251, 191, 36, 0.35) 0%, rgba(229, 184, 105, 0.08) 60%, transparent 80%);
+  background: radial-gradient(circle, rgba(251, 191, 36, 0.22) 0%, rgba(229, 184, 105, 0.06) 50%, transparent 75%);
   animation: jh-float-2 18s ease-in-out infinite alternate;
+}
+
+.jh-ambient-orb-3 {
+  top: 1300px;
+  right: -150px;
+  width: 580px;
+  height: 580px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.16) 0%, rgba(0, 229, 255, 0.04) 50%, transparent 70%);
+  animation: jh-float-1 22s ease-in-out infinite alternate-reverse;
 }
 
 .jh-ambient-grid {
