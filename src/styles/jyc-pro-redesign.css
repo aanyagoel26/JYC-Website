@@ -2959,3 +2959,182 @@ body::before {
     padding: 24px 18px;
   }
 }
+
+/* About Page Integrated History Timeline */
+.about-history-section {
+  margin: 48px 0;
+  padding: 40px 32px;
+  background: var(--tech-surface, #12131a);
+  border: 1px solid var(--tech-border, rgba(255, 255, 255, 0.08));
+  border-radius: var(--tech-radius-lg, 16px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+}
+
+.about-history-timeline-v2 {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 32px;
+  position: relative;
+}
+
+.about-history-node {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 24px;
+  align-items: flex-start;
+  position: relative;
+}
+
+.about-history-node-rail {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  position: relative;
+}
+
+.about-history-node-idx {
+  font-family: var(--tech-mono, monospace);
+  font-size: 0.78rem;
+  color: var(--jyc-red, #dc2626);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.about-history-node-yr {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--tech-text, #fff);
+  letter-spacing: -0.02em;
+  margin-top: 2px;
+}
+
+.about-history-node-line {
+  width: 2px;
+  height: calc(100% - 30px);
+  min-height: 40px;
+  background: linear-gradient(to bottom, var(--jyc-red, #dc2626), transparent);
+  margin-left: 8px;
+  margin-top: 8px;
+  opacity: 0.35;
+}
+
+.about-history-node-card {
+  background: color-mix(in srgb, var(--tech-surface-elevated, #161822) 80%, transparent);
+  border: 1px solid var(--tech-border, rgba(255, 255, 255, 0.08));
+  border-radius: var(--tech-radius-md, 12px);
+  padding: 22px 26px;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.about-history-node-card:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--jyc-red, #dc2626) 45%, var(--tech-border));
+  box-shadow: 0 8px 24px -6px rgba(220, 38, 38, 0.15);
+}
+
+.about-history-badge {
+  display: inline-block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 3px 8px;
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--jyc-red, #dc2626) 15%, transparent);
+  color: var(--jyc-red, #dc2626);
+  border: 1px solid color-mix(in srgb, var(--jyc-red, #dc2626) 30%, transparent);
+  margin-bottom: 10px;
+}
+
+.about-history-node-card h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--tech-text, #fff);
+  margin-bottom: 8px;
+  line-height: 1.35;
+}
+
+.about-history-node-card p {
+  font-size: 0.92rem;
+  color: var(--tech-text-muted, #94a3b8);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+.about-history-cite {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--tech-text-subtle, #64748b);
+}
+
+.about-history-cite a {
+  color: var(--tech-cyan, #06b6d4);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.2s ease;
+}
+
+.about-history-cite a:hover {
+  color: #38bdf8;
+}
+
+@media (max-width: 768px) {
+  .about-history-section {
+    padding: 24px 16px;
+  }
+  .about-history-node {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .about-history-node-rail {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .about-history-node-line {
+    display: none;
+  }
+}
+
+/* Club Wall Brand Glyph & Micro-Animations */
+.jyc57-club-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 4px;
+}
+
+.jyc57-club-brand-glyph {
+  width: 36px;
+  height: 36px;
+  min-width: 36px;
+  border-radius: 10px;
+  background: rgba(14, 15, 23, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.jyc57-club-brand-glyph img {
+  position: static !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5)) !important;
+  transform: none !important;
+}
+
+.jyc57-club-card:hover .jyc57-club-brand-glyph {
+  transform: scale(1.15) rotate(4deg);
+  border-color: var(--jyc-red, #dc2626);
+  box-shadow: 0 6px 18px rgba(220, 38, 38, 0.35);
+}

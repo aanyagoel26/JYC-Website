@@ -130,24 +130,69 @@ JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS.forEach(item=>{const key=normalise(item.assoc
 const AUTHENTIC_HUB_LOGOS = {
   cicr: '/assets/logos/cicr.png',
   jodc: '/assets/logos/jodc.svg',
-  aura: '/assets/logos/aura.jpg',
+  aura: '/assets/logos/aura.png',
+  aurathefashionhub: '/assets/logos/aura.png',
   dronotics: '/assets/logos/dronotics.jpg',
+  dronoticshub: '/assets/logos/dronotics.jpg',
+  rph: '/assets/logos/rph.png',
+  rapidprogramming: '/assets/logos/rph.png',
+  rapidprogramminghub: '/assets/logos/rph.png',
+  cypherx: '/assets/logos/cypherx.png',
+  cypherxhub: '/assets/logos/cypherx.png',
+  vamunique: '/assets/logos/vamunique.png',
+  neuralnexus: '/assets/logos/neuralnexus.png',
+  panache: '/assets/logos/panache.png',
+  panacheartsociety: '/assets/logos/panache.png',
+  aakriti: '/assets/logos/aakriti.png',
+  aakrititheatregroup: '/assets/logos/aakriti.png',
+  zencoders: '/assets/logos/zencoders.png',
+  zencodershub: '/assets/logos/zencoders.png',
+  jsa: '/assets/logos/jsa.png',
+  jaypeestudentassociation: '/assets/logos/jsa.png',
+  eloquence: '/assets/logos/eloquence.png',
+  eloquencesociety: '/assets/logos/eloquence.png',
+  prismatic: '/assets/logos/prismatic.png',
+  prismatichub: '/assets/logos/prismatic.png',
 };
 const AUTHENTIC_HUB_BANNERS = {
-  dronotics: '/assets/events/drone-wars/event-fpv-racing.jpg',
+  dronotics: '/assets/banners/dronotics-banner.jpg',
+  dronoticshub: '/assets/banners/dronotics-banner.jpg',
   innovation: '/assets/events/innovation/ridehack.jpeg',
+  cypherx: '/assets/banners/cypherx-banner.jpg',
+  cypherxhub: '/assets/banners/cypherx-banner.jpg',
+  vamunique: '/assets/banners/vamunique-banner.jpg',
+  arcadia: '/assets/banners/arcadia-banner.jpg',
+  arcadiagaminghub: '/assets/banners/arcadia-banner.jpg',
+  neuralnexus: '/assets/banners/neuralnexus-banner.jpg',
+  aakriti: '/assets/banners/aakriti-banner.jpg',
+  aakrititheatregroup: '/assets/banners/aakriti-banner.jpg',
+  panache: '/assets/banners/panache-banner.jpg',
+  panacheartsociety: '/assets/banners/panache-banner.jpg',
+  zencoders: '/assets/banners/zencoders-banner.jpg',
+  zencodershub: '/assets/banners/zencoders-banner.jpg',
+  bds: '/assets/banners/bds-banner.jpg',
+  bhangradancesociety: '/assets/banners/bds-banner.jpg',
+  aura: '/assets/banners/aura-banner.jpg',
+  aurathefashionhub: '/assets/banners/aura-banner.jpg',
+  jsa: '/assets/banners/jsa-banner.jpg',
+  jaypeestudentassociation: '/assets/banners/jsa-banner.jpg',
+  eloquence: '/assets/banners/eloquence-banner.jpg',
+  eloquencesociety: '/assets/banners/eloquence-banner.jpg',
 };
 
 export function enrichSourceClub(club){
   const media=sourceHubMedia(club?.name);
   const normKey=normalise(media.name);
-  const identityAssets=IDENTITY_BY_ASSOCIATION.get(normKey)||[];
+  const rawKey=normalise(club?.name);
+  const identityAssets=IDENTITY_BY_ASSOCIATION.get(normKey)||IDENTITY_BY_ASSOCIATION.get(rawKey)||[];
   const identityLogo=identityAssets.find(item=>/logo/i.test(item.sourcePath||item.url))||identityAssets[0];
   const identityBanner=identityAssets.find(item=>/banner/i.test(item.sourcePath||item.url))||null;
   const photos=[...new Set([...(Array.isArray(club?.hubPhotos)?club.hubPhotos:[]),...media.photos])];
-  const profile=JYC_HUB_CONTENT[media.name];
-  const resolvedLogo=club?.logo||AUTHENTIC_HUB_LOGOS[normKey]||identityLogo?.url||'';
-  const resolvedBanner=club?.banner||AUTHENTIC_HUB_BANNERS[normKey]||photos[0]||identityBanner?.url||identityLogo?.url||'';
+  const profile=JYC_HUB_CONTENT[media.name]||JYC_HUB_CONTENT[club?.name];
+  const isGenericLogo=!club?.logo||/jyc[-_ ]?logo/i.test(club.logo);
+  const isGenericBanner=!club?.banner||/jyc[-_ ]?logo/i.test(club.banner);
+  const resolvedLogo=AUTHENTIC_HUB_LOGOS[normKey]||AUTHENTIC_HUB_LOGOS[rawKey]||(!isGenericLogo&&club?.logo)||identityLogo?.url||club?.logo||'';
+  const resolvedBanner=AUTHENTIC_HUB_BANNERS[normKey]||AUTHENTIC_HUB_BANNERS[rawKey]||(!isGenericBanner&&club?.banner)||photos[0]||identityBanner?.url||identityLogo?.url||'';
   return {...club,description:club?.description||profile?.summary||media.summary,about:club?.about||profile?.detail||media.detail,hubPhotos:photos,logo:resolvedLogo,banner:resolvedBanner,identityAsset:identityLogo||null,identityAssets,sourceMediaCount:photos.length,sourceMediaLabel:photos.length?'JYC source archive · '+photos.length+' visual'+(photos.length===1?'':'s'):(resolvedLogo?'JYC source archive · verified identity asset':'Identity-led profile · source photography not yet extracted')};
 }
 

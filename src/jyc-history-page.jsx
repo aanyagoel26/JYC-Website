@@ -34,7 +34,7 @@ const S={
  yearBtn:{border:'1px solid var(--line,rgba(21,32,48,.14))',background:'var(--surface,#fff)',color:'inherit',borderRadius:15,padding:18,textAlign:'left',cursor:'pointer'}
 };
 
-const HISTORY = [
+export const HISTORY = [
   {
     year:'2019–20',
     label:'THE RECORD GROWS',

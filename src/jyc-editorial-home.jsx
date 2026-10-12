@@ -136,10 +136,50 @@ export function JYCEditorialHome({ data }) {
     return selected.length >= 4 ? selected : defaultFlagships;
   }, [data?.gallery]);
 
+  const [countdown, setCountdown] = useState(() => {
+    const target = new Date('2026-11-15T09:00:00+05:30').getTime();
+    const diff = Math.max(0, target - Date.now());
+    return {
+      days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+      mins: Math.floor((diff / 1000 / 60) % 60),
+      secs: Math.floor((diff / 1000) % 60),
+    };
+  });
+
+  useEffect(() => {
+    const target = new Date('2026-11-15T09:00:00+05:30').getTime();
+    const timer = setInterval(() => {
+      const diff = Math.max(0, target - Date.now());
+      setCountdown({
+        days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+        mins: Math.floor((diff / 1000 / 60) % 60),
+        secs: Math.floor((diff / 1000) % 60),
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
   const handleSpotlight = e => {
     const rect = e.currentTarget.getBoundingClientRect();
     e.currentTarget.style.setProperty('--mouse-x', `${e.clientX - rect.left}px`);
     e.currentTarget.style.setProperty('--mouse-y', `${e.clientY - rect.top}px`);
+  };
+
+  const handleCardTilt = e => {
+    handleSpotlight(e);
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    const rotX = (y / (rect.height / 2)) * -5;
+    const rotY = (x / (rect.width / 2)) * 5;
+    card.style.transform = `perspective(1000px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale3d(1.01, 1.01, 1.01)`;
+  };
+
+  const resetCardTilt = e => {
+    e.currentTarget.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
   };
 
   return (
@@ -199,6 +239,41 @@ export function JYCEditorialHome({ data }) {
               <span>Years Legacy</span>
             </div>
           </div>
+
+          {/* FLAGSHIP COUNTDOWN HUD */}
+          <div className="jh-flagship-countdown-strip" onMouseMove={handleSpotlight}>
+            <div className="jh-countdown-label">
+              <span className="jh-live-pulse-dot" />
+              <div>
+                <small>CAMPUS FLAGSHIP COUNTDOWN</small>
+                <strong>CONVERGE '26 &amp; DRON-O-WAR</strong>
+              </div>
+            </div>
+            <div className="jh-countdown-timer">
+              <div className="jh-timer-segment">
+                <b>{String(countdown.days).padStart(2, '0')}</b>
+                <span>DAYS</span>
+              </div>
+              <span className="jh-timer-sep">:</span>
+              <div className="jh-timer-segment">
+                <b>{String(countdown.hours).padStart(2, '0')}</b>
+                <span>HOURS</span>
+              </div>
+              <span className="jh-timer-sep">:</span>
+              <div className="jh-timer-segment">
+                <b>{String(countdown.mins).padStart(2, '0')}</b>
+                <span>MINS</span>
+              </div>
+              <span className="jh-timer-sep">:</span>
+              <div className="jh-timer-segment">
+                <b>{String(countdown.secs).padStart(2, '0')}</b>
+                <span>SECS</span>
+              </div>
+            </div>
+            <button type="button" className="jh-countdown-cta" onClick={() => nav('/events')}>
+              Lineup ↗
+            </button>
+          </div>
         </div>
 
         {/* HERO DITHERVEIL VISUAL PLAQUE */}
@@ -245,7 +320,7 @@ export function JYCEditorialHome({ data }) {
 
       {/* 3D SPATIAL ASSISTANT SHOWCASE */}
       <section className="jh-assistant-spotlight jh-container">
-        <div className="jh-assistant-spotlight-card" onMouseMove={handleSpotlight}>
+        <div className="jh-assistant-spotlight-card" onMouseMove={handleCardTilt} onMouseLeave={resetCardTilt}>
           <div className="jh-assistant-visual">
             <model-viewer
               className="jh-assistant-3d-model"
@@ -267,6 +342,9 @@ export function JYCEditorialHome({ data }) {
             <div className="jh-assistant-badge-live">
               <span className="jh-live-pulse-dot" />
               <span>3D SPATIAL AGENT</span>
+            </div>
+            <div className="jh-assistant-soundwave" aria-hidden="true">
+              <span/><span/><span/><span/><span/><span/><span/><span/>
             </div>
           </div>
           <div className="jh-assistant-info">

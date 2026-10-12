@@ -20,7 +20,7 @@ import {enrichSourceClubs,mergeSourceGallery,sourceHubMedia,sourceEventMedia} fr
 import {JYC_EVENT_CATEGORIES,JYC_COMMUNITY_DISCOVERY,JYC_PUBLIC_ACTIVITIES} from './public-v1/config.js';
 import {JYC_SOCIALS,festSocialProfile,socialProfile,is128SocialProfile} from './jyc-socials.js';
 import {JYCNowStrip,JYCNowPage,HubLatestUpdates} from './jyc-now.jsx';
-import JYCHistory,{HistoryTeaser} from './jyc-history-page.jsx';
+import JYCHistory,{HistoryTeaser,HISTORY} from './jyc-history-page.jsx';
 import {JYCBrandEditorial} from './jyc-next-experience.jsx';
 import {JYCEditorialHome} from './jyc-editorial-home.jsx';
 import {ResponsivePhoto} from './jyc-responsive-photo.jsx';
@@ -571,6 +571,8 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
  const clean=p.replace(/\/$/,'')||'/';
  if(clean==='/admin'||clean.startsWith('/admin/'))return <Navigate to="/" replace/>;
  if(clean==='/leadership')return <Navigate to="/team" replace/>;
+ if(clean==='/history')return <Navigate to="/about" replace/>;
+ if(clean==='/achievements'||clean==='/best-of-jyc')return <Navigate to="/about" replace/>;
  if(clean==='/event-calendar')return <Navigate to="/calendar" replace/>;
  if(clean==='/moments')return <Navigate to="/gallery" replace/>;
  if(clean==='/planner'||clean==='/agenda')return <Navigate to="/events" replace/>;
@@ -648,13 +650,13 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
  usePageMeta(title,description,canonicalPath,{noindex:privateRoute||unknownRoute,type:event?'event':'website',image:event?.poster||club?.logo||undefined,imageAlt:event?.title||club?.name||'JIIT Youth Club 128 official visual'});
  const schema=<JsonLd data={data} pageType={pageType} item={club||event} path={canonicalPath}/>;
  if(clean==='/')return <>{schema}<Home data={data}/></>;
- if(clean==='/history')return <>{schema}<JYCHistory data={data}/></>;
+ if(clean==='/history')return <Navigate to="/about" replace/>;
  if(clean==='/about')return <>{schema}<About data={data}/></>;if(clean==='/clubs')return <>{schema}<JYC57Clubs data={data}/></>;if(club)return <>{schema}<ClubDetail data={data} id={slugId} virtualName={hubKey||undefined}/></>;
  if(clean==='/events')return <>{schema}<JYC57Events data={data}/></>;if(clean==='/fests')return isFestMode(data)?<>{schema}<FestsPage data={data}/></>:<Navigate to="/events" replace/>;if(clean.startsWith('/events/')&&legacyEventRedirect)return <Navigate to={'/events/'+legacyEventRedirect} replace/>;if(event&&parts[2]==='register')return <><RegistrationPage data={data} id={slugId} session={session}/></>;if(event)return <>{schema}<EventDetail data={data} id={slugId} session={session} notify={notify}/></>;
  if(clean==='/gallery'||clean.startsWith('/gallery/'))return <>{schema}<JYC57Gallery data={data}/></>;if(clean==='/leadership')return <Navigate to="/team" replace/>;if(clean==='/team')return <>{schema}<Team data={data}/></>;if(clean==='/contact')return <>{schema}<Contact data={data}/></>;if(clean==='/archive')return <>{schema}<JYC57Archive data={data}/></>;
  if(clean==='/announcements')return <>{schema}<Announcements data={data}/></>;
  if(clean==='/updates')return <>{schema}<JYCNowPage data={data}/></>;
- if(clean==='/achievements')return <>{schema}<Achievements data={data}/></>;if(clean==='/best-of-jyc')return <>{schema}<JYCBestOf data={data}/></>;if(clean==='/join-jyc')return <>{schema}<JoinJYC/></>;if(clean==='/recruitment')return <>{schema}{recruitmentEnabled(data)?<RecruitmentHub data={data}/>:<JoinJYC/>}</>;if(clean==='/event-calendar')return <Navigate to="/calendar" replace/>;if(clean==='/calendar')return <>{schema}<JYCCalendarPage data={data}/></>;if(clean==='/moments')return <Navigate to="/gallery" replace/>;if(clean==='/discover')return <Navigate to="/clubs" replace/>;if(clean==='/resources')return <Navigate to="/about" replace/>;if(clean==='/guide')return <Navigate to="/about" replace/>;if(clean==='/my-jyc'||clean==='/login'||clean==='/notifications')return <Navigate to="/" replace/>;;if(clean==='/settings'||clean==='/download')return <Navigate to="/about" replace/>;if(clean.startsWith('/qr/'))return <Navigate to="/events" replace/>;if(clean==='/admin'||clean.startsWith('/admin/'))return <Navigate to="/" replace/>;return <section className="section page not-found-page"><div className="not-found-art"><span>404</span><i aria-hidden="true">JYC</i></div><span className="eyebrow">JYC · ROUTE MISSED</span><h1>This route is not part of the published JYC experience.</h1><p>The page you requested is not part of the published JYC experience.</p><div className="detail-actions"><Button onClick={()=>nav('/')}>Return home</Button><Button secondary onClick={()=>nav('/clubs')}>Explore clubs</Button></div></section>
+ if(clean==='/achievements'||clean==='/best-of-jyc')return <Navigate to="/about" replace/>;if(clean==='/join-jyc')return <>{schema}<JoinJYC/></>;if(clean==='/recruitment')return <>{schema}{recruitmentEnabled(data)?<RecruitmentHub data={data}/>:<JoinJYC/>}</>;if(clean==='/event-calendar')return <Navigate to="/calendar" replace/>;if(clean==='/calendar')return <>{schema}<JYCCalendarPage data={data}/></>;if(clean==='/moments')return <Navigate to="/gallery" replace/>;if(clean==='/discover')return <Navigate to="/clubs" replace/>;if(clean==='/resources')return <Navigate to="/about" replace/>;if(clean==='/guide')return <Navigate to="/about" replace/>;if(clean==='/my-jyc'||clean==='/login'||clean==='/notifications')return <Navigate to="/" replace/>;;if(clean==='/settings'||clean==='/download')return <Navigate to="/about" replace/>;if(clean.startsWith('/qr/'))return <Navigate to="/events" replace/>;if(clean==='/admin'||clean.startsWith('/admin/'))return <Navigate to="/" replace/>;return <section className="section page not-found-page"><div className="not-found-art"><span>404</span><i aria-hidden="true">JYC</i></div><span className="eyebrow">JYC · ROUTE MISSED</span><h1>This route is not part of the published JYC experience.</h1><p>The page you requested is not part of the published JYC experience.</p><div className="detail-actions"><Button onClick={()=>nav('/')}>Return home</Button><Button secondary onClick={()=>nav('/clubs')}>Explore clubs</Button></div></section>
 }
 function NavIcon({kind}){const paths={home:'M3 10.5 12 3l9 7.5M5.5 9.5V21h13V9.5M9 21v-6h6v6',clubs:'M8 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm8-1.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM2.5 20a5.5 5.5 0 0 1 11 0M14 20a6 6 0 0 1 7.5 0',events:'M7 3v4M17 3v4M4 9h16M5 5h14a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1Z',gallery:'M4 5h16v14H4zM4 16l4-4 3 3 2-2 5 5M15 9h.01',team:'M8 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Zm8-1.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM2.5 20a5.5 5.5 0 0 1 11 0M14 20a6 6 0 0 1 7.5 0',more:'M5 7h14M5 12h14M5 17h14',search:'M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15Zm5.5-2 5 5'};return <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d={paths[kind]||paths.more}/></svg>}
 
@@ -745,20 +747,18 @@ function MobileMoreSheet({data,admin,close,openSearch}){
  },[close]);
  const go=p=>{close();nav(p)};
 const explore=[
-   ['/about','About JYC','Vision, mission and values'],
-   ['/history','JYC History','Evidence-led milestones and the organisation’s story'],
-   ['/team','Leadership','Faculty, Apex and Core Team'],
-   ['/clubs','Clubs & Communities','Explore the official hub ecosystem'],
-   ['/events','Events','Upcoming, ongoing and completed experiences'],
-   ['/calendar','Event Calendar','Browse JYC events by date'],
-   ['/gallery','Gallery','Event memories, years and visual archive'],
-   ['/achievements','Achievements','Wall of Fame and community outcomes'],
-   ['/updates','JYC Now','Recent verified updates from JYC and the hubs'],
-   ['/announcements','Announcements','Registrations, notices and JYC updates'],
-   ['/join-jyc','Join JYC · Coming Soon','Official JYC recruitment will appear here when the next cycle opens'],
-   ['/archive','Archive','The published JYC story by year'],
-   ['/contact','Contact','Official public channels and query form']
-  ];
+    ['/about','About JYC','Vision, mission, history and legacy'],
+    ['/team','Leadership','Faculty, Apex and Core Team'],
+    ['/clubs','Clubs & Communities','Explore the official hub ecosystem'],
+    ['/events','Events','Upcoming, ongoing and completed experiences'],
+    ['/calendar','Event Calendar','Browse JYC events by date'],
+    ['/gallery','Gallery','Event memories, years and visual archive'],
+    ['/updates','JYC Now','Recent verified updates from JYC and the hubs'],
+    ['/announcements','Announcements','Registrations, notices and JYC updates'],
+    ['/join-jyc','Join JYC','Official recruitment pathway and onboarding guide'],
+    ['/archive','Archive','The published JYC story by year'],
+    ['/contact','Contact','Official public channels and query form']
+   ];
  return <div ref={sheetRef} className="more-sheet-overlay" role="dialog" aria-modal="true" aria-label="More JYC" onMouseDown={e=>{if(e.target===e.currentTarget)close()}}>
   <div className="more-sheet jyc-more-club-sheet">
    <div className="sheet-grabber"/>
@@ -846,7 +846,7 @@ function Footer({data,admin}){
     ['/about','About'],['/clubs','Clubs'],['/events','Events'],
     ...(isFestMode(data)?[['/fests','Fests']]:[]),
     ['/team','Team'],['/recruitment','Join JYC'],['/calendar','Event calendar'],
-    ['/archive','Archive'],['/history','History'],['/achievements','Achievements'],['/contact','Contact']
+    ['/archive','Archive'],['/gallery','Gallery'],['/contact','Contact']
   ];
   return <footer className="jyc-footer jyc-footer-v6">
     <div className="footer-v6-inner">
@@ -1055,7 +1055,29 @@ function About({data}){
     ['07','Campus spirit','JYC turns participation, celebration and shared responsibility into a stronger campus community.']
    ].map(([n,t,p])=><article className="about-principle-v33" key={t}><span>{n}</span><strong>{t}</strong><p>{p}</p></article>)}
   </section>
-  <div className="about-source-note reveal">Content scope: JYC 128 hub orientation material + current public JIIT information. Current event, recruitment and team records are published separately through the JYC Control Center.</div>
+  <section className="about-history-section reveal" id="history" aria-labelledby="about-history-heading">
+    <div className="about-section-title-v28">
+     <span className="eyebrow">HISTORY &amp; LEGACY · 2019–2026</span>
+     <h2 id="about-history-heading">Built over years. Still student-led.</h2>
+     <p>The evidence-led timeline of JIIT Youth Club, from initial hub co-ordination and campus orientations to Sector 128 flagship fests.</p>
+    </div>
+    <div className="about-history-timeline-v2">
+     {HISTORY.map((item,index)=><article key={item.year} className="about-history-node">
+      <div className="about-history-node-rail">
+       <span className="about-history-node-idx">{String(index+1).padStart(2,'0')}</span>
+       <b className="about-history-node-yr">{item.year}</b>
+       <div className="about-history-node-line" aria-hidden="true"/>
+      </div>
+      <div className="about-history-node-card">
+       <span className="about-history-badge">{item.label}</span>
+       <h3>{item.title}</h3>
+       <p>{item.text}</p>
+       <div className="about-history-cite"><span>Verified source: </span><a href={item.href} target="_blank" rel="noopener noreferrer">{item.source} ↗</a></div>
+      </div>
+     </article>)}
+    </div>
+   </section>
+   <div className="about-source-note reveal">Content scope: JYC 128 hub orientation material + current public JIIT information. Current event, recruitment and team records are published separately through the JYC Control Center.</div>
   <section className="about-next-v28 reveal"><span className="eyebrow">YOUR NEXT STEP</span><h2>See the organisation in action.</h2><div><Button onClick={()=>nav('/clubs')}>Explore clubs ↗</Button><Button secondary onClick={()=>nav('/events')}>Explore events →</Button><Button secondary onClick={()=>nav('/team')}>Meet JYC →</Button></div></section>
  </section>
 }
