@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { JYC_HUB_CONTENT, JYC_HUB_FAMILIES } from './v21-hub-content.js';
 import { sourceEventMedia } from './jyc-source-media.js';
 import { ResponsivePhoto } from './jyc-responsive-photo.jsx';
+import { JYCSpotlight } from './jyc-spotlight.jsx';
 const LazyDitherVeil = lazy(() => import('./react-bits/DitherVeil.jsx'));
 import './jyc-editorial-home.css';
 
@@ -470,6 +471,9 @@ export function JYCEditorialHome({ data }) {
           </div>
         )}
       </section>
+
+      {/* LIVING JYC SPOTLIGHT */}
+      <JYCSpotlight data={data} />
 
       {/* REAL MOMENTS & VISUAL ARCHIVE */}
       {photoStories.length > 0 && (
