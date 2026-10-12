@@ -127,14 +127,28 @@ export const JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS=ARCHIVE_GALLERY
 const IDENTITY_BY_ASSOCIATION=new Map();
 JYC_SOURCE_ARCHIVE_IDENTITY_ASSETS.forEach(item=>{const key=normalise(item.association);const rows=IDENTITY_BY_ASSOCIATION.get(key)||[];rows.push(item);IDENTITY_BY_ASSOCIATION.set(key,rows)});
 
+const AUTHENTIC_HUB_LOGOS = {
+  cicr: '/assets/logos/cicr.png',
+  jodc: '/assets/logos/jodc.svg',
+  aura: '/assets/logos/aura.jpg',
+  dronotics: '/assets/logos/dronotics.jpg',
+};
+const AUTHENTIC_HUB_BANNERS = {
+  dronotics: '/assets/events/drone-wars/event-fpv-racing.jpg',
+  innovation: '/assets/events/innovation/ridehack.jpeg',
+};
+
 export function enrichSourceClub(club){
   const media=sourceHubMedia(club?.name);
-  const identityAssets=IDENTITY_BY_ASSOCIATION.get(normalise(media.name))||[];
+  const normKey=normalise(media.name);
+  const identityAssets=IDENTITY_BY_ASSOCIATION.get(normKey)||[];
   const identityLogo=identityAssets.find(item=>/logo/i.test(item.sourcePath||item.url))||identityAssets[0];
   const identityBanner=identityAssets.find(item=>/banner/i.test(item.sourcePath||item.url))||null;
   const photos=[...new Set([...(Array.isArray(club?.hubPhotos)?club.hubPhotos:[]),...media.photos])];
   const profile=JYC_HUB_CONTENT[media.name];
-  return {...club,description:club?.description||profile?.summary||media.summary,about:club?.about||profile?.detail||media.detail,hubPhotos:photos,logo:club?.logo||identityLogo?.url||'',banner:club?.banner||photos[0]||identityBanner?.url||identityLogo?.url||'',identityAsset:identityLogo||null,identityAssets,sourceMediaCount:photos.length,sourceMediaLabel:photos.length?'JYC source archive · '+photos.length+' visual'+(photos.length===1?'':'s'):(identityLogo?'JYC source archive · verified identity asset':'Identity-led profile · source photography not yet extracted')};
+  const resolvedLogo=club?.logo||AUTHENTIC_HUB_LOGOS[normKey]||identityLogo?.url||'';
+  const resolvedBanner=club?.banner||AUTHENTIC_HUB_BANNERS[normKey]||photos[0]||identityBanner?.url||identityLogo?.url||'';
+  return {...club,description:club?.description||profile?.summary||media.summary,about:club?.about||profile?.detail||media.detail,hubPhotos:photos,logo:resolvedLogo,banner:resolvedBanner,identityAsset:identityLogo||null,identityAssets,sourceMediaCount:photos.length,sourceMediaLabel:photos.length?'JYC source archive · '+photos.length+' visual'+(photos.length===1?'':'s'):(resolvedLogo?'JYC source archive · verified identity asset':'Identity-led profile · source photography not yet extracted')};
 }
 
 export function enrichSourceClubs(clubs){return (Array.isArray(clubs)?clubs:[]).map(enrichSourceClub);}

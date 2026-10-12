@@ -10,7 +10,7 @@ const FALLBACK = '/jyc-logo-official.webp';
 const DITHER_SOURCE = '/jyc-logo-official.webp';
 
 const slug = v => String(v || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-const eventPath = e => `/events/${slug(e?.slug || e?.title)}`;
+const eventPath = e => `/events/${slug(e?.slug||e?.title)}`;
 const media = v => v?.url || v?.src || v?.image || v?.imageUrl || '';
 const dateMs = e => {
   const raw = String(e?.date || '').trim();

@@ -46,6 +46,149 @@
 }
 
 /* --------------------------------------------------------------------------
+   GLOBAL ATMOSPHERE & CYBER HUD FOUNDATION
+   Inspired by: 8BitsLife/jodc-fromroots & Mercy036/drone-wars
+   -------------------------------------------------------------------------- */
+body {
+  background-color: var(--tech-bg) !important;
+  color: var(--tech-text-primary) !important;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Atmospheric ambient breathing orbs & cyber grid backdrop */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: 
+    radial-gradient(circle at 12% 18%, rgba(56, 189, 248, 0.09) 0%, transparent 45%),
+    radial-gradient(circle at 88% 22%, rgba(251, 191, 36, 0.08) 0%, transparent 50%),
+    radial-gradient(circle at 50% 80%, rgba(239, 68, 68, 0.06) 0%, transparent 55%),
+    linear-gradient(rgba(255, 255, 255, 0.016) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.016) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 54px 54px, 54px 54px;
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Custom Cyber Scrollbar (from Mercy036/drone-wars) */
+*::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--tech-bg);
+  border-left: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  border: 2px solid var(--tech-bg);
+  background: linear-gradient(180deg, var(--tech-cyan) 0%, var(--tech-gold) 100%);
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.45);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #00f0ff 0%, #ffea00 100%);
+  box-shadow: 0 0 16px rgba(251, 191, 36, 0.7);
+}
+
+/* Cyber Corner Brackets on Interactive Cards (drone-wars HUD) */
+.card,
+.club-card,
+.event-card,
+.join-roadmap-card,
+.join-domain-card,
+.contact-card,
+.achievement-feature,
+.announcement-card {
+  position: relative;
+  background: var(--tech-surface-glass) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--tech-border) !important;
+  transition: all 0.3s var(--tech-ease) !important;
+}
+
+.card::before,
+.club-card::before,
+.event-card::before,
+.join-roadmap-card::before,
+.contact-card::before,
+.achievement-feature::before {
+  content: '';
+  position: absolute;
+  top: 6px;
+  left: 6px;
+  width: 10px;
+  height: 10px;
+  border-top: 2px solid var(--tech-gold);
+  border-left: 2px solid var(--tech-gold);
+  pointer-events: none;
+  opacity: 0.55;
+  transition: all 0.25s var(--tech-ease);
+  z-index: 2;
+}
+
+.card::after,
+.club-card::after,
+.event-card::after,
+.join-roadmap-card::after,
+.contact-card::after,
+.achievement-feature::after {
+  content: '';
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  width: 10px;
+  height: 10px;
+  border-bottom: 2px solid var(--tech-cyan);
+  border-right: 2px solid var(--tech-cyan);
+  pointer-events: none;
+  opacity: 0.55;
+  transition: all 0.25s var(--tech-ease);
+  z-index: 2;
+}
+
+.card:hover::before,
+.club-card:hover::before,
+.event-card:hover::before,
+.join-roadmap-card:hover::before,
+.contact-card:hover::before,
+.achievement-feature:hover::before {
+  opacity: 1;
+  width: 16px;
+  height: 16px;
+  border-color: #fff;
+}
+
+.card:hover::after,
+.club-card:hover::after,
+.event-card:hover::after,
+.join-roadmap-card:hover::after,
+.contact-card:hover::after,
+.achievement-feature:hover::after {
+  opacity: 1;
+  width: 16px;
+  height: 16px;
+  border-color: var(--tech-cyan);
+}
+
+.card:hover,
+.club-card:hover,
+.event-card:hover,
+.join-roadmap-card:hover,
+.contact-card:hover,
+.achievement-feature:hover {
+  border-color: rgba(56, 189, 248, 0.45) !important;
+  box-shadow: 0 20px 45px -12px rgba(0, 0, 0, 0.75), 0 0 28px -6px rgba(56, 189, 248, 0.28), inset 0 1px 1px rgba(255, 255, 255, 0.15) !important;
+  transform: translateY(-3px);
+}
+
+/* --------------------------------------------------------------------------
    HERO WITH DITHER VEIL
    -------------------------------------------------------------------------- */
 .jh-hero {
