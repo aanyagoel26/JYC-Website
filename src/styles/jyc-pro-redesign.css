@@ -3224,3 +3224,146 @@ body::before {
   50% { opacity: 0.85; transform: scale(0.98); }
 }
 
+/* ==========================================================================
+   OFFICIAL SOCIAL PROOF RAIL & HANDLES
+   ========================================================================== */
+.club-social-proof {
+  position: relative;
+  background: var(--tech-surface, #0b1329);
+  border: 1px solid var(--tech-border, rgba(255, 255, 255, 0.1));
+  border-radius: var(--tech-radius-lg, 20px);
+  padding: clamp(24px, 4vw, 36px);
+  margin: 32px auto;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(12px);
+  overflow: hidden;
+}
+
+.club-social-proof::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--tech-gold, #fbbf24), var(--tech-cyan, #38bdf8), transparent);
+}
+
+.club-social-proof-links {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
+
+.club-social-proof-links a {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 12px 20px;
+  border-radius: var(--tech-radius-md, 14px);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--tech-text-primary, #f8fafc);
+  text-decoration: none;
+  min-width: 170px;
+  transition: transform 0.25s var(--tech-ease, ease), border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+}
+
+.club-social-proof-links a b {
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--tech-text-secondary, #94a3b8);
+  font-weight: 800;
+}
+
+.club-social-proof-links a span {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--tech-text-primary, #f8fafc);
+}
+
+.club-social-proof-links a:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(56, 189, 248, 0.45);
+  box-shadow: 0 8px 24px rgba(56, 189, 248, 0.2);
+}
+
+.club-social-proof-links a:hover b {
+  color: var(--tech-cyan, #38bdf8);
+}
+
+/* ==========================================================================
+   SOURCE LEADERSHIP GRID POLISH
+   ========================================================================== */
+.hub-source-people {
+  margin-top: 36px;
+  padding-top: 28px;
+  border-top: 1px solid var(--tech-border, rgba(255, 255, 255, 0.1));
+}
+
+.hub-source-people > div {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.hub-source-people > div > span {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 14px 18px;
+  border-radius: var(--tech-radius-md, 14px);
+  background: rgba(11, 19, 41, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(8px);
+  transition: transform 0.22s var(--tech-ease, ease), border-color 0.22s ease, box-shadow 0.22s ease;
+}
+
+.hub-source-people > div > span:hover {
+  transform: translateY(-2px);
+  border-color: rgba(251, 191, 36, 0.4);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+.hub-source-people small {
+  color: var(--tech-gold, #fbbf24);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hub-source-people strong {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--tech-text-primary, #f8fafc);
+}
+
+/* ==========================================================================
+   CLUB CARD ENHANCED MICRO-ANIMATIONS
+   ========================================================================== */
+.jyc57-club-card {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease;
+}
+
+.jyc57-club-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5), 0 0 24px color-mix(in srgb, var(--club-accent, #38bdf8) 25%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .club-social-proof-links a,
+  .hub-source-people > div > span,
+  .jyc57-club-card,
+  .jyc57-reg-pill {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+  }
+}
+
+

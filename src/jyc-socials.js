@@ -11,8 +11,26 @@ export const JYC_SOCIALS = {
     sourcePriority: 'canonical-128',
     sourceNote: 'Supplied 2026–27 orientation material explicitly directs students to @jiityouthclub128; use this 128 identity for public social/event sourcing.'
   },
-  Fortissimo: {},
-  BDS: {},
+  Fortissimo: {
+    instagram: 'https://www.instagram.com/ffortissimo_j128/',
+    instagramHandle: '@ffortissimo_j128',
+    label: 'Fortissimo · Music Society of JIIT-128',
+    campus: 'sector-128',
+    sourcePriority: 'official-hub',
+    verifiedBy: 'all hubs 1.pdf & https://www.instagram.com/ffortissimo_j128/',
+    verifiedOn: '2026-10-12',
+    sourceNote: 'Official music & acoustic society of JIIT Sector 128, Battle of the Bands and Converge headliners.'
+  },
+  BDS: {
+    instagram: 'https://www.instagram.com/bds_jiit/',
+    instagramHandle: '@bds_jiit',
+    label: 'Bhangra Dance Society (BDS) · JIIT-128',
+    campus: 'sector-128',
+    sourcePriority: 'official-hub',
+    verifiedBy: 'all hubs 1.pdf & https://www.instagram.com/bds_jiit/',
+    verifiedOn: '2026-10-12',
+    sourceNote: 'Official bhangra and folk dance society of JIIT Sector 128, Freshers Induction and Ethnic Day headliners.'
+  },
   VamUnique: {
     instagram: 'https://www.instagram.com/vamunique/',
     instagramHandle: '@vamunique',
@@ -24,7 +42,16 @@ export const JYC_SOCIALS = {
     verifiedOn: '2026-10-10',
     sourceNote: 'Official LinkedIn profile identifies VamUnique as the dance society of JIIT Sector 128 and describes cultural-fest, inter-college and community performances.'
   },
-  Panache: {},
+  Panache: {
+    instagram: 'https://www.instagram.com/panache_jiit/',
+    instagramHandle: '@panache_jiit',
+    label: 'Panache · The Fashion Society of JIIT-128',
+    campus: 'sector-128',
+    sourcePriority: 'official-hub',
+    verifiedBy: 'all hubs 1.pdf & https://www.instagram.com/panache_jiit/',
+    verifiedOn: '2026-10-12',
+    sourceNote: 'Official fashion and runway society of JIIT Sector 128, winners of Vogue-IIT Roorkee prelims 2024.'
+  },
   RPH: {
     linkedin: 'https://www.linkedin.com/company/rapid-programming-hub-jiit-noida/',
     label: 'Rapid Programming Hub · JIIT-128',
@@ -130,7 +157,16 @@ export const JYC_SOCIALS = {
     sourceNote: 'Current LinkedIn profile identifies Dronotics as the Drone Society of JIIT 128 and its DRON-O-WAR post explicitly gives Sector 128.',
     verifiedOn: '2026-10-03'
   },
-  Aakriti: {},
+  Aakriti: {
+    instagram: 'https://www.instagram.com/aakriti_jiit128/',
+    instagramHandle: '@aakriti_jiit128',
+    label: 'Aakriti · The Fine Arts Society of JIIT-128',
+    campus: 'sector-128',
+    sourcePriority: 'official-hub',
+    verifiedBy: 'all hubs 1.pdf & https://www.instagram.com/aakriti_jiit128/',
+    verifiedOn: '2026-10-12',
+    sourceNote: 'Official fine arts society of JIIT Sector 128; leads Art of the Week, Best out of Waste, and campus decor for Converge and Ebullience.'
+  },
   Aura: {
     instagram: 'https://www.instagram.com/auraphotography.128/',
     instagramHandle: '@auraphotography.128',
@@ -150,9 +186,25 @@ export const JYC_SOCIALS = {
     sourceNote: 'Current LinkedIn profile identifies Cinekala at JIIT Sector-128, Noida and links its official YouTube presence.'
   },
   Abhivyakti: {
-    label: 'Abhivyakti · JIIT-128', campus: 'sector-128', sourcePriority: 'source-material'
+    instagram: 'https://www.instagram.com/abhivyaktidramasoc/',
+    instagramHandle: '@abhivyaktidramasoc',
+    label: 'Abhivyakti · The Dramatics Society of JIIT',
+    campus: 'sector-128',
+    sourcePriority: 'official-hub',
+    verifiedBy: 'all hubs 1.pdf & https://www.instagram.com/abhivyaktidramasoc/',
+    verifiedOn: '2026-10-12',
+    sourceNote: 'Official dramatics society of JIIT; produces award-winning Nukkad Natak (Street Play) and Rangmanch stage plays across national youth circuits.'
   },
-  Prismatic: {},
+  Prismatic: {
+    instagram: 'https://www.instagram.com/prismatic_jiit128/',
+    instagramHandle: '@prismatic_jiit128',
+    label: 'Prismatic · Graphic Design Society of JIIT-128',
+    campus: 'sector-128',
+    sourcePriority: 'official-hub',
+    verifiedBy: 'all hubs 1.pdf & https://www.instagram.com/prismatic_jiit128/',
+    verifiedOn: '2026-10-12',
+    sourceNote: 'Official graphic design and visual communications society of JIIT-128.'
+  },
   Eloquence: {
     instagram: 'https://www.instagram.com/eloquencej128/',
     instagramHandle: '@eloquencej128',
@@ -164,7 +216,16 @@ export const JYC_SOCIALS = {
     verifiedBy: 'https://www.linkedin.com/company/eloquence-litsoc/',
     verifiedOn: '2026-10-04'
   },
-  JSA: {}
+  JSA: {
+    instagram: 'https://www.instagram.com/jiitsports/',
+    instagramHandle: '@jiitsports',
+    label: 'Jaypee Sports Association (JSA) · JIIT-128',
+    campus: 'sector-128',
+    sourcePriority: 'official-hub',
+    verifiedBy: 'all hubs 1.pdf & https://www.instagram.com/jiitsports/',
+    verifiedOn: '2026-10-12',
+    sourceNote: 'Official sports association running Kshitij 1.0–4.0 annual sports meets, annual marathon & sprint, and indoor/outdoor collegiate championships.'
+  }
 };
 
 export const JYC_FEST_SOCIALS = {
