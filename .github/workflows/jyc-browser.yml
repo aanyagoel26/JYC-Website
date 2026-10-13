@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   browser:
@@ -22,7 +22,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
         with:
-          persist-credentials: false
+          persist-credentials: true
 
       - name: Setup Node
         uses: actions/setup-node@v7
@@ -55,3 +55,15 @@ jobs:
             test-results
             scripts/visual-route-matrix.spec.js-snapshots
           if-no-files-found: ignore
+      - name: Commit one-time initial visual baselines
+        if: success() && contains(github.event.head_commit.message || '', '[visual-baseline-bootstrap]')
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -d scripts/visual-route-matrix.spec.js-snapshots
+          test -n "$(git status --porcelain -- scripts/visual-route-matrix.spec.js-snapshots)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/visual-route-matrix.spec.js-snapshots
+          git commit -m "test(visual): establish initial JYC route screenshot baselines"
+          git push origin HEAD:main

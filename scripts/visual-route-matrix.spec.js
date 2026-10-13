@@ -1,4 +1,6 @@
 import { test, expect } from '@playwright/test';
+import fs from 'node:fs';
+import path from 'node:path';
 
 const routes = [
   '/', '/about', '/history', '/clubs', '/events', '/team', '/gallery',
@@ -73,7 +75,9 @@ test.describe('JYC visual capture and measurable design contracts', () => {
         const routeName = route === '/' ? 'home' : route.slice(1).replaceAll('/', '-');
         const snapshotName = `${viewport.name}-${routeName}.png`;
         if (process.env.JYC_UPDATE_VISUAL_BASELINES === 'true') {
-          await page.screenshot({ path: testInfo.snapshotPath(snapshotName), animations: 'disabled' });
+          const baselinePath = testInfo.snapshotPath(snapshotName);
+          fs.mkdirSync(path.dirname(baselinePath), { recursive: true });
+          await page.screenshot({ path: baselinePath, animations: 'disabled' });
         } else {
           await expect(page).toHaveScreenshot(snapshotName, {
             animations: 'disabled',
