@@ -12,7 +12,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   browser:
@@ -22,7 +22,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
         with:
-          persist-credentials: true
+          persist-credentials: false
 
       - name: Setup Node
         uses: actions/setup-node@v7
@@ -55,15 +55,40 @@ jobs:
             test-results
             scripts/visual-route-matrix.spec.js-snapshots
           if-no-files-found: ignore
-      - name: Commit one-time initial visual baselines
+      - name: Upload visual baseline bootstrap
         if: success() && contains(github.event.head_commit.message || '', '[visual-baseline-bootstrap]')
+        uses: actions/upload-artifact@v6
+        with:
+          name: jyc-visual-baselines-bootstrap
+          path: scripts/visual-route-matrix.spec.js-snapshots
+          if-no-files-found: error
+
+  commit-visual-baselines:
+    if: github.event_name == 'push' && contains(github.event.head_commit.message || '', '[visual-baseline-bootstrap]')
+    needs: browser
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: true
+      - name: Download visual baselines
+        uses: actions/download-artifact@v6
+        with:
+          name: jyc-visual-baselines-bootstrap
+          path: /tmp/jyc-visual-baselines
+      - name: Commit initial route screenshot baselines
         shell: bash
         run: |
           set -euo pipefail
-          test -d scripts/visual-route-matrix.spec.js-snapshots
-          test -n "$(git status --porcelain -- scripts/visual-route-matrix.spec.js-snapshots)"
+          snapshot_dir=scripts/visual-route-matrix.spec.js-snapshots
+          mkdir -p "$snapshot_dir"
+          cp -R /tmp/jyc-visual-baselines/. "$snapshot_dir/"
+          test -n "$(git status --porcelain -- "$snapshot_dir")"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add scripts/visual-route-matrix.spec.js-snapshots
+          git add "$snapshot_dir"
           git commit -m "test(visual): establish initial JYC route screenshot baselines"
           git push origin HEAD:main
