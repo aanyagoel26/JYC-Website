@@ -717,7 +717,7 @@ test('public images load, stay inside the viewport, and use centered focal posit
       .map(img => img.complete ? true : new Promise(resolve => { const done=()=>resolve(true); img.addEventListener('load',done,{once:true}); img.addEventListener('error',done,{once:true}); setTimeout(done,10000); }))));
     const result = await page.locator('main img, footer img').evaluateAll(images => images
       .filter(img => {
-        if(['/JYC%20Logo(4).png','/assets/jyc-logo.webp','/jyc-logo-official.webp'].includes(new URL(img.currentSrc||img.src,window.location.href).pathname)) return false;
+        if(['/JYC%20Logo(4).png','/assets/jyc-logo.webp','/jyc-logo-official.webp','/assets/jyc-logo.avif'].includes(new URL(img.currentSrc||img.src,window.location.href).pathname)) return false;
         const r=img.getBoundingClientRect();
         return r.bottom>0 && r.top<window.innerHeight && r.width>0 && r.height>0;
       })
@@ -802,7 +802,7 @@ test('Dither Veil keeps the official logo visible when AVIF is unavailable', asy
   await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'Dither logo format fallback');
   const fallback = page.locator('.jh-dither-mark .dither-veil__fallback');
-  await expect(fallback).toHaveAttribute('src', '/jyc-logo-official.webp');
+  await expect(fallback).toHaveAttribute('src', '/assets/jyc-logo.avif');
   await expect.poll(() => fallback.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
 });
 
@@ -1029,7 +1029,7 @@ test('team flip-card biographies and LinkedIn links remain readable in both them
 
 test('failed team portraits fall through the optimized logo to the original PNG safely', async ({ page }) => {
   await page.route('**/assets/team/**', route => route.abort());
-  await page.route('**/jyc-logo-official.webp', route => route.abort());
+  await page.route('**/assets/jyc-logo.avif', route => route.abort());
   await page.goto(base + '/team', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'team portrait fallback');
 

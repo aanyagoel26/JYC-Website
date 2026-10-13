@@ -1,6 +1,6 @@
 const CACHE_NAME = 'jyc-cache-v64-5-9';
 
-const APP_SHELL = ['/', '/offline.html', '/manifest.json', '/jyc-logo-official.webp'];
+const APP_SHELL = ['/', '/offline.html', '/manifest.json', '/assets/jyc-logo.avif'];
 
 const isRecord = (value) => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 const isSafeManifestAssetUrl = (url) => {

@@ -43,7 +43,7 @@ export function JYCBrandEditorial({compact=false}){
    <div className="jyc-brand-editorial-actions"><button type="button" className="btn" onClick={()=>nav('/about')}>Read the JYC story ↗</button><button type="button" className="text-link" onClick={()=>nav('/clubs')}>Explore communities →</button></div>
   </div>
   <div className="jyc-brand-editorial-mark" aria-label="JIIT Youth Club official identity">
-   <div className="jyc-brand-editorial-logo"><img src="/JYC%20Logo(4).png" alt="JIIT Youth Club official emblem" loading={compact?'lazy':'eager'} decoding="async"/></div>
+   <div className="jyc-brand-editorial-logo"><img src="/assets/jyc-logo.avif" alt="JIIT Youth Club official emblem" width={512} height={512} loading={compact?'lazy':'eager'} decoding="async"/></div>
    <span className="jyc-brand-editorial-rule"><i/>JYC 128<i/></span>
    <strong>VOICE · TALENT · SPIRIT</strong>
    <small>JIIT WISH TOWN CAMPUS</small>
@@ -86,7 +86,7 @@ export function FlagshipExperience({data}){
  return <section className="section jyc-flagship-section reveal" aria-labelledby="jyc-flagship-title">
   <div className="jyc-flagship-head"><div><span className="eyebrow">FLAGSHIP EXPERIENCE · JYC 128</span><h2 id="jyc-flagship-title">{event.title}</h2><p>{event.summitTitle||event.description||'A major JYC experience with a clear path from idea to participation.'}</p></div><span className="jyc-flagship-date">{event.date?(event.dateEnd?event.date+' — '+event.dateEnd:event.date):''}</span></div>
   <div className="jyc-flagship-shell">
-   <div className="jyc-flagship-visual">{event.poster?<img src={event.poster} alt={event.title+' poster'} loading="lazy"/>:<div className="jyc-flagship-mark"><img src="/JYC%20Logo(4).png" alt="JIIT Youth Club official emblem" loading="lazy"/><span>JYC · 128</span></div>}<span className="jyc-flagship-visual-label">JYC · SECTOR 128 · NOIDA</span></div>
+   <div className="jyc-flagship-visual">{event.poster?<img src={event.poster} alt={event.title+' poster'} loading="lazy"/>:<div className="jyc-flagship-mark"><img src="/assets/jyc-logo.avif" alt="JIIT Youth Club official emblem" loading="lazy"/><span>JYC · 128</span></div>}<span className="jyc-flagship-visual-label">JYC · SECTOR 128 · NOIDA</span></div>
    <div className="jyc-flagship-copy">
     <div className="jyc-flagship-kicker"><span>{event.eventType||'FLAGSHIP PROGRAMME'}</span><b>{event.venue||'JIIT Wish Town Campus · Sector 128, Noida'}</b></div>
     <h3>{event.description||'Build, participate and connect through a flagship JYC experience.'}</h3>

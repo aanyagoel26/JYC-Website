@@ -28,7 +28,7 @@ const authRedirectOk=!authModule.includes("emailRedirectTo:`${window.location.or
 console.log((authRedirectOk ? "PASS" : "FAIL")+": passwordless auth callback avoids retired /my-jyc redirect");
 if(!authRedirectOk)failed++;
 const nowModule=fs.readFileSync(path.join(root,'src/jyc-now.jsx'),'utf8');
-const nowLogoOk=nowModule.includes('/JYC%20Logo(4).png')&&!nowModule.includes('/jyc-logo-official.webp');
+const nowLogoOk=nowModule.includes('/assets/jyc-logo.avif')&&nowModule.includes('fallbackSrc="/assets/jyc-logo.webp"');
 console.log((nowLogoOk ? "PASS" : "FAIL")+": JYC Now uses the canonical JYC logo asset");
 if(!nowLogoOk)failed++;
 const nowNormaliseOk=nowModule.includes('safeExternalUrl(x.url)')&&nowModule.includes('safeExternalUrl(x.image||x.thumbnail||\'\')')&&nowModule.includes('.filter(x=>x.url)');

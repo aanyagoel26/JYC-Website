@@ -87,7 +87,7 @@ import {MomentsSection} from './v14-platform.jsx';
 import {SkipLink,InstallPrompt,MaintenanceGate,ErrorBoundary,EventTools,DownloadICS,JsonLd,usePageMeta,Gallery,GalleryItems,RecruitmentHub,RegistrationPage} from './extra-features.jsx';
 import {readSiteCache,writeSiteCache,siteCacheAge,formatCacheAge,armStoredReminders,googleCalendarUrl,hasLocalReminder,scheduleEventReminder,clearLocalReminder} from './v15-functional.js';
 
-const logo='/jyc-logo-official.webp';
+const logo='/assets/jyc-logo.avif';
 function LogoImage({alt='',...props}){
  const [failed,setFailed]=useState(false);
  useEffect(()=>setFailed(false),[]);
@@ -663,7 +663,7 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
  if(clean==='/achievements')return <>{schema}<Achievements data={data}/></>;
  if(clean==='/best-of-jyc')return <>{schema}<JYCBestOf data={data}/></>;
  if(clean==='/about')return <>{schema}<About data={data}/></>;if(clean==='/clubs')return <>{schema}<JYC57Clubs data={data}/></>;if(club)return <>{schema}<ClubDetail data={data} id={slugId} virtualName={hubKey||undefined}/></>;
- if(clean==='/events')return <>{schema}<JYC57Events data={data}/></>;if(clean==='/fests')return isFestMode(data)?<>{schema}<FestsPage data={data}/></>:<Navigate to="/events" replace/>;if(clean.startsWith('/events/')&&legacyEventRedirect)return <Navigate to={'/events/'+legacyEventRedirect} replace/>;if(event&&parts[2]==='register')return <><RegistrationPage data={data} id={slugId} session={session}/></>;if(event)return <>{schema}<EventDetail data={data} id={slugId} session={session} notify={notify}/></>;
+ if(clean==='/events')return <>{schema}<JYC57Events data={data}/></>;if(clean==='/fests')return <>{schema}<FestsPage data={data}/></>;if(clean.startsWith('/events/')&&legacyEventRedirect)return <Navigate to={'/events/'+legacyEventRedirect} replace/>;if(event&&parts[2]==='register')return <><RegistrationPage data={data} id={slugId} session={session}/></>;if(event)return <>{schema}<EventDetail data={data} id={slugId} session={session} notify={notify}/></>;
  if(clean==='/gallery'||clean.startsWith('/gallery/'))return <>{schema}<JYC57Gallery data={data}/></>;if(clean==='/leadership')return <Navigate to="/team" replace/>;if(clean==='/team')return <>{schema}<Team data={data}/></>;if(clean==='/contact')return <>{schema}<Contact data={data}/></>;if(clean==='/archive')return <>{schema}<Suspense fallback={<div className="jyc57-empty" role="status">Loading the JYC archive…</div>}><LazyJYC57Archive data={data}/></Suspense></>;
  if(clean==='/announcements')return <>{schema}<Announcements data={data}/></>;
  if(clean==='/updates')return <>{schema}<JYCNowPage data={data}/></>;
@@ -732,7 +732,7 @@ function Navbar({data,admin,theme,setTheme}){
    <nav className={open?'open':''}>{navButtons}<button type="button" className={`nav-more-trigger ${moreOpen?'active':''}`} onClick={()=>{setOpen(false);setMoreOpen(v=>!v)}} aria-expanded={moreOpen}>More <span aria-hidden="true">⌄</span></button></nav>
    <button type="button" className="nav-join-cta" onClick={()=>nav('/join-jyc')}>Join JYC <span>↗</span></button>
    <Theme theme={theme} setTheme={setTheme}/><button type="button" className={`hamb ${open?'open':''}`} onClick={()=>setOpen(v=>!v)} aria-label="Menu" aria-expanded={open}><i/><i/><i/></button>
-   {open&&<button type="button" className="mobile-nav-scrim" aria-label="Close navigation" onClick={()=>setOpen(false)}/>}<button type="button" className="search-trigger" onClick={()=>setSearch(true)} aria-label="Search" title="Search JYC (Ctrl/Cmd + K)"><span className="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg></span><span className="search-label">Search</span><kbd>Ctrl K</kbd></button>
+   {open&&<button type="button" className="mobile-nav-scrim" aria-label="Close navigation" onClick={()=>setOpen(false)}/>}<button type="button" className="search-trigger" onClick={()=>setSearch(true)} aria-label="Search Ctrl K" title="Search JYC (Ctrl/Cmd + K)"><span className="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg></span><span className="search-label">Search</span><kbd>Ctrl K</kbd></button>
  </div></header>
  {createPortal(dock,document.body)}{createPortal(more,document.body)}{searchView}</>
 }

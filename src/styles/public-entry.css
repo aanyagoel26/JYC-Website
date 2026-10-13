@@ -169,3 +169,30 @@
     transition: none;
   }
 }
+
+
+/* WCAG 2.2 AA contrast repairs from the Lighthouse route audit. */
+.jh-cyber-badge b{color:#FFF8E1!important}
+.about-principles-v33 article>span,.about-history-badge{color:#A82420!important}
+.public-app .visible-breadcrumbs a,.public-app .search-topic-links a{color:#825F2B!important}
+.jyc-featured-event-note{color:#625A52!important}
+.jyc-footer-v6 .footer-v6-brand strong,
+.jyc-footer-v6 .footer-v6-intro h2,
+.jyc-footer-v6 .footer-v6-links button,
+.jyc-footer-v6 .footer-v6-connect a,
+.jyc-footer-v6 .footer-v6-biglink button{color:#FFF8E1!important}
+.jyc-footer-v6 .footer-v6-brand span,
+.jyc-footer-v6 .footer-v6-index,
+.jyc-footer-v6 .footer-v6-intro p,
+.jyc-footer-v6 .footer-v6-bottom,
+.jyc-footer-v6 .jyc-creator-credit{color:#A8A3B0!important}
+.jyc-footer-v6 .footer-v6-intro .eyebrow,
+.jyc-footer-v6 .footer-v6-links .eyebrow,
+.jyc-footer-v6 .footer-v6-connect .eyebrow{color:#FF7777!important}
+.jyc-footer-v6 .footer-v6-bottom a,
+.jyc-footer-v6 .jyc-creator-credit a{color:#D2B48C!important}
+@media(max-width:620px){
+ .jyc-bot-orb{width:48px!important;min-width:48px!important;height:48px!important;padding:0!important;gap:0!important;border-radius:50%!important}
+ .jyc-bot-label{display:none!important}
+ .jyc-bot-orb .jyc-bot-visual{width:36px!important;height:36px!important}
+}
