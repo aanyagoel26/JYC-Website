@@ -1395,6 +1395,14 @@ test('closed recruitment state still offers useful next steps', async ({ page })
   await expect(page.getByRole('button', { name: /Join JYC updates/ })).toBeVisible();
 });
 
+test('featured event announcement never blocks mobile navigation', async ({ page }) => {
+  await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'JYC homepage');
+  await page.waitForTimeout(700);
+  await expect(page.locator('.jyc-featured-event-overlay')).toHaveCount(0);
+  await expect(page.locator('.mobile-dock')).toBeVisible();
+});
+
 test('Best of JYC frames navigate into the matching gallery photo', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto(base + '/best-of-jyc', { waitUntil: 'domcontentloaded' });
