@@ -15,7 +15,7 @@ async function waitForImagesToSettle(page) {
 
 async function waitForAppMount(page, label='page') {
   try {
-    await page.waitForFunction(() => Boolean(document.querySelector('#root .app-frame, #root .app, #root .public-app')), { timeout: 30000 });
+    await page.waitForFunction(() => Boolean(document.querySelector('#root .app-frame, #root .app, #root .public-app')) && document.documentElement.dataset.jycContentReady === 'true', { timeout: 30000 });
   } catch (error) {
     const diagnostics = await page.evaluate(() => ({
       readyState: document.readyState,
@@ -51,6 +51,20 @@ for (const route of routes) {
   });
 }
 
+
+test('history, achievements and Best of JYC render their dedicated pages', async ({ page }) => {
+  const cases = [
+    ['/history', /A living record of JYC\./i],
+    ['/achievements', /What the community has built\./i],
+    ['/best-of-jyc', /The Best of JYC\./i]
+  ];
+  for (const [route, heading] of cases) {
+    await page.goto(base + route, { waitUntil: 'domcontentloaded' });
+    await waitForAppMount(page, route);
+    await expect(page.locator('h1').first()).toContainText(heading);
+    await expect.poll(() => new URL(page.url()).pathname).toBe(route);
+  }
+});
 
 test('JYC Now page stays within responsive guardrails', async ({ page }) => {
   await page.goto(base + '/updates', { waitUntil: 'domcontentloaded' });
@@ -232,6 +246,32 @@ test('event and gallery navigation use canonical, shareable URLs', async ({ page
   const eagerImages = await page.locator('img[loading="eager"]').count();
   expect(eagerImages).toBeLessThanOrEqual(4);
 });
+
+test('club detail route opens from a directory card', async ({ page }) => {
+  await page.goto(base + '/clubs', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'club directory');
+  const card = page.locator('.jyc57-club-card').first();
+  await expect(card, 'published club card is available').toBeVisible();
+  await card.click();
+  await expect.poll(() => new URL(page.url()).pathname, { timeout: 7000 }).toMatch(/^\/clubs\/[a-z0-9-]+$/);
+  await waitForAppMount(page, 'club detail destination');
+  await expect(page.locator('h1').first(), 'club detail has a primary heading').toBeVisible();
+  await expect(page.locator('h1').first()).not.toBeEmpty();
+});
+
+test('event detail route opens from the event directory', async ({ page }) => {
+  await page.goto(base + '/events', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'event directory');
+  await page.locator('.jyc57-segment').getByRole('button', { name: 'All', exact: true }).click();
+  const card = page.locator('.jyc57-event-card').first();
+  await expect(card, 'published event card is available').toBeVisible();
+  await card.click();
+  await expect.poll(() => new URL(page.url()).pathname, { timeout: 7000 }).toMatch(/^\/events\/[a-z0-9-]+$/);
+  await waitForAppMount(page, 'event detail destination');
+  await expect(page.locator('h1').first(), 'event detail has a primary heading').toBeVisible();
+  await expect(page.locator('h1').first()).not.toBeEmpty();
+});
+
 
 test('homepage renders the official logo through Dither Veil and a magnetic activity Bento', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 960 });
@@ -1213,7 +1253,7 @@ test('static boot screen respects the saved light/dark theme before React mounts
   await page.addInitScript(value => localStorage.setItem('jyc-theme', value), 'light');
   await page.route('**/*', route => {
     const pathname = new URL(route.request().url()).pathname;
-    if (/\.(?:js|jsx|mjs)$/.test(pathname) || pathname === '/@vite/client') return route.abort();
+    if ((pathname.startsWith('/assets/') && /\.(?:js|jsx|mjs)$/.test(pathname)) || pathname === '/@vite/client') return route.abort();
     return route.continue();
   });
 
@@ -1247,18 +1287,20 @@ test('static boot screen respects the saved light/dark theme before React mounts
 test('public route shells keep route-specific SEO content and one primary heading without JavaScript', async ({ page }) => {
   await page.route('**/*', route => {
     const pathname = new URL(route.request().url()).pathname;
-    if (/\.(?:js|jsx|mjs)$/.test(pathname) || pathname === '/@vite/client') return route.abort();
+    if ((pathname.startsWith('/assets/') && /\.(?:js|jsx|mjs)$/.test(pathname)) || pathname === '/@vite/client') return route.abort();
     return route.continue();
   });
   const routes = [
     { path: '/', title: 'JIIT Youth Club 128 — Official JYC Website | JIIT Wish Town, Noida' },
-    { path: '/contact', title: 'Contact JIIT Youth Club 128 | JYC' },
-    { path: '/clubs', title: 'JYC Communities & Clubs | JIIT Youth Club 128' },
-    { path: '/events/jai-2026-jaypee-agentic-ai-hackathon', title: 'JAI 2026 — Jaypee Agentic AI Hackathon | JYC' }
+    { path: '/contact', requestPath: '/contact/', title: 'Contact JIIT Youth Club 128 | JYC' },
+    { path: '/clubs', requestPath: '/clubs/', title: 'JYC Communities & Clubs | JIIT Youth Club 128' },
+    { path: '/events/jai-2026-jaypee-agentic-ai-hackathon', requestPath: '/events/jai-2026-jaypee-agentic-ai-hackathon/', title: 'JAI 2026 — Jaypee Agentic AI Hackathon | JYC' }
   ];
 
-  for (const { path, title } of routes) {
-    await page.goto(base + path, { waitUntil: 'domcontentloaded' });
+  for (const { path, title, requestPath } of routes) {
+    // Vite preview serves the generated dist/<route>/index.html at the trailing-slash path.
+    // Keep the canonical assertion on the public, slashless route.
+    await page.goto(base + (requestPath || path), { waitUntil: 'domcontentloaded' });
     await expect(page).toHaveTitle(title);
     const primaryHeading = page.getByRole('heading', { level: 1 });
     await expect(primaryHeading).toHaveCount(1);
