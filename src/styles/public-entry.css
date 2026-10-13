@@ -196,3 +196,19 @@
  .jyc-bot-label{display:none!important}
  .jyc-bot-orb .jyc-bot-visual{width:36px!important;height:36px!important}
 }
+
+
+/* High-specificity WCAG contrast fixes verified against computed foreground/background pairs. */
+footer.jyc-footer.jyc-footer-v6 .footer-v6-inner .footer-bottom .jyc-creator-credit{color:#A8A3B0!important}
+footer.jyc-footer.jyc-footer-v6 .footer-v6-inner .footer-bottom .jyc-creator-credit a{color:#D2B48C!important}
+.about-history-node-card .about-history-cite>span,.about-source-note{color:#625A52!important}
+.about-history-node-card .about-history-cite a{color:#825F2B!important}
+.about-next-v28 .eyebrow{color:#A82420!important}
+.about-next-v28 h2{color:#1A191D!important}
+.about-next-v28 .btn{background:#A82420!important;color:#FFF8E1!important;border-color:#A82420!important}
+.about-next-v28 .btn.secondary{background:transparent!important;color:#1A191D!important;border-color:#A82420!important}
+.jyc-gallery-hero .jh-kicker,.jyc-gallery-hero .jh-kicker b,
+.jyc-clubs-header .jh-kicker,.jyc-clubs-header .jh-kicker b{color:#625A52!important}
+.jyc57-archive-nav>a{color:#825F2B!important}
+.jyc-section-head-bar>div>span{color:#625A52!important}
+.jyc57-media-filter+div>div>span,#jyc-gallery-years>span{color:#625A52!important}
