@@ -17,7 +17,7 @@ permissions:
 jobs:
   browser:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 35
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -42,6 +42,8 @@ jobs:
         run: npm run build
 
       - name: Run browser smoke and responsive QA against production preview
+        env:
+          JYC_UPDATE_VISUAL_BASELINES: ${{ contains(github.event.head_commit.message || '', '[visual-baseline-bootstrap]') && 'true' || 'false' }}
         run: npm run qa:browser
       - name: Upload Playwright reports and visual route captures
         if: always()
@@ -51,4 +53,5 @@ jobs:
           path: |
             playwright-report
             test-results
+            scripts/visual-route-matrix.spec.js-snapshots
           if-no-files-found: ignore

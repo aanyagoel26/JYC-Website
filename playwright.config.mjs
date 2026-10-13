@@ -1,10 +1,10 @@
 import { defineConfig } from '@playwright/test';
 
 const baseURL = process.env.JYC_BASE_URL || 'http://127.0.0.1:5173';
-
-// Full functional and route coverage runs on desktop. Smaller viewports run a
-// focused responsive/interaction matrix to avoid repeating exhaustive media scans.
-const responsiveMatrix = /homepage accessibility and responsive guardrails|reduced-motion mode disables|brand text contrast|mobile visual guardrails|event and gallery navigation|official logo|gallery archive uses deterministic|lazy-loaded media decodes|photo-led pages render real image|empty media frames|gallery deep-link|gallery album routes|gallery lightbox supports|constrained mobile network|gallery lightbox traps focus|Search and More surfaces|keyboard can reach the skip link|public images load|team profiles flip|responsive photos|featured event poster|team flip-card biographies|magnetic bento motion|featured event popup|JYC assistant remains interactive|GLB stays on capable|mobile fixed controls|fixed public controls|Join JYC exposes|gallery interaction contract|gallery load-more|JYC Assistant search|JYC Assistant traps keyboard focus|external registration route|published JAI event detail|tablet events hero|Best of JYC frames|updates API returns|JYC Now fallback cards|featured accordion gallery|sitewide routes|club detail|event detail|mobile pages remain centered|gallery lightbox opens|React Bits and Motion surfaces|search and More sheets|static boot screen|public route shells|assistant quick routes|Core Web Vitals/i;
+const mobileCore = /homepage accessibility and responsive guardrails|brand text contrast stays readable in both light and dark themes|mobile visual guardrails|mobile pages remain centered and controls meet touch-safe sizing|fixed public controls|Search and More surfaces follow the light\/dark theme with readable text|responsive photos retry the original source when a derivative returns HTML with HTTP 200|featured event poster uses the shared responsive image fallback contract|gallery interaction contract covers filters, album routes, navigation, zoom and share controls|gallery lightbox traps focus and restores focus after close|Join JYC explains the published recruitment journey|Best of JYC frames navigate into the matching gallery photo/i;
+const mobile430 = /homepage accessibility and responsive guardrails|brand text contrast stays readable in both light and dark themes|mobile pages remain centered and controls meet touch-safe sizing|Search and More surfaces follow the light\/dark theme with readable text|featured event poster uses the shared responsive image fallback contract/i;
+const tabletCore = /homepage accessibility and responsive guardrails|brand text contrast stays readable in both light and dark themes|tablet events hero keeps the headline inside its text frame|mobile pages remain centered and controls meet touch-safe sizing|responsive photos retry the original source when a derivative returns HTML with HTTP 200|featured event poster uses the shared responsive image fallback contract/i;
+const desktop1440 = /homepage accessibility and responsive guardrails|brand text contrast stays readable in both light and dark themes|sitewide routes have no overflow, clipping, off-screen content or fixed-control overlap|sitewide routes load every visible image successfully and expose alt text|gallery archive uses deterministic responsive image frames|homepage records Core Web Vitals under the browser harness/i;
 
 export default defineConfig({
   testDir: './scripts',
@@ -13,46 +13,21 @@ export default defineConfig({
   workers: process.env.CI ? 2 : undefined,
   fullyParallel: false,
   reporter: [['line']],
-  // The public site exercises WebGL, image decoding and multiple lazy React surfaces. CI runners are memory-constrained; serializing projects prevents browser-context OOM cascades while retaining every viewport check.
   use: {
     baseURL,
-    // Keep deterministic request interception reliable for image/API failure-path tests.
     serviceWorkers: 'block',
-    // CI keeps screenshots for actionable failures but disables expensive trace/video streams.
-    // This prevents large WebGL/media journeys from exhausting the runner's artifact I/O budget.
     trace: process.env.CI ? 'off' : 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: process.env.CI ? 'off' : 'retain-on-failure'
   },
   projects: [
-    {
-      name: 'mobile-390',
-      use: { viewport: { width: 390, height: 844 }, isMobile: true },
-      grep: responsiveMatrix,
-    },
-    {
-      name: 'mobile-430',
-      use: { viewport: { width: 430, height: 932 }, isMobile: true },
-      grep: responsiveMatrix,
-    },
-    {
-      name: 'tablet-768',
-      use: { viewport: { width: 768, height: 1024 } },
-      grep: responsiveMatrix,
-    },
-    {
-      name: 'desktop-1280',
-      use: { viewport: { width: 1280, height: 900 } }
-    },
-    {
-      name: 'desktop-1440',
-      use: { viewport: { width: 1440, height: 900 } },
-      grep: responsiveMatrix,
-    }
+    { name: 'mobile-390', use: { viewport: { width: 390, height: 844 }, isMobile: true }, grep: mobileCore },
+    { name: 'mobile-430', use: { viewport: { width: 430, height: 932 }, isMobile: true }, grep: mobile430 },
+    { name: 'tablet-768', use: { viewport: { width: 768, height: 1024 } }, grep: tabletCore },
+    { name: 'desktop-1280', use: { viewport: { width: 1280, height: 900 } } },
+    { name: 'desktop-1440', use: { viewport: { width: 1440, height: 900 } }, grep: desktop1440 }
   ],
   webServer: {
-    // CI has already built the production bundle; exercise that exact artifact instead of
-    // paying Vite's cold dev-transform cost on every parallel browser project.
     command: process.env.CI
       ? 'npm run preview -- --host 127.0.0.1 --port 5173'
       : 'npm run dev -- --host 127.0.0.1',

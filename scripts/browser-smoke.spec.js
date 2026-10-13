@@ -1150,10 +1150,11 @@ test('fixed public controls have no accidental pairwise overlap on mobile', asyn
 
 
 
-test('Join JYC exposes the public coming-soon experience', async ({ page }) => {
+test('Join JYC explains the published recruitment journey and current status', async ({ page }) => {
   await page.goto(base + '/join-jyc', { waitUntil: 'domcontentloaded' });
-  await expect(page.getByRole('heading', { name: 'Join JYC.' })).toBeVisible();
-  await expect(page.getByText('The next JYC recruitment cycle is being prepared.')).toBeVisible();
+  await waitForAppMount(page, 'Join JYC');
+  await expect(page.getByRole('heading', { name: /Ready to Soar\. Join the JYC Student Ecosystem\./ })).toBeVisible();
+  await expect(page.getByText(/Explore the published JYC communities and current recruitment notices\./)).toBeVisible();
 });
 
 
@@ -1395,11 +1396,13 @@ test('closed recruitment state still offers useful next steps', async ({ page })
 });
 
 test('Best of JYC frames navigate into the matching gallery photo', async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.goto(base + '/best-of-jyc', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'Best of JYC editorial selection');
+  await page.addStyleTag({ content: '*,*::before,*::after{animation:none!important;transition:none!important;caret-color:transparent!important}' });
   const card = page.locator('.jyc-best-of-page .jyc57-feature-card').first();
   await expect(card).toBeVisible();
-  await card.click();
+  await card.click({ timeout: 7000 });
   await expect(page).toHaveURL(/\/gallery\?photo=/);
   await expect(page.locator('.jyc57-gallery-page')).toBeVisible();
 });

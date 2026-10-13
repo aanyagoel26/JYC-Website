@@ -27,6 +27,7 @@ test.describe('JYC visual capture and measurable design contracts', () => {
         await page.locator('.public-app').waitFor({ state: 'visible', timeout: 25000 });
         await page.waitForFunction(() => document.documentElement.dataset.jycContentReady === 'true', { timeout: 20000 });
         await page.evaluate(() => document.fonts.ready);
+        await page.addStyleTag({content:'*,*::before,*::after{animation:none!important;animation-duration:0s!important;transition:none!important;transition-duration:0s!important;caret-color:transparent!important}.fest-countdown{visibility:hidden!important}'});
         await page.mouse.move(-1, -1);
         const metrics = await page.evaluate(() => {
           const visible = el => {
@@ -69,8 +70,19 @@ test.describe('JYC visual capture and measurable design contracts', () => {
         expect(metrics.brokenImages, `${route} broken images`).toBe(0);
         expect(metrics.bodyOverflow, `${route} horizontal overflow at ${viewport.name}`).toBe(false);
         expect(metrics.badText, `${route} has undersized or compressed body text`).toBe(0);
+        const routeName = route === '/' ? 'home' : route.slice(1).replaceAll('/', '-');
+        const snapshotName = `${viewport.name}-${routeName}.png`;
+        if (process.env.JYC_UPDATE_VISUAL_BASELINES === 'true') {
+          await page.screenshot({ path: testInfo.snapshotPath(snapshotName), animations: 'disabled' });
+        } else {
+          await expect(page).toHaveScreenshot(snapshotName, {
+            animations: 'disabled',
+            threshold: 0.15,
+            maxDiffPixelRatio: 0.01
+          });
+        }
         await page.screenshot({
-          path: testInfo.outputPath(`${route === '/' ? 'home' : route.slice(1).replaceAll('/', '-')}.png`),
+          path: testInfo.outputPath(`${routeName}.png`),
           fullPage: true,
           animations: 'disabled'
         });
