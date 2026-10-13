@@ -7,7 +7,7 @@ import { Renderer, Program, Mesh, Triangle, Texture, RenderTarget } from 'ogl';
 
 import './DitherVeil.css';
 
-const DEFAULT_SRC = '/JYC%20Logo(4).png';
+const DEFAULT_SRC = '/jyc-logo-official.webp';
 
 const ORDERED = { bayer: 0, noise: 1, lines: 2 };
 
@@ -836,7 +836,7 @@ const DitherVeil = ({
     };
   }, [src, fallbackSrc, originalFallbackSrc]);
 
-  return <div ref={containerRef} className={`dither-veil ${className}`.trim()} style={style}><img className="dither-veil__fallback" src={src} alt="" aria-hidden="true" loading="eager" fetchPriority="high" decoding="async" onError={event=>{const image=event.currentTarget;const candidates=[fallbackSrc,originalFallbackSrc].filter(Boolean);let next=Number(image.dataset.logoFallbackStage||0);while(next<candidates.length&&new URL(candidates[next],window.location.href).href===image.src)next+=1;if(next<candidates.length){image.dataset.logoFallbackStage=String(next+1);image.src=candidates[next]}else image.hidden=true}} /></div>;
+  return <div ref={containerRef} className={`dither-veil ${className}`.trim()} style={style}><img className="dither-veil__fallback" src={src} alt="" aria-hidden="true" width={160} height={160} loading="eager" fetchPriority="high" decoding="async" onError={event=>{const image=event.currentTarget;const candidates=[fallbackSrc,originalFallbackSrc].filter(Boolean);let next=Number(image.dataset.logoFallbackStage||0);while(next<candidates.length&&new URL(candidates[next],window.location.href).href===image.src)next+=1;if(next<candidates.length){image.dataset.logoFallbackStage=String(next+1);image.src=candidates[next]}else image.hidden=true}} /></div>;
 };
 
 export default DitherVeil;

@@ -6,6 +6,7 @@ export function JYCBot({data}){
  const loc=useLocation(),[assistantOpen,setAssistantOpen]=useState(false),[modelReady,setModelReady]=useState(false),[modelAvailable,setModelAvailable]=useState(false),[modelFailed,setModelFailed]=useState(false),[motion,setMotion]=useState('');
  const modelRef=useRef(null); const modelPreloadRef=useRef(false); const motionTimer=useRef(null); const animationStopTimer=useRef(null); const idleTimer=useRef(null); const animationCursor=useRef(0); const modelAnimationCursor=useRef(0);
  const context=loc.pathname.startsWith('/events')?'events':loc.pathname.startsWith('/clubs')?'clubs':loc.pathname.startsWith('/gallery')?'gallery':loc.pathname.startsWith('/team')||loc.pathname.startsWith('/leadership')?'team':'home';
+ const botLabel=context==='clubs'?'Explore hubs':context==='events'?'Find an event':context==='gallery'?'Explore archive':context==='team'?'Meet JYC':'Ask JYC';
  const loadModelViewer=()=>{
   if(typeof window==='undefined'||document.documentElement.dataset.performance==='lite'||navigator.connection?.saveData||window.matchMedia?.('(pointer: coarse)').matches||window.matchMedia?.('(max-width: 760px)').matches||window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
   if(customElements?.get('model-viewer')){setModelReady(true);return;}
@@ -41,10 +42,7 @@ export function JYCBot({data}){
  const handleModelError=()=>{setModelAvailable(false);setModelFailed(true)};
  const runContextAnimation=()=>{const map={home:['wave','peek'],clubs:['idle','think'],events:['tap','celebrate'],gallery:['dance','peek'],team:['wave','think']};const intents=map[context]||['idle'];const intent=intents[animationCursor.current%intents.length];animationCursor.current+=1;triggerMotion(`is-${intent}`,760,intent)};
  const openAssistant=()=>{loadModelViewer();preloadModelAsset();const sequence=[['is-wave',900,'wave'],['is-bounce',820,'bounce'],['is-tap',520,'tap'],['is-celebrate',900,'celebrate'],['is-dance',980,'dance'],['is-peek',760,'peek']];const next=sequence[animationCursor.current%sequence.length];animationCursor.current+=1;triggerMotion(next[0],next[1],next[2]);setAssistantOpen(true)};
- useEffect(()=>{
-  const bootTimer=window.setTimeout(()=>{loadModelViewer();preloadModelAsset();},500);
-  return ()=>{window.clearTimeout(bootTimer);window.clearTimeout(motionTimer.current);window.clearTimeout(animationStopTimer.current);window.clearInterval(idleTimer.current)};
- },[]);
+ useEffect(()=>()=>{window.clearTimeout(motionTimer.current);window.clearTimeout(animationStopTimer.current);window.clearInterval(idleTimer.current)},[]);
  useEffect(()=>{if(modelReady&&modelAvailable&&!modelFailed&&!prefersReducedMotion())triggerMotion('is-wave',760,'wave')},[modelReady,modelAvailable,modelFailed]);
  useEffect(()=>{
   if(prefersReducedMotion())return;
@@ -59,7 +57,7 @@ export function JYCBot({data}){
   return ()=>window.clearInterval(interval);
  },[assistantOpen]);
  return <div className={`jyc-bot-shell ${assistantOpen?'is-open':''}`} data-context={context}>
-  <button className={`jyc-bot-orb ${motion}`} type="button" aria-label="Open JYC Assistant" aria-expanded={assistantOpen} onPointerEnter={()=>{loadModelViewer();preloadModelAsset();triggerMotion('is-hover',520,'idle')}} onFocus={()=>{loadModelViewer();preloadModelAsset()}} onClick={openAssistant}><span className="jyc-bot-status" aria-hidden="true"/><span className="jyc-bot-model-wrap">{modelReady&&!modelFailed?<model-viewer ref={modelRef} className="jyc-bot-glb" data-jyc-glb-src="/models/jyc-spatial.glb" src="/models/jyc-spatial.glb" poster="/JYC%20Logo(4).png" camera-orbit="0deg 75deg auto" loading="eager" reveal="auto" disable-zoom disable-pan interaction-prompt="none" shadow-intensity="0.45" shadow-softness="0.75" exposure="1.15" alt="Interactive 3D JYC spatial assistant" onLoad={handleModelLoad} onError={handleModelError}></model-viewer>:<span className="jyc-bot-model-fallback" aria-hidden="true"><img src="/JYC%20Logo(4).png" alt="" loading="lazy" decoding="async"/><span className="bot-orbit-dot"/></span>}</span><span className="jyc-bot-label">{context==='clubs'?'Explore hubs':context==='events'?'Find an event':context==='gallery'?'Explore archive':context==='team'?'Meet JYC':'Ask JYC'}</span></button>
+  <button className={`jyc-bot-orb ${motion}`} type="button" aria-label={botLabel} aria-expanded={assistantOpen} onPointerEnter={()=>{loadModelViewer();preloadModelAsset();triggerMotion('is-hover',520,'idle')}} onFocus={()=>{loadModelViewer();preloadModelAsset()}} onClick={openAssistant}><span className="jyc-bot-status" aria-hidden="true"/><span className="jyc-bot-model-wrap">{modelReady&&!modelFailed?<model-viewer ref={modelRef} className="jyc-bot-glb" data-jyc-glb-src="/models/jyc-spatial.glb" src="/models/jyc-spatial.glb" poster="/jyc-logo-official.webp" camera-orbit="0deg 75deg auto" loading="eager" reveal="auto" disable-zoom disable-pan interaction-prompt="none" shadow-intensity="0.45" shadow-softness="0.75" exposure="1.15" alt="Interactive 3D JYC spatial assistant" onLoad={handleModelLoad} onError={handleModelError}></model-viewer>:<span className="jyc-bot-model-fallback" aria-hidden="true"><img src="/jyc-logo-official.webp" alt="" width={44} height={44} loading="lazy" decoding="async"/><span className="bot-orbit-dot"/></span>}</span><span className="jyc-bot-label">{botLabel}</span></button>
   <div className="jyc-bot-hint" aria-hidden="true">JYC Assistant · click to explore</div>
   {assistantOpen&&<JYCAssistant data={data} onClose={()=>setAssistantOpen(false)}/>}
   <style>{`

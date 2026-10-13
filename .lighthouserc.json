@@ -25,7 +25,6 @@
       }
     },
     "assert": {
-      "preset": "lighthouse:recommended",
       "assertions": {
         "categories:performance": [
           "warn",
@@ -67,6 +66,36 @@
           "warn",
           {
             "maxNumericValue": 300
+          }
+        ],
+        "color-contrast": [
+          "error",
+          {
+            "minScore": 1
+          }
+        ],
+        "label-content-name-mismatch": [
+          "error",
+          {
+            "minScore": 1
+          }
+        ],
+        "aria-prohibited-attr": [
+          "error",
+          {
+            "minScore": 1
+          }
+        ],
+        "unsized-images": [
+          "warn",
+          {
+            "minScore": 0.95
+          }
+        ],
+        "uses-responsive-images": [
+          "warn",
+          {
+            "minScore": 0.9
           }
         ]
       }

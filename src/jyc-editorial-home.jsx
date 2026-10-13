@@ -133,7 +133,7 @@ function LazyActivityBento({ activities, nav }) {
     return () => observer.disconnect();
   }, []);
 
-  return <div ref={rootRef} className="jh-activity-bento-shell" aria-label="Explore JYC activities">
+  return <div ref={rootRef} className="jh-activity-bento-shell" role="group" aria-label="Explore JYC activities">
     {ready
       ? <Suspense fallback={<div className="jh-bento-loading" role="status">Loading activity discovery…</div>}>
           <LazyMagicBento items={activities} enableMagnetism={true} enableTilt={true} enableStars={false} enableSpotlight={true} enableBorderGlow={false} particleCount={0} onNavigate={nav} glowColor="191,156,111" />
