@@ -3,8 +3,8 @@ const getPublishableKey=()=>readNamedKey('SUPABASE_PUBLISHABLE_KEYS','SUPABASE_A
 const getSecretKey=()=>readNamedKey('SUPABASE_SECRET_KEYS','SUPABASE_SERVICE_ROLE_KEY');
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.117.2';
 
-const origins = new Set((Deno.env.get('SITE_ORIGINS') || Deno.env.get('SITE_ORIGIN') || 'http://localhost:5173')
-  .split(',').map(x=>x.trim()).filter(Boolean));
+const configuredOrigins=(Deno.env.get('SITE_ORIGINS')||Deno.env.get('SITE_ORIGIN')||'').split(',').map(x=>x.trim()).filter(Boolean);
+const origins = new Set([...configuredOrigins,'https://jyc-website-eight.vercel.app']);
 const allowedOrigin = (origin:string|null) => origin && (origins.has(origin) || /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) ? origin : null;
 const json=(body:unknown,status=200,origin:string|null=null)=>new Response(JSON.stringify(body),{status,headers:{
   'Access-Control-Allow-Origin':allowedOrigin(origin)||'null',
@@ -17,7 +17,10 @@ const json=(body:unknown,status=200,origin:string|null=null)=>new Response(JSON.
 }});
 
 async function fingerprint(req:Request){
-  const ip=(req.headers.get('x-forwarded-for')||req.headers.get('x-real-ip')||'unknown').split(',')[0].trim();
+  // Prefer Cloudflare's edge-authored client IP; otherwise use the rightmost
+  // proxy-appended X-Forwarded-For value instead of trusting a caller-controlled first entry.
+  const forwarded=(req.headers.get('x-forwarded-for')||'').split(',').map(value=>value.trim()).filter(Boolean);
+  const ip=(req.headers.get('cf-connecting-ip')||forwarded.at(-1)||req.headers.get('x-real-ip')||'unknown').slice(0,128);
   const ua=(req.headers.get('user-agent')||'unknown').slice(0,300);
   const digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(ip+'|'+ua));
   return Array.from(new Uint8Array(digest)).map(b=>b.toString(16).padStart(2,'0')).join('');
