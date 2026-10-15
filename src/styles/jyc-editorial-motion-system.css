@@ -1,0 +1,42 @@
+/* JYC Editorial Motion System — V65
+   Source-owned visual layer; no runtime dependency or extra JS. */
+:root{--jyc-motion-fast:160ms;--jyc-motion-base:240ms;--jyc-motion-slow:420ms;--jyc-motion-ease:cubic-bezier(.2,.75,.25,1);--jyc-paper:#f6f2e9;--jyc-paper-raised:#fffdf8;--jyc-ink:#201b1c;--jyc-muted-ink:#686064;--jyc-oxblood:#8f2429;--jyc-champagne:#c6a777;--jyc-hairline:rgba(32,27,28,.14)}
+[data-theme="dark"]{--jyc-paper:#121113;--jyc-paper-raised:#1c191c;--jyc-ink:#f8f2e8;--jyc-muted-ink:#b9afb3;--jyc-oxblood:#d45b60;--jyc-champagne:#d2b68b;--jyc-hairline:rgba(248,242,232,.14)}
+.jyc-editorial-home.jyc-home{background:radial-gradient(ellipse at 82% 8%,color-mix(in srgb,var(--jh-accent,#8f2429) 7%,transparent),transparent 35%),var(--jh-bg,var(--jyc-paper));color:var(--jh-ink,var(--jyc-ink));isolation:isolate}
+.jyc-editorial-home .jh-hero{width:min(1380px,calc(100% - clamp(32px,7vw,112px)));min-height:min(850px,calc(100svh - 72px));padding-block:clamp(44px,7.5vh,92px) clamp(52px,8vh,100px);grid-template-columns:minmax(0,1.04fr) minmax(300px,.96fr);gap:clamp(28px,5.5vw,88px)}
+.jyc-editorial-home .jh-hero-copy{max-width:760px}
+.jyc-editorial-home .jh-overline{color:var(--jh-muted,var(--jyc-muted-ink));font-size:11px;letter-spacing:.16em}
+.jyc-editorial-home .jh-hero h1{max-width:10.5ch;margin-block:clamp(18px,2.2vw,30px) clamp(18px,2vw,26px)!important;font-size:clamp(48px,6.1vw,88px)!important;line-height:.94!important;letter-spacing:-.067em!important;text-wrap:balance}
+.jyc-editorial-home .jh-title-gradient{color:var(--jh-accent,var(--jyc-oxblood));font-style:italic}
+.jyc-editorial-home .jh-lead{max-width:48ch;color:var(--jh-muted,var(--jyc-muted-ink));font-size:clamp(16px,1.25vw,19px);line-height:1.75}
+.jyc-editorial-home .jh-hero-dither-visual{min-width:0;min-height:clamp(320px,42vw,600px);align-self:stretch;display:grid;place-items:center}
+.jyc-editorial-home .jh-hero-logo-plaque{width:min(100%,570px);min-height:clamp(320px,42vw,570px);border:1px solid var(--jh-line,var(--jyc-hairline));border-radius:clamp(24px,3vw,42px);background:color-mix(in srgb,var(--jh-surface,var(--jyc-paper-raised)) 66%,transparent);box-shadow:0 28px 90px rgba(40,25,26,.10),inset 0 1px 0 rgba(255,255,255,.38);overflow:hidden;isolation:isolate}
+.jyc-editorial-home .jh-dither-mark{width:100%;height:100%;min-height:inherit}
+.jyc-editorial-home .jh-hero-dither-backdrop,.jyc-editorial-home .jh-logo-halo{opacity:.52}
+.jyc-editorial-home .jh-logo-caption{letter-spacing:.2em;font-size:10px;color:var(--jh-muted,var(--jyc-muted-ink))}
+.jyc-editorial-home .jh-cyber-badge{border-color:var(--jh-line-accent,var(--jyc-hairline));box-shadow:none;background:color-mix(in srgb,var(--jh-surface,var(--jyc-paper-raised)) 78%,transparent)}
+.jyc-editorial-home .jh-live-pulse-dot{box-shadow:none}
+.jyc-editorial-home .jh-btn{min-height:50px;border-radius:999px;padding-inline:23px;transition:transform var(--jyc-motion-base) var(--jyc-motion-ease),background var(--jyc-motion-base) ease,border-color var(--jyc-motion-base) ease,box-shadow var(--jyc-motion-base) ease}
+.jyc-editorial-home .jh-btn-primary{color:#fffaf3;background:var(--jh-accent,var(--jyc-oxblood));border-color:var(--jh-accent,var(--jyc-oxblood));box-shadow:0 8px 22px color-mix(in srgb,var(--jh-accent,var(--jyc-oxblood)) 18%,transparent)}
+.jyc-editorial-home .jh-btn-primary:hover{color:#fffaf3;background:color-mix(in srgb,var(--jh-accent,var(--jyc-oxblood)) 88%,#000);box-shadow:0 12px 28px color-mix(in srgb,var(--jh-accent,var(--jyc-oxblood)) 24%,transparent)}
+.jyc-editorial-home :where(a,button,[role="button"],input,select,textarea):focus-visible,.public-app :where(a,button,[role="button"],input,select,textarea):focus-visible{outline:3px solid color-mix(in srgb,var(--jyc-champagne) 88%,white);outline-offset:3px}
+.jyc-editorial-home .jh-hero-stats-row{gap:8px;margin-top:clamp(26px,3vw,42px);padding-top:20px}
+.jyc-editorial-home .jh-stat-item{border-radius:12px;padding:12px 10px}
+.jyc-editorial-home .jh-stat-item:hover{border-color:var(--jh-line,var(--jyc-hairline));background:color-mix(in srgb,var(--jh-surface,var(--jyc-paper-raised)) 72%,transparent)}
+.public-app{color:var(--jyc-ink);background:var(--jyc-paper);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+.public-app :where(.section-head,.page-head,.compact-page-head){margin-bottom:clamp(22px,3vw,38px)}
+.public-app :where(.section-head h1,.section-head h2,.page h1,.page h2,.compact-page-head h1,.compact-page-head h2){letter-spacing:-.045em;text-wrap:balance}
+.public-app :where(.section-head p,.page-head p,.compact-page-head p){text-wrap:pretty;line-height:1.72}
+.public-app :where(.club-card,.event-card,.activity-card,.team-layer-card,.hub-story-card,.jyc-journal-card,.event-related-card,.club-identity-card,.event-identity-card){border:1px solid var(--jyc-hairline);border-radius:18px;box-shadow:0 2px 8px rgba(32,27,28,.025);transition:border-color var(--jyc-motion-base) ease,box-shadow var(--jyc-motion-base) var(--jyc-motion-ease),transform var(--jyc-motion-base) var(--jyc-motion-ease)}
+.public-app :where(.club-card,.event-card,.activity-card,.team-layer-card,.hub-story-card,.jyc-journal-card,.event-related-card) img{transition:transform 360ms var(--jyc-motion-ease),filter 360ms ease}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){.public-app :where(.club-card,.event-card,.activity-card,.team-layer-card,.hub-story-card,.jyc-journal-card,.event-related-card):hover{transform:translateY(-3px);border-color:color-mix(in srgb,var(--jyc-champagne) 58%,var(--jyc-hairline));box-shadow:0 16px 38px rgba(32,27,28,.09)}.public-app :where(.club-card,.event-card,.activity-card,.team-layer-card,.hub-story-card,.jyc-journal-card,.event-related-card):hover img{transform:scale(1.025)}}
+.public-app :where(button,a,[role="button"]){-webkit-tap-highlight-color:transparent}
+.public-app :where(button,a,[role="button"]):active{transform:scale(.99)}
+.public-app :where(.gallery-item,.gallery-story-card,.event-source-gallery-grid figure,.hub-source-photo-strip figure){border-radius:14px}
+.public-app :where(.gallery-item img,.gallery-story-card img,.event-source-gallery-grid img,.hub-source-photo-strip img){background:color-mix(in srgb,var(--jyc-paper-raised) 86%,transparent)}
+.public-app :where(input,select,textarea){border-radius:12px}
+.public-app :where(.page,.section){scroll-margin-top:92px}
+@media(max-width:980px){.jyc-editorial-home .jh-hero{min-height:auto;grid-template-columns:minmax(0,1fr) minmax(260px,.8fr);gap:28px;width:calc(100% - 40px)}.jyc-editorial-home .jh-hero h1{font-size:clamp(44px,6.8vw,68px)!important}.jyc-editorial-home .jh-hero-dither-visual,.jyc-editorial-home .jh-hero-logo-plaque{min-height:360px}}
+@media(max-width:700px){.jyc-editorial-home .jh-hero{width:calc(100% - 36px);padding-block:34px 48px;grid-template-columns:minmax(0,1fr);gap:26px}.jyc-editorial-home .jh-hero-copy{order:0}.jyc-editorial-home .jh-hero-visual{order:1}.jyc-editorial-home .jh-hero h1{max-width:12ch;font-size:clamp(42px,12vw,62px)!important;line-height:.98!important}.jyc-editorial-home .jh-lead{font-size:16px}.jyc-editorial-home .jh-actions{gap:10px;margin-top:24px}.jyc-editorial-home .jh-btn{flex:1 1 155px;padding-inline:16px}.jyc-editorial-home .jh-hero-dither-visual,.jyc-editorial-home .jh-hero-logo-plaque{min-height:min(82vw,390px)}.jyc-editorial-home .jh-hero-stats-row{grid-template-columns:repeat(2,minmax(0,1fr))}.jyc-editorial-home .jh-hero-stats-row .jh-stat-item{min-width:0}}
+@media(max-width:380px){.jyc-editorial-home .jh-hero{width:calc(100% - 28px)}.jyc-editorial-home .jh-hero h1{font-size:40px!important}.jyc-editorial-home .jh-btn{width:100%;flex-basis:100%}}
+@media(prefers-reduced-motion:reduce){.jyc-editorial-home *,.public-app :where(.club-card,.event-card,.activity-card,.team-layer-card,.hub-story-card,.jyc-journal-card,.event-related-card),.public-app :where(.club-card img,.event-card img,.activity-card img,.team-layer-card img,.hub-story-card img,.jyc-journal-card img,.event-related-card img){animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important;transition-duration:.01ms!important}.jyc-editorial-home .jh-ambient-orb{animation:none!important}}
