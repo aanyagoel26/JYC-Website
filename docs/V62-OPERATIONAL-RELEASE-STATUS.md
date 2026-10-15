@@ -41,3 +41,8 @@ Dynamic entity routes beyond the explicitly generated canonical JAI route still 
 
 ## Release safety
 The release is not marked fully production-complete until the platform-gated, editorial/legal, backup, browser/device, and deployment gates above are actually passed. No database status was falsified and no unrelated JAI/event deployment was modified.
+
+## JYC Now runtime defect — October 16, 2026
+- **Source fix proposed:** define the `isRecord` predicate before `hasEntries` in `api/jyc-updates.js`; this removes a confirmed undefined-reference path during source-configuration checks.
+- **Regression coverage:** security QA asserts the helper exists before first use and rejects null, arrays, and primitives by contract.
+- **Release status:** awaiting PR checks and a production deployment. Do not mark JYC Now end-to-end PASS until the deployed `/api/jyc-updates` returns HTTP 200 with a valid JSON shape and the configured/unconfigured-source cases are verified.

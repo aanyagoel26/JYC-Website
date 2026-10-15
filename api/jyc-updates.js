@@ -15,6 +15,7 @@ const cfg={
  rss:json(process.env.JYC_RSS_FEEDS),
  manual:Array.isArray(json(process.env.JYC_MANUAL_UPDATES))?json(process.env.JYC_MANUAL_UPDATES):[]
 };
+const isRecord=value=>value!==null&&typeof value==='object'&&!Array.isArray(value);
 const hasEntries=value=>isRecord(value)&&Object.keys(value).length>0;
 const hasConfiguredSource=()=>Boolean(
  (process.env.META_ACCESS_TOKEN&&hasEntries(cfg.instagram)&&Object.values(cfg.instagram).some(Boolean))||
