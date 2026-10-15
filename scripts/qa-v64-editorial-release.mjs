@@ -23,6 +23,7 @@ const homeCss=read('src/jyc-editorial-home.css');
 const design=read('src/jyc-design-upgrades.css');
 const proRedesign=read('src/styles/jyc-pro-redesign.css');
 const editorialHome=read('src/jyc-editorial-home.jsx');
+const spotlight=read('src/jyc-spotlight.jsx');
 const brandExperience=read('src/jyc-next-experience.jsx');
 const flip=read('src/components/react-bits/FlipCard.jsx');
 const indexHtml=read('index.html');
@@ -173,6 +174,7 @@ const checks=[
  ['About family tiles expose supplied PDF examples',main.includes('profile?.examples||[]')&&main.includes('profile?.description||')&&design.includes('.about-family-grid-v28>button>p')],
  ['Innovation JIIT profile does not imply RIDE HACK applications remain open after the published 5 October deadline',hubs.includes('as of 10 October, do not describe applications as open unless the organiser explicitly reopens them')&&hubs.includes('shortlisting on 15 October 2026')&&hubs.includes('the final on 1 November 2026')],
   ['homepage photo story only selects published, role-classified event/club photography',editorialHome.includes('const photoStories = useMemo')&&editorialHome.includes("item?.mediaKind !== 'photo'")&&editorialHome.includes("!['event','club'].includes(role)")&&editorialHome.includes('item?.published === false')&&editorialHome.includes('seen.has(association.toLowerCase())')],
+  ['JYC spotlight archive image is distinct from its community photo and event poster',spotlight.includes('const photoKey=')&&spotlight.includes('const communityPhotoKey=photoKey(communityPhoto)')&&spotlight.includes('const eventPosterKey=photoKey(event?.poster)')&&spotlight.includes('key!==communityPhotoKey&&key!==eventPosterKey')&&spotlight.includes('const archive=archiveCandidates.find')],
   ['homepage photo story uses lazy responsive images, logo fallback and gallery navigation',editorialHome.includes('className="jh-story-photo"')&&editorialHome.includes('loading="lazy"')&&editorialHome.includes('decoding="async"')&&editorialHome.includes('fallbackSrc={FALLBACK}')&&editorialHome.includes("onClick={() => nav('/gallery')}")],
   ['featured event poster uses the shared stateful ResponsivePhoto fallback',editorialHome.includes('<ResponsivePhoto')&&editorialHome.includes('className="jh-featured-event-photo"')&&!editorialHome.includes('function Img(')&&homeCss.includes('.jh-featured-event-photo')],
   ['featured event popup is portal-layered, desktop-only and delayed',read('src/featured-event-popup.jsx').includes('createPortal')&&read('src/featured-event-popup.jsx').includes("(min-width: 761px) and (pointer: fine)")&&read('src/featured-event-popup.jsx').includes('EVENT_POPUP_DELAY_MS=10000')],
@@ -195,6 +197,7 @@ checks.push([
     gallery.includes("fetchPriority={albumIndex === 0 ? 'high' : undefined}")
 ]);
 checks.push(['public boot gate preserves the data-loading guard while avoiding a long artificial post-load wait',main.includes('const minimum=error?150:(readSiteCache()?120:250);')&&main.includes('if(loading)return;')&&main.includes('if(!bootReady)return <Loading stage={bootStage} cached={Boolean(readSiteCache())}/>;')]);
+checks.push(['navbar logo uses high-priority 48px/96px AVIF sources with LogoImage fallback',main.includes('<LogoImage alt="JIIT Youth Club logo" loading="eager" fetchPriority="high" srcSet={`${logoTiny} 1x, ${logoSmall} 2x`}/>')&&main.includes("const logoTiny='/assets/jyc-logo-48.avif'")&&main.includes("const logoSmall='/assets/jyc-logo-small.avif'")&&main.includes('if(stage<3){image.dataset.logoFallbackStage=\'3\';image.src=\'/JYC%20Logo(4).png\';return}')]);
 checks.push(['footer uses the compact 48px logo asset for its 48px mark',main.includes('function FooterLogoImage')&&main.includes('src="/assets/jyc-logo-48.avif"')&&main.includes('<FooterLogoImage alt="JYC logo"/>')]);
 checks.push(['feature hero copy has high-contrast light-theme overrides and recruitment empty state stays stacked',entryCss.includes('html[data-theme="light"] .public-app .feature-hero :is(h1,h2,h3,h4,h5,h6){color:#FFF8E1!important}')&&entryCss.includes('html[data-theme="light"] .public-app .feature-hero :is(p,li,small){color:#D7D1C7!important}')&&entryCss.includes('.public-app .feature-empty{display:flex;flex-direction:column;gap:8px}')&&entryCss.includes('.public-app .feature-empty.large>strong{display:block;')&&entryCss.includes('.public-app .feature-empty.large>span{display:block;')]);
 let failed=0;
