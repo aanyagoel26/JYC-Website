@@ -14,8 +14,10 @@ import './jyc-editorial-home.css';
 const ORIGINAL_LOGO = '/JYC%20Logo(4).png';
 const FALLBACK = import.meta.env.PROD ? '/assets/jyc-logo.webp' : ORIGINAL_LOGO;
 const DITHER_SOURCE = import.meta.env.PROD ? '/assets/jyc-logo-medium.avif' : FALLBACK;
+const DITHER_SRCSET = import.meta.env.PROD ? '/assets/jyc-logo-medium.avif 1x, /assets/jyc-logo.avif 2x' : undefined;
 const handleHeroLogoFallback = event => {
   const image = event.currentTarget;
+  image.srcset = '';
   const candidates = [FALLBACK, ORIGINAL_LOGO];
   let next = Number(image.dataset.logoFallbackStage || 0);
   while (next < candidates.length && new URL(candidates[next], window.location.href).href === image.src) next += 1;
@@ -225,9 +227,10 @@ export function JYCEditorialHome({ data }) {
           <div className="jh-hero-logo-plaque">
             <span className="jh-logo-halo" aria-hidden="true" />
             <div className="jh-dither-mark" role="img" aria-label="Official JIIT Youth Club 128 logo with an interactive Dither Veil effect">
-              <Suspense fallback={<img className="jh-hero-logo jh-dither-suspense-fallback" src={DITHER_SOURCE} alt="" aria-hidden="true" loading="eager" fetchPriority="high" decoding="async" onError={handleHeroLogoFallback} />}>
+              <Suspense fallback={<img className="jh-hero-logo jh-dither-suspense-fallback" src={DITHER_SOURCE} srcSet={DITHER_SRCSET} alt="" aria-hidden="true" loading="eager" fetchPriority="high" decoding="async" onError={handleHeroLogoFallback} />}>
                 <LazyDitherVeil
                   src={DITHER_SOURCE}
+                  srcSet={DITHER_SRCSET}
                   fallbackSrc={FALLBACK}
                   originalFallbackSrc={ORIGINAL_LOGO}
                   fit="contain"
