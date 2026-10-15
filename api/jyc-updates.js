@@ -4,7 +4,8 @@ const fetchWithTimeout=(url,options={})=>fetch(url,{...options,signal:AbortSigna
 let memory={at:0,items:[],live:false,configured:false};
 const json=value=>{try{return JSON.parse(value||'{}')}catch{return {}}};
 const unique=rows=>{const seen=new Set();return rows.filter(x=>{const key=x.externalId||x.url;if(!key||seen.has(key))return false;seen.add(key);return true})};
-const safeRemoteUrl=value=>{const raw=String(value||'').trim();if(!raw||/[\u0000-\u001f\u007f]/.test(raw))return '';try{const u=new URL(raw);if(!['http:','https:'].includes(u.protocol)||u.username||u.password)return '';const host=u.hostname.toLowerCase().replace(/^\[|\]$/g,'');const blocked=host==='localhost'||host==='metadata.google.internal'||host==='instance-data.ec2.internal'||host==='0.0.0.0'||host==='127.0.0.1'||host==='::1'||host==='169.254.169.254'||host.startsWith('10.')||host.startsWith('192.168.')||host.startsWith('169.254.')||host.startsWith('100.64.')||host.startsWith('fc')||host.startsWith('fd')||host.startsWith('fe80:')||host.startsWith('::ffff:')||/^172\.(1[6-9]|2\d|3[0-1])\./.test(host)||host.endsWith('.local')||host.endsWith('.internal');if(blocked)return '';return u.href}catch{return ''}}
+const hasUnsafeControlChars=value=>[...String(value||'')].some(char=>{const code=char.charCodeAt(0);return code<=31||code===127});
+const safeRemoteUrl=value=>{const raw=String(value||'').trim();if(!raw||hasUnsafeControlChars(raw))return '';try{const u=new URL(raw);if(!['http:','https:'].includes(u.protocol)||u.username||u.password)return '';const host=u.hostname.toLowerCase().replace(/^\[|\]$/g,'');const blocked=host==='localhost'||host==='metadata.google.internal'||host==='instance-data.ec2.internal'||host==='0.0.0.0'||host==='127.0.0.1'||host==='::1'||host==='169.254.169.254'||host.startsWith('10.')||host.startsWith('192.168.')||host.startsWith('169.254.')||host.startsWith('100.64.')||host.startsWith('fc')||host.startsWith('fd')||host.startsWith('fe80:')||host.startsWith('::ffff:')||/^172\.(1[6-9]|2\d|3[0-1])\./.test(host)||host.endsWith('.local')||host.endsWith('.internal');if(blocked)return '';return u.href}catch{return ''}}
 const cleanText=value=>String(value||'').replace(/<[^>]+>/g,' ').replace(/&amp;/g,'&').replace(/\s+/g,' ').trim();
 const safeHttpsUrl=value=>{const safe=safeRemoteUrl(value);if(!safe)return '';try{return new URL(safe).protocol==='https:'?safe:''}catch{return ''}};
 const cfg={
@@ -66,14 +67,31 @@ async function collect(){
  const settled=await Promise.allSettled(tasks);
  const remoteItems=unique(settled.flatMap(x=>x.status==='fulfilled'?x.value:[]));
  const manualItems=await manual();
- const items=unique([...remoteItems,...manualItems]).sort((a,b)=>new Date(b.publishedAt||0)-new Date(a.publishedAt||0)).slice(0,60);
+ const items=sanitizeItems([...remoteItems,...manualItems]).sort((a,b)=>new Date(b.publishedAt||0)-new Date(a.publishedAt||0)).slice(0,60);
  return {items,live:remoteItems.length>0};
 }
+const boundedText=(value,max=220)=>String(value??'').split('').filter(char=>{const code=char.charCodeAt(0);return !((code>=0&&code<=8)||(code>=11&&code<=12)||(code>=14&&code<=31)||code===127)}).join('').replace(/\s+/g,' ').trim().slice(0,max);
+const sanitizeItem=row=>{
+ if(!row||typeof row!=='object'||Array.isArray(row))return null;
+ const externalId=boundedText(row.externalId??row.external_id,180);
+ const title=boundedText(row.title,180);
+ const url=safeRemoteUrl(row.url??row.post_url);
+ if(!externalId||!title||!url)return null;
+ const image=safeRemoteUrl(row.image??row.image_url);
+ const publishedAtRaw=row.publishedAt??row.published_at??'';
+ const publishedAt=publishedAtRaw&&Number.isFinite(Date.parse(publishedAtRaw))?new Date(publishedAtRaw).toISOString():'';
+ return {
+  externalId,title,summary:boundedText(row.summary,220),url,image,
+  publishedAt,hub:boundedText(row.hub,100),platform:boundedText(row.platform,40)||'Web',
+  type:boundedText(row.type,40)||'Update',verified:row.verified===true
+ };
+};
+const sanitizeItems=rows=>unique((Array.isArray(rows)?rows:[]).map(sanitizeItem).filter(Boolean)).slice(0,60);
 async function dbRead(){
  try{
   const base=process.env.SUPABASE_URL,key=process.env.SUPABASE_SERVICE_ROLE_KEY||process.env.SUPABASE_SECRET_KEY;if(!base||!key)return [];
   const u=base.replace(/\/$/,'')+'/rest/v1/aggregated_posts?select=*&published=eq.true&order=published_at.desc&limit=60';
-  const r=await fetchWithTimeout(u,{headers:{apikey:key,Authorization:'Bearer '+key}});if(!r.ok)return [];return await r.json();
+  const r=await fetchWithTimeout(u,{headers:{apikey:key,Authorization:'Bearer '+key}});if(!r.ok)return [];const rows=await r.json();return sanitizeItems(rows);
  }catch{return []}
 }
 async function dbWrite(items){
@@ -94,7 +112,7 @@ if(sync&&req.headers['x-jyc-sync-secret']!==process.env.JYC_SYNC_SECRET){res.sta
  if(!sync&&memory.items.length&&Date.now()-memory.at<CACHE_MS){res.setHeader('Cache-Control','s-maxage=900, stale-while-revalidate=1800');res.status(200).json({items:memory.items,live:memory.live,configured:memory.configured,cached:true});return}
  try{
   const collected=await collect();
-  let items=collected.items;
+  let items=sanitizeItems(collected.items);
   if(items.length)await dbWrite(items);
   if(!items.length)items=await dbRead();
   const live=collected.live===true,configured=hasConfiguredSource();
@@ -102,7 +120,7 @@ if(sync&&req.headers['x-jyc-sync-secret']!==process.env.JYC_SYNC_SECRET){res.sta
   res.setHeader('Cache-Control','s-maxage=900, stale-while-revalidate=1800');
   res.status(200).json({items,live,configured});
  }catch(error){
-  const fallback=await dbRead(),configured=hasConfiguredSource();memory={at:Date.now(),items:fallback,live:false,configured};
+  const fallback=sanitizeItems(await dbRead()),configured=hasConfiguredSource();memory={at:Date.now(),items:fallback,live:false,configured};
   res.setHeader('Cache-Control','s-maxage=300, stale-while-revalidate=600');
   res.status(200).json({items:fallback,live:false,configured,error:'connector refresh failed'});
  }
