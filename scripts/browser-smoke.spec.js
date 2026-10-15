@@ -1519,6 +1519,7 @@ test('JYC Now fallback cards and filters keep readable contrast in light and dar
   await waitForAppMount(page, 'JYC Now theme contrast');
   const card = page.locator('.jyc-now-card').first();
   await expect(card).toBeVisible();
+  await expect(page.locator('.jyc-now-status-line')).toContainText(/Curated source directory active|Live connectors active/);
   await expect(card.locator('h3')).toContainText(/JAI 2026|RIDE Hack|CICR/);
   const filter = page.locator('.jyc-now-filter-group button').first();
   await expect(filter).toBeVisible();
@@ -1576,4 +1577,37 @@ test('featured accordion gallery keeps five source-backed panels usable without 
   await expect(page.locator('.jyc57-lightbox[role="dialog"]')).toBeVisible();
   await page.locator('.jyc57-lightbox .jyc57-close').click();
   await expect(page.locator('.jyc57-lightbox[role="dialog"]')).toHaveCount(0);
+});
+
+
+test('sparse faculty layout uses only populated tracks and mobile home actions stay unobstructed', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(base + '/team', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'sparse faculty grid');
+  const grid = page.locator('.team-layer-grid--two');
+  await expect(grid).toBeVisible();
+  const desktopLayout = await grid.evaluate(el => ({
+    columns: getComputedStyle(el).gridTemplateColumns.split(' ').length,
+    cards: el.children.length,
+    width: el.getBoundingClientRect().width,
+    background: getComputedStyle(el).backgroundColor
+  }));
+  expect(desktopLayout.cards, 'two faculty profiles should produce exactly two cards').toBe(2);
+  expect(desktopLayout.columns, 'two faculty profiles should not leave a third empty grid track').toBe(2);
+  expect(desktopLayout.width, 'two-card faculty grid should be centered and bounded').toBeLessThanOrEqual(560);
+  expect(desktopLayout.background, 'sparse faculty grid should not paint an empty third track').toBe('rgba(0, 0, 0, 0)');
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'mobile homepage action clearance');
+  await expect(page.locator('.jyc-editorial-home .hero-actions')).toBeVisible();
+  const fixedOverlap = await page.evaluate(() => {
+    const box = selector => { const el = document.querySelector(selector); if (!el) return null; const r = el.getBoundingClientRect(); return { left:r.left, right:r.right, top:r.top, bottom:r.bottom }; };
+    const intersects = (a,b) => Boolean(a&&b&&Math.max(0,Math.min(a.right,b.right)-Math.max(a.left,b.left))>0&&Math.max(0,Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top))>0);
+    const bot = box('.jyc-bot-shell');
+    return { action:intersects(bot,box('.jyc-editorial-home .hero-actions')), nav:intersects(bot,box('.nav')) };
+  });
+  expect(fixedOverlap.action, 'mobile assistant must not cover homepage primary actions').toBe(false);
+  expect(fixedOverlap.nav, 'mobile assistant must not cover the navigation controls').toBe(false);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1), 'mobile homepage should not overflow').toBeTruthy();
 });
