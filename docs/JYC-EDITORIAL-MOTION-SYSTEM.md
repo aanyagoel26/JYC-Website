@@ -11,7 +11,7 @@ This pass strengthens the existing editorial design rather than introducing anot
 
 ## Implementation notes
 - CSS is source-owned and dependency-free; no new runtime packages are required.
-- main.jsx imports the new layer after the application component imports so it participates late in the compiled stylesheet order.
+- The editorial-home module imports the layer after its existing CSS; the canonical main.jsx stylesheet entry remains unique.
 - Existing components, routes, media provenance, and registration logic remain untouched.
 - Hover lift and image zoom only run for fine pointers when reduced motion is not requested.
 - Tremor is intentionally not introduced into public editorial pages.
