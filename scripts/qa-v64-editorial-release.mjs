@@ -3,6 +3,7 @@ import path from 'node:path';
 import {JYC_SOCIALS,is128SocialProfile} from '../src/jyc-socials.js';
 
 const root=process.cwd();
+const depthCss=fs.readFileSync(path.join(root,'src/v36-depth-polish.css'),'utf8');
 const read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const main=read('src/main.jsx');
 const entryCss=read('src/styles/public-entry.css');
@@ -52,7 +53,9 @@ const sitemap=read('scripts/generate-sitemap.mjs');
 const pkg=JSON.parse(read('package.json'));
 const ciWorkflow=read('.github/workflows/ci.yml');
 const qualityWorkflow=read('.github/workflows/jyc-quality.yml');
+const revealKeyframes=depthCss.match(/@keyframes jycV36Reveal\s*\{([\s\S]*?)\n\}/)?.[1]||'';
 const checks=[
+  ['scroll reveal animation preserves text contrast without opacity fades',Boolean(revealKeyframes)&&!/opacity\s*:/.test(revealKeyframes)&&/transform/.test(revealKeyframes)],
   ['homepage restores the editorial intro and source-linked JYC Now update feed',editorialHome.includes('jh-about-editorial')&&editorialHome.includes('<JYCNowStrip limit={3} compact={false} />')],
   ['homepage keeps student-centered identity copy, source-backed activity photography and photo stories before discovery',editorialHome.includes('<span>Find your people.</span>')&&editorialHome.includes('<span>Make your mark.</span>')&&editorialHome.includes('At JIIT 128.')&&editorialHome.includes("import { sourceEventMedia, sourceHubMedia }")&&editorialHome.includes('const photoHubs = { technical: \'CICR\', cultural: \'VamUnique\', literary: \'Eloquence\', fests: \'Aakriti\', sports: \'Sports\', creative: \'Aura\' }')&&editorialHome.includes('const image = source.photoItems.find(item => item?.url)?.url || \'\'')&&homeCss.includes('.jyc-editorial-home .magic-bento-card__media { display: block; }')&&editorialHome.includes('Campus life,')&&editorialHome.includes('as it happened.')&&editorialHome.includes('real photographs from JYC clubs, events and campus life.')&&!editorialHome.includes('jh-assistant-spotlight')&&!editorialHome.includes('JYC Spatial Assistant')&&editorialHome.indexOf('jh-photo-story')<editorialHome.indexOf('jh-pillars-section')],
   ['font requests only include used families and preconnect the font file origin',indexHtml.includes('href="https://fonts.googleapis.com"')&&indexHtml.includes('href="https://fonts.gstatic.com" crossorigin')&&!indexHtml.includes('family=Outfit')&&indexHtml.includes('family=Inter')&&indexHtml.includes('family=Space+Grotesk')&&indexHtml.includes('family=JetBrains+Mono')],
@@ -77,7 +80,7 @@ const checks=[
   ['empty photo sources use a neutral fallback instead of requesting the current document',responsive.includes("const PHOTO_FALLBACK='/assets/photo-unavailable.svg'")&&responsive.includes("const normalizedFallbackSrc=typeof fallbackSrc==='string'&&fallbackSrc.trim()?fallbackSrc.trim():PHOTO_FALLBACK;")&&responsive.includes("const source=typeof src==='string'&&src.trim()?src.trim():normalizedFallbackSrc;")&&responsive.includes('const resolvedSrc=stage===0?source:!failed?candidates[stage-1]:undefined')&&responsive.includes('manifest?.images?.[source]')],
  ['manifest and service worker reject unsafe derivative eligibility flags',manifestLoader.includes('!isDerivativeDimensionEligible(width,height)')&&serviceWorker.includes('!isDerivativeDimensionEligible(width, height)')&&serviceWorker.includes('isDerivativeManifestPath')],
  ['browser photo audit rejects empty responsive img sources',browser.includes("page.locator('picture.jyc-responsive-picture > img')")&&browser.includes("img.getAttribute('src') === ''")&&browser.includes('responsive photos must not request the current document as an image')],
- ['browser suite proves malformed non-empty image manifests retry and resume responsive sources',browser.includes('responsive photo manifest retries after a successful but malformed payload')&&browser.includes('width: 0, height: 640')&&browser.includes("page.locator('.jyc57-gallery-page picture source[srcset]').count()).toBeGreaterThan(0)")],
+ ['browser suite proves malformed non-empty image manifests retry and resume responsive sources',browser.includes('responsive photo manifest retries after a successful but malformed payload')&&browser.includes('width: 0, height: 640')&&browser.includes("page.locator('.jyc-gallery-hub-container picture source[srcset]').count()).toBeGreaterThan(0)")],
   ['derivative candidates require manifest-confirmed intrinsic dimensions and approved photo assets',responsive.includes('photoDerivativeUrls(source,intrinsicWidth)')&&responsive.includes('const entry=manifest?.images?.[source]')&&responsive.includes('entry?.derivativesEligible===true')&&responsive.includes('derivativesEnabled&&intrinsicWidth>0?photoDerivativeUrls(source,intrinsicWidth):null')&&responsive.includes('If the manifest is unavailable, keep the original source')&&responsive.includes('const resolvedSrc=stage===0?source:!failed?candidates[stage-1]:undefined;')&&!responsive.includes('variants?.webp?.at(-1)?.url||src')&&manifestLoader.includes("fetch('/image-manifest.json',{cache:'no-cache'})")&&responsive.includes('loadJycImageManifest()')&&gallery.includes('ResponsivePhoto')&&gallery.includes('album.cover_url')&&responsive.includes('source-archive|hub-photos|hub-photos-extra')&&responsive.includes('if(!derivativesEnabled||!isDerivativeSource(source)')&&imageManifestGenerator.includes('derivativesEligible:derivativeEligible(url,display.width,display.height)')&&imageManifestGenerator.includes('derivativeArchiveUrls.has(url)')&&intelligence.includes('photoDerivativeUrls(url,sourceWidth)')&&intelligence.includes('width<=Number(sourceWidth)')],
  ['canonical JAI slug is the only sitemap slug',sitemap.includes('/events/jai-2026-jaypee-agentic-ai-hackathon')&&!sitemap.includes('/events/agentic-ai-2026')&&!sitemap.includes('/events/codeai-hackathon')],
  ['sitemap resolves dynamic event slugs from canonical data',sitemap.includes('slug(e.slug||e.title)')],
@@ -97,6 +100,7 @@ const checks=[
   ['contact route exposes a primary H1',main.includes('function SectionHead({eyebrow,title,text,level=2})')&&main.includes('<SectionHead level={1} eyebrow="COMMUNICATION HUB"')&&main.includes('Stay connected with JYC.')],
  ['photo derivative encoding uses build-friendly effort settings',derivatives.includes('.avif({quality:52,effort:2})')&&derivatives.includes('.webp({quality:82,effort:3})')&&derivatives.includes('completed%25===0')],
  ['production media build emits a compact official-logo WebP derivative',productionMediaOptimizer.includes("const logoOutput=path.join(root,'assets','jyc-logo.webp')")&&productionMediaOptimizer.includes("path.resolve('public/JYC Logo(4).png')")&&productionMediaOptimizer.includes("webp({quality:92,effort:5,alphaQuality:100})")],
+ ['small assistant logo is generated at 96px and used by the floating assistant',productionMediaOptimizer.includes("const logoSmallAvifOutput=path.join(root,'assets','jyc-logo-small.avif')")&&productionMediaOptimizer.includes("resize({width:96,withoutEnlargement:true})")&&bot.includes('poster="/assets/jyc-logo-small.avif"')&&bot.includes('<img src="/assets/jyc-logo-small.avif"')],
  ['GLB bot renders after model-viewer loads without a circular availability gate',bot.includes('modelReady&&!modelFailed?<model-viewer')&&bot.includes('onLoad={handleModelLoad}')&&bot.includes('setModelAvailable(true)')],
  ['GLB bot failure restores the safe fallback state',bot.includes('onError={handleModelError}')&&bot.includes('setModelAvailable(false)')&&bot.includes('setModelFailed(true)')],
  ['GLB bot animation respects reduced-motion preference',bot.includes("prefers-reduced-motion: reduce")&&bot.includes("if(prefersReducedMotion()){setMotion('');return}")],
@@ -180,6 +184,14 @@ const checks=[
  ['JYC Now cards and filters have dark-theme contrast and reduced-motion overrides',now.includes('html[data-theme="dark"] .jyc-now-card')&&now.includes('var(--jyc-muted-live')&&now.includes('prefers-reduced-motion:reduce')],
  ['browser suite verifies JYC Now light/dark contrast',browser.includes('JYC Now fallback cards and filters keep readable contrast in light and dark themes')&&browser.includes('cardTextContrast')&&browser.includes('paragraphContrast')&&browser.includes("toBeGreaterThanOrEqual(4.5)")],
 ];
+checks.push([
+  'gallery eagerly loads the first visible album row and prioritizes the first cover',
+  gallery.includes("publishedAlbums.slice(0, 12).map((album, albumIndex) => {") &&
+    gallery.includes("loading={albumIndex < 3 ? 'eager' : 'lazy'}") &&
+    gallery.includes("fetchPriority={albumIndex === 0 ? 'high' : undefined}")
+]);
+checks.push(['public boot gate preserves the data-loading guard while avoiding a long artificial post-load wait',main.includes('const minimum=error?150:(readSiteCache()?120:250);')&&main.includes('if(loading)return;')&&main.includes('if(!bootReady)return <Loading stage={bootStage} cached={Boolean(readSiteCache())}/>;')]);
+checks.push(['footer uses the compact 96px logo asset for its small mark',main.includes('function FooterLogoImage')&&main.includes('src="/assets/jyc-logo-small.avif"')&&main.includes('<FooterLogoImage alt="JYC logo"/>')]);
 let failed=0;
 for(const [name,ok] of checks){console.log((ok?'PASS':'FAIL')+' · '+name);if(!ok)failed++}
 if(failed)process.exit(1);

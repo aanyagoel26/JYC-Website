@@ -23,8 +23,8 @@ const homeCss=read('src/jyc-editorial-home.css');
 const extraFeaturesSafe=()=>{const f=read('src/extra-features.jsx');return f.includes('LazyDriftWall')&&f.includes('Drift wall')};
 
 const checks=[
- ['React Bits dependencies declared',pkg.dependencies.motion==='14.0.0'&&pkg.dependencies['@hugeicons/react']==='1.1.10'&&pkg.dependencies['@hugeicons/core-free-icons']==='4.3.5'&&pkg.dependencies.ogl==='1.0.11'],
- ['lockfile root matches React Bits/runtime dependencies',lock.packages[''].dependencies.motion==='14.0.0'&&lock.packages[''].dependencies.ogl==='1.0.11'&&lock.packages['node_modules/ogl']?.version==='1.0.11'],
+ ['React Bits dependencies declared',pkg.dependencies.motion===lock.packages[''].dependencies.motion&&lock.packages['node_modules/motion']?.version===pkg.dependencies.motion&&pkg.dependencies['@hugeicons/react']==='1.1.10'&&pkg.dependencies['@hugeicons/core-free-icons']==='4.3.5'&&pkg.dependencies.ogl==='1.0.11'],
+ ['lockfile root matches React Bits/runtime dependencies',lock.packages[''].dependencies.motion===pkg.dependencies.motion&&lock.packages[''].dependencies.ogl==='1.0.11'&&lock.packages['node_modules/ogl']?.version==='1.0.11'],
  ['React Bits micro components present',/BellToggle|JellyRadio|RubberSegment|BorderGlow/.test(micro)],
  ['React Bits motion controls are lazy-loaded',main.includes('LazyRubberSegment')&&main.includes('LazyBellToggle')],
  ['JYC Now uses JellyRadio',now.includes('LazyJellyRadio')&&now.includes('Filter JYC Now by community')],
@@ -41,7 +41,7 @@ const checks=[
  ['single global image-error fallback listener is canonical',
   (main.match(/document\.addEventListener\('error',onImageError,true\)/g)||[]).length===1&&
   (main.match(/document\.removeEventListener\('error',onImageError,true\)/g)||[]).length===1&&
-  main.includes("img.dataset.jycFallback='1'")&&main.includes("img.dataset.jycFallbackApplied='1'")&&main.includes('img.src=logo')],
+  main.includes("img.dataset.jycFallback='1'")&&main.includes("img.dataset.jycFallbackApplied='1'")&&main.includes("img.closest('.jyc-responsive-picture')")&&main.includes('img.src=logo')],
  ['no public Control Center launcher added',!main.includes('Control Center</button>')&&!main.includes('Control Center ↗')]
 ];
 

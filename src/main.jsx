@@ -94,6 +94,11 @@ function LogoImage({alt='',...props}){
  if(failed)return <span className={`jyc-logo-fallback ${props.className||''}`.trim()} role="img" aria-label={alt||'JIIT Youth Club logo'}>JYC</span>;
  return <img {...props} src={logo} alt={alt} width={props.width??48} height={props.height??48} loading={props.loading??(props.fetchPriority==='high'?'eager':'lazy')} decoding={props.decoding??'async'} onError={event=>{const image=event.currentTarget;if(logo!=='/JYC%20Logo(4).png'&&image.dataset.logoFallback!=='1'){image.dataset.logoFallback='1';image.src='/JYC%20Logo(4).png';return}setFailed(true)}}/>
 }
+function FooterLogoImage({alt='',...props}){
+ const [failed,setFailed]=useState(false);
+ if(failed)return <span className={`jyc-logo-fallback ${props.className||''}`.trim()} role="img" aria-label={alt||'JIIT Youth Club logo'}>JYC</span>;
+ return <img {...props} src="/assets/jyc-logo-small.avif" alt={alt} width={props.width??48} height={props.height??48} loading={props.loading??'lazy'} decoding={props.decoding??'async'} onError={()=>setFailed(true)}/>;
+}
 const isFestMode=data=>String(data?.mode||'events').toLowerCase()==='fest';
 const recruitmentEnabled=data=>data?.flags?.recruitmentHub!==false;
 
@@ -230,7 +235,7 @@ function App(){const loc=useLocation();const [data,setData]=useState(()=>import.
  useEffect(()=>{
    const onImageError=e=>{
      const img=e.target;
-     if(!(img instanceof HTMLImageElement)||img.dataset.jycFallback==='1')return;
+     if(!(img instanceof HTMLImageElement)||img.closest('.jyc-responsive-picture')||img.dataset.jycFallback==='1')return;
      img.dataset.jycFallback='1';
      img.dataset.jycFallbackApplied='1';
      img.removeAttribute('srcset');
@@ -240,7 +245,8 @@ function App(){const loc=useLocation();const [data,setData]=useState(()=>import.
    return()=>document.removeEventListener('error',onImageError,true);
  },[]);
  useEffect(()=>{const report=(message,stack)=>{if(!supabase?.__configured||!supabase?.functions||typeof supabase.functions.invoke!=='function')return;Promise.resolve(supabase.functions.invoke('error-report',{body:{message:String(message||'Unknown error').slice(0,2000),stack:stack||null,path:location.pathname,user_agent:navigator.userAgent}})).catch(()=>{})};const onError=e=>report(e.message,e.error?.stack);const onReject=e=>report(e.reason?.message||e.reason,e.reason?.stack);window.addEventListener('error',onError);window.addEventListener('unhandledrejection',onReject);return()=>{window.removeEventListener('error',onError);window.removeEventListener('unhandledrejection',onReject)}},[]);
- useEffect(()=>{if(loading)return;const minimum=error?300:(readSiteCache()?500:650);const id=setTimeout(()=>setBootReady(true),minimum);return()=>clearTimeout(id)},[loading,error]);
+ useEffect(()=>{if(loading)return;const minimum=error?150:(readSiteCache()?120:250);const id=setTimeout(()=>setBootReady(true),minimum);return()=>clearTimeout(id)},[loading,error]);
+ useEffect(()=>{if(!bootReady){delete document.documentElement.dataset.jycContentReady;return}document.documentElement.dataset.jycContentReady='true';return()=>{delete document.documentElement.dataset.jycContentReady}},[bootReady,loc.pathname]);
   if(!bootReady)return <Loading stage={bootStage} cached={Boolean(readSiteCache())}/>;
   const connectionNotice=(!online||error)?<div className={`connection-notice ${readSiteCache()?'cached':'offline'} ${error==='JYC data service is not deployed. Run supabase/FINAL-PRODUCTION-REPAIR.sql in the connected Supabase project, then refresh.'?'setup-needed':''}`} role="status"><span>{!online?'You are offline. JYC will keep using cached content until the connection returns.':error==='JYC data service is not deployed. Run supabase/FINAL-PRODUCTION-REPAIR.sql in the connected Supabase project, then refresh.'?'JYC data service needs setup.':readSiteCache()?`Showing the last saved JYC snapshot · ${formatCacheAge(siteCacheAge())}.`:'JYC content is currently offline.'}</span><button type="button" onClick={()=>window.dispatchEvent(new CustomEvent('jyc-refresh-data'))}>Refresh</button></div>:null;
  const isAdmin=loc.pathname.startsWith('/admin');
@@ -867,7 +873,7 @@ function Footer({data,admin}){
     <div className="footer-v6-inner">
       <div className="footer-v6-rail">
         <div className="footer-v6-brand">
-          <div className="footer-logo-lockup"><LogoImage alt="JYC logo"/></div>
+          <div className="footer-logo-lockup"><FooterLogoImage alt="JYC logo"/></div>
           <div><strong>JIIT YOUTH CLUB</strong><span>READY TO SOAR · JIIT SECTOR 128</span></div>
         </div>
         <span className="footer-v6-index">JYC / 128</span>

@@ -212,3 +212,134 @@ footer.jyc-footer.jyc-footer-v6 .footer-v6-inner .footer-bottom .jyc-creator-cre
 .jyc57-archive-nav>a{color:#825F2B!important}
 .jyc-section-head-bar>div>span{color:#625A52!important}
 .jyc57-media-filter+div>div>span,#jyc-gallery-years>span{color:#625A52!important}
+
+
+/* Release QA: correct final-layer contrast and touch-target fixes. */
+footer.jyc-footer .footer-v6-inner .footer-bottom .jyc-creator-credit {
+  color: #A8A3B0 !important;
+  opacity: 1 !important;
+}
+footer.jyc-footer .footer-v6-inner .footer-bottom .jyc-creator-credit a {
+  color: #D2B48C !important;
+  opacity: 1 !important;
+}
+html[data-theme="light"] .public-app .jyc-gallery-hero .jh-kicker b,
+html[data-theme="light"] .public-app .jyc-clubs-header .jh-kicker b {
+  color: #3F3024 !important;
+}
+html[data-theme="light"] .public-app .jh-final p,
+html[data-theme="light"] .public-app .jh-final .jh-section-number {
+  color: #FFF8E1 !important;
+  opacity: 1 !important;
+}
+.public-app .jyc57-breadcrumbs :is(a,button) {
+  min-width: 44px !important;
+  min-height: 44px !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* Release QA: keep public navigation and editorial copy legible at every viewport.
+   This final layer intentionally follows legacy CSS so breakpoint behavior is deterministic. */
+.mobile-dock { display: none !important; }
+@media (max-width: 760px) {
+  .mobile-dock {
+    display: grid !important;
+    position: fixed !important;
+    left: max(10px, env(safe-area-inset-left)) !important;
+    right: max(10px, env(safe-area-inset-right)) !important;
+    bottom: max(10px, env(safe-area-inset-bottom)) !important;
+    z-index: 12000 !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  }
+}
+:root:not([data-theme="dark"]) .public-app :is(
+  .eyebrow,.tag,.text-link,.reference-view-all,.card-topline,.club-index,
+  .latest-index,.moment-tile small,.jh-overline,
+  .jh-about-kicker,.jyc57-gallery-meta,.jyc57-gallery-eyebrow,
+  .jyc57-filter-group>span,.jyc57-pill,.gallery-source-ledger>span
+) {
+  color: #65451F !important;
+}
+:root:not([data-theme="dark"]) .public-app :is(.text-link,.reference-view-all,.jh-overline,.jh-about-kicker) {
+  color: #76211D !important;
+}
+:root:not([data-theme="dark"]) .public-app :is(
+  .jh-lead,.jh-assistant-info p,.jh-community-copy p,
+  .jh-pillar-card p,.jh-event-copy>p,.muted,.muted-text,.jyc57-empty p
+) {
+  color: #4B4650 !important;
+}
+
+
+/* Exact Lighthouse findings: tune contrast per surface instead of forcing one
+   foreground color across both paper panels and the red CTA panel. */
+.jyc-footer .jyc-creator-credit { color: #d6d2db !important; }
+.jyc-footer .jyc-creator-credit a { color: #e2c89f !important; }
+.public-app :is(.jyc-gallery-hero,.jyc-clubs-header) .jh-kicker b {
+  color: #3f2a12 !important;
+}
+.public-app .about-source-note { color: #4b4650 !important; }
+.public-app .about-next-v28 .eyebrow { color: #65451f !important; }
+.public-app .about-next-v28 h2 { color: #28242a !important; }
+.public-app .about-next-v28 .btn:not(.secondary) {
+  background: #a82420 !important;
+  border-color: #a82420 !important;
+  color: #fffaf0 !important;
+}
+.public-app .about-next-v28 .btn.secondary {
+  background: #fff !important;
+  border-color: #a82420 !important;
+  color: #28242a !important;
+}
+.public-app .jh-final :is(.jh-section-number,p) {
+  color: #fffaf0 !important;
+}
+
+
+/* Touch target floor for compact controls; image cards keep their own geometry. */
+.public-app button:not(.jyc57-photo):not(.jyc57-feature-card),
+.public-app .btn,
+.public-app .filter-toggle {
+  min-width: 40px;
+  min-height: 40px;
+}
+
+
+/* A modal gallery lightbox owns the viewport and focus: hide floating launchers
+   and the persistent dock so they cannot cover photo actions or escape the dialog. */
+body:has(.jyc57-lightbox[aria-modal="true"]) :is(.jyc-bot-shell,.mobile-dock) {
+  display: none !important;
+}
+
+/* Lighthouse follow-up: pin the measured About-page foregrounds at the route root.
+   These selectors intentionally outrank legacy route/button rules that otherwise
+   wash the editorial text and CTA into the paper background. */
+#main-content.public-app .route-stage > section.section .about-source-note {
+  color: #4b4650 !important;
+  opacity: 1 !important;
+}
+#main-content.public-app .route-stage > section.section .about-next-v28 .eyebrow {
+  color: #65451f !important;
+  opacity: 1 !important;
+}
+#main-content.public-app .route-stage > section.section .about-next-v28 h2 {
+  color: #28242a !important;
+  opacity: 1 !important;
+}
+#main-content.public-app .route-stage > section.section .about-next-v28 button.btn:not(.secondary) {
+  background-color: #a82420 !important;
+  background-image: none !important;
+  border-color: #a82420 !important;
+  color: #fffaf0 !important;
+  opacity: 1 !important;
+}
+#main-content.public-app .route-stage > section.section .about-next-v28 button.btn.secondary {
+  background-color: #fff !important;
+  background-image: none !important;
+  border-color: #a82420 !important;
+  color: #28242a !important;
+  opacity: 1 !important;
+}
