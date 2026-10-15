@@ -196,6 +196,7 @@ checks.push([
 ]);
 checks.push(['public boot gate preserves the data-loading guard while avoiding a long artificial post-load wait',main.includes('const minimum=error?150:(readSiteCache()?120:250);')&&main.includes('if(loading)return;')&&main.includes('if(!bootReady)return <Loading stage={bootStage} cached={Boolean(readSiteCache())}/>;')]);
 checks.push(['footer uses the compact 48px logo asset for its 48px mark',main.includes('function FooterLogoImage')&&main.includes('src="/assets/jyc-logo-48.avif"')&&main.includes('<FooterLogoImage alt="JYC logo"/>')]);
+checks.push(['feature hero copy has high-contrast light-theme overrides and recruitment empty state stays stacked',entryCss.includes('html[data-theme="light"] .public-app .feature-hero :is(h1,h2,h3,h4,h5,h6){color:#FFF8E1!important}')&&entryCss.includes('html[data-theme="light"] .public-app .feature-hero :is(p,li,small){color:#D7D1C7!important}')&&entryCss.includes('.public-app .feature-empty{display:flex;flex-direction:column;gap:8px}')&&entryCss.includes('.public-app .feature-empty.large>strong{display:block;')&&entryCss.includes('.public-app .feature-empty.large>span{display:block;')]);
 let failed=0;
 for(const [name,ok] of checks){console.log((ok?'PASS':'FAIL')+' · '+name);if(!ok)failed++}
 if(failed)process.exit(1);
