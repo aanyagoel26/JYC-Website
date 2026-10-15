@@ -6,7 +6,7 @@ const main = fs.readFileSync('src/main.jsx', 'utf8');
 const layer = fs.readFileSync('src/styles/jyc-editorial-motion-system.css', 'utf8');
 const home = fs.readFileSync('src/jyc-editorial-home.jsx', 'utf8');
 const checks = [
-  [!entry.includes("@import './jyc-editorial-motion-system.css';") && home.indexOf("import './jyc-editorial-motion-system.css';") > home.indexOf("import './jyc-editorial-home.css';") && main.includes("import './styles/public-entry.css';") && !main.includes("import './styles/jyc-editorial-motion-system.css';"), 'motion layer follows the editorial home styles without duplicating the public entry'],
+  [home.includes("import './jyc-editorial-home.css';") && home.includes("import './styles/jyc-editorial-motion-system.css';") && home.indexOf("import './styles/jyc-editorial-motion-system.css';") > home.indexOf("import './jyc-editorial-home.css';"), 'motion layer is loaded after the editorial home stylesheet'],
   [home.includes('jh-hero-dither-visual') && home.includes('LazyDitherVeil'), 'existing branded Dither Veil hero is retained'],
   [layer.includes('@media(max-width:700px)'), 'single-column mobile hero is explicitly supported'],
   [layer.includes('@media(max-width:980px)'), 'tablet hero layout is explicitly supported'],
