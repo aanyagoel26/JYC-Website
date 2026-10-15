@@ -47,8 +47,6 @@ const LazyJYC57Archive=lazy(()=>import('./jyc57-archive.jsx').then(m=>({default:
 
 
 
-import './styles/jyc-editorial-motion-system.css';
-
 const PUBLIC_ACTIVITIES=JYC_PUBLIC_ACTIVITIES;
 function mergePublicFallback(d,{allowContentFallback=true}={}){
  const x=norm(d||{});
