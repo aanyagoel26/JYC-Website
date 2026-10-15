@@ -1,6 +1,6 @@
 # JIIT Youth Club 128 — Official Website
 
-> **Current release: V64.5.10 — Compact assistant media and truthful live updates**
+> **Current release: V64.5.12 — Right-sized gallery and brand imagery**
 
 [![Quality](https://github.com/kaustubhdua/JYC-Website/actions/workflows/ci.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/ci.yml) [![CodeQL](https://github.com/kaustubhdua/JYC-Website/actions/workflows/codeql.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/codeql.yml) [![JYC Quality](https://github.com/kaustubhdua/JYC-Website/actions/workflows/jyc-quality.yml/badge.svg)](https://github.com/kaustubhdua/JYC-Website/actions/workflows/jyc-quality.yml)
 
@@ -297,20 +297,22 @@ The connected production Supabase project is active and has been hardened and po
 - Seven deployed Edge Functions: admin management, notifications, backups, AI content assistance, error intake, media upload and public submissions.
 - Private backup storage and constrained public media storage.
 
-The remaining production gates are operational: configure required third-party Edge Function secrets, enable leaked-password protection in Supabase Auth, verify the connected Vercel production project, publish the current main revision once the Vercel Hobby deployment limit clears, review which archive visuals should be promoted as official current event records, and run final browser/performance QA against the real deployment.
+The remaining production gates are operational: configure required third-party Edge Function secrets, enable leaked-password protection in Supabase Auth, verify the connected Vercel production project, resolve the current Vercel deployment-rate limit through the normal owner/platform process, review which archive visuals should be promoted as official current event records, and run final browser/performance QA against the real deployment.
 
 ## Current release status
 
 - **Latest UI/media review:** [JYC UI/UX, Media & Release Audit — 11 October 2026](docs/JYC-UIUX-MEDIA-DEEP-AUDIT-2026-10-11.md). It records photo fallback hardening, verified event-source corrections, animation guardrails, and remaining release gates.
 
-**V64.5.10 is the current source release.** This pass generates a dedicated 96px AVIF JYC mark for the floating assistant, precaches it under a refreshed service-worker cache, and reduces the artificial post-load boot delay without bypassing the data-loading guard. JYC Now now distinguishes remote live connector results from curated/database fallback and ignores empty connector configuration; RSS sources must use HTTPS. The release checklist now separates the public website from the optional admin platform, and production asset QA validates the built output so generated logo files are checked at the correct stage. The existing editorial hero, responsive image fallbacks, reduced-motion safeguards, team profile interactions and source-backed club/event content remain covered by the release QA suite.
+**V64.5.12 is the current source release candidate.** This pass adds 240/320/360/480/960/1600px photo derivatives, corrects Gallery sizes to match rendered cards, adds a 270px AVIF brand mark and a 48px AVIF compact mark, and refreshes the offline cache. The earlier 96px/192px variants remain available for larger marks and the Dither Veil. JYC Now distinguishes remote live connector results from curated/database fallback and ignores empty connector configuration; RSS sources must use HTTPS. The release checklist separates the public website from the optional admin platform, and production asset QA validates generated assets at the correct build stage. The editorial hero, responsive image fallbacks, reduced-motion safeguards, team interactions and source-backed club/event content remain covered by release QA.
 
-Package metadata, lockfile and the service-worker cache namespace are synchronized. Source-contract assertions are not a substitute for a successful production build or browser run. The latest GitHub Actions runs are failing before job steps/logs are exposed, and Vercel deployment limits/domain routing remain operational release gates; do not treat this branch as deployed or production-verified until those checks are green.
+Package metadata, lockfile and the service-worker cache namespace are synchronized. Source-contract assertions are not a substitute for a successful production build or browser run.
+
+**Verified release-status snapshot — 15 October 2026 (main before Run 20):** current `main` is `35d692f67ddd1c6f7df1d00be5a0bf4bca75d3f3`. CI, Quality Gate, CodeQL and Lighthouse CI passed on that exact SHA; Browser QA failed 1 of 38 tests on `/team` at desktop-1280 because intentionally screen-reader-only FlipCard text (`Photo shown.`) was counted as clipped visible text ([browser run](https://github.com/kaustubhdua/JYC-Website/actions/runs/38723211136)). The Vercel status is `Deployment rate limited — retry in 24 hours`; the latest READY production deployment last verified is still on `7ebef7bdbc5d744c8fc505c10663e70770f38c8a`, not current `main`. Do not describe the release as production-verified until a READY deployment matches the approved source SHA and browser QA passes.
 
 The highest-value remaining production work is operational/editorial rather than architectural:
 
 1. Keep the complete 873-file source archive catalogued and maintain editorial review when promoting new material into official event/club records.
-2. CI now enforces the production JS/CSS/image budget, public-route hygiene and expanded browser smoke suite; run the same browser suite against the deployed site at desktop/tablet/mobile sizes and both themes.
+2. CI enforces the production JS/CSS/image budget and public-route hygiene; resolve the current browser regression, then run the same browser suite against the deployed site at desktop/tablet/mobile sizes and both themes.
 3. Verify live Supabase content and every published club/event record.
 4. Verify the Vercel production deployment and its redirects/headers.
 5. Run a final performance pass after the real production image set is known.

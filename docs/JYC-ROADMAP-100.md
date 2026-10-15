@@ -150,15 +150,18 @@ For each route verify:
 - [ ] no dead links
 - [ ] no incorrect JIIT 62 content
 
-## J. Release
+## J. Release — base-main snapshot (15 October 2026; superseded by Run 20)
 
-- [x] GitHub main contains the current final source
-- [ ] Latest PR Quality Gate, CI, CodeQL and Browser QA need a usable successful run; recent runs failed before job steps/logs were exposed
+This section records the verified `main` baseline before Run 20 PR #231. Its SHA and workflow results are historical after that PR is merged; use the PR's exact-head checks and the production deployment SHA for release decisions.
+
+- [x] GitHub main contained the release source (`35d692f67ddd1c6f7df1d00be5a0bf4bca75d3f3`)
+- [x] Current-main CI (`38723211069`), Quality Gate (`38723211052`), CodeQL (`38723211111`) and Lighthouse CI (`38723211036`) passed on 2026-10-15
+- [ ] Browser QA (`38723211136`) is green; current run fails 1/38 on `/team` at desktop-1280 because screen-reader-only FlipCard announcement text is classified as clipped visible text
 - [ ] CodeQL open findings = 0, or every remaining finding has a documented justified disposition
 - [ ] Dependabot alerts = 0 high/critical
 - [ ] Supabase security advisor = 0 high/critical
-- [x] Vercel production deployment is READY for the current main line
-- [ ] verify the exact current main SHA is the production deployment; the current PR preview is separate from production
+- [ ] Vercel production deployment is READY for the current main line; the current Vercel status is `Deployment rate limited — retry in 24 hours`
+- [ ] Verify the exact current main SHA is the production deployment. Latest READY production SHA observed on 2026-10-15 is `7ebef7bdbc5d744c8fc505c10663e70770f38c8a`, not current `main`.
 - [ ] production HTTP/security headers verified
 - [ ] all public routes smoke-tested on production
 - [ ] production media/link/content check complete
@@ -171,16 +174,23 @@ For each route verify:
 2. The provided GitHub Security screenshot reports 142 open code-scanning alerts, but the connected GitHub file API does not expose the alert list. They must be opened in Security and quality > Code scanning so each finding can be mapped to a source line and remediated or justified.
 3. Vercel previously hit the deployment-rate limit; do not repeatedly retry deployments until the limit clears.
 4. The local sandbox Chromium launch has been unreliable; GitHub Actions is the authoritative browser-QA environment once its workflow completes.
+5. The connected JYC Supabase project (`ogbanmjokjlxfuktkicj`) is ACTIVE_HEALTHY. The 2026-10-15 advisor returned eight SECURITY DEFINER function warnings: `jyc_read_site_data()` is intentionally callable by anon for filtered public content; seven admin/helper functions are authenticated-only and use active-role/club checks with an empty search path. RLS is enabled on the reviewed public tables. Keep these grants unchanged until a reviewed security migration confirms all RLS dependencies.
+6. Supabase Auth leaked-password protection is disabled. Enable it in the Auth settings before declaring the backend security review complete; no auth setting or database schema was changed in Run 20.
+7. The live `/api/jyc-updates` endpoint reports `live=false` and `configured=false`; the public page explicitly describes JYC Now as a curated editorial layer, not a live social-network feed. Official source configuration/credentials remain owner-side work.
+8. Vercel reports `jiityouthclub128.in` and `www.jiityouthclub128.in` as unverified. Do not change DNS until the owner confirms access to the authoritative DNS zone and preserves existing mail records.
+9. Production emitted Node `DEP0169` (`url.parse()`) warnings from `/api/jyc-updates` activity. The endpoint source uses WHATWG `new URL` and contains no direct deprecated `url.parse()` call; source of the warning is unconfirmed, so do not patch speculatively.
 
 ## Definition of done
 
 The website is 100% done only when sections A–J are either implemented and green, or a manual/account-level item has an explicit verified disposition. No “looks fine” release is allowed with open high/critical security findings, unknown production deployment state, broken media, wrong campus scope, or unverified browser behavior.
 
-## Live release state (2026-10-07)
+## Historical release snapshot (2026-10-07; superseded by the current release status above)
 
-- GitHub `main` currently points to `4172d294a5ab13efedc99bbe6f0852adca1086eb` (Dependabot merge updating Vite/Motion).
-- Vercel production is READY at deployment `dpl_HmQN44hacjado1jUFgwiez1wfavD`, built from the exact current `main` SHA `4172d294a5ab13efedc99bbe6f0852adca1086eb` and aliased to `jyc-website-eight.vercel.app`.
-- The latest completed Quality Gate, CI and CodeQL checks are green; Browser QA is still running in GitHub Actions.
+This section records the state observed on 7 October 2026. Its branch, deployment, and workflow claims are historical and must not be used as evidence that the current `main` revision is deployed or release-ready.
+
+- GitHub `main` pointed to `4172d294a5ab13efedc99bbe6f0852adca1086eb` (Dependabot merge updating Vite/Motion) at the time.
+- Vercel deployment `dpl_HmQN44hacjado1jUFgwiez1wfavD` was READY for that historical SHA and aliased to `jyc-website-eight.vercel.app`. This does not prove that the current `main` revision is deployed.
+- The latest completed Quality Gate, CI and CodeQL checks were green at the time; Browser QA was still running in GitHub Actions.
 - Vercel runtime observability shows one low-impact Node deprecation warning group on `/api/jyc-updates` (`url.parse()` warning), with no application exception group reported in the last 24h.
 - The screenshot-reported 142 open CodeQL findings remain an account-level disposition task; the current CodeQL workflow itself is green, so each historical alert still needs individual remediation/dismissal/verification in GitHub Security.
 - Do not declare 100% release-ready until browser QA, production route/security checks, CodeQL alert disposition, and the remaining manual GitHub/Supabase checks are closed.
