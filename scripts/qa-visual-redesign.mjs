@@ -5,7 +5,7 @@ const entry = fs.readFileSync('src/styles/public-entry.css', 'utf8');
 const layer = fs.readFileSync('src/styles/jyc-editorial-motion-system.css', 'utf8');
 const home = fs.readFileSync('src/jyc-editorial-home.jsx', 'utf8');
 const checks = [
-  [entry.includes("@import './jyc-editorial-motion-system.css';"), 'new motion system is loaded last in the public cascade'],
+  [entry.includes("@import './jyc-editorial-motion-system.css';"), 'new motion system is loaded after foundational public imports'],
   [home.includes('jh-hero-dither-visual') && home.includes('LazyDitherVeil'), 'existing branded Dither Veil hero is retained'],
   [layer.includes('@media(max-width:700px)'), 'single-column mobile hero is explicitly supported'],
   [layer.includes('@media(max-width:980px)'), 'tablet hero layout is explicitly supported'],
