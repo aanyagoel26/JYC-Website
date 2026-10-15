@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import vm from 'node:vm';
 import path from 'node:path';
 
 const root=process.cwd();
@@ -59,6 +60,10 @@ add('Session identifiers use Web Crypto with no insecure random fallback',/const
 add('Pageview local storage rejects malformed shapes and invalid counters',/const parsed=JSON\.parse\(storageGet\(key,'\{\}'\)\);[\s\S]{0,650}!Array\.isArray\(parsed\)[\s\S]{0,250}Number\.isSafeInteger\(count\)/.test(read(path.join(root,'src/main.jsx'))));
 add('Featured-event dismissal storage writes only a safe integer timestamp',/const expiry=Date\.now\(\)\+FEATURED_EVENT_DISMISS_MS;[\s\S]{0,160}Number\.isSafeInteger\(expiry\)/.test(read(path.join(root,'src/featured-event-popup.jsx'))));
 const updatesApi=read(path.join(root,'api/jyc-updates.js'));
+const recordGuardMatch=updatesApi.match(/const isRecord=(value=>[^;]+);/);
+let recordGuard;
+try { if(recordGuardMatch) recordGuard=vm.runInNewContext('('+recordGuardMatch[1]+')'); } catch {}
+add('JYC Now record guard behaviour handles objects, null, arrays, and primitives',typeof recordGuard==='function'&&recordGuard({configured:true})===true&&recordGuard(Object.create(null))===true&&recordGuard(null)===false&&recordGuard([])===false&&recordGuard('source')===false&&recordGuard(42)===false);
 add('JYC Now record guard is defined before configuration checks',updatesApi.indexOf('const isRecord=value=>value!==null&&typeof value===\'object\'&&!Array.isArray(value);')>=0&&updatesApi.indexOf('const isRecord=')<updatesApi.indexOf('const hasEntries=value=>isRecord(value)'));
 add('JYC Now record guard accepts plain objects and rejects null, arrays, and primitives',/const isRecord=value=>value!==null&&typeof value===\'object\'&&!Array.isArray\(value\);/.test(updatesApi)&&updatesApi.includes('const hasEntries=value=>isRecord(value)&&Object.keys(value).length>0;'));
 add('Updates API validates remote URLs before persistence and requires HTTPS RSS sources',read(path.join(root,'api/jyc-updates.js')).includes('const safeRemoteUrl=')&&read(path.join(root,'api/jyc-updates.js')).includes("169.254.169.254")&&read(path.join(root,'api/jyc-updates.js')).includes("safeHttpsUrl(feedUrl)")&&read(path.join(root,'api/jyc-updates.js')).includes("new URL(safe).protocol==='https:'"));
