@@ -379,3 +379,6 @@ html[data-theme="light"] .public-app .feature-hero :is(p,li,small){color:#D7D1C7
     gap:12px!important;
   }
 }
+
+/* V65 — final shared editorial tokens and accessible interaction motion. */
+@import './jyc-editorial-motion-system.css';
