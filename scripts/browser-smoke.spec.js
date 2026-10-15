@@ -2108,7 +2108,7 @@ test('homepage hero uses the official JYC logo through Dither Veil without a con
 
 
 test('Dither Veil falls back to the full official logo when the compact AVIF is unavailable', async ({ page }) => {
-  await page.route('**/assets/jyc-logo-hero.avif', route => route.abort('failed'));
+  await page.route('**/assets/jyc-logo-medium.avif', route => route.abort('failed'));
   await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'Dither logo format fallback');
   const fallback = page.locator('.jh-dither-mark .dither-veil__fallback');
