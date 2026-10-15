@@ -3,6 +3,7 @@
 @import '../jyc-design-upgrades.css';
 @import './jyc-pro-redesign.css';
 @import './jyc-visual-quality.css';
+@import './jyc-editorial-motion-system.css';
 
 
 /* V68 — final shared-surface pass after legacy style layers. Keep the editorial home
@@ -379,6 +380,3 @@ html[data-theme="light"] .public-app .feature-hero :is(p,li,small){color:#D7D1C7
     gap:12px!important;
   }
 }
-
-/* V65 — final shared editorial tokens and accessible interaction motion. */
-@import './jyc-editorial-motion-system.css';
