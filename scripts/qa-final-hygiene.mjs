@@ -26,7 +26,7 @@ add('canonical public routes remain JYC-only',[
 add('public staff surface is not exposed',!main.includes('footer-admin-link')&&!main.includes('more-sheet-staff')&&!main.includes('search-admin-tools'));
 add('student-platform UI is not mounted',!/<(MyJYC|AccountLogin|QRSharePage|SiteAtmosphere)\b/.test(main));
 add('academic/campus utility UI is not mounted',!main.includes('JIIT Academic Calendar')&&!main.includes('Campus Map')&&!main.includes('<CampusMap'));
-add('legacy public aliases redirect',vercel.redirects.some(x=>x.source==='/my-jyc'&&x.destination==='/')&&vercel.redirects.some(x=>x.source==='/map'&&x.destination==='/events')&&main.includes("if(clean==='/history')return <Navigate to=\"/about#history\" replace/>;"));
+add('legacy public aliases redirect',vercel.redirects.some(x=>x.source==='/my-jyc'&&x.destination==='/')&&vercel.redirects.some(x=>x.source==='/map'&&x.destination==='/events')&&vercel.redirects.some(x=>x.source==='/history'&&x.destination==='/about#history')&&main.includes("if(clean==='/history')return <Navigate to=\"/about#history\" replace/>;"));
 add('visual contract is present',theme.includes('V56.8 FINAL VISUAL QA CONTRACT')&&theme.includes('overflow-wrap:anywhere')&&theme.includes('text-wrap:pretty'));
 add('homepage keeps Projects/Impact/FAQ out of navigation',!main.includes("['/projects','Projects'")&&!main.includes("['/impact','Impact'")&&!main.includes("['/faq','FAQ'"));
 add('homepage does not mount the retired Impact block',!main.includes('jyc-v1-impact')&&!main.includes('HIGHLIGHTS · IMPACT'));
