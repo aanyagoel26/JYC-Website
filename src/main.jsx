@@ -605,7 +605,7 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
  const titles={
   '/':'JIIT Youth Club (JYC) — Clubs, Events & Fests | JIIT Noida',
   '/about':'What is JIIT Youth Club (JYC)? | JIIT Noida',
-  '/history':'The History of JIIT Youth Club | JYC 128',
+  '/history':'About JIIT Youth Club 128 | JYC',
   '/clubs':'JIIT Clubs & Student Communities | JIIT Youth Club',
   '/events':'JIIT Events & Campus Activities | JIIT Youth Club',
   '/fests':'JIIT Fests & Flagship Events | JIIT Youth Club',
@@ -629,7 +629,7 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
  };
  const descriptions={
   '/':'Official JIIT Youth Club (JYC) website for JIIT Noida. Discover JIIT clubs, student communities, JIIT events, annual fests and co-curricular activities.',
-  '/history':'Read the evidence-led public history of JIIT Youth Club, from hub coordination and induction programmes to flagship JIIT campus experiences.',
+  '/history':'Explore the combined About JYC page and its source-backed timeline of student-led communities, programmes and milestones.',
   '/clubs':'Explore the official JIIT club list and student communities across technical, cultural, literary, creative, sports and other campus interests through JIIT Youth Club.',
   '/events':'Find JIIT events, workshops, competitions, cultural activities and campus events published by JIIT Youth Club at JIIT Noida.',
   '/fests':'Explore JIIT fests and flagship campus events such as officially published JYC programmes, with dates, venues, clubs and registration details when available.',
@@ -637,7 +637,7 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
   '/guide':'About JIIT Youth Club — purpose, communities, events and campus life.',
     '/calendar':'Browse the JYC 128 event calendar by date, category and event status.',
   '/recruitment':'Find published JIIT club recruitment opportunities, auditions and official application links through JIIT Youth Club.',
-  '/about':'Learn about JYC 128, its history and role at JIIT, its vision, mission and student-community values.',
+  '/about':'Learn about JIIT Youth Club 128: its purpose, student-led communities, values, programmes and documented milestones.',
   '/contact':'Official JYC 128 contact details, social channels and query form.',
   '/archive':'JYC archive of published events, clubs, gallery moments and campus stories from JIIT.',
   '/announcements':'Official JYC announcements, notices, registration updates and published student-community updates.',
@@ -652,7 +652,7 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
  const knownPublic=['/','/about','/history','/clubs','/events','/fests','/gallery','/team','/leadership','/contact','/archive','/calendar','/event-calendar','/achievements','/best-of-jyc','/announcements','/updates','/recruitment','/join-jyc'].includes(clean)||clean.startsWith('/gallery/');
  const knownDetail=Boolean(club||event);
  const unknownRoute=!privateRoute&&!knownPublic&&!knownDetail;
- const pageType=club?'club':event?'event':clean==='/fests'?'fests':clean==='/clubs'?'clubs':clean==='/events'?'events':clean.startsWith('/gallery')?'gallery':clean==='/team'||clean==='/leadership'?'team':clean==='/history'?'history':clean==='/archive'?'archive':clean==='/announcements'?'announcements':clean==='/updates'?'updates':clean==='/achievements'?'achievements':clean==='/best-of-jyc'?'best-of-jyc':clean==='/calendar'||clean==='/event-calendar'?'calendar':clean==='/recruitment'?'recruitment':clean==='/join-jyc'?'join-jyc':clean==='/about'?'about':clean==='/contact'?'contact':'home';
+ const pageType=club?'club':event?'event':clean==='/fests'?'fests':clean==='/clubs'?'clubs':clean==='/events'?'events':clean.startsWith('/gallery')?'gallery':clean==='/team'||clean==='/leadership'?'team':clean==='/history'||clean==='/about'?'about':clean==='/archive'?'archive':clean==='/announcements'?'announcements':clean==='/updates'?'updates':clean==='/achievements'?'achievements':clean==='/best-of-jyc'?'best-of-jyc':clean==='/calendar'||clean==='/event-calendar'?'calendar':clean==='/recruitment'?'recruitment':clean==='/join-jyc'?'join-jyc':clean==='/contact'?'contact':'home';
  const canonicalPath=club?`/clubs/${slug(club.name)}`:event?`/events/${slug(event.slug||event.title)}${parts[2]==='register'?'/register':''}`:clean;
  useEffect(()=>{if((club||event)&&(slugId!==slug(event?(event.slug||event.title):club.name)||Boolean(legacyEventSlugMap[slugId]))){const target=event?`/events/${slug(event.slug||event.title)}${parts[2]==='register'?'/register':''}`:`/clubs/${slug(club.name)}`;nav(target,{replace:true});}},[slugId,club?.id,event?.id,parts[2],nav]);
  const galleryAlbumName=clean.startsWith('/gallery/')?decodeURIComponent(parts[1]||'').replace(/-/g,' '):'';
@@ -770,7 +770,7 @@ function MobileMoreSheet({data,admin,close,openSearch}){
  },[close]);
  const go=p=>{close();nav(p)};
 const explore=[
-    ['/about','About JYC','Vision, mission, history and legacy'],
+    ['/about','About JYC','Purpose, communities, values and the JYC story'],
     ['/team','Leadership','Faculty, Apex and Core Team'],
     ['/clubs','Clubs & Communities','Explore the official hub ecosystem'],
     ['/events','Events','Upcoming, ongoing and completed experiences'],
