@@ -671,7 +671,7 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
  if(clean.startsWith('/admin/')||clean.startsWith('/qr/'))return <Navigate to={clean.startsWith('/admin/')?'/':'/events'} replace/>;
 
  if(clean==='/')return <>{schema}<Home data={data}/></>;
- if(clean==='/history')return <>{schema}<JYCHistory data={data}/></>;
+ if(clean==='/history')return <Navigate to="/about#history" replace/>;
  if(clean==='/achievements')return <>{schema}<Achievements data={data}/></>;
  if(clean==='/best-of-jyc')return <>{schema}<JYCBestOf data={data}/></>;
  if(clean==='/about')return <>{schema}<About data={data}/></>;if(clean==='/clubs')return <>{schema}<JYC57Clubs data={data}/></>;if(club)return <>{schema}<ClubDetail data={data} id={slugId} virtualName={hubKey||undefined}/></>;
@@ -1082,12 +1082,12 @@ function About({data}){
   </section>
   <section className="about-history-section reveal" id="history" aria-labelledby="about-history-heading">
     <div className="about-section-title-v28">
-     <span className="eyebrow">HISTORY &amp; LEGACY · 2019–2026</span>
-     <h2 id="about-history-heading">Built over years. Still student-led.</h2>
-     <p>The evidence-led timeline of JIIT Youth Club, from initial hub co-ordination and campus orientations to Sector 128 flagship fests.</p>
+     <span className="eyebrow">THE JYC STORY · 2019–2026</span>
+     <h2 id="about-history-heading">JYC, built by generations of students.</h2>
+     <p>A source-backed record of JYC milestones, community coordination, student orientations and flagship JYC experiences. This timeline is part of About JYC—not a separate history destination.</p>
     </div>
     <div className="about-history-timeline-v2">
-     {HISTORY.map((item,index)=><article key={item.year} className="about-history-node">
+     {HISTORY.map((item,index)=><article key={item.year} id={item.year.replace('–','-')} className="about-history-node">
       <div className="about-history-node-rail">
        <span className="about-history-node-idx">{String(index+1).padStart(2,'0')}</span>
        <b className="about-history-node-yr">{item.year}</b>
