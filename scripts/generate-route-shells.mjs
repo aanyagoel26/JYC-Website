@@ -48,8 +48,8 @@ const routes={
     description:'Connect with JIIT Youth Club 128 through official contact channels and community links.'
   },
   '/history':{
-    title:'JYC History | JIIT Youth Club 128',
-    description:'Explore the history, purpose and evolution of JIIT Youth Club 128.'
+    title:'About JIIT Youth Club 128 | JYC',
+    description:'Learn about JYC’s purpose, student-led communities, values, programme and evidence-backed milestones in one combined About JYC experience.'
   },
   '/announcements':{
     title:'JYC Announcements | JIIT Youth Club 128',
