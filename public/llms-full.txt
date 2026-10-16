@@ -11,8 +11,8 @@ The public website is the official organisational source for published JYC infor
 ## Core public pages
 
 - / — JYC 128 home
-- /about — About JYC
-- /history — JYC history and documented milestones
+- /about — About JYC, including purpose, communities, values and the documented JYC timeline
+- /history — Legacy URL that redirects to the timeline section of About JYC
 - /team — JYC 128 leadership and organisational structure
 - /clubs — official published clubs and hubs
 - /events — official published JYC events
