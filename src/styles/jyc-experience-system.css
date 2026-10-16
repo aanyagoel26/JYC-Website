@@ -166,3 +166,80 @@
     transform: none !important;
   }
 }
+
+
+/* Page art direction: About JYC is one editorial story, with its source-backed
+   timeline embedded in the page rather than presented as a separate destination. */
+.public-app .about-page{max-width:1540px;margin-inline:auto;padding-bottom:clamp(48px,8vw,112px)}
+.public-app .about-page .about-hero-v28{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(240px,.8fr);align-items:stretch;gap:clamp(24px,4vw,64px);margin:clamp(18px,3vw,38px) 0 clamp(32px,5vw,72px);padding:clamp(28px,5vw,76px);border:1px solid color-mix(in srgb,var(--jyc-ex-champagne) 42%,var(--jyc-ex-line));border-radius:var(--jyc-ex-radius-lg);background:radial-gradient(ellipse at 88% 12%,color-mix(in srgb,var(--jyc-ex-champagne) 18%,transparent),transparent 42%),linear-gradient(132deg,var(--jyc-ex-paper-raised),color-mix(in srgb,var(--jyc-ex-oxblood) 5%,var(--jyc-ex-paper)));box-shadow:var(--jyc-ex-shadow-soft);overflow:clip}
+.public-app .about-page .about-hero-copy{align-self:center;max-width:780px}
+.public-app .about-page .about-hero-copy h1{max-width:11ch;margin:18px 0 22px;font-size:clamp(44px,6.4vw,86px);line-height:.94;letter-spacing:-.065em;text-wrap:balance}
+.public-app .about-page .about-hero-copy>p{max-width:58ch;color:var(--jyc-ex-muted);font-size:clamp(16px,1.35vw,19px);line-height:1.78}
+.public-app .about-page .about-hero-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:26px}
+.public-app .about-page .about-hero-mark{min-height:310px;display:grid;align-content:center;justify-items:center;gap:22px;padding:26px;border:1px solid rgba(255,250,243,.14);border-radius:calc(var(--jyc-ex-radius-lg) - 6px);background:radial-gradient(ellipse at 50% 20%,rgba(198,164,119,.2),transparent 48%),linear-gradient(145deg,#281c22,#4b1b2a 70%,#201a20);color:#fffaf3;text-align:center}
+.public-app .about-page .about-hero-mark>div{display:grid;place-items:center;width:min(230px,72%);aspect-ratio:1;padding:18px;border:1px solid rgba(255,250,243,.18);border-radius:50%;background:rgba(255,250,243,.045);box-shadow:0 18px 50px rgba(0,0,0,.18),inset 0 1px rgba(255,255,255,.1)}
+.public-app .about-page .about-hero-mark img{width:100%;height:100%;object-fit:contain}
+.public-app .about-page .about-hero-mark>span{color:#ead1ad;font-size:11px;font-weight:750;letter-spacing:.2em}
+.public-app .about-page :where(.v40-about-snapshot,.about-intro-v28,.about-families-v28,.about-flow-v28,.about-programmes-v28,.about-vision-v28,.about-history-section){margin-block:clamp(42px,7vw,96px)}
+.public-app .about-page :where(.about-section-title-v28 h2,.v40-about-snapshot-intro h2,.about-intro-v28>h2){max-width:17ch;margin:12px 0 16px;font-size:clamp(30px,4.2vw,54px);line-height:1;letter-spacing:-.05em}
+.public-app .about-page :where(.about-section-title-v28 p,.v40-about-snapshot-intro p,.about-intro-v28>p){max-width:68ch;color:var(--jyc-ex-muted);font-size:16px;line-height:1.78}
+.public-app .about-page .v40-about-snapshot{padding:clamp(24px,4vw,48px);border:1px solid var(--jyc-ex-line);border-radius:var(--jyc-ex-radius-lg);background:var(--jyc-ex-paper-raised)}
+.public-app .about-page .v40-about-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:28px}
+.public-app .about-page .v40-about-metrics article{min-width:0;display:grid;gap:8px;padding:clamp(16px,2.3vw,26px);border:1px solid var(--jyc-ex-line);border-radius:var(--jyc-ex-radius-md);background:color-mix(in srgb,var(--jyc-ex-paper) 70%,transparent)}
+.public-app .about-page .v40-about-metrics strong{color:var(--jyc-ex-oxblood);font-size:clamp(30px,4vw,48px);line-height:1;letter-spacing:-.06em;font-variant-numeric:tabular-nums}
+.public-app .about-page .v40-about-metrics span{color:var(--jyc-ex-muted);font-size:13px;line-height:1.45}
+.public-app .about-page .v40-about-leadership{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-top:22px;padding-top:22px;border-top:1px solid var(--jyc-ex-line)}
+.public-app .about-page .v40-about-leadership strong{display:block;margin-top:8px;font-size:clamp(16px,2vw,22px)}
+.public-app .about-page .v40-about-leadership p{max-width:60ch;margin-bottom:0;color:var(--jyc-ex-muted);line-height:1.65}
+.public-app .about-page :where(.about-principles-v28,.about-family-grid-v28,.about-flow-grid-v28){display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:26px}
+.public-app .about-page :where(.about-principles-v28 article,.about-family-grid-v28 button,.about-flow-grid-v28 article){min-width:0;padding:clamp(20px,2.6vw,30px);border:1px solid var(--jyc-ex-line);border-radius:var(--jyc-ex-radius-md);background:var(--jyc-ex-paper-raised);text-align:left}
+.public-app .about-page :where(.about-principles-v28 article>b,.about-flow-grid-v28 article>span,.about-family-grid-v28 button>span){color:var(--jyc-ex-oxblood);font-size:11px;font-weight:800;letter-spacing:.12em}
+.public-app .about-page :where(.about-principles-v28 h3,.about-family-grid-v28 strong,.about-flow-grid-v28 strong){display:block;margin:22px 0 10px;font-size:clamp(18px,2vw,23px);line-height:1.15;letter-spacing:-.03em}
+.public-app .about-page :where(.about-principles-v28 p,.about-family-grid-v28 p,.about-flow-grid-v28 p){margin:0;color:var(--jyc-ex-muted);font-size:14px;line-height:1.7}
+.public-app .about-page .about-family-grid-v28 button{color:inherit;cursor:pointer}
+.public-app .about-page .about-family-grid-v28 button small{display:block;margin-top:20px;color:var(--jyc-ex-oxblood);font-weight:750;line-height:1.5}
+.public-app .about-page .about-flow-grid-v28{grid-template-columns:repeat(5,minmax(0,1fr))}
+.public-app .about-page .about-programme-grid-v28{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:28px}
+.public-app .about-page .about-programme-grid-v28>article{min-width:0;overflow:clip;border:1px solid var(--jyc-ex-line);border-radius:var(--jyc-ex-radius-md);background:var(--jyc-ex-paper-raised)}
+.public-app .about-page .about-programme-image{position:relative;aspect-ratio:4/3;overflow:hidden;background:var(--jyc-ex-paper)}
+.public-app .about-page .about-programme-image :where(img,picture){width:100%;height:100%;object-fit:cover}
+.public-app .about-page .about-programme-image>span{position:absolute;left:14px;top:14px;display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:#fffaf3;color:var(--jyc-ex-oxblood);font-size:11px;font-weight:800}
+.public-app .about-page .about-programme-grid-v28>article>div:last-child{padding:22px}
+.public-app .about-page .about-programme-grid-v28 small{color:var(--jyc-ex-oxblood);font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+.public-app .about-page .about-programme-grid-v28 h3{margin:9px 0;font-size:23px;letter-spacing:-.035em}
+.public-app .about-page .about-programme-grid-v28 p{color:var(--jyc-ex-muted);font-size:14px;line-height:1.7}
+.public-app .about-page :where(.about-programme-grid-v28 button,.about-inline-links button){padding:0;border:0;background:none;color:var(--jyc-ex-oxblood);font-weight:750;cursor:pointer}
+.public-app .about-page .about-vision-v28{display:grid;grid-template-columns:1.1fr .9fr;gap:clamp(22px,4vw,54px);padding:clamp(28px,4.5vw,58px);border-radius:var(--jyc-ex-radius-lg);background:linear-gradient(135deg,#281c22,#4b1b2a);color:#fffaf3}
+.public-app .about-page .about-vision-v28 :where(h2,p){color:inherit}
+.public-app .about-page .about-vision-v28 h2{max-width:16ch;margin-top:14px;font-size:clamp(28px,4vw,48px);line-height:1.02;letter-spacing:-.05em}
+.public-app .about-page .about-vision-v28 p{color:rgba(255,250,243,.78);line-height:1.75}
+.public-app .about-page .about-inline-links{display:flex;flex-wrap:wrap;gap:18px;margin-top:20px}
+.public-app .about-page .about-vision-v28 .about-inline-links button{color:#ead1ad}
+.public-app .about-page .about-principles-v33{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.public-app .about-page .about-principle-v33{min-width:0;padding:24px;border:1px solid var(--jyc-ex-line);border-radius:var(--jyc-ex-radius-md);background:var(--jyc-ex-paper-raised)}
+.public-app .about-page .about-principle-v33>span{color:var(--jyc-ex-oxblood);font-size:11px;font-weight:800;letter-spacing:.12em}
+.public-app .about-page .about-principle-v33>strong{display:block;margin:24px 0 10px;font-size:20px}
+.public-app .about-page .about-principle-v33 p{margin:0;color:var(--jyc-ex-muted);font-size:14px;line-height:1.7}
+.public-app .about-page .about-history-section{scroll-margin-top:92px;padding:clamp(26px,4.5vw,58px);border:1px solid color-mix(in srgb,var(--jyc-ex-champagne) 45%,var(--jyc-ex-line));border-radius:var(--jyc-ex-radius-lg);background:linear-gradient(145deg,var(--jyc-ex-paper-raised),color-mix(in srgb,var(--jyc-ex-champagne) 8%,var(--jyc-ex-paper))}
+.public-app .about-page .about-history-section>.about-section-title-v28{margin-bottom:34px}
+.public-app .about-page .about-history-timeline-v2{display:grid;gap:14px}
+.public-app .about-page .about-history-node{display:grid;grid-template-columns:minmax(100px,.22fr) minmax(0,1fr);gap:clamp(16px,3vw,36px);scroll-margin-top:100px}
+.public-app .about-page .about-history-node-rail{display:flex;flex-direction:column;align-items:flex-start;gap:10px;padding:22px 0}
+.public-app .about-page .about-history-node-idx{color:var(--jyc-ex-oxblood);font-size:11px;font-weight:850;letter-spacing:.13em}
+.public-app .about-page .about-history-node-yr{font-size:clamp(18px,2vw,25px);letter-spacing:-.04em}
+.public-app .about-page .about-history-node-line{flex:1;width:1px;min-height:20px;margin-left:4px;background:color-mix(in srgb,var(--jyc-ex-champagne) 70%,transparent)}
+.public-app .about-page .about-history-node-card{padding:clamp(20px,3vw,34px);border:1px solid var(--jyc-ex-line);border-radius:var(--jyc-ex-radius-md);background:var(--jyc-ex-paper-raised)}
+.public-app .about-page .about-history-badge{color:var(--jyc-ex-oxblood);font-size:10px;font-weight:850;letter-spacing:.14em}
+.public-app .about-page .about-history-node-card h3{margin:10px 0 12px;font-size:clamp(22px,3vw,34px);line-height:1.1}
+.public-app .about-page .about-history-node-card p{max-width:72ch;color:var(--jyc-ex-muted);line-height:1.78}
+.public-app .about-page .about-history-cite{display:flex;flex-wrap:wrap;gap:5px;font-size:12px;line-height:1.6}
+.public-app .about-page .about-history-cite>span{color:var(--jyc-ex-muted)}
+.public-app .about-page .about-history-cite a{color:var(--jyc-ex-oxblood);font-weight:750;text-underline-offset:.2em}
+.public-app .about-page .about-source-note{margin:20px 0;padding:16px 18px;border-left:3px solid var(--jyc-ex-champagne);background:color-mix(in srgb,var(--jyc-ex-paper) 70%,transparent);color:var(--jyc-ex-muted);font-size:13px;line-height:1.65}
+.public-app .about-page .about-next-v28{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:22px;margin-top:30px;padding:clamp(24px,4vw,42px);border:1px solid var(--jyc-ex-line);border-radius:var(--jyc-ex-radius-lg);background:var(--jyc-ex-paper-raised)}
+.public-app .about-page .about-next-v28 h2{margin:8px 0 0;font-size:clamp(26px,3.4vw,42px);line-height:1.05}
+.public-app .about-page .about-next-v28>div{display:flex;flex-wrap:wrap;gap:8px}
+@media(max-width:980px){.public-app .about-page .about-flow-grid-v28{grid-template-columns:repeat(3,minmax(0,1fr))}.public-app .about-page .about-principles-v33{grid-template-columns:repeat(2,minmax(0,1fr))}.public-app .about-page .about-programme-grid-v28{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:700px){.public-app .about-page .about-hero-v28{grid-template-columns:minmax(0,1fr);padding:24px}.public-app .about-page .about-hero-mark{min-height:250px}.public-app .about-page .v40-about-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.public-app .about-page :where(.about-principles-v28,.about-family-grid-v28,.about-flow-grid-v28,.about-programme-grid-v28){grid-template-columns:repeat(2,minmax(0,1fr))}.public-app .about-page .about-vision-v28{grid-template-columns:minmax(0,1fr)}.public-app .about-page .about-history-node{grid-template-columns:72px minmax(0,1fr);gap:12px}.public-app .about-page .about-history-section{padding:20px}.public-app .about-page .about-history-node-rail{padding-top:18px}.public-app .about-page .about-next-v28{align-items:flex-start}}
+@media(max-width:420px){.public-app .about-page .about-hero-v28{padding:18px}.public-app .about-page .about-hero-copy h1{font-size:clamp(38px,12vw,54px)}.public-app .about-page :where(.about-principles-v28,.about-family-grid-v28,.about-flow-grid-v28,.about-programme-grid-v28,.about-principles-v33){grid-template-columns:minmax(0,1fr)}.public-app .about-page .v40-about-leadership{align-items:flex-start;flex-direction:column}.public-app .about-page .about-history-node{grid-template-columns:1fr;gap:0}.public-app .about-page .about-history-node-rail{flex-direction:row;align-items:center;padding:8px 0 0}.public-app .about-page .about-history-node-line{display:none}.public-app .about-page .about-history-node-card{padding:18px}.public-app .about-page .about-next-v28>div{width:100%}.public-app .about-page .about-next-v28 .btn{flex:1 1 100%}}
+@media(prefers-reduced-motion:reduce){.public-app .about-page *{scroll-behavior:auto!important}}
