@@ -162,41 +162,42 @@ For each route verify:
 - [ ] no dead links
 - [ ] no incorrect JIIT 62 content
 
-## J. Release — current main snapshot (16 October 2026)
+## J. Release — verified snapshot (16 October 2026, 23:26 UTC)
 
-Current source SHA: `828aa7167a6feac152e4d75a2f79b9b204a81132` (PR #231 merged).
+Verified deployed source checkpoint: `e348489b011fa1c590d65588c0b78ba10eb66798` (PRs #231, #239 and #240 merged). This is a timestamped release-evidence snapshot; recheck the deployment SHA after any later merge.
 
-- [x] Current-main CI (`38789119846`) passed
-- [x] Current-main Quality Gate (`38789119876`) passed
-- [x] Current-main CodeQL (`38789120155`) passed
-- [x] Current-main Browser QA (`38789119865`) passed: 39/39 tests plus three visual route checks; the dedicated 320px viewport project is included
-- [x] Current-main Lighthouse CI (`38789119910`) passed on seven routes
-- [x] Production build generated 4,172 responsive photo derivatives; 36 were skipped and zero failed. Logo optimization emitted 48px, 96px, 192px and 270px AVIF variants.
-- [x] Automated accessibility score 100, Best Practices 100 and SEO 100 on all seven Lighthouse routes
-- [ ] CodeQL open findings = 0, or every remaining finding has a documented justified disposition
-- [ ] Dependabot alerts = 0 high/critical
-- [ ] Supabase security advisor findings have reviewed dispositions; do not alter role-scoped grants speculatively
-- [x] A Vercel production deployment is READY at `jyc-website-eight.vercel.app` on `6b43c70ebfd0e95ab02c020b0a5e546edffcdae3`.
-- [ ] Vercel production deployment matches the latest `main` SHA `abbd7d9c22e42ae426cdc4448419005282d89a45`; current Vercel check reports `build-rate-limit`.
-- [ ] Verify a READY production deployment has the exact approved `main` SHA
-- [ ] Human visual review and production smoke tests pass on that deployment
-- [ ] Supabase Auth leaked-password protection enabled and verified
-- [ ] Custom domains verified, or the Vercel alias explicitly accepted as launch origin
-- [ ] JYC Now official live source intentionally configured, or curated fallback explicitly accepted
-- [ ] production media/link/content review complete
-- [ ] only then declare the site 100% release-ready
+- [x] Current-checkpoint CI (`38822979234`) passed
+- [x] Current-checkpoint Quality Gate (`38822979202`) passed
+- [x] Current-checkpoint CodeQL (`38822979263`) passed
+- [x] Current-checkpoint Browser QA (`38822979216`) passed
+- [x] Current-checkpoint Lighthouse CI (`38822979205`) passed on seven routes
+- [x] Production deployment `dpl_A97MuUSRQvZoCn56dZdRKxiwUSH3` is READY at the exact source checkpoint above; verified Vercel alias: `jyc-website-eight.vercel.app`
+- [x] Production smoke tests returned HTTP 200 for homepage, team, gallery, clubs, events, fests, updates, JYC Now API, robots.txt and sitemap.xml
+- [x] Playwright screenshot review confirms the faculty grid uses only populated tracks and the mobile assistant stays clear of primary homepage actions
+- [x] Lighthouse scores on the tested source: Performance 86–89; Accessibility 100; Best Practices 100; SEO 100 across seven routes. These are lab results, not field Core Web Vitals.
+- [x] JYC Now clearly labels the fallback as curated while API state remains `live=false`, `configured=false`
+- [ ] Enable and verify Supabase Auth leaked-password protection
+- [ ] Verify `jiityouthclub128.in` and `www.jiityouthclub128.in` or explicitly accept the verified Vercel alias as the launch origin
+- [ ] Review current GitHub code-scanning/dependency alerts individually; the historical screenshot's count of 142 is not assumed to be current
+- [ ] Verify branch protection settings; the connected API could not read the protection endpoint
+- [ ] Review current Supabase advisor findings without changing role-scoped grants speculatively
+- [ ] Configure official JYC Now feeds if live sources are required; otherwise obtain explicit owner acceptance of curated mode
+- [ ] Finish editorial review of event dates, venues, official links and archive material
+- [ ] Only then declare all account-level and editorial release gates 100% closed
+
 
 ## Current blockers
 
-1. GitHub Advanced Security account settings are not writable through the connected repository file API, so the manual toggles above must be done in GitHub Settings.
-2. The provided GitHub Security screenshot reports 142 open code-scanning alerts, but the connected GitHub file API does not expose the alert list. They must be opened in Security and quality > Code scanning so each finding can be mapped to a source line and remediated or justified.
-3. Vercel previously hit the deployment-rate limit; do not repeatedly retry deployments until the limit clears.
-4. The local sandbox Chromium launch has been unreliable; GitHub Actions is the authoritative browser-QA environment once its workflow completes.
-5. The connected JYC Supabase project (`ogbanmjokjlxfuktkicj`) is ACTIVE_HEALTHY. The 2026-10-15 advisor returned eight SECURITY DEFINER function warnings: `jyc_read_site_data()` is intentionally callable by anon for filtered public content; seven admin/helper functions are authenticated-only and use active-role/club checks with an empty search path. RLS is enabled on the reviewed public tables. Keep these grants unchanged until a reviewed security migration confirms all RLS dependencies.
-6. Supabase Auth leaked-password protection is disabled. Enable it in the Auth settings before declaring the backend security review complete; no auth setting or database schema was changed in Run 20.
-7. The live `/api/jyc-updates` endpoint reports `live=false` and `configured=false`; the public page explicitly describes JYC Now as a curated editorial layer, not a live social-network feed. Official source configuration/credentials remain owner-side work.
-8. Vercel reports `jiityouthclub128.in` and `www.jiityouthclub128.in` as unverified. Do not change DNS until the owner confirms access to the authoritative DNS zone and preserves existing mail records.
-9. Production emitted Node `DEP0169` (`url.parse()`) warnings from `/api/jyc-updates` activity. The endpoint source uses WHATWG `new URL` and contains no direct deprecated `url.parse()` call; source of the warning is unconfirmed, so do not patch speculatively.
+1. **Supabase Auth leaked-password protection is disabled.** Enable it in project Auth settings and verify the setting. No auth setting or schema was changed.
+2. **Custom domains are unverified.** Vercel reports pending TXT challenges for `jiityouthclub128.in` and `www.jiityouthclub128.in`. The verified Vercel alias is live; preserve existing mail records when the DNS owner adds verification records.
+3. **JYC Now live feed is not configured.** The API returns `live=false`, `configured=false`; the frontend now labels the curated fallback honestly. Configure official sources only with owner-controlled feed URLs/credentials, or explicitly accept curated mode.
+4. **Security alert disposition is incomplete.** CodeQL workflow passes, but the connected GitHub API cannot enumerate the current open alert list. The earlier screenshot count of 142 is historical and must not be treated as current.
+5. **Branch protection is not reverified.** The connected repository API returned 403 for the protection endpoint; owner-side settings review is required.
+6. **Supabase advisor snapshot (15 October 2026) reported eight SECURITY DEFINER warnings.** `jyc_read_site_data()` was documented as intentionally callable by anon for filtered public content; seven admin/helper functions were authenticated-only with active-role/club checks and an empty search path. Re-review current findings and keep grants unchanged until a reviewed security migration proves a change is safe.
+7. **Non-blocking Node `DEP0169` warning persists on `/api/jyc-updates`.** Repository source uses WHATWG `new URL` and has no direct deprecated `url.parse()` call; source remains unconfirmed. Do not patch speculatively.
+8. **Editorial sign-off remains an owner task.** Verify event dates, venues, official club/social links and archive material before promoting them as current official content.
+9. **Historical CI trigger-efficiency proposal P-CI-01 remains unapplied.** Do not alter browser workflow triggers until branch protection/required-check policy is verified. This is an efficiency task, not a blocker for the currently passing release.
+
 
 ## Definition of done
 
