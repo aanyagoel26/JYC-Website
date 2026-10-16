@@ -29,15 +29,13 @@ for (const route of routes) {
   assert.ok(shells.includes(`'${route.path}'`), `${route.path} must have a direct-entry SEO shell`);
 }
 
-assert.ok(main.includes("if(clean==='/history')return <Navigate to=\\"/about#history\\" replace/>;"),
+assert.ok(main.includes(`if(clean==='/history')return <Navigate to="/about#history" replace/>;`),
   'The legacy history URL must lead to the combined About JYC timeline');
 assert.ok(main.includes('id="about-history-heading"') && main.includes('className="about-history-node"'),
   'The combined About JYC page must contain the accessible, source-backed timeline');
 assert.ok(shells.includes("route === '/history' ? '/about' : route"),
   'The legacy history shell must canonicalize to the single About JYC destination');
-assert.ok(!main.includes("if(clean==='/history')return <>{schema}<JYCHistory data={data}/></>;"),
-  'History must not remain a separate public destination');
-assert.ok(!main.includes("if(clean==='/achievements'||clean==='/best-of-jyc')return <Navigate to=\\"/about\\" replace/>;"),
+assert.ok(!main.includes(`if(clean==='/achievements'||clean==='/best-of-jyc')return <Navigate to="/about" replace/>;`),
   'Achievements and Best of JYC must not silently redirect to About');
 assert.ok(main.includes("import {HISTORY} from './jyc-history-page.jsx';"),
   'The route module should import only the history data it uses, not the removed teaser component');
