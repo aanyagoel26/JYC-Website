@@ -43,15 +43,15 @@ Use these as proposed design tokens until the official logo artwork is sampled a
 1. **Home** — brand-led hero, organisation intro, community families, verified upcoming event, announcements, activity types, team/history teaser, photo moments and clear next actions.
 2. **About JYC** — purpose, role, structure, values and a source-backed timeline in one page; legacy `/history` redirects to the timeline anchor.
 3. **Leadership** — faculty guidance and student leadership grouped by real role; verified names/photos/social links only.
-5. **Clubs** — search and filter by category/interest; readable descriptions and explicit detail links; distinguish official/published records from source-only records.
-6. **Club detail** — identity, purpose, activities, verified team, related events/gallery and real recruitment status.
-7. **Events** — featured event, search, category and time/status filters; chronological sorting with robust missing/invalid-date handling.
-8. **Event detail** — date/time/timezone, venue, organiser, description, schedule/rules/eligibility/prizes only when available, registration status and contact. Hide unavailable fields rather than fabricating them.
-9. **Event calendar** — accessible month/list views, keyboard-operable date selection and valid event links; calendar export only with valid event data.
-10. **Gallery** — source-verified collections and year filters; accessible lightbox, keyboard escape/arrow handling, focus restoration and sensible mobile gestures.
-11. **Achievements / Best of JYC** — verifiable accomplishments with date and evidence/context; avoid unsupported superlatives.
-12. **Announcements** — publication status, date, deadline and archive state; show only public/published notices.
-13. **Recruitment / Join JYC** — explicit open/closed/coming-soon state; never imply applications are open without a verified destination and dates.
+4. **Clubs** — search and filter by category/interest; readable descriptions and explicit detail links; distinguish official/published records from source-only records.
+5. **Club detail** — identity, purpose, activities, verified team, related events/gallery and real recruitment status.
+6. **Events** — featured event, search, category and time/status filters; chronological sorting with robust missing/invalid-date handling.
+7. **Event detail** — date/time/timezone, venue, organiser, description, schedule/rules/eligibility/prizes only when available, registration status and contact. Hide unavailable fields rather than fabricating them.
+8. **Event calendar** — accessible month/list views, keyboard-operable date selection and valid event links; calendar export only with valid event data.
+9. **Gallery** — source-verified collections and year filters; accessible lightbox, keyboard escape/arrow handling, focus restoration and sensible mobile gestures.
+10. **Achievements / Best of JYC** — verifiable accomplishments with date and evidence/context; avoid unsupported superlatives.
+11. **Announcements** — publication status, date, deadline and archive state; show only public/published notices.
+12. **Recruitment / Join JYC** — explicit open/closed/coming-soon state; never imply applications are open without a verified destination and dates.
 14. **Contact** — verified channels, campus location and clear form success/error states; do not claim a message was sent unless submission succeeds.
 15. **Archive** — legacy and historical content with clear dates/context, distinct from upcoming activity.
 
