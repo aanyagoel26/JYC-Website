@@ -453,3 +453,28 @@ html[data-theme="light"] .public-app .jyc-editorial-home .jh-photo-story-head h2
   font-size: 12px;
   line-height: 1.6;
 }
+
+/* Innovationjiit scrapbook framing, restrained for JYC's existing flip-card interaction. */
+.public-app .team-photo-editorial {
+  padding: 6px;
+  border: 1px solid rgba(129,94,45,.28);
+  box-shadow: inset 0 0 0 1px rgba(255,249,235,.7), 0 12px 28px rgba(35,24,29,.12);
+}
+.public-app .team-photo-editorial img {
+  border-radius: 7px;
+}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  .public-app .jyc-editorial-home .jh-story-card:hover {
+    transform: perspective(1100px) rotateX(.7deg) rotateY(-.5deg) translateY(-4px);
+    box-shadow: 0 24px 50px rgba(67,46,20,.17);
+  }
+  .public-app .jyc57-masonry > .jyc57-photo,
+  .public-app .jyc57-feature-card {
+    transition: transform .28s cubic-bezier(.2,.8,.2,1), box-shadow .28s ease;
+  }
+  .public-app .jyc57-masonry > .jyc57-photo:hover,
+  .public-app .jyc57-feature-card:hover {
+    transform: perspective(1000px) translateY(-3px) rotateX(.35deg);
+    box-shadow: 0 22px 44px rgba(35,24,29,.16);
+  }
+}
