@@ -253,3 +253,106 @@
   border-color: color-mix(in srgb, var(--jyc-ex-champagne) 72%, var(--jyc-ex-line));
   box-shadow: var(--jyc-ex-shadow-soft);
 }
+
+
+/* High-traffic route art direction: club discovery, events, people and archive. */
+.public-app :where(.compact-page-head,.team-hero-panel,.archive-hero,.join-soon-hero){
+  position:relative;isolation:isolate;overflow:clip;padding:clamp(26px,4.5vw,58px);
+  border:1px solid color-mix(in srgb,var(--jyc-ex-champagne) 42%,var(--jyc-ex-line));
+  border-radius:var(--jyc-ex-radius-lg);
+  background:radial-gradient(ellipse at 90% 5%,color-mix(in srgb,var(--jyc-ex-champagne) 17%,transparent),transparent 40%),linear-gradient(132deg,var(--jyc-ex-paper-raised),color-mix(in srgb,var(--jyc-ex-oxblood) 5%,var(--jyc-ex-paper)));
+}
+.public-app :where(.compact-page-head h1,.team-hero-panel h1,.archive-hero h1,.join-soon-hero h1){
+  max-width:13ch;margin:12px 0 18px;font-size:clamp(38px,5.6vw,72px);line-height:.97;letter-spacing:-.06em;text-wrap:balance;
+}
+.public-app :where(.compact-page-head p,.team-hero-panel p,.archive-hero p,.join-soon-hero p){max-width:62ch;color:var(--jyc-ex-muted);font-size:clamp(15px,1.3vw,18px);line-height:1.75}
+.public-app :where(.page-stat-row,.hero-stats){display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.public-app :where(.page-stat-row span,.hero-stats>div){padding:12px 15px;border:1px solid var(--jyc-ex-line);border-radius:13px;background:color-mix(in srgb,var(--jyc-ex-paper-raised) 82%,transparent);font-size:12px}
+.public-app :where(.page-stat-row b,.hero-stats strong){display:inline-block;margin-right:5px;color:var(--jyc-ex-oxblood);font-size:20px;font-variant-numeric:tabular-nums}
+.public-app .clubs-page .club-drift-wall-section,
+.public-app .events-page .event-drift-wall-section{margin-block:clamp(30px,5vw,62px);padding:clamp(20px,3vw,34px);border:1px solid var(--jyc-ex-line);border-radius:var(--jyc-ex-radius-lg);background:var(--jyc-ex-paper-raised)}
+.public-app .clubs-page .hub-spectrum,
+.public-app .clubs-page .find-community-panel,
+.public-app .events-page .event-program-band,
+.public-app .events-page .events-live-strip,
+.public-app .events-page .supplied-event-programme{margin-block:24px;padding:clamp(20px,3vw,34px);border:1px solid var(--jyc-ex-line);border-radius:var(--jyc-ex-radius-lg);background:var(--jyc-ex-paper-raised)}
+.public-app .clubs-page .hub-spectrum h2,
+.public-app .clubs-page .find-community-panel h2,
+.public-app .events-page .event-program-band h2,
+.public-app .events-page .supplied-event-programme h2{font-size:clamp(26px,3.6vw,42px);line-height:1.04;letter-spacing:-.045em}
+.public-app .clubs-page .hub-spectrum-tags,
+.public-app .clubs-page .find-community-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
+.public-app .clubs-page :where(.hub-spectrum-tags button,.find-community-chips button){min-height:42px;padding:10px 14px;border:1px solid var(--jyc-ex-line);border-radius:999px;background:var(--jyc-ex-paper);color:var(--jyc-ex-ink);font-size:13px;font-weight:650}
+.public-app .clubs-page :where(.hub-spectrum-tags button.is-active,.find-community-chips button.is-active){border-color:var(--jyc-ex-oxblood);background:var(--jyc-ex-oxblood);color:#fffaf3}
+.public-app .clubs-page .club-grid{gap:16px}
+.public-app .clubs-page .club-card-premium{border:1px solid var(--jyc-ex-line);border-radius:var(--jyc-ex-radius-md);background:var(--jyc-ex-paper-raised);box-shadow:0 8px 24px rgba(35,24,29,.035)}
+.public-app .clubs-page .club-card-photo{aspect-ratio:5/4;overflow:hidden;background:var(--jyc-ex-paper)}
+.public-app .clubs-page .club-card-photo img{width:100%;height:100%;object-fit:cover}
+.public-app .clubs-page .club-card-footer{border-top:1px solid var(--jyc-ex-line)}
+.public-app .events-page .event-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-block:24px;padding:14px;border:1px solid var(--jyc-ex-line);border-radius:18px;background:var(--jyc-ex-paper-raised)}
+.public-app .events-page .event-search{flex:1 1 240px;min-width:0}
+.public-app .events-page .event-search input{width:100%;min-height:46px;padding:12px 16px;border:1px solid var(--jyc-ex-line);border-radius:999px;background:var(--jyc-ex-paper)}
+.public-app .events-page .event-scope-tabs{display:flex;flex-wrap:wrap;gap:8px;margin-block:18px}
+.public-app .events-page .event-directory-list{display:grid;gap:8px}
+.public-app .events-page .event-directory-row{display:grid;grid-template-columns:40px minmax(100px,.25fr) minmax(0,1fr) auto auto 20px;align-items:center;gap:16px;width:100%;padding:18px;border:1px solid var(--jyc-ex-line);border-radius:16px;background:var(--jyc-ex-paper-raised);color:inherit;text-align:left;transition:border-color .2s ease,background .2s ease}
+.public-app .events-page .event-directory-row:hover{border-color:color-mix(in srgb,var(--jyc-ex-champagne) 70%,var(--jyc-ex-line));background:color-mix(in srgb,var(--jyc-ex-paper-raised) 78%,var(--jyc-ex-champagne))}
+.public-app .events-page .event-row-number{color:var(--jyc-ex-oxblood);font-size:11px;font-weight:800}
+.public-app .events-page .event-row-date{display:grid;gap:4px}
+.public-app .events-page .event-row-date b{font-size:14px}
+.public-app .events-page .event-row-date small,.public-app .events-page .event-row-copy small{color:var(--jyc-ex-muted);font-size:11px;letter-spacing:.04em}
+.public-app .events-page .event-row-copy{display:grid;gap:6px;min-width:0}
+.public-app .events-page .event-row-copy strong{font-size:clamp(16px,1.6vw,20px);letter-spacing:-.025em}
+.public-app .events-page .event-row-copy em{color:var(--jyc-ex-muted);font-size:13px;font-style:normal;line-height:1.55}
+.public-app .events-page .event-row-state,.public-app .events-page .event-row-register{font-size:10px;font-weight:800;letter-spacing:.08em;white-space:nowrap}
+.public-app .events-page .event-row-state{color:var(--jyc-ex-oxblood)}
+.public-app .events-page .event-card-premium{border:1px solid var(--jyc-ex-line);border-radius:var(--jyc-ex-radius-md);background:var(--jyc-ex-paper-raised)}
+.public-app .events-page .event-poster{aspect-ratio:4/3;background:var(--jyc-ex-paper)}
+.public-app .events-page .event-poster-photo{width:100%;height:100%;object-fit:cover}
+.public-app .events-page .event-card-meta{color:var(--jyc-ex-muted);font-size:12px;line-height:1.6}
+.public-app .team-page .team-hero-panel{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:30px;margin-block:24px}
+.public-app .team-page .team-hero-logo{display:grid;place-items:center;width:clamp(130px,17vw,220px);aspect-ratio:1;border:1px solid rgba(255,250,243,.18);border-radius:50%;background:linear-gradient(145deg,#281c22,#4b1b2a);overflow:hidden}
+.public-app .team-page .team-hero-logo img{width:72%;height:72%;object-fit:contain}
+.public-app .team-page .team-command-strip{display:flex;flex-wrap:wrap;gap:10px;margin-block:24px}
+.public-app .team-page .team-command-strip>*{flex:1 1 180px;padding:18px;border:1px solid var(--jyc-ex-line);border-radius:14px;background:var(--jyc-ex-paper-raised)}
+.public-app .team-page .team-structure-visual{margin-block:30px;padding:clamp(20px,3vw,34px);border:1px solid var(--jyc-ex-line);border-radius:var(--jyc-ex-radius-lg);background:var(--jyc-ex-paper-raised)}
+.public-app .team-page .team-layer{margin-block:clamp(36px,5vw,64px)}
+.public-app .team-page .team-layer-head{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:20px}
+.public-app .team-page .team-layer-head h2{font-size:clamp(28px,4vw,46px);letter-spacing:-.05em}
+.public-app .team-page .team-layer-grid{gap:14px}
+.public-app .team-page .team-flip-member{border:1px solid var(--jyc-ex-line);border-radius:18px;overflow:clip;background:var(--jyc-ex-paper-raised)}
+.public-app .team-page .team-member-face-content{min-height:100%;background:var(--jyc-ex-paper-raised)}
+.public-app .team-page .team-photo-editorial{aspect-ratio:4/5;background:var(--jyc-ex-paper)}
+.public-app .team-page .team-photo-editorial img{width:100%;height:100%;object-fit:cover;object-position:center 25%}
+.public-app .team-page .team-front-overlay{background:linear-gradient(transparent 18%,rgba(24,17,21,.9));color:#fffaf3}
+.public-app .team-page .team-role-tag{color:#ead1ad}
+.public-app .team-page .team-flip-indicator{min-width:44px;min-height:44px}
+.public-app .team-page .team-back-content{padding:24px;background:linear-gradient(145deg,#281c22,#4b1b2a);color:#fffaf3}
+.public-app .team-page .team-back-bio{color:rgba(255,250,243,.78);line-height:1.65}
+.public-app .contact-page .contact-sla-banner{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:24px 0;padding:16px 20px;border:1px solid var(--jyc-ex-line);border-radius:14px;background:var(--jyc-ex-paper-raised)}
+.public-app .contact-page .contact-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.public-app .contact-page .contact-card{min-width:0;padding:clamp(20px,3vw,30px);border:1px solid var(--jyc-ex-line);border-radius:var(--jyc-ex-radius-md);background:var(--jyc-ex-paper-raised)}
+.public-app .contact-page .contact-card>span:first-child{color:var(--jyc-ex-oxblood);font-size:11px;font-weight:800;letter-spacing:.12em}
+.public-app .contact-page .contact-card h3{margin:20px 0 8px;font-size:clamp(20px,2.4vw,28px);letter-spacing:-.04em}
+.public-app .contact-page .contact-card p{color:var(--jyc-ex-muted);line-height:1.65}
+.public-app .contact-page .contact-location,.public-app .contact-page .contact-form-container{margin-top:24px;padding:clamp(20px,3vw,34px);border:1px solid var(--jyc-ex-line);border-radius:var(--jyc-ex-radius-lg);background:var(--jyc-ex-paper-raised)}
+.public-app .contact-page .contact-form-card{max-width:800px;margin-inline:auto}
+.public-app .contact-page .contact-form{display:grid;gap:16px;margin-top:22px}
+.public-app .contact-page .contact-form label{display:grid;gap:8px;font-weight:650}
+.public-app .contact-page .contact-form :where(input,textarea){width:100%;min-height:48px;padding:12px 14px;border:1px solid var(--jyc-ex-line);border-radius:12px;background:var(--jyc-ex-paper);color:var(--jyc-ex-ink)}
+.public-app .contact-page .contact-form textarea{min-height:140px;resize:vertical}
+.public-app .archive-page .archive-hero{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:30px;margin-block:24px}
+.public-app .archive-page .archive-seal{display:grid;place-items:center;width:clamp(120px,16vw,190px);aspect-ratio:1;border:1px solid var(--jyc-ex-line);border-radius:50%;background:var(--jyc-ex-paper-raised)}
+.public-app .archive-page .archive-year-strip{display:flex;flex-wrap:wrap;gap:8px;margin-block:24px}
+.public-app .archive-page .archive-section{margin-block:clamp(32px,5vw,58px)}
+.public-app .archive-page .archive-event-list{display:grid;gap:10px}
+.public-app .archive-page .archive-event{padding:20px;border:1px solid var(--jyc-ex-line);border-radius:16px;background:var(--jyc-ex-paper-raised)}
+.public-app .archive-page .archive-story-collage{display:grid;grid-template-columns:1.2fr .8fr .8fr;gap:12px}
+.public-app .archive-page .archive-story-image{overflow:clip;border-radius:var(--jyc-ex-radius-md);background:var(--jyc-ex-paper)}
+.public-app .archive-page .archive-story-image img{width:100%;height:100%;min-height:180px;object-fit:cover}
+.public-app .join-jyc-page .join-roadmap-grid,.public-app .join-jyc-page .join-domain-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-block:28px}
+.public-app .join-jyc-page :where(.join-roadmap-grid>article,.join-domain-grid>article){padding:24px;border:1px solid var(--jyc-ex-line);border-radius:var(--jyc-ex-radius-md);background:var(--jyc-ex-paper-raised)}
+.public-app .join-jyc-page :where(.join-roadmap-grid>article>span,.join-domain-grid>article>span){color:var(--jyc-ex-oxblood);font-size:11px;font-weight:800;letter-spacing:.12em}
+@media(max-width:900px){.public-app .events-page .event-directory-row{grid-template-columns:28px 100px minmax(0,1fr) auto;gap:12px}.public-app .events-page .event-row-register,.public-app .events-page .event-row-arrow{display:none}.public-app .team-page .team-hero-panel,.public-app .archive-page .archive-hero{grid-template-columns:minmax(0,1fr) auto}.public-app .archive-page .archive-story-collage{grid-template-columns:1fr 1fr}.public-app .archive-page .archive-story-image:first-child{grid-column:1/-1}}
+@media(max-width:620px){.public-app :where(.compact-page-head,.team-hero-panel,.archive-hero,.join-soon-hero){padding:22px}.public-app .events-page .event-directory-row{grid-template-columns:24px minmax(0,1fr) auto;gap:10px;padding:14px}.public-app .events-page .event-row-date{grid-column:2;grid-row:1}.public-app .events-page .event-row-copy{grid-column:2/-1;grid-row:2}.public-app .events-page .event-row-state{grid-column:3;grid-row:1}.public-app .events-page .event-row-number{grid-row:1/3}.public-app .team-page .team-hero-panel,.public-app .archive-page .archive-hero{grid-template-columns:minmax(0,1fr)}.public-app .team-page .team-hero-logo,.public-app .archive-page .archive-seal{width:112px}.public-app .contact-page .contact-grid{grid-template-columns:minmax(0,1fr)}.public-app .join-jyc-page .join-roadmap-grid,.public-app .join-jyc-page .join-domain-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.public-app .archive-page .archive-story-collage{grid-template-columns:minmax(0,1fr)}.public-app .archive-page .archive-story-image:first-child{grid-column:auto}}
+@media(max-width:390px){.public-app .events-page .event-directory-row{grid-template-columns:20px minmax(0,1fr);}.public-app .events-page .event-row-state{grid-column:2;grid-row:3;white-space:normal}.public-app .join-jyc-page .join-roadmap-grid,.public-app .join-jyc-page .join-domain-grid{grid-template-columns:minmax(0,1fr)}}
+@media(prefers-reduced-motion:reduce){.public-app .events-page .event-directory-row{transition:none}}
