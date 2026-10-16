@@ -12,7 +12,7 @@ const publicEntry=read('src/styles/public-entry.css');
 const css=read('src/styles/public-system.css')+'\n'+read('src/jyc-logo-final-theme.css')+'\n'+publicEntry;
 const browser=read('scripts/browser-smoke.spec.js');
 const cssImports=main.match(/import ['"][^'"]+\.css['"];?/g)||[];
-check('public entry stylesheet is mounted exactly once without duplicate CSS imports',cssImports.length===1&&cssImports[0].includes('styles/public-entry.css')&&new Set(cssImports).size===cssImports.length);
+check('public entry stylesheet is mounted exactly once and additional design layers remain unique',cssImports.filter(item=>item.includes('styles/public-entry.css')).length===1&&cssImports.some(item=>item.includes('styles/jyc-experience-system.css'))&&new Set(cssImports).size===cssImports.length);
 check('visible focus indicator is defined',/:focus-visible/.test(css)&&/outline:\s*(?:2|3)px/.test(css));
 check('touch targets meet the project 44px contract',/min-width:\s*44px/.test(css)&&/min-height:\s*44px/.test(css));
 const finalControlRule=publicEntry.match(/\.public-app button:not\(\.jyc57-photo\):not\(\.jyc57-feature-card\),\s*\.public-app \.btn,\s*\.public-app \.filter-toggle\s*\{([^}]*)\}/);
