@@ -38,7 +38,8 @@ const scripts = [
   'qa-public-ux-refinements.mjs',
   'qa-dynamic-route-shells.mjs',
   'qa-public-route-completeness.mjs',
-  'qa-visual-quality-contract.mjs'
+  'qa-visual-quality-contract.mjs',
+  'qa-visual-redesign.mjs'
 ];
 
 for (const script of scripts) {
