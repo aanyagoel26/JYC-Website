@@ -203,7 +203,7 @@ function shellFor(meta,route){
       out=out.replace(/<meta name="twitter:description" content="[^"]*"\s*\/>/i,`<meta name="twitter:description" content="${esc}" />`);
     }
   }
-  const canonicalUrl=`${siteOrigin}${route}`;
+  const canonicalUrl=`${siteOrigin}${route === '/history' ? '/about' : route}`;
   const canonicalTag=`<link rel="canonical" href="${canonicalUrl}" />`;
   if(/<link rel="canonical" href="[^"]*"\s*\/>/i.test(out)){
     out=out.replace(/<link rel="canonical" href="[^"]*"\s*\/>/i,canonicalTag);
