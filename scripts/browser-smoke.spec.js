@@ -313,6 +313,23 @@ test('JAI event does not advertise an expired registration QR as open', async ({
   await expect(page.locator('#event-register').getByRole('button', { name: /REGISTRATION LINK UNAVAILABLE/i })).toBeDisabled();
 });
 
+test('first visit keeps the V20 light palette even when OS requests dark', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await page.addInitScript(() => localStorage.removeItem('jyc-theme'));
+  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'V20 default theme');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await expect(page.locator('.jyc-editorial-home .jh-hero')).toBeVisible();
+});
+
+test('event directory does not label JAI registration open after its deadline', async ({ page }) => {
+  await page.goto(base + '/events', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'event directory registration state');
+  const jai = page.locator('.jyc57-event-card').filter({ hasText: 'JAI 2026' });
+  await expect(jai).toBeVisible();
+  await expect(jai.locator('.jyc57-reg-pill')).toHaveCount(0);
+});
+
 test('homepage renders the official logo through Dither Veil and a magnetic activity Bento', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 960 });
   await page.goto(base, { waitUntil: 'domcontentloaded' });

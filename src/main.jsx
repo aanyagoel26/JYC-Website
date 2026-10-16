@@ -202,7 +202,10 @@ function EventReminderControl({event,notify}){if(!event?.date||eventState(event)
 function App(){const loc=useLocation();const [data,setData]=useState(()=>import.meta.env.DEV?publicDemoData():norm(empty));const [loading,setLoading]=useState(true);const [bootReady,setBootReady]=useState(false);const [bootStage,setBootStage]=useState('INITIALIZING');const [error,setError]=useState('');const [online,setOnline]=useState(()=>navigator.onLine!==false);const [theme,setTheme]=useState(()=>{
   const saved=storageGet('jyc-theme',null);
   if(saved==='dark'||saved==='light')return saved;
-  return window.matchMedia?.('(prefers-color-scheme: dark)').matches?'dark':'light';
+  // The approved JYC V20 identity is the warm paper/brass/oxblood system.
+  // Respect an explicit saved choice, but do not let an OS dark-mode preference
+  // silently replace the site's intended launch palette on first visit.
+  return 'light';
 });const [session,setSession]=useState(null);const [admin,setAdmin]=useState(null);const [toast,setToast]=useState(null);const [confirm,setConfirm]=useState(null);
 
  useEffect(()=>{const onToast=e=>notify(e.detail?.message||'',e.detail?.type||'success');const onConfirm=e=>setConfirm(e.detail||null);window.addEventListener('jyc-toast',onToast);window.addEventListener('jyc-confirm',onConfirm);return()=>{window.removeEventListener('jyc-toast',onToast);window.removeEventListener('jyc-confirm',onConfirm)}},[]);
