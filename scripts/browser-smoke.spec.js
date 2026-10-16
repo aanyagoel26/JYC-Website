@@ -66,6 +66,34 @@ test('history, achievements and Best of JYC render their dedicated pages', async
   }
 });
 
+test('contact form validates required fields and email accessibly before submission', async ({ page }) => {
+  await page.goto(base + '/contact', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'contact form validation');
+
+  const form = page.locator('form.contact-form');
+  await expect(form).toBeVisible();
+  const submit = form.getByRole('button', { name: /Send message/i });
+
+  // Empty form: report all required fields and focus the first invalid control.
+  await submit.click();
+  await expect(form.locator('#contact-name-error')).toHaveText('Enter your name.');
+  await expect(form.locator('#contact-email-error')).toHaveText('Enter your email address.');
+  await expect(form.locator('#contact-message-error')).toHaveText('Enter a message.');
+  await expect(form.locator('input[name="name"]')).toBeFocused();
+
+  // Editing a field clears only that field's error.
+  await form.locator('input[name="name"]').fill('JYC QA');
+  await expect(form.locator('#contact-name-error')).toHaveCount(0);
+
+  // A malformed email is rejected client-side; do not submit a real message in QA.
+  await form.locator('input[name="email"]').fill('not-an-email');
+  await form.locator('textarea[name="message"]').fill('Validation-only browser test.');
+  await submit.click();
+  await expect(form.locator('#contact-email-error')).toHaveText('Enter a valid email address.');
+  await expect(form.locator('input[name="email"]')).toHaveAttribute('aria-invalid', 'true');
+  await expect(form.locator('.contact-form-error')).toHaveCount(0);
+});
+ 
 test('JYC Now page stays within responsive guardrails', async ({ page }) => {
   await page.goto(base + '/updates', { waitUntil: 'domcontentloaded' });
   await expect(page.getByText('The organisation, in motion.')).toBeVisible();

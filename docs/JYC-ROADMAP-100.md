@@ -1,5 +1,17 @@
 # JYC Website — 100% Completion Roadmap
 
+## Superseding release update — 2026-10-16
+
+The checkpoint further below records an earlier deployment state and must be read as historical evidence, not current status.
+
+- [x] PR #244 redesign is merged to main at `2ceb1789b8218450707516b737c54635b7593c4e`.
+- [x] Vercel reports production deployment `dpl_2NqBhEMA8scNgVL6vuzTyBsQbKoD` as READY for that exact SHA.
+- [x] Latest repository search found no open PRs or issues at the time of this check.
+- [ ] A follow-up branch `fix/contact-form-validation-and-release-ux` adds accessible contact-form validation and a browser regression. It is not production until its PR checks pass and the change is merged/deployed.
+- [ ] Visual sign-off remains pending because the live browser-inspection service was unavailable in this execution. Do not mark every route, photo crop or paragraph as manually inspected.
+- [ ] Owner-side operational gates remain: official domain/DNS, live JYC Now connectors, Supabase Auth leaked-password protection, security finding disposition, media rights/provenance, live backend authorization checks, real-device performance/Core Web Vitals and install/offline recovery.
+
+
 Updated: 2026-10-16
 
 This is the execution ledger for taking the JIIT Youth Club 128 website from the current codebase to a release-ready state. Items marked **DONE** are implemented in the repository; **BLOCKED/MANUAL** items require a GitHub/Vercel/Supabase account action that the code connector cannot perform.

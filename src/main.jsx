@@ -391,6 +391,12 @@ function Contact({data}){
  const [sent,setSent]=useState(false);
  const [sending,setSending]=useState(false);
  const [submitError,setSubmitError]=useState('');
+ const [fieldErrors,setFieldErrors]=useState({});
+ const updateContactField=(field,value)=>{
+  setForm(current=>({...current,[field]:value}));
+  setFieldErrors(current=>({...current,[field]:''}));
+  setSubmitError('');
+ };
  const copyEmail=(text,label)=>{
   if(navigator?.clipboard?.writeText){
    navigator.clipboard.writeText(text).then(()=>jycToast(label+' copied to clipboard!')).catch(()=>jycToast(text));
@@ -398,7 +404,21 @@ function Contact({data}){
    jycToast(text);
   }
  };
- const submit=async e=>{e.preventDefault();setSubmitError('');if(!form.name.trim()||!form.email.trim()||!form.message.trim())return;setSending(true);try{
+ const submit=async e=>{
+  e.preventDefault();
+  setSubmitError('');
+  const errors={};
+  if(!form.name.trim())errors.name='Enter your name.';
+  const email=form.email.trim();
+  if(!email)errors.email='Enter your email address.';
+  else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))errors.email='Enter a valid email address.';
+  if(!form.message.trim())errors.message='Enter a message.';
+  setFieldErrors(errors);
+  if(Object.keys(errors).length){
+   requestAnimationFrame(()=>document.querySelector('.contact-form [aria-invalid="true"]')?.focus());
+   return;
+  }
+  setSending(true);try{
    if(!supabase.__configured){
      setSubmitError('The live contact inbox is not configured yet. Please use Instagram, LinkedIn or WhatsApp below.');
      return;
@@ -473,11 +493,11 @@ function Contact({data}){
     {sent?<div className="contact-form-success" role="status">
      <b>Thanks, {form.name.split(' ')[0]||'friend'}!</b>
      <p>Your message has been received. JYC channels are also available above if you need a faster response.</p>
-     <button type="button" className="btn" onClick={()=>{setSent(false);setForm({name:'',email:'',message:''})}}>Send another message</button>
+     <button type="button" className="btn" onClick={()=>{setSent(false);setForm({name:'',email:'',message:''});setFieldErrors({});setSubmitError('')}}>Send another message</button>
     </div>:<form className="contact-form" onSubmit={submit} noValidate>
-     <label><span>Name</span><input name="name" value={form.name} onChange={e=>setForm({...form,name:e.target.value})} placeholder="Your full name" required autoComplete="name"/></label>
-     <label><span>Email</span><input name="email" type="email" value={form.email} onChange={e=>setForm({...form,email:e.target.value})} placeholder="you@email.com" required autoComplete="email"/></label>
-     <label><span>Message</span><textarea name="message" rows="5" value={form.message} onChange={e=>setForm({...form,message:e.target.value})} placeholder="How can JYC help you?" required/></label>
+     <label><span>Name</span><input name="name" value={form.name} onChange={e=>updateContactField('name',e.target.value)} placeholder="Your full name" required autoComplete="name" aria-invalid={fieldErrors.name?'true':undefined} aria-describedby={fieldErrors.name?'contact-name-error':undefined}/>{fieldErrors.name&&<span id="contact-name-error" className="contact-field-error" aria-live="polite">{fieldErrors.name}</span>}</label>
+     <label><span>Email</span><input name="email" type="email" value={form.email} onChange={e=>updateContactField('email',e.target.value)} placeholder="you@email.com" required autoComplete="email" aria-invalid={fieldErrors.email?'true':undefined} aria-describedby={fieldErrors.email?'contact-email-error':undefined}/>{fieldErrors.email&&<span id="contact-email-error" className="contact-field-error" aria-live="polite">{fieldErrors.email}</span>}</label>
+     <label><span>Message</span><textarea name="message" rows="5" value={form.message} onChange={e=>updateContactField('message',e.target.value)} placeholder="How can JYC help you?" required aria-invalid={fieldErrors.message?'true':undefined} aria-describedby={fieldErrors.message?'contact-message-error':undefined}/>{fieldErrors.message&&<span id="contact-message-error" className="contact-field-error" aria-live="polite">{fieldErrors.message}</span>}</label>
      {submitError&&<p className="contact-form-error" role="alert">{submitError}</p>}
      <button className="btn primary" type="submit" disabled={sending}>{sending?'Sending…':'Send message →'}</button>
     </form>}
