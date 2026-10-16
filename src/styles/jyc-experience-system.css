@@ -358,7 +358,6 @@
 @media(prefers-reduced-motion:reduce){.public-app .events-page .event-directory-row{transition:none}}
 
 /* Accessible, inline contact validation — calm, explicit and keyboard friendly. */
-.public-app .contact-page .contact-form label:has([aria-invalid="true"]) { color: var(--jyc-ex-ink); }
 .public-app .contact-page .contact-form :where(input,textarea)[aria-invalid="true"] { border-color: #b42318; box-shadow: 0 0 0 1px color-mix(in srgb, #b42318 28%, transparent); }
 .public-app .contact-page .contact-form :where(input,textarea)[aria-invalid="true"]:focus-visible { outline-color: #b42318; }
 .public-app .contact-page .contact-field-error { display: block; margin-top: -2px; color: #b42318; font-size: 13px; font-weight: 650; line-height: 1.45; }
