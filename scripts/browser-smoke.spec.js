@@ -101,6 +101,31 @@ test('JYC Now page stays within responsive guardrails', async ({ page }) => {
   expect(overflow).toBe(false);
 });
 
+test('mobile homepage logo and primary actions stay clear of the fixed navigation dock', async ({ page }) => {
+  const viewport = page.viewportSize();
+  test.skip(!viewport || viewport.width > 680);
+  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'mobile hero and dock geometry');
+  const geometry = await page.evaluate(() => {
+    const rect = selector => {
+      const element = document.querySelector(selector);
+      if (!element) return null;
+      const r = element.getBoundingClientRect();
+      return { top: r.top, bottom: r.bottom, height: r.height };
+    };
+    return {
+      dock: rect('.mobile-dock'),
+      logo: rect('.jh-hero-logo-plaque'),
+      actions: rect('.jh-hero-actions')
+    };
+  });
+  expect(geometry.dock, 'the mobile navigation dock should be present').not.toBeNull();
+  expect(geometry.logo, 'the homepage logo plaque should be present').not.toBeNull();
+  expect(geometry.actions, 'the homepage actions should be present').not.toBeNull();
+  expect(geometry.logo.bottom, 'the fixed dock must not cover the JYC logo plaque').toBeLessThanOrEqual(geometry.dock.top + 1);
+  expect(geometry.actions.bottom, 'the fixed dock must not cover the hero actions').toBeLessThanOrEqual(geometry.dock.top + 1);
+});
+
 test('homepage accessibility and responsive guardrails', async ({ page }) => {
   await page.goto(base, { waitUntil: 'domcontentloaded' });
 
@@ -232,7 +257,7 @@ test('mobile visual guardrails keep core content centered and inside viewport', 
             // The skip link is intentionally parked off-screen until keyboard focus.
             // It is an accessibility affordance, not an accidentally clipped visible node.
             if (el.classList.contains('skip-link') && document.activeElement !== el) return false;
-            if (el.closest('.jyc57-collection-scroller,.jyc57-photo-story-scrubber')) return false;
+            if (el.closest('.jyc57-collection-scroller,.jyc57-photo-story-scrubber,.jyc-quick-family-pills')) return false;
             const s = getComputedStyle(el);
             const r = el.getBoundingClientRect();
             return s.display !== 'none' && s.visibility !== 'hidden' && r.width > 0 && r.height > 0 &&
@@ -253,7 +278,9 @@ test('mobile visual guardrails keep core content centered and inside viewport', 
       expect(result.badRects, 'off-screen elements ' + width + 'px ' + route).toEqual([]);
       expect(result.invisibleText, 'off-screen visible text ' + width + 'px ' + route + ' :: ' + JSON.stringify(result.invisibleTextDetails)).toBe(0);
       const textOverflow = await page.evaluate(() => [...document.querySelectorAll('h1,h2,h3,h4,p,button,a,span')].filter(el => {
-        const s=getComputedStyle(el), r=el.getBoundingClientRect(), text=(el.textContent||'').trim();
+        const s=getComputedStyle(el), r=el.getBoundingClientRect(), text=(el.innerText||'').trim();
+        // The assistant label is absolutely positioned under its trigger; measure its own span, not the parent button scrollWidth.
+        if(el.classList.contains('jyc-bot-orb'))return false;
         if(!text||s.display==='none'||s.visibility==='hidden'||r.width<=0||r.height<=0)return false;
         return el.scrollWidth > el.clientWidth + 2 && s.overflowWrap !== 'anywhere' && s.whiteSpace !== 'nowrap';
       }).slice(0,8).map(el => ({tag:el.tagName,cls:String(el.className||''),text:String(el.textContent||'').trim().replace(/\s+/g,' ').slice(0,100),scrollWidth:el.scrollWidth,clientWidth:el.clientWidth})));
@@ -300,6 +327,29 @@ test('event detail route opens from the event directory', async ({ page }) => {
   await expect(page.locator('h1').first()).not.toBeEmpty();
 });
 
+
+test('team accent and gallery album titles stay readable on the paper theme', async ({ page }) => {
+  await page.goto(base + '/team', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'team heading contrast');
+  const teamAccent = page.locator('.team-hero-panel h1 em');
+  await expect(teamAccent).toBeVisible();
+  await expect(teamAccent).toHaveCSS('color', 'rgb(141, 100, 47)');
+  const teamStats = await page.locator('.team-command-strip article b').allTextContents();
+  const teamStatLabels = await page.locator('.team-command-strip article span').allTextContents();
+  expect(teamStats).toHaveLength(4);
+  expect(teamStats.slice(0, 3), 'missing team records must not be presented as zero people').not.toContain('0');
+  for (let index = 0; index < 3; index++) {
+    if (teamStats[index] === '—') expect(teamStatLabels[index]).toContain('awaiting publication');
+  }
+
+  await page.goto(base + '/gallery', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'gallery cover contrast');
+  const album = page.locator('.jyc-memory-card').first();
+  await expect(album).toBeVisible();
+  await expect(album.locator('.jyc-memory-cover-fallback')).toBeAttached();
+  await expect(album.locator('.jyc-memory-title')).toHaveCSS('color', 'rgb(255, 249, 235)');
+  await expect(album.locator('.jyc-memory-count')).toHaveCSS('color', 'rgb(242, 215, 167)');
+});
 
 test('JAI event does not advertise an expired registration QR as open', async ({ page }) => {
   await page.goto(base + '/events/jai-2026-jaypee-agentic-ai-hackathon', { waitUntil: 'domcontentloaded' });
@@ -568,6 +618,28 @@ test('gallery lightbox supports next/previous keyboard navigation', async ({ pag
 });
 
 test('homepage records Core Web Vitals under the browser harness', async ({ page }) => {
+  // Install observers before navigation: reading LCP only after hydration can
+  // miss the browser's buffered entry and silently log a null measurement.
+  await page.addInitScript(() => {
+    const metrics = { lcp: null, cls: 0, inp: 0 };
+    Object.defineProperty(window, '__jycVitals', { value: metrics, configurable: false });
+    try {
+      new PerformanceObserver(list => {
+        const entries = list.getEntries();
+        if (entries.length) metrics.lcp = entries[entries.length - 1].startTime;
+      }).observe({ type: 'largest-contentful-paint', buffered: true });
+    } catch {}
+    try {
+      new PerformanceObserver(list => {
+        for (const entry of list.getEntries()) if (!entry.hadRecentInput) metrics.cls += entry.value;
+      }).observe({ type: 'layout-shift', buffered: true });
+    } catch {}
+    try {
+      new PerformanceObserver(list => {
+        for (const entry of list.getEntries()) metrics.inp = Math.max(metrics.inp, Number(entry.duration) || 0);
+      }).observe({ type: 'event', buffered: true, durationThreshold: 16 });
+    } catch {}
+  });
   await page.goto(base, { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'web vitals');
   // Keep the measurement passive: the current editorial homepage has no
@@ -577,15 +649,17 @@ test('homepage records Core Web Vitals under the browser harness', async ({ page
   const vitals=await page.evaluate(() => {
     const entries=performance.getEntriesByType('navigation');
     const nav=entries[0];
-    const lcp=performance.getEntriesByType('largest-contentful-paint').at(-1)?.startTime ?? null;
-    const layoutShift=performance.getEntriesByType('layout-shift').reduce((sum,e)=>sum+(e.hadRecentInput?0:e.value),0);
+    const observed=window.__jycVitals||{};
+    const lcp=observed.lcp ?? performance.getEntriesByType('largest-contentful-paint').at(-1)?.startTime ?? null;
+    const layoutShift=observed.cls ?? performance.getEntriesByType('layout-shift').reduce((sum,e)=>sum+(e.hadRecentInput?0:e.value),0);
     const interactionEntries=performance.getEntriesByType('event');
-    const inp=interactionEntries.length ? Math.max(...interactionEntries.map(e=>Number(e.duration)||0)) : 0;
+    const inp=Math.max(Number(observed.inp)||0, interactionEntries.length ? Math.max(...interactionEntries.map(e=>Number(e.duration)||0)) : 0);
     return {lcp,cls:layoutShift,inp,domContentLoaded:nav?.domContentLoadedEventEnd||null,load:nav?.loadEventEnd||null};
   });
   console.log('JYC WEB VITALS', JSON.stringify(vitals));
   expect(vitals.domContentLoaded).not.toBeNull();
-  if(vitals.lcp!==null) expect(vitals.lcp).toBeLessThan(10000);
+  expect(vitals.lcp, 'the pre-navigation observer should capture a Largest Contentful Paint entry').not.toBeNull();
+  expect(vitals.lcp).toBeLessThan(10000);
   expect(vitals.cls).toBeLessThan(0.25);
   expect(vitals.inp).toBeLessThan(1000);
 });
@@ -1493,8 +1567,8 @@ test('responsive photos retry the original source when a derivative returns HTML
   let derivativeRequests = 0;
 
   // Keep the source image deterministic and valid so this test exercises the
-  // derivative failure path rather than an unrelated missing portrait in fixture data.
-  await testPage.route('**/assets/team/**', async route => {
+  // derivative failure path rather than an unrelated missing CMS/team record.
+  await testPage.route('**/assets/source-archive/**', async route => {
     await route.fulfill({
       status: 200,
       contentType: 'image/svg+xml',
@@ -1511,9 +1585,9 @@ test('responsive photos retry the original source when a derivative returns HTML
     });
   });
 
-  await testPage.goto(base + '/team', { waitUntil: 'domcontentloaded' });
+  await testPage.goto(base + '/gallery', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(testPage, 'derivative HTTP 200 HTML fallback');
-  const picture = testPage.locator('.team-photo-editorial .jyc-responsive-picture').filter({ has: testPage.locator('img[src*="/assets/team/"]') }).first();
+  const picture = testPage.locator('.jyc57-photo .jyc-responsive-picture').filter({ has: testPage.locator('img[src*="/assets/source-archive/"]') }).first();
   await picture.scrollIntoViewIfNeeded();
   await expect.poll(() => derivativeRequests, { timeout: 12000 }).toBeGreaterThan(0);
 

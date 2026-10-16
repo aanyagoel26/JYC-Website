@@ -10,6 +10,7 @@ import {jycToast} from './lib/ui';
 import './styles/public-entry.css';
 import './styles/jyc-experience-system.css';
 import './styles/v20-reference-restoration.css';
+import './styles/innovation-inspired-3d.css';
 import {JYCEditorialSystem} from './jyc-editorial-system.jsx';
 import {JYC_HUB_CONTENT, JYC_HUB_FAMILIES, hubProfile} from './v21-hub-content.js';
 import {JYC_HUB_SOURCE_REGISTRY,JYC_HUB_SOURCE_ONLY} from './jyc-hub-registry.js';
@@ -374,9 +375,9 @@ function Team({data}){
    <div className="team-hero-identity" aria-hidden="true"><div className="team-hero-logo"><LogoImage alt=""/></div><b>PEOPLE · PURPOSE · PARTICIPATION</b></div>
   </div>
   <div className="team-command-strip reveal">
-   <article><b>{faculty.length}</b><span>Faculty guidance</span></article>
-   <article><b>{apex.length}</b><span>Apex leadership</span></article>
-   <article><b>{core.length}</b><span>Core / heads</span></article>
+   <article><b>{faculty.length || '—'}</b><span>{faculty.length ? 'Faculty profiles' : 'Faculty profiles awaiting publication'}</span></article>
+   <article><b>{apex.length || '—'}</b><span>{apex.length ? 'Apex leaders' : 'Apex profiles awaiting publication'}</span></article>
+   <article><b>{core.length || '—'}</b><span>{core.length ? 'Core team profiles' : 'Core profiles awaiting publication'}</span></article>
    <article><b>{JYC_HUB_FAMILIES.length}</b><span>Community families</span></article>
   </div>
   <section className="team-structure-visual reveal"><span className="eyebrow">ORGANIZATIONAL STRUCTURE</span><h2>Faculty → Apex → Core → Clubs & Hubs.</h2><div className="team-structure-flow"><div><b>01</b><strong>Faculty Coordinators</strong><span>Guidance & institutional support</span></div><i>↓</i><div><b>02</b><strong>JYC Apex</strong><span>Student leadership & coordination</span></div><i>↓</i><div><b>03</b><strong>Core Team</strong><span>Committee heads & operations</span></div><i>↓</i><div><b>04</b><strong>Clubs & Hubs</strong><span>Communities · coordinators · volunteers</span></div></div></section>
@@ -764,11 +765,11 @@ function Navbar({data,admin,theme,setTheme}){
   });
  return <>
  <header className="nav"><div className="nav-inner">
-   <button type="button" className="brand" onClick={()=>{setOpen(false);nav('/')}}><span className="brand-mark"><LogoImage alt="JIIT Youth Club logo" loading="eager" fetchPriority="high" srcSet={`${logoTiny} 1x, ${logoSmall} 2x`}/></span><span>JIIT YOUTH CLUB</span></button>
+   <button type="button" className="brand" aria-label="JIIT Youth Club home" onClick={()=>{setOpen(false);nav('/')}}><span className="brand-mark"><LogoImage alt="JIIT Youth Club logo" loading="eager" fetchPriority="high" srcSet={`${logoTiny} 1x, ${logoSmall} 2x`}/></span><span>JIIT YOUTH CLUB</span></button>
    <nav className={open?'open':''}>{navButtons}<button type="button" className={`nav-more-trigger ${moreOpen?'active':''}`} onClick={()=>{setOpen(false);setMoreOpen(v=>!v)}} aria-expanded={moreOpen}>More <span aria-hidden="true">⌄</span></button></nav>
    <button type="button" className="nav-join-cta" onClick={()=>nav('/join-jyc')}>Join JYC <span>↗</span></button>
    <Theme theme={theme} setTheme={setTheme}/><button type="button" className={`hamb ${open?'open':''}`} onClick={()=>setOpen(v=>!v)} aria-label="Menu" aria-expanded={open}><i/><i/><i/></button>
-   {open&&<button type="button" className="mobile-nav-scrim" aria-label="Close navigation" onClick={()=>setOpen(false)}/>}<button type="button" className="search-trigger" onClick={()=>setSearch(true)} title="Search JYC (Ctrl/Cmd + K)"><span className="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg></span><span className="search-label">Search</span><kbd>Ctrl K</kbd></button>
+   {open&&<button type="button" className="mobile-nav-scrim" aria-label="Close navigation" onClick={()=>setOpen(false)}/>}<button type="button" className="search-trigger" aria-label="Search JYC (Ctrl K)" onClick={()=>setSearch(true)} title="Search JYC (Ctrl/Cmd + K)"><span className="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg></span><span className="search-label">Search</span><kbd>Ctrl K</kbd></button>
  </div></header>
  {createPortal(dock,document.body)}{createPortal(more,document.body)}{searchView}</>
 }
