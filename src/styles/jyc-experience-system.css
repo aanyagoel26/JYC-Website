@@ -1,0 +1,168 @@
+/* JYC Experience System — sitewide visual consistency pass.
+   Source-owned CSS keeps the public app fast and avoids adding a second UI runtime. */
+:root {
+  --jyc-ex-paper: #f7f4ed;
+  --jyc-ex-paper-raised: #fffdf8;
+  --jyc-ex-ink: #201d22;
+  --jyc-ex-muted: #706a70;
+  --jyc-ex-line: rgba(43, 34, 39, .13);
+  --jyc-ex-oxblood: #702b3b;
+  --jyc-ex-oxblood-deep: #4b1b2a;
+  --jyc-ex-champagne: #c6a477;
+  --jyc-ex-radius-sm: 12px;
+  --jyc-ex-radius-md: 20px;
+  --jyc-ex-radius-lg: 30px;
+  --jyc-ex-shadow-soft: 0 12px 34px rgba(35, 24, 29, .07);
+  --jyc-ex-shadow-hover: 0 20px 48px rgba(35, 24, 29, .13);
+  --jyc-ex-ease: cubic-bezier(.2, .75, .25, 1);
+}
+.public-app {
+  color: var(--jyc-ex-ink);
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+.public-app :where(h1,h2,h3,h4) { text-wrap: balance; letter-spacing: -.025em; }
+.public-app :where(p,li) { text-wrap: pretty; }
+.public-app :where(a,button,input,select,textarea,[role="button"]) {
+  -webkit-tap-highlight-color: transparent;
+}
+.public-app :where(a,button,input,select,textarea,[role="button"]):focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--jyc-ex-champagne) 82%, white);
+  outline-offset: 3px;
+}
+.public-app :where(button, [role="button"], a.btn, button.btn) { touch-action: manipulation; }
+.public-app :where(.page,.section.page,.unified-public-page) {
+  --page-gutter: clamp(18px, 4.2vw, 68px);
+}
+.public-app :where(.unified-public-page) {
+  padding-inline: var(--page-gutter);
+}
+.public-app :where(.section-head,.section-inline-head,.section-heading,.page-heading) {
+  gap: clamp(12px, 2vw, 24px);
+}
+.public-app :where(.section-head h1,.section-head h2,.section-inline-head h2,.page h1,.page h2) {
+  max-width: 19ch;
+  line-height: .99;
+  letter-spacing: -.045em;
+}
+.public-app :where(.eyebrow,.overline,.jh-overline) {
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  font-weight: 750;
+}
+.public-app :where(.btn,.button,.hero-actions a,.hero-actions button,.event-actions a,.event-actions button) {
+  min-height: 44px;
+  border-radius: 999px;
+  font-weight: 700;
+  transition: transform .22s var(--jyc-ex-ease), box-shadow .22s var(--jyc-ex-ease), background-color .22s ease, border-color .22s ease;
+}
+.public-app :where(input,select,textarea) {
+  border-radius: var(--jyc-ex-radius-sm);
+}
+.public-app :where(.event-card,.event-tile,.club-card,.team-card,.gallery-item,.gallery-story-card,.achievement-feature,.announcement-card,.event-related-card,.hub-card,.jyc57-photo,.jyc57-feature-card) {
+  border-color: var(--jyc-ex-line);
+  border-radius: var(--jyc-ex-radius-md);
+  box-shadow: 0 1px 0 rgba(255,255,255,.6) inset;
+  overflow: clip;
+}
+.public-app :where(.event-card,.event-tile,.club-card,.team-card,.gallery-item,.gallery-story-card,.event-related-card,.hub-card,.jyc57-photo,.jyc57-feature-card) :where(img,picture) {
+  max-width: 100%;
+}
+.public-app :where(.event-card,.event-tile,.club-card,.team-card,.gallery-item,.gallery-story-card,.event-related-card,.hub-card,.jyc57-photo,.jyc57-feature-card) :where(img) {
+  display: block;
+  object-fit: cover;
+}
+.public-app :where(.state,.empty-state,.gallery-empty,.no-results) {
+  border: 1px dashed var(--jyc-ex-line);
+  border-radius: var(--jyc-ex-radius-md);
+  background: color-mix(in srgb, var(--jyc-ex-paper) 72%, transparent);
+}
+.public-app :where(.gallery-grid,.gallery-wall,.team-grid,.club-grid,.events-grid,.event-grid) {
+  align-items: stretch;
+}
+.public-app :where(.gallery-item,.gallery-story-card,.jyc57-photo,.jyc57-feature-card) {
+  background: var(--jyc-ex-paper-raised);
+}
+.public-app :where(.gallery-item img,.gallery-story-card img,.jyc57-photo img,.jyc57-feature-card img) {
+  transition: transform .55s var(--jyc-ex-ease), filter .35s ease;
+}
+.public-app :where(.gallery-item,.gallery-story-card,.jyc57-photo,.jyc57-feature-card) :where(a,button) {
+  position: relative;
+  z-index: 1;
+}
+.public-app :where(.announcement-card,.achievement-feature,.event-related-card) {
+  padding: clamp(18px, 2.6vw, 34px);
+}
+.public-app :where(.event-related-card,.announcement-card a,.achievement-feature a) {
+  text-decoration-thickness: .08em;
+  text-underline-offset: .22em;
+}
+.public-app :where(.breadcrumbs,[aria-label="Breadcrumb"]) {
+  color: var(--jyc-ex-muted);
+  font-size: .88rem;
+}
+.public-app :where(.filter-row,.gallery-filters,.event-filters,.club-filters,.filter-chips) {
+  gap: 8px;
+}
+.public-app :where(.filter-row button,.gallery-filters button,.event-filters button,.club-filters button,.filter-chips button) {
+  min-height: 40px;
+  border-radius: 999px;
+  transition: background-color .18s ease, color .18s ease, border-color .18s ease;
+}
+.public-app :where(.modal,.dialog,.lightbox,.gallery-lightbox,[role="dialog"]) {
+  overscroll-behavior: contain;
+}
+.public-app :where(.modal,.dialog,[role="dialog"]) :where(button[aria-label*="Close"],button[aria-label*="close"]) {
+  min-width: 44px;
+  min-height: 44px;
+}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  .public-app :where(.event-card,.event-tile,.club-card,.team-card,.event-related-card,.hub-card,.achievement-feature) {
+    transition: transform .28s var(--jyc-ex-ease), box-shadow .28s var(--jyc-ex-ease), border-color .28s ease;
+  }
+  .public-app :where(.event-card,.event-tile,.club-card,.team-card,.event-related-card,.hub-card,.achievement-feature):hover {
+    transform: translateY(-3px);
+    box-shadow: var(--jyc-ex-shadow-hover);
+    border-color: color-mix(in srgb, var(--jyc-ex-champagne) 58%, var(--jyc-ex-line));
+  }
+  .public-app :where(.gallery-item,.gallery-story-card,.jyc57-photo,.jyc57-feature-card):hover img {
+    transform: scale(1.035);
+    filter: saturate(1.04) contrast(1.02);
+  }
+  .public-app :where(.btn,.button,.hero-actions a,.hero-actions button):hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(35, 24, 29, .12);
+  }
+}
+@media (max-width: 760px) {
+  .public-app :where(.unified-public-page) { padding-inline: 16px; }
+  .public-app :where(.page h1,.section-head h1,.section-head h2,.section-inline-head h2) {
+    max-width: 15ch;
+    line-height: 1.02;
+    letter-spacing: -.035em;
+  }
+  .public-app :where(.hero-actions,.event-actions,.fest-live-actions,.fest-empty-actions) {
+    flex-wrap: wrap;
+  }
+  .public-app :where(.hero-actions a,.hero-actions button,.event-actions a,.event-actions button) {
+    min-height: 46px;
+  }
+  .public-app :where(.gallery-grid,.team-grid,.club-grid,.events-grid,.event-grid) {
+    min-width: 0;
+  }
+}
+@media (max-width: 390px) {
+  .public-app :where(.unified-public-page) { padding-inline: 12px; }
+  .public-app :where(.page h1,.section-head h1) { font-size: clamp(2rem, 10vw, 3.1rem); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .public-app :where(*, *::before, *::after) {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+  .public-app :where(.event-card,.event-tile,.club-card,.team-card,.event-related-card,.hub-card,.achievement-feature):hover {
+    transform: none !important;
+  }
+}
