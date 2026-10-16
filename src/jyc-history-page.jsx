@@ -90,7 +90,7 @@ export function HistoryTeaser(){
     <div className="jyc-history-teaser-copy">
       <span className="eyebrow">JYC · THE RECORD</span>
       <h2 id="jyc-history-teaser-title" style={S.teaserTitle}>Built over years. Still student-led.</h2>
-      <p style={S.teaserText}>JYC is more than a logo on an event poster. Its story is a record of communities coming together to create the culture of JIIT.</p>
+      <p style={S.teaserText}>JYC’s story is the work of its student communities: organising, creating, performing and building shared experiences together.</p>
       <button className="btn" type="button" onClick={()=>nav('/about#history')}>Explore the JYC story ↗</button>
     </div>
     <div className="jyc-history-teaser-years" style={S.teaserYears} aria-label="Selected JYC history years">
