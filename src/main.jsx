@@ -1200,7 +1200,6 @@ function EventCard({e,index=0}){
  const shouldReduceMotion=useReducedMotion();
  const state=eventState(e);
  const eventPoster=e.poster||sourceEventMedia(e)?.photoItems?.find(item=>item?.url)?.url||'';
- const registrationTarget=safeExternalUrl(e.registrationUrl);
  const identity=eventIdentity(e);
  const eventEnd=e.dateEnd||e.date;
  const eventEnded=eventEnd?new Date(eventEnd+'T23:59:59')<new Date():false;
@@ -1222,6 +1221,7 @@ function EventDetail({data,id,session,notify}){
  if(!e||(!e.published&&!e.publicStatus)||e.archived)return <section className="section page"><Back label="Back to events" to="/events"/><State title="Event not found." text="This event may be unpublished or archived."/></section>;
  const state=eventState(e);
  const eventPoster=e.poster||sourceEventMedia(e)?.photoItems?.find(item=>item?.url)?.url||'';
+ const registrationTarget=safeExternalUrl(e.registrationUrl);
  const related=[...data.gallery.filter(g=>e.galleryIds?.includes(g.id)||g.eventId===e.id),...PDF_HUB_EXTRA_GALLERY.filter(g=>{const a=String(g.association||'').toLowerCase();const t=String(e.title||'').toLowerCase();const club=String(e.club||'').toLowerCase();return (t&&a&&t.includes(a))||(club&&a&&club.includes(a))||(a&&t.includes(a.split(' · ')[0]||'___'));})].filter((g,i,a)=>a.findIndex(x=>x.id===g.id)===i);
  const relatedClub=data.clubs.find(c=>String(c.id)===String(e.clubId)||String(c.name||'').trim().toLowerCase()===String(e.club||'').trim().toLowerCase());
  const identity=eventIdentity(e);
