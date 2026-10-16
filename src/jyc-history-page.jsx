@@ -91,10 +91,10 @@ export function HistoryTeaser(){
       <span className="eyebrow">JYC · THE RECORD</span>
       <h2 id="jyc-history-teaser-title" style={S.teaserTitle}>Built over years. Still student-led.</h2>
       <p style={S.teaserText}>JYC is more than a logo on an event poster. Its story is a record of communities coming together to create the culture of JIIT.</p>
-      <button className="btn" type="button" onClick={()=>nav('/history')}>Explore the JYC story ↗</button>
+      <button className="btn" type="button" onClick={()=>nav('/about#history')}>Explore the JYC story ↗</button>
     </div>
     <div className="jyc-history-teaser-years" style={S.teaserYears} aria-label="Selected JYC history years">
-      {HISTORY.slice(-4).map(item=><button key={item.year} type="button" style={S.yearBtn} onClick={()=>nav('/history#'+item.year.replace('–','-'))}><span>{item.year}</span><b>{item.label}</b></button>)}
+      {HISTORY.slice(-4).map(item=><button key={item.year} type="button" style={S.yearBtn} onClick={()=>nav('/about#'+item.year.replace('–','-'))}><span>{item.year}</span><b>{item.label}</b></button>)}
     </div>
   </section>
 }
