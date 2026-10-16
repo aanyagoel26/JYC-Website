@@ -21,7 +21,7 @@ import {enrichSourceClubs,mergeSourceGallery,sourceHubMedia,sourceEventMedia} fr
 import {JYC_EVENT_CATEGORIES,JYC_COMMUNITY_DISCOVERY,JYC_PUBLIC_ACTIVITIES} from './public-v1/config.js';
 import {JYC_SOCIALS,festSocialProfile,socialProfile,is128SocialProfile} from './jyc-socials.js';
 import {JYCNowStrip,JYCNowPage,HubLatestUpdates} from './jyc-now.jsx';
-import JYCHistory,{HistoryTeaser,HISTORY} from './jyc-history-page.jsx';
+import {HistoryTeaser,HISTORY} from './jyc-history-page.jsx';
 import {JYCBrandEditorial} from './jyc-next-experience.jsx';
 import {JYCEditorialHome} from './jyc-editorial-home.jsx';
 import {ResponsivePhoto} from './jyc-responsive-photo.jsx';
@@ -1102,7 +1102,7 @@ function About({data}){
      </article>)}
     </div>
    </section>
-   <div className="about-source-note reveal">Content scope: JYC 128 hub orientation material + current public JIIT information. Current event, recruitment and team records are published separately through the JYC Control Center.</div>
+   <div className="about-source-note reveal">Content scope: JYC 128 orientation material and published JYC milestones. Current events, recruitment and team records remain on their dedicated JYC pages.</div>
   <section className="about-next-v28 reveal"><span className="eyebrow">YOUR NEXT STEP</span><h2>See the organisation in action.</h2><div><Button onClick={()=>nav('/clubs')}>Explore clubs ↗</Button><Button secondary onClick={()=>nav('/events')}>Explore events →</Button><Button secondary onClick={()=>nav('/team')}>Meet JYC →</Button></div></section>
  </section>
 }
