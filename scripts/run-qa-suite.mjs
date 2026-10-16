@@ -38,6 +38,7 @@ const scripts = [
   'qa-public-ux-refinements.mjs',
   'qa-dynamic-route-shells.mjs',
   'qa-public-route-completeness.mjs',
+  'qa-v20-reference-restoration.mjs',
   'qa-visual-quality-contract.mjs',
   'qa-visual-redesign.mjs',
   'qa-experience-system.mjs'
