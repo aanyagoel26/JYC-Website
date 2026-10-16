@@ -10,7 +10,8 @@ const routes = [
 const viewports = [
   { name: 'desktop', width: 1440, height: 1000 },
   { name: 'tablet', width: 768, height: 1024 },
-  { name: 'mobile', width: 390, height: 844 }
+  { name: 'mobile', width: 390, height: 844 },
+  { name: 'narrow-320', width: 320, height: 740 }
 ];
 
 test.describe('JYC visual capture and measurable design contracts', () => {

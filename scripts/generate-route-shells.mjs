@@ -48,8 +48,8 @@ const routes={
     description:'Connect with JIIT Youth Club 128 through official contact channels and community links.'
   },
   '/history':{
-    title:'JYC History | JIIT Youth Club 128',
-    description:'Explore the history, purpose and evolution of JIIT Youth Club 128.'
+    title:'About JIIT Youth Club 128 | JYC',
+    description:'Learn about JYC’s purpose, student-led communities, values, programme and evidence-backed milestones in one combined About JYC experience.'
   },
   '/announcements':{
     title:'JYC Announcements | JIIT Youth Club 128',
@@ -203,7 +203,7 @@ function shellFor(meta,route){
       out=out.replace(/<meta name="twitter:description" content="[^"]*"\s*\/>/i,`<meta name="twitter:description" content="${esc}" />`);
     }
   }
-  const canonicalUrl=`${siteOrigin}${route}`;
+  const canonicalUrl=`${siteOrigin}${route === '/history' ? '/about' : route}`;
   const canonicalTag=`<link rel="canonical" href="${canonicalUrl}" />`;
   if(/<link rel="canonical" href="[^"]*"\s*\/>/i.test(out)){
     out=out.replace(/<link rel="canonical" href="[^"]*"\s*\/>/i,canonicalTag);

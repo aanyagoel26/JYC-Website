@@ -81,13 +81,13 @@ This is the single execution order for the JIIT Youth Club 128 public website. W
 - real photographs where available
 - accessible profile interactions
 
-## 08 — About + History
-- JYC purpose
+## 08 — About JYC (including the timeline)
+- JYC purpose and role
 - how JYC works
 - community families
-- evidence-led history
-- source links
-- archival milestones
+- evidence-led historical milestones in the same page
+- source links and deep links to each milestone
+- no separate History destination
 - no invented founding date or statistics
 
 ## 09 — Achievements
