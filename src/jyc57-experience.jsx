@@ -12,6 +12,20 @@ import AccordionGallery from './components/react-bits/AccordionGallery.jsx';
 const safeDate=(e)=>{const t=eventMoment(e?.date,e?.start,'00:00');return Number.isFinite(t)?t:Infinity};
 const eventMoment=(date,time,fallback='00:00')=>{const raw=String(date||'').trim();if(!raw)return NaN;if(/[T ]\d{1,2}:\d{2}/.test(raw))return Date.parse(raw.replace(' ','T'));const clock=String(time||fallback).trim();const normalized=/^\d{1,2}:\d{2}$/.test(clock)?clock.padStart(5,'0'):fallback;return Date.parse(`${raw}T${normalized}`)};
 const stateOf=(e)=>{if(!e?.date)return 'draft';const start=eventMoment(e.date,e.start,'00:00'),end=eventMoment(e.dateEnd||e.date,e.end,'23:59'),now=Date.now();if(!Number.isFinite(start)||!Number.isFinite(end))return 'draft';if(now<start)return 'upcoming';if(now<=end)return 'live';return 'past'};
+const registrationOpen=(e)=>{
+ if(!e?.registrationUrl||stateOf(e)==='past')return false;
+ if(e.publicStatus==='planned'&&e.registrationVerified!==true)return false;
+ const raw=String(e.registrationDeadline||'').trim();
+ if(raw){
+  const deadline=Date.parse(/^\\d{4}-\\d{2}-\\d{2}$/.test(raw)?raw+'T23:59:59':raw);
+  if(!Number.isFinite(deadline)||deadline<=Date.now())return false;
+ }
+ try{
+  const url=new URL(e.registrationUrl,window.location.origin);
+  if(url.protocol!=='https:'&&url.protocol!=='http:')return false;
+ }catch{return false}
+ return true;
+};
 const publishedEvents=(data)=>Array.isArray(data?.events)?data.events.filter(e=>e?.published&&e?.archived!==true):[];
 const publishedClubs=(data)=>Array.isArray(data?.clubs)?data.clubs.filter(c=>c?.published&&c?.status!=='archived'):[];
 const eventPath=(e)=>`/events/${encodeURIComponent(String(e?.slug||slugify(e?.title)||e?.id||''))}`;
@@ -71,7 +85,7 @@ export function JYC57Events({data}){
     {filtered.length?filtered.map((e,i)=>{const photo=eventCardPhoto(e);return <button type="button" className="jyc57-event-card" key={e.id||e.title||i} style={{'--event-accent':eventIdentity(e).accent||identityAccent(e.title||e.slug||e.club)}} onPointerMove={magneticMove} onPointerLeave={magneticReset} onClick={()=>nav(eventPath(e))}>
       <div className="jyc57-event-date"><b>{e.date?new Date(`${e.date}T12:00`).toLocaleDateString('en-IN',{day:'2-digit'}):'—'}</b><span>{e.date?new Date(`${e.date}T12:00`).toLocaleDateString('en-IN',{month:'short'}):'TBA'}</span></div>
       <div className="jyc57-event-art">{photo?<ResponsivePhoto src={photo} alt="" loading="lazy" decoding="async" sizes="92px" fallbackSrc={e.poster||LOGO_FALLBACK} fallbackAlt=""/>:<span>{String(e.eventType||e.club||'JYC').slice(0,3).toUpperCase()}</span>}</div>
-      <div className="jyc57-event-copy"><div style={{display:'flex',gap:6,alignItems:'center',flexWrap:'wrap'}}><MetaPill tone={stateOf(e)==='live'?'live':''}>{stateOf(e)==='live'?'● LIVE NOW':stateOf(e)==='past'?'ARCHIVED':'UPCOMING'}</MetaPill>{(e.eventType||e.category)&&<MetaPill>{e.eventType||e.category}</MetaPill>}{e.registrationUrl&&stateOf(e)!=='past'&&<span className="jyc57-reg-pill">REGISTRATION OPEN ↗</span>}</div><h2>{e.title}</h2><p>{e.description||'Open the event for registration, schedule, venue and published details.'}</p><small>{e.club||'JYC'} · {e.venue||'JIIT Sector 128'}{e.start?` · ${e.start}`:''}</small></div>
+      <div className="jyc57-event-copy"><div style={{display:'flex',gap:6,alignItems:'center',flexWrap:'wrap'}}><MetaPill tone={stateOf(e)==='live'?'live':''}>{stateOf(e)==='live'?'● LIVE NOW':stateOf(e)==='past'?'ARCHIVED':'UPCOMING'}</MetaPill>{(e.eventType||e.category)&&<MetaPill>{e.eventType||e.category}</MetaPill>}{registrationOpen(e)&&<span className="jyc57-reg-pill">REGISTRATION OPEN ↗</span>}</div><h2>{e.title}</h2><p>{e.description||'Open the event for registration, schedule, venue and published details.'}</p><small>{e.club||'JYC'} · {e.venue||'JIIT Sector 128'}{e.start?` · ${e.start}`:''}</small></div>
       <span className="jyc57-arrow" aria-hidden="true">↗</span>
     </button>}):<Empty eyebrow="EVENT DIRECTORY" title="Nothing matches this view." text="Try another category, status, or search term. Only published Sector-128 events are shown."/>}
    </div>
