@@ -411,7 +411,7 @@ function Contact({data}){
   if(!form.name.trim())errors.name='Enter your name.';
   const email=form.email.trim();
   if(!email)errors.email='Enter your email address.';
-  else if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email))errors.email='Enter a valid email address.';
+  else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))errors.email='Enter a valid email address.';
   if(!form.message.trim())errors.message='Enter a message.';
   setFieldErrors(errors);
   if(Object.keys(errors).length){
