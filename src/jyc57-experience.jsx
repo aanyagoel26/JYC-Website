@@ -17,7 +17,7 @@ const registrationOpen=(e)=>{
  if(e.publicStatus==='planned'&&e.registrationVerified!==true)return false;
  const raw=String(e.registrationDeadline||'').trim();
  if(raw){
-  const deadline=Date.parse(/^\\d{4}-\\d{2}-\\d{2}$/.test(raw)?raw+'T23:59:59':raw);
+  const deadline=Date.parse(/^\d{4}-\d{2}-\d{2}$/.test(raw)?raw+'T23:59:59':raw);
   if(!Number.isFinite(deadline)||deadline<=Date.now())return false;
  }
  try{
