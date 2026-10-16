@@ -13,7 +13,7 @@ const checks = [
   [layer.includes('prefers-reduced-motion:reduce'), 'reduced-motion preferences are honored'],
   [layer.includes(':focus-visible'), 'visible keyboard focus is defined'],
   [layer.includes('--jyc-oxblood') && layer.includes('--jyc-champagne'), 'JYC identity tokens are defined'],
-  [/\\.jh-overline\\{[^}]*font-size:12px/.test(layer), 'hero eyebrow text stays at the 12px minimum readable type size'],
+  [layer.includes('.jh-overline{color:var(--jh-muted,var(--jyc-muted-ink));font-size:12px;letter-spacing:.16em}'), 'hero eyebrow text stays at the 12px minimum readable type size'],
   [layer.includes('translateY(-3px)') && layer.includes('hover:hover'), 'card motion is restricted to fine pointers'],
 ];
 for (const [ok, name] of checks) { console.log((ok ? 'PASS: ' : 'FAIL: ') + name); assert.ok(ok, name); }
