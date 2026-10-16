@@ -1053,7 +1053,7 @@ function About({data}){
    <div className="about-hero-copy"><span className="eyebrow">ABOUT JYC · JIIT 128</span><h1>The student ecosystem behind campus life.</h1><p>{h.aboutText||'JIIT Youth Club connects students, communities, leadership and campus experiences across JIIT Sector 128.'}</p><div className="about-hero-actions"><Button onClick={()=>nav('/clubs')}>Find your community ↗</Button><Button secondary onClick={()=>nav('/events')}>See what is happening →</Button></div></div>
    <div className="about-hero-mark"><div><LogoImage alt="JIIT Youth Club"/></div><span>VOICE · TALENT · SPIRIT</span></div>
   </div>
-  <JYCBrandEditorial compact/>
+  
   <section className="v40-about-snapshot reveal" aria-label="JYC at a glance">
    <div className="v40-about-snapshot-intro"><span className="eyebrow">JYC AT A GLANCE</span><h2>One coordinating body. A whole campus ecosystem.</h2><p>JYC connects faculty guidance, student leadership, communities, volunteers and experiences so students can move from discovering an interest to actually participating.</p></div>
    <div className="v40-about-metrics"><article><strong>{JYC_HUB_FAMILIES.length}</strong><span>community families</span></article><article><strong>{Object.keys(JYC_HUB_CONTENT).length}</strong><span>named communities</span></article><article><strong>{PDF_HUB_PROGRAMME.length}</strong><span>programme strands</span></article><article><strong>{data.team.filter(m=>m.published===true).length}</strong><span>published people</span></article></div>
@@ -1064,22 +1064,6 @@ function About({data}){
   <section className="about-flow-v28 reveal"><div className="about-section-title-v28"><span className="eyebrow">HOW JYC WORKS</span><h2>Guidance → leadership → communities → experiences.</h2></div><div className="about-flow-grid-v28">{[['01','Faculty guidance','Institutional support and direction'],['02','Apex Body','Student leadership and coordination'],['03','Hubs & Societies','Communities built around interests and talent'],['04','Coordinators & Volunteers','People who turn plans into execution'],['05','Events & Experiences','The campus moments students actually join']].map(x=><article key={x[0]}><span>{x[0]}</span><strong>{x[1]}</strong><p>{x[2]}</p></article>)}</div></section>
   <section className="about-programmes-v28 reveal"><div className="about-section-title-v28"><span className="eyebrow">THE CAMPUS RHYTHM</span><h2>From welcome to farewell.</h2><p>The supplied JYC programme material highlights recurring major experiences. Current dates and registrations remain controlled by published event records.</p></div><div className="about-programme-grid-v28">{PDF_HUB_PROGRAMME.map((p,i)=><article key={p.name}><div className="about-programme-image"><ResponsivePhoto src={p.image} alt={p.name+' · JYC programme'} loading="lazy" sizes="(max-width: 760px) 100vw, 30vw"/><span>{String(i+1).padStart(2,'0')}</span></div><div><small>{p.type}</small><h3>{p.name}</h3><p>{p.text}</p><button type="button" onClick={()=>nav('/events')}>Open events →</button></div></article>)}</div></section>
   <section className="about-vision-v28 reveal"><article><span className="eyebrow">VISION</span><h2>A campus where every student can find a place to participate, create, lead and belong.</h2></article><article><span className="eyebrow">MISSION</span><p>Connect students with clubs and communities, create meaningful experiences, develop leadership and teamwork, and make campus life more participatory.</p><div className="about-inline-links"><button type="button" onClick={()=>nav('/team')}>Meet the people →</button><button type="button" onClick={()=>nav('/gallery')}>See the archive →</button></div></article></section>
-  <section className="about-section-title-v28 reveal" style={{marginTop:28,textAlign:'center'}}>
-   <span className="eyebrow">WHAT WE STAND FOR</span>
-   <h2>Seven principles that shape the JYC experience.</h2>
-   <p>These are presented as the public-facing values of the student ecosystem; operational details remain controlled by JYC.</p>
-  </section>
-  <section className="about-principles-v33 reveal">
-   {[
-    ['01','Student voice','Students have a platform to participate, contribute and shape campus life.'],
-    ['02','Creativity','Performance, design, writing, media and making belong in the same ecosystem.'],
-    ['03','Leadership','Responsibility grows through real coordination, execution and teamwork.'],
-    ['04','Innovation','Technical communities turn curiosity into projects, competitions and learning.'],
-    ['05','Collaboration','Hubs, committees and volunteers create experiences together.'],
-    ['06','Inclusivity','There should be a place to discover, learn, contribute and belong.'],
-    ['07','Campus spirit','JYC turns participation, celebration and shared responsibility into a stronger campus community.']
-   ].map(([n,t,p])=><article className="about-principle-v33" key={t}><span>{n}</span><strong>{t}</strong><p>{p}</p></article>)}
-  </section>
   <section className="about-history-section reveal" id="history" aria-labelledby="about-history-heading">
     <div className="about-section-title-v28">
      <span className="eyebrow">THE JYC STORY · 2019–2026</span>
