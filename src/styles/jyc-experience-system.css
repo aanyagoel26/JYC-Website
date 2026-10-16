@@ -243,3 +243,13 @@
 @media(max-width:700px){.public-app .about-page .about-hero-v28{grid-template-columns:minmax(0,1fr);padding:24px}.public-app .about-page .about-hero-mark{min-height:250px}.public-app .about-page .v40-about-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.public-app .about-page :where(.about-principles-v28,.about-family-grid-v28,.about-flow-grid-v28,.about-programme-grid-v28){grid-template-columns:repeat(2,minmax(0,1fr))}.public-app .about-page .about-vision-v28{grid-template-columns:minmax(0,1fr)}.public-app .about-page .about-history-node{grid-template-columns:72px minmax(0,1fr);gap:12px}.public-app .about-page .about-history-section{padding:20px}.public-app .about-page .about-history-node-rail{padding-top:18px}.public-app .about-page .about-next-v28{align-items:flex-start}}
 @media(max-width:420px){.public-app .about-page .about-hero-v28{padding:18px}.public-app .about-page .about-hero-copy h1{font-size:clamp(38px,12vw,54px)}.public-app .about-page :where(.about-principles-v28,.about-family-grid-v28,.about-flow-grid-v28,.about-programme-grid-v28,.about-principles-v33){grid-template-columns:minmax(0,1fr)}.public-app .about-page .v40-about-leadership{align-items:flex-start;flex-direction:column}.public-app .about-page .about-history-node{grid-template-columns:1fr;gap:0}.public-app .about-page .about-history-node-rail{flex-direction:row;align-items:center;padding:8px 0 0}.public-app .about-page .about-history-node-line{display:none}.public-app .about-page .about-history-node-card{padding:18px}.public-app .about-page .about-next-v28>div{width:100%}.public-app .about-page .about-next-v28 .btn{flex:1 1 100%}}
 @media(prefers-reduced-motion:reduce){.public-app .about-page *{scroll-behavior:auto!important}}
+
+
+/* Deep links into the combined About JYC story must clear the sticky site header. */
+.public-app :where(#history, .about-history-node, #about-history-heading) {
+  scroll-margin-top: calc(var(--jyc-header-height, 88px) + 24px);
+}
+.public-app .about-history-node:target .about-history-node-card {
+  border-color: color-mix(in srgb, var(--jyc-ex-champagne) 72%, var(--jyc-ex-line));
+  box-shadow: var(--jyc-ex-shadow-soft);
+}
