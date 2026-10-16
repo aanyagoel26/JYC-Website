@@ -1050,7 +1050,7 @@ function About({data}){
  return <section className="section page unified-public-page about-page">
   <Breadcrumbs items={[{label:'About JYC'}]}/><EcosystemContextRail/><SearchTopicBand eyebrow="ABOUT JYC · JIIT NOIDA" title="What is JIIT Youth Club?" text="JIIT Youth Club (JYC) is the student-led community ecosystem at JIIT Wish Town Campus, Sector 128, Noida, connecting clubs, hubs, events, leadership and campus experiences beyond academics." links={[["JYC clubs","/clubs"],["JYC events","/events"],["JYC leadership","/team"]]}/>
   <div className="about-hero-v28 v40-about-hero reveal">
-   <div className="about-hero-copy"><span className="eyebrow">ABOUT JYC · JIIT 128</span><h1>The student ecosystem behind campus life.</h1><p>{h.aboutText||'JIIT Youth Club connects students, communities, leadership and campus experiences across JIIT Sector 128.'}</p><div className="about-hero-actions"><Button onClick={()=>nav('/clubs')}>Find your community ↗</Button><Button secondary onClick={()=>nav('/events')}>See what is happening →</Button></div></div>
+   <div className="about-hero-copy"><span className="eyebrow">ABOUT JYC · JIIT 128</span><h1>JYC brings student communities together.</h1><p>{h.aboutText||'JIIT Youth Club connects students, communities, leadership and campus experiences across JIIT Sector 128.'}</p><div className="about-hero-actions"><Button onClick={()=>nav('/clubs')}>Find your community ↗</Button><Button secondary onClick={()=>nav('/events')}>See what is happening →</Button></div></div>
    <div className="about-hero-mark"><div><LogoImage alt="JIIT Youth Club"/></div><span>VOICE · TALENT · SPIRIT</span></div>
   </div>
   
