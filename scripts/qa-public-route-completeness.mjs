@@ -37,7 +37,7 @@ assert.ok(!main.includes("if(clean==='/history')return <>{schema}<JYCHistory dat
   'History must not remain a separate public destination');
 assert.ok(!main.includes("if(clean==='/achievements'||clean==='/best-of-jyc')return <Navigate to=\"/about\" replace/>;"),
   'Achievements and Best of JYC must not silently redirect to About');
-assert.ok(main.includes('import JYCHistory'));
+assert.ok(main.includes("import {HistoryTeaser,HISTORY} from './jyc-history-page.jsx';"));
 assert.ok(main.includes('JYCBestOf'));
 assert.ok(main.includes('function Achievements({data})'));
 
