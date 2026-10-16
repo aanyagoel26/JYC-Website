@@ -52,8 +52,8 @@ Use these as proposed design tokens until the official logo artwork is sampled a
 10. **Achievements / Best of JYC** — verifiable accomplishments with date and evidence/context; avoid unsupported superlatives.
 11. **Announcements** — publication status, date, deadline and archive state; show only public/published notices.
 12. **Recruitment / Join JYC** — explicit open/closed/coming-soon state; never imply applications are open without a verified destination and dates.
-14. **Contact** — verified channels, campus location and clear form success/error states; do not claim a message was sent unless submission succeeds.
-15. **Archive** — legacy and historical content with clear dates/context, distinct from upcoming activity.
+13. **Contact** — verified channels, campus location and clear form success/error states; do not claim a message was sent unless submission succeeds.
+14. **Archive** — legacy and historical content with clear dates/context, distinct from upcoming activity.
 
 ## Accessibility and responsive acceptance
 - One clear page-level H1; headings follow a meaningful hierarchy.
