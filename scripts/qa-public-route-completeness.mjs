@@ -33,6 +33,8 @@ assert.ok(main.includes("if(clean==='/history')return <Navigate to=\"/about#hist
   'The legacy history URL must lead to the combined About JYC timeline');
 assert.ok(main.includes('id="about-history-heading"') && main.includes('className="about-history-node"'),
   'The combined About JYC page must contain the accessible, source-backed timeline');
+assert.ok(shells.includes("route === '/history' ? '/about' : route"),
+  'The legacy history shell must canonicalize to the single About JYC destination');
 assert.ok(!main.includes("if(clean==='/history')return <>{schema}<JYCHistory data={data}/></>;"),
   'History must not remain a separate public destination');
 assert.ok(!main.includes("if(clean==='/achievements'||clean==='/best-of-jyc')return <Navigate to=\"/about\" replace/>;"),
