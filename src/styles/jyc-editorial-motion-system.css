@@ -5,7 +5,7 @@
 .jyc-editorial-home.jyc-home{background:radial-gradient(ellipse at 82% 8%,color-mix(in srgb,var(--jh-accent,#8f2429) 7%,transparent),transparent 35%),var(--jh-bg,var(--jyc-paper));color:var(--jh-ink,var(--jyc-ink));isolation:isolate}
 .jyc-editorial-home .jh-hero{width:min(1380px,calc(100% - clamp(32px,7vw,112px)));min-height:min(850px,calc(100svh - 72px));padding-block:clamp(44px,7.5vh,92px) clamp(52px,8vh,100px);grid-template-columns:minmax(0,1.04fr) minmax(300px,.96fr);gap:clamp(28px,5.5vw,88px)}
 .jyc-editorial-home .jh-hero-copy{max-width:760px}
-.jyc-editorial-home .jh-overline{color:var(--jh-muted,var(--jyc-muted-ink));font-size:11px;letter-spacing:.16em}
+.jyc-editorial-home .jh-overline{color:var(--jh-muted,var(--jyc-muted-ink));font-size:12px;letter-spacing:.16em}
 .jyc-editorial-home .jh-hero h1{max-width:10.5ch;margin-block:clamp(18px,2.2vw,30px) clamp(18px,2vw,26px)!important;font-size:clamp(48px,6.1vw,88px)!important;line-height:.94!important;letter-spacing:-.067em!important;text-wrap:balance}
 .jyc-editorial-home .jh-title-gradient{color:var(--jh-accent,var(--jyc-oxblood));font-style:italic}
 .jyc-editorial-home .jh-lead{max-width:48ch;color:var(--jh-muted,var(--jyc-muted-ink));font-size:clamp(16px,1.25vw,19px);line-height:1.75}
