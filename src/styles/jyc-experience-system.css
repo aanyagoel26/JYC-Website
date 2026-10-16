@@ -220,7 +220,7 @@
 .public-app .about-page .about-principle-v33>span{color:var(--jyc-ex-oxblood);font-size:11px;font-weight:800;letter-spacing:.12em}
 .public-app .about-page .about-principle-v33>strong{display:block;margin:24px 0 10px;font-size:20px}
 .public-app .about-page .about-principle-v33 p{margin:0;color:var(--jyc-ex-muted);font-size:14px;line-height:1.7}
-.public-app .about-page .about-history-section{scroll-margin-top:92px;padding:clamp(26px,4.5vw,58px);border:1px solid color-mix(in srgb,var(--jyc-ex-champagne) 45%,var(--jyc-ex-line));border-radius:var(--jyc-ex-radius-lg);background:linear-gradient(145deg,var(--jyc-ex-paper-raised),color-mix(in srgb,var(--jyc-ex-champagne) 8%,var(--jyc-ex-paper)))
+.public-app .about-page .about-history-section{scroll-margin-top:92px;padding:clamp(26px,4.5vw,58px);border:1px solid color-mix(in srgb,var(--jyc-ex-champagne) 45%,var(--jyc-ex-line));border-radius:var(--jyc-ex-radius-lg);background:linear-gradient(145deg,var(--jyc-ex-paper-raised),color-mix(in srgb,var(--jyc-ex-champagne) 8%,var(--jyc-ex-paper)))}
 .public-app .about-page .about-history-section>.about-section-title-v28{margin-bottom:34px}
 .public-app .about-page .about-history-timeline-v2{display:grid;gap:14px}
 .public-app .about-page .about-history-node{display:grid;grid-template-columns:minmax(100px,.22fr) minmax(0,1fr);gap:clamp(16px,3vw,36px);scroll-margin-top:100px}
