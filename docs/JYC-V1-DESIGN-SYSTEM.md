@@ -41,9 +41,8 @@ Use these as proposed design tokens until the official logo artwork is sampled a
 
 ## Public route contract
 1. **Home** — brand-led hero, organisation intro, community families, verified upcoming event, announcements, activity types, team/history teaser, photo moments and clear next actions.
-2. **About** — purpose, role, structure, values and verified campus context; link to history and leadership.
-3. **History** — dated milestones only when source-backed; label uncertain dates rather than implying certainty.
-4. **Leadership** — faculty guidance and student leadership grouped by real role; verified names/photos/social links only.
+2. **About JYC** — purpose, role, structure, values and a source-backed timeline in one page; legacy `/history` redirects to the timeline anchor.
+3. **Leadership** — faculty guidance and student leadership grouped by real role; verified names/photos/social links only.
 5. **Clubs** — search and filter by category/interest; readable descriptions and explicit detail links; distinguish official/published records from source-only records.
 6. **Club detail** — identity, purpose, activities, verified team, related events/gallery and real recruitment status.
 7. **Events** — featured event, search, category and time/status filters; chronological sorting with robust missing/invalid-date handling.
