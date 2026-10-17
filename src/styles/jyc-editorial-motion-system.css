@@ -489,3 +489,15 @@ html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-lead {
     height: 84px !important;
   }
 }
+
+
+/* Keep the compact overline available to sighted users and route-level checks. */
+@media (max-width: 680px) {
+  .jyc-editorial-home.jyc-home .jh-hero-copy > .jh-overline {
+    display: block !important;
+    font-size: 9px !important;
+    line-height: 1.15 !important;
+    letter-spacing: .08em !important;
+    margin: 0 !important;
+  }
+}
