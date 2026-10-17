@@ -480,6 +480,36 @@ test('gallery archive uses deterministic responsive image frames', async ({ page
   for (const ratio of result.ratios) expect(ratio).toBeLessThan(2.3);
 });
 
+test('editorial gallery uses tile-specific responsive image sizes', async ({ page }) => {
+  await page.goto(base + '/gallery', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'editorial gallery responsive images');
+  await expect(page.locator('.jyc57-editorial-grid .jyc57-editorial-photo').first()).toBeVisible();
+  await expect.poll(() => page.locator('.jyc57-editorial-grid picture source[srcset]').count()).toBeGreaterThan(0);
+  const tiles = await page.locator('.jyc57-editorial-grid .jyc57-editorial-photo').evaluateAll(buttons =>
+    buttons.slice(0, 8).map(button => {
+      const img = button.querySelector('picture img');
+      const source = button.querySelector('picture source[srcset]');
+      return {
+        classes: button.className,
+        width: button.getBoundingClientRect().width,
+        sizes: img?.getAttribute('sizes') || '',
+        srcset: source?.getAttribute('srcset') || '',
+        currentSrc: img?.currentSrc || ''
+      };
+    })
+  );
+  expect(tiles.length, 'editorial wall exposes photo tiles').toBeGreaterThan(0);
+  for (const tile of tiles) {
+    expect(tile.width, 'tile has a measured rendered width').toBeGreaterThan(0);
+    expect(tile.sizes, 'tile uses an explicit layout-aware sizes value').not.toBe('');
+    expect(tile.sizes, 'editorial tiles do not overstate every slot as 420px').not.toContain('420px');
+    expect(tile.srcset, 'optimized responsive source candidates are present').not.toBe('');
+  }
+  const lead = tiles[0];
+  expect(lead.sizes, 'lead tile sizes account for the wider feature span').toContain(lead.classes.includes('portrait') ? '360px' : '520px');
+  expect(tiles.slice(1).some(tile => tile.sizes.includes('260px') || tile.sizes.includes('360px')), 'standard and landscape tiles use narrower source sizes').toBe(true);
+});
+
 test('photo-led pages render real image content without broken assets', async ({ page }) => {
   test.setTimeout(120000);
   for (const route of ['/', '/about', '/clubs', '/events', '/team', '/gallery', '/achievements', '/best-of-jyc']) {
