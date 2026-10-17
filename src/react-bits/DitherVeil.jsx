@@ -429,19 +429,19 @@ const DitherVeil = ({
     const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     const coarsePointer = window.matchMedia?.('(pointer: coarse)').matches || window.innerWidth < 800;
     const constrainedHardware = (navigator.hardwareConcurrency || 8) < 6 || (navigator.deviceMemory || 8) < 4;
-    if (reducedMotion || coarsePointer || constrainedHardware) {
+    if (reducedMotion || constrainedHardware) {
       container.dataset.static = '1';
       return () => { delete container.dataset.static; };
     }
     let renderer;
     try {
-      renderer = new Renderer({ dpr: Math.min(window.devicePixelRatio || 1, 2), alpha: false, antialias: false });
+      renderer = new Renderer({ dpr: coarsePointer ? 1 : Math.min(window.devicePixelRatio || 1, 2), alpha: false, antialias: false });
     } catch {
       container.dataset.static = '1';
       return () => { delete container.dataset.static; };
     }
     const gl = renderer?.gl;
-    if (!gl) {
+    if (!gl || !renderer?.isWebgl2) {
       container.dataset.static = '1';
       return () => { renderer?.gl?.getExtension('WEBGL_lose_context')?.loseContext(); delete container.dataset.static; };
     }
@@ -524,8 +524,22 @@ const DitherVeil = ({
     };
     const program = (fragment, uniforms) =>
       new Program(gl, { vertex, fragment, uniforms, depthTest: false, depthWrite: false });
-    const maskMesh = new Mesh(gl, { geometry, program: program(maskFragment, maskUniforms) });
-    const viewMesh = new Mesh(gl, { geometry, program: program(viewFragment, viewUniforms) });
+    let maskMesh;
+    let viewMesh;
+    try {
+      maskMesh = new Mesh(gl, { geometry, program: program(maskFragment, maskUniforms) });
+      viewMesh = new Mesh(gl, { geometry, program: program(viewFragment, viewUniforms) });
+      // Some browsers expose WebGL2 but fail to compile/link a shader. Treat that
+      // as an enhancement failure rather than leaving a blank hero or React error.
+      const programsReady = [maskMesh.program.program, viewMesh.program.program].every(
+        compiled => compiled && gl.getProgramParameter(compiled, gl.LINK_STATUS)
+      );
+      if (!programsReady) throw new Error('Dither Veil shader program failed to link');
+    } catch {
+      container.dataset.static = '1';
+      gl.getExtension('WEBGL_lose_context')?.loseContext();
+      return () => { delete container.dataset.static; };
+    }
 
     const sampler = document.createElement('canvas');
     const samplerContext = sampler.getContext('2d', { willReadFrequently: true });

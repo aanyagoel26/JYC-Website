@@ -198,6 +198,30 @@
 :root[data-theme="dark"] .search-modal .search-result,.dark .search-modal .search-result,:root[data-theme="dark"] .search-modal .search-list button,:root[data-theme="dark"] .search-modal .search-suggestions button,:root[data-theme="dark"] .search-modal .search-recent button,:root[data-theme="dark"] .search-modal .search-empty-actions button,.dark .search-modal .search-result{background:#18161d;color:#f5f1e6}
 :root[data-theme="dark"] .more-sheet,.dark .more-sheet{background:#18161d;color:#f5f1e6}
 :root[data-theme="dark"] .more-sheet .more-sheet-grid button,.dark .more-sheet .more-sheet-grid button{background:#18161d;color:#f5f1e6}
+/* Featured event media must not shrink to an icon-sized sliver on narrow screens. */
+.public-app .jyc57-page .jyc57-feature { min-width: 0; }
+.public-app .jyc57-page .jyc57-feature > .jyc-responsive-picture {
+  flex: 0 0 96px;
+  width: 96px;
+  min-width: 96px;
+  min-height: 140px;
+  align-self: stretch;
+  overflow: hidden;
+  border-radius: 10px;
+}
+.public-app .jyc57-page .jyc57-feature > .jyc-responsive-picture img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 140px;
+  object-fit: cover;
+  object-position: center;
+}
+.public-app .jyc57-page .jyc57-feature > div { flex: 1 1 auto; min-width: 0; }
+@media (max-width: 390px) {
+  .public-app .jyc57-page .jyc57-feature { gap: 12px; padding: 14px; }
+  .public-app .jyc57-page .jyc57-feature > .jyc-responsive-picture { flex-basis: 84px; width: 84px; min-width: 84px; }
+}
 @media(max-width:760px){.jyc57-page .jyc57-event-art{min-height:72px}.jyc57-page .jyc57-event-card{grid-template-columns:52px 68px minmax(0,1fr) 18px}.jyc57-page .jyc57-feature>picture,.jyc57-page .jyc57-feature>picture img{min-height:130px}}
 @media(max-width:520px){.jyc57-page .jyc57-event-card{grid-template-columns:48px minmax(0,1fr) 18px}.jyc57-page .jyc57-event-art{display:none}}
 @media(prefers-reduced-motion:reduce){.boot-fallback:after{animation:none;opacity:.65}.about-family-grid-v28>button{transition:none;transform:none!important}}

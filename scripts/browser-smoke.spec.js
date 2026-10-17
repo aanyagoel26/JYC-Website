@@ -101,11 +101,60 @@ test('JYC Now page stays within responsive guardrails', async ({ page }) => {
   expect(overflow).toBe(false);
 });
 
+test('production PWA manifest points to a real 512px WebP icon', async ({ page }) => {
+  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  const manifestResponse = await page.request.get(base + '/manifest.json');
+  expect(manifestResponse.ok(), 'manifest responds successfully').toBe(true);
+  const manifest = await manifestResponse.json();
+  const icon = manifest.icons?.find(item => item.purpose === 'any');
+  expect(icon, 'manifest has a standard installable icon').toBeTruthy();
+  expect(icon.src).toBe('/assets/jyc-logo.webp');
+  expect(icon.type).toBe('image/webp');
+  expect(icon.sizes).toBe('512x512');
+  expect(manifest.icons.some(item => item.purpose === 'any maskable')).toBe(false);
+  for (const shortcut of manifest.shortcuts || []) {
+    for (const shortcutIcon of shortcut.icons || []) {
+      expect(shortcutIcon.type).toBe('image/webp');
+      expect(shortcutIcon.sizes).toBe('512x512');
+    }
+  }
+  const rendered = await page.evaluate(async src => {
+    const response = await fetch(src, { cache: 'no-store' });
+    const contentType = response.headers.get('content-type') || '';
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    try {
+      const dimensions = await new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => resolve({ width: image.naturalWidth, height: image.naturalHeight });
+        image.onerror = reject;
+        image.src = url;
+      });
+      return { contentType, ...dimensions };
+    } finally {
+      URL.revokeObjectURL(url);
+    }
+  }, icon.src);
+  expect(rendered.contentType).toContain('image/webp');
+  expect(rendered.width).toBe(512);
+  expect(rendered.height).toBe(512);
+});
+
 test('mobile homepage logo and primary actions stay clear of the fixed navigation dock', async ({ page }) => {
   const viewport = page.viewportSize();
   test.skip(!viewport || viewport.width > 680);
   await page.goto(base, { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'mobile hero and dock geometry');
+  // The bot is a lazy-loaded chunk behind Suspense; wait for actual layout, not just the app root.
+  // Fonts and responsive CSS can still change bounding boxes after React mounts.
+  await expect(page.locator('.jyc-bot-shell')).toBeAttached({ timeout: 15000 });
+  for (const selector of ['.mobile-dock', '.jh-cyber-badge', '.jh-hero-logo-plaque', '.jh-dither-mark', '.jh-plaque-footer', '.jh-hero-actions']) {
+    await expect(page.locator(selector), `required hero geometry element ${selector}`).toBeVisible({ timeout: 15000 });
+  }
+  await page.evaluate(async () => {
+    if (document.fonts?.ready) await document.fonts.ready;
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  });
   const geometry = await page.evaluate(() => {
     const rect = selector => {
       const element = document.querySelector(selector);
@@ -124,6 +173,8 @@ test('mobile homepage logo and primary actions stay clear of the fixed navigatio
     };
   });
   expect(geometry.dock, 'the mobile navigation dock should be present').not.toBeNull();
+  expect(geometry.badge, 'the academic-year badge should be present').not.toBeNull();
+  expect(geometry.bot, 'the floating assistant should be mounted before overlap is measured').not.toBeNull();
   expect(geometry.logo, 'the homepage logo plaque should be present').not.toBeNull();
   expect(geometry.mark, 'the Dither Veil mark container should be present').not.toBeNull();
   expect(geometry.plaqueFooter, 'the official-mark caption should be present').not.toBeNull();
@@ -138,6 +189,17 @@ test('mobile homepage logo and primary actions stay clear of the fixed navigatio
 
 test('homepage accessibility and responsive guardrails', async ({ page }) => {
   await page.goto(base, { waitUntil: 'domcontentloaded' });
+  const themeToggle = page.locator('button.theme-toggle');
+  await expect(themeToggle).toBeVisible();
+  const visibleThemeLabel = (await themeToggle.locator('.theme-toggle-copy b').innerText()).trim() + ' ' + (await themeToggle.locator('.theme-toggle-copy small').innerText()).trim();
+  const themeAccessibleName = await themeToggle.getAttribute('aria-label');
+  expect(themeAccessibleName, 'theme toggle accessible name must include its visible label').toContain(visibleThemeLabel);
+  const startingTheme = await page.locator('html').getAttribute('data-theme');
+  await themeToggle.focus();
+  await page.keyboard.press('Enter');
+  await expect.poll(() => page.locator('html').getAttribute('data-theme')).not.toBe(startingTheme);
+  await expect(themeToggle).toContainText(startingTheme === 'dark' ? 'Light' : 'Dark');
+
 
   const missingAlt = await page.locator('img:not([alt])').count();
   expect(missingAlt).toBe(0);
@@ -390,6 +452,61 @@ test('event directory does not label JAI registration open after its deadline', 
   await expect(jai.locator('.jyc57-reg-pill')).toHaveCount(0);
 });
 
+test('mobile event feature keeps a usable photo and readable copy column', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 800 });
+  await page.goto(base + '/events', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'mobile featured event composition');
+  const feature = page.locator('.jyc57-feature').first();
+  await expect(feature).toBeVisible();
+  const geometry = await feature.evaluate(el => {
+    const card = el.getBoundingClientRect();
+    const media = el.querySelector('.jyc-responsive-picture')?.getBoundingClientRect();
+    const copy = el.querySelector(':scope > div')?.getBoundingClientRect();
+    return { cardWidth: card.width, mediaWidth: media?.width || 0, copyWidth: copy?.width || 0, overflow: el.scrollWidth > el.clientWidth };
+  });
+  expect(geometry.cardWidth).toBeGreaterThan(260);
+  expect(geometry.mediaWidth).toBeGreaterThanOrEqual(80);
+  expect(geometry.copyWidth).toBeGreaterThanOrEqual(130);
+  expect(geometry.overflow).toBe(false);
+});
+
+test('failed gallery photos use the neutral unavailable-photo asset, not a logo placeholder', async ({ page }) => {
+  await page.route('**/*', route => {
+    const request = route.request();
+    if (request.resourceType() !== 'image') return route.continue();
+    const url = new URL(request.url());
+    if (url.pathname === '/assets/photo-unavailable.svg' || /jyc-logo/i.test(url.pathname)) return route.continue();
+    return route.abort();
+  });
+  await page.goto(base + '/gallery', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'gallery failed-image fallback');
+
+  // Scroll the original lazy image into view first. The neutral fallback is
+  // created only after the deliberately failed request fires, so it cannot be
+  // the locator used to trigger that request.
+  const originalPhoto = page.locator('.jyc57-editorial-photo img').first();
+  await originalPhoto.scrollIntoViewIfNeeded();
+  const fallback = page.locator('.jyc57-editorial-photo img[src="/assets/photo-unavailable.svg"]').first();
+  await expect(fallback).toBeVisible({ timeout: 15000 });
+  await expect(fallback).toHaveAttribute('alt', 'Photograph unavailable');
+  await expect(page.locator('.jyc57-editorial-photo img[src*="jyc-logo"]').first()).toHaveCount(0);
+
+  await page.goto(base + '/events', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'event photo fallback');
+  // Event cards render the shared ResponsivePhoto picture without a
+  // dedicated .jyc57-event-art ancestor; assert the actual neutral fallback.
+  const eventFallback = page.locator('img[src="/assets/photo-unavailable.svg"]').first();
+  await expect(eventFallback).toBeVisible({ timeout: 15000 });
+  await expect(eventFallback).toHaveAttribute('alt', 'Photograph unavailable');
+
+  await page.goto(base + '/clubs', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'club photo fallback');
+  const clubFallback = page.locator('.jyc57-club-card img[src="/assets/photo-unavailable.svg"]').first();
+  await expect(clubFallback).toBeVisible({ timeout: 15000 });
+  await expect(clubFallback).toHaveAttribute('alt', 'Club photograph unavailable');
+  await expect(page.locator('.jyc57-club-card picture img[src*="jyc-logo"]')).toHaveCount(0);
+});
+
 test('homepage renders the official logo through Dither Veil and a magnetic activity Bento', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 960 });
   await page.goto(base, { waitUntil: 'domcontentloaded' });
@@ -467,6 +584,36 @@ test('gallery archive uses deterministic responsive image frames', async ({ page
   expect(result.overflow, 'gallery frame grid does not overflow').toBe(false);
   for (const ratio of result.ratios) expect(ratio).toBeGreaterThan(0.45);
   for (const ratio of result.ratios) expect(ratio).toBeLessThan(2.3);
+});
+
+test('editorial gallery uses tile-specific responsive image sizes', async ({ page }) => {
+  await page.goto(base + '/gallery', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'editorial gallery responsive images');
+  await expect(page.locator('.jyc57-editorial-grid .jyc57-editorial-photo').first()).toBeVisible();
+  await expect.poll(() => page.locator('.jyc57-editorial-grid picture source[srcset]').count()).toBeGreaterThan(0);
+  const tiles = await page.locator('.jyc57-editorial-grid .jyc57-editorial-photo').evaluateAll(buttons =>
+    buttons.slice(0, 8).map(button => {
+      const img = button.querySelector('picture img');
+      const source = button.querySelector('picture source[srcset]');
+      return {
+        classes: button.className,
+        width: button.getBoundingClientRect().width,
+        sizes: img?.getAttribute('sizes') || '',
+        srcset: source?.getAttribute('srcset') || '',
+        currentSrc: img?.currentSrc || ''
+      };
+    })
+  );
+  expect(tiles.length, 'editorial wall exposes photo tiles').toBeGreaterThan(0);
+  for (const tile of tiles) {
+    expect(tile.width, 'tile has a measured rendered width').toBeGreaterThan(0);
+    expect(tile.sizes, 'tile uses an explicit layout-aware sizes value').not.toBe('');
+    expect(tile.sizes, 'editorial tiles do not overstate every slot as 420px').not.toContain('420px');
+    expect(tile.srcset, 'optimized responsive source candidates are present').not.toBe('');
+  }
+  const lead = tiles[0];
+  expect(lead.sizes, 'lead tile sizes account for the wider feature span').toContain(lead.classes.includes('portrait') ? '360px' : '520px');
+  expect(tiles.slice(1).some(tile => tile.sizes.includes('260px') || tile.sizes.includes('360px')), 'standard and landscape tiles use narrower source sizes').toBe(true);
 });
 
 test('photo-led pages render real image content without broken assets', async ({ page }) => {

@@ -18,7 +18,7 @@ assert.ok(css.includes('@media (max-width: 760px)') && css.includes('@media (pre
 assert.ok(css.includes('.team-photo-editorial img') && css.includes('.event-detail-poster-image-wrap img'), 'team and event image framing must be explicitly styled');
 assert.ok(gallery.includes('className="jyc57-masonry"') && gallery.includes('className={`jyc57-photo photo-'), 'gallery uses the expected responsive collage components');
 assert.ok(main.includes('event-jai-registration-closed') && main.includes('regOpen&&registrationTarget'), 'expired JAI registration must not expose an active QR/link');
-assert.ok(fallback.includes("registrationDeadline:'2026-10-10T23:59:00+05:30'"), 'JAI fallback must retain the verified deadline');
+assert.ok(fallback.includes("registrationDeadline:'2026-10-15T23:59:00+05:30'"), 'JAI fallback must retain the verified deadline');
 assert.ok(browser.includes('JAI event does not advertise an expired registration QR as open'), 'browser regression for expired registration must exist');
 assert.ok(main.includes("if(saved==='dark'||saved==='light')return saved;") && main.includes("return 'light';"), 'first visit must retain the approved warm V20 palette even when the OS requests dark mode');
 assert.ok(css.includes('grid-auto-flow: row dense !important') && css.includes('align-content: start !important'), 'photo wall must pack variable-height frames without avoidable empty grid tracks');

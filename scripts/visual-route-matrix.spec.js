@@ -9,8 +9,13 @@ const routes = [
 
 const viewports = [
   { name: 'desktop', width: 1440, height: 1000 },
+  { name: 'desktop-1280', width: 1280, height: 900 },
+  { name: 'desktop-1920', width: 1920, height: 1080 },
   { name: 'tablet', width: 768, height: 1024 },
+  { name: 'tablet-1024', width: 1024, height: 768 },
   { name: 'mobile', width: 390, height: 844 },
+  { name: 'mobile-430', width: 430, height: 932 },
+  { name: 'mobile-360', width: 360, height: 800 },
   { name: 'narrow-320', width: 320, height: 740 }
 ];
 
