@@ -1,0 +1,90 @@
+/* JYC public design system — final shared layer.
+   Tokens are intentionally brand-led and route-agnostic. Public content remains
+   semantic HTML; the homepage's signature art direction stays separately scoped. */
+:root {
+  color-scheme: light;
+  --jyc-brand-paper: #f5f1e8;
+  --jyc-brand-paper-raised: #fffdf8;
+  --jyc-brand-ink: #211d22;
+  --jyc-brand-muted: #5f5860;
+  --jyc-brand-oxblood: #8f211f;
+  --jyc-brand-oxblood-hover: #741b19;
+  --jyc-brand-champagne: #b99b70;
+  --jyc-brand-line: rgba(33, 29, 34, .14);
+  --jyc-brand-line-strong: rgba(33, 29, 34, .24);
+  --jyc-brand-radius-sm: 8px;
+  --jyc-brand-radius-md: 12px;
+  --jyc-brand-radius-lg: 20px;
+  --jyc-brand-radius-xl: 28px;
+  --jyc-brand-shadow-sm: 0 2px 8px rgba(33, 29, 34, .045);
+  --jyc-brand-shadow-md: 0 12px 32px rgba(33, 29, 34, .075);
+  --jyc-brand-shadow-lg: 0 24px 64px rgba(33, 29, 34, .12);
+  --jyc-brand-ease: cubic-bezier(.2, .8, .2, 1);
+  --jyc-brand-fast: 160ms;
+  --jyc-brand-base: 240ms;
+}
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --jyc-brand-paper: #141216;
+  --jyc-brand-paper-raised: #1e1a20;
+  --jyc-brand-ink: #f8f1e7;
+  --jyc-brand-muted: #c1b8c1;
+  --jyc-brand-oxblood: #d45b55;
+  --jyc-brand-oxblood-hover: #ed7770;
+  --jyc-brand-champagne: #d2b48c;
+  --jyc-brand-line: rgba(248, 241, 231, .14);
+  --jyc-brand-line-strong: rgba(248, 241, 231, .24);
+  --jyc-brand-shadow-sm: 0 2px 8px rgba(0, 0, 0, .18);
+  --jyc-brand-shadow-md: 0 12px 32px rgba(0, 0, 0, .24);
+  --jyc-brand-shadow-lg: 0 24px 64px rgba(0, 0, 0, .32);
+}
+html { text-size-adjust: 100%; -webkit-text-size-adjust: 100%; }
+body { text-rendering: optimizeLegibility; }
+.public-app {
+  color: var(--jyc-brand-ink);
+  accent-color: var(--jyc-brand-oxblood);
+}
+.public-app :where(h1,h2,h3,h4) {
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+.public-app :where(p,li) { text-wrap: pretty; }
+.public-app :where(.page,.section,.page-shell,.content-shell,.route-stage) { min-width: 0; }
+.public-app :where(.club-card,.event-card,.activity-card,.team-layer-card,.hub-story-card,.jyc-journal-card,.event-related-card,.club-identity-card,.event-identity-card,.gallery-item,.gallery-story-card) {
+  border-radius: var(--jyc-brand-radius-lg);
+  border-color: var(--jyc-brand-line);
+}
+.public-app :where(input,select,textarea,[contenteditable="true"]) {
+  border-radius: var(--jyc-brand-radius-md);
+  border-color: var(--jyc-brand-line-strong);
+  font: inherit;
+}
+.public-app :where(input,select,textarea) { min-height: 44px; }
+.public-app textarea { min-height: 120px; }
+.public-app :where(button,.button,.btn,[role="button"]) {
+  -webkit-tap-highlight-color: transparent;
+  transition-property: color, background-color, border-color, box-shadow, transform;
+  transition-duration: var(--jyc-brand-fast);
+  transition-timing-function: var(--jyc-brand-ease);
+}
+.public-app :where(a,button,input,select,textarea,[tabindex]):focus-visible {
+  outline: 3px solid var(--jyc-brand-champagne);
+  outline-offset: 3px;
+}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  .public-app :where(.club-card,.event-card,.activity-card,.team-layer-card,.hub-story-card,.jyc-journal-card,.event-related-card,.club-identity-card,.event-identity-card) {
+    transition: border-color var(--jyc-brand-base) var(--jyc-brand-ease), box-shadow var(--jyc-brand-base) var(--jyc-brand-ease), transform var(--jyc-brand-base) var(--jyc-brand-ease);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .public-app *, .public-app *::before, .public-app *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+}
+@media (max-width: 680px) {
+  .public-app :where(.page,.section) { scroll-margin-top: 80px; }
+  .public-app :where(.page,.section,.page-shell,.content-shell) { overflow-wrap: anywhere; }
+}
