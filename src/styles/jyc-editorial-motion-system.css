@@ -122,3 +122,174 @@
   .jyc-editorial-home.jyc-home .jh-hero-copy > .jh-hero-actions { grid-template-columns: minmax(0, 1fr) !important; gap: 6px !important; }
   .jyc-editorial-home.jyc-home .jh-hero-copy > .jh-hero-actions .jh-btn { min-height: 40px !important; padding: 8px 10px !important; }
 }
+
+
+/* V70 — cinematic editorial hero refinement. Scoped to the homepage so the
+   visual identity does not leak into route-level content or admin screens. */
+.jyc-editorial-home.jyc-home .jh-hero {
+  gap: clamp(28px, 4.5vw, 76px) !important;
+  padding-block: clamp(38px, 6.5vh, 88px) !important;
+}
+.jyc-editorial-home.jyc-home .jh-hero-copy > .jh-cyber-badge {
+  border-color: rgba(168,36,32,.22) !important;
+  background: rgba(255,253,248,.84) !important;
+  box-shadow: 0 8px 26px rgba(49,30,28,.055) !important;
+  backdrop-filter: blur(18px);
+}
+.jyc-editorial-home.jyc-home .jh-hero-copy > .jh-overline {
+  max-width: 54ch;
+  font-size: clamp(10px, .78vw, 12px) !important;
+  letter-spacing: .15em !important;
+  line-height: 1.8 !important;
+}
+.jyc-editorial-home.jyc-home .jh-hero-copy > h1 {
+  max-width: 10.5ch !important;
+  font-size: clamp(44px, 5.55vw, 82px) !important;
+  line-height: .96 !important;
+  letter-spacing: -.065em !important;
+}
+.jyc-editorial-home.jyc-home .jh-hero-copy > h1 span {
+  margin-bottom: .035em;
+}
+.jyc-editorial-home.jyc-home .jh-hero-copy > h1 .jh-title-gradient,
+.jyc-editorial-home.jyc-home .jh-hero-copy > h1 em {
+  color: #A82420 !important;
+  -webkit-text-fill-color: #A82420 !important;
+  text-shadow: none !important;
+}
+.jyc-editorial-home.jyc-home .jh-hero-copy > .jh-lead {
+  max-width: 49ch !important;
+  color: #514b50 !important;
+  font-size: clamp(16px, 1.18vw, 18px) !important;
+  line-height: 1.78 !important;
+}
+.jyc-editorial-home.jyc-home .jh-hero-actions .jh-btn {
+  min-height: 50px !important;
+  border-radius: 999px !important;
+  padding-inline: clamp(17px, 1.7vw, 25px) !important;
+  letter-spacing: .025em !important;
+  text-transform: none !important;
+  font-size: 14px !important;
+  box-shadow: 0 5px 16px rgba(32,24,26,.055) !important;
+  transition: transform .24s cubic-bezier(.2,.8,.2,1), box-shadow .24s ease, background .24s ease, border-color .24s ease !important;
+}
+.jyc-editorial-home.jyc-home .jh-hero-actions .jh-btn-primary {
+  color: #fffaf0 !important;
+  background: #A82420 !important;
+  border-color: #A82420 !important;
+  box-shadow: 0 10px 24px rgba(168,36,32,.18) !important;
+}
+.jyc-editorial-home.jyc-home .jh-hero-actions .jh-btn-primary:hover {
+  color: #fffaf0 !important;
+  background: #861d1a !important;
+  border-color: #861d1a !important;
+  box-shadow: 0 14px 30px rgba(168,36,32,.22) !important;
+}
+.jyc-editorial-home.jyc-home .jh-hero-actions .jh-btn-glass,
+.jyc-editorial-home.jyc-home .jh-hero-actions .jh-btn-outline {
+  color: #292329 !important;
+  background: rgba(255,253,248,.8) !important;
+  border-color: rgba(41,35,41,.15) !important;
+}
+.jyc-editorial-home.jyc-home .jh-hero-actions .jh-btn:hover {
+  transform: translateY(-2px) !important;
+}
+.jyc-editorial-home.jyc-home .jh-hero-visual {
+  isolation: isolate;
+  perspective: 1200px;
+  min-width: 0;
+}
+.jyc-editorial-home.jyc-home .jh-hero-dither-visual::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 5% 4% 4% 7%;
+  border-radius: 48% 52% 43% 57% / 51% 42% 58% 49%;
+  border: 1px solid rgba(191,156,111,.48);
+  transform: rotate(-8deg);
+  box-shadow: 0 0 0 18px rgba(191,156,111,.055), 0 0 0 42px rgba(168,36,32,.025);
+  pointer-events: none;
+}
+.jyc-editorial-home.jyc-home .jh-hero-dither-visual::after {
+  content: "JIIT 128  /  EST. STUDENT COMMUNITY";
+  position: absolute;
+  z-index: 3;
+  top: 4%;
+  right: 0;
+  color: #7c6550;
+  font: 600 9px/1.4 "JetBrains Mono", monospace;
+  letter-spacing: .14em;
+  writing-mode: vertical-rl;
+  pointer-events: none;
+}
+.jyc-editorial-home.jyc-home .jh-hero-logo-plaque {
+  position: relative;
+  transform: rotateY(-5deg) rotateX(1deg);
+  transform-style: preserve-3d;
+  border: 1px solid rgba(191,156,111,.42) !important;
+  border-radius: clamp(22px, 3vw, 38px) !important;
+  background: linear-gradient(145deg, rgba(255,255,255,.94), rgba(250,245,235,.88)) !important;
+  box-shadow: 0 32px 85px rgba(39,27,29,.13), inset 0 1px 0 rgba(255,255,255,.9) !important;
+  backdrop-filter: blur(22px);
+}
+.jyc-editorial-home.jyc-home .jh-logo-halo {
+  opacity: .7;
+  filter: blur(5px);
+}
+.jyc-editorial-home.jyc-home .jh-dither-mark {
+  min-width: 0;
+  border-radius: 24px;
+  overflow: hidden;
+}
+.jyc-editorial-home.jyc-home .jh-dither-mark .dither-veil {
+  min-height: 250px;
+}
+.jyc-editorial-home.jyc-home .jh-plaque-footer {
+  border-top-color: rgba(41,35,41,.12) !important;
+}
+.jyc-editorial-home.jyc-home .jh-logo-caption {
+  color: #332a2b !important;
+}
+.jyc-editorial-home.jyc-home .jh-status-live-tag {
+  color: #825f2b !important;
+}
+.jyc-editorial-home.jyc-home .jh-photo-label,
+.jyc-editorial-home.jyc-home .jh-photo-index {
+  color: #725e50 !important;
+  letter-spacing: .13em !important;
+}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  .jyc-editorial-home.jyc-home .jh-hero-logo-plaque {
+    animation: jyc-hero-float 9s ease-in-out infinite;
+  }
+}
+@keyframes jyc-hero-float {
+  0%,100% { transform: translate3d(0,0,0) rotateY(-5deg) rotateX(1deg); }
+  50% { transform: translate3d(0,-7px,0) rotateY(-3deg) rotateX(0deg); }
+}
+@media (max-width: 980px) {
+  .jyc-editorial-home.jyc-home .jh-hero { gap: 28px !important; }
+  .jyc-editorial-home.jyc-home .jh-hero-copy > h1 { font-size: clamp(42px, 6.8vw, 64px) !important; }
+  .jyc-editorial-home.jyc-home .jh-dither-mark .dither-veil { min-height: 210px; }
+}
+@media (max-width: 700px) {
+  .jyc-editorial-home.jyc-home .jh-hero { padding-block: 28px 40px !important; }
+  .jyc-editorial-home.jyc-home .jh-hero-copy > h1 { max-width: 12ch !important; font-size: clamp(40px, 10vw, 58px) !important; }
+  .jyc-editorial-home.jyc-home .jh-hero-copy > .jh-overline { font-size: 10px !important; letter-spacing: .1em !important; }
+  .jyc-editorial-home.jyc-home .jh-hero-visual { width: min(100%, 520px); margin-inline: auto; }
+  .jyc-editorial-home.jyc-home .jh-hero-dither-visual::after { top: 0; right: 2px; font-size: 8px; }
+  .jyc-editorial-home.jyc-home .jh-hero-logo-plaque { transform: none; }
+  .jyc-editorial-home.jyc-home .jh-dither-mark .dither-veil { min-height: 220px; }
+  .jyc-editorial-home.jyc-home .jh-hero-actions { gap: 9px !important; }
+  .jyc-editorial-home.jyc-home .jh-hero-actions .jh-btn { min-height: 48px !important; }
+}
+@media (max-width: 380px) {
+  .jyc-editorial-home.jyc-home .jh-hero-copy > h1 { font-size: clamp(36px, 10vw, 42px) !important; }
+  .jyc-editorial-home.jyc-home .jh-hero-logo-plaque { width: min(100%, 240px) !important; padding: 10px !important; }
+  .jyc-editorial-home.jyc-home .jh-dither-mark { width: 100% !important; max-width: none !important; }
+  .jyc-editorial-home.jyc-home .jh-dither-mark .dither-veil { min-height: 190px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .jyc-editorial-home.jyc-home .jh-hero-logo-plaque { animation: none !important; transform: none !important; }
+  .jyc-editorial-home.jyc-home .jh-hero-actions .jh-btn { transition: none !important; }
+}
