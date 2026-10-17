@@ -11,8 +11,8 @@ const admin=read('src/admin-chunk.jsx');
 const adminExtra=read('src/admin-extra.jsx');
 
 const checks=[
-  [system.includes("@import '../jyc-logo-final-theme.css';"),'senior theme remains the final public CSS layer'],
-  [theme.includes('--jyc-navy:#18161d')&&theme.includes('--jyc-champagne:#bf9c6f')&&theme.includes('--jyc-ivory:#ffffff')&&theme.includes('--accent-red:#a82420'),'senior logo palette is explicit'],
+  [system.includes("@import '../jyc-logo-final-theme.css';")&&system.indexOf("@import '../jyc-logo-final-theme.css';")<system.indexOf("@import '../jyc-editorial-system.css';"),'senior theme remains in the shared public CSS stack before page-specific editorial refinements'],
+  [theme.includes('--jyc-navy:#0F0E11')&&theme.includes('--jyc-champagne:#BF9C6F')&&theme.includes('--jyc-ivory:#FFF8E1')&&theme.includes('--accent-red:#A82420'),'senior logo palette is explicit'],
   [theme.includes('hero-logo-stage::after')&&theme.includes('jycLogoSheen'),'hero has a restrained visible micro-interaction'],
   [theme.includes('.hero-logo-ring,')&&theme.includes('display:none!important'),'rejected orbital rings stay disabled'],
   [theme.includes('prefers-reduced-motion:reduce')&&theme.includes('jycLogoSheen'),'motion has a reduced-motion kill switch'],
@@ -21,6 +21,9 @@ const checks=[
   [theme.includes('.public-app p,.public-app li{color:var(--jyc-muted-live)!important}'),'body copy has an explicit readable theme color'],
   [index.includes('theme-color" media="(prefers-color-scheme: dark)" content="#0f0e11"'),'dark browser chrome uses the deep navy brand color'],
   [manifest.includes('"theme_color": "#f5f1e6"'),'PWA theme color stays on the senior palette'],
+  [manifest.includes('"src": "/assets/jyc-logo.webp"')&&manifest.includes('"type": "image/webp"')&&manifest.includes('"sizes": "512x512"'),'PWA icon uses the configured WebP asset with matching MIME type and intrinsic dimensions'],
+  [optimizer.includes('resize({width:512,withoutEnlargement:true})')&&optimizer.includes("webp({quality:92,effort:5,alphaQuality:100}"),'production build emits the manifest-declared 512px WebP icon from the untouched source logo'],
+  [manifest.includes('"purpose": "any"')&&!manifest.includes('"purpose": "any maskable"'),'PWA icon only claims the non-maskable purpose until safe-area artwork is visually verified'],
   [editorialHome.includes('fetchPriority="high"')&&editorialHome.includes('jh-photo-frame'),'editorial hero image is prioritized for first paint'],
   [editorialHome.includes('jh-hero')&&read('src/jyc-editorial-home.css').includes('--jh-bg:#f5f1e6')&&read('src/jyc-editorial-home.css').includes('--jh-gold:#bf9c6f')&&read('src/jyc-editorial-home.css').includes('[data-theme=dark] .jyc-home'),'editorial homepage follows the JYC palette in light and dark mode'],
   [read('src/jyc-innovation-motion.jsx').includes('Public card tilt was intentionally retired')&&!read('src/jyc-innovation-motion.css').includes('perspective(1100px) rotateX(var(--tilt-x))'),'public card tilt is retired for V1 stability'],
