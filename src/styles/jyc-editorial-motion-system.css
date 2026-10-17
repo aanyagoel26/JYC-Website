@@ -501,3 +501,11 @@ html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-lead {
     margin: 0 !important;
   }
 }
+
+
+/* Public touch targets stay at least 44px while retaining the compact hero. */
+@media (max-width: 680px) {
+  .jyc-editorial-home.jyc-home .jh-hero-copy > .jh-hero-actions .jh-btn {
+    min-height: 44px !important;
+  }
+}
