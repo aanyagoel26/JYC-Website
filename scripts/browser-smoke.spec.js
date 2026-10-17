@@ -414,7 +414,7 @@ test('event directory does not label JAI registration open after its deadline', 
 });
 
 test('failed gallery photos use the neutral unavailable-photo asset, not a logo placeholder', async ({ page }) => {
-  await page.route(/\/assets\/(?:source-archive|hub-photos|hub-photos-extra|photo-derivatives)\//, route => route.abort());
+  await page.route(/\/assets\/(?:source-archive|hub-photos|hub-photos-extra|photo-derivatives|events|home|team)\//, route => route.abort());
   await page.goto(base + '/gallery', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'gallery failed-image fallback');
 
@@ -422,6 +422,19 @@ test('failed gallery photos use the neutral unavailable-photo asset, not a logo 
   await expect(fallback).toBeVisible({ timeout: 15000 });
   await expect(fallback).toHaveAttribute('alt', 'Photograph unavailable');
   await expect(page.locator('.jyc57-photo img[src*="jyc-logo"]').first()).toHaveCount(0);
+
+  await page.goto(base + '/events', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'event photo fallback');
+  const eventFallback = page.locator('.jyc57-event-art picture img[src="/assets/photo-unavailable.svg"]').first();
+  await expect(eventFallback).toBeVisible({ timeout: 15000 });
+  await expect(eventFallback).toHaveAttribute('alt', 'Event image unavailable');
+
+  await page.goto(base + '/clubs', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'club photo fallback');
+  const clubFallback = page.locator('.jyc57-club-card picture img[src="/assets/photo-unavailable.svg"]').first();
+  await expect(clubFallback).toBeVisible({ timeout: 15000 });
+  await expect(clubFallback).toHaveAttribute('alt', 'Club photograph unavailable');
+  await expect(page.locator('.jyc57-club-card picture img[src*="jyc-logo"]')).toHaveCount(0);
 });
 
 test('homepage renders the official logo through Dither Veil and a magnetic activity Bento', async ({ page }) => {
