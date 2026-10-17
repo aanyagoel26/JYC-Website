@@ -2100,3 +2100,18 @@ html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-overline {
     pointer-events: none !important;
   }
 }
+
+
+/* Exact browser-matrix regression fix: the campus identifier is real content,
+   not disposable microcopy. Keep it readable at 320px and above. */
+@media (max-width: 680px) {
+  .jyc-editorial-home.jyc-home .jh-hero-copy > .jh-overline {
+    display: block !important;
+    max-width: 34ch;
+    font-size: 12px !important;
+    line-height: 1.35 !important;
+    letter-spacing: .025em !important;
+    text-wrap: pretty;
+    overflow-wrap: anywhere;
+  }
+}
