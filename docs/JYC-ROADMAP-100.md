@@ -1,5 +1,22 @@
 # JYC Website — 100% Completion Roadmap
 
+## Current release evidence — 2026-10-17 UTC
+
+This section supersedes earlier deployment and PR checkpoints below.
+
+- Current `main` at audit time: `1da5867a4f4920f4854810efd275d59bf44c344d`.
+- Latest READY production deployment: `dpl_D2FS72gXcAzDkhGdhsfRwmUA1GGw`, source `55bef8b7a6ec6a2647eb3dc892371a7b54507065`. GitHub compare shows production is 5 commits behind current `main`; the latest main changes are not yet verified in production.
+- Vercel project domain state: `jiityouthclub128.in` and `www.jiityouthclub128.in` are unverified. Vercel requires TXT records at `_vercel.jiityouthclub128.in`; see issue #251 for the exact values. No DNS was changed.
+- Production Supabase read-only audit: 31 media albums, 0 published; 52 gallery records, all 52 still `rights_status='review'` and missing focal coordinates. No records were published or rights statuses altered.
+- Supabase Auth leaked-password protection remains disabled; the SECURITY DEFINER advisor warnings require owner/security review of intended RPC grants. No production auth or policy settings were changed in this audit.
+- PR #257's cool cobalt/coral palette proposal was closed because it conflicts with the approved warm ivory/paper, deep ink, oxblood and champagne direction.
+- PRs #256 and #258–#260 were consolidated into [PR #261](https://github.com/kaustubhdua/JYC-Website/pull/261) to avoid overlapping fixes. The consolidated candidate includes Falcon lifecycle cleanup, PWA WebP MIME/dimensions without an unverified maskable claim, keyboard-operable theme toggle naming, synchronized mobile geometry tests, neutral gallery fallbacks, and layout-matched responsive image sizes.
+- A prior Lighthouse artifact recorded Gallery responsive-image score 0.5 with 14,902 bytes potential savings. The implicated 251px editorial tile was selecting a 480px AVIF because a shared `420px` size hint ignored the CSS grid span; the consolidated candidate now computes sizes from feature/landscape/standard tile layout.
+- [ ] Current PR #261 CI, Browser QA, Lighthouse CI, Quality Gate and CodeQL must all finish and be reviewed on its exact final head before merge.
+- [ ] Vercel's daily deployment quota has blocked recent preview/production builds. A prior READY preview is not evidence for the latest consolidated head.
+- [ ] Manual visual sign-off, approved screenshot baselines, photo/event association review, and human rights/consent/focal-point approvals remain outstanding.
+
+
 ## Superseding release update — 2026-10-17
 
 The older checkpoint further below is historical evidence, not the current release state.
