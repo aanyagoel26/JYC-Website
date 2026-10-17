@@ -390,6 +390,17 @@ test('event directory does not label JAI registration open after its deadline', 
   await expect(jai.locator('.jyc57-reg-pill')).toHaveCount(0);
 });
 
+test('failed gallery photos use the neutral unavailable-photo asset, not a logo placeholder', async ({ page }) => {
+  await page.route(/\/assets\/(?:source-archive|hub-photos|hub-photos-extra|photo-derivatives)\//, route => route.abort());
+  await page.goto(base + '/gallery', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'gallery failed-image fallback');
+
+  const fallback = page.locator('.jyc57-photo img[src="/assets/photo-unavailable.svg"]').first();
+  await expect(fallback).toBeVisible({ timeout: 15000 });
+  await expect(fallback).toHaveAttribute('alt', 'Photograph unavailable');
+  await expect(page.locator('.jyc57-photo img[src*="jyc-logo"]').first()).toHaveCount(0);
+});
+
 test('homepage renders the official logo through Dither Veil and a magnetic activity Bento', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 960 });
   await page.goto(base, { waitUntil: 'domcontentloaded' });
