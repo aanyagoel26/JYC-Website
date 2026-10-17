@@ -364,3 +364,128 @@
   }
   .public-app :where(.page,.section,.page-shell,.content-shell) { overflow-wrap: anywhere; }
 }
+
+
+/* V70 release corrections — this layer loads after the hero art direction above. */
+html[data-theme="dark"] .jyc-editorial-home.jyc-home {
+  background: #121113 !important;
+  background-color: #121113 !important;
+  color: #f8f2e8 !important;
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-lead {
+  color: #e6dfe0 !important;
+}
+@media (max-width: 680px) {
+  .jyc-editorial-home.jyc-home .jh-hero {
+    gap: 3px !important;
+    padding: 4px 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-areas: "badge" "overline" "title" "lead" "visual" "actions" !important;
+  }
+  .jyc-editorial-home.jyc-home .jh-hero-copy { display: contents !important; }
+  .jyc-editorial-home.jyc-home .jh-hero-copy > .jh-cyber-badge {
+    grid-area: badge !important;
+    justify-self: start;
+    margin: 0 !important;
+  }
+  .jyc-editorial-home.jyc-home .jh-hero-copy > .jh-overline {
+    display: none !important;
+    grid-area: overline !important;
+    margin: 0 !important;
+  }
+  .jyc-editorial-home.jyc-home .jh-hero-copy > h1 {
+    grid-area: title !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    font-size: clamp(32px, 8.8vw, 40px) !important;
+    line-height: .98 !important;
+  }
+  .jyc-editorial-home.jyc-home .jh-hero-copy > .jh-lead {
+    grid-area: lead !important;
+    max-width: 42ch !important;
+    margin: 0 !important;
+    font-size: 14px !important;
+    line-height: 1.38 !important;
+    display: -webkit-box !important;
+    -webkit-box-orient: vertical !important;
+    -webkit-line-clamp: 2 !important;
+    overflow: hidden !important;
+  }
+  .jyc-editorial-home.jyc-home .jh-hero-visual,
+  .jyc-editorial-home.jyc-home .jh-hero-dither-visual {
+    grid-area: visual !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    height: auto !important;
+    margin: 0 auto !important;
+    padding: 0 !important;
+  }
+  .jyc-editorial-home.jyc-home .jh-hero-logo-plaque {
+    width: min(100%, 150px) !important;
+    max-width: 150px !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    aspect-ratio: auto !important;
+    padding: 4px !important;
+    margin: 0 auto !important;
+    transform: none !important;
+    animation: none !important;
+  }
+  .jyc-editorial-home.jyc-home .jh-dither-mark {
+    width: min(100%, 92px) !important;
+    max-width: 92px !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1 !important;
+  }
+  .jyc-editorial-home.jyc-home .jh-dither-mark .dither-veil {
+    min-height: 92px !important;
+    height: 92px !important;
+  }
+  .jyc-editorial-home.jyc-home .jh-plaque-footer {
+    gap: 3px !important;
+    margin-top: 3px !important;
+    padding-top: 3px !important;
+  }
+  .jyc-editorial-home.jyc-home .jh-logo-caption {
+    font-size: 8px !important;
+    letter-spacing: 0 !important;
+  }
+  .jyc-editorial-home.jyc-home .jh-hero-copy > .jh-hero-actions {
+    grid-area: actions !important;
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 6px !important;
+    width: 100% !important;
+    margin: 0 !important;
+  }
+  .jyc-editorial-home.jyc-home .jh-hero-copy > .jh-hero-actions .jh-btn {
+    min-width: 0 !important;
+    min-height: 40px !important;
+    padding: 8px !important;
+    font-size: 12px !important;
+  }
+  .jyc-editorial-home.jyc-home .jh-hero-copy > .jh-hero-actions .jh-btn:nth-child(3) {
+    grid-column: 1 / -1 !important;
+  }
+  body:has(.jyc-editorial-home.jyc-home) .jyc-bot-shell {
+    display: none !important;
+  }
+}
+@media (max-width: 360px) {
+  .jyc-editorial-home.jyc-home .jh-hero-copy > h1 {
+    font-size: clamp(30px, 9.6vw, 32px) !important;
+  }
+  .jyc-editorial-home.jyc-home .jh-dither-mark {
+    width: 84px !important;
+    max-width: 84px !important;
+  }
+  .jyc-editorial-home.jyc-home .jh-dither-mark .dither-veil {
+    min-height: 84px !important;
+    height: 84px !important;
+  }
+}
