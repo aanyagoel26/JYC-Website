@@ -63,6 +63,9 @@ check('DriftWall has offscreen, low-power and reduced-motion safeguards',read('s
 check('DriftWall is used for event and community visual rails',main.includes('event-drift-wall-section')&&main.includes('club-drift-wall-section')&&main.includes('LazyDriftWall'));
 check('MagicBento disables heavy effects on mobile/coarse pointers',read('src/components/react-bits/MagicBento.jsx').includes('(pointer:coarse)')&&read('src/components/react-bits/MagicBento.jsx').includes('max-width:768px'));
 
+check('Dither Veil renders on capable touch devices at capped device-pixel ratio',dither.includes("const coarsePointer = window.matchMedia?.('(pointer: coarse)').matches || window.innerWidth < 800;")&&dither.includes('if (reducedMotion || constrainedHardware)')&&dither.includes('dpr: coarsePointer ? 1 : Math.min(window.devicePixelRatio || 1, 2)'));
+check('homepage hero uses oxblood primary action and editorial depth without forced motion',read('src/styles/jyc-editorial-motion-system.css').includes('.jh-hero-actions .jh-btn-primary')&&read('src/styles/jyc-editorial-motion-system.css').includes('background: #A82420 !important')&&read('src/styles/jyc-editorial-motion-system.css').includes('@media (prefers-reduced-motion: reduce)'));
+
 let failed=0;
 for(const [name,ok] of checks){console.log((ok?'PASS':'FAIL')+' · '+name);if(!ok)failed++}
 if(failed)process.exit(1);
