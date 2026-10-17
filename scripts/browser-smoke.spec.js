@@ -101,6 +101,45 @@ test('JYC Now page stays within responsive guardrails', async ({ page }) => {
   expect(overflow).toBe(false);
 });
 
+test('production PWA manifest points to a real 512px WebP icon', async ({ page }) => {
+  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  const manifestResponse = await page.request.get(base + '/manifest.json');
+  expect(manifestResponse.ok(), 'manifest responds successfully').toBe(true);
+  const manifest = await manifestResponse.json();
+  const icon = manifest.icons?.find(item => item.purpose === 'any');
+  expect(icon, 'manifest has a standard installable icon').toBeTruthy();
+  expect(icon.src).toBe('/assets/jyc-logo.webp');
+  expect(icon.type).toBe('image/webp');
+  expect(icon.sizes).toBe('512x512');
+  expect(manifest.icons.some(item => item.purpose === 'any maskable')).toBe(false);
+  for (const shortcut of manifest.shortcuts || []) {
+    for (const shortcutIcon of shortcut.icons || []) {
+      expect(shortcutIcon.type).toBe('image/webp');
+      expect(shortcutIcon.sizes).toBe('512x512');
+    }
+  }
+  const rendered = await page.evaluate(async src => {
+    const response = await fetch(src, { cache: 'no-store' });
+    const contentType = response.headers.get('content-type') || '';
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    try {
+      const dimensions = await new Promise((resolve, reject) => {
+        const image = new Image();
+        image.onload = () => resolve({ width: image.naturalWidth, height: image.naturalHeight });
+        image.onerror = reject;
+        image.src = url;
+      });
+      return { contentType, ...dimensions };
+    } finally {
+      URL.revokeObjectURL(url);
+    }
+  }, icon.src);
+  expect(rendered.contentType).toContain('image/webp');
+  expect(rendered.width).toBe(512);
+  expect(rendered.height).toBe(512);
+});
+
 test('mobile homepage logo and primary actions stay clear of the fixed navigation dock', async ({ page }) => {
   const viewport = page.viewportSize();
   test.skip(!viewport || viewport.width > 680);
