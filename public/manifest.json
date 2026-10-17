@@ -11,8 +11,8 @@
     {
       "src": "/assets/jyc-logo.webp",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/webp",
+      "purpose": "any"
     }
   ],
   "shortcuts": [
