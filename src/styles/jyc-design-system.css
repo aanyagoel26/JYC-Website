@@ -124,3 +124,59 @@ html[data-theme="dark"] .public-app :where(.btn-secondary,.button-secondary,[dat
   background: var(--jyc-brand-paper-raised);
   border-color: var(--jyc-brand-line-strong);
 }
+
+
+/* Responsive editorial type and layout tokens. Keep these opt-in through the
+   public page-shell selectors so embedded/admin surfaces are not reflowed. */
+:root {
+  --jyc-type-xs: .75rem;
+  --jyc-type-sm: .875rem;
+  --jyc-type-body: 1rem;
+  --jyc-type-lead: clamp(1.0625rem, 1.2vw, 1.25rem);
+  --jyc-type-h3: clamp(1.35rem, 2vw, 1.9rem);
+  --jyc-type-h2: clamp(1.85rem, 4vw, 3.65rem);
+  --jyc-type-h1: clamp(2.45rem, 6.8vw, 6.8rem);
+  --jyc-measure-copy: 68ch;
+  --jyc-measure-heading: 17ch;
+  --jyc-page-gutter: clamp(18px, 4.4vw, 72px);
+  --jyc-section-space: clamp(56px, 9vw, 132px);
+}
+.public-app :where(.unified-public-page,.page-shell,.content-shell) {
+  --page-gutter: var(--jyc-page-gutter);
+}
+.public-app :where(.unified-public-page,.page-shell,.content-shell) :where(.page-heading h1,.section-head h1,.page h1) {
+  max-width: var(--jyc-measure-heading);
+  font-size: var(--jyc-type-h1);
+  line-height: .96;
+  letter-spacing: -.055em;
+}
+.public-app :where(.unified-public-page,.page-shell,.content-shell) :where(.section-head h2,.section-heading h2,.page h2) {
+  font-size: var(--jyc-type-h2);
+  line-height: 1.02;
+  letter-spacing: -.045em;
+}
+.public-app :where(.unified-public-page,.page-shell,.content-shell) :where(.page-intro,.page-lead,.section-intro,.lead) {
+  max-width: var(--jyc-measure-copy);
+  font-size: var(--jyc-type-lead);
+  line-height: 1.7;
+}
+.public-app :where(.unified-public-page,.page-shell,.content-shell) :where(.eyebrow,.overline,.section-kicker) {
+  font-size: var(--jyc-type-xs);
+  line-height: 1.4;
+}
+.public-app :where(.unified-public-page,.page-shell,.content-shell) :where(.page-section,.editorial-section) {
+  scroll-margin-top: 6rem;
+}
+@media (max-width: 680px) {
+  :root { --jyc-page-gutter: 18px; --jyc-section-space: 56px; }
+  .public-app :where(.unified-public-page,.page-shell,.content-shell) :where(.page-heading h1,.section-head h1,.page h1) {
+    max-width: 14ch;
+    letter-spacing: -.045em;
+  }
+  .public-app :where(.unified-public-page,.page-shell,.content-shell) :where(.page-intro,.page-lead,.section-intro,.lead) {
+    line-height: 1.65;
+  }
+}
+@media (min-width: 1600px) {
+  :root { --jyc-page-gutter: clamp(72px, 6vw, 120px); }
+}
