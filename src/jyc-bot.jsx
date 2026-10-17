@@ -42,7 +42,7 @@ export function JYCBot({data}){
  const handleModelError=()=>{setModelAvailable(false);setModelFailed(true)};
  const runContextAnimation=()=>{const map={home:['wave','peek'],clubs:['idle','think'],events:['tap','celebrate'],gallery:['dance','peek'],team:['wave','think']};const intents=map[context]||['idle'];const intent=intents[animationCursor.current%intents.length];animationCursor.current+=1;triggerMotion(`is-${intent}`,760,intent)};
  const openAssistant=()=>{window.clearTimeout(idleTimer.current);loadModelViewer();preloadModelAsset();triggerMotion('is-wave',760,'wave');setAssistantOpen(true)};
- useEffect(()=>()=>{window.clearTimeout(motionTimer.current);window.clearTimeout(animationStopTimer.current);window.clearInterval(idleTimer.current)},[]);
+ useEffect(()=>()=>{window.clearTimeout(motionTimer.current);window.clearTimeout(animationStopTimer.current);window.clearTimeout(idleTimer.current)},[]);
  useEffect(()=>{if(modelReady&&modelAvailable&&!modelFailed&&!prefersReducedMotion())triggerMotion('is-wave',760,'wave')},[modelReady,modelAvailable,modelFailed]);
  useEffect(()=>{
   window.clearTimeout(idleTimer.current);
