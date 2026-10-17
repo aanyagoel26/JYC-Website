@@ -24,3 +24,11 @@ Evidence source: exact candidate SHA `483a95b0e6030edcfd2049d2453ca8126ea405b5`,
 
 ## Visual verification policy
 No route is marked visually verified until a rendered browser screenshot has been inspected. Route HTTP status, source assertions and artifact existence are not sufficient.
+
+
+## UI/UX pass — new finding
+
+| ID | Severity | Route / scope | Evidence / change | Disposition |
+|---|---|---|---|---|
+| R-008 | P1 | Homepage hero / Dither Veil on touch devices | Source inspection found a blanket static-fallback branch for coarse pointers, which prevented the interactive effect from running on all touch devices regardless of actual capability. | Fixed in candidate commit `9ef450e`: capable touch devices now run the effect at DPR 1; reduced-motion and constrained-hardware fallback remain. Browser rendering and performance still require exact-head verification. |
+| R-009 | P2 | Homepage hero CTA and plaque | Source CSS mixed a bright gold-to-red primary CTA with the approved warm editorial palette and a small logo plaque on very narrow screens. | Refined in candidate commit `06dbffd` with oxblood CTA, restrained depth and responsive plaque sizing. Rendered visual acceptance is pending. |
