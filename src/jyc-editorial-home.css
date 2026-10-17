@@ -1972,3 +1972,46 @@
   .jyc-editorial-home.jyc-home .magic-bento-card__media img,
   .jyc-editorial-home.jyc-home .magic-bento-card button { transition:none!important; transform:none!important; animation:none!important; }
 }
+
+
+/* Release QA repair: explicit dark canvas keeps the inherited muted copy
+   contrasted against the actual dark surface instead of the paper fallback. */
+[data-theme="dark"] .jyc-editorial-home.jyc-home {
+  background-color: #121113 !important;
+}
+
+/* Compact mobile hero composition: preserve the JYC mark and both actions
+   above the fixed dock, including short 320px-wide devices. */
+@media (max-width: 680px) {
+  .jyc-editorial-home.jyc-home .jh-hero {
+    gap: 2px !important;
+    padding-block: 4px !important;
+  }
+  .jyc-editorial-home.jyc-home .jh-hero-copy > .jh-overline {
+    display: none !important;
+  }
+  .jyc-editorial-home.jyc-home .jh-hero-copy > h1 {
+    font-size: clamp(32px, 8.8vw, 40px) !important;
+    line-height: .98 !important;
+  }
+  .jyc-editorial-home.jyc-home .jh-hero-copy > .jh-lead {
+    font-size: 14px !important;
+    line-height: 1.35 !important;
+  }
+  .jyc-editorial-home.jyc-home .jh-hero-logo-plaque {
+    width: min(100%, 176px) !important;
+    padding: 6px !important;
+  }
+  .jyc-editorial-home.jyc-home .jh-dither-mark {
+    width: min(100%, 108px) !important;
+    max-width: 108px !important;
+  }
+  .jyc-editorial-home.jyc-home .jh-plaque-footer {
+    margin-top: 5px !important;
+    padding-top: 5px !important;
+  }
+  .jyc-editorial-home.jyc-home .jh-hero-copy > .jh-hero-actions .jh-btn {
+    min-height: 42px !important;
+    padding-block: 8px !important;
+  }
+}
