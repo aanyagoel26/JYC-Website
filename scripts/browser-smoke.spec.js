@@ -464,6 +464,9 @@ test('failed gallery photos use the neutral unavailable-photo asset, not a logo 
   await waitForAppMount(page, 'gallery failed-image fallback');
 
   const fallback = page.locator('.jyc57-editorial-photo img[src="/assets/photo-unavailable.svg"]').first();
+  // On narrow screens the gallery wall is below the hero; scroll it into view so
+  // native lazy loading actually requests the deliberately failed photo fixture.
+  await fallback.scrollIntoViewIfNeeded();
   await expect(fallback).toBeVisible({ timeout: 15000 });
   await expect(fallback).toHaveAttribute('alt', 'Photograph unavailable');
   await expect(page.locator('.jyc57-editorial-photo img[src*="jyc-logo"]').first()).toHaveCount(0);
