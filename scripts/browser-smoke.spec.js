@@ -106,6 +106,16 @@ test('mobile homepage logo and primary actions stay clear of the fixed navigatio
   test.skip(!viewport || viewport.width > 680);
   await page.goto(base, { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'mobile hero and dock geometry');
+  // The bot is a lazy-loaded chunk behind Suspense; wait for actual layout, not just the app root.
+  // Fonts and responsive CSS can still change bounding boxes after React mounts.
+  await expect(page.locator('.jyc-bot-shell')).toBeAttached({ timeout: 15000 });
+  for (const selector of ['.mobile-dock', '.jh-cyber-badge', '.jh-hero-logo-plaque', '.jh-dither-mark', '.jh-plaque-footer', '.jh-hero-actions']) {
+    await expect(page.locator(selector), `required hero geometry element ${selector}`).toBeVisible({ timeout: 15000 });
+  }
+  await page.evaluate(async () => {
+    if (document.fonts?.ready) await document.fonts.ready;
+    await new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+  });
   const geometry = await page.evaluate(() => {
     const rect = selector => {
       const element = document.querySelector(selector);
@@ -124,6 +134,8 @@ test('mobile homepage logo and primary actions stay clear of the fixed navigatio
     };
   });
   expect(geometry.dock, 'the mobile navigation dock should be present').not.toBeNull();
+  expect(geometry.badge, 'the academic-year badge should be present').not.toBeNull();
+  expect(geometry.bot, 'the floating assistant should be mounted before overlap is measured').not.toBeNull();
   expect(geometry.logo, 'the homepage logo plaque should be present').not.toBeNull();
   expect(geometry.mark, 'the Dither Veil mark container should be present').not.toBeNull();
   expect(geometry.plaqueFooter, 'the official-mark caption should be present').not.toBeNull();
@@ -138,6 +150,17 @@ test('mobile homepage logo and primary actions stay clear of the fixed navigatio
 
 test('homepage accessibility and responsive guardrails', async ({ page }) => {
   await page.goto(base, { waitUntil: 'domcontentloaded' });
+  const themeToggle = page.locator('button.theme-toggle');
+  await expect(themeToggle).toBeVisible();
+  const visibleThemeLabel = (await themeToggle.locator('.theme-toggle-copy b').innerText()).trim() + ' ' + (await themeToggle.locator('.theme-toggle-copy small').innerText()).trim();
+  const themeAccessibleName = await themeToggle.getAttribute('aria-label');
+  expect(themeAccessibleName, 'theme toggle accessible name must include its visible label').toContain(visibleThemeLabel);
+  const startingTheme = await page.locator('html').getAttribute('data-theme');
+  await themeToggle.focus();
+  await page.keyboard.press('Enter');
+  await expect.poll(() => page.locator('html').getAttribute('data-theme')).not.toBe(startingTheme);
+  await expect(themeToggle).toContainText(startingTheme === 'dark' ? 'Light' : 'Dark');
+
 
   const missingAlt = await page.locator('img:not([alt])').count();
   expect(missingAlt).toBe(0);
