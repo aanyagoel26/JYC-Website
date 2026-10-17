@@ -293,3 +293,74 @@
   .jyc-editorial-home.jyc-home .jh-hero-logo-plaque { animation: none !important; transform: none !important; }
   .jyc-editorial-home.jyc-home .jh-hero-actions .jh-btn { transition: none !important; }
 }
+
+
+/* Shared public UI refinement: one consistent surface, type and interaction
+   language across directories, detail pages, forms, archive and calendar. */
+:root {
+  --jyc-content-max: 1320px;
+  --jyc-page-gutter: clamp(18px, 4.5vw, 72px);
+  --jyc-radius-card: 20px;
+  --jyc-radius-control: 12px;
+  --jyc-shadow-card: 0 8px 28px rgba(32,27,28,.045);
+  --jyc-shadow-card-hover: 0 18px 46px rgba(32,27,28,.095);
+  --jyc-motion-enter: cubic-bezier(.16,1,.3,1);
+}
+.public-app :where(.page,.section,.page-shell,.content-shell) {
+  min-width: 0;
+}
+.public-app :where(.page h1,.section-head h1,.page-head h1,.compact-page-head h1) {
+  font-size: clamp(2.25rem, 5vw, 4.75rem);
+  line-height: .99;
+  letter-spacing: -.065em;
+}
+.public-app :where(.page h2,.section-head h2,.page-head h2,.compact-page-head h2) {
+  font-size: clamp(1.65rem, 3vw, 2.65rem);
+  line-height: 1.08;
+  letter-spacing: -.05em;
+}
+.public-app :where(.club-card,.event-card,.activity-card,.team-layer-card,.hub-story-card,.jyc-journal-card,.event-related-card,.club-identity-card,.event-identity-card) {
+  border-radius: var(--jyc-radius-card);
+  box-shadow: var(--jyc-shadow-card);
+  overflow: clip;
+}
+.public-app :where(.club-card,.event-card,.activity-card,.team-layer-card,.hub-story-card,.jyc-journal-card,.event-related-card) :where(h2,h3,h4) {
+  letter-spacing: -.035em;
+  line-height: 1.12;
+  text-wrap: balance;
+}
+.public-app :where(.page p,.section p,.page-head p,.section-head p) {
+  max-width: 72ch;
+  text-wrap: pretty;
+}
+.public-app :where(input,select,textarea) {
+  min-height: 44px;
+  border-radius: var(--jyc-radius-control);
+  border-color: var(--jyc-hairline);
+  background-color: var(--jyc-paper-raised);
+}
+.public-app textarea { min-height: 120px; }
+.public-app :where(button,.button,.btn,[role="button"]) {
+  transition: color var(--jyc-motion-fast) ease,
+              background-color var(--jyc-motion-fast) ease,
+              border-color var(--jyc-motion-fast) ease,
+              box-shadow var(--jyc-motion-base) ease,
+              transform var(--jyc-motion-fast) var(--jyc-motion-ease);
+}
+.public-app :where(a,button,input,select,textarea,[tabindex]):focus-visible {
+  outline: 3px solid color-mix(in srgb,var(--jyc-champagne) 90%,white);
+  outline-offset: 3px;
+}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  .public-app :where(.club-card,.event-card,.activity-card,.team-layer-card,.hub-story-card,.jyc-journal-card,.event-related-card):hover {
+    box-shadow: var(--jyc-shadow-card-hover);
+  }
+}
+@media (max-width: 680px) {
+  .public-app :where(.page,.section) { scroll-margin-top: 76px; }
+  .public-app :where(.page h1,.section-head h1,.page-head h1,.compact-page-head h1) {
+    font-size: clamp(2.1rem, 10vw, 3.25rem);
+    letter-spacing: -.06em;
+  }
+  .public-app :where(.page,.section,.page-shell,.content-shell) { overflow-wrap: anywhere; }
+}
