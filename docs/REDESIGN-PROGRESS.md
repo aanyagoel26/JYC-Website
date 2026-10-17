@@ -11,6 +11,18 @@ Last updated: 2026-10-17 UTC
 - Latest observed candidate checks: CodeQL PASS; Browser QA FAIL (81 pass, 2 fail, 4 skipped); Lighthouse FAIL (`label-content-name-mismatch`); Quality Gate FAIL; JYC CI FAIL.
 - No merge or production configuration/data change performed.
 
+## Follow-up fixes committed after the initial failing candidate
+
+Latest branch head: `e51821edfd775ae85374467e89e41295b348b6ba`.
+
+- [x] Inspected the actual Playwright failure context: the gallery fallback assertion passed; the same test then failed on Events because the test required a `picture img` ancestor, while `ResponsivePhoto` renders the responsive `picture` wrapper with the class on the wrapper itself. Updated the event/club selectors to target the rendered image directly.
+- [x] Inspected Lighthouse JSON artifacts across all seven routes. The common mismatch was the Search button: visible text was “Search” and “Ctrl K” while `aria-label` said “Search JYC (Ctrl K)”. Aligned the accessible name to the visible label.
+- [x] Corrected gallery photo button names to include their visible index, category, caption and action so the visible label is represented in the accessible name.
+- [x] Inspected the mobile Events failure screenshot. The featured event photo could shrink below a useful size beside long event copy; gave it a fixed responsive media column and added a 360px browser geometry regression.
+- [x] Added browser coverage for the event and club neutral fallback images using the actual rendered DOM structure.
+- [ ] Fresh CI must complete on the exact latest head before these fixes are considered verified. The prior failure reports belong to the older SHA `483a95b0e6030edcfd2049d2453ca8126ea405b5`.
+- [ ] Preview deploy is still blocked by Vercel's daily build quota; do not treat the older READY preview as the latest build.
+
 ## Completed in existing candidate
 - PWA manifest icon MIME/dimensions corrected and unverified maskable claim removed.
 - Responsive gallery image sizes aligned with tile layout.
