@@ -5,6 +5,7 @@ const theme=read('src/jyc-logo-final-theme.css');
 const system=read('src/styles/public-system.css');
 const index=read('index.html');
 const manifest=read('public/manifest.json');
+const optimizer=read('scripts/optimize-production-media.mjs');
 const main=read('src/main.jsx');
 const editorialHome=read('src/jyc-editorial-home.jsx');
 const admin=read('src/admin-chunk.jsx');
