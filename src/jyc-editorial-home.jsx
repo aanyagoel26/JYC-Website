@@ -356,13 +356,13 @@ export function JYCEditorialHome({ data }) {
             <div className="jh-event-image">
               <ResponsivePhoto
                 className="jh-featured-event-photo"
-                src={eventImage(featured) || FALLBACK}
-                alt={featured.title + ' poster'}
+                src={eventImage(featured) || '/assets/photo-unavailable.svg'}
+                alt={eventImage(featured) ? featured.title + ' poster' : 'Event media unavailable'}
                 loading="lazy"
                 decoding="async"
                 sizes="(max-width: 680px) 100vw, 50vw"
-                fallbackSrc={FALLBACK}
-                fallbackAlt="Official JYC logo placeholder; event media unavailable"
+                fallbackSrc="/assets/photo-unavailable.svg"
+                fallbackAlt="Event media unavailable"
               />
               <span className="jh-featured-badge">FEATURED EXPERIENCE</span>
             </div>
@@ -442,7 +442,7 @@ export function JYCEditorialHome({ data }) {
                 <button type="button" key={m.id || i} onClick={() => nav('/team')} aria-label={`Meet ${m.name || 'JYC team member'}, ${m.role || m.position || 'JYC Apex'}`}>
                   <span className="jh-team-monogram" aria-hidden="true">
                     {teamPhotoFor(m)
-                      ? <ResponsivePhoto className="jh-team-thumb" src={teamPhotoFor(m)} alt="" loading="lazy" decoding="async" sizes="48px" fallbackSrc="/assets/jyc-logo.webp" fallbackAlt="" />
+                      ? <ResponsivePhoto className="jh-team-thumb" src={teamPhotoFor(m)} alt="" loading="lazy" decoding="async" sizes="48px" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Portrait unavailable" />
                       : String(m.name || 'JYC').trim().split(/\s+/).map(x => x[0]).slice(0, 2).join('').toUpperCase()}
                   </span>
                   <span>
