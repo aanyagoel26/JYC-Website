@@ -463,10 +463,10 @@ test('failed gallery photos use the neutral unavailable-photo asset, not a logo 
   await page.goto(base + '/gallery', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'gallery failed-image fallback');
 
-  const fallback = page.locator('.jyc57-photo img[src="/assets/photo-unavailable.svg"]').first();
+  const fallback = page.locator('.jyc57-editorial-photo img[src="/assets/photo-unavailable.svg"]').first();
   await expect(fallback).toBeVisible({ timeout: 15000 });
   await expect(fallback).toHaveAttribute('alt', 'Photograph unavailable');
-  await expect(page.locator('.jyc57-photo img[src*="jyc-logo"]').first()).toHaveCount(0);
+  await expect(page.locator('.jyc57-editorial-photo img[src*="jyc-logo"]').first()).toHaveCount(0);
 
   await page.goto(base + '/events', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'event photo fallback');
