@@ -88,3 +88,39 @@ body { text-rendering: optimizeLegibility; }
   .public-app :where(.page,.section) { scroll-margin-top: 80px; }
   .public-app :where(.page,.section,.page-shell,.content-shell) { overflow-wrap: anywhere; }
 }
+
+
+/* Shared interaction primitives: consistent hierarchy without flattening every
+   page into identical cards. Only known primary-action classes receive the
+   filled oxblood treatment; route-specific editorial surfaces keep their art direction. */
+.public-app :where(.btn-primary,.button-primary,.jh-btn-primary,[data-variant="primary"]) {
+  color: #fffaf0;
+  background: var(--jyc-brand-oxblood);
+  border-color: var(--jyc-brand-oxblood);
+  box-shadow: var(--jyc-brand-shadow-sm);
+}
+.public-app :where(.btn-primary,.button-primary,.jh-btn-primary,[data-variant="primary"]):hover {
+  color: #fffaf0;
+  background: var(--jyc-brand-oxblood-hover);
+  border-color: var(--jyc-brand-oxblood-hover);
+  box-shadow: var(--jyc-brand-shadow-md);
+}
+.public-app :where(.btn-secondary,.button-secondary,[data-variant="secondary"]) {
+  color: var(--jyc-brand-ink);
+  background: var(--jyc-brand-paper-raised);
+  border-color: var(--jyc-brand-line-strong);
+}
+.public-app :where(.club-card,.event-card,.activity-card,.team-layer-card,.hub-story-card,.jyc-journal-card,.event-related-card,.club-identity-card,.event-identity-card) {
+  box-shadow: var(--jyc-brand-shadow-sm);
+}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  .public-app :where(.club-card,.event-card,.activity-card,.team-layer-card,.hub-story-card,.jyc-journal-card,.event-related-card,.club-identity-card,.event-identity-card):hover {
+    box-shadow: var(--jyc-brand-shadow-md);
+    border-color: var(--jyc-brand-line-strong);
+  }
+}
+html[data-theme="dark"] .public-app :where(.btn-secondary,.button-secondary,[data-variant="secondary"]) {
+  color: var(--jyc-brand-ink);
+  background: var(--jyc-brand-paper-raised);
+  border-color: var(--jyc-brand-line-strong);
+}
