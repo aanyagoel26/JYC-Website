@@ -67,6 +67,7 @@ check('Dither Veil renders on capable touch devices at capped device-pixel ratio
 check('homepage hero uses oxblood primary action and editorial depth without forced motion',read('src/styles/jyc-editorial-motion-system.css').includes('.jh-hero-actions .jh-btn-primary')&&read('src/styles/jyc-editorial-motion-system.css').includes('background: #A82420 !important')&&read('src/styles/jyc-editorial-motion-system.css').includes('@media (prefers-reduced-motion: reduce)'));
 check('Dither Veil has shader/image failure fallback and WebGL teardown',dither.includes('img.onerror = () =>')&&dither.includes('container.dataset.static = \'1\'')&&dither.includes("getExtension('WEBGL_lose_context')")&&dither.includes('resizeObserver.disconnect()'));
 check('Dither Veil static fallback is visible and canvas hidden when static mode is selected',ditherCss.includes('.dither-veil[data-static=\"1\"] canvas{display:none}')&&ditherCss.includes('.dither-veil[data-static=\"1\"] .dither-veil__fallback{display:block}'));
+check('Dither Veil falls back instead of running GLSL ES 3 shaders without WebGL2',dither.includes('if (!gl || !renderer?.isWebgl2)')&&dither.includes('container.dataset.static = \'1\''));
 
 let failed=0;
 for(const [name,ok] of checks){console.log((ok?'PASS':'FAIL')+' · '+name);if(!ok)failed++}
