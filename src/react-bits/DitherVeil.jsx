@@ -441,7 +441,7 @@ const DitherVeil = ({
       return () => { delete container.dataset.static; };
     }
     const gl = renderer?.gl;
-    if (!gl) {
+    if (!gl || !renderer?.isWebgl2) {
       container.dataset.static = '1';
       return () => { renderer?.gl?.getExtension('WEBGL_lose_context')?.loseContext(); delete container.dataset.static; };
     }
