@@ -473,7 +473,7 @@ export function JYC57Gallery({data}){
             : shape==='landscape'
               ? '(max-width: 620px) calc(50vw - 24px), (max-width: 900px) calc(50vw - 24px), 360px'
               : '(max-width: 900px) calc(50vw - 24px), 260px';
-          return <button type="button" key={photo.id||photo.url} className={`jyc57-editorial-photo ${shape} ${index===0?'feature':''}`} style={{'--photo-index':index}} onClick={()=>openPhoto(photo)} aria-label={`${String(index+1).padStart(2,'0')} ${subject.replaceAll('-',' ')} ${photo.caption||photo.title||photo.albumName||photo.association||'A JYC campus moment'} ↗ Open photo`}>
+          return <button type="button" key={photo.id||photo.url} className={`jyc57-editorial-photo ${shape} ${index===0?'feature':''}`} style={{'--photo-index':index}} onClick={()=>openPhoto(photo)} title="Open photo">
             <ResponsivePhoto src={photo.url} alt={photo.alt||photo.alt_text||photo.caption||photo.title||`JYC campus photograph ${index+1}`} loading={index<2?'eager':'lazy'} fetchPriority={index===0?'high':undefined} sizes={photoSizes} fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Photograph unavailable"/>
             <span className="jyc57-editorial-vignette"/>
             <span className="jyc57-photo-index" aria-hidden="true">{String(index+1).padStart(2,'0')}</span>
