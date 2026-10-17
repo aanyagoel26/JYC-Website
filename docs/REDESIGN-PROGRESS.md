@@ -2,6 +2,15 @@
 
 Last updated: 2026-10-17 UTC
 
+## Latest execution cycle
+- Re-queried PR #261: open, draft, unmerged; latest verified head before this fix was `06fab5f5547b0b7fbf9796e0d5c95f8391264c35`.
+- Fresh CI on that head: CodeQL PASS; JYC Quality Gate FAIL. JYC CI, Browser QA and Lighthouse were still running when checked.
+- Quality Gate log confirmed two QA contract defects in `scripts/qa-v64-editorial-release.mjs`: one assertion accidentally required a CSS selector to be both present and absent; another still expected the obsolete top-anchored assistant rule.
+- Corrected both contracts in commit `54d6211641cb01d4933433ee445c28fcde91e291`: now assert bottom anchoring, absence of the conflicting top rule, narrow-home assistant suppression, and the real browser geometry test. This is a test expectation correction grounded in the actual active CSS and existing browser regression—not a weakened visual assertion.
+- Candidate preview attempts: newest READY preview at `https://jyc-website-566te1x29-jyc-website.vercel.app` is commit `1d16cc487c33d7c8e9b2244324fd50c7ef057eac`, not this branch's verified head. The exact candidate preview remains unverified. Vercel screenshot fetch was blocked because the connected Firecrawl account has insufficient credits; no screenshot was captured in this cycle.
+- Reference archive search did not establish that `Innovationjiit.in-main.zip` is available; treat it as unavailable unless an actual project file is surfaced.
+
+
 ## Current repository state
 - Branch: `fix/gallery-neutral-photo-fallbacks`
 - Candidate SHA at start of this cycle: `483a95b0e6030edcfd2049d2453ca8126ea405b5`
