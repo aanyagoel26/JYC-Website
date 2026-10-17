@@ -464,7 +464,7 @@ export function JYC57Gallery({data}){
           const shape=photoAspect(photo,index);
           const subject=photoSubject(photo,index);
           return <button type="button" key={photo.id||photo.url} className={`jyc57-editorial-photo ${shape} ${index===0?'feature':''}`} style={{'--photo-index':index}} onClick={()=>openPhoto(photo)} aria-label={`${subject.replaceAll('-',' ')} ${photo.caption||photo.title||photo.albumName||photo.association||'A JYC campus moment'}`}>
-            <ResponsivePhoto src={photo.url} alt={photo.alt||photo.alt_text||photo.caption||photo.title||`JYC campus photograph ${index+1}`} loading={index<2?'eager':'lazy'} fetchPriority={index===0?'high':undefined} sizes="(max-width: 620px) 50vw, (max-width: 960px) 33vw, 420px" fallbackSrc={LOGO_FALLBACK} fallbackAlt="Official JYC logo placeholder; photograph unavailable"/>
+            <ResponsivePhoto src={photo.url} alt={photo.alt||photo.alt_text||photo.caption||photo.title||`JYC campus photograph ${index+1}`} loading={index<2?'eager':'lazy'} fetchPriority={index===0?'high':undefined} sizes="(max-width: 620px) 50vw, (max-width: 960px) 33vw, 420px" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Photograph unavailable"/>
             <span className="jyc57-editorial-vignette"/>
             <span className="jyc57-photo-index" aria-hidden="true">{String(index+1).padStart(2,'0')}</span>
             <span className="jyc57-photo-caption"><small>{subject.replaceAll('-',' ')}</small><strong>{photo.caption||photo.title||photo.albumName||photo.association||'A JYC campus moment'}</strong></span>
@@ -489,7 +489,7 @@ export function JYC57Gallery({data}){
           return <button type="button" key={album.id || album.slug} className="jyc-memory-card" onClick={() => nav(albumRoute(album.slug))}>
             <div className="jyc-memory-cover">
               <div className="jyc-memory-cover-fallback" aria-hidden="true"><span>{String(album.name || 'JYC').trim().slice(0,1).toUpperCase()}</span><small>JYC VISUAL ARCHIVE</small></div>
-              <ResponsivePhoto src={album.cover_url || albumPhotos[0]?.url || LOGO_FALLBACK} alt={album.name} loading={albumIndex < 3 ? 'eager' : 'lazy'} fetchPriority={albumIndex === 0 ? 'high' : undefined} sizes="(max-width: 620px) calc(100vw - 28px), (max-width: 699px) calc(100vw - 40px), (max-width: 900px) calc(50vw - 30px), (max-width: 1063px) calc(50vw - 42px), 360px" fallbackSrc={LOGO_FALLBACK} fallbackAlt={`Official JYC logo placeholder; ${album.name} cover unavailable`}/>
+              <ResponsivePhoto src={album.cover_url || albumPhotos[0]?.url || LOGO_FALLBACK} alt={album.name} loading={albumIndex < 3 ? 'eager' : 'lazy'} fetchPriority={albumIndex === 0 ? 'high' : undefined} sizes="(max-width: 620px) calc(100vw - 28px), (max-width: 699px) calc(100vw - 40px), (max-width: 900px) calc(50vw - 30px), (max-width: 1063px) calc(50vw - 42px), 360px" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt={`Album cover unavailable: ${album.name}`}/>
             </div>
             <div className="jyc-memory-scrim" />
             <div className="jyc-memory-details">
