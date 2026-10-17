@@ -78,6 +78,8 @@ Latest branch head: `e51821edfd775ae85374467e89e41295b348b6ba`.
 - Commit `06dbffd03f0e31492c0a51d0f5b61f61ba64421a`: added a scoped homepage hero refinement: oxblood CTA instead of the conflicting gold/red gradient, refined type sizing and spacing, an editorial plaque with restrained depth/rings, consistent borders, mobile sizing, and reduced-motion-safe float animation.
 - Commit `09243503a17abbd303ea0ea2a19f5faa492dc603`: added source-contract coverage for touch Dither Veil and the hero design layer. This is not yet a passing test result; CI must execute it.
 - Source inspection confirms the homepage already lazily mounts React Bits Dither Veil and Magic Bento, uses OGL, and has fallback assets. The key behavior change was removing the blanket coarse-pointer disable. This is a targeted implementation step, not proof that the rendered effect is visually correct.
-- Current latest code commit recorded before this progress update: `09243503a17abbd303ea0ea2a19f5faa492dc603`.
+- Current latest code commit recorded before this progress update: `0417c0dc4992dafdab4519daadff890f523196f1`.
 - **Still unverified:** no exact-head preview or browser screenshots were manually inspected during this pass. No claim that every route is redesigned, that the effect renders correctly in production, or that visual QA passes.
 - **Next:** fresh exact-head CI; fix resulting failures without weakening contracts; inspect real screenshots when browser access is available; proceed route-by-route with the shared design system, then accessibility/performance/release gates.
+
+- Fresh CI was triggered for code head `0417c0dc4992dafdab4519daadff890f523196f1`: JYC CI run `38992221749`, Browser QA `38992221751`, Quality Gate `38992221775`, CodeQL `38992221762`, Lighthouse CI `38992221745`. At last poll, JYC CI, Quality Gate and Lighthouse were in progress; Browser QA and CodeQL had no job details yet. Results are not yet known.
