@@ -452,6 +452,24 @@ test('event directory does not label JAI registration open after its deadline', 
   await expect(jai.locator('.jyc57-reg-pill')).toHaveCount(0);
 });
 
+test('mobile event feature keeps a usable photo and readable copy column', async ({ page }) => {
+  await page.setViewportSize({ width: 360, height: 800 });
+  await page.goto(base + '/events', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'mobile featured event composition');
+  const feature = page.locator('.jyc57-feature').first();
+  await expect(feature).toBeVisible();
+  const geometry = await feature.evaluate(el => {
+    const card = el.getBoundingClientRect();
+    const media = el.querySelector('.jyc-responsive-picture')?.getBoundingClientRect();
+    const copy = el.querySelector(':scope > div')?.getBoundingClientRect();
+    return { cardWidth: card.width, mediaWidth: media?.width || 0, copyWidth: copy?.width || 0, overflow: el.scrollWidth > el.clientWidth };
+  });
+  expect(geometry.cardWidth).toBeGreaterThan(260);
+  expect(geometry.mediaWidth).toBeGreaterThanOrEqual(80);
+  expect(geometry.copyWidth).toBeGreaterThanOrEqual(130);
+  expect(geometry.overflow).toBe(false);
+});
+
 test('failed gallery photos use the neutral unavailable-photo asset, not a logo placeholder', async ({ page }) => {
   await page.route('**/*', route => {
     const request = route.request();
