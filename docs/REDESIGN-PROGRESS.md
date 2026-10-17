@@ -69,3 +69,15 @@ Latest branch head: `e51821edfd775ae85374467e89e41295b348b6ba`.
 3. Update the stale QA source contract only after confirming live geometry assertions still guard against overlap.
 4. Commit changes on this branch; wait for fresh CI on the exact resulting SHA.
 5. Render/inspect preview screenshots for routes and viewports; keep unresolved routes explicitly unverified.
+
+
+## UI/UX implementation pass — 2026-10-17
+
+- Candidate work is on the existing draft PR #261 branch; no merge or production deployment performed.
+- Commit `9ef450ea1a54d3021ef5a3048753869fe8179daa`: capable touch devices now run the Dither Veil instead of being unconditionally forced to the static image. Coarse-pointer devices cap renderer DPR at 1 to limit GPU cost. Reduced-motion and constrained-hardware fallbacks remain.
+- Commit `06dbffd03f0e31492c0a51d0f5b61f61ba64421a`: added a scoped homepage hero refinement: oxblood CTA instead of the conflicting gold/red gradient, refined type sizing and spacing, an editorial plaque with restrained depth/rings, consistent borders, mobile sizing, and reduced-motion-safe float animation.
+- Commit `09243503a17abbd303ea0ea2a19f5faa492dc603`: added source-contract coverage for touch Dither Veil and the hero design layer. This is not yet a passing test result; CI must execute it.
+- Source inspection confirms the homepage already lazily mounts React Bits Dither Veil and Magic Bento, uses OGL, and has fallback assets. The key behavior change was removing the blanket coarse-pointer disable. This is a targeted implementation step, not proof that the rendered effect is visually correct.
+- Current latest code commit recorded before this progress update: `09243503a17abbd303ea0ea2a19f5faa492dc603`.
+- **Still unverified:** no exact-head preview or browser screenshots were manually inspected during this pass. No claim that every route is redesigned, that the effect renders correctly in production, or that visual QA passes.
+- **Next:** fresh exact-head CI; fix resulting failures without weakening contracts; inspect real screenshots when browser access is available; proceed route-by-route with the shared design system, then accessibility/performance/release gates.
