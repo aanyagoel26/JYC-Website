@@ -473,13 +473,13 @@ test('failed gallery photos use the neutral unavailable-photo asset, not a logo 
 
   await page.goto(base + '/events', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'event photo fallback');
-  const eventFallback = page.locator('.jyc57-event-art picture img[src="/assets/photo-unavailable.svg"]').first();
+  const eventFallback = page.locator('.jyc57-event-art img[src="/assets/photo-unavailable.svg"]').first();
   await expect(eventFallback).toBeVisible({ timeout: 15000 });
   await expect(eventFallback).toHaveAttribute('alt', 'Event image unavailable');
 
   await page.goto(base + '/clubs', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'club photo fallback');
-  const clubFallback = page.locator('.jyc57-club-card picture img[src="/assets/photo-unavailable.svg"]').first();
+  const clubFallback = page.locator('.jyc57-club-card img[src="/assets/photo-unavailable.svg"]').first();
   await expect(clubFallback).toBeVisible({ timeout: 15000 });
   await expect(clubFallback).toHaveAttribute('alt', 'Club photograph unavailable');
   await expect(page.locator('.jyc57-club-card picture img[src*="jyc-logo"]')).toHaveCount(0);
