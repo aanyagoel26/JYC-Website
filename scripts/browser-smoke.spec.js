@@ -414,7 +414,13 @@ test('event directory does not label JAI registration open after its deadline', 
 });
 
 test('failed gallery photos use the neutral unavailable-photo asset, not a logo placeholder', async ({ page }) => {
-  await page.route(/\/assets\/(?:source-archive|hub-photos|hub-photos-extra|photo-derivatives|events|home|team)\//, route => route.abort());
+  await page.route('**/*', route => {
+    const request = route.request();
+    if (request.resourceType() !== 'image') return route.continue();
+    const url = new URL(request.url());
+    if (url.pathname === '/assets/photo-unavailable.svg' || /jyc-logo/i.test(url.pathname)) return route.continue();
+    return route.abort();
+  });
   await page.goto(base + '/gallery', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'gallery failed-image fallback');
 
