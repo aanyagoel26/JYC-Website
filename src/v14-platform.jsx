@@ -19,7 +19,7 @@ export function EcosystemSection({data}){
       <span className="ecosystem-connector ecosystem-connector-2" aria-hidden="true"/>
       <span className="ecosystem-connector ecosystem-connector-3" aria-hidden="true"/>
       <div className="ecosystem-core-wrap">
-        <button className="ecosystem-core ecosystem-core-action" onClick={()=>nav('/about')} aria-label="Open About JYC" onMouseEnter={()=>setActive('core')} onMouseLeave={()=>setActive('')}>
+        <button className="ecosystem-core ecosystem-core-action" onClick={()=>nav('/about')} aria-label="JYC — Open About JYC" onMouseEnter={()=>setActive('core')} onMouseLeave={()=>setActive('')}>
           <div className="ecosystem-brand-lockup ecosystem-logo-only"><img src="/JYC%20Logo(4).png" alt="JIIT Youth Club" loading="lazy" decoding="async"/></div>
           <span>JYC</span>
         </button>
