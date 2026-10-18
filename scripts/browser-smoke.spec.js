@@ -247,7 +247,7 @@ test('retired student-platform routes resolve to safe public destinations', asyn
 test('JYC calendar contains only event content', async ({ page }) => {
   await page.goto(base + '/calendar', { waitUntil: 'domcontentloaded' });
   await expect(page.getByText('JYC EVENT CALENDAR')).toBeVisible();
-  await expect(page.getByText('Academic Calendar')).toHaveCount(0);
+  await expect(page.getByRole('link', { name: /official JIIT academic calendar/i })).toHaveAttribute('href', 'https://www.jiit.ac.in/academics/academic-calendars');
 });
 
 test('reduced-motion mode disables homepage motion', async ({ page }) => {
