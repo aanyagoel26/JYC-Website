@@ -44,7 +44,7 @@ Retired student-platform destinations are handled with permanent redirects rathe
 The public site does **not** provide:
 
 - My JYC / student accounts
-- Academic calendar or academic utilities
+- Official JIIT academic calendar source linked alongside the JYC event calendar; institute dates remain maintained by JIIT
 - Attendance / check-in
 - Event-pass or certificate systems
 - Campus maps / utility dashboards
