@@ -19,6 +19,7 @@ const microCss=read('src/react-bits/JYCMicro.css');
 const dither=read('src/react-bits/DitherVeil.jsx');
 const ditherCss=read('src/react-bits/DitherVeil.css');
 const home=read('src/jyc-editorial-home.jsx');
+const hero=read('src/components/JYCHeroWebGLEmblem.jsx');
 const homeCss=read('src/jyc-editorial-home.css');
 const extraFeaturesSafe=()=>{const f=read('src/extra-features.jsx');return f.includes('LazyDriftWall')&&f.includes('Drift wall')};
 
@@ -32,7 +33,7 @@ const checks=[
  ['event reminders use BellToggle',main.includes('EventReminderControl')&&main.includes('scheduleEventReminder')],
  ['Agentic AI popup is isolated from the public shell',!main.includes('AgenticAIPopup')&&!main.includes('agentic-launcher')&&!main.includes('LazyBorderGlow')],
  ['DitherVeil is the current React Bits implementation',dither.includes('const KERNELS =')&&dither.includes('const getBlueNoise')&&dither.includes('const diffuse')&&dither.includes('RenderTarget')&&dither.includes('measureEdge')],
- ['current homepage uses the WebGL emblem and preserves the generated logo fallback',home.includes('JYCHeroWebGLEmblem')&&home.includes('jh-hero-webgl-stage-wrap')&&home.includes("const FALLBACK = import.meta.env.PROD ? '/assets/jyc-logo.webp' : ORIGINAL_LOGO")&&home.includes("const DITHER_SOURCE = import.meta.env.PROD ? '/assets/jyc-logo-medium.avif' : FALLBACK")&&home.includes('LazyMagicBento')&&!home.includes('LazyDriftWall')],
+ ['current homepage uses the WebGL emblem and preserves the generated logo fallback',home.includes('JYCHeroWebGLEmblem')&&home.includes('jh-hero-webgl-stage-wrap')&&hero.includes("prefers-reduced-motion: reduce")&&hero.includes('motionQuery.addEventListener')&&home.includes("const FALLBACK = import.meta.env.PROD ? '/assets/jyc-logo.webp' : ORIGINAL_LOGO")&&home.includes("const DITHER_SOURCE = import.meta.env.PROD ? '/assets/jyc-logo-medium.avif' : FALLBACK")&&home.includes('LazyMagicBento')&&!home.includes('LazyDriftWall')],
  ['DitherVeil has reduced-motion/visibility lifecycle support',dither.includes("prefers-reduced-motion")&&dither.includes('IntersectionObserver')&&dither.includes('ResizeObserver')],
  ['MagicBento uses router navigation and disables motion for reduced-motion users',read('src/components/react-bits/MagicBento.jsx').includes('onNavigate?onNavigate(item.href)')&&read('src/components/react-bits/MagicBento.jsx').includes("prefers-reduced-motion: reduce")&&home.includes('LazyMagicBento')&&home.includes('enableMagnetism={true}')],
  ['DitherVeil CSS is minimal and scoped',ditherCss.includes('.dither-veil')&&!ditherCss.includes('body{')],
@@ -53,7 +54,7 @@ check('DepthCarousel avoids a direct GSAP import',!read('src/components/react-bi
 check('DepthCarousel is lazy-loaded on public routes',main.includes('LazyDepthCarousel')&&main.includes('<Suspense fallback={<div className="depth-carousel depth-carousel--loading"'));
 
 check('DriftWall remains available for the visual archive',fs.existsSync(path.join(root,'src/components/react-bits/DriftWall.jsx'))&&extraFeaturesSafe());
-check('Homepage uses the WebGL emblem and lazy magnetic Bento without a continuously animated photo wall',home.includes('JYCHeroWebGLEmblem')&&home.includes('LazyMagicBento')&&!home.includes('LazyDriftWall')&&home.includes('jh-hero-webgl-stage-wrap')&&home.includes('enableMagnetism={true}'));
+check('Homepage uses the WebGL emblem and lazy magnetic Bento without a continuously animated photo wall',home.includes('JYCHeroWebGLEmblem')&&home.includes('LazyMagicBento')&&!home.includes('LazyDriftWall')&&home.includes('jh-hero-webgl-stage-wrap')&&home.includes('enableMagnetism={true}')&&hero.includes("prefers-reduced-motion: reduce"));
 check('MagicBento remains available as an optional library surface',fs.existsSync(path.join(root,'src/components/react-bits/MagicBento.jsx'))&&pkg.dependencies.gsap==='3.15.0'&&lock.packages['node_modules/gsap']?.version==='3.15.0');
 check('FlexCarousel component remains available for future archive surfaces',fs.existsSync(path.join(root,'src/components/react-bits/FlexCarousel.jsx'))&&fs.existsSync(path.join(root,'src/components/react-bits/FlexCarousel.css')));
 check('React Bits components do not ship CSP-incompatible remote demo media',!files.some(file=>/\.jsx$/.test(file)&&/images\.unsplash\.com/.test(read(file))));
