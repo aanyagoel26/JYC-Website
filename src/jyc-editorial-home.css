@@ -1979,7 +1979,8 @@
 /* Release QA repair: explicit dark canvas keeps the inherited muted copy
    contrasted against the actual dark surface instead of the paper fallback. */
 [data-theme="dark"] .jyc-editorial-home.jyc-home {
-  background-color: #121113 !important;
+  background-color: transparent !important;
+  background: transparent !important;
 }
 
 /* Compact mobile hero composition: preserve the JYC mark and both actions

@@ -386,8 +386,7 @@ export function JYCEditorialHome({ data }) {
       {/* Editorial update feed: source-linked updates instead of invented activity counters. */}
       <JYCNowStrip limit={3} compact={false} />
 
-      {/* LIVING JYC SPOTLIGHT */}
-      <JYCSpotlight data={data} />
+
 
       {/* REAL MOMENTS & VISUAL ARCHIVE */}
 

@@ -1199,10 +1199,563 @@
   box-shadow: 0 10px 30px rgba(60, 45, 20, 0.08) !important;
 }
 
-[data-theme="light"] .jyc57-club-card:hover {
-  border-color: var(--club-accent, #a82420) !important;
-  box-shadow: 0 18px 45px rgba(60, 45, 20, 0.15), 0 0 25px rgba(229, 184, 105, 0.25) !important;
+/* ==========================================================================
+   GLOBAL TYPOGRAPHY & FONT OVERHAUL
+   ========================================================================== */
+body, button, input, select, textarea {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
 }
+
+h1, h2, h3, h4, .jh-kicker, .eyebrow, .jyc-event-card-title, .jyc57-club-content h2 {
+  font-family: 'Space Grotesk', 'Inter', -apple-system, sans-serif !important;
+}
+
+/* Base Body Backgrounds (Galaxy Dark Mode vs Warm Champagne Light Mode) */
+html[data-theme="dark"], html[data-theme="dark"] body {
+  background: radial-gradient(ellipse 1400px 900px at 50% 0%, #0d1226 0%, #060914 50%, #020306 100%) !important;
+  background-color: #020306 !important;
+  color: #f1f5f9 !important;
+}
+
+html[data-theme="light"], html[data-theme="light"] body {
+  background: radial-gradient(ellipse 1400px 900px at 50% 0%, #fcf8f0 0%, #f6eee0 50%, #eee2ce 100%) !important;
+  background-color: #f6eee0 !important;
+  color: #1a1612 !important;
+}
+
+/* Ensure full transparency across wrapper layers so the ambient canvas & starry sky shine through */
+html[data-theme="dark"] .app-frame,
+html[data-theme="dark"] .public-app,
+html[data-theme="dark"] .route-stage,
+html[data-theme="dark"] #main-content,
+html[data-theme="dark"] .jyc-editorial-home.jyc-home,
+html[data-theme="dark"] .jh-container,
+html[data-theme="dark"] .unified-public-page {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+html[data-theme="light"] .app-frame,
+html[data-theme="light"] .public-app,
+html[data-theme="light"] .route-stage,
+html[data-theme="light"] #main-content,
+html[data-theme="light"] .jyc-editorial-home.jyc-home,
+html[data-theme="light"] .jh-container,
+html[data-theme="light"] .unified-public-page {
+  background: transparent !important;
+  background-color: transparent !important;
+}
+
+/* ==========================================================================
+   DROPDOWN POPOVER FILTERS (Appear on click, disappear on select)
+   ========================================================================== */
+.jyc-dropdown-wrap {
+  position: relative;
+  display: inline-block;
+}
+
+.jyc-dropdown-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 260px;
+  max-width: 340px;
+  max-height: 380px;
+  overflow-y: auto;
+  border-radius: 16px;
+  padding: 8px;
+  z-index: 1000;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.65), 0 0 30px rgba(229, 184, 105, 0.15);
+  animation: jyc-popover-in 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes jyc-popover-in {
+  from { opacity: 0; transform: translateY(-6px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+[data-theme="dark"] .jyc-dropdown-popover {
+  background: rgba(14, 18, 32, 0.96) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+}
+
+[data-theme="light"] .jyc-dropdown-popover {
+  background: rgba(255, 254, 250, 0.98) !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  border: 1px solid rgba(197, 155, 39, 0.3) !important;
+}
+
+.jyc-dropdown-title {
+  padding: 8px 12px 6px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gold, #e5b869);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  margin-bottom: 6px;
+}
+
+[data-theme="light"] .jyc-dropdown-title {
+  color: #a82420;
+  border-bottom-color: rgba(0, 0, 0, 0.08);
+}
+
+.jyc-dropdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.jyc-dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  color: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+[data-theme="dark"] .jyc-dropdown-item:hover {
+  background: rgba(229, 184, 105, 0.12);
+  color: #e5b869;
+}
+
+[data-theme="dark"] .jyc-dropdown-item.is-active {
+  background: rgba(229, 184, 105, 0.2);
+  color: #fbbf24;
+  font-weight: 700;
+}
+
+[data-theme="light"] .jyc-dropdown-item:hover {
+  background: rgba(168, 36, 32, 0.08);
+  color: #a82420;
+}
+
+[data-theme="light"] .jyc-dropdown-item.is-active {
+  background: rgba(168, 36, 32, 0.14);
+  color: #7f1d1d;
+  font-weight: 700;
+}
+
+.jyc-search-clear {
+  position: absolute;
+  right: 12px;
+  background: none;
+  border: 0;
+  color: #888;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+/* ==========================================================================
+   REBUILT EVENTS PAGE: ZERO EMPTY SPACES & FULL RESPONSIVE GRID
+   ========================================================================== */
+.jyc-events-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 28px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.jyc-events-header-copy h1 {
+  font-size: clamp(34px, 4.2vw, 58px) !important;
+  letter-spacing: -0.04em !important;
+  line-height: 1.05 !important;
+  margin: 10px 0 14px !important;
+}
+
+.jyc-events-header-copy p {
+  max-width: 680px;
+  color: var(--muted, #94a3b8);
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.jyc-events-telemetry-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+
+.telemetry-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(34, 197, 94, 0.1);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+  color: #22c55e;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.telemetry-sub {
+  font-size: 11px;
+  color: var(--muted, #888);
+  letter-spacing: 0.06em;
+}
+
+.jyc-events-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+  width: 100%;
+}
+
+.jyc-event-card-v2 {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  overflow: hidden;
+  text-align: left;
+  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.32s ease, border-color 0.32s ease;
+}
+
+[data-theme="dark"] .jyc-event-card-v2 {
+  background: rgba(14, 18, 32, 0.75) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.35) !important;
+}
+
+[data-theme="dark"] .jyc-event-card-v2:hover {
+  transform: translateY(-6px);
+  border-color: var(--event-accent, #e5b869) !important;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55), 0 0 35px color-mix(in srgb, var(--event-accent, #e5b869) 25%, transparent) !important;
+}
+
+[data-theme="light"] .jyc-event-card-v2 {
+  background: rgba(255, 253, 248, 0.9) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1px solid rgba(197, 155, 39, 0.22) !important;
+  box-shadow: 0 10px 30px rgba(60, 45, 20, 0.06) !important;
+}
+
+[data-theme="light"] .jyc-event-card-v2:hover {
+  transform: translateY(-6px);
+  border-color: var(--event-accent, #a82420) !important;
+  box-shadow: 0 20px 50px rgba(60, 45, 20, 0.12), 0 0 25px rgba(229, 184, 105, 0.25) !important;
+}
+
+.jyc-event-card-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #110f15;
+  cursor: pointer;
+}
+
+.jyc-event-card-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.jyc-event-card-v2:hover .jyc-event-card-media img {
+  transform: scale(1.06);
+}
+
+.jyc-event-card-vignette {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 100%);
+  pointer-events: none;
+}
+
+.jyc-event-card-fallback {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  place-items: center;
+  background: radial-gradient(circle, #241d2f, #0d0c13);
+  font: 800 36px 'Space Grotesk', sans-serif;
+  color: var(--event-accent, #e5b869);
+}
+
+.jyc-event-floating-date {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 58px;
+  padding: 6px 4px;
+  border-radius: 12px;
+  background: rgba(10, 12, 20, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(10px);
+  color: #fff;
+  z-index: 2;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+}
+
+.jyc-event-floating-date b {
+  font-size: 22px;
+  line-height: 1;
+  font-family: 'Space Grotesk', sans-serif;
+  color: #fbbf24;
+}
+
+.jyc-event-floating-date span {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.jyc-event-floating-date small {
+  font-size: 9px;
+  color: #94a3b8;
+}
+
+.jyc-event-floating-status {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  z-index: 2;
+}
+
+.jyc-chip {
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  backdrop-filter: blur(10px);
+}
+
+.jyc-chip.is-live {
+  background: rgba(220, 38, 38, 0.9);
+  color: #fff;
+  box-shadow: 0 0 12px rgba(220, 38, 38, 0.6);
+}
+
+.jyc-chip.is-upcoming {
+  background: rgba(14, 165, 233, 0.85);
+  color: #fff;
+}
+
+.jyc-chip.is-past {
+  background: rgba(100, 116, 139, 0.7);
+  color: #e2e8f0;
+}
+
+.jyc-chip.is-type {
+  background: rgba(15, 14, 20, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #f8fafc;
+}
+
+.jyc-event-card-body {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.jyc-event-card-club {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 12px;
+}
+
+.club-glyph-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.reg-badge {
+  margin-left: auto;
+  font-size: 9px;
+  font-weight: 800;
+  color: #22c55e;
+  letter-spacing: 0.08em;
+}
+
+.jyc-event-card-title {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  line-height: 1.25 !important;
+  letter-spacing: -0.03em !important;
+  margin: 0 0 10px !important;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.jyc-event-card-title:hover {
+  color: var(--event-accent, #e5b869);
+}
+
+.jyc-event-card-desc {
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--muted, #94a3b8);
+  margin: 0 0 14px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.jyc-event-card-highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.highlight-pill {
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  background: rgba(229, 184, 105, 0.1);
+  border: 1px solid rgba(229, 184, 105, 0.25);
+  color: var(--event-accent, #e5b869);
+}
+
+[data-theme="light"] .highlight-pill {
+  background: rgba(168, 36, 32, 0.08);
+  border-color: rgba(168, 36, 32, 0.25);
+  color: #a82420;
+}
+
+.jyc-event-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="light"] .jyc-event-card-footer {
+  border-top-color: rgba(0, 0, 0, 0.08);
+}
+
+.jyc-event-card-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 11px;
+  color: var(--muted, #94a3b8);
+}
+
+.jyc-event-card-cta {
+  padding: 8px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--event-accent, #e5b869);
+  background: transparent;
+  color: var(--event-accent, #e5b869);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  white-space: nowrap;
+}
+
+.jyc-event-card-cta:hover {
+  background: var(--event-accent, #e5b869);
+  color: #0b0f1a;
+  box-shadow: 0 4px 18px color-mix(in srgb, var(--event-accent, #e5b869) 40%, transparent);
+}
+
+.jyc-events-empty-state {
+  grid-column: 1 / -1;
+  padding: 60px 24px;
+  text-align: center;
+  border-radius: 20px;
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.empty-state-icon {
+  font-size: 48px;
+  margin-bottom: 14px;
+}
+
+/* ==========================================================================
+   GALLERY EDITORIAL WALL CONTRAST REPAIR (Fix Screenshot 4)
+   ========================================================================== */
+[data-theme="dark"] .public-app .jyc-gallery-hub-container .jyc57-editorial-wall {
+  background: rgba(14, 18, 32, 0.82) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6) !important;
+}
+
+[data-theme="dark"] .public-app .jyc57-editorial-wall-head h2 {
+  color: #f8fafc !important;
+}
+
+[data-theme="dark"] .public-app .jyc57-editorial-wall-head p {
+  color: #94a3b8 !important;
+}
+
+[data-theme="dark"] .public-app .jyc57-editorial-wall-head .eyebrow {
+  color: #e5b869 !important;
+}
+
+[data-theme="light"] .public-app .jyc-gallery-hub-container .jyc57-editorial-wall {
+  background: rgba(255, 253, 248, 0.95) !important;
+  border: 1px solid rgba(197, 155, 39, 0.3) !important;
+  box-shadow: 0 18px 50px rgba(60, 45, 20, 0.08) !important;
+}
+
+[data-theme="light"] .public-app .jyc57-editorial-wall-head h2 {
+  color: #1a1612 !important;
+}
+
+[data-theme="light"] .public-app .jyc57-editorial-wall-head p {
+  color: #5c5446 !important;
+}
+
+[data-theme="light"] .public-app .jyc57-editorial-wall-head .eyebrow {
+  color: #a82420 !important;
+}
+
+@media (max-width: 760px) {
+  .jyc-events-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 
 
 

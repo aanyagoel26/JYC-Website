@@ -63,7 +63,7 @@ function mergePublicFallback(d,{allowContentFallback=true}={}){
  const clubs=[...enrichedClubs,...sourceOnlyClubs];
  const enrichedTeam=(Array.isArray(x.team)?x.team:[]).map(member=>{const key=Object.keys(JYC_TEAM_SOCIALS).find(n=>n.toLowerCase()===String(member?.name||'').trim().toLowerCase());const social=key?JYC_TEAM_SOCIALS[key]:null;return social?{...member,socials:{...(member.socials||{}),linkedin:member.socials?.linkedin||social.linkedin||''},linkedin:member.linkedin||social.linkedin||'',socialVerifiedBy:social.verifiedBy||'',socialVerifiedOn:social.verifiedOn||''}:member});
  const sourceGallery=mergeSourceGallery(x.gallery);
- const gallery=[...sourceGallery,...JAI_OFFICIAL_MEDIA,...(allowContentFallback?[...PDF_HUB_GALLERY,...PDF_HUB_EXTRA_GALLERY,...PUBLIC_GALLERY_FALLBACK]:[])].filter((g,i,a)=>a.findIndex(x=>x.id===g.id)===i);
+ const gallery=[...sourceGallery,...JAI_OFFICIAL_MEDIA,...(allowContentFallback?[...PDF_HUB_GALLERY,...PDF_HUB_EXTRA_GALLERY,...PUBLIC_GALLERY_FALLBACK]:[])].filter((g,i,a)=>a.findIndex(x=>x.id===g.id)===i).filter(g=>g&&g.published!==false&&!String(g.url||'').toLowerCase().includes('jyc-01')&&!String(g.url||'').toLowerCase().includes('jyc-02')&&!String(g.url||'').toLowerCase().includes('jyc-03')&&!String(g.url||'').toLowerCase().includes('vamunique-03')&&!String(g.caption||'').toLowerCase().includes('portrait from the supplied archive'));
  const liveEvents=Array.isArray(x.events)?x.events:[];
  const fallbackEvents=allowContentFallback?PUBLIC_EVENT_FALLBACK:[];
  const events=allowContentFallback

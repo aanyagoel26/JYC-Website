@@ -111,44 +111,207 @@ function Empty({eyebrow,title,text}){return <div className="jyc57-empty"><span c
 export function JYC57Events({data}){
  const nav=useNavigate(),loc=useLocation();
  const params=useMemo(()=>new URLSearchParams(loc.search),[loc.search]);
- const [query,setQuery]=useState(params.get('q')||''),[category,setCategory]=useState(params.get('category')||'All'),[scope,setScope]=useState(params.get('status')||'upcoming');
- const events=useMemo(()=>publishedEvents(data).sort((a,b)=>safeDate(a)-safeDate(b)),[data]);
- const categories=useMemo(()=>['All',...new Set(events.map(e=>e.eventType||e.category||'').filter(Boolean))],[events]);
+ const [query,setQuery]=useState(params.get('q')||'');
+ const [category,setCategory]=useState(params.get('category')||'All');
+ const [scope,setScope]=useState(params.get('status')||'upcoming');
+ const [categoryOpen,setCategoryOpen]=useState(false);
+ const [statusOpen,setStatusOpen]=useState(false);
+
+ const rawEvents=useMemo(()=>publishedEvents(data).sort((a,b)=>safeDate(a)-safeDate(b)),[data]);
+ const events=useMemo(()=>{
+   const seen=new Set();
+   return rawEvents.filter(e=>{
+     if(!e||!e.title)return false;
+     const k=String(e.id||e.title).toLowerCase();
+     if(seen.has(k))return false;
+     seen.add(k);
+     return true;
+   });
+ },[rawEvents]);
+
+ const categories=useMemo(()=>[
+   'All',
+   'Technical Fest',
+   'Agentic AI Hackathon',
+   'Cultural Festival',
+   'National Drone Championship',
+   'Robotics Workshop',
+   'Coding Competition',
+   'Live Music Showcase',
+   'Theatre Festival',
+   'Cybersecurity CTF',
+   'Dance Showcase',
+   'Fine Arts Expo',
+   'Sports Tournament',
+   'Esports Tournament',
+   'Fashion Gala',
+   'Debate & MUN'
+ ],[]);
+
  const filtered=useMemo(()=>events.filter(e=>{
-   const hay=`${e.title} ${e.club} ${e.eventType} ${e.description} ${e.venue}`.toLowerCase();
+   const hay=`${e.title} ${e.club} ${e.eventType} ${e.description} ${e.venue} ${(e.highlights||[]).join(' ')}`.toLowerCase();
    const okQ=!query.trim()||hay.includes(query.trim().toLowerCase());
-   const okC=category==='All'||(e.eventType||e.category)===category;
+   const okC=category==='All'||(e.eventType||e.category)===category||hay.includes(category.toLowerCase().split(' ')[0]);
    const s=stateOf(e),okS=scope==='all'||s===scope;
    return okQ&&okC&&okS;
  }),[events,query,category,scope]);
- const featured=events.find(e=>e.featured&&stateOf(e)!=='past')||events.find(e=>stateOf(e)==='live')||events.find(e=>stateOf(e)==='upcoming');
- const upcoming=events.filter(e=>stateOf(e)==='upcoming'||stateOf(e)==='live').slice(0,5);
- const timelineDays=useMemo(()=>{const rows=filtered.filter(e=>e.date).reduce((m,e)=>{const k=String(e.date);(m[k] ||= []).push(e);return m},{});return Object.entries(rows).sort(([a],[b])=>safeDate({date:a})-safeDate({date:b})).slice(0,7)},[filtered]);
- return <section className="section page unified-public-page jyc57-page">
-  <div className="visible-breadcrumbs"><button type="button" onClick={()=>nav('/')}>JYC</button><span>→</span><strong>Events</strong></div>
-  <header className="jyc57-hero">
-   <div><span className="eyebrow">JYC · 01 / DISCOVER</span><h1>Events that move the campus.</h1><p>Find what is happening at JIIT Sector 128, see the details that matter, and move from discovery to participation without friction.</p></div>
-   {featured&&<button type="button" className="jyc57-feature" onClick={()=>nav(eventPath(featured))}>{eventCardPhoto(featured)?<ResponsivePhoto src={eventCardPhoto(featured)} alt="" loading="eager" fetchPriority="high" sizes="(max-width: 760px) 35vw, 240px"/>:<div className="jyc57-feature-fallback">JYC</div>}<div><MetaPill tone={stateOf(featured)==='live'?'live':''}>{stateOf(featured)==='live'?'LIVE NOW':'UP NEXT'}</MetaPill><strong>{featured.title}</strong><small>{featured.club||'JYC'} · {featured.venue||'JIIT Sector 128'}</small><span>Open event ↗</span></div></button>}
-  </header>
-  <div className="jyc57-event-toolbar" aria-label="Event filters">
-   <label className="jyc57-search"><span aria-hidden="true">⌕</span><input value={query} onChange={e=>{const v=e.target.value;setQuery(v);syncFilters(nav,loc,{q:v,category,status:scope})}} placeholder="Search events, clubs or topics" aria-label="Search events"/></label>
-   <div className="jyc57-segment">{[['upcoming','Upcoming'],['live','Live'],['past','Past'],['all','All']].map(([id,label])=><button type="button" key={id} className={scope===id?'active':''} onClick={()=>{setScope(id);syncFilters(nav,loc,{q:query,category,status:id})}}>{label}</button>)}</div>
-  </div>
-  <div className="jyc57-category-row" aria-label="Event categories">{categories.map(c=><button type="button" key={c} className={category===c?'active':''} onClick={()=>{setCategory(c);syncFilters(nav,loc,{q:query,category:c,status:scope})}}>{c}</button>)}</div>
-  {timelineDays.length>1&&<section className="jyc57-event-timeline" aria-label="Event timeline"><div className="jyc57-section-head"><div><span className="eyebrow">EVENT TIMELINE</span><h2>See the week at a glance.</h2></div><span>{timelineDays.length} dates in this view</span></div><div className="jyc57-timeline-days">{timelineDays.map(([day,rows],i)=><button type="button" key={day} onClick={()=>document.getElementById('event-day-'+day)?.scrollIntoView({behavior:window.matchMedia?.('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'})}><b>{new Date(day+'T12:00').toLocaleDateString('en-IN',{day:'2-digit'})}</b><span>{new Date(day+'T12:00').toLocaleDateString('en-IN',{weekday:'short',month:'short'})}</span><small>{rows.length} {rows.length===1?'event':'events'}</small></button>)}</div><div className="jyc57-timeline-list">{timelineDays.map(([day,rows])=><div id={'event-day-'+day} className="jyc57-timeline-day" key={day}><strong>{new Date(day+'T12:00').toLocaleDateString('en-IN',{weekday:'long',day:'numeric',month:'long'})}</strong>{rows.slice(0,4).map(e=><button type="button" key={e.id||e.title} onClick={()=>nav(eventPath(e))}><span>{e.start||'TBA'}</span><div><b>{e.title}</b><small>{e.club||'JYC'} · {e.venue||'JIIT Sector 128'}</small></div><em>↗</em></button>)}</div>)}</div></section>}
-  <div className="jyc57-event-layout">
-   <div className="jyc57-event-list">
-    <div className="jyc57-list-head"><span>{filtered.length} published {filtered.length===1?'event':'events'}</span><small>Sector 128 only</small></div>
-    {filtered.length?filtered.map((e,i)=>{const photo=eventCardPhoto(e);return <button type="button" className="jyc57-event-card" key={e.id||e.title||i} style={{'--event-accent':eventIdentity(e).accent||identityAccent(e.title||e.slug||e.club)}} onPointerMove={magneticMove} onPointerLeave={magneticReset} onClick={()=>nav(eventPath(e))}>
-      <div className="jyc57-event-date"><b>{e.date?new Date(`${e.date}T12:00`).toLocaleDateString('en-IN',{day:'2-digit'}):'—'}</b><span>{e.date?new Date(`${e.date}T12:00`).toLocaleDateString('en-IN',{month:'short'}):'TBA'}</span></div>
-      <div className="jyc57-event-art">{photo?<ResponsivePhoto src={photo} alt="" loading="lazy" decoding="async" sizes="92px" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Event image unavailable"/>:<span>{String(e.eventType||e.club||'JYC').slice(0,3).toUpperCase()}</span>}</div>
-      <div className="jyc57-event-copy"><div style={{display:'flex',gap:6,alignItems:'center',flexWrap:'wrap'}}><MetaPill tone={stateOf(e)==='live'?'live':''}>{stateOf(e)==='live'?'● LIVE NOW':stateOf(e)==='past'?'ARCHIVED':'UPCOMING'}</MetaPill>{(e.eventType||e.category)&&<MetaPill>{e.eventType||e.category}</MetaPill>}{registrationOpen(e)&&<span className="jyc57-reg-pill">REGISTRATION OPEN ↗</span>}</div><h2>{e.title}</h2><p>{e.description||'Open the event for registration, schedule, venue and published details.'}</p><small>{e.club||'JYC'} · {e.venue||'JIIT Sector 128'}{e.start?` · ${e.start}`:''}</small></div>
-      <span className="jyc57-arrow" aria-hidden="true">↗</span>
-    </button>}):<Empty eyebrow="EVENT DIRECTORY" title="Nothing matches this view." text="Try another category, status, or search term. Only published Sector-128 events are shown."/>}
+
+ const featured=events.find(e=>e.featured&&stateOf(e)!=='past')||events.find(e=>stateOf(e)==='live')||events.find(e=>stateOf(e)==='upcoming')||events[0];
+
+ const selectCategory=(cat)=>{
+   setCategory(cat);
+   setCategoryOpen(false);
+   syncFilters(nav,loc,{q:query,category:cat,status:scope});
+ };
+
+ const selectScope=(sc)=>{
+   setScope(sc);
+   setStatusOpen(false);
+   syncFilters(nav,loc,{q:query,category,status:sc});
+ };
+
+ const clearAll=()=>{
+   setQuery('');
+   setCategory('All');
+   setScope('all');
+   setCategoryOpen(false);
+   setStatusOpen(false);
+   syncFilters(nav,loc,{q:'',category:'All',status:'all'});
+ };
+
+ return <section className="section page unified-public-page jyc57-page jyc-events-experience">
+  <div className="visible-breadcrumbs"><button type="button" onClick={()=>nav('/')}>JYC</button><span>→</span><strong>Events & Fests</strong></div>
+  
+  <header className="jyc-events-header">
+   <div className="jyc-events-header-copy">
+    <span className="jh-kicker">JYC 128 <b>CAMPUS CALENDAR</b></span>
+    <h1>Events That Define the Campus Rhythm.</h1>
+    <p>Explore hackathons, collegiate festivals, live concerts, robotics challenges, sports tournaments, and technical summits across JIIT Sector 128.</p>
    </div>
-   <aside className="jyc57-next"><span className="eyebrow">02 / WHAT'S NEXT</span><h2>Near-term rhythm.</h2>{upcoming.map(e=><button type="button" key={e.id||e.title} onClick={()=>nav(eventPath(e))}><span>{e.date||'TBA'}</span><strong>{e.title}</strong><small>{e.start||'Time TBA'} · {e.venue||'Venue TBA'}</small></button>)}{!upcoming.length&&<p>No upcoming published events yet.</p>}<button type="button" className="jyc57-text-link" onClick={()=>setScope('past')}>Browse the archive →</button></aside>
+   <div className="jyc-events-telemetry-badge">
+    <div className="telemetry-pill">
+     <span className="jh-live-pulse-dot"/>
+     <b>{events.filter(e=>stateOf(e)==='upcoming'||stateOf(e)==='live').length} Active Events</b>
+    </div>
+    <span className="telemetry-sub">Official JIIT Sector 128 Schedule</span>
+   </div>
+  </header>
+
+  {/* Sleek Popover Filter Bar (No clutter, options appear only when clicked and disappear on select) */}
+  <div className="jyc-filter-bar">
+   <div className="jyc-search-input-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    <input className="jyc-search-input" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search events by name, club, hackathon, prize..." aria-label="Search events"/>
+    {query&&<button type="button" onClick={()=>setQuery('')} className="jyc-search-clear">×</button>}
+   </div>
+
+   {/* Category Dropdown Popover */}
+   <div className="jyc-dropdown-wrap">
+    <button type="button" className={`jyc-filter-toggle-btn ${category!=='All'||categoryOpen?'is-active':''}`} onClick={()=>{setCategoryOpen(v=>!v);setStatusOpen(false);}} aria-expanded={categoryOpen}>
+     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
+     <span>{category==='All'?'Filter by Domain':category}</span>
+     <small>{categoryOpen?'▲':'▼'}</small>
+    </button>
+    {categoryOpen&&<div className="jyc-dropdown-popover">
+     <div className="jyc-dropdown-title">Select Domain / Category</div>
+     <div className="jyc-dropdown-list">
+      {categories.map(c=><button type="button" key={c} className={`jyc-dropdown-item ${category===c?'is-active':''}`} onClick={()=>selectCategory(c)}>
+       <span>{c}</span>
+       {category===c&&<b>✓</b>}
+      </button>)}
+     </div>
+    </div>}
+   </div>
+
+   {/* Status Dropdown Popover */}
+   <div className="jyc-dropdown-wrap">
+    <button type="button" className={`jyc-filter-toggle-btn ${scope!=='all'||statusOpen?'is-active':''}`} onClick={()=>{setStatusOpen(v=>!v);setCategoryOpen(false);}} aria-expanded={statusOpen}>
+     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+     <span>Status: {scope==='upcoming'?'Upcoming':scope==='live'?'Live Now':scope==='past'?'Past':scope==='all'?'All Events':scope}</span>
+     <small>{statusOpen?'▲':'▼'}</small>
+    </button>
+    {statusOpen&&<div className="jyc-dropdown-popover">
+     <div className="jyc-dropdown-title">Event Status</div>
+     <div className="jyc-dropdown-list">
+      {[['upcoming','Upcoming Events'],['live','Live Now'],['all','All Events'],['past','Past Archive']].map(([s,label])=><button type="button" key={s} className={`jyc-dropdown-item ${scope===s?'is-active':''}`} onClick={()=>selectScope(s)}>
+       <span>{label}</span>
+       {scope===s&&<b>✓</b>}
+      </button>)}
+     </div>
+    </div>}
+   </div>
+
+   {(category!=='All'||scope!=='upcoming'||query)&&<button type="button" className="jyc-clear-filters-btn" onClick={clearAll}>Reset Filters ↺</button>}
   </div>
- </section>
+
+  {/* Zero Empty Spaces: Full Responsive Grid */}
+  <div className="jyc-events-grid">
+   {filtered.length ? filtered.map((e,i)=>{
+    const photo=eventCardPhoto(e);
+    const accent=eventIdentity(e).accent||identityAccent(e.title||e.slug||e.club);
+    const isLive=stateOf(e)==='live';
+    const isPast=stateOf(e)==='past';
+    const dateObj=e.date?new Date(`${e.date}T12:00`):null;
+    const dayStr=dateObj?dateObj.toLocaleDateString('en-IN',{day:'2-digit'}):'TBA';
+    const monthStr=dateObj?dateObj.toLocaleDateString('en-IN',{month:'short'}).toUpperCase():'TBA';
+    const weekdayStr=dateObj?dateObj.toLocaleDateString('en-IN',{weekday:'short'}):'';
+
+    return <article className="jyc-event-card-v2" key={e.id||e.title||i} style={{'--event-accent':accent}} onPointerMove={magneticMove} onPointerLeave={magneticReset}>
+     <div className="jyc-event-card-media" onClick={()=>nav(eventPath(e))}>
+      {photo ? <ResponsivePhoto src={photo} alt={e.title} loading="lazy" decoding="async" sizes="(max-width: 760px) 100vw, (max-width: 1200px) 50vw, 33vw" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Event poster unavailable"/>
+        : <div className="jyc-event-card-fallback"><span>{String(e.eventType||e.club||'JYC').slice(0,3).toUpperCase()}</span></div>}
+      <div className="jyc-event-card-vignette"/>
+      
+      {/* Date Chip */}
+      <div className="jyc-event-floating-date">
+       <b>{dayStr}</b>
+       <span>{monthStr}</span>
+       {weekdayStr&&<small>{weekdayStr}</small>}
+      </div>
+
+      {/* State / Tag Chip */}
+      <div className="jyc-event-floating-status">
+       {isLive ? <span className="jyc-chip is-live">● LIVE NOW</span> : isPast ? <span className="jyc-chip is-past">ARCHIVED</span> : <span className="jyc-chip is-upcoming">UPCOMING</span>}
+       {(e.eventType||e.category)&&<span className="jyc-chip is-type">{e.eventType||e.category}</span>}
+      </div>
+     </div>
+
+     <div className="jyc-event-card-body">
+      <div className="jyc-event-card-club">
+       <span className="club-glyph-dot" style={{backgroundColor:accent}}/>
+       <strong>{e.club||'JYC Community'}</strong>
+       {registrationOpen(e)&&<span className="reg-badge">REGISTRATION OPEN ↗</span>}
+      </div>
+
+      <h2 className="jyc-event-card-title" onClick={()=>nav(eventPath(e))}>{e.title}</h2>
+      <p className="jyc-event-card-desc">{e.description||'Official JYC experience details, registration and participation highlights.'}</p>
+
+      {/* Highlights or Prize Pills */}
+      {Array.isArray(e.highlights)&&e.highlights.length>0&&<div className="jyc-event-card-highlights">
+       {e.highlights.slice(0,2).map((h,hi)=><span key={hi} className="highlight-pill">{h}</span>)}
+      </div>}
+
+      <div className="jyc-event-card-footer">
+       <div className="jyc-event-card-meta">
+        <span>📍 {e.venue||'JIIT Sector 128'}</span>
+        {e.start&&<small>⏰ {e.start}{e.end?` – ${e.end}`:''}</small>}
+       </div>
+       <button type="button" className="jyc-event-card-cta" onClick={()=>nav(eventPath(e))}>
+        {registrationOpen(e)?'Register Now ↗':'Explore Event →'}
+       </button>
+      </div>
+     </div>
+    </article>;
+   }) : (
+    <div className="jyc-events-empty-state">
+     <div className="empty-state-icon">📅</div>
+     <h3>No events match your current filter.</h3>
+     <p>Try resetting the category filter or search term to browse the entire official Sector 128 schedule.</p>
+     <button type="button" className="jh-btn jh-btn-primary" onClick={clearAll}>View All Events ↺</button>
+    </div>
+   )}
+  </div>
+ </section>;
 }
 
 export function JYC57Clubs({data}){
@@ -201,69 +364,46 @@ export function JYC57Clubs({data}){
    <p>Find your space across {clubs.length} published communities spanning technical, cultural, creative, literary and sports interests at JIIT Sector 128.</p>
   </header>
 
-  {/* Sleek Filter Bar */}
+  {/* Sleek Filter Bar with Dropdowns (Options only show when clicked and disappear upon selection) */}
   <div className="jyc-filter-bar">
    <div className="jyc-search-input-wrap">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
     <input className="jyc-search-input" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search clubs by name, tech, domain..." aria-label="Search clubs"/>
-    {query&&<button type="button" onClick={()=>setQuery('')} style={{position:'absolute',right:12,background:'none',border:0,color:'#888',cursor:'pointer',fontSize:16}}>×</button>}
+    {query&&<button type="button" onClick={()=>setQuery('')} className="jyc-search-clear">×</button>}
    </div>
 
-   <button type="button" className={`jyc-filter-toggle-btn ${filtersOpen||activeFilterCount>0?'is-active':''}`} onClick={()=>setFiltersOpen(v=>!v)} aria-expanded={filtersOpen}>
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-    Filter Communities
-    {activeFilterCount>0&&<span className="filter-badge">{activeFilterCount}</span>}
-    <span>{filtersOpen?'▲':'▼'}</span>
-   </button>
-  </div>
-
-  {/* Quick Family Filter Ribbon */}
-  <div className="jyc-quick-family-pills" aria-label="Quick family filter">
-   {families.map(f=>{
-     const count = f === 'All' ? clubs.length : clubs.filter(c => c.type === f || c.category === f || (c.interests||[]).includes(f)).length;
-     return (
-       <button
-         type="button"
-         key={f}
-         className={`jyc-quick-pill ${family === f ? 'is-active' : ''}`}
-         onClick={() => setFamily(f)}
-       >
+   {/* Family Dropdown Popover */}
+   <div className="jyc-dropdown-wrap">
+    <button type="button" className={`jyc-filter-toggle-btn ${family!=='All'||filtersOpen?'is-active':''}`} onClick={()=>setFiltersOpen(v=>!v)} aria-expanded={filtersOpen}>
+     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+     <span>Family: {family==='All'?'All Families':family}</span>
+     <small>{filtersOpen?'▲':'▼'}</small>
+    </button>
+    {filtersOpen&&<div className="jyc-dropdown-popover">
+     <div className="jyc-dropdown-title">Select Community Family</div>
+     <div className="jyc-dropdown-list">
+      {families.map(f=>{
+        const count = f === 'All' ? clubs.length : clubs.filter(c => c.type === f || c.category === f || (c.interests||[]).includes(f)).length;
+        return <button type="button" key={f} className={`jyc-dropdown-item ${family===f?'is-active':''}`} onClick={()=>{setFamily(f);setFiltersOpen(false);}}>
          <span>{f}</span>
-         <small>{count}</small>
-       </button>
-     );
-   })}
+         <small>({count})</small>
+         {family===f&&<b>✓</b>}
+        </button>;
+      })}
+     </div>
+    </div>}
+   </div>
+
+   {/* Society Type Dropdown Popover */}
+   <div className="jyc-dropdown-wrap">
+    <button type="button" className={`jyc-filter-toggle-btn ${type!=='All'?'is-active':''}`} onClick={()=>setType(t=>t==='All'?'Technical':t==='Technical'?'Non-Technical':'All')}>
+     <span>Type: {type==='All'?'All Types':type}</span>
+     <small>⇄</small>
+    </button>
+   </div>
+
+   {(activeFilterCount>0||query)&&<button type="button" className="jyc-clear-filters-btn" onClick={clearAllFilters}>Reset Filters ↺</button>}
   </div>
-
-  {/* Expandable Filter Drawer */}
-  {filtersOpen&&<div className="jyc-filter-drawer">
-   <div className="jyc-filter-group">
-    <span className="jyc-filter-group-label">Community Family</span>
-    <div className="jyc-filter-pill-row">
-     {families.map(f=><button type="button" key={f} className={`jyc-filter-pill ${family===f?'is-active':''}`} onClick={()=>setFamily(f)}>{f}</button>)}
-    </div>
-   </div>
-
-   <div className="jyc-filter-group">
-    <span className="jyc-filter-group-label">Society Type</span>
-    <div className="jyc-filter-pill-row">
-     {types.map(t=><button type="button" key={t} className={`jyc-filter-pill ${type===t?'is-active':''}`} onClick={()=>setType(t)}>{t}</button>)}
-    </div>
-   </div>
-
-   <div className="jyc-filter-group">
-    <span className="jyc-filter-group-label">Domain / Focus Area</span>
-    <div className="jyc-filter-pill-row">
-     <button type="button" className={`jyc-filter-pill ${domain==='All'?'is-active':''}`} onClick={()=>setDomain('All')}>All Domains</button>
-     {quickDomains.map(d=><button type="button" key={d} className={`jyc-filter-pill ${domain===d?'is-active':''}`} onClick={()=>setDomain(d)}>{d}</button>)}
-    </div>
-   </div>
-
-   <div className="jyc-filter-drawer-footer">
-    <span>Showing <b>{filtered.length}</b> of {clubs.length} communities</span>
-    {(activeFilterCount>0||query)&&<button type="button" className="jyc-clear-filters-btn" onClick={clearAllFilters}>Reset All Filters ↺</button>}
-   </div>
-  </div>}
 
   {/* Club Cards Wall */}
   <div className="jyc57-club-wall">
@@ -420,7 +560,12 @@ export function JYC57Gallery({data}){
   }, [items, query, eventCategory, year, albumSlug, currentAlbum, mediaFilter]);
 
   const heroPhotos = useMemo(() => {
-    const pool = filtered.length ? filtered : items;
+    const rawPool = filtered.length ? filtered : items;
+    const pool = rawPool.filter(item => {
+      const u = String(item.url || '').toLowerCase();
+      const c = String(item.caption || item.alt || '').toLowerCase();
+      return !u.includes('jyc-01') && !u.includes('jyc-02') && !u.includes('jyc-03') && !u.includes('vamunique-03') && !c.includes('portrait from the supplied archive') && !c.includes('portrait archive');
+    });
     const bySubject = new Map();
     for (const item of pool) {
       const subject = photoSubject(item);

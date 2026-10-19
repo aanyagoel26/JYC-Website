@@ -352,10 +352,10 @@
 }
 
 
-/* V70 release corrections — this layer loads after the hero art direction above. */
+/* V70 release corrections — transparency enables the ambient cosmic/galaxy canvas. */
 html[data-theme="dark"] .jyc-editorial-home.jyc-home {
-  background: #121113 !important;
-  background-color: #121113 !important;
+  background: transparent !important;
+  background-color: transparent !important;
   color: #f8f2e8 !important;
 }
 html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-lead {
