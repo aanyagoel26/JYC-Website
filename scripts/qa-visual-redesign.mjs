@@ -13,7 +13,7 @@ const checks = [
   [bot.includes('window.clearTimeout(idleTimer.current)') && !bot.includes('window.clearInterval(idleTimer.current)'), 'Falcon timeout lifecycle uses timeout cleanup consistently'],
   [bot.includes("{intent:'peek',weight:4}") && !bot.includes("const animPool=['wave','dance','bounce','tap','celebrate','peek','think']"), 'Falcon idle behavior uses restrained weighted choices and excludes surprise dance/celebration'],
   [home.includes("import './jyc-editorial-home.css';") && home.includes("import './styles/jyc-editorial-motion-system.css';") && home.indexOf("import './styles/jyc-editorial-motion-system.css';") > home.indexOf("import './jyc-editorial-home.css';"), 'motion layer is loaded after the editorial home stylesheet'],
-  [home.includes('jh-hero-dither-visual') && home.includes('LazyDitherVeil'), 'existing branded Dither Veil hero is retained'],
+  [home.includes('jh-hero-webgl-stage-wrap') && home.includes('<JYCHeroWebGLEmblem />'), 'interactive WebGL emblem hero is retained'],
   [layer.includes('@media(max-width:700px)'), 'single-column mobile hero is explicitly supported'],
   [layer.includes('@media(max-width:980px)'), 'tablet hero layout is explicitly supported'],
   [layer.includes('prefers-reduced-motion:reduce'), 'reduced-motion preferences are honored'],
