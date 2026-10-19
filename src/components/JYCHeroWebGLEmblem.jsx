@@ -10,8 +10,9 @@ export function JYCHeroWebGLEmblem() {
   const [isHovered, setIsHovered] = useState(false);
   const [activeBadge, setActiveBadge] = useState(0);
 
-  // Auto-cycle badges
+  // Badge motion is decorative; keep it still for users who request reduced motion.
   useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined;
     const timer = setInterval(() => {
       setActiveBadge(prev => (prev + 1) % 3);
     }, 3800);
@@ -65,11 +66,23 @@ export function JYCHeroWebGLEmblem() {
     };
     window.addEventListener('mousemove', handleMove, { passive: true });
 
-    let isVisible = true;
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let reducedMotion = motionQuery.matches;
+    let isVisible = !document.hidden;
     const handleVisibility = () => {
       isVisible = !document.hidden;
-      if (isVisible && !animId) animId = requestAnimationFrame(draw);
+      if (isVisible && !reducedMotion && !animId) animId = requestAnimationFrame(draw);
     };
+    const handleMotionPreference = () => {
+      reducedMotion = motionQuery.matches;
+      if (reducedMotion) {
+        cancelAnimationFrame(animId);
+        animId = 0;
+      } else if (isVisible && !animId) {
+        animId = requestAnimationFrame(draw);
+      }
+    };
+    motionQuery.addEventListener('change', handleMotionPreference);
     document.addEventListener('visibilitychange', handleVisibility);
 
     const draw = () => {
@@ -168,7 +181,7 @@ export function JYCHeroWebGLEmblem() {
         ctx.globalAlpha = 1.0;
       });
 
-      animId = requestAnimationFrame(draw);
+      animId = reducedMotion ? 0 : requestAnimationFrame(draw);
     };
 
     animId = requestAnimationFrame(draw);
@@ -178,6 +191,7 @@ export function JYCHeroWebGLEmblem() {
       window.removeEventListener('resize', resize);
       window.removeEventListener('mousemove', handleMove);
       document.removeEventListener('visibilitychange', handleVisibility);
+      motionQuery.removeEventListener('change', handleMotionPreference);
     };
   }, []);
 
