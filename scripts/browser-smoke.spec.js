@@ -1666,7 +1666,7 @@ test('tablet events hero keeps the headline inside its text frame', async ({ pag
   await page.setViewportSize({ width: 768, height: 900 });
   await page.goto(base + '/events', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'tablet events directory');
-  const geometry = await page.locator('.jyc57-page .jyc57-hero h1').evaluate(el => {
+  const geometry = await page.locator('.events-page .compact-page-head h1').evaluate(el => {
     const rect = el.getBoundingClientRect();
     return { client: el.clientWidth, scroll: el.scrollWidth, left: rect.left, right: rect.right, viewport: innerWidth };
   });
