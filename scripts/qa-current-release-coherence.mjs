@@ -45,7 +45,7 @@ add('gallery has mobile layout contracts',publicCss.includes('@media(max-width:6
 add('homepage activity Bento has responsive photo frames and mobile layout',homeCss.includes('.jh-activity-bento-shell')&&homeCss.includes('.magic-bento__grid')&&homeCss.includes('.magic-bento-card__media { display: block; }')&&homeCss.includes('.magic-bento-card__media picture { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }')&&homeCss.includes('@media (max-width: 600px)'));
 add('active suite contains current media/layout QA',suite.includes('qa-media-layout.mjs')&&suite.includes('qa-current-release-coherence.mjs'));
 add('homepage CMS cannot restore retired visual surfaces',!admin.includes('move=(id,dir)')&&!admin.includes('Photo Chapters')&&!admin.includes('Hub Photo Wall'));
-add('browser QA guards homepage composition and gallery interactions',browser.includes('homepage renders the official logo through Dither Veil and a magnetic activity Bento')&&browser.includes('homepage photo-story horizontal overflow')&&browser.includes('gallery album routes are shareable and filter the archive'));
+add('browser QA guards homepage composition and gallery interactions',browser.includes('homepage renders the official emblem and a magnetic activity Bento')&&browser.includes('homepage photo-story horizontal overflow')&&browser.includes('gallery album routes are shareable and filter the archive'));
 const suiteFiles=[...suite.matchAll(/'([^']+\.mjs)'/g)].map(m=>m[1]).filter(p=>p.startsWith('qa-'));
 const stale=[];
 const stalePatterns=[/pkg\.version===['"](?:5[0-9]|6[0-3])\./,/release is v(?:5[0-9]|6[0-3])/i,/release version is V(?:5[0-9]|6[0-3])/i,/gallery\.slice\(0,4\)/,/jh-photo-grid/,/column-count:4/];
