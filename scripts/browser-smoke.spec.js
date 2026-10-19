@@ -148,7 +148,7 @@ test('mobile homepage logo and primary actions stay clear of the fixed navigatio
   // The bot is a lazy-loaded chunk behind Suspense; wait for actual layout, not just the app root.
   // Fonts and responsive CSS can still change bounding boxes after React mounts.
   await expect(page.locator('.jyc-bot-shell')).toBeAttached({ timeout: 15000 });
-  for (const selector of ['.mobile-dock', '.jh-cyber-badge', '.jh-hero-logo-plaque', '.jh-dither-mark', '.jh-plaque-footer', '.jh-hero-actions']) {
+  for (const selector of ['.mobile-dock', '.jh-cyber-badge', '.jh-hero-webgl-stage-wrap', '.jh-hero-actions']) {
     await expect(page.locator(selector), `required hero geometry element ${selector}`).toBeVisible({ timeout: 15000 });
   }
   await page.evaluate(async () => {
@@ -166,24 +166,18 @@ test('mobile homepage logo and primary actions stay clear of the fixed navigatio
       dock: rect('.mobile-dock'),
       badge: rect('.jh-cyber-badge'),
       bot: rect('.jyc-bot-shell'),
-      logo: rect('.jh-hero-logo-plaque'),
-      mark: rect('.jh-dither-mark'),
-      plaqueFooter: rect('.jh-plaque-footer'),
+      heroStage: rect('.jh-hero-webgl-stage-wrap'),
       actions: rect('.jh-hero-actions')
     };
   });
   expect(geometry.dock, 'the mobile navigation dock should be present').not.toBeNull();
   expect(geometry.badge, 'the academic-year badge should be present').not.toBeNull();
   expect(geometry.bot, 'the floating assistant should be mounted before overlap is measured').not.toBeNull();
-  expect(geometry.logo, 'the homepage logo plaque should be present').not.toBeNull();
-  expect(geometry.mark, 'the Dither Veil mark container should be present').not.toBeNull();
-  expect(geometry.plaqueFooter, 'the official-mark caption should be present').not.toBeNull();
+  expect(geometry.heroStage, 'the current WebGL hero stage should be present').not.toBeNull();
   expect(geometry.actions, 'the homepage actions should be present').not.toBeNull();
   expect(geometry.bot.bottom <= geometry.badge.top || geometry.bot.top >= geometry.badge.bottom, 'the floating assistant must not cover the academic-year badge').toBe(true);
   expect(geometry.bot.bottom <= geometry.actions.top || geometry.bot.top >= geometry.actions.bottom, 'the floating assistant must not cover primary hero actions').toBe(true);
-  expect(geometry.mark.bottom, 'the full JYC mark must finish before the plaque caption begins').toBeLessThanOrEqual(geometry.plaqueFooter.top);
-  expect(geometry.plaqueFooter.bottom, 'the plaque must contain the full caption without clipping').toBeLessThanOrEqual(geometry.logo.bottom);
-  expect(geometry.logo.bottom, 'the fixed dock must not cover the JYC logo plaque').toBeLessThanOrEqual(geometry.dock.top + 1);
+  expect(geometry.heroStage.bottom, 'the fixed dock must not cover the interactive hero stage').toBeLessThanOrEqual(geometry.dock.top + 1);
   expect(geometry.actions.bottom, 'the fixed dock must not cover the hero actions').toBeLessThanOrEqual(geometry.dock.top + 1);
 });
 
