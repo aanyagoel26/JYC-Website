@@ -73,6 +73,8 @@ const QUALITY_OVERRIDES={
   Prismatic:[],
   RPH:[],
   VamUnique:['/assets/hub-photos-extra/vamunique-61.webp','/assets/hub-photos-extra/vamunique-63.webp'],
+  Fortissimo:['/assets/banners/fortissimo-banner.jpg','/assets/home/converge-voices.webp'],
+  Abhivyakti:['/assets/banners/abhivyakti-banner.jpg'],
   Zencoders:[],
   Arcadia:[],
   NeuralNexus:[],

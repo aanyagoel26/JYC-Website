@@ -16,10 +16,19 @@
 }
 html[data-theme="light"] .public-app {
   background:
-    radial-gradient(ellipse at 8% 5%, rgba(194,154,89,.14), transparent 34rem),
-    radial-gradient(ellipse at 94% 20%, rgba(112,43,59,.075), transparent 32rem),
-    radial-gradient(ellipse at 55% 82%, rgba(194,154,89,.08), transparent 38rem),
-    linear-gradient(180deg, #fff9eb 0%, #f4ead5 54%, #fbf4e3 100%) !important;
+    radial-gradient(ellipse at 15% 10%, rgba(212,175,55,.14), transparent 38rem),
+    radial-gradient(ellipse at 88% 25%, rgba(191,156,111,.11), transparent 36rem),
+    radial-gradient(ellipse at 50% 80%, rgba(212,175,55,.09), transparent 42rem),
+    linear-gradient(180deg, #fdfbf7 0%, #f6f0e4 52%, #fbf7ee 100%) !important;
+  background-attachment: fixed !important;
+}
+html[data-theme="dark"] .public-app,
+:root:not([data-theme="light"]) .public-app {
+  background:
+    radial-gradient(ellipse at 18% 12%, rgba(212,175,55,.06), transparent 38rem),
+    radial-gradient(ellipse at 82% 28%, rgba(56,189,248,.05), transparent 42rem),
+    radial-gradient(ellipse at 50% 75%, rgba(147,51,234,.035), transparent 48rem),
+    linear-gradient(180deg, #07090e 0%, #0a0d16 50%, #080a11 100%) !important;
   background-attachment: fixed !important;
 }
 .public-app {

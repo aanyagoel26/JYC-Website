@@ -16,6 +16,9 @@
 @import './jyc-v56-final-system.css';
 @import './jyc-v56-9-editorial.css';
 @import './jyc-v58-final.css';
+@import '../jyc-design-upgrades.css';
+@import './jyc-pro-redesign.css';
+@import './jyc-visual-wow.css';
 
 html{color-scheme:light dark;}
 

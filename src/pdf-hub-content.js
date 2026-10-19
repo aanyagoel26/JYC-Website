@@ -1,6 +1,6 @@
 export const PDF_HUB_GALLERY=[
-{id:'pdf-jyc-01',url:'/assets/hub-photos/jyc-01.webp',caption:'JYC · portrait from the supplied archive',association:'JYC Archive',mediaKind:'photo'},
-{id:'pdf-jyc-02',url:'/assets/hub-photos/jyc-02.webp',caption:'JYC · portrait from the supplied archive',association:'JYC Archive',mediaKind:'photo'},
+{id:'pdf-jyc-01',url:'/assets/hub-photos/jyc-01.webp',caption:'JYC · portrait from the supplied archive',association:'JYC Archive',mediaKind:'photo',published:false},
+{id:'pdf-jyc-02',url:'/assets/hub-photos/jyc-02.webp',caption:'JYC · portrait from the supplied archive',association:'JYC Archive',mediaKind:'photo',published:false},
 {id:'pdf-jyc-03',url:'/assets/hub-photos/jyc-03.webp',caption:'JYC · “Welcome to reality” programme graphic',association:'JYC Archive',mediaKind:'artwork'},
 {id:'pdf-jyc-04',url:'/assets/hub-photos/jyc-04.webp',caption:'JYC · “Master of None” programme graphic',association:'JYC Archive',mediaKind:'artwork'},
 {id:'pdf-jyc-05',url:'/assets/hub-photos/jyc-05.webp',caption:'JYC · supplied Google-themed programme graphic',association:'JYC Archive',mediaKind:'artwork'},
@@ -30,7 +30,7 @@ export const PDF_HUB_GALLERY=[
 {id:'pdf-cypherx-02',url:'/assets/hub-photos/cypherx-02.webp',caption:'CypherX · supplied security-awareness graphic',association:'CypherX',mediaKind:'artwork'},
 {id:'pdf-vamunique-01',url:'/assets/hub-photos/vamunique-01.webp',caption:'VamUnique · dance performance photograph',association:'VamUnique',mediaKind:'photo'},
 {id:'pdf-vamunique-02',url:'/assets/hub-photos/vamunique-02.webp',caption:'VamUnique · stage performance photograph',association:'VamUnique',mediaKind:'photo'},
-{id:'pdf-vamunique-03',url:'/assets/hub-photos/vamunique-03.webp',caption:'VamUnique · dancer portrait from the supplied archive',association:'VamUnique',mediaKind:'photo'},
+{id:'pdf-vamunique-03',url:'/assets/hub-photos/vamunique-03.webp',caption:'VamUnique · dancer portrait from the supplied archive',association:'VamUnique',mediaKind:'photo',published:false},
 {id:'pdf-vamunique-04',url:'/assets/hub-photos/vamunique-04.webp',caption:'VamUnique · dance group photograph',association:'VamUnique',mediaKind:'photo'},
 {id:'pdf-arcadia-01',url:'/assets/hub-photos/arcadia-01.webp',caption:'Arcadia · student community group photograph',association:'Arcadia',mediaKind:'photo'},
 {id:'pdf-neural-01',url:'/assets/hub-photos/neural-01.webp',caption:'Neural Nexus · AI/ML society material',association:'Neural Nexus'},
@@ -40,6 +40,8 @@ export const PDF_HUB_GALLERY=[
 {id:'pdf-sports-story',url:'/assets/hub-stories/sports.webp',caption:'JSA · supplied sports programme artwork',association:'JSA',mediaKind:'artwork'}
 ];
 export const PDF_HUB_STORIES=[
+{name:'Fortissimo',family:'Cultural',focus:'Music',image:'/assets/banners/fortissimo-banner.jpg',text:'Fortissimo is the premier music and live band society of JIIT-128, bringing vocalists, guitarists, drummers and keyboardists together for acoustic jams, Battle of the Bands and headline concert stages.'},
+{name:'Abhivyakti',family:'Cultural',focus:'Dramatics',image:'/assets/banners/abhivyakti-banner.jpg',text:'Abhivyakti is the official dramatics society of JIIT-128, producing award-winning street theatre (Nukkad Natak) and stage plays across collegiate festival circuits.'},
 {name:'Aakriti',family:'Creative',focus:'Fine Arts',image:'/assets/hub-stories/aakriti.webp',text:'Aakriti describes itself as the Fine Art Society of JIIT-128. Its supplied material highlights Art of the Week, Best out of Waste, inter-college participation, Converge decoration and competitions, plus creative work for Ebullience and Farewell.'},
 {name:'Aura',family:'Creative',focus:'Photography',image:'/assets/hub-stories/aura.webp',text:'Aura is the photography society of JIIT-128. The supplied material highlights campus event coverage, lectures and workshops, photo walks, profile photography, professional experience and competitions including Converge and Synergy.'},
 {name:'Panache',family:'Cultural',focus:'Fashion',image:'/assets/hub-stories/panache.webp',text:'Panache presents fashion as a platform for talent, teamwork and confidence. The supplied material includes fashion designing, photowalks, makeup and face paint, cosplay, flashmobs and performances, along with inter-college achievements.'},
@@ -60,4 +62,14 @@ export const PDF_HUB_STORIES=[
 export const HUB_PHOTO_MAP={
 // Exclude aakriti-01 (1311×25 wordmark/banner) from the photo pool; keep the visual available in the source material.
 // neural-01 (1500×211) is also an ultra-wide graphic; retain it as a visual, not a photo-map entry.
-Aakriti:['/assets/hub-photos/aakriti-02.webp','/assets/hub-photos/aakriti-03.webp'],Aura:[],Panache:['/assets/hub-photos/panache-02.webp'],CICR:[],RPH:['/assets/hub-photos/rph-02.webp'],Dronotics:[],CypherX:[],VamUnique:['/assets/hub-photos/vamunique-01.webp','/assets/hub-photos/vamunique-02.webp','/assets/hub-photos/vamunique-03.webp','/assets/hub-photos/vamunique-04.webp'],Arcadia:['/assets/hub-photos/arcadia-01.webp']};
+Fortissimo:['/assets/banners/fortissimo-banner.jpg'],
+Abhivyakti:['/assets/banners/abhivyakti-banner.jpg'],
+Aakriti:['/assets/hub-photos/aakriti-02.webp','/assets/hub-photos/aakriti-03.webp'],
+Aura:['/assets/banners/aura-banner.jpg'],
+Panache:['/assets/hub-photos/panache-02.webp'],
+CICR:[],
+RPH:['/assets/hub-photos/rph-02.webp'],
+Dronotics:['/assets/banners/dronotics-banner.jpg'],
+CypherX:['/assets/banners/cypherx-banner.jpg'],
+VamUnique:['/assets/hub-photos/vamunique-01.webp','/assets/hub-photos/vamunique-02.webp','/assets/hub-photos/vamunique-04.webp'],
+Arcadia:['/assets/hub-photos/arcadia-01.webp']};

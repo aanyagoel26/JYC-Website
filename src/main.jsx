@@ -321,6 +321,7 @@ function ClubDetail({data,id,virtualName}){
 }
 function Team({data}){
  const nav=useNavigate();
+ const [activeTier,setActiveTier]=useState('all');
  const members=data.team.filter(m=>m.published===true);
  const faculty=members.filter(m=>/faculty|advisor|coordinator/i.test(String(m.role||m.position||'')));
  const apex=members.filter(m=>/president|vice president|general secretary|joint secretary|finance secretary|treasurer/i.test(String(m.role||m.position||''))&&!/faculty/i.test(String(m.role||'')));
@@ -336,7 +337,7 @@ function Team({data}){
    <Suspense fallback={<div className="team-flip-loading" aria-hidden="true"/>}>
     <LazyFlipCard label={`Open profile for ${name}`} className="team-member-flip">
      {/* Front Face: High-Res Portrait, Name, Position, Flip Trigger */}
-     <div className="team-member-face-content" style={{position:'relative',width:'100%',height:'100%',overflow:'hidden',padding:0}}>
+     <div className="team-member-face-content" style={{position:'absolute',inset:0,width:'100%',height:'100%',minHeight:'100%',overflow:'hidden',padding:0}}>
       <div className="team-photo-editorial">
        {photo?<ResponsivePhoto src={photo} alt={name} width={600} height={720} loading="lazy" decoding="async" sizes="(max-width: 420px) 90vw, (max-width: 760px) 45vw, 25vw" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt={`Portrait unavailable for ${name}`}/>:<span className="jyc-logo-fallback team-photo-missing-logo" role="img" aria-label={`Portrait unavailable for ${name}`}>{String(name||'JYC').trim().split(/\s+/).map(x=>x[0]).slice(0,2).join('').toUpperCase()}</span>}
       </div>
@@ -382,10 +383,30 @@ function Team({data}){
    <article><b>{core.length || '—'}</b><span>{core.length ? 'Core team profiles' : 'Core profiles awaiting publication'}</span></article>
    <article><b>{JYC_HUB_FAMILIES.length}</b><span>Community families</span></article>
   </div>
+  <div className="team-filter-bar reveal" role="tablist" aria-label="Filter leadership tiers">
+   {[
+     ['all', 'All Leadership', members.length],
+     ['apex', 'Apex Leadership', apex.length],
+     ['core', 'Core Committee Heads', core.length],
+     ['faculty', 'Faculty Coordinators', faculty.length]
+   ].map(([key, label, count]) => (
+     <button
+       type="button"
+       key={key}
+       role="tab"
+       aria-selected={activeTier === key}
+       className={`team-filter-tab ${activeTier === key ? 'is-active' : ''}`}
+       onClick={() => setActiveTier(key)}
+     >
+       <span>{label}</span>
+       <b>{count}</b>
+     </button>
+   ))}
+  </div>
   <section className="team-structure-visual reveal"><span className="eyebrow">ORGANIZATIONAL STRUCTURE</span><h2>Faculty → Apex → Core → Clubs & Hubs.</h2><div className="team-structure-flow"><div><b>01</b><strong>Faculty Coordinators</strong><span>Guidance & institutional support</span></div><i>↓</i><div><b>02</b><strong>JYC Apex</strong><span>Student leadership & coordination</span></div><i>↓</i><div><b>03</b><strong>Core Team</strong><span>Committee heads & operations</span></div><i>↓</i><div><b>04</b><strong>Clubs & Hubs</strong><span>Communities · coordinators · volunteers</span></div></div></section>
-  {faculty.length>0&&<section className="team-layer reveal"><div className="team-layer-head"><span className="eyebrow">01 · FACULTY COORDINATORS</span><h2>Institutional guidance.</h2><p>Faculty advisors provide guidance and institutional support to the student ecosystem.</p></div><div className={faculty.length===2?'team-layer-grid team-layer-grid--two':'team-layer-grid'}>{faculty.map((m,i)=><MemberCard m={m} index={i} key={m.id||m.name||i}/>)}</div></section>}
-  {apex.length>0&&<section className="team-layer reveal"><div className="team-layer-head"><span className="eyebrow">02 · JYC APEX</span><h2>Student leadership.</h2><p>The apex body coordinates the wider JYC ecosystem and its campus-facing execution.</p></div><div className="team-layer-grid">{apex.map((m,i)=><MemberCard m={m} index={i} key={m.id||m.name||i}/>)}</div></section>}
-  {core.length>0&&<section className="team-layer reveal"><div className="team-layer-head"><span className="eyebrow">03 · CORE TEAM</span><h2>Heads who make programmes happen.</h2><p>Media, creative, PR, hospitality, security, management, digital and executive responsibilities sit here.</p></div><div className="team-layer-grid">{core.map((m,i)=><MemberCard m={m} index={i} key={m.id||m.name||i}/>)}</div></section>}
+  {(activeTier==='all'||activeTier==='faculty')&&faculty.length>0&&<section className="team-layer reveal"><div className="team-layer-head"><span className="eyebrow">01 · FACULTY COORDINATORS</span><h2>Institutional guidance.</h2><p>Faculty advisors provide guidance and institutional support to the student ecosystem.</p></div><div className={faculty.length===2?'team-layer-grid team-layer-grid--two':'team-layer-grid'}>{faculty.map((m,i)=><MemberCard m={m} index={i} key={m.id||m.name||i}/>)}</div></section>}
+  {(activeTier==='all'||activeTier==='apex')&&apex.length>0&&<section className="team-layer reveal"><div className="team-layer-head"><span className="eyebrow">02 · JYC APEX</span><h2>Student leadership.</h2><p>The apex body coordinates the wider JYC ecosystem and its campus-facing execution.</p></div><div className="team-layer-grid">{apex.map((m,i)=><MemberCard m={m} index={i} key={m.id||m.name||i}/>)}</div></section>}
+  {(activeTier==='all'||activeTier==='core')&&core.length>0&&<section className="team-layer reveal"><div className="team-layer-head"><span className="eyebrow">03 · CORE TEAM</span><h2>Heads who make programmes happen.</h2><p>Media, creative, PR, hospitality, security, management, digital and executive responsibilities sit here.</p></div><div className="team-layer-grid">{core.map((m,i)=><MemberCard m={m} index={i} key={m.id||m.name||i}/>)}</div></section>}
   <section className="team-layer reveal"><div className="team-layer-head"><span className="eyebrow">04 · CLUBS & HUBS</span><h2>One leadership layer. {Object.keys(JYC_HUB_CONTENT).length} named communities.</h2><p>Explore the five JYC families and open any community to see its profile, activities, events and official links.</p></div><div className="team-hub-directory">{Object.entries(JYC_HUB_CONTENT).map(([name,p])=><a href={'/clubs/'+slug(name)} key={name}><small>{p.family}</small><strong>{name}</strong></a>)}</div></section>
   {roleFallback}
   <div className="team-closeout reveal"><div className="team-closeout-mark"><LogoImage alt="JIIT Youth Club logo"/></div><div><span className="eyebrow">DIFFERENT ROLES · DIFFERENT COMMUNITIES</span><h2>One JYC.</h2><p>Explore the people, communities and experiences that make the JYC ecosystem visible on campus.</p><div className="hero-actions"><Button onClick={()=>nav('/clubs')}>Find your community ↗</Button><Button secondary onClick={()=>nav('/events')}>See events →</Button></div></div></div>
@@ -938,10 +959,57 @@ function Footer({data,admin}){
 }
 
 function Loading({stage='INITIALIZING',cached=false}){ 
- const labels={INITIALIZING:['INITIALIZING','CONNECTING TO JYC'],LOADING:['LOADING','PREPARING THE CAMPUS ECOSYSTEM'],SYNCING:['SYNCING',cached?'USING YOUR LATEST SAVED SNAPSHOT':'CHECKING THE LATEST CAMPUS DATA'],READY:['READY','BUILDING YOUR EXPERIENCE'],OFFLINE:['OFFLINE','OPENING THE LAST AVAILABLE JYC EXPERIENCE']};
+ const labels={
+   INITIALIZING:['BOOTING JYC ENGINE','CONNECTING TO CAMPUS GRAPH'],
+   LOADING:['SYNCING SOCIETIES','INITIALIZING 28+ STUDENT COMMUNITIES'],
+   SYNCING:['RESOLVING ASSETS',cached?'LOADING CACHED CAMPUS ARCHIVE':'FETCHING LIVE EVENT DATA'],
+   READY:['SYSTEM OPERATIONAL','ENTERING JYC 128 DIGITAL ECOSYSTEM'],
+   OFFLINE:['OFFLINE READY','OPENING VERIFIED LOCAL SNAPSHOT']
+ };
  const current=labels[stage]||labels.INITIALIZING;
- const progress={INITIALIZING:18,LOADING:44,SYNCING:72,READY:100,OFFLINE:88}[stage]||18;
- return <div className="loading loading-v41" role="status" aria-live="polite" aria-label="Loading JYC"><div className="loading-v41-backdrop" aria-hidden="true"><span/><i/><b/></div><div className="loading-center-v41"><div className="loading-kicker"><i/> JIIT · SECTOR 128 · NOIDA</div><div className="loading-v41-mark-wrap"><span className="loading-v41-line loading-v41-line-a"/><span className="loading-v41-line loading-v41-line-b"/><div className="loading-mark"><LogoImage alt="JIIT Youth Club"/></div></div><div className="loading-logo"><span>JIIT YOUTH CLUB</span><strong>READY TO SOAR</strong></div><p className="loading-tagline">One campus. Many communities. One JYC.</p><div className="loading-v41-steps" aria-hidden="true"><span className={progress>=18?'done':''}>01</span><i/><span className={progress>=44?'done':''}>02</span><i/><span className={progress>=72?'done':''}>03</span><i/><span className={progress>=100?'done':''}>04</span></div><div className="loadline" style={{'--boot-progress':`${progress}%`}}><i/></div><div className="loading-status"><span>{current[0]} · {progress}%</span><span>{current[1]}</span></div></div><div className="loading-foot">JYC · 128 <span>NOIDA · 2026</span></div></div>
+ const progress={INITIALIZING:25,LOADING:55,SYNCING:80,READY:100,OFFLINE:88}[stage]||25;
+ return (
+   <div className="loading loading-v41 loading-cyber-suite" role="status" aria-live="polite" aria-label="Loading JYC">
+     <div className="loading-v41-backdrop" aria-hidden="true">
+       <span className="backdrop-aurora" />
+       <i className="backdrop-star-a" />
+       <b className="backdrop-star-b" />
+     </div>
+     <div className="loading-center-v41">
+       <div className="loading-kicker">
+         <i /> JIIT · SECTOR 128 · NOIDA · AY 2026–27
+       </div>
+       <div className="loading-v41-mark-wrap loading-cyber-rings">
+         <span className="cyber-ring-outer" />
+         <span className="cyber-ring-inner" />
+         <div className="loading-mark">
+           <LogoImage alt="JIIT Youth Club Crest" />
+         </div>
+       </div>
+       <div className="loading-logo">
+         <span>JIIT YOUTH CLUB</span>
+         <strong>READY TO SOAR</strong>
+       </div>
+       <p className="loading-tagline">One campus. Many communities. One JYC.</p>
+       <div className="loading-v41-steps" aria-hidden="true">
+         <span className={progress>=25?'done':''}>01</span><i/>
+         <span className={progress>=55?'done':''}>02</span><i/>
+         <span className={progress>=80?'done':''}>03</span><i/>
+         <span className={progress>=100?'done':''}>04</span>
+       </div>
+       <div className="loadline loading-laser-line" style={{'--boot-progress':`${progress}%`}}>
+         <i />
+       </div>
+       <div className="loading-status">
+         <span>{current[0]} · {progress}%</span>
+         <span>{current[1]}</span>
+       </div>
+     </div>
+     <div className="loading-foot">
+       JYC · 128 <span>SEC-128, NOIDA · OFFICIAL PLATFORM</span>
+     </div>
+   </div>
+ );
 }
 function BackToTop(){const [show,setShow]=useState(false);useEffect(()=>{const onScroll=()=>setShow(window.scrollY>520);window.addEventListener('scroll',onScroll,{passive:true});return()=>window.removeEventListener('scroll',onScroll)},[]);if(!show)return null;return <button type="button" className="back-to-top" onClick={()=>window.scrollTo({top:0,behavior:'smooth'})} aria-label="Back to top" title="Back to top">↑</button>}
 function ScrollProgress(){const [progress,setProgress]=useState(0);useEffect(()=>{const update=()=>{const d=document.documentElement;const max=d.scrollHeight-d.clientHeight;setProgress(max>0?Math.min(100,(d.scrollTop/max)*100):0)};update();window.addEventListener('scroll',update,{passive:true});window.addEventListener('resize',update);return()=>{window.removeEventListener('scroll',update);window.removeEventListener('resize',update)}},[]);return <div className="scroll-progress" aria-hidden="true" style={{'--scroll-progress-width':`${progress}%`}}><i/></div>}

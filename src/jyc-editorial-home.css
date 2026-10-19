@@ -5,7 +5,8 @@
    ========================================================================== */
 
 :root {
-  --jh-bg: #F5F1E6;
+  --jh-bg:#f5f1e6;
+  --jh-gold:#bf9c6f;
   --jh-surface: #FFFFFF;
   --jh-surface-elevated: #FFFDF8;
   --jh-surface-glass: rgba(255, 255, 255, 0.90);
@@ -38,7 +39,8 @@
   --jh-line-accent: rgba(191, 156, 111, 0.42);
 }
 
-[data-theme="dark"] .jyc-editorial-home.jyc-home {
+[data-theme="dark"] .jyc-editorial-home.jyc-home,
+[data-theme=dark] .jyc-home {
   --jh-bg: #0F0E11;
   --jh-surface: #18161D;
   --jh-surface-elevated: #211E26;

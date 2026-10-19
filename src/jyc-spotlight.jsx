@@ -7,19 +7,35 @@ const slug=value=>String(value||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'
 const mediaUrl=item=>item?.url||item?.src||item?.image||item?.imageUrl||'';
 const photoKey=value=>String(value||'').trim().split(/[?#]/,1)[0].toLowerCase();
 
+const isPortraitOrSelfie = item => {
+  const url = String(item?.url || item?.src || item?.image || '').toLowerCase();
+  const caption = String(item?.caption || item?.alt || '').toLowerCase();
+  return url.includes('jyc-01.webp') || url.includes('jyc-02.webp') || url.includes('vamunique-03.webp') || caption.includes('portrait from the supplied archive') || caption.includes('portrait archive');
+};
+
 const photoFor=(gallery,clubName,event)=>{
-  const rows=Array.isArray(gallery)?gallery:[];
+  const rows=Array.isArray(gallery)?gallery.filter(g=>g?.published!==false&&!isPortraitOrSelfie(g)):[];
   const eventId=String(event?.id||'');
   const eventTitle=String(event?.title||'').toLowerCase();
   const club=String(clubName||'').toLowerCase();
-  return mediaUrl(rows.find(g=>String(g.eventId||'')===eventId))
-    || mediaUrl(rows.find(g=>{
-      const hay=String(g.association||g.caption||'').toLowerCase();
-      return (club&&hay.includes(club))||(eventTitle&&hay.includes(eventTitle));
-    }))
-    || mediaUrl(rows.find(g=>g.url||g.src||g.image||g.imageUrl))
-    || PDF_HUB_STORIES.find(s=>String(s.name||'').toLowerCase()===club)?.image
-    || '';
+  
+  // 1. Direct event photo
+  const eventMatch = rows.find(g=>String(g.eventId||'')===eventId);
+  if(eventMatch) return mediaUrl(eventMatch);
+  
+  // 2. Direct club association in verified gallery
+  const clubMatch = rows.find(g=>{
+    const hay=String(g.association||g.caption||'').toLowerCase();
+    return (club&&hay.includes(club))||(eventTitle&&hay.includes(eventTitle));
+  });
+  if(clubMatch) return mediaUrl(clubMatch);
+
+  // 3. Official curated story image or banner
+  const storyImage = PDF_HUB_STORIES.find(s=>String(s.name||'').toLowerCase()===club)?.image;
+  if(storyImage) return storyImage;
+
+  // 4. Default high-energy festival or campus photograph
+  return '/assets/home/converge-voices.webp';
 };
 
 export function JYCSpotlight({data}){
@@ -40,7 +56,7 @@ export function JYCSpotlight({data}){
     const eventPosterKey=photoKey(event?.poster);
     const archiveCandidates=gallery.filter(g=>{
       const url=mediaUrl(g),key=photoKey(url);
-      return url&&key&&key!==communityPhotoKey&&key!==eventPosterKey;
+      return url&&key&&key!==communityPhotoKey&&key!==eventPosterKey&&!isPortraitOrSelfie(g);
     });
     const archive=archiveCandidates.find(g=>event?.id&&String(g.eventId||'')===String(event.id))||archiveCandidates[0]||null;
     return {event,community,communityPhoto,archive};

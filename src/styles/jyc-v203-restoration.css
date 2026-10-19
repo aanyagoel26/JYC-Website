@@ -13,36 +13,10 @@
   --jyc-restoration-halo: rgba(194,154,89,.22);
 }
 
-/* Preserve the current JYC logo and Dither Veil, adding a restrained warm halo. */
-.jyc-editorial-home.jyc-home .jh-hero-logo-plaque {
+/* JYC Hero WebGL Stage Clean Container */
+.jyc-editorial-home.jyc-home .jh-hero-webgl-stage-wrap {
   position: relative;
-  isolation: isolate;
-  border-color: color-mix(in srgb, var(--jyc-restoration-champagne) 42%, var(--jh-line, transparent));
-  box-shadow:
-    0 28px 90px rgba(48, 26, 24, .14),
-    0 0 0 1px rgba(194,154,89,.08),
-    inset 0 1px rgba(255,255,255,.58);
-  transition: border-color 260ms ease, box-shadow 320ms ease, transform 320ms ease;
-}
-.jyc-editorial-home.jyc-home .jh-hero-logo-plaque::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: -1px;
-  border-radius: inherit;
-  pointer-events: none;
-  background: radial-gradient(ellipse at 52% 48%, rgba(194,154,89,.17), transparent 66%);
-  opacity: .72;
-  transition: opacity 320ms ease;
-}
-.jyc-editorial-home.jyc-home .jh-hero-logo-plaque:hover {
-  border-color: rgba(194,154,89,.62);
-  box-shadow: 0 32px 100px rgba(48,26,24,.18), 0 0 36px rgba(194,154,89,.12), inset 0 1px rgba(255,255,255,.68);
-}
-.jyc-editorial-home.jyc-home .jh-hero-logo-plaque:hover::after { opacity: 1; }
-.jyc-editorial-home.jyc-home .jh-hero-logo,
-.jyc-editorial-home.jyc-home .jh-dither-veil-effect {
-  filter: drop-shadow(0 10px 24px rgba(112,43,59,.14));
+  width: 100%;
 }
 .jyc-editorial-home.jyc-home .jh-logo-halo {
   width: min(88%, 460px);

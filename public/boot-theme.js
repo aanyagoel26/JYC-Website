@@ -1,5 +1,5 @@
 (() => {
-  let theme = 'light';
+  let theme = 'dark';
   try {
     const saved = localStorage.getItem('jyc-theme');
     theme = saved === 'dark' || saved === 'light'

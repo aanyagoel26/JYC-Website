@@ -68,7 +68,32 @@ const photoObjectPosition=photo=>{
  if(!Number.isFinite(x)||!Number.isFinite(y))return undefined;
  return `${Math.min(100,Math.max(0,x))}% ${Math.min(100,Math.max(0,y))}%`;
 };
-const clubCardPhoto=club=>{const clubName=typeof club==='object'&&club!==null?club.name:club;const source=sourceHubMedia(clubName);return club?.hubPhotos?.[0]||source?.photos?.[0]||source?.photoItems?.find(item=>item?.url)?.url||source?.visuals?.[0]||(club?.banner&&club.banner!==club.logo?club.banner:'')||''};
+const clubCardPhoto=club=>{
+  const clubName=typeof club==='object'&&club!==null?club.name:club;
+  const source=sourceHubMedia(clubName);
+  const isSelfie=u=>{
+    if(!u)return false;
+    const s=String(u).toLowerCase();
+    return s.includes('jyc-01')||s.includes('jyc-02')||s.includes('vamunique-03')||s.includes('portrait')||s.includes('selfie');
+  };
+  const pickValid=arr=>{
+    if(!Array.isArray(arr))return null;
+    return arr.find(x=>{
+      const url=typeof x==='string'?x:(x?.url||x?.src);
+      return url&&!isSelfie(url);
+    });
+  };
+  const cPhoto=pickValid(club?.hubPhotos);
+  if(cPhoto)return typeof cPhoto==='string'?cPhoto:(cPhoto.url||cPhoto.src);
+  const sPhoto=pickValid(source?.photos);
+  if(sPhoto)return typeof sPhoto==='string'?sPhoto:(sPhoto.url||sPhoto.src);
+  const sItem=source?.photoItems?.find(item=>item?.url&&!isSelfie(item.url));
+  if(sItem?.url)return sItem.url;
+  const sVis=pickValid(source?.visuals);
+  if(sVis)return typeof sVis==='string'?sVis:(sVis.url||sVis.src);
+  if(club?.banner&&club.banner!==club.logo&&!isSelfie(club.banner))return club.banner;
+  return '';
+};
 function magneticMove(event){
  if(event.pointerType!=='mouse'||window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
  const element=event.currentTarget,rect=element.getBoundingClientRect();
@@ -289,6 +314,9 @@ export function JYC57Gallery({data}){
     return rawGallery
       .filter(g => g && g.url && g.mediaKind === 'photo')
       .filter(g => {
+        const u = String(g.url).toLowerCase();
+        if (u.includes('jyc-01') || u.includes('jyc-02') || u.includes('vamunique-03')) return false;
+        if (/portrait|selfie/i.test(g.caption || '') && !g.official) return false;
         const key = String(g.url);
         if (seen.has(key)) return false;
         seen.add(key);

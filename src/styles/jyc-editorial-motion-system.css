@@ -210,27 +210,13 @@
   box-shadow: 0 0 0 18px rgba(191,156,111,.055), 0 0 0 42px rgba(168,36,32,.025);
   pointer-events: none;
 }
-.jyc-editorial-home.jyc-home .jh-hero-dither-visual::after {
-  content: "JIIT 128  /  EST. STUDENT COMMUNITY";
-  position: absolute;
-  z-index: 3;
-  top: 4%;
-  right: 0;
-  color: #7c6550;
-  font: 600 9px/1.4 "JetBrains Mono", monospace;
-  letter-spacing: .14em;
-  writing-mode: vertical-rl;
-  pointer-events: none;
-}
-.jyc-editorial-home.jyc-home .jh-hero-logo-plaque {
+.jyc-editorial-home.jyc-home .jh-hero-webgl-stage-wrap {
   position: relative;
-  transform: rotateY(-5deg) rotateX(1deg);
-  transform-style: preserve-3d;
-  border: 1px solid rgba(191,156,111,.42) !important;
-  border-radius: clamp(22px, 3vw, 38px) !important;
-  background: linear-gradient(145deg, rgba(255,255,255,.94), rgba(250,245,235,.88)) !important;
-  box-shadow: 0 32px 85px rgba(39,27,29,.13), inset 0 1px 0 rgba(255,255,255,.9) !important;
-  backdrop-filter: blur(22px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 480px;
 }
 .jyc-editorial-home.jyc-home .jh-logo-halo {
   opacity: .7;

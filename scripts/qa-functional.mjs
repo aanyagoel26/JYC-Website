@@ -1,6 +1,7 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
 
 const source = fs.readFileSync(new URL('../src/v15-functional.js', import.meta.url), 'utf8')
   .replace("import { supabase } from './lib/supabase';", "const supabase = { from(){ return { upsert: async()=>({error:null}) }; } };");
@@ -15,7 +16,7 @@ globalThis.CustomEvent = class { constructor(type,init){this.type=type;this.deta
 
 action();
 async function action(){
-  const mod = await import(file+'?t='+Date.now());
+  const mod = await import(pathToFileURL(file).href+'?t='+Date.now());
   const { googleCalendarUrl, setSaved, isSaved, clearLocalReminder, hasLocalReminder } = mod;
   const url = googleCalendarUrl({title:'JYC Test',date:'2026-09-20',start:'9:00',end:'10:30'});
   if(!decodeURIComponent(url).includes('20260920T090000/20260920T103000')) throw new Error('Google Calendar 9:00 formatting failed');

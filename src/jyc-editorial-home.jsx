@@ -9,6 +9,9 @@ import { JYCSpotlight } from './jyc-spotlight.jsx';
 import { JYCNowStrip } from './jyc-now.jsx';
 const LazyDitherVeil = lazy(() => import('./react-bits/DitherVeil.jsx'));
 const LazyMagicBento = lazy(() => import('./components/react-bits/MagicBento.jsx'));
+import { JYCHeroWebGLEmblem } from './components/JYCHeroWebGLEmblem.jsx';
+import './components/JYCHeroWebGLEmblem.css';
+import { JYC3DInteractiveExplorer } from './components/JYC3DInteractiveExplorer.jsx';
 import './jyc-editorial-home.css';
 import './styles/jyc-editorial-motion-system.css';
 
@@ -154,7 +157,8 @@ export function JYCEditorialHome({ data }) {
     return PILLARS.map(p => {
       const source = sourceHubMedia(photoHubs[p.id]);
       const image = rankDiverseJycPhotos((source?.photoItems || []).filter(item => item?.url && (item.mediaKind || 'photo') === 'photo'), { limit: 1, maxPerAssociation: 1 })[0]?.url || '';
-      return { id:p.id, label:p.family.toUpperCase(), title:p.title, description:p.desc, href:p.id === 'fests' ? '/events' : '/clubs', image };
+      const cardImage = image || (p.id === 'literary' ? '/assets/hub-photos-extra/eloquence-26.webp' : '');
+      return { id:p.id, label:p.family.toUpperCase(), title:p.title, description:p.desc, href:p.id === 'fests' ? '/events' : '/clubs', image: cardImage };
     });
   }, []);
   const events = useMemo(() => Array.isArray(data?.events) ? data.events.filter(e => e?.published && !e?.archived).slice().sort((a, b) => dateMs(a) - dateMs(b)) : [], [data?.events]);
@@ -172,7 +176,7 @@ export function JYCEditorialHome({ data }) {
       const url = String(item?.url || '').trim();
       const association = String(item?.association || item?.albumName || '').trim();
       const role = String(item?.role || '').toLowerCase();
-      if (!url || !association || item?.mediaKind !== 'photo' || !['event','club'].includes(role) || item?.published === false || item?.archived === true || /jyc(?:\s+photo)?\s+archive|source archive/i.test(association) || seen.has(association.toLowerCase())) continue;
+      if (!url || !association || item?.mediaKind !== 'photo' || !['event','club'].includes(role) || item?.published === false || item?.archived === true || /jyc(?:\s+photo)?\s+archive|source archive/i.test(association) || /jyc-0[12]\.webp|vamunique-03/i.test(url) || /portrait/i.test(item?.caption || '') || seen.has(association.toLowerCase())) continue;
       seen.add(association.toLowerCase());
       selected.push({ ...item, association });
       if (selected.length === 3) break;
@@ -222,45 +226,9 @@ export function JYCEditorialHome({ data }) {
 
         </div>
 
-        {/* HERO DITHERVEIL VISUAL PLAQUE */}
-        <div className="jh-hero-visual jh-hero-dither-visual">
-          <div className="jh-hero-dither-backdrop" aria-hidden="true" />
-          <div className="jh-hero-logo-plaque">
-            <span className="jh-logo-halo" aria-hidden="true" />
-            <div className="jh-dither-mark" role="img" aria-label="Official JIIT Youth Club 128 logo with an interactive Dither Veil effect">
-              <Suspense fallback={<img className="jh-hero-logo jh-dither-suspense-fallback" src={DITHER_SOURCE} srcSet={DITHER_SRCSET} alt="" aria-hidden="true" loading="eager" fetchPriority="high" decoding="async" onError={handleHeroLogoFallback} />}>
-                <LazyDitherVeil
-                  src={DITHER_SOURCE}
-                  srcSet={DITHER_SRCSET}
-                  fallbackSrc={FALLBACK}
-                  originalFallbackSrc={ORIGINAL_LOGO}
-                  fit="contain"
-                  pattern="floyd"
-                  pixelSize={2}
-                  levels={3}
-                  palette="duotone"
-                  inkColor="#18161d"
-                  paperColor="#fffdf8"
-                  contrast={1.25}
-                  brightness={0.04}
-                  revealRadius={250}
-                  softness={0.7}
-                  linger={1.2}
-                  rimColor="#a82420"
-                  rim={0.28}
-                  wander={false}
-                  clickBurst={true}
-                  className="jh-dither-veil-effect"
-                />
-              </Suspense>
-            </div>
-            <div className="jh-plaque-footer">
-              <span className="jh-logo-caption">JIIT YOUTH CLUB <b>·</b> 128</span>
-              <span className="jh-status-live-tag">OFFICIAL MARK</span>
-            </div>
-          </div>
-          <span className="jh-photo-label">JYC 128 / CAMPUS COMMUNITY</span>
-          <span className="jh-photo-index">01 — IDENTITY</span>
+        {/* MODERN 3D WEBGL HERO EMBLEM STAGE */}
+        <div className="jh-hero-visual jh-hero-webgl-stage-wrap">
+          <JYCHeroWebGLEmblem />
         </div>
       </section>
 
@@ -271,6 +239,11 @@ export function JYCEditorialHome({ data }) {
           <h2 id="jh-about-title">A campus is made<br /><em>by the people in it.</em></h2>
           <div className="jh-about-editorial-copy">
             <p>JIIT Youth Club brings student communities together across technology, culture, performance, service and sport. Find the people, projects and experiences that make campus life feel like yours.</p>
+            <div className="jh-about-participation-proof">
+              <span><b>01</b> DISCOVER</span>
+              <span><b>02</b> PARTICIPATE</span>
+              <span><b>03</b> BELONG</span>
+            </div>
             <div className="jh-about-editorial-actions">
               <button type="button" className="jh-text-link" onClick={() => nav('/about')}>How JYC works <span>↗</span></button>
               <button type="button" className="jh-text-link" onClick={() => nav('/clubs')}>Explore communities <span>↗</span></button>
@@ -339,6 +312,11 @@ export function JYCEditorialHome({ data }) {
         </div>
         <LazyActivityBento activities={activities} nav={nav} />
       </section>
+
+      {/* 3D INTERACTIVE CAMPUS EXPLORER (CICR & INNOVATION INSPIRED) */}
+      <div className="jh-container">
+        <JYC3DInteractiveExplorer />
+      </div>
 
       {/* FEATURED & UPCOMING EVENTS */}
       <section className="jh-container jh-events">
