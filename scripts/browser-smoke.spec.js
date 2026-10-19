@@ -497,7 +497,7 @@ test('failed gallery photos use the neutral unavailable-photo asset, not a logo 
   // dedicated .jyc57-event-art ancestor; assert the actual neutral fallback.
   const eventFallback = page.locator('img[src="/assets/photo-unavailable.svg"]').first();
   await expect(eventFallback).toBeVisible({ timeout: 15000 });
-  await expect(eventFallback).toHaveAttribute('alt', 'Photograph unavailable');
+  await expect(eventFallback).toHaveAttribute('alt', 'Event poster unavailable');
 
   await page.goto(base + '/clubs', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'club photo fallback');
