@@ -23,6 +23,16 @@ export const canonicalHubName=name=>{
 };
 const SOURCE_GALLERY=[...PDF_HUB_GALLERY,...PDF_HUB_EXTRA_GALLERY];
 
+// These known presentation graphics and generic placeholder panels are not photographs.
+const HUB_GRAPHIC_URLS = new Set([
+  '/assets/hub-photos/jyc-03.webp','/assets/hub-photos/jyc-04.webp','/assets/hub-photos/jyc-05.webp',
+  '/assets/hub-photos/jyc-06.webp','/assets/hub-photos/jyc-07.webp','/assets/hub-photos/jyc-08.webp',
+  '/assets/hub-photos/jyc-09.webp','/assets/hub-photos/aura-01.webp','/assets/hub-photos/panache-01.webp',
+  '/assets/hub-photos/cicr-01.webp','/assets/hub-photos/cicr-02.webp','/assets/hub-photos/rph-01.webp',
+  '/assets/hub-photos/dronotics-01.webp','/assets/hub-photos/cypherx-01.webp','/assets/hub-photos/cypherx-02.webp',
+  '/assets/hub-photos/sports-01.webp','/assets/hub-photos/neural-01.webp','/assets/hub-stories/sports.webp'
+]);
+
 // The five archives were visually audited before publication. The archive intentionally contains
 // posters, slides, logos, QR codes, textures and other graphics alongside real photographs.
 // These conservative exclusions keep the default photography stream editorial rather than
@@ -47,6 +57,7 @@ const ARCHIVE_PHOTO_EXCLUSIONS={
 };
 const ARCHIVE_SHOWCASE_PHOTOS=new Set(['clubs/aura/p5-showcase-2','clubs/aura/p5-showcase-3','clubs/bds/p5-showcase-1','clubs/bds/p5-showcase-2','clubs/vamunique/p5-showcase-1']);
 const archivePhotoKind=item=>{
+  if(HUB_GRAPHIC_URLS.has(String(item.url||'')))return 'visual';
   const cat=String(item.category||'');
   const stem=String(item.sourcePath||item.url||'').split('/').pop().replace(/\.[^.]+$/,'');
   if(/^archive\/presentation-assets|^design-assets/.test(cat))return 'visual';
@@ -81,6 +92,8 @@ const QUALITY_OVERRIDES={
   Sports:['/assets/hub-photos/sports-02.webp','/assets/hub-photos/sports-03.webp','/assets/hub-photos/sports-04.webp']
 };
 
+
+const isAcceptedHubPhotoUrl = url => isAcceptedArchiveUrl(url) && !HUB_GRAPHIC_URLS.has(String(url));
 const QUALITY_BY_KEY=new Map(Object.entries(QUALITY_OVERRIDES).map(([name,photos])=>[normalise(name),photos]));
 const storyByKey=new Map(PDF_HUB_STORIES.map(s=>[normalise(s.name),s]));
 
@@ -89,8 +102,8 @@ export function sourceHubMedia(name){
   const key=normalise(labelFromAlias);
   const canonical=Object.keys(JYC_HUB_CONTENT).find(k=>normalise(k)===key);
   const label=canonical||name;
-  const quality=(QUALITY_BY_KEY.get(normalise(label))||[]).filter(isAcceptedArchiveUrl);
-  const mapped=(HUB_PHOTO_MAP[label]||[]).filter(isAcceptedArchiveUrl);
+  const quality=(QUALITY_BY_KEY.get(normalise(label))||[]).filter(isAcceptedHubPhotoUrl);
+  const mapped=(HUB_PHOTO_MAP[label]||[]).filter(isAcceptedHubPhotoUrl);
   const archiveGallery=ARCHIVE_GALLERY.filter(g=>g.association&&normalise(canonicalHubName(g.association))===key).map(enrichMediaItem).filter(Boolean);
   const gallery=SOURCE_GALLERY.filter(g=>normalise(canonicalHubName(g.association))===key).map(enrichMediaItem).filter(Boolean);
   const story=storyByKey.get(key)||storyByKey.get(normalise(name));
@@ -294,7 +307,7 @@ const enrichMediaItem=item=>{
     sourceType:item.page?'presentation-export':/^https?:\/\//i.test(String(item.url))?'official-external-media':item.sourceType||'maintained-jyc-media',
     sourceLabel:item.sourceLabel||(/^https?:\/\//i.test(String(item.url))?`${association} · official external media`:'JYC maintained source archive'),
     alt:item.alt||item.caption||`${association} · JYC visual archive`,
-    mediaKind:item.mediaKind||mediaKind(item),
+    mediaKind:HUB_GRAPHIC_URLS.has(String(item.url))?'visual':(item.mediaKind||mediaKind(item)),
     published:item.published!==false
   };
 };

@@ -148,7 +148,7 @@ test('mobile homepage logo and primary actions stay clear of the fixed navigatio
   // The bot is a lazy-loaded chunk behind Suspense; wait for actual layout, not just the app root.
   // Fonts and responsive CSS can still change bounding boxes after React mounts.
   await expect(page.locator('.jyc-bot-shell')).toBeAttached({ timeout: 15000 });
-  for (const selector of ['.mobile-dock', '.jh-cyber-badge', '.jh-hero-logo-plaque', '.jh-dither-mark', '.jh-plaque-footer', '.jh-hero-actions']) {
+  for (const selector of ['.mobile-dock', '.jh-cyber-badge', '.jh-hero-webgl-stage-wrap', '.jh-hero-actions']) {
     await expect(page.locator(selector), `required hero geometry element ${selector}`).toBeVisible({ timeout: 15000 });
   }
   await page.evaluate(async () => {
@@ -166,24 +166,18 @@ test('mobile homepage logo and primary actions stay clear of the fixed navigatio
       dock: rect('.mobile-dock'),
       badge: rect('.jh-cyber-badge'),
       bot: rect('.jyc-bot-shell'),
-      logo: rect('.jh-hero-logo-plaque'),
-      mark: rect('.jh-dither-mark'),
-      plaqueFooter: rect('.jh-plaque-footer'),
+      heroStage: rect('.jh-hero-webgl-stage-wrap'),
       actions: rect('.jh-hero-actions')
     };
   });
   expect(geometry.dock, 'the mobile navigation dock should be present').not.toBeNull();
   expect(geometry.badge, 'the academic-year badge should be present').not.toBeNull();
   expect(geometry.bot, 'the floating assistant should be mounted before overlap is measured').not.toBeNull();
-  expect(geometry.logo, 'the homepage logo plaque should be present').not.toBeNull();
-  expect(geometry.mark, 'the Dither Veil mark container should be present').not.toBeNull();
-  expect(geometry.plaqueFooter, 'the official-mark caption should be present').not.toBeNull();
+  expect(geometry.heroStage, 'the current WebGL hero stage should be present').not.toBeNull();
   expect(geometry.actions, 'the homepage actions should be present').not.toBeNull();
   expect(geometry.bot.bottom <= geometry.badge.top || geometry.bot.top >= geometry.badge.bottom, 'the floating assistant must not cover the academic-year badge').toBe(true);
   expect(geometry.bot.bottom <= geometry.actions.top || geometry.bot.top >= geometry.actions.bottom, 'the floating assistant must not cover primary hero actions').toBe(true);
-  expect(geometry.mark.bottom, 'the full JYC mark must finish before the plaque caption begins').toBeLessThanOrEqual(geometry.plaqueFooter.top);
-  expect(geometry.plaqueFooter.bottom, 'the plaque must contain the full caption without clipping').toBeLessThanOrEqual(geometry.logo.bottom);
-  expect(geometry.logo.bottom, 'the fixed dock must not cover the JYC logo plaque').toBeLessThanOrEqual(geometry.dock.top + 1);
+  expect(geometry.heroStage.bottom, 'the fixed dock must not cover the interactive hero stage').toBeLessThanOrEqual(geometry.dock.top + 1);
   expect(geometry.actions.bottom, 'the fixed dock must not cover the hero actions').toBeLessThanOrEqual(geometry.dock.top + 1);
 });
 
@@ -497,7 +491,7 @@ test('failed gallery photos use the neutral unavailable-photo asset, not a logo 
   // dedicated .jyc57-event-art ancestor; assert the actual neutral fallback.
   const eventFallback = page.locator('img[src="/assets/photo-unavailable.svg"]').first();
   await expect(eventFallback).toBeVisible({ timeout: 15000 });
-  await expect(eventFallback).toHaveAttribute('alt', 'Photograph unavailable');
+  await expect(eventFallback).toHaveAttribute('alt', 'Event poster unavailable');
 
   await page.goto(base + '/clubs', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'club photo fallback');
@@ -507,15 +501,15 @@ test('failed gallery photos use the neutral unavailable-photo asset, not a logo 
   await expect(page.locator('.jyc57-club-card picture img[src*="jyc-logo"]')).toHaveCount(0);
 });
 
-test('homepage renders the official logo through Dither Veil and a magnetic activity Bento', async ({ page }) => {
+test('homepage renders the official emblem and a magnetic activity Bento', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 960 });
   await page.goto(base, { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'homepage identity and activity design');
-  await expect(page.locator('.jh-dither-mark .dither-veil')).toHaveCount(1, { timeout: 15000 });
-  await expect(page.getByRole('img', { name: 'Official JIIT Youth Club 128 logo with an interactive Dither Veil effect' })).toBeVisible();
-  const ditherSource=page.locator('.jh-dither-mark .dither-veil__fallback');
-  await expect(ditherSource).toHaveAttribute('src', '/assets/jyc-logo-medium.avif');
-  await expect.poll(()=>ditherSource.evaluate(img=>img.complete&&img.naturalWidth>0)).toBe(true);
+  await expect(page.locator('.jh-hero-webgl-stage-wrap .jyc-hero-emblem-stage')).toBeVisible();
+  await expect(page.locator('.jh-hero-webgl-stage-wrap canvas.jyc-emblem-canvas')).toHaveCount(1);
+  const crest = page.getByRole('img', { name: 'JIIT Youth Club Crest' });
+  await expect(crest).toBeVisible();
+  await expect.poll(() => crest.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
 
   const themeSamples = {};
   for (const theme of ['light', 'dark']) {
@@ -543,14 +537,14 @@ test('homepage renders the official logo through Dither Veil and a magnetic acti
     const story = [...document.querySelectorAll('.jyc-home .jh-story-card')];
     const familyImages = document.querySelectorAll('.jyc-home .jh-family-image, .jyc-home .jh-family img').length;
     const archiveWalls = document.querySelectorAll('.jyc-home .jh-archive-section, .jyc-home .jyc-photo-chapters-section').length;
-    const heroDitherMarks = document.querySelectorAll('.jyc-home .jh-dither-mark .dither-veil').length;
+    const heroEmblemStages = document.querySelectorAll('.jyc-home .jh-hero-webgl-stage-wrap .jyc-hero-emblem-stage').length;
     const heroDriftWalls = document.querySelectorAll('.jyc-home .jh-hero-drift-wall .drift-wall').length;
     const bentoCards = document.querySelectorAll('.jyc-home .jh-activity-bento-shell .magic-bento-card').length;
     const activityImages = document.querySelectorAll('.jyc-home .jh-activity-bento-shell img').length;
     const storyOverflow = [...document.querySelectorAll('.jyc-home .jh-photo-story-grid')].some(el => el.scrollWidth > el.clientWidth + 1);
-    return { storyTiles: story.length, familyImages, archiveWalls, heroDitherMarks, heroDriftWalls, bentoCards, activityImages, storyOverflow };
+    return { storyTiles: story.length, familyImages, archiveWalls, heroEmblemStages, heroDriftWalls, bentoCards, activityImages, storyOverflow };
   });
-  expect(result.heroDitherMarks, 'one lazy Dither Veil for the actual JYC logo').toBe(1);
+  expect(result.heroEmblemStages, 'one interactive emblem stage for the actual JYC logo').toBe(1);
   expect(result.heroDriftWalls, 'continuous hero photo-wall engine removed to reduce load').toBe(0);
   expect(result.bentoCards, 'magnetic activity cards').toBeGreaterThan(0);
   const activityPhotoSources = await page.locator('.jh-activity-bento-shell .magic-bento-card__media img').evaluateAll(images => images.map(img => img.getAttribute('src') || ''));
@@ -1072,26 +1066,25 @@ test('legacy public cards stay flat outside the intentional magnetic bento', asy
   expect(transforms.filter(value => value && value !== 'none' && value.includes('matrix3d')).length).toBe(0);
 });
 
-test('homepage hero uses the official JYC logo through Dither Veil without a continuous photo wall', async ({ page }) => {
+test('homepage hero uses the official JYC emblem without a continuous photo wall', async ({ page }) => {
   await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'JYC hero identity');
   await expect(page.locator('.jh-hero-copy h1')).toBeVisible();
-  await expect(page.locator('.jh-dither-mark')).toBeVisible();
-  await expect(page.locator('.jh-dither-mark .dither-veil')).toHaveCount(1, { timeout: 15000 });
-  await expect(page.getByRole('img', { name: 'Official JIIT Youth Club 128 logo with an interactive Dither Veil effect' })).toBeVisible();
+  await expect(page.locator('.jh-hero-webgl-stage-wrap .jyc-hero-emblem-stage')).toBeVisible();
+  await expect(page.locator('.jh-hero-webgl-stage-wrap canvas.jyc-emblem-canvas')).toHaveCount(1);
+  await expect(page.getByRole('img', { name: 'JIIT Youth Club Crest' })).toBeVisible();
   await expect(page.locator('.jh-hero-drift-wall')).toHaveCount(0);
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
   expect(overflow).toBe(false);
 });
 
 
-test('Dither Veil keeps the official logo visible when AVIF is unavailable', async ({ page }) => {
-  await page.route('**/assets/jyc-logo-medium.avif', route => route.abort('failed'));
-  await page.route('**/assets/jyc-logo.avif', route => route.abort('failed'));
+test('hero keeps the official logo visible when the original image is unavailable', async ({ page }) => {
+  await page.route('**/JYC%20Logo(4).png', route => route.abort('failed'));
   await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
-  await waitForAppMount(page, 'Dither logo format fallback');
-  const fallback = page.locator('.jh-dither-mark .dither-veil__fallback');
-  await expect(fallback).toHaveAttribute('src', '/assets/jyc-logo.webp');
+  await waitForAppMount(page, 'official emblem logo fallback');
+  const fallback = page.getByRole('img', { name: 'JIIT Youth Club Crest' });
+  await expect(fallback).toHaveAttribute('src', '/assets/jyc-logo.avif');
   await expect.poll(() => fallback.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
 });
 
@@ -1666,7 +1659,7 @@ test('tablet events hero keeps the headline inside its text frame', async ({ pag
   await page.setViewportSize({ width: 768, height: 900 });
   await page.goto(base + '/events', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'tablet events directory');
-  const geometry = await page.locator('.jyc57-page .jyc57-hero h1').evaluate(el => {
+  const geometry = await page.locator('.events-page .compact-page-head h1').evaluate(el => {
     const rect = el.getBoundingClientRect();
     return { client: el.clientWidth, scroll: el.scrollWidth, left: rect.left, right: rect.right, viewport: innerWidth };
   });
