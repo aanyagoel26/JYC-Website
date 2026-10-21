@@ -1,0 +1,27 @@
+import fs from 'node:fs';
+const read=p=>fs.readFileSync(p,'utf8');
+const main=read('src/main.jsx'), fallbacks=read('src/content/jyc-public-fallbacks.js'), extra=read('src/extra-features.jsx'), details=read('src/v23.6-hub-details.js'), registry=read('src/jyc-hub-registry.js'), media=read('src/jyc-source-media.js'), bot=read('src/jyc-bot.jsx'), theme=read('src/styles/jyc-v56-final-system.css'), system=read('src/styles/public-system.css'), llms=read('public/llms.txt'), sitemap=read('scripts/generate-sitemap.mjs');
+const source=main+'\n'+media+'\n'+extra;
+const fail=[];const check=(ok,msg)=>{if(!ok)fail.push(msg)};
+const hubs=['Fortissimo','BDS','VamUnique','Panache','RPH','CICR','Innovation','Zencoders','JODC','CypherX','Arcadia','Neural Nexus','GDG','Dronotics','Aakriti','Aura','Cinekala','Abhivyakti','Prismatic','Eloquence','JSA','Qriosity','JIIT OPTICA'];
+for(const h of hubs)check(new RegExp("(?:['\\\"])?"+h.replace(/[.*+?^${}()|[\\]\\\\]/g,'\\\\$&')+"(?:['\\\"])?\\s*:").test(details),`hub detail missing: ${h}`);
+check((registry.match(/status:'brochure-verified'/g)||[]).length===2,'2 brochure-verified registry entries required');
+check((registry.match(/status:'orientation-verified'/g)||[]).length===21,'21 orientation-verified registry entries required');
+check((registry.match(/status:'source-material'/g)||[]).length===0,'0 source-material registry entries required after supplied-material promotion');
+check(!registry.includes("verified-current"),'stale verified-current status present');
+check(/name:'Arcadia'[^\n]+publicationStatus:'published'/.test(registry)&&/name:'Neural Nexus'[^\n]+publicationStatus:'published'/.test(registry),'final two hub publication status missing');
+check(media.includes('QUALITY_OVERRIDES')&&media.includes('sourceHubMedia'),'source media quality/lookup layer missing');
+check(main.includes('club-living-photo')&&main.includes('sourceHubMedia(c.name).photoItems')&&main.includes('LivingPhoto'),'club source photography rail not wired');
+check(source.includes('JYC_SOURCE_ARCHIVE_PHOTO_ITEMS')&&source.match(/mediaKind==='photo'/),'full source-archive photography pool is exposed');
+check(extra.includes('visibleCount')&&extra.includes('setVisibleCount')&&extra.includes('remaining.slice(0,visibleCount)'),'large gallery is progressively rendered');
+check(main.includes('sourceEventMedia(e)'),'event source-media preference missing');
+check(extra.includes("image:images")&&extra.includes('eventImages.length?eventImages'),'entity JSON-LD image depth missing');
+check(system.includes('--jyc-final-bg: #0f0e11')&&system.includes('--jyc-final-surface: #18161d'),'official dark theme tokens missing');
+check(theme.includes('html[data-theme="dark"] .public-app .hub-official-description')&&theme.includes('html[data-theme="dark"] .public-app .jyc-source-archive-ledger'),'dark editorial surface safeguards missing');
+check(!main.includes('club-card-v41 tilt-card')&&!main.includes('event-card-premium tilt-card'),'rotating public card interaction remains');
+check(bot.includes('model-viewer')&&bot.includes('playModelAnimation')&&bot.includes('prefers-reduced-motion'),'contextual GLB bot contract missing');
+for(const h of hubs)check(llms.includes(h),`llms.txt missing community vocabulary: ${h}`);
+check(sitemap.includes('jyc-hub-registry.js')&&sitemap.includes('/events/jai-2026-jaypee-agentic-ai-hackathon')&&!sitemap.includes('/events/agentic-ai-2026')&&sitemap.includes('xmlns:image'),'sitemap depth contract missing');
+check(fallbacks.includes("name:'Harisha'")&&fallbacks.includes("role:'Creative Head'")&&fallbacks.includes("name:'Dhruv Choudhary'")&&fallbacks.includes("role:'Management Head'"),'source-backed leadership depth missing');
+if(fail.length){fail.forEach(x=>console.error('FAIL:',x));process.exit(1)}
+console.log('PASS: V56.7 source/content/depth/theme/SEO contract');

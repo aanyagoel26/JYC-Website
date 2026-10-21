@@ -1,0 +1,58 @@
+-- JYC Events expansion: idempotent source-first calendar seed.
+-- Completed records are historical; future planning records remain under_review.
+
+with seed as (
+  select * from jsonb_to_recordset($json$
+  [
+    {"slug":"jyc-orientation-2026","title":"JYC Orientation 2026","event_type":"JYC Orientation","short_description":"JYC’s orientation session introducing freshers to the student-led club ecosystem.","full_description":"As part of the 2026 induction programme, JYC conducted an orientation session introducing students to the JYC ecosystem, student hubs, participation pathways and campus activities.","start_at":"2026-07-16T08:30:00+00","end_at":"2026-07-16T10:30:00+00","venue":"JIIT Noida · Induction Programme","status":"past","featured":true,"pinned":false},
+    {"slug":"jyc-function-2026","title":"JYC Function 2026","event_type":"JYC Function","short_description":"The annual JYC function listed in JIIT’s academic calendar.","full_description":"JIIT’s official academic calendar lists the JYC Function for 6–8 February 2026 as part of the institute’s student activity calendar.","start_at":"2026-02-06T03:30:00+00","end_at":"2026-02-08T12:30:00+00","venue":"JIIT Noida","status":"past","featured":false,"pinned":false},
+    {"slug":"ebullience-freshers-welcome-2026","title":"Ebullience 2026 · Fresher’s Welcome","event_type":"Fresher’s Fest","short_description":"JYC’s fresher-focused welcome experience for the 2026–27 intake.","full_description":"Ebullience is JIIT’s fresher welcome tradition and a major JYC-led campus experience. The 2026–27 JYC activity budget lists the 2026 edition for 14 August 2026.","start_at":"2026-08-14T03:30:00+00","end_at":"2026-08-14T12:30:00+00","venue":"JIIT Sector 128, Noida","status":"past","featured":true,"pinned":false},
+    {"slug":"innovate-4-0-2026","title":"Innovate 4.0","event_type":"Inter-Institute Hackathon","short_description":"The 2026 Innovate hackathon listed in the JYC activity calendar.","full_description":"Innovate 4.0 is listed in the 2026–27 JYC activity budget as an inter-institute hackathon scheduled for 18–19 September 2026.","start_at":"2026-09-18T03:30:00+00","end_at":"2026-09-19T12:30:00+00","venue":"JIIT Noida","status":"past","featured":false,"pinned":false},
+    {"slug":"intra-institute-sports-week-2026","title":"Intra-Institute Sports Week 2026","event_type":"Sports Week","short_description":"Campus sports week listed in the 2026–27 JYC activity calendar.","full_description":"The 2026–27 JYC activity budget lists the Intra-Institute Sports Week for 24–26 September 2026.","start_at":"2026-09-24T03:30:00+00","end_at":"2026-09-26T12:30:00+00","venue":"JIIT Noida","status":"past","featured":false,"pinned":false},
+    {"slug":"teachers-day-2026","title":"Teacher’s Day 2026","event_type":"Campus Celebration","short_description":"Campus celebration listed in the 2026–27 JYC activity calendar.","full_description":"Teacher’s Day is listed in the 2026–27 JYC activity budget for 5 September 2026.","start_at":"2026-09-05T03:30:00+00","end_at":"2026-09-05T12:30:00+00","venue":"JIIT Noida","status":"past","featured":false,"pinned":false},
+    {"slug":"nukkad-natak-competition-2026","title":"Inter-Institute Nukkad Natak Competition 2026","event_type":"Theatre · Social Impact","short_description":"An inter-institute street-theatre competition listed in the 2026–27 JYC activity plan.","full_description":"The 2026–27 JYC activity budget lists this competition for 16 October 2026.","start_at":"2026-10-16T03:30:00+00","end_at":"2026-10-16T12:30:00+00","venue":"JIIT Noida","status":"under_review","featured":false,"pinned":false},
+    {"slug":"ethnic-day-diwali-2026","title":"Ethnic Day & Diwali Celebration 2026","event_type":"Cultural Celebration · Fest","short_description":"The campus cultural celebration listed for the 2026–27 JYC activity calendar.","full_description":"The 2026–27 JYC activity budget lists Ethnic Day and Diwali Celebration for 24 October 2026.","start_at":"2026-10-24T03:30:00+00","end_at":"2026-10-24T12:30:00+00","venue":"JIIT Noida · Sector 128","status":"under_review","featured":true,"pinned":true},
+    {"slug":"inter-institute-sports-week-2027","title":"Inter-Institute Sports Week 2027","event_type":"Sports Week","short_description":"The next inter-institute sports week listed in the 2026–27 JYC activity plan.","full_description":"The 2026–27 JYC activity budget lists this event for 28–30 January 2027.","start_at":"2027-01-28T03:30:00+00","end_at":"2027-01-30T12:30:00+00","venue":"JIIT Noida","status":"under_review","featured":false,"pinned":false},
+    {"slug":"converge-2027","title":"Converge 2027","event_type":"Technical · Cultural · Sports Fest","short_description":"The next annual JIIT technical-cultural-sports fest listed in the JYC activity plan.","full_description":"The 2026–27 JYC activity budget lists Converge 2027 for 27–28 February 2027.","start_at":"2027-02-27T03:30:00+00","end_at":"2027-02-28T12:30:00+00","venue":"JIIT Sector 128, Noida","status":"under_review","featured":true,"pinned":true},
+    {"slug":"inter-institute-battle-of-bands-2027","title":"Inter-Institute Battle of Bands 2027","event_type":"Music Competition","short_description":"An inter-institute music event listed in the 2026–27 JYC activity plan.","full_description":"The 2026–27 JYC activity budget lists Battle of Bands for 12 March 2027.","start_at":"2027-03-12T03:30:00+00","end_at":"2027-03-12T12:30:00+00","venue":"JIIT Noida","status":"under_review","featured":false,"pinned":false},
+    {"slug":"inter-institute-stage-play-2027","title":"Inter-Institute Stage Play 2027","event_type":"Theatre Competition","short_description":"An inter-institute stage-play event listed in the 2026–27 JYC activity plan.","full_description":"The 2026–27 JYC activity budget lists Stage Play for 9–10 April 2027.","start_at":"2027-04-09T03:30:00+00","end_at":"2027-04-10T12:30:00+00","venue":"JIIT Noida","status":"under_review","featured":false,"pinned":false},
+    {"slug":"farewell-2027","title":"Farewell 2027","event_type":"Farewell · Campus Celebration","short_description":"The 2027 farewell programme listed in the 2026–27 JYC activity plan.","full_description":"The 2026–27 JYC activity budget lists Farewell for 8 May 2027.","start_at":"2027-05-08T03:30:00+00","end_at":"2027-05-08T12:30:00+00","venue":"JIIT Noida","status":"under_review","featured":false,"pinned":false}
+  ]
+  $json$::jsonb)
+  as x(slug text,title text,event_type text,short_description text,full_description text,start_at timestamptz,end_at timestamptz,venue text,status text,featured boolean,pinned boolean)
+)
+insert into public.jyc_events (slug,title,event_type,short_description,full_description,start_at,end_at,venue,status,featured,pinned)
+select s.slug,s.title,s.event_type,s.short_description,s.full_description,s.start_at,s.end_at,s.venue,s.status,s.featured,s.pinned
+from seed s
+where not exists (select 1 from public.jyc_events e where e.slug=s.slug);
+
+with sources as (
+  select * from jsonb_to_recordset($json$
+  [
+    {"slug":"student-induction-program-2026","source_url":"https://www.jiit.ac.in/","source_type":"official-institute-document","notes":"Official JIIT 2026 induction programme; includes Sector 128 students and JYC activities."},
+    {"slug":"jyc-orientation-2026","source_url":"https://www.jiit.ac.in/","source_type":"official-institute-document","notes":"Official programme lists Orientation of JYC on 16 July 2026."},
+    {"slug":"jyc-performances-auditions-2026","source_url":"https://www.jiit.ac.in/","source_type":"official-institute-document","notes":"Official programme lists JYC Performances & Auditions during induction."},
+    {"slug":"jyc-function-2026","source_url":"https://www.jiit.ac.in/uploads/AC_2025_26_0_8c1fe78bf3.pdf","source_type":"official-academic-calendar","notes":"Official JIIT academic calendar lists JYC Function for 6–8 February 2026."},
+    {"slug":"ebullience-freshers-welcome-2026","source_url":"https://www.scribd.com/document/1069230498/Tentative-Budget-2026-27","source_type":"jyc-budget-artifact","notes":"JYC 2026–27 tentative budget lists Ebullience for 14 August 2026; event outcome is not independently corroborated here."},
+    {"slug":"innovate-4-0-2026","source_url":"https://www.scribd.com/document/1069230498/Tentative-Budget-2026-27","source_type":"jyc-budget-artifact","notes":"JYC 2026–27 tentative budget lists Innovate 4.0 for 18–19 September 2026; event outcome is not independently corroborated here."},
+    {"slug":"intra-institute-sports-week-2026","source_url":"https://www.scribd.com/document/1069230498/Tentative-Budget-2026-27","source_type":"jyc-budget-artifact","notes":"JYC 2026–27 tentative budget lists Intra-Institute Sports Week for 24–26 September 2026; event outcome is not independently corroborated here."},
+    {"slug":"teachers-day-2026","source_url":"https://www.scribd.com/document/1069230498/Tentative-Budget-2026-27","source_type":"jyc-budget-artifact","notes":"JYC 2026–27 tentative budget lists Teacher’s Day for 5 September 2026; event outcome is not independently corroborated here."},
+    {"slug":"nukkad-natak-competition-2026","source_url":"https://www.scribd.com/document/1069230498/Tentative-Budget-2026-27","source_type":"jyc-budget-artifact","notes":"JYC 2026–27 tentative budget lists the competition for 16 October 2026."},
+    {"slug":"ethnic-day-diwali-2026","source_url":"https://www.scribd.com/document/1069230498/Tentative-Budget-2026-27","source_type":"jyc-budget-artifact","notes":"JYC 2026–27 tentative budget lists Ethnic Day and Diwali Celebration for 24 October 2026."},
+    {"slug":"inter-institute-sports-week-2027","source_url":"https://www.scribd.com/document/1069230498/Tentative-Budget-2026-27","source_type":"jyc-budget-artifact","notes":"JYC 2026–27 tentative budget lists this event for 28–30 January 2027."},
+    {"slug":"converge-2027","source_url":"https://www.scribd.com/document/1069230498/Tentative-Budget-2026-27","source_type":"jyc-budget-artifact","notes":"JYC 2026–27 tentative budget lists Converge 2027 for 27–28 February 2027."},
+    {"slug":"inter-institute-battle-of-bands-2027","source_url":"https://www.scribd.com/document/1069230498/Tentative-Budget-2026-27","source_type":"jyc-budget-artifact","notes":"JYC 2026–27 tentative budget lists Battle of Bands for 12 March 2027."},
+    {"slug":"inter-institute-stage-play-2027","source_url":"https://www.scribd.com/document/1069230498/Tentative-Budget-2026-27","source_type":"jyc-budget-artifact","notes":"JYC 2026–27 tentative budget lists Stage Play for 9–10 April 2027."},
+    {"slug":"farewell-2027","source_url":"https://www.scribd.com/document/1069230498/Tentative-Budget-2026-27","source_type":"jyc-budget-artifact","notes":"JYC 2026–27 tentative budget lists Farewell for 8 May 2027."}
+  ]
+  $json$::jsonb)
+  as s(slug text,source_url text,source_type text,notes text)
+)
+insert into public.jyc_content_verification
+(entity_type,entity_id,campus_id,status,source_url,source_type,notes)
+select 'event',s.slug,'sector-128','review',s.source_url,s.source_type,s.notes
+from sources s
+where not exists (
+  select 1 from public.jyc_content_verification v
+  where v.entity_type='event' and v.entity_id=s.slug
+);

@@ -1,0 +1,58 @@
+name: Legacy Route Matrix
+on:
+  push:
+    branches: [legacy-route-matrix]
+permissions:
+  contents: read
+jobs:
+  check:
+    strategy:
+      fail-fast: false
+      matrix:
+        route:
+          - from: "leadership"
+            to: "team"
+          - from: "join-jyc"
+            to: "recruitment"
+          - from: "event-calendar"
+            to: "calendar"
+          - from: "moments"
+            to: "gallery"
+          - from: "planner"
+            to: "events"
+          - from: "discover"
+            to: "clubs"
+          - from: "my-jyc"
+            to: ""
+          - from: "login"
+            to: ""
+          - from: "notifications"
+            to: ""
+          - from: "settings"
+            to: "about"
+          - from: "agenda"
+            to: "events"
+          - from: "download"
+            to: "about"
+          - from: "projects"
+            to: "clubs"
+    name: /${{ matrix.route.from }} → /${{ matrix.route.to }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Generate single-route test
+        run: |
+          cat > scripts/legacy-one.spec.js <<'EOF'
+          import { test, expect } from '@playwright/test';
+          test('legacy route', async ({ page }) => {
+            await page.goto('http://127.0.0.1:5173/${{ matrix.route.from }}', { waitUntil: 'domcontentloaded' });
+            await expect.poll(() => new URL(page.url()).pathname, { timeout: 5000 }).toBe('/${{ matrix.route.to }}');
+          });
+          EOF
+      - run: npx playwright test scripts/legacy-one.spec.js

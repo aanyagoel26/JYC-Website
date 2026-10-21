@@ -1,0 +1,71 @@
+/* JYC V38 — OFFICIAL LOGO THEME
+   Senior direction: keep the approved homepage/page layouts.
+   Rebuild the visual palette from the supplied JYC emblem:
+   deep navy + champagne/beige + ivory + restrained black/white neutrals.
+*/
+:root{
+  --jyc-logo-navy:#081020;
+  --jyc-logo-navy-2:#101a2b;
+  --jyc-logo-ink:#111827;
+  --jyc-logo-champagne:#d8ccb5;
+  --jyc-logo-champagne-soft:#eee7da;
+  --jyc-logo-ivory:#f7f3ea;
+  --jyc-logo-white:#fffdf8;
+  --jyc-logo-muted:#68645c;
+  --jyc-logo-line:rgba(8,16,32,.14);
+  --jyc-logo-line-dark:rgba(216,204,181,.20);
+  --jyc-logo-shadow:0 18px 50px rgba(8,16,32,.10);
+}
+html[data-theme="light"]{--jyc-logo-bg:#eee8dc;--jyc-logo-surface:#f8f4eb;--jyc-logo-surface-2:#e4ded1;--jyc-logo-text:#101827;--jyc-logo-muted:#68645c;--jyc-logo-line:rgba(8,16,32,.14)}
+html[data-theme="dark"]{--jyc-logo-bg:#060c16;--jyc-logo-surface:#0d1624;--jyc-logo-surface-2:#121e2f;--jyc-logo-text:#f5f0e6;--jyc-logo-muted:#bcb5a8;--jyc-logo-line:rgba(216,204,181,.20)}
+.public-app,.home,.page{
+  --bg-main:var(--jyc-logo-bg)!important;--bg-card:var(--jyc-logo-surface)!important;
+  --text-primary:var(--jyc-logo-text)!important;--text-muted:var(--jyc-logo-muted)!important;
+  --border-tech:var(--jyc-logo-line)!important;--jyc-beige:var(--jyc-logo-champagne)!important;
+  --jyc33-brand:var(--jyc-logo-champagne)!important;--jyc32-accent:var(--jyc-logo-champagne)!important;
+  --jyc-v28-accent:var(--jyc-logo-champagne)!important;--jyc-v36-beige:var(--jyc-logo-champagne)!important;
+  --jyc33-ink:var(--jyc-logo-text)!important;--jyc32-ink:var(--jyc-logo-text)!important;
+  --jyc32-muted:var(--jyc-logo-muted)!important;--jyc32-paper:var(--jyc-logo-surface)!important;
+  --jyc32-surface-2:var(--jyc-logo-surface-2)!important;--jyc32-line:var(--jyc-logo-line)!important;
+  color:var(--jyc-logo-text)!important;
+}
+html[data-theme="light"] body,html[data-theme="light"] #root,html[data-theme="light"] .app-frame,html[data-theme="light"] .public-app{
+  background:radial-gradient(circle at 50% -12%,rgba(216,204,181,.32),transparent 34%),linear-gradient(180deg,#f4efe6 0%,#eee8dc 58%,#e7e0d3 100%)!important;
+}
+html[data-theme="dark"] body,html[data-theme="dark"] #root,html[data-theme="dark"] .app-frame,html[data-theme="dark"] .public-app{
+  background:radial-gradient(circle at 50% -10%,rgba(216,204,181,.08),transparent 32%),linear-gradient(180deg,#050a12 0%,#081020 58%,#0c1522 100%)!important;
+}
+html[data-theme="light"] .public-app .nav{background:rgba(8,16,32,.97)!important;border-bottom:1px solid rgba(216,204,181,.20)!important;box-shadow:0 12px 38px rgba(8,16,32,.16)!important}
+html[data-theme="dark"] .public-app .nav{background:rgba(5,10,18,.97)!important;border-bottom:1px solid var(--jyc-logo-line)!important}
+.public-app .nav .brand-mark{background:var(--jyc-logo-ivory)!important;border-color:rgba(216,204,181,.55)!important;box-shadow:0 8px 24px rgba(216,204,181,.12)!important}
+.public-app .nav .brand>span:last-child{color:#f5f0e6!important}
+.public-app .nav nav button{color:rgba(245,240,230,.72)!important}
+.public-app .nav nav button:hover{color:#fffaf1!important}
+.public-app .nav nav button.active{background:var(--jyc-logo-champagne)!important;color:#081020!important;border-color:var(--jyc-logo-champagne)!important}
+html[data-theme="dark"] .public-app .nav nav button.active{background:rgba(216,204,181,.16)!important;color:#f7f2e9!important;border-color:rgba(216,204,181,.48)!important}
+.public-app .nav .theme-toggle,.public-app .nav .search-trigger{background:rgba(247,243,234,.08)!important;color:#f5f0e6!important;border-color:rgba(216,204,181,.22)!important}
+.public-app .nav .search-trigger svg{stroke:var(--jyc-logo-champagne)!important}
+.public-app .eyebrow,.public-app .tag,.public-app .text-link,.public-app .reference-view-all,.public-app .card-topline,.public-app .club-index,.public-app .latest-index,.public-app .moment-tile small{color:var(--jyc-logo-champagne)!important}
+.public-app h1,.public-app h2,.public-app h3,.public-app h4,.public-app h5,.public-app h6,.public-app strong,.public-app b,.public-app label{color:var(--jyc-logo-text)!important}
+.public-app .btn:not(.secondary),.public-app .btn.primary{background:var(--jyc-logo-champagne)!important;color:#081020!important;border-color:var(--jyc-logo-champagne)!important}
+.public-app .btn.secondary{background:transparent!important;color:var(--jyc-logo-text)!important;border-color:var(--jyc-logo-line)!important}
+.public-app .btn:hover{box-shadow:0 14px 32px rgba(8,16,32,.15)!important}
+.public-app .card,.public-app .activity-card,.public-app .home-team-card,.public-app .hub-story-card,.public-app .jyc-journal-card,.public-app .past-card,.public-app .contact-card,.public-app .archive-club,.public-app .event-related-card,.public-app .club-section-card,.public-app .event-context-card,.public-app .home-about-ecosystem,.public-app .jyc-feature-event,.public-app .jyc-now-strip,.public-app .announcement-card,.public-app .achievement-feature,.public-app .feature-card,.public-app .about-intro-v28,.public-app .about-flow-v28{
+  background:linear-gradient(145deg,rgba(216,204,181,.075),transparent 55%),var(--jyc-logo-surface)!important;color:var(--jyc-logo-text)!important;border-color:var(--jyc-logo-line)!important;box-shadow:var(--jyc-logo-shadow)!important;
+}
+html[data-theme="dark"] .public-app .card,html[data-theme="dark"] .public-app .activity-card,html[data-theme="dark"] .public-app .home-team-card,html[data-theme="dark"] .public-app .hub-story-card,html[data-theme="dark"] .public-app .jyc-journal-card,html[data-theme="dark"] .public-app .past-card,html[data-theme="dark"] .public-app .contact-card,html[data-theme="dark"] .public-app .archive-club,html[data-theme="dark"] .public-app .event-related-card,html[data-theme="dark"] .public-app .club-section-card,html[data-theme="dark"] .public-app .event-context-card{box-shadow:0 22px 60px rgba(0,0,0,.30)!important}
+.public-app .card:hover,.public-app .activity-card:hover,.public-app .home-team-card:hover,.public-app .jyc-journal-card:hover,.public-app .past-card:hover,.public-app .contact-card:hover{border-color:rgba(216,204,181,.58)!important}
+.home .hero::after{border-color:rgba(216,204,181,.20)!important;background:radial-gradient(circle at 50% 42%,rgba(216,204,181,.10),transparent 40%)!important}
+.home .hero::before{background:linear-gradient(90deg,transparent,var(--jyc-logo-champagne),transparent)!important}
+.home .hero-rule{background:var(--jyc-logo-champagne)!important}.home .hero-copy h4{color:var(--jyc-logo-champagne)!important}
+.home .hero-logo-stage{filter:drop-shadow(0 30px 60px rgba(8,16,32,.22))!important}
+.home .hero-logo-stage::before{background:radial-gradient(circle,rgba(216,204,181,.28),transparent 69%)!important}
+.home .hero-logo-ring,.home .hero-logo-pulse{border-color:rgba(216,204,181,.48)!important}.home .hero-logo-ring-b{border-color:rgba(216,204,181,.30)!important}
+.home .hero-stats>div:hover{background:rgba(216,204,181,.08)!important}
+.public-app .section+.section{border-top-color:var(--jyc-logo-line)!important}
+.public-app .filter-toggle,.public-app .event-scope-tabs button,.public-app .filter-chip,.public-app .category-pill,.public-app .gallery-filter button,.public-app .page-stat-row span{color:var(--jyc-logo-muted)!important;background:var(--jyc-logo-surface)!important;border-color:var(--jyc-logo-line)!important}
+.public-app .filter-toggle.active,.public-app .event-scope-tabs button.active,.public-app .filter-chip.active,.public-app .category-pill.active,.public-app .gallery-filter button.active{background:var(--jyc-logo-navy)!important;color:#f7f3ea!important;border-color:var(--jyc-logo-navy)!important}
+html[data-theme="dark"] .public-app .filter-toggle.active,html[data-theme="dark"] .public-app .event-scope-tabs button.active,html[data-theme="dark"] .public-app .filter-chip.active,html[data-theme="dark"] .public-app .category-pill.active,html[data-theme="dark"] .public-app .gallery-filter button.active{background:var(--jyc-logo-champagne)!important;color:#081020!important}
+.public-app .team-hero-logo,.public-app .team-closeout-mark,.public-app .club-logo{background:var(--jyc-logo-ivory)!important;border-color:rgba(216,204,181,.55)!important;box-shadow:0 12px 34px rgba(8,16,32,.10)!important}
+.public-app .gallery-grid .gallery-item img,.public-app .archive-story-photo img,.public-app .jyc-feature-poster img,.public-app .about-programme-image img,.public-app .club-card-visual img,.public-app .team-photo-editorial img,.public-app .home-team-photo img{filter:saturate(.90) contrast(1.05)!important}
+@media (prefers-reduced-motion:reduce){.home .hero::after{animation:none!important}}

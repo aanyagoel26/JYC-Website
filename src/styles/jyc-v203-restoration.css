@@ -1,0 +1,213 @@
+/* JYC V20 reference restoration — selective, current-system-safe layer.
+   Uses the existing official logo and existing Motion/React Bits components.
+   No orbital rings, new runtime dependency, global cursor, or permanent WebGL loop. */
+
+:root {
+  --jyc-restoration-paper: #f4ead5;
+  --jyc-restoration-paper-raised: #fff9eb;
+  --jyc-restoration-ink: #211a13;
+  --jyc-restoration-muted: #66594a;
+  --jyc-restoration-red: #8f211f;
+  --jyc-restoration-red-bright: #b8322c;
+  --jyc-restoration-champagne: #c29a59;
+  --jyc-restoration-halo: rgba(194,154,89,.22);
+}
+
+/* JYC Hero WebGL Stage Clean Container */
+.jyc-editorial-home.jyc-home .jh-hero-webgl-stage-wrap {
+  position: relative;
+  width: 100%;
+}
+.jyc-editorial-home.jyc-home .jh-logo-halo {
+  width: min(88%, 460px);
+  background: radial-gradient(circle, rgba(194,154,89,.28), rgba(143,33,31,.09) 44%, transparent 72%);
+  filter: blur(28px);
+  opacity: .7;
+  animation: jyc-restoration-halo-breathe 7s ease-in-out infinite;
+}
+@keyframes jyc-restoration-halo-breathe {
+  0%, 100% { opacity: .52; transform: scale(.96); }
+  50% { opacity: .82; transform: scale(1.04); }
+}
+
+/* Editorial copy: keep type scale expressive but readable across routes. */
+.jyc-editorial-home.jyc-home .jh-about-editorial {
+  padding-block: clamp(66px, 9vw, 132px);
+}
+.jyc-editorial-home.jyc-home .jh-about-editorial-grid {
+  align-items: start;
+  gap: clamp(28px, 6vw, 92px);
+}
+.jyc-editorial-home.jyc-home .jh-about-editorial h2 {
+  max-width: 11ch;
+  font-size: clamp(38px, 5.2vw, 72px);
+  line-height: .99;
+  letter-spacing: -.055em;
+  text-wrap: balance;
+}
+.jyc-editorial-home.jyc-home .jh-about-editorial h2 em {
+  color: var(--jh-accent, var(--jyc-restoration-red));
+  text-shadow: 0 8px 34px rgba(143,33,31,.09);
+}
+.jyc-editorial-home.jyc-home .jh-about-editorial-copy p {
+  max-width: 58ch;
+  font-size: clamp(16px, 1.2vw, 19px);
+  line-height: 1.8;
+}
+.jyc-editorial-home.jyc-home .jh-about-editorial-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 24px;
+  margin-top: 24px;
+}
+.jyc-editorial-home.jyc-home .jh-text-link {
+  text-underline-offset: 5px;
+  transition: color 180ms ease, transform 220ms ease;
+}
+.jyc-editorial-home.jyc-home .jh-text-link:hover { transform: translateY(-2px); }
+
+/* More deliberate hover/reveal feedback: no orbit paths or perpetual card motion. */
+.jyc-editorial-home.jyc-home .jh-story-card,
+.jyc-editorial-home.jyc-home .jh-featured-event,
+.jyc-editorial-home.jyc-home .jh-event-list > button {
+  transition: transform 280ms cubic-bezier(.2,.8,.2,1), box-shadow 280ms ease, border-color 240ms ease;
+}
+.jyc-editorial-home.jyc-home .jh-story-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 54px rgba(33,26,19,.18), 0 0 0 1px rgba(194,154,89,.28);
+}
+.jyc-editorial-home.jyc-home .jh-story-photo img { transition: transform 600ms cubic-bezier(.2,.8,.2,1), filter 350ms ease; }
+.jyc-editorial-home.jyc-home .jh-story-card:hover .jh-story-photo img {
+  transform: scale(1.035);
+  filter: saturate(1.04);
+}
+.jyc-editorial-home.jyc-home .jh-event-list > button:hover { transform: translateX(4px); }
+
+/* Team flip-card: the portrait is a real, full-face image layer beneath its overlay.
+   The picture wrapper must fill the face too; styling only the nested img leaves it 0px high
+   in some inherited grid/flex combinations, which makes the card flip with no visible portrait. */
+.public-app .team-layer-card { min-width: 0; }
+.public-app .team-layer-card .team-member-flip { width: 100%; min-width: 0; }
+.public-app .team-layer-card .team-member-face-content {
+  min-height: 360px;
+  isolation: isolate;
+  background: #211a20;
+}
+.public-app .team-layer-card .team-photo-editorial {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 360px;
+  overflow: hidden;
+  border-radius: inherit;
+  background: linear-gradient(145deg, #30252a, #141216);
+}
+.public-app .team-layer-card .team-photo-editorial .jyc-responsive-picture {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.public-app .team-layer-card .team-photo-editorial img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 100%;
+  object-fit: cover !important;
+  object-position: center 26%;
+}
+.public-app .team-layer-card .team-front-overlay {
+  position: absolute;
+  z-index: 2;
+  inset: auto 0 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, transparent 0%, rgba(16,13,15,.26) 22%, rgba(16,13,15,.92) 100%);
+}
+.public-app .team-layer-card .team-photo-editorial::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(16,13,15,.02) 42%, rgba(16,13,15,.20) 68%, rgba(16,13,15,.54) 100%);
+}
+.public-app .team-layer-card .team-photo-editorial [data-image-failed="true"] {
+  background: linear-gradient(145deg, #30252a, #141216);
+}
+.public-app .team-layer-card .team-photo-editorial [data-image-failed="true"]::after {
+  content: "Portrait unavailable";
+  position: absolute;
+  inset: auto 12px 18px;
+  color: #fff9eb;
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: .06em;
+}
+.public-app .team-layer-card .team-member-flip:focus-visible {
+  outline: 3px solid var(--jyc-brand-champagne, #c29a59);
+  outline-offset: 4px;
+}
+
+/* Calendar keeps JYC events primary and provides a clear, source-linked academic layer. */
+.public-app .jyc-calendar-page .calendar-footer-note {
+  margin-top: 28px;
+  padding: clamp(18px, 3vw, 30px);
+  border: 1px solid var(--jyc-brand-line, rgba(33,29,34,.14));
+  border-radius: 20px;
+  background: color-mix(in srgb, var(--jyc-brand-paper-raised, #fffdf8) 88%, transparent);
+}
+.public-app .jyc-calendar-page .academic-calendar-source {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--jyc-brand-line, rgba(33,29,34,.14));
+}
+.public-app .jyc-calendar-page .academic-calendar-source a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 10px 15px;
+  border: 1px solid var(--jyc-brand-line-strong, rgba(33,29,34,.24));
+  border-radius: 999px;
+  color: var(--jyc-brand-ink, #211d22);
+  font-weight: 700;
+  text-decoration: none;
+  transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+}
+.public-app .jyc-calendar-page .academic-calendar-source a:hover {
+  transform: translateY(-2px);
+  border-color: var(--jyc-brand-champagne, #c29a59);
+  box-shadow: 0 8px 22px rgba(143,33,31,.09);
+}
+
+@media (max-width: 760px) {
+  .jyc-editorial-home.jyc-home .jh-about-editorial { padding-block: 56px; }
+  .jyc-editorial-home.jyc-home .jh-about-editorial-grid { gap: 20px; }
+  .public-app .team-layer-card .team-member-face-content,
+  .public-app .team-layer-card .team-photo-editorial { min-height: 320px; }
+  .public-app .jyc-calendar-page .academic-calendar-source { align-items: stretch; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .jyc-editorial-home.jyc-home .jh-logo-halo { animation: none; }
+  .jyc-editorial-home.jyc-home .jh-hero-logo-plaque,
+  .jyc-editorial-home.jyc-home .jh-story-card,
+  .jyc-editorial-home.jyc-home .jh-featured-event,
+  .jyc-editorial-home.jyc-home .jh-event-list > button,
+  .jyc-editorial-home.jyc-home .jh-story-photo img,
+  .jyc-editorial-home.jyc-home .jh-text-link,
+  .public-app .jyc-calendar-page .academic-calendar-source a {
+    transition: none !important;
+    transform: none !important;
+  }
+}

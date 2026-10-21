@@ -1,0 +1,13 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /login
+Disallow: /my-jyc
+Disallow: /notifications
+Disallow: /settings
+Disallow: /agenda
+Disallow: /projects/submit
+Disallow: /download
+Disallow: /qr/
+
+Sitemap: https://jyc-website-eight.vercel.app/sitemap.xml

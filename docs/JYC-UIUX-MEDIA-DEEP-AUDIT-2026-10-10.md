@@ -1,0 +1,324 @@
+# JYC UI/UX, Photography & Source Audit — 11 October 2026
+
+## V64.5.5 follow-up — manifest schema integrity
+
+- The shared image-manifest loader now requires version 1, a non-empty plain-object `images` map, safe same-origin asset paths, positive integer intrinsic dimensions, an accurate five-decimal aspect ratio, a truthful orientation label, and an explicit boolean `derivativesEligible` value on every entry.
+- The service worker applies the same checks before caching a fresh manifest. It remains network-first and falls back to the last known-good cache only when the network request fails; cache-storage failures do not mask a successful response.
+- Photo integrity QA now includes valid and invalid schema fixtures. The Playwright malformed-manifest regression uses HTTP 200 with a non-empty but invalid image record, then checks that a later gallery mount retries and restores verified responsive sources.
+- Package and lockfile metadata, README release header, changelog, and service-worker cache namespace have been advanced to V64.5.5.
+
+**Evidence boundary:** these edits are committed to the PR branch, but the browser suite has not produced a usable green result and the current deployment preview must be checked against the new runtime commit. Production API configuration and custom-domain attachment/routing remain independent release blockers.
+
+
+## Scope
+
+This audit covers the merged V64.5.0 design source and the follow-up `fix/media-fallback-state-rerender` V64.5.4 media/PWA reliability branch, its source-media pipeline, the supplied 2026–27 All Hubs PDFs, official public club profiles/sites, and the newest available Vercel preview metadata. It distinguishes source-level verification, HTTP asset probes, and tests actually executed in a browser.
+
+## V64.5.3 media follow-up
+
+- Changed the responsive-image and gallery manifest fetches from `cache: 'force-cache'` to `cache: 'no-cache'`. The manifest has `max-age=0, must-revalidate` semantics; forcing a stale entry across deploys can advertise variants that no longer exist or have changed dimensions.
+- Added a browser regression that blocks all generated AVIF/WebP derivative requests and asserts that a team portrait resolves to a real original/branded fallback rather than leaving a broken image.
+- The shared manifest loader now clears its cached promise after transient HTTP/network/JSON failures; a browser regression verifies a later gallery route can retry and resume responsive sources.
+- Dimension audit found two ultra-wide supplied assets (Aakriti 1311×25 and Neural Nexus 1500×211) that were being forced into the photo pool. They are now kept out of club photo cards; other source material remains available as visual/archive content.
+- Added a full hub-photo-pool metadata check that reads each unique source with Sharp, applies EXIF orientation and fails on unreadable assets or ratios outside 0.25–5. This makes future banner/photo misclassification a release-test failure rather than a visual regression.
+- Added a source-level media contract for both fresh manifest reads and derivative-failure recovery.
+- Rotated the service-worker cache namespace and release metadata to V64.5.3 so returning clients don't retain the old shell.
+
+**Live asset probe (READY preview built from runtime commit `127e477`):** the official logo AVIF/WebP/PNG, representative team original + AVIF/WebP derivatives, JAI event original + AVIF derivative, homepage WebP derivative and CICR hub AVIF derivative all returned HTTP 200 with the expected image content types. The 2.6 MB original PNG is retained as a compatibility fallback; the compact AVIF/WebP logo assets are the preferred path. These probes verify those specific URLs only, not every media asset.
+
+**Still unverified:** the newest V64.5.3 code and added browser test have not yet received a fresh successful CI/browser run or deployment. GitHub Actions jobs fail with zero steps/logs through the available connector, so do not label the browser suite green. The custom production domain and production API deployment blockers recorded below remain separate release gates.
+
+## Implemented in the release branch
+
+- **Hero identity:** left-aligned editorial JYC headline and actions; right-side official `/JYC Logo(4).png` rendered through the lazy React Bits Dither Veil. Coarse pointers, reduced-motion preference and constrained hardware use the static official-logo fallback. No continuously animated photo wall is mounted in the hero.
+- **Magnetic discovery:** activity Bento is lazy-mounted near the section, desktop-only for tilt/magnetism, and disables heavy effects for coarse pointers/reduced motion. Pointer leave resets transforms; router navigation is used rather than assigning arbitrary external URLs.
+- **Team:** React Bits flip cards show portrait, name and role on the front, with available biography/about text and safely resolved LinkedIn/Instagram links on the back. A persistent return-to-photo control is present. Missing public bios are not fabricated.
+- **Club and event identity:** club accents/motifs come from maintained identity records; event accents are event-specific. Club logos are contained rather than cropped as photography when a genuine photo is unavailable.
+- **Photography:** supplied archive records are classified by role and provenance; identity assets are kept out of the photo-only pool; archive frames use stable geometry; responsive AVIF/WebP derivatives and lazy decoding are enabled where appropriate; image fallbacks are local.
+- **Source-backed content:** the All Hubs material grounds the five community families and hub activity narratives. Current official profiles/sites supplement, rather than replace, the supplied orientation source.
+- **Accessibility/theme:** reduced-motion support, keyboard-focus styles, search/More theme checks, responsive overflow checks and team flip keyboard behavior are covered in the browser suite.
+
+## Current public-source recheck
+
+### CICR — Robotics Hub of JIIT-128
+
+- LinkedIn: https://in.linkedin.com/company/cicrjiit128/
+- Official site: https://www.cicr.in/
+- The profile identifies CICR as the official Robotics Hub of JIIT Sector 128.
+- Public updates describe **AI Unlocked** on 11 August 2026 and **ROBOSPARK** on 21 September 2026, including practical AI, sensors/electronics, Arduino/ESP32/STM32 and robotics fundamentals.
+- The official site lists **TechTonic 2.0** as a future AI/ML + robotics workshop with the date still TBA. Do not invent a date or open registration state.
+
+### Innovation JIIT
+
+- LinkedIn: https://in.linkedin.com/company/innovation-jiit/
+- Official site: https://www.innovationjiit.in/
+- The profile describes an innovation/entrepreneurship hub with RIDE Hack, Innovate, startup-oriented programmes, workshops and mentorship.
+- The current site lists **RIDE HACK 26** for 1 November 2026 at JIIT Sector 128. The public LinkedIn post says applications closed on 5 October, shortlisting is 15 October and the final is 1 November; the official website still displays “Registrations are NOW OPEN”. This is a source inconsistency. JYC should link to the official source and avoid asserting that registration is currently open unless the organiser confirms it.
+- Historical activities include Innovate 3.0, CodeAI and Climate Data Hackathon; retain them as past experiences, not upcoming registrations.
+
+### JODC vs OSDC — campus identity guard
+
+- JODC LinkedIn: https://in.linkedin.com/company/jodc/
+- JODC identifies itself as the Open Source Society of JIIT-128 and describes contributions, collaboration, developer networking, GSoC/GSoD/Outreachy preparation, meetups, dev-sprints and hackathons.
+- A separately named **Open Source Developers Community (OSDC)** appears on LinkedIn at https://in.linkedin.com/company/os-dc and is associated with JIIT Sector 62. Do not merge that profile's events, leadership, photos or links into the Sector-128 JYC/JODC record without independent venue/identity evidence.
+
+### LinkedIn identity cross-check — 11 October 2026
+
+The latest public search reconfirmed the following campus-specific profile links already recorded in `src/jyc-socials.js` and the hub descriptions:
+
+- VamUnique: https://www.linkedin.com/company/vamunique-the-dance-society-jiit-noida/ — explicitly says JIIT Sector 128 and describes dance, cultural fests and inter-college/community performances.
+- Rapid Programming Hub: https://www.linkedin.com/company/rapid-programming-hub-jiit-noida/ — Code Clash 25.2 is dated 22 November 2025 and remains archive content, not a current registration.
+- CICR: https://www.linkedin.com/company/cicrjiit128/ — current robotics/electronics/AI workshops and ROBOSPARK updates; TechTonic 2.0 has no confirmed date in the checked official source.
+- Innovation JIIT: https://in.linkedin.com/company/innovation-jiit/ — RIDE HACK 26 has the 5 October application deadline / 15 October shortlist / 1 November final conflict described above.
+- JODC: https://in.linkedin.com/company/jodc/ — explicitly identifies the Open Source Society of JIIT-128.
+- JYC: https://www.linkedin.com/company/jiityouthclub/ and the campus-specific public profile https://in.linkedin.com/in/jyc128 — use the supplied orientation material's `@jiityouthclub128` identity for Sector 128 event sourcing.
+- CypherX: https://www.linkedin.com/company/cypherx-jiit/ — JIIT-128 cybersecurity community.
+- OSDC: https://in.linkedin.com/company/os-dc — the separate profile is associated with Sector 62 and must not be used for JODC/128.
+- GDG JIIT: https://in.linkedin.com/company/dsc-jiit/ — recent posts mention Sector 128 events, but the LinkedIn location metadata still says Sector 62; the record remains review-gated.
+
+A fresh search for Fortissimo, BDS, Panache, Arcadia, Aakriti, Aura, Abhivyakti, Prismatic and JSA did not produce a confidently matching JIIT-128 LinkedIn profile for every name; several results belonged to unrelated institutions or businesses. **Do not fill missing links by guessing from a shared club name.** Keep these links absent until the club or JYC confirms its official URL. Hub descriptions should continue to use the supplied All Hubs material when no trustworthy public profile is available.
+
+### JYC 128 and JAI 2026
+
+- JYC 128 public profile: https://in.linkedin.com/in/jyc128
+- The current public post identifies JAI 2026 as a JYC Wish Town / Sector-128 event on **30–31 October 2026**. Keep its canonical event route and official event landing page as the primary registration source.
+- Converge 2026 (14–15 March 2026) and DRON-O-WAR 1.0 (2–3 May 2026) are past events; do not present them as upcoming.
+- Dronotics source: https://www.linkedin.com/company/dronotics-jiit-128
+
+### GDG JIIT 128
+
+- LinkedIn: https://in.linkedin.com/company/dsc-jiit/
+- Its recent public update advertises Hack Day ’26 for 23 October 2026 at Sector 128. The organisation's LinkedIn location metadata has historically lagged behind its current 128 posts, so event-specific campus evidence should govern inclusion. Keep this as a hub-originated event unless JYC's editorial workflow approves it as a JYC-organised event.
+
+## Media and browser QA additions
+
+- Added a photo-integrity contract that parses the maintained team portrait map and requires local, committed WebP files for each mapped portrait.
+- Added a Playwright regression that scrolls through About, Clubs, Events, Team, Gallery, Achievements and Best of JYC; forces lazy images to load/decode; then checks for broken images and missing `alt` attributes.
+- The existing browser suite already checks the Dither Veil hero, magnetic interactions, team flip + LinkedIn links, search/More light/dark surfaces, reduced motion, route SEO, photo-led routes and overlap/overflow guardrails.
+
+## Validation status — do not overstate
+
+- The newest Vercel preview metadata reports **READY** for commit `139d235b9da90c68e1fdd8e44aad612ed314d780` (Dither Veil/Bento QA commit). The latest added photo-integrity/browser-test commits are newer than that preview, so they are not included in that build yet.
+- The preview is protected by Vercel authentication for an unauthenticated browser; a live browser session could not be completed from the external browser runner.
+- GitHub Actions for the previewed commit report failure, but all inspected jobs return **zero steps** and the log download reports the log blob is unavailable. This is not a passing test result and does not identify an application-code failure; CI must be rerun where a runner/logs are available.
+- No production deployment, public custom-domain routing, or DNS ownership change is claimed here.
+
+## Prioritized next steps
+
+1. **P0 — Release gates:** run `npm ci`, full `npm run qa`, `npm run build`, and the complete Playwright suite on the exact branch head; retain logs/artifacts. Do not merge if any job fails or does not execute.
+2. **P0 — Live browser access:** provide an unprotected preview URL or an authenticated browser session so 320/360/390/768/1024/1280/1440/1920 widths can be visually checked in light and dark themes. Check the hero, team flips, gallery lightbox, event posters and fixed controls.
+3. **P0 — Production routing:** verify Vercel custom-domain ownership and aliases before touching DNS. Do not change DNS based solely on an unverified project-domain state.
+4. **P1 — Event truth:** reconcile RIDE HACK 26 registration status with Innovation JIIT because the application deadline and current site CTA conflict. Keep JAI 2026 as the canonical JYC event and keep old events clearly marked as past.
+5. **P1 — Editorial profile quality:** continue verifying each hub's identity, current official links and campus-specific events. Do not scrape LinkedIn CDN images into the public archive; use owned/permissioned media with source/provenance records.
+6. **P2 — Performance:** capture real LCP/INP/CLS and image bytes on mobile/desktop; compare Dither Veil versus static logo fallback on capable hardware; keep heavy effects below the fold and avoid stacking multiple pointer-driven animations on one element.
+7. **P2 — Maintainability:** consolidate the historical CSS cascade only after visual regression coverage is reliable; keep the source-media manifest and QA contracts as release gates.
+
+## Design direction
+
+Use restrained, purposeful motion: Dither Veil only for the official logo; magnetic movement only on discovery cards; short, reduced-motion-aware page reveals; a controlled photo lightbox; and the team flip as an explicit interaction. Avoid adding more continuous animation until real-device performance is measured. JYC's identity should remain champagne/beige, near-black and ivory, with club-specific muted accents rather than a new competing palette.
+
+
+## Incremental follow-up — 10 October 2026
+
+- **Portrait failure semantics hardened:** team cards reserve a 600×720 intrinsic ratio and keep lazy/async image decoding. A failed portrait now uses the official `/JYC Logo(4).png`, not the generic hub photograph; the fallback is contained, and its alternative text explicitly says the portrait is unavailable. All `ResponsivePhoto` failures now fall back to the official JYC logo instead of substituting an unrelated campus photograph; fallback alt text identifies the logo placeholder, source sets are cleared, and branded fallbacks are contained. Club cards prefer their own logo, event cards prefer their own poster, and the homepage featured-event image uses the official mark when media is missing.
+- **Regression coverage added:** the photo-integrity contract now guards the team fallback and alt-text transitions; Playwright aborts `/assets/team/**` image requests and checks that the official logo is loaded, labelled correctly and rendered with `object-fit: contain`.
+- **Source identity check:** current public LinkedIn results confirm JODC is the JIIT-128 Open Source Society, while the separately named OSDC profile is associated with Sector 62. Do not merge OSDC posts, photos, people or event listings into the Sector-128 JYC site without separate evidence. The official Innovation JIIT LinkedIn post still gives RIDE HACK 26 an application close date of 5 October 2026 while its website CTA says registrations are open; as of 10 October this must remain marked as an organiser-side inconsistency, not a JYC-confirmed registration state.
+- **Validation boundary remains unchanged:** these source edits and source-contract checks do not prove that Playwright or the production build passed. The latest GitHub Actions jobs still expose zero steps/logs; the current head needs an executable CI run before the PR can be approved.
+
+## Incremental follow-up — 10 October 2026 (continued)
+
+- **Removed a retired QA expectation:** the V64 editorial contract still expected the old animated photo wall in the homepage hero, despite the current design intentionally using the official JYC logo + Dither Veil + magnetic activity Bento. Updated the contract to validate the current identity-first hero and keep DriftWall scoped to gallery/event/community rails. This prevents a stale design assertion from blocking the intended release.
+- **Magnetic motion cost:** MagicBento now coalesces pointer movement to one animation-frame callback, ignores a queued move after pointer-leave, cancels queued work on unmount, and guards the center division against zero-sized cards. This bounds transform updates on high-refresh-rate mice and avoids a late transform after pointer leave.
+- **Missing team portraits:** a team record with no portrait mapping previously rendered the official logo through the same `object-fit: cover` rule used for people photographs. It now marks that branch explicitly and uses `object-fit: contain` with a branded neutral background; the photo-integrity contract covers the case. This preserves the official mark instead of cropping it like a portrait.
+- **Validation status:** these are source edits and QA-contract changes. They have not been validated by a successful local full-suite execution or a successful GitHub Actions run. The latest available preview remains Vercel-auth-protected for the external browser, and the GitHub Actions failures still return jobs with no steps/logs. Re-check the new branch head's Vercel build and executable CI/browser results before considering the release complete.
+
+## Incremental follow-up — 10 October 2026 (team profile polish)
+
+- **Team card information order:** the front face now presents the portrait, member name, role/position and flip hint in that order. The back face can display an available LinkedIn headline (`linkedinHeadline`, `linkedin_headline`, `headline` or `tagline`) separately from the person's biography; it supports common LinkedIn URL field variants without inventing content.
+- **Flip-card regression correction:** the browser test was asserting `aria-expanded` on the card wrapper, which does not own that attribute. It now asserts the expanded state on the actual front button, matching the component's accessible interaction contract.
+- **Release QA consistency:** the V64 source contract was corrected where it expected retired hero/photo-wall markup or obsolete implementation strings. The current contract now follows the real Dither Veil hero, current image fallback implementation, event-specific identity styling and front-control ARIA state.
+- **Current validation:** 12/12 focused hardening assertions and 10/10 targeted media/team assertions passed against fetched source. The newest GitHub Actions runs are queued; no successful full build/browser run has yet been observed for the current head. The latest available Vercel preview remains protected from the external browser and predates these newest source changes.
+
+## Incremental follow-up — responsive derivative integrity
+
+- **Intrinsic dimensions now drive responsive sources.** The responsive photo component no longer treats a card's HTML/display width as the source image's real pixel width. For eligible archive/hub photos it resolves the intrinsic width from the build-generated `/image-manifest.json` (cached once per page), then emits only matching AVIF/WebP candidates. If the manifest is unavailable, it safely keeps the original source instead of guessing derivative paths.
+- **No upscaled width descriptors.** Derivative generation and runtime `srcset` selection now both require candidate widths to be no greater than the source's actual pixel width. This avoids advertising a 480w file when Sharp's `withoutEnlargement` actually produced a smaller image, and prevents requests for derivative sizes that were never generated for small originals.
+- **Release checks updated:** V64, photo-integrity and photo-intelligence contracts now cover manifest-backed intrinsic dimensions, managed-folder scoping and truthful `srcset` widths.
+- **Build evidence available for the previous source head:** Vercel built commit `4acb8de` successfully, transformed 6,620 modules, generated 1,316 AVIF/WebP derivatives from 480 eligible source files with `skipped=0` and `failed=0`, optimized the official logo from 5,897,819 to 1,685,566 bytes, and generated 47 route shells. This build predates the intrinsic-width correction and does not validate the newest code.
+- **Release still blocked:** the newest source-width changes require a fresh Vercel build and executable QA/browser run. GitHub Actions continues to fail before exposing steps/logs; do not treat those failures as passing checks.
+
+## Incremental follow-up — logo payload and manifest eligibility
+
+- **Logo payload:** production post-build now generates a transparent 1600px WebP derivative from the original official PNG. The header, homepage hero/Dither texture, boot screen and media fallbacks prefer the compact derivative in production, with the original PNG retained as the safe fallback. Social-preview metadata and the original asset remain unchanged.
+- **Image manifest eligibility:** the build manifest now explicitly marks whether an asset actually receives photo derivatives. Source-archive identity/logo assets remain available as identity marks but are excluded from photo derivative generation, avoiding guessed URLs for assets intentionally not processed.
+- **Low-resolution source finding:** the last built manifest contained 482 derivative-managed candidates, including 101 sources narrower than 480px. The previous component could choose 480w/960w/1600w variants before knowing a photo's intrinsic dimensions; many of those variants do not exist for small sources. Runtime selection now waits for manifest width + eligibility and falls back to the original source when a valid derivative is unavailable.
+- **Truthful responsive widths:** both generator and runtime now skip candidates wider than the original pixel width, keeping `srcset` width descriptors consistent with actual encoded files.
+- **Validation:** 15/15 targeted source assertions passed for the optimized-logo fallback, manifest eligibility, intrinsic widths, low-resolution candidate behavior and QA wiring. This does not replace a fresh production build or browser run.
+- **Deployment state:** the V64.5.1 follow-up head `dcf2336` has a READY Vercel preview. Its manifest contains 530 images with 444 derivative-eligible records; the 1311×25 Aakriti strip, 1500×211 Neural Nexus panorama and small 235×200 image are marked ineligible, while their originals remain available. The preview is not the production deployment, and browser interaction remains unverified because the connected GitHub job log blobs are missing.
+
+
+## Incremental follow-up — image fallback and derivative eligibility
+
+- **React fallback stability:** the previous ResponsivePhoto error handler mutated the image src/alt and parent picture source nodes directly. A later React render could re-apply the original src prop and undo a successful branded fallback. The component now tracks fallback stage in React state, derives active src and alt from that state, removes derivative source elements declaratively while falling back, and resets only when the requested source or contextual fallback changes.
+- **Regression test:** the Playwright photo-failure test deliberately fails team portrait requests and the optimized logo request, verifies the original official PNG loads, toggles the theme to force a parent render, and then verifies the fallback stage, accessible label and PNG source remain stable. The test is added to the browser suite; it still needs to execute successfully in CI.
+- **Derivative audit of the current READY preview manifest:** the deployed manifest contained 530 image records, of which 480 were marked derivative-eligible by folder path alone. A dimension-aware analysis found 36 of those records were unsuitable for generated photo variants. Examples included /assets/hub-photos/aakriti-01.webp at 1311×25 and /assets/hub-photos/neural-01.webp at 1500×211, plus small archive thumbnails that cannot benefit from 480w+ derivatives. These remain usable as original assets; the fix only prevents wasteful/non-useful derivative generation and incorrect eligibility claims.
+- **Shared eligibility rule:** isDerivativeDimensionEligible(width,height) is now shared by the manifest generator and derivative encoder. It requires at least 320×120 source pixels and an aspect ratio between 0.25 and 5. The manifest and generator therefore agree about which files actually receive variants; the browser continues to use the original source when a source is not eligible.
+- **Expanded responsive media coverage:** curated /assets/team, /assets/events and /assets/home sources are now eligible for AVIF/WebP variants too. The 23 team image files (12 primary portraits plus 11 campaign portraits), 3 event posters and 6 homepage photos found in the current manifest all pass the dimension rule. The next build is expected to include them; final derivative counts must be taken from that build log rather than inferred.
+- **Validation boundary:** 15/15 targeted source-contract assertions passed before the expanded team/event/home derivative coverage was added; the additional source-level contract checks were added afterward. The preceding V64.5.1 preview built 1,158 photo derivatives, skipped 36 unsuitable sources, generated 48 route shells and reported zero media optimization failures. The new coverage requires a fresh build for final derivative counts. GitHub Actions/Browser QA still fail before exposing steps or logs, so the Playwright regression is not confirmed passing. The preview is not production, and the custom domain still requires separate verification.
+- **Patch release hygiene:** package.json, both package-lock root version fields, the service-worker cache namespace, README release header and CHANGELOG are synchronized to V64.5.1 on the follow-up branch.
+
+## Next visual QA pass
+
+1. After a fresh preview is available, compare the home hero at 1440, 1024, 768, 390 and 320 CSS pixels in both themes. Confirm the Dither Veil has no black flash, no clipped logo, no hydration shift, and that low-power/reduced-motion fallback is visually equivalent.
+2. Inspect a representative sample from every hub and event: square identity mark, portrait photo, landscape event poster, panorama, missing image, broken URL, transparent PNG and low-resolution original. Confirm logos use contain, photos use the intended crop, and no non-photo strip is treated as a full-width photograph.
+3. Run the browser image-failure and theme-toggle tests on the built production preview; record natural dimensions, currentSrc, layout shift, and console/network errors rather than relying only on static assertions.
+4. Measure mobile LCP/CLS and desktop INP before adding further animation. Keep Dither Veil limited to the logo and magnetic motion limited to the Bento/intentional club-event cards; avoid adding another continuously animated full-page background.
+
+## Incremental follow-up — V64.5.2 image-header integrity
+
+- **Found and fixed a real metadata defect:** the previous lossless WebP (VP8L) parser extracted width/height from the wrong packed bytes. This could write incorrect intrinsic dimensions into `image-manifest.json`, which is the source of truth for responsive derivative selection.
+- Centralized dimension parsing in `src/jyc-photo-intelligence.js` for PNG, JPEG SOF, WebP VP8X, VP8 and VP8L; PNG detection now validates the complete eight-byte signature.
+- Added synthetic header fixtures for each supported format and malformed/truncated inputs. Photo-intelligence QA asserts the manifest generator uses the shared parser.
+- Expanded photo-integrity QA to compare the parsed dimensions against Sharp's metadata for every PNG, JPEG and WebP under `public/assets`, including generated derivatives. The check runs with bounded concurrency and reports mismatched files.
+- Updated the package/lockfile version to **64.5.2** and recorded the fix in the changelog and README.
+- **Validation boundary:** source and QA wiring were inspected after editing; the test scripts and full production build still need to execute on the exact current head. No new successful CI or Vercel build is claimed for this change.
+
+## Incremental follow-up — EXIF geometry and derivative lifecycle
+
+- **Rotation-aware sizing:** JPEG EXIF orientations 5–8 swap the displayed width/height even though the encoded pixel matrix is unchanged. The manifest now records both raw and display dimensions; responsive source-set widths and derivative eligibility use the display dimensions. The encoder applies the same orientation rule before deciding which widths to generate.
+- **Stale build-output cleanup:** existing variants are reused only when their modification time is newer than the source and their actual width/height still match the expected oriented dimensions. Oversized variants are removed when a source becomes smaller or ineligible; orphaned variants are pruned if the source is removed.
+- **Collision safety:** the build now fails early if two source files in the same derivative-managed folder would map to the same output basename, avoiding concurrent overwrite and ambiguous image URLs.
+- **Full asset QA:** the photo-integrity script now compares parsed PNG/JPEG/WebP header dimensions with Sharp metadata across the entire source/generated image tree, validates each AVIF/WebP variant against its source and expected aspect ratio, checks the generated manifest, and detects basename collisions.
+- **Offline payload:** the service-worker cache namespace now matches V64.5.2 and pre-caches the generated compact WebP logo rather than the 5.9 MB original PNG. The original PNG remains available as a runtime fallback.
+- **Source-contract review:** 17/17 targeted assertions passed against the current source after these edits. They are not a substitute for executing the QA scripts against actual assets. The current branch head still has no confirmed successful CI or build: Actions jobs fail without steps/logs, and the latest READY Vercel preview predates these changes.
+
+
+## Follow-up pass — responsive delivery and official-source reconciliation (10 October 2026)
+
+### Photo pipeline correction
+- The runtime previously called `photoDerivativeUrls(src, 0)` while the manifest request was still pending or had failed. The helper interprets an unknown source width as permission to emit all candidate widths, so a page could request guessed AVIF/WebP paths that were never generated or were larger than the source.
+- The runtime now emits AVIF/WebP candidates only after `/image-manifest.json` confirms both `derivativesEligible === true` and a positive intrinsic width. If the manifest cannot be fetched, the original image URL remains the source; no guessed derivative path is emitted.
+- Added source contracts in both photo-integrity and release QA, plus a Playwright regression that blocks the manifest and observes image requests on the Team route.
+- The homepage featured-event poster now uses the same stateful `ResponsivePhoto` fallback component as the rest of the editorial surfaces. This removes a separate DOM-mutating image error handler and keeps the poster's fallback behavior consistent with React rerenders, responsive formats and lazy loading.
+- The event poster fallback styles now target the component's declarative `data-image-fallback-stage` marker instead of the retired `data-fallback` marker.
+
+### Official public source review
+- [INNOVATION JIIT LinkedIn](https://in.linkedin.com/company/innovation-jiit/) and [the official Innovation site](https://www.innovationjiit.in/) both list RIDE HACK 26 for 1 November 2026. The LinkedIn post says applications close on 5 October; the site still labels registration “NOW OPEN” on 10 October. This conflict is recorded in `src/jyc-socials.js`: the website remains the official destination, but JYC must not claim that registration is currently open or closed without organiser confirmation.
+- [CICR's official LinkedIn page](https://in.linkedin.com/company/cicrjiit128) confirms the JIIT-128 robotics identity and recent AI Unlocked activity. [CICR's official website](https://www.cicr.in/) remains the canonical destination for current workshops and event information.
+- [JODC's LinkedIn page](https://in.linkedin.com/company/jodc) explicitly identifies the Open Source Society of JIIT-128. The separately named OSDC profile should not be merged into the Sector-128 directory without independent campus evidence.
+- [Dronotics JIIT-128](https://www.linkedin.com/company/dronotics-jiit-128/) identifies the drone society and its posts place DRON-O-WAR 1.0 on 2–3 May 2026. This is archive content, not an upcoming registration.
+- [CypherX JIIT-128](https://in.linkedin.com/company/cypherx-jiit) describes its cybersecurity workshops, CTFs, projects and industry engagement. [VamUnique](https://www.linkedin.com/company/vamunique-the-dance-society-jiit-noida/) confirms its dance-society identity and performance focus. [ZENCODERS](https://www.linkedin.com/company/zencoders) identifies itself as JIIT's coding society.
+- [JYC's public LinkedIn profile](https://in.linkedin.com/in/jyc128) has a current post for JAI 2026 on 30–31 October 2026 at Sector 128. Keep that event separate from RIDE HACK 26 and from other similarly named university events.
+- Personal LinkedIn biographies should only appear when the public profile is explicitly attached to a published team record. Do not infer identity from names, scrape unrelated people, or fabricate a bio where no public profile was verified.
+
+### Validation boundary
+- The source-level checks and browser regressions are committed to the existing draft PR. They have not been executed successfully on the exact updated head yet. A green source-contract assertion is not evidence that a production build, browser run or deployed preview passed.
+
+
+## Follow-up pass — malformed manifest recovery and release boundary (11 October 2026)
+
+### Additional failure mode found
+- A response could be HTTP 200 and valid JSON but still have an unusable schema (for example, `{}` or an empty `images` array). HTTP/network/JSON error handling alone would then cache a resolved-but-invalid promise for the rest of the page session.
+- `src/jyc-image-manifest.js` now accepts only a non-empty object at `payload.images`; invalid/empty payloads clear the shared promise and return `null`, allowing a later route mount to retry.
+- Added a browser regression that returns an HTTP 200 with a malformed manifest on the Team route, then navigates to Gallery and verifies a second request restores verified responsive image sources. The source-contract checks now guard this regression as well.
+- The shared loader still uses `cache: 'no-cache'`; gallery album/photo metadata and `ResponsivePhoto` source sets share the same request and cannot drift to separate stale snapshots.
+- **Offline boot-logo mismatch fixed:** the static pre-React screen previously requested AVIF while the service worker only precached the compact WebP logo, so an offline first load could hide the logo before React mounted. The boot screen now requests the precached WebP and retains the original PNG as its compatibility fallback; the no-JavaScript browser regression checks the logo actually decodes.
+- **Dither hero fallback aligned with the offline shell:** the WebGL canvas still uses the compact AVIF when available, but its static fallback now uses the precached official WebP rather than an uncached 5.9 MB PNG. The hero browser regression simulates an AVIF failure and checks that the WebP logo decodes.
+- **Reduced photo-card render churn:** each `ResponsivePhoto` previously reset its source-dimension state on mount, and the fallback-state layout effect allocated a new state object even when the source had not changed. State now initializes against the current source and only resets on an actual source/fallback change, avoiding unnecessary React renders across large gallery grids without weakening failure persistence.
+- **Service-worker cache path corrected:** the worker previously used cache-first for every non-navigation request, so a page-level `cache: 'no-cache'` did not actually guarantee fresh `/image-manifest.json` metadata. The worker now revalidates this file first, caches only a non-empty valid JSON manifest, awaits that cache write without letting a quota/storage failure replace a fresh network response, and falls back to the last known-good manifest only when offline; release/photo QA checks the routing and schema guards.
+- **Campus identity gate hardened:** the social-profile allow-list previously checked only the LinkedIn field against blocked legacy identities. It now normalizes `www`/`in` aliases and checks LinkedIn, Instagram, website and official URLs together, so an old Sector-62 profile cannot slip through a different field. Release QA executes positive/negative cases for the JYC-128 identity and blocked aliases.
+- **Browser QA no longer starts duplicate previews:** qa-browser previously launched Vite on port 4173 while Playwright's webServer also launched the configured server on port 5173. The runner now delegates server lifecycle to Playwright, removing redundant memory/CPU work and making the actual tested URL unambiguous.
+
+### Current release gate
+- Targeted cross-file source assertions pass for the shared loader, declarative image fallback, manifest eligibility, photo QA wiring, theme/hero/team design contracts and release metadata.
+- The latest focused review passed 29 cross-file source assertions covering the media pipeline, boot/Dither fallback, release metadata, theme/hero/team contracts and single-preview browser orchestration. Six additional positive/negative policy cases passed for the campus social URL normalizer (canonical JYC-128 identity accepted; blocked LinkedIn/Instagram/website aliases and non-128 campus rejected). These are source/function checks, not a production build or browser run.
+- **The malformed-payload browser test has not been executed successfully on the exact current head.** GitHub Actions has not provided usable runner steps/logs, and the Vercel deployment API previously rejected fresh deployments at the daily deployment limit. Do not call this a production pass until the exact head has a successful build and browser run.
+- The next useful design work is measurement-driven rather than adding more ambient animation: verify LCP/CLS/INP on a fresh preview, audit image bytes and decode sizes at mobile breakpoints, and keep high-cost WebGL/magnetic effects scoped to the hero mark and intentional Bento/cards. Keep any newly discovered hub/social profile campus-gated until an official source confirms it.
+
+## Post-release roadmap — what to improve next, and where motion belongs
+
+This is the follow-up research plan, not a claim that the current head has passed release QA.
+
+### P0 — prove the exact release
+1. Obtain one successful Vercel deployment for the exact PR head, then record its commit SHA and deployment URL in the release notes. The currently READY preview predates the V64.5.4 service-worker, boot-logo and social-policy changes.
+2. Run npm ci, npm run build, npm run qa:photo-integrity, npm run qa:photo-intelligence, npm run qa:v64-editorial and npm run qa:browser against the built preview. Do not treat source-string assertions as a substitute for running the browser tests.
+3. Repeat the route matrix at 320, 360, 390, 768, 1024, 1280, 1440 and 1920 CSS pixels in both themes. Capture horizontal overflow, clipped text, missing alt text, failed image decode, duplicate H1, focus loss and browser console errors.
+4. Verify the service-worker update lifecycle: fresh install, update from V64.5.3 to V64.5.4, offline first paint, manifest revalidation, offline fallback, and recovery after reconnect.
+5. Confirm production /api/jyc-updates returns a successful response on the exact deployment; the previous production deployment had a mapper syntax error that was fixed in source but still requires a fresh production endpoint check.
+6. Resolve the custom-domain ownership/routing issue with the domain owner. Do not change DNS or verification records without explicit authorization.
+
+### P1 — measure performance before adding more effects
+- Collect mobile and desktop field data for LCP, INP and CLS. Use the Core Web Vitals “good” thresholds as release targets: LCP ≤ 2.5 s, INP ≤ 200 ms and CLS ≤ 0.1 at the 75th percentile.
+- Record transfer bytes and decode dimensions for the hero, team portraits, featured-event posters and first gallery row. Keep only the first-view hero/logo eager; lazy-load below-the-fold gallery and club imagery.
+- Profile React renders while changing themes, filtering clubs, opening Search/More and moving through gallery albums. Confirm that magnetic effects and WebGL stop when offscreen and do not cause continuous work after navigation.
+- Track missing/unverified official social profiles in editorial QA rather than filling them with same-name LinkedIn results. Keep the JODC (Sector 128) and OSDC (Sector 62) identities separate.
+- Add an organiser-confirmed status field for events whose deadline or registration state conflicts across official sources. Do not infer that an event registration is open just because an old CTA remains available.
+
+### Animation placement matrix
+| Area | Recommended motion | Guardrails |
+| --- | --- | --- |
+| Homepage hero logo | Dither Veil on the right; static official WebP fallback | One hero canvas only; stop on reduced motion/coarse pointers; never hide the logo if AVIF/WebGL fails. |
+| Community/club discovery Bento | Magnetic pointer attraction on selected cards | Fine-pointer devices only; small translation/tilt; no page-wide cursor physics; disable for touch and reduced motion. |
+| Team cards | Click/keyboard-triggered 3D flip | Never hover-only; preserve focus; front always shows portrait/name/role; back stays readable and includes only verified profile links. |
+| Gallery | Shared-element transition into the lightbox, subtle image crossfade | Arrow keys, Escape, focus restoration and scroll lock; no navigation-to-top; zero-duration motion when reduced motion is requested. |
+| Section entrances | One-time opacity + 8–12 px vertical reveal on major section headers only | Avoid animating every card and paragraph; no scroll-jacking or long parallax. |
+| Buttons, chips and filters | 100–160 ms color/border/scale feedback | Keep the hit target stable; do not animate layout dimensions; maintain visible keyboard focus. |
+| Loading screen | Brief opacity fade only when the app genuinely needs time to mount | Do not impose a minimum delay; show useful fallback content immediately; honor saved/system theme. |
+| Event cards | Poster-to-detail shared transition and subtle status accent | Identity comes from the event poster, hub color and verified status—not constant pulsing or autoplay. |
+
+### Visual system recommendations from the reference review
+- Keep the design hierarchy editorial: one large hero message, one clear primary action, distinct club/event identities and a consistent page rhythm. Do not add another decorative full-width background wall.
+- Use the existing antique-gold accent with ink/cream surfaces; introduce category colors only as restrained accents tied to hub identity, never as competing full-page palettes.
+- Preserve the existing React Bits Dither Veil, Magic Bento and Motion/FlipCard stack. Adding another animation dependency should require a measured benefit; avoid shipping effects that increase bundle size without solving a user task.
+- Keep cards photo-led and content-led. Do not place ultrawide banners, logos, poster strips or screenshots into portrait photo pools. Every image source must have a clear subject, contextual alt text, correct aspect ratio, an appropriate crop and a predictable failure fallback.
+- The next design review should use screenshots and interaction recordings from the exact current deployment—not the earlier preview—and should compare light/dark, reduced-motion, touch and keyboard paths side by side.
+
+
+## V64.5.5 preview checkpoint
+
+- A READY Vercel build was produced for commit `a6feb0978fc9bcb228d7a0337d60f9e23a836183`, which has package version 64.5.5 and the initial strict-manifest validator shape. Its deployment hostname is `jyc-website-m96jj5be2-jyc-website.vercel.app`.
+- On that READY preview, `/`, the canonical JAI event route, `/image-manifest.json`, the official logo WebP, and a team AVIF derivative returned HTTP 200. The JAI route returned a route-specific title/H1. The manifest contained 530 records, 476 marked derivative-eligible.
+- The 530 live manifest records independently passed the new schema checks for safe asset paths, positive integer dimensions, aspect-ratio consistency, orientation labels and explicit eligibility. Sixteen representative image/derivative endpoint probes also returned HTTP 200 with the expected PNG/WebP/AVIF file signatures.
+- **This is not an exact-head build.** The preview commit predates the final numeric-type enforcement, matching service-worker cache namespace bump, and latest QA assertions. Do not treat it as validation of the current PR head. The newest commits need a fresh build and browser/CI run.
+
+## Earlier preview spot-check — V64.5.4 runtime code (superseded)
+
+- Vercel marks preview commit 415c276966937f44b561ac482917eb4745d98853 as READY at jyc-website-9xwdtath6-jyc-website.vercel.app. The current branch has identical Git blob SHAs for the key runtime files checked (ResponsivePhoto, shared image manifest, service worker, homepage hero, social policy, browser runner/spec, release QA, index and package metadata); commits after that preview are documentation-only.
+- Nine route-shell requests returned HTTP 200: home, about, history, clubs, events, team, gallery, contact and JAI 2026. Each had one route-specific H1, matching title, canonical production URL and WebPage JSON-LD.
+- The live image manifest parsed successfully and reported 530 image records, 476 derivative-eligible. The service-worker response contained the V64.5.4 cache namespace, network-first manifest route, valid-schema cache guard, awaited cache write and cache-storage-failure safety.
+- Twenty-two representative image endpoints returned HTTP 200 with expected WebP/AVIF content types, including the official logo, team portrait, homepage image, hub photo, archive photo, JAI poster and generated event/team/home/hub/archive variants.
+- The preview’s /api/jyc-updates endpoint returned HTTP 200 JSON but had configured=false and an empty item list because preview credentials are not configured. This does not verify the live configured feed; production still needs a fresh deployment and endpoint check.
+- These were direct HTTP/source checks, **not** a full browser interaction run. The Firecrawl execution environment used for this pass did not have Playwright installed, and GitHub Actions has not exposed usable runner steps/logs. Do not mark browser QA as passed on the strength of these checks alone.
+
+
+## Additional visual-reference audit — Innovation JIIT website (10 October 2026)
+
+Reference inspected: `Omtripathi007/Innovationjiit.in`, including its `innovation-2.0/index.html`, `innovation-2.0/css/main.css`, and `innovation-2.0/js/main.js`, plus the currently indexed official site at https://www.innovationjiit.in/.
+
+### Patterns worth adapting to JYC (not copying)
+
+- **Editorial photography:** the reference uses real event photographs as part of the hero and featured projects instead of treating imagery as decoration. JYC should continue using its own approved archive with editorial captions, meaningful alt text, image-credit/provenance metadata and clear photo-vs-logo-vs-poster roles.
+- **Asymmetric feature storytelling:** a large lead story followed by smaller supporting stories creates hierarchy. Apply this selectively to JYC's featured event and photo-story surfaces, while retaining the existing restrained editorial grid and avoiding arbitrary card imbalance.
+- **Event pages that tell the full story:** event pages in the reference combine purpose, tracks/activities, event logistics, eligibility, prizes, registration, timeline and results. JYC can improve its event detail pages by surfacing only verified applicable fields from the published record, and by clearly distinguishing upcoming events, closed registration and archived results.
+- **Club-specific experience:** the reference separates projects, domains/teams, events, gallery and team. JYC already supports clubs/hubs, events, gallery and team; use those connections to make cross-navigation more obvious, with the club's own verified photos, activities, related events and public links.
+- **Warm editorial colour and display typography:** its warm off-white background, high-contrast dark type, serif display headlines and compact geometric sans-serif body text show how an editorial site can feel handcrafted. Translate the principle into JYC's existing beige/champagne, ivory and navy/black palette, rather than importing the reference's coral/teal/purple palette or changing the JYC brand.
+- **Deliberate navigation states:** the reference reduces navigation density on scroll and uses a clear mobile menu with an explicit expanded state, outside-click close and Escape handling. Keep JYC navigation compact, and regression-test its existing mobile navigation/theme state rather than introducing a second competing menu implementation.
+- **Progressive motion:** the reference uses viewport-triggered reveals and image sliders. JYC should prefer one-shot, viewport-triggered reveals and manually controlled gallery/event image navigation. Avoid copying its random collage rotation, always-running tape animations, multiple competing IntersectionObservers per element or auto-moving sliders; these can create motion discomfort and wasted work. Every effect must respect `prefers-reduced-motion`, remain keyboard-accessible and avoid blocking content visibility if JavaScript/observers fail.
+
+### Reference-site caveats
+
+- Its README documents a static HTML/CSS/JavaScript implementation, with multiple historical/alternate site folders in the same repository. Do not import the reference repository wholesale or copy its assets, generated content, CSS, JavaScript or third-party dependencies into JYC.
+- The inspected `index.html` includes old 2026 event dates in a commented popup. The public reference currently presents RIDE HACK 26 as upcoming on 1 November 2026, while a LinkedIn source recorded an application deadline of 5 October 2026. This discrepancy was already flagged in the source audit. JYC should link to the official Innovation source for this hub event and should not assert that registration is open without organiser confirmation.
+- The user also supplied a `share.google` short link. The public resolution available to this audit revealed only the Google share-link landing page, not the underlying destination. No visual or product conclusions have been attributed to that link; revisit it if the direct destination URL becomes available.
+
+### JYC-specific follow-up
+
+1. Compare the live JYC preview with the reference's editorial hierarchy at desktop and mobile widths: hero balance, photo focal points, section rhythm, featured event density, navigation and footer.
+2. Verify every adopted pattern against both themes, keyboard-only use and reduced-motion mode.
+3. Prefer verified JYC imagery and content. Do not copy Innovation Club photos, logos, code or private team information.
+4. Keep source-derived visual inspiration separate from factual JYC content; use official/attributable sources before adding claims, people, dates or registration states.
+
+
+## Second reference supplied in this request — unresolved share link
+
+The shortened link `https://share.google/bgNM6MWanvi9Q2alm` was checked alongside the Innovation JIIT source. It exposes a Google share-link landing page in the available browser result, not the original content. Its destination remains unknown, so this audit does not attribute design or product recommendations to it. If the source is a screenshot, another website, or a design reference, the direct destination URL or uploaded image is needed to review it reliably.

@@ -1,0 +1,22 @@
+import fs from 'node:fs';
+const failures=[];
+const read=p=>fs.readFileSync(p,'utf8');
+const check=(name,ok)=>{console.log((ok?'PASS':'FAIL')+': '+name);if(!ok)failures.push(name)};
+const api=read('api/jyc-updates.js');
+const popup=read('src/featured-event-popup.jsx');
+const now=read('src/jyc-now.jsx');
+const exact=(scheme,host,path)=>[scheme,'//',host,path].join('');
+const jaiOrigin=exact('https:','www.jiityouthclub128.in/','','');
+const jaiSite=exact('https:','www.jiityouthclub128.in','','/');
+check('JYC Now provider requests have a bounded timeout',api.includes('FETCH_TIMEOUT_MS=8000')&&api.includes('fetchWithTimeout'));
+check('all JYC Now providers use bounded fetches',!api.includes('await fetch(u,')&&!api.includes('await fetch(p,')&&!api.includes('await fetch(feedUrl,'));
+check('featured event dialog has a focus trap',popup.includes("e.key==='Tab'")&&popup.includes('dialogRef.current.querySelectorAll'));
+check('featured event dialog retains Escape dismissal',popup.includes("e.key==='Escape'"));
+check('JYC Now images have meaningful alt text',now.includes("alt={`${item.hub||'JYC'} — ${item.title}`}"));
+check('JAI popup uses official 128 source',popup.includes(jaiSite)&&popup.includes("JIIT Wish Town Campus · Sector 128, Noida"));
+check('JAI popup is homepage-scoped',popup.includes("window.location.pathname==='/'")&&popup.includes("if(!onHome||Date.now()>EVENT_END||!open)return null;")&&popup.includes("2026-10-31T23:59:59+05:30"));
+check('JAI popup is dismissible and reduced-motion safe',popup.includes('localStorage')&&popup.includes("e.key==='Escape'")&&popup.includes('prefers-reduced-motion:reduce'));
+check('JAI popup has official registration and site actions',popup.includes('unstop.com/o/XAfa40i')&&popup.includes('Register on Unstop')&&popup.includes('Official site'));
+
+if(failures.length)process.exit(1);
+console.log('V50 DEEP PRODUCTION QA PASS');

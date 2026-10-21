@@ -1,0 +1,12 @@
+.env
+.env.local
+.env.*.local
+node_modules/
+dist/
+.vercel/
+.DS_Store
+Thumbs.db
+public/image-manifest.json
+public/assets/photo-derivatives/
+public/assets/hub-extracted/
+scratch/

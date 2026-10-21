@@ -1,0 +1,28 @@
+name: Unknown Route Check
+on:
+  push:
+    branches: [unknown-route-check]
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Generate test
+        run: |
+          cat > scripts/unknown-one.spec.js <<'EOF'
+          import { test, expect } from '@playwright/test';
+          test('unknown', async ({ page }) => {
+            await page.goto('http://127.0.0.1:5173/this-route-should-not-exist-404', { waitUntil: 'domcontentloaded' });
+            await expect(page.locator('#root')).not.toBeEmpty();
+            await expect(page.locator('body')).toBeVisible();
+          });
+          EOF
+      - run: npx playwright test scripts/unknown-one.spec.js

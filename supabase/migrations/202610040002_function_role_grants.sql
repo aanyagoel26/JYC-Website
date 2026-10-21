@@ -1,0 +1,15 @@
+begin;
+revoke execute on function public.handle_new_user() from anon,authenticated;
+revoke execute on function public.is_club_admin(uuid) from anon,authenticated;
+revoke execute on function public.is_jyc_admin() from anon,authenticated;
+revoke execute on function public.is_super_admin() from anon,authenticated;
+revoke execute on function public.jyc_allow_ai_request(uuid,integer) from anon,authenticated;
+revoke execute on function public.jyc_allow_public_submission(text,integer,integer) from anon,authenticated;
+revoke execute on function public.jyc_guard_json_publication() from anon,authenticated;
+revoke execute on function public.jyc_ingest_error_report(text,text,text,text,text,jsonb) from anon,authenticated;
+revoke execute on function public.jyc_prune_public_submission_limits() from anon,authenticated;
+revoke execute on function public.jyc_save_site_data(text,jsonb,text,text) from anon;
+revoke execute on function public.jyc_save_site_data(jsonb,text,text,text) from anon;
+revoke execute on function public.jyc_v2_club() from anon;
+revoke execute on function public.jyc_v2_role() from anon;
+commit;

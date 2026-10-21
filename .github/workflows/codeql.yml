@@ -1,0 +1,59 @@
+name: JYC CodeQL
+
+on:
+  push:
+    branches: [main, master, 'jyc/**', 'fix/**']
+  pull_request:
+    branches: [main, master]
+  schedule:
+    - cron: '23 3 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+concurrency:
+  group: jyc-codeql-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  analyze-javascript:
+    name: Analyze production JavaScript and TypeScript
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: javascript-typescript
+          config-file: ./.github/codeql/codeql-config.yml
+          queries: security-and-quality
+      - name: Analyze
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: /language:javascript-typescript
+
+  analyze-actions:
+    name: Analyze GitHub Actions
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: actions
+          queries: security-and-quality
+      - name: Analyze
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: /language:actions

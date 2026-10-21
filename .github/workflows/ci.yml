@@ -1,0 +1,50 @@
+name: JYC CI
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, master, 'fix/**']
+  pull_request:
+    branches: [main, master]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: jyc-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+      - name: Verify dependency lock consistency
+        run: npm run qa:dependency-lock
+      - name: Dependency vulnerability gate
+        run: npm audit --audit-level=high
+
+      # Build first so photo-integrity QA validates generated manifest/derivative outputs.
+      - name: Build production bundle and media derivatives
+        run: npm run build
+      - name: Verify responsive breakpoint contracts
+        run: npm run qa:responsive
+
+      - run: npm run qa
+      - run: npm run qa:seo
+      - name: Verify photo integrity
+        run: npm run qa:photos
+      - run: npm run qa:v64-editorial
+      - run: npm run qa:photo-intelligence
+      - name: Enforce production media/performance budget
+        run: node scripts/qa-performance.mjs

@@ -1,0 +1,18 @@
+name: Legacy Redirect Check
+on:
+  push:
+    branches: [legacy-redirect-check]
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test scripts/browser-smoke.spec.js --grep "legacy redirects and unknown routes resolve safely"

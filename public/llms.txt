@@ -1,0 +1,115 @@
+# JIIT Youth Club 128 — Official Website
+
+JIIT Youth Club 128 is the student-led central coordinating body for major college events, fests and inter-society activities at JIIT Wish Town Campus, Sector 128, Noida.
+
+The public website is the official organisational source for published JYC information. Public search covers published pages, clubs, events, people and visual records; staff publishing tools are intentionally not exposed as a public navigation surface. The public information surface includes identity, leadership, history, clubs and hubs, events, fests, achievements, announcements, gallery/memories, archive, recruitment and contact.
+
+## Core public pages
+
+- / — JYC 128 home
+- /about — About JYC, including purpose, communities, values and the documented JYC timeline
+- /history — Legacy URL that redirects to the timeline section of About JYC
+- /team — JYC 128 leadership and organisational structure
+- /clubs — official published clubs and hubs
+- /events — official published JYC events
+- /fests — official published JYC fests and flagship events
+- /events/:id — event details, registration, rules, FAQs, results and recap
+- /gallery — official visual archive
+- /best-of-jyc — official event and club memories
+- /achievements — documented JYC achievements
+- /announcements — official JYC notices, registrations, results and updates
+- /recruitment — official recruitment / Join JYC destination; published cycles appear when JYC opens them
+- /calendar — JYC event calendar only
+- /archive — JYC historical and visual archive
+- /contact — official contact channels and query form
+- /updates — JYC Now / verified recent updates
+
+## Canonical content rule
+
+Only content published by authorised JYC editors should be treated as current official information. Historical brochures, supplied presentations and archived material are context unless re-verified.
+
+Current records should be sourced and, where applicable, carry a last-verified date.
+
+## Organisation vocabulary
+
+JIIT Youth Club 128, JYC 128, JIIT Youth Club, JIIT Wish Town Campus, Sector 128, Noida, JYC leadership, JYC clubs, JYC hubs, JYC events, JYC fests, JYC achievements, JYC gallery, JYC announcements.
+
+
+## JYC 128 community index
+
+The maintained JYC 128 public source index currently covers 23 named communities across five families. This index combines the official JIIT Admission Brochure 2026 with the supplied JYC 2026–27 All Hubs / orientation material; source status is kept in the website registry.
+
+### Cultural
+Fortissimo — Music; BDS — Bhangra / Dance; VamUnique — Western Dance; Panache — Fashion.
+
+### Technical
+RPH — Coding / Competitive Programming; CICR — Robotics; Innovation Club — Innovation / Entrepreneurship; Zencoders — Programming / Development; JODC — Open Source; CypherX — Cybersecurity; Arcadia — Esports / Gaming; Neural Nexus — AI / ML; GDG — Developer Community; Dronotics — Drones / Aerial Robotics; JIIT OPTICA — STEM / Optics.
+
+### Creative
+Aakriti — Fine Arts; Aura — Photography; Cinekala — Film Making; Abhivyakti — Drama / Theatre; Prismatic — Graphic Design.
+
+### Literary
+Eloquence — Writing / Speaking; Qriosity — Quizzing.
+
+### Sports
+JSA — Sports.
+
+## Source hierarchy
+
+For current organisational facts, prefer published JYC records. For identity and ecosystem context, use the official JIIT Admission Brochure 2026 and the supplied JYC 2026–27 All Hubs / orientation material. Historical JIIT annual reports provide documented history and should be treated as historical evidence rather than proof of current leadership or recruitment. The site does not invent missing club handles, current teams, dates or achievements.
+
+## Search identity
+
+Useful search phrases include: JIIT Youth Club 128, JYC 128, JIIT Youth Club Wish Town Campus, JIIT clubs Sector 128, JIIT student clubs, JIIT events Sector 128, JIIT fests, JIIT cultural clubs, JIIT technical clubs, JIIT coding club RPH, JIIT robotics CICR, JIIT Innovation Club, JIIT photography Aura, JIIT drama Abhivyakti, JIIT literary Eloquence, JIIT sports JSA, JIIT OPTICA, Qriosity JIIT, Dronotics JIIT, CypherX JIIT, Neural Nexus JIIT, Arcadia JIIT, VamUnique JIIT, BDS JIIT and Panache JIIT.
+
+## Product boundary
+
+This site is an official JYC organisational website. It is not an academic portal, attendance system, student-help portal, campus utility dashboard or social-network clone.
+
+## Official identity
+
+Official links: https://linktr.ee/jiityouthclub
+Instagram: https://www.instagram.com/jiityouthclub128/
+LinkedIn: https://in.linkedin.com/in/jyc128
+
+
+Public website: Home, About, History, Clubs, Events, Event Calendar, Fests, Gallery, Leadership, Archive, Achievements, Recruitment, Announcements/JYC Now and Contact. Academic utilities, My JYC, student accounts, attendance, passes, certificates and campus utilities are outside scope.
+
+
+## Release boundary
+
+V64.4.2 is the current repository release boundary. It adds restrained editorial navigation, event/gallery shared-element transitions, a multi-day event timeline, route-specific metadata shells, a real AVIF/WebP derivative pipeline, photo editorial tooling and expanded release/browser QA.
+
+V64.0.0 remains a club-first public website. Academic calendars are informational only; student accounts, attendance, passes, certificates, campus utilities and student-help workflows are outside the public product. Current official records are published only through authorised JYC editorial workflows.
+
+## Source-backed community detail
+
+The 2026 JIIT Admission Brochure describes JIIT Youth Club 128 as the central coordinating body responsible for planning, managing and executing major college events, fests and inter-society activities. It describes VamUnique as Western Dance, BDS as Bhangra, Aakriti as Fine Arts, Panache as Fashion, Abhivyakti as Drama, Aura as Photography, Cinekala as Film Making, Eloquence as Literary, Qriosity as Quizzing, Prismatic as Designing, Fortissimo as Music, CICR as Robotics, JODC as Open Source Developers Circle, RPH as Coding, Innovation Club as innovation/hackathons, JSA as Sports and JIIT OPTICA as a STEM-oriented scientific society. These are source-derived identity descriptions; current teams, recruitment and operational details must come from published JYC records.
+
+## Current external source signals used for editorial updates
+
+- JIIT official public communication: current campus events and JYC activity.
+- JIIT Innovation: RIDE Hack, CodeAI, Innovate and Climate Data Hackathon archive/current event information.
+- CICR: robotics capabilities, projects and event structure.
+- Dronotics: DRONO-O-WAR 1.0 and its aerial-robotics competition structure.
+
+The website uses these sources for verification/context and does not copy external branding. Event dates, links, prizes and registration claims should always remain attached to their canonical source record.
+
+
+## Source-backed programme vocabulary
+
+RPH: Code Clash 25.1, Code Clash 25.2, DSA, Competitive Programming, C++ and technical interview preparation.
+CICR: Robotics Hub of JIIT-128, TechTonic, Circuit Rush, Robo Soccer, electronics and prototyping.
+Innovation: RIDE Hack, CodeAI, Innovate, Climate Data Hackathon, mentorship and entrepreneurship.
+CypherX: cybersecurity, Capture the Flag, workshops, projects and competitions.
+Neural Nexus: AI/ML, real-world projects, hackathons, workshops and AI challenges.
+Arcadia: esports, PC/mobile gaming, Aim Labs, Flappy Bird and AR/VR activities.
+Dronotics: Dron-O-War, Top Gun Challenge, drone engineering and aerial robotics.
+Aura: photography, photo walks, campus event coverage and workshops.
+Aakriti: fine arts, Art of the Week, Best out of Waste and campus installations.
+Panache: fashion design, photowalks, makeup/face paint, cosplay and performances.
+Eloquence: debating, anchoring, writing, poetry and public speaking.
+JSA: cricket, football, basketball, volleyball, lawn tennis, carrom, table tennis, chess and badminton.
+Qriosity: quizzing, knowledge competitions, curiosity and critical thinking.
+JIIT OPTICA: STEM, scientific exploration, OPTICA student chapter and physics/materials science context.
+JAI 2026: Jaypee Agentic AI International Summit, 30–31 October 2026, JIIT Wish Town Campus, Sector 128, Noida.

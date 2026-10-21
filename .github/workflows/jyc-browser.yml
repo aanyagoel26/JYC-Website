@@ -1,0 +1,69 @@
+name: JYC Browser QA
+
+concurrency:
+  group: jyc-browser-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches: [main, 'fix/**']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Build production bundle
+        env:
+          VITE_JYC_QA_FIXTURES: 'true'
+        run: npm run build
+
+      - name: Run browser smoke and responsive QA against production preview
+        env:
+          JYC_UPDATE_VISUAL_BASELINES: ${{ github.event_name == 'workflow_dispatch' && inputs.update_visual_baselines == true || contains(github.event.head_commit.message || '', '[visual-baseline-bootstrap]') && 'true' || 'false' }}
+        run: npm run qa:browser
+      - name: Upload Playwright reports and visual route captures
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: jyc-playwright-and-visual-report
+          path: |
+            playwright-report
+            test-results
+            scripts/visual-route-matrix.spec.js-snapshots
+          if-no-files-found: ignore
+      - name: Upload visual baseline bootstrap
+        if: success() && contains(github.event.head_commit.message || '', '[visual-baseline-bootstrap]')
+        uses: actions/upload-artifact@v7
+        with:
+          name: jyc-visual-baselines-bootstrap
+          path: scripts/visual-route-matrix.spec.js-snapshots
+          if-no-files-found: error
+
+# Visual baseline bootstrap is an artifact-only workflow. Review and commit
+# generated screenshots through a normal pull request; CI must never push
+# generated content directly to main or use write permissions on the default
+# branch as a side effect of a screenshot test.

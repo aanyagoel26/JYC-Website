@@ -1,0 +1,14 @@
+begin;
+revoke execute on function public.is_club_admin(uuid) from public;
+revoke execute on function public.is_club_admin(uuid) from anon;
+revoke execute on function public.is_club_admin(uuid) from authenticated;
+revoke execute on function public.is_jyc_admin() from public;
+revoke execute on function public.is_jyc_admin() from anon;
+revoke execute on function public.is_jyc_admin() from authenticated;
+revoke execute on function public.is_super_admin() from public;
+revoke execute on function public.is_super_admin() from anon;
+revoke execute on function public.is_super_admin() from authenticated;
+grant execute on function public.is_club_admin(uuid) to authenticated;
+grant execute on function public.is_jyc_admin() to authenticated;
+grant execute on function public.is_super_admin() to authenticated;
+commit;

@@ -1,0 +1,23 @@
+project_id = "ogbanmjokjlxfuktkicj"
+
+[functions.admin-management]
+verify_jwt = true
+
+[functions.send-notification]
+verify_jwt = true
+
+[functions.backup-site-data]
+verify_jwt = false
+
+[functions.ai-content-assist]
+verify_jwt = true
+
+[functions.error-report]
+verify_jwt = false
+
+[functions.media-upload]
+verify_jwt = true
+
+
+[functions.public-submission]
+verify_jwt = false

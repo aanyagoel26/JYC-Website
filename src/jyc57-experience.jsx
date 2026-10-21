@@ -1,0 +1,833 @@
+import React,{useEffect,useMemo,useRef,useState} from 'react';
+import {AnimatePresence,motion,useReducedMotion} from 'motion/react';
+import {useLocation,useNavigate} from 'react-router-dom';
+import {JYC_HUB_CONTENT} from './v21-hub-content.js';
+import {supabase} from './lib/supabase';
+import {JYC_SOURCE_ARCHIVE_PHOTO_ITEMS,JYC_SOURCE_ARCHIVE_ALBUMS,rankJycPhotoItems,sourceHubMedia,sourceEventMedia} from './jyc-source-media.js';
+import {eventIdentity} from './hub-identities.js';
+import {ResponsivePhoto} from './jyc-responsive-photo.jsx';
+import {loadJycImageManifest} from './jyc-image-manifest.js';
+import AccordionGallery from './components/react-bits/AccordionGallery.jsx';
+
+const safeDate=(e)=>{const t=eventMoment(e?.date,e?.start,'00:00');return Number.isFinite(t)?t:Infinity};
+const eventMoment=(date,time,fallback='00:00')=>{const raw=String(date||'').trim();if(!raw)return NaN;if(/[T ]\d{1,2}:\d{2}/.test(raw))return Date.parse(raw.replace(' ','T'));const clock=String(time||fallback).trim();const normalized=/^\d{1,2}:\d{2}$/.test(clock)?clock.padStart(5,'0'):fallback;return Date.parse(`${raw}T${normalized}`)};
+const stateOf=(e)=>{if(!e?.date)return 'draft';const start=eventMoment(e.date,e.start,'00:00'),end=eventMoment(e.dateEnd||e.date,e.end,'23:59'),now=Date.now();if(!Number.isFinite(start)||!Number.isFinite(end))return 'draft';if(now<start)return 'upcoming';if(now<=end)return 'live';return 'past'};
+const registrationOpen=(e)=>{
+ if(!e?.registrationUrl||stateOf(e)==='past')return false;
+ if(e.publicStatus==='planned'&&e.registrationVerified!==true)return false;
+ const raw=String(e.registrationDeadline||'').trim();
+ if(raw){
+  const deadline=Date.parse(/^\d{4}-\d{2}-\d{2}$/.test(raw)?raw+'T23:59:59':raw);
+  if(!Number.isFinite(deadline)||deadline<=Date.now())return false;
+ }
+ try{
+  const url=new URL(e.registrationUrl,window.location.origin);
+  if(url.protocol!=='https:'&&url.protocol!=='http:')return false;
+ }catch{return false}
+ return true;
+};
+const publishedEvents=(data)=>Array.isArray(data?.events)?data.events.filter(e=>e?.published&&e?.archived!==true):[];
+const publishedClubs=(data)=>Array.isArray(data?.clubs)?data.clubs.filter(c=>c?.published&&c?.status!=='archived'):[];
+const eventPath=(e)=>`/events/${encodeURIComponent(String(e?.slug||slugify(e?.title)||e?.id||''))}`;
+const slugify=(value)=>String(value||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+const syncFilters=(nav,loc,values)=>{const p=new URLSearchParams(loc.search);Object.entries(values).forEach(([k,v])=>{const value=String(v??'').trim();if(!value||value==='All'||(k==='status'&&value==='upcoming'))p.delete(k);else p.set(k,value)});const search=p.toString();nav({pathname:loc.pathname,search:search?'?'+search:''},{replace:true});};
+
+const LOGO_FALLBACK='/assets/jyc-logo.avif';
+const identityPalette=['#A82420','#BF9C6F','#D2B48C','#C92A2A'];
+const identityAccent=value=>{let hash=0;for(const ch of String(value||'JYC'))hash=(hash*31+ch.charCodeAt(0))>>>0;return identityPalette[hash%identityPalette.length]};
+const eventCardPhoto=event=>event?.poster||event?.banner||sourceEventMedia(event)?.photoItems?.find(item=>item?.url)?.url||'';
+const PHOTO_SUBJECTS = [
+ ['induction', /induction|orientation|freshers/i],
+ ['cultural-fest', /converge|ebullience|fest|ethnic day|impressions/i],
+ ['technology', /hack|hackathon|code|robot|drone|ai summit|technology/i],
+ ['performance', /dance|music|theatre|stage|performance|singing/i],
+ ['community', /club|community|society|hub|volunteer|meeting/i],
+ ['sports', /sport|cricket|football|badminton|match|tournament/i],
+ ['workshop', /workshop|session|seminar|talk|lecture/i]
+];
+const photoSubject=(item,index=0)=>{
+ const text=`${item?.caption||''} ${item?.title||''} ${item?.association||''} ${item?.albumName||''} ${item?.category||''} ${item?.event||''}`.toLowerCase();
+ return PHOTO_SUBJECTS.find(([,pattern])=>pattern.test(text))?.[0] || 'campus-life';
+};
+const photoAspect=(item,index=0)=>{
+ const width=Number(item?.width||item?.dimensions?.width||0),height=Number(item?.height||item?.dimensions?.height||0);
+ if(width>0&&height>0){
+  const ratio=width/height;
+  if(ratio>1.52)return 'landscape';
+  if(ratio<.78)return 'portrait';
+  return 'square';
+ }
+ const ratio=(index*7+3)%11;
+ return ratio<4?'landscape':ratio<7?'square':'portrait';
+};
+const photoObjectPosition=photo=>{
+ const rawX=photo?.focalX??photo?.focal_x;
+ const rawY=photo?.focalY??photo?.focal_y;
+ if(rawX==null||rawY==null||rawX===''||rawY==='')return undefined;
+ const x=Number(rawX),y=Number(rawY);
+ if(!Number.isFinite(x)||!Number.isFinite(y))return undefined;
+ return `${Math.min(100,Math.max(0,x))}% ${Math.min(100,Math.max(0,y))}%`;
+};
+const clubCardPhoto=club=>{
+  const clubName=typeof club==='object'&&club!==null?club.name:club;
+  const source=sourceHubMedia(clubName);
+  const isSelfie=u=>{
+    if(!u)return false;
+    const s=String(u).toLowerCase();
+    return s.includes('jyc-01')||s.includes('jyc-02')||s.includes('vamunique-03')||s.includes('portrait')||s.includes('selfie');
+  };
+  const pickValid=arr=>{
+    if(!Array.isArray(arr))return null;
+    return arr.find(x=>{
+      const url=typeof x==='string'?x:(x?.url||x?.src);
+      return url&&!isSelfie(url);
+    });
+  };
+  const cPhoto=pickValid(club?.hubPhotos);
+  if(cPhoto)return typeof cPhoto==='string'?cPhoto:(cPhoto.url||cPhoto.src);
+  const sPhoto=pickValid(source?.photos);
+  if(sPhoto)return typeof sPhoto==='string'?sPhoto:(sPhoto.url||sPhoto.src);
+  const sItem=source?.photoItems?.find(item=>item?.url&&!isSelfie(item.url));
+  if(sItem?.url)return sItem.url;
+  const sVis=pickValid(source?.visuals);
+  if(sVis)return typeof sVis==='string'?sVis:(sVis.url||sVis.src);
+  if(club?.banner&&club.banner!==club.logo&&!isSelfie(club.banner))return club.banner;
+  return '';
+};
+function magneticMove(event){
+ if(event.pointerType!=='mouse'||window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;
+ const element=event.currentTarget,rect=element.getBoundingClientRect();
+ if(!rect.width||!rect.height)return;
+ const x=(event.clientX-rect.left)/rect.width-.5,y=(event.clientY-rect.top)/rect.height-.5;
+ element.style.setProperty('--magnetic-x',`${(x*7).toFixed(2)}px`);
+ element.style.setProperty('--magnetic-y',`${(y*7).toFixed(2)}px`);
+ element.style.setProperty('--magnetic-rx',`${(-y*1.7).toFixed(2)}deg`);
+ element.style.setProperty('--magnetic-ry',`${(x*1.7).toFixed(2)}deg`);
+}
+function magneticReset(event){for(const property of ['--magnetic-x','--magnetic-y','--magnetic-rx','--magnetic-ry'])event.currentTarget.style.removeProperty(property)}
+function MetaPill({children,tone=''}){return <span className={`jyc57-pill ${tone}`}>{children}</span>}
+function Empty({eyebrow,title,text}){return <div className="jyc57-empty"><span className="eyebrow">{eyebrow}</span><h2>{title}</h2><p>{text}</p></div>}
+
+export function JYC57Events({data}){
+ const nav=useNavigate(),loc=useLocation();
+ const params=useMemo(()=>new URLSearchParams(loc.search),[loc.search]);
+ const [query,setQuery]=useState(params.get('q')||'');
+ const [category,setCategory]=useState(params.get('category')||'All');
+ const [scope,setScope]=useState(params.get('status')||'upcoming');
+ const [categoryOpen,setCategoryOpen]=useState(false);
+ const [statusOpen,setStatusOpen]=useState(false);
+
+ const rawEvents=useMemo(()=>publishedEvents(data).sort((a,b)=>safeDate(a)-safeDate(b)),[data]);
+ const events=useMemo(()=>{
+   const seen=new Set();
+   return rawEvents.filter(e=>{
+     if(!e||!e.title)return false;
+     const k=String(e.id||e.title).toLowerCase();
+     if(seen.has(k))return false;
+     seen.add(k);
+     return true;
+   });
+ },[rawEvents]);
+
+ const categories=useMemo(()=>[
+   'All',
+   'Technical Fest',
+   'Agentic AI Hackathon',
+   'Cultural Festival',
+   'National Drone Championship',
+   'Robotics Workshop',
+   'Coding Competition',
+   'Live Music Showcase',
+   'Theatre Festival',
+   'Cybersecurity CTF',
+   'Dance Showcase',
+   'Fine Arts Expo',
+   'Sports Tournament',
+   'Esports Tournament',
+   'Fashion Gala',
+   'Debate & MUN'
+ ],[]);
+
+ const filtered=useMemo(()=>events.filter(e=>{
+   const hay=`${e.title} ${e.club} ${e.eventType} ${e.description} ${e.venue} ${(e.highlights||[]).join(' ')}`.toLowerCase();
+   const okQ=!query.trim()||hay.includes(query.trim().toLowerCase());
+   const okC=category==='All'||(e.eventType||e.category)===category||hay.includes(category.toLowerCase().split(' ')[0]);
+   const s=stateOf(e),okS=scope==='all'||s===scope;
+   return okQ&&okC&&okS;
+ }),[events,query,category,scope]);
+
+ const featured=events.find(e=>e.featured&&stateOf(e)!=='past')||events.find(e=>stateOf(e)==='live')||events.find(e=>stateOf(e)==='upcoming')||events[0];
+
+ const selectCategory=(cat)=>{
+   setCategory(cat);
+   setCategoryOpen(false);
+   syncFilters(nav,loc,{q:query,category:cat,status:scope});
+ };
+
+ const selectScope=(sc)=>{
+   setScope(sc);
+   setStatusOpen(false);
+   syncFilters(nav,loc,{q:query,category,status:sc});
+ };
+
+ const clearAll=()=>{
+   setQuery('');
+   setCategory('All');
+   setScope('all');
+   setCategoryOpen(false);
+   setStatusOpen(false);
+   syncFilters(nav,loc,{q:'',category:'All',status:'all'});
+ };
+
+ return <section className="section page unified-public-page jyc57-page jyc-events-experience">
+  <div className="visible-breadcrumbs"><button type="button" onClick={()=>nav('/')}>JYC</button><span>→</span><strong>Events & Fests</strong></div>
+  
+  <header className="jyc-events-header">
+   <div className="jyc-events-header-copy">
+    <span className="jh-kicker">JYC 128 <b>CAMPUS CALENDAR</b></span>
+    <h1>Events That Define the Campus Rhythm.</h1>
+    <p>Explore hackathons, collegiate festivals, live concerts, robotics challenges, sports tournaments, and technical summits across JIIT Sector 128.</p>
+   </div>
+   <div className="jyc-events-telemetry-badge">
+    <div className="telemetry-pill">
+     <span className="jh-live-pulse-dot"/>
+     <b>{events.filter(e=>stateOf(e)==='upcoming'||stateOf(e)==='live').length} Active Events</b>
+    </div>
+    <span className="telemetry-sub">Official JIIT Sector 128 Schedule</span>
+   </div>
+  </header>
+
+  {/* Sleek Popover Filter Bar (No clutter, options appear only when clicked and disappear on select) */}
+  <div className="jyc-filter-bar">
+   <div className="jyc-search-input-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    <input className="jyc-search-input" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search events by name, club, hackathon, prize..." aria-label="Search events"/>
+    {query&&<button type="button" onClick={()=>setQuery('')} className="jyc-search-clear">×</button>}
+   </div>
+
+   {/* Category Dropdown Popover */}
+   <div className="jyc-dropdown-wrap">
+    <button type="button" className={`jyc-filter-toggle-btn ${category!=='All'||categoryOpen?'is-active':''}`} onClick={()=>{setCategoryOpen(v=>!v);setStatusOpen(false);}} aria-expanded={categoryOpen}>
+     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 3H2l8 9.46V19l4 2v-8.54L22 3z"/></svg>
+     <span>{category==='All'?'Filter by Domain':category}</span>
+     <small>{categoryOpen?'▲':'▼'}</small>
+    </button>
+    {categoryOpen&&<div className="jyc-dropdown-popover">
+     <div className="jyc-dropdown-title">Select Domain / Category</div>
+     <div className="jyc-dropdown-list">
+      {categories.map(c=><button type="button" key={c} className={`jyc-dropdown-item ${category===c?'is-active':''}`} onClick={()=>selectCategory(c)}>
+       <span>{c}</span>
+       {category===c&&<b>✓</b>}
+      </button>)}
+     </div>
+    </div>}
+   </div>
+
+   {/* Status Dropdown Popover */}
+   <div className="jyc-dropdown-wrap">
+    <button type="button" className={`jyc-filter-toggle-btn ${scope!=='all'||statusOpen?'is-active':''}`} onClick={()=>{setStatusOpen(v=>!v);setCategoryOpen(false);}} aria-expanded={statusOpen}>
+     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+     <span>Status: {scope==='upcoming'?'Upcoming':scope==='live'?'Live Now':scope==='past'?'Past':scope==='all'?'All Events':scope}</span>
+     <small>{statusOpen?'▲':'▼'}</small>
+    </button>
+    {statusOpen&&<div className="jyc-dropdown-popover">
+     <div className="jyc-dropdown-title">Event Status</div>
+     <div className="jyc-dropdown-list">
+      {[['upcoming','Upcoming Events'],['live','Live Now'],['all','All Events'],['past','Past Archive']].map(([s,label])=><button type="button" key={s} className={`jyc-dropdown-item ${scope===s?'is-active':''}`} onClick={()=>selectScope(s)}>
+       <span>{label}</span>
+       {scope===s&&<b>✓</b>}
+      </button>)}
+     </div>
+    </div>}
+   </div>
+
+   {(category!=='All'||scope!=='upcoming'||query)&&<button type="button" className="jyc-clear-filters-btn" onClick={clearAll}>Reset Filters ↺</button>}
+  </div>
+
+  {/* Zero Empty Spaces: Full Responsive Grid */}
+  <div className="jyc-events-grid">
+   {filtered.length ? filtered.map((e,i)=>{
+    const photo=eventCardPhoto(e);
+    const accent=eventIdentity(e).accent||identityAccent(e.title||e.slug||e.club);
+    const isLive=stateOf(e)==='live';
+    const isPast=stateOf(e)==='past';
+    const dateObj=e.date?new Date(`${e.date}T12:00`):null;
+    const dayStr=dateObj?dateObj.toLocaleDateString('en-IN',{day:'2-digit'}):'TBA';
+    const monthStr=dateObj?dateObj.toLocaleDateString('en-IN',{month:'short'}).toUpperCase():'TBA';
+    const weekdayStr=dateObj?dateObj.toLocaleDateString('en-IN',{weekday:'short'}):'';
+
+    return <article className="jyc-event-card-v2" key={e.id||e.title||i} style={{'--event-accent':accent}} onPointerMove={magneticMove} onPointerLeave={magneticReset}>
+     <div className="jyc-event-card-media" onClick={()=>nav(eventPath(e))}>
+      {photo ? <ResponsivePhoto src={photo} alt={e.title} loading="lazy" decoding="async" sizes="(max-width: 760px) 100vw, (max-width: 1200px) 50vw, 33vw" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Event poster unavailable"/>
+        : <div className="jyc-event-card-fallback"><span>{String(e.eventType||e.club||'JYC').slice(0,3).toUpperCase()}</span></div>}
+      <div className="jyc-event-card-vignette"/>
+      
+      {/* Date Chip */}
+      <div className="jyc-event-floating-date">
+       <b>{dayStr}</b>
+       <span>{monthStr}</span>
+       {weekdayStr&&<small>{weekdayStr}</small>}
+      </div>
+
+      {/* State / Tag Chip */}
+      <div className="jyc-event-floating-status">
+       {isLive ? <span className="jyc-chip is-live">● LIVE NOW</span> : isPast ? <span className="jyc-chip is-past">ARCHIVED</span> : <span className="jyc-chip is-upcoming">UPCOMING</span>}
+       {(e.eventType||e.category)&&<span className="jyc-chip is-type">{e.eventType||e.category}</span>}
+      </div>
+     </div>
+
+     <div className="jyc-event-card-body">
+      <div className="jyc-event-card-club">
+       <span className="club-glyph-dot" style={{backgroundColor:accent}}/>
+       <strong>{e.club||'JYC Community'}</strong>
+       {registrationOpen(e)&&<span className="reg-badge">REGISTRATION OPEN ↗</span>}
+      </div>
+
+      <h2 className="jyc-event-card-title" onClick={()=>nav(eventPath(e))}>{e.title}</h2>
+      <p className="jyc-event-card-desc">{e.description||'Official JYC experience details, registration and participation highlights.'}</p>
+
+      {/* Highlights or Prize Pills */}
+      {Array.isArray(e.highlights)&&e.highlights.length>0&&<div className="jyc-event-card-highlights">
+       {e.highlights.slice(0,2).map((h,hi)=><span key={hi} className="highlight-pill">{h}</span>)}
+      </div>}
+
+      <div className="jyc-event-card-footer">
+       <div className="jyc-event-card-meta">
+        <span>📍 {e.venue||'JIIT Sector 128'}</span>
+        {e.start&&<small>⏰ {e.start}{e.end?` – ${e.end}`:''}</small>}
+       </div>
+       <button type="button" className="jyc-event-card-cta" onClick={()=>nav(eventPath(e))}>
+        {registrationOpen(e)?'Register Now ↗':'Explore Event →'}
+       </button>
+      </div>
+     </div>
+    </article>;
+   }) : (
+    <div className="jyc-events-empty-state">
+     <div className="empty-state-icon">📅</div>
+     <h3>No events match your current filter.</h3>
+     <p>Try resetting the category filter or search term to browse the entire official Sector 128 schedule.</p>
+     <button type="button" className="jh-btn jh-btn-primary" onClick={clearAll}>View All Events ↺</button>
+    </div>
+   )}
+  </div>
+ </section>;
+}
+
+export function JYC57Clubs({data}){
+ const nav=useNavigate();
+ const [query,setQuery]=useState('');
+ const [family,setFamily]=useState('All');
+ const [type,setType]=useState('All');
+ const [domain,setDomain]=useState('All');
+ const [filtersOpen,setFiltersOpen]=useState(false);
+ const [active,setActive]=useState(null);
+
+ const clubs=publishedClubs(data);
+ const families=['All','Technical','Cultural','Creative','Literary','Sports'];
+ const types=['All','Technical','Non-Technical'];
+ const quickDomains=[
+   'AI & Coding',
+   'Robotics & Drones',
+   'Web & App',
+   'Music & Band',
+   'Dance',
+   'Theatre & Drama',
+   'Debate & MUN',
+   'Design & Media',
+   'Photography',
+   'Sports & Fitness'
+ ];
+
+ const activeFilterCount=(family!=='All'?1:0)+(type!=='All'?1:0)+(domain!=='All'?1:0);
+
+ const filtered=clubs.filter(c=>{
+  const hay=`${c.name} ${c.category||''} ${c.type||''} ${c.description||''} ${(c.interests||[]).join(' ')}`.toLowerCase();
+  const matchesQuery=!query||hay.includes(query.toLowerCase());
+  const matchesFamily=family==='All'||c.type===family||c.category===family||(c.interests||[]).includes(family);
+  const matchesType=type==='All'||c.type===type;
+  const matchesDomain=domain==='All'||hay.includes(domain.toLowerCase().split('&')[0].trim());
+  return matchesQuery && matchesFamily && matchesType && matchesDomain;
+ });
+
+ const clearAllFilters=()=>{
+  setQuery('');
+  setFamily('All');
+  setType('All');
+  setDomain('All');
+ };
+
+ return <section className="section page unified-public-page jyc57-page jyc-clubs-hub-container">
+  <header className="jyc-clubs-header">
+   <span className="jh-kicker">JYC 128 <b>COMMUNITIES</b></span>
+   <h1>Explore the Club Ecosystem.</h1>
+   <p>Find your space across {clubs.length} published communities spanning technical, cultural, creative, literary and sports interests at JIIT Sector 128.</p>
+  </header>
+
+  {/* Sleek Filter Bar with Dropdowns (Options only show when clicked and disappear upon selection) */}
+  <div className="jyc-filter-bar">
+   <div className="jyc-search-input-wrap">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    <input className="jyc-search-input" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search clubs by name, tech, domain..." aria-label="Search clubs"/>
+    {query&&<button type="button" onClick={()=>setQuery('')} className="jyc-search-clear">×</button>}
+   </div>
+
+   {/* Family Dropdown Popover */}
+   <div className="jyc-dropdown-wrap">
+    <button type="button" className={`jyc-filter-toggle-btn ${family!=='All'||filtersOpen?'is-active':''}`} onClick={()=>setFiltersOpen(v=>!v)} aria-expanded={filtersOpen}>
+     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+     <span>Family: {family==='All'?'All Families':family}</span>
+     <small>{filtersOpen?'▲':'▼'}</small>
+    </button>
+    {filtersOpen&&<div className="jyc-dropdown-popover">
+     <div className="jyc-dropdown-title">Select Community Family</div>
+     <div className="jyc-dropdown-list">
+      {families.map(f=>{
+        const count = f === 'All' ? clubs.length : clubs.filter(c => c.type === f || c.category === f || (c.interests||[]).includes(f)).length;
+        return <button type="button" key={f} className={`jyc-dropdown-item ${family===f?'is-active':''}`} onClick={()=>{setFamily(f);setFiltersOpen(false);}}>
+         <span>{f}</span>
+         <small>({count})</small>
+         {family===f&&<b>✓</b>}
+        </button>;
+      })}
+     </div>
+    </div>}
+   </div>
+
+   {/* Society Type Dropdown Popover */}
+   <div className="jyc-dropdown-wrap">
+    <button type="button" className={`jyc-filter-toggle-btn ${type!=='All'?'is-active':''}`} onClick={()=>setType(t=>t==='All'?'Technical':t==='Technical'?'Non-Technical':'All')}>
+     <span>Type: {type==='All'?'All Types':type}</span>
+     <small>⇄</small>
+    </button>
+   </div>
+
+   {(activeFilterCount>0||query)&&<button type="button" className="jyc-clear-filters-btn" onClick={clearAllFilters}>Reset Filters ↺</button>}
+  </div>
+
+  {/* Club Cards Wall */}
+  <div className="jyc57-club-wall">
+   {filtered.map((c,i)=>{
+    const selected=active===i;
+    const photo=clubCardPhoto(c);
+    return <button type="button" key={c.id||c.name||i} className={`jyc57-club-card ${selected?'selected':''}`} style={{'--club-accent':identityAccent(c.name)}} onPointerMove={magneticMove} onPointerLeave={magneticReset} onMouseEnter={()=>setActive(i)} onFocus={()=>setActive(i)} onClick={()=>nav('/clubs/'+encodeURIComponent(slugify(c.name)))}>
+     {photo?<ResponsivePhoto src={photo} alt="" loading="lazy" decoding="async" sizes="(max-width: 760px) 50vw, (max-width: 1100px) 50vw, 33vw" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Club photograph unavailable"/>:<div className="jyc57-club-fallback"><span aria-hidden="true">{String(c.name||'JYC').slice(0,2).toUpperCase()}</span>{c.logo&&<ResponsivePhoto className="jyc57-club-fallback-logo" src={c.logo} alt={`${c.name||'JYC'} logo`} width={160} height={160} loading="lazy" decoding="async" sizes="160px"/>}</div>}
+     <span className="jyc57-club-shade"/>
+     <div className="jyc57-club-content">
+      <div className="jyc57-club-top-bar">
+       <MetaPill>{c.type||c.category||'JYC'}</MetaPill>
+       {c.logo&&<div className="jyc57-club-brand-glyph" title={`${c.name} official emblem`}><img src={c.logo} alt="" loading="lazy"/></div>}
+      </div>
+      <h2>{c.name}</h2>
+      <p>{c.description||c.about||'A published JYC community.'}</p>
+      <span>Explore Community ↗</span>
+     </div>
+    </button>;
+   })}
+  </div>
+  {!filtered.length&&<Empty eyebrow="COMMUNITY DIRECTORY" title="No community found." text="Try clearing some filters or searching with a different term."/>}
+ </section>;
+}
+
+export function JYC57Gallery({data}){
+  const shouldReduceMotion = useReducedMotion();
+  const nav=useNavigate(),loc=useLocation();
+  const params=useMemo(()=>new URLSearchParams(loc.search),[loc.search]);
+  const [query,setQuery]=useState(params.get('q')||'');
+  const [eventCategory,setEventCategory]=useState('All');
+  const [mediaFilter,setMediaFilter]=useState('all');
+  const [year,setYear]=useState(params.get('year')||'All');
+  const [selected,setSelected]=useState(null);
+  const [zoom,setZoom]=useState(1);
+  const touchStartX=useRef(0);
+  const previousFocusRef=useRef(null);
+  const lightboxRef=useRef(null);
+  const [remoteAlbums,setRemoteAlbums]=useState([]);
+  const [copied,setCopied]=useState(false);
+  const [visibleCount,setVisibleCount]=useState(36);
+
+  const albumSlug = loc.pathname.startsWith('/gallery/') ? decodeURIComponent(loc.pathname.split('/')[2] || '') : '';
+  const albumRoute=value=>'/gallery/'+encodeURIComponent(value);
+  const rawGallery = useMemo(() => [...(Array.isArray(data?.gallery) ? data.gallery : []), ...JYC_SOURCE_ARCHIVE_PHOTO_ITEMS], [data?.gallery]);
+  const items = useMemo(() => {
+    const seen = new Set();
+    return rawGallery
+      .filter(g => g && g.url && g.mediaKind === 'photo')
+      .filter(g => {
+        const u = String(g.url).toLowerCase();
+        if (u.includes('jyc-01') || u.includes('jyc-02') || u.includes('vamunique-03')) return false;
+        if (/portrait|selfie/i.test(g.caption || '') && !g.official) return false;
+        const key = String(g.url);
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      })
+      .map(g => ({
+        ...g,
+        category: g.category || g.eventType || (/induction/i.test(g.caption||g.association||'') ? 'Induction'
+          : /converge|fest|ebullience|ethnic/i.test(g.caption||g.association||'') ? 'Festivals'
+          : /hack|hackathon|war|drone|jai|compete|code/i.test(g.caption||g.association||'') ? 'Competitions'
+          : /workshop|session|class/i.test(g.caption||g.association||'') ? 'Workshops'
+          : /sport|cricket|football/i.test(g.caption||g.association||'') ? 'Sports'
+          : 'Campus')
+      }));
+  }, [rawGallery]);
+
+  const categories = useMemo(() => ['All', ...new Set(items.map(g => g.category).filter(Boolean))], [items]);
+  const years = useMemo(() => ['All', ...new Set(items.map(g => String(g.year || g.date || '').slice(0,4)).filter(y => /^\d{4}$/.test(y)))].sort((a,b) => a === 'All' ? -1 : b === 'All' ? 1 : Number(b)-Number(a)), [items]);
+  const ARCHIVE_IA = ['COLLECTIONS','MOMENTS','YEARS','COMMUNITIES'];
+
+
+  useEffect(() => {
+    let alive = true;
+    supabase.from('jyc_media_albums').select('id,name,slug,cover_url,is_published').eq('is_published', true).order('created_at', {ascending:false})
+      .then(({data:rows}) => { if (alive) setRemoteAlbums(Array.isArray(rows) ? rows : []); })
+      .catch(() => { if (alive) setRemoteAlbums([]); });
+    return () => { alive = false; };
+  }, []);
+
+  const publishedAlbums = useMemo(() => {
+    const merged = [...JYC_SOURCE_ARCHIVE_ALBUMS, ...remoteAlbums].filter(album => album && album.slug && album.is_published !== false);
+    const unique = [...new Map(merged.map(album => [String(album.slug), album])).values()];
+    return unique.filter(album => album.cover_url || items.some(g =>
+      g.albumSlug === album.slug || g.albumId === album.id || g.albumName === album.name || g.association === album.name
+    ));
+  }, [remoteAlbums, items]);
+
+  const currentAlbum = useMemo(() => publishedAlbums.find(album =>
+    album.slug === albumSlug || slugify(album.name) === albumSlug
+  ), [publishedAlbums, albumSlug]);
+
+  useEffect(() => {
+    const requestedPhoto = params.get('photo');
+    if (!requestedPhoto) { setSelected(null); return; }
+    const match = items.find(g => String(g.id || g.url) === requestedPhoto || g.url === requestedPhoto);
+    if (match) setSelected(match);
+  }, [params, items]);
+
+  const openPhoto = photo => {
+    if (!photo) return;
+    previousFocusRef.current = document.activeElement;
+    setZoom(1);
+    setSelected(photo);
+    const next = new URLSearchParams(loc.search);
+    next.set('photo', String(photo.id || photo.url));
+    nav({ pathname: loc.pathname, search: `?${next.toString()}` }, { replace: true });
+  };
+  const closePhoto = () => {
+    setSelected(null);
+    const next = new URLSearchParams(loc.search);
+    next.delete('photo');
+    nav({ pathname: loc.pathname, search: next.toString() ? `?${next.toString()}` : '' }, { replace: true });
+  };
+
+  useEffect(() => { setVisibleCount(36); }, [query, eventCategory, year, albumSlug, mediaFilter]);
+  useEffect(() => { setZoom(1); }, [selected?.url]);
+  useEffect(() => {
+    if (!selected) return;
+    const dialog = lightboxRef.current;
+    const getFocusable = () => [...(dialog?.querySelectorAll('button:not([disabled]),a[href],input:not([disabled]),[tabindex]:not([tabindex="-1"])') || [])];
+    getFocusable()[0]?.focus();
+    const onTab = event => {
+      if (event.key !== 'Tab') return;
+      const nodes = getFocusable();
+      if (!nodes.length) { event.preventDefault(); return; }
+      const first = nodes[0];
+      const last = nodes[nodes.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+    };
+    dialog?.addEventListener('keydown', onTab);
+    return () => {
+      dialog?.removeEventListener('keydown', onTab);
+      previousFocusRef.current?.focus?.();
+      previousFocusRef.current = null;
+    };
+  }, [Boolean(selected)]);
+
+  const filtered = useMemo(() => {
+    return items.filter(g => {
+      const hay = `${g.caption||''} ${g.association||''} ${g.year||''} ${g.category||''} ${g.albumName||''}`.toLowerCase();
+      const matchesQuery = !query || hay.includes(query.toLowerCase());
+      const matchesCategory = eventCategory === 'All' || g.category === eventCategory || hay.includes(eventCategory.toLowerCase());
+      const matchesYear = year === 'All' || String(g.year||g.date||'').startsWith(year);
+      const matchesAlbum = !albumSlug || g.albumSlug === albumSlug || g.albumId === currentAlbum?.id || g.albumName === currentAlbum?.name || g.association === currentAlbum?.name;
+      const mediaHay = `${g.role||''} ${g.association||''} ${g.mediaKind||'photo'} ${g.category||''}`.toLowerCase();
+       const isCommunity = /club|community|hub|society/i.test(mediaHay) || Object.keys(JYC_HUB_CONTENT).some(name=>mediaHay.includes(name.toLowerCase()));
+       const matchesMedia = mediaFilter==='all' || (mediaFilter==='club' ? isCommunity : mediaFilter==='event' ? /event|fest|competition|sports|converge|ebullience|dron-o-war|hackathon/i.test(mediaHay) : true);
+       return matchesQuery && matchesCategory && matchesYear && matchesAlbum && matchesMedia;
+    });
+  }, [items, query, eventCategory, year, albumSlug, currentAlbum, mediaFilter]);
+
+  const heroPhotos = useMemo(() => {
+    const rawPool = filtered.length ? filtered : items;
+    const pool = rawPool.filter(item => {
+      const u = String(item.url || '').toLowerCase();
+      const c = String(item.caption || item.alt || '').toLowerCase();
+      return !u.includes('jyc-01') && !u.includes('jyc-02') && !u.includes('jyc-03') && !u.includes('vamunique-03') && !c.includes('portrait from the supplied archive') && !c.includes('portrait archive');
+    });
+    const bySubject = new Map();
+    for (const item of pool) {
+      const subject = photoSubject(item);
+      const rows = bySubject.get(subject) || [];
+      if (rows.length < 4) rows.push(item);
+      bySubject.set(subject, rows);
+    }
+    const selectedSubjects = [...bySubject.keys()];
+    const chosen = [];
+    let round = 0;
+    while (chosen.length < 6 && selectedSubjects.some(key => (bySubject.get(key) || []).length > round)) {
+      for (const key of selectedSubjects) {
+        const item = bySubject.get(key)?.[round];
+        if (item && chosen.length < 6) chosen.push(item);
+      }
+      round++;
+    }
+    return chosen;
+  }, [filtered, items]);
+
+  const selectedIndex = selected === null ? -1 : filtered.findIndex(g => g.url === selected.url);
+  const setFilter = filter => setMediaFilter(filter);
+
+  const move = (dir) => {
+    if (!filtered.length) return;
+    const nextIdx = (selectedIndex + dir + filtered.length) % filtered.length;
+    openPhoto(filtered[nextIdx]);
+  };
+
+  const sharePhoto = async () => {
+    if (!selected) return;
+    const url = window.location.origin + loc.pathname + '?photo=' + encodeURIComponent(selected.id || selected.url);
+    try {
+      if (navigator.share) await navigator.share({ title: selected.caption || 'JYC Moment', url });
+      else {
+        await navigator.clipboard.writeText(url);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }
+    } catch {}
+  };
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === 'Escape') closePhoto();
+      if (e.key === 'ArrowRight') move(1);
+      if (e.key === 'ArrowLeft') move(-1);
+    };
+    if (selected) window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [selected, selectedIndex, filtered, loc.pathname, loc.search]);
+
+  return <section className="section page unified-public-page jyc-gallery-hub-container">
+    <header className="jyc-gallery-hero">
+      <span className="jh-kicker">JYC 128 <b>VISUAL VAULT</b></span>
+      <h1>{currentAlbum?.name || 'Captured Memories.'}</h1>
+      <p>{currentAlbum?.description || 'Explore source-backed campus photography organized by published albums, events, communities and years across Sector 128.'}</p>
+      <span className="jyc57-gallery-meta" aria-live="polite">{filtered.length} photographs {albumSlug ? 'in this collection' : 'in the archive'}</span>
+    </header>
+    <nav className="jyc57-archive-nav" aria-label="Gallery archive navigation">{ARCHIVE_IA.map(label=><a key={label} href={`#jyc-gallery-${label.toLowerCase()}`}>{label}</a>)}</nav>
+    <section className="jyc57-editorial-wall" aria-label="Featured JYC photographs">
+      <div className="jyc57-editorial-wall-head">
+        <span className="eyebrow">THE VISUAL RECORD</span>
+        <h2>Campus life, in its own light.</h2>
+        <p>Curated moments from published JYC photography. Open any image for its full-size view and available source context.</p>
+      </div>
+      <div className="jyc57-editorial-grid">
+        {heroPhotos.map((photo,index)=>{
+          const shape=photoAspect(photo,index);
+          const subject=photoSubject(photo,index);
+          // Match the real 12-column editorial wall: standard tiles span 3 columns,
+          // landscape tiles 4, the lead feature 6, and a portrait lead 4.
+          // At <=900px the wall becomes six columns; at <=620px it becomes two.
+          const photoSizes=index===0
+            ? shape==='portrait'
+              ? '(max-width: 620px) calc(100vw - 48px), (max-width: 900px) calc(66.67vw - 32px), 360px'
+              : '(max-width: 620px) calc(100vw - 48px), (max-width: 900px) calc(100vw - 48px), 520px'
+            : shape==='landscape'
+              ? '(max-width: 620px) calc(50vw - 24px), (max-width: 900px) calc(50vw - 24px), 360px'
+              : '(max-width: 900px) calc(50vw - 24px), 260px';
+          return <button type="button" key={photo.id||photo.url} className={`jyc57-editorial-photo ${shape} ${index===0?'feature':''}`} style={{'--photo-index':index}} onClick={()=>openPhoto(photo)} title="Open photo">
+            <ResponsivePhoto src={photo.url} alt={photo.alt||photo.alt_text||photo.caption||photo.title||`JYC campus photograph ${index+1}`} loading={index<2?'eager':'lazy'} fetchPriority={index===0?'high':undefined} sizes={photoSizes} fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Photograph unavailable"/>
+            <span className="jyc57-editorial-vignette"/>
+            <span className="jyc57-photo-index" aria-hidden="true">{String(index+1).padStart(2,'0')}</span>
+            <span className="jyc57-photo-caption"><small>{subject.replaceAll('-',' ')}</small><strong>{photo.caption||photo.title||photo.albumName||photo.association||'A JYC campus moment'}</strong></span>
+            <span className="jyc57-editorial-open" aria-hidden="true">↗</span>
+          </button>;
+        })}
+      </div>
+    </section>
+
+    {/* Published albums and source-backed collections; counts come from actual photo records. */}
+    <section id="jyc-gallery-collections" className="jyc-memories-section">
+      <div className="jyc-section-head-bar">
+        <div>
+          <h2>{currentAlbum?.name || 'Published photo albums'}</h2>
+          <span>{albumSlug ? 'A source-backed collection from the JYC visual archive' : 'Open a published album or explore the complete photo archive'}</span>
+        </div>
+        {albumSlug && <button type="button" className="jyc-clear-filters-btn" onClick={() => nav('/gallery')}>All albums ↗</button>}
+      </div>
+      {!albumSlug && <div className="jyc-memories-grid">
+        {publishedAlbums.slice(0, 12).map((album, albumIndex) => {
+          const albumPhotos = items.filter(g => g.albumSlug === album.slug || g.albumId === album.id || g.albumName === album.name || g.association === album.name);
+          return <button type="button" key={album.id || album.slug} className="jyc-memory-card" onClick={() => nav(albumRoute(album.slug))}>
+            <div className="jyc-memory-cover">
+              <div className="jyc-memory-cover-fallback" aria-hidden="true"><span>{String(album.name || 'JYC').trim().slice(0,1).toUpperCase()}</span><small>JYC VISUAL ARCHIVE</small></div>
+              <ResponsivePhoto src={album.cover_url || albumPhotos[0]?.url || '/assets/photo-unavailable.svg'} alt={album.cover_url || albumPhotos[0]?.url ? album.name : `Album cover unavailable: ${album.name}`} loading={albumIndex < 3 ? 'eager' : 'lazy'} fetchPriority={albumIndex === 0 ? 'high' : undefined} sizes="(max-width: 620px) calc(100vw - 28px), (max-width: 699px) calc(100vw - 40px), (max-width: 900px) calc(50vw - 30px), (max-width: 1063px) calc(50vw - 42px), 360px" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt={`Album cover unavailable: ${album.name}`}/>
+            </div>
+            <div className="jyc-memory-scrim" />
+            <div className="jyc-memory-details">
+              <span className="jyc-memory-top-badge">PUBLISHED COLLECTION</span>
+              <h3 className="jyc-memory-title">{album.name}</h3>
+              <span className="jyc-memory-count">{albumPhotos.length ? `${albumPhotos.length} verified photos` : 'Source collection'}</span>
+              <span className="jyc-memory-action">Open album →</span>
+            </div>
+          </button>;
+        })}
+      </div>}
+    </section>
+
+    {/* Filter Toolbar */}
+    <div id="jyc-gallery-moments" className="jyc-filter-bar">
+      <div className="jyc-search-input-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input className="jyc-search-input" value={query} onChange={e => setQuery(e.target.value)} placeholder="Search memories, events, years..." aria-label="Search gallery" />
+        {query && <button type="button" onClick={() => setQuery('')} style={{position:'absolute',right:12,background:'none',border:0,color:'#888',cursor:'pointer',fontSize:16}}>×</button>}
+      </div>
+    </div>
+
+    <div className="jyc57-media-filter" role="group" aria-label="Filter gallery by media type">
+      <button type="button" className={`jyc-filter-pill ${mediaFilter==='all'?'is-active':''}`} aria-pressed={mediaFilter==='all'} onClick={()=>setFilter('all')}>All photos</button>
+      <button type="button" className={`jyc-filter-pill ${mediaFilter==='club'?'is-active':''}`} aria-pressed={mediaFilter==='club'} onClick={()=>setFilter('club')}>Clubs & communities</button>
+      <button type="button" className={`jyc-filter-pill ${mediaFilter==='event'?'is-active':''}`} aria-pressed={mediaFilter==='event'} onClick={()=>setFilter('event')}>Events</button>
+    </div>
+    {/* Category & Year Pills */}
+    <div style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 28 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+        <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', color: 'var(--tech-gold)', textTransform: 'uppercase', minWidth: 80 }}>Event:</span>
+        {categories.map(cat => (
+          <button 
+            key={cat} 
+            type="button" 
+            className={`jyc-filter-pill ${eventCategory === cat ? 'is-active' : ''}`} 
+            onClick={() => setEventCategory(cat)}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
+
+      <div id="jyc-gallery-years" style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+        <span style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.12em', color: 'var(--tech-gold)', textTransform: 'uppercase', minWidth: 80 }}>Year:</span>
+        {years.map(y => (
+          <button 
+            key={y} 
+            type="button" 
+            className={`jyc-filter-pill ${year === y ? 'is-active' : ''}`} 
+            onClick={() => setYear(y)}
+          >
+            {y}
+          </button>
+        ))}
+        {(eventCategory !== 'All' || year !== 'All' || query || mediaFilter !== 'all') && (
+          <button 
+            type="button" 
+            className="jyc-clear-filters-btn" 
+            style={{ marginLeft: 'auto' }} 
+            onClick={() => { setEventCategory('All'); setYear('All'); setQuery(''); setMediaFilter('all'); }}
+          >
+            Reset Filters ↺
+          </button>
+        )}
+      </div>
+    </div>
+
+    {/* Photo Grid */}
+    {filtered.length ? (
+      <>
+        <div id="jyc-gallery-communities" className="jyc57-masonry" aria-label="JYC photograph collection">
+          {filtered.slice(0, visibleCount).map((g, i) => (
+            <button 
+              type="button" 
+              key={g.id || g.url || i} 
+              className={`jyc57-photo photo-${i % 6}`} data-photo-id={String(g.id || g.url)}
+              onClick={() => openPhoto(g)} 
+             
+            >
+              <ResponsivePhoto src={g.url} alt={g.alt || g.caption || 'JYC archive photograph'} loading={i < 4 ? 'eager' : 'lazy'} decoding="async" sizes="(max-width: 700px) calc(50vw - 24px), (max-width: 1100px) calc(33vw - 24px), calc(25vw - 48px)" objectPosition={photoObjectPosition(g)} fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Photograph unavailable"/>
+              <span>
+                <small>{g.association || 'JYC ARCHIVE'}{g.year ? ' · ' + g.year : ''}</small>
+                <strong>{g.caption || 'JYC moment'}</strong>
+              </span>
+            </button>
+          ))}
+        </div>
+
+        {filtered.length > visibleCount && (
+          <div className="jyc57-load-more">
+            <span>Showing {visibleCount} of {filtered.length} photographs</span>
+            <button type="button" className="jh-btn" onClick={() => setVisibleCount(n => n + 36)}>
+              Load 36 More Photos ▾
+            </button>
+          </div>
+        )}
+      </>
+    ) : (
+      <Empty eyebrow="GALLERY ARCHIVE" title="No photographs found." text="Try selecting another event category, year, or clearing the search query." />
+    )}
+
+    {/* Full-Screen Lightbox Modal */}
+    {selected && (
+      <div ref={lightboxRef} className="jyc57-lightbox" role="dialog" aria-modal="true" data-photo-id={String(selected.id || selected.url)} aria-label={selected.caption || 'JYC photograph'} onClick={closePhoto}>
+        <div className="jyc57-lightbox-inner" onClick={e => e.stopPropagation()}>
+          <button type="button" className="jyc57-close" onClick={closePhoto} aria-label="Close modal">×</button>
+          <button className="jyc57-nav prev" type="button" onClick={() => move(-1)} aria-label="Previous photo">‹</button>
+          <div className="jyc57-lightbox-media" onTouchStart={e => { touchStartX.current = e.changedTouches[0]?.clientX || 0; }} onTouchEnd={e => { const endX = e.changedTouches[0]?.clientX || touchStartX.current; const delta = endX - touchStartX.current; if (Math.abs(delta) > 48) move(delta < 0 ? 1 : -1); touchStartX.current = 0; }}>
+            <ResponsivePhoto src={selected.url} alt={selected.caption || 'JYC photo'} sizes="(max-width: 900px) 100vw, 75vw" loading="eager" objectPosition={photoObjectPosition(selected)} style={{ transform: `scale(${zoom})`, transition: shouldReduceMotion ? 'none' : 'transform 0.2s ease' }} fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Photograph unavailable"/>
+          </div>
+          <button className="jyc57-nav next" type="button" onClick={() => move(1)} aria-label="Next photo">›</button>
+          <div className="jyc57-lightbox-copy">
+            <span className="eyebrow">{selected.association || 'JYC 128'}{selected.year ? ' · ' + selected.year : ''}</span>
+            <h2>{selected.caption || 'JYC Campus Memory'}</h2>
+            <p>{selected.story || selected.description || selected.alt || 'Official JYC visual archive item.'}</p>
+            <span className="jyc57-counter">{selectedIndex + 1} / {filtered.length}</span>
+            <div className="jyc57-lightbox-actions">
+              <button type="button" onClick={() => setZoom(z => z > 1 ? 1 : 1.75)}>{zoom > 1 ? 'Reset Zoom' : 'Zoom In'}</button>
+              <button type="button" onClick={sharePhoto}>{copied ? 'Link Copied ✓' : 'Share Photo'}</button>
+              <a className="jyc57-full-resolution-link" href={selected.url} target="_blank" rel="noopener noreferrer">Full Resolution ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    )}
+  </section>;
+}
+export function JYCBestOf({data}){
+ const items=useMemo(()=>{
+  const incoming=Array.isArray(data?.gallery)?data.gallery:[];
+  const strict=[...incoming,...JYC_SOURCE_ARCHIVE_PHOTO_ITEMS]
+   .filter(g=>g?.url&&(!g.mediaKind||g.mediaKind==='photo'))
+   .map(g=>({...g,mediaKind:'photo'}));
+  return rankJycPhotoItems([...new Map(strict.map(g=>[String(g.url),g])).values()],{limit:24});
+ },[data?.gallery]);
+ const groups=useMemo(()=>[
+  ['People',items.filter(g=>/people|portrait|group|student|team/i.test(String(g.caption||g.alt||'')))],
+  ['Performance',items.filter(g=>/stage|performance|audience|music|dance|theatre/i.test(String(g.caption||g.alt||'')))],
+  ['Innovation',items.filter(g=>/innovation|workshop|technical|competition|hackathon/i.test(String(g.caption||g.alt||'')))],
+  ['Campus',items.filter(g=>/campus|jiit|event|community/i.test(String(g.caption||g.alt||'')))],
+  ['Celebrations',items.filter(g=>/fest|celebr|farewell|ethnic|converge|aakriti/i.test(String(g.caption||g.alt||'')))],
+ ].map(([name,rows])=>[name,rows.slice(0,6)]).filter(([,rows])=>rows.length));
+ return <section className="section page unified-public-page jyc57-page jyc-best-of-page">
+  <header className="jyc57-archive-head"><div><span className="eyebrow">JYC · EDITORIAL SELECTION</span><h1>The Best of JYC.</h1><p>A photography-first selection of people, performance, innovation, campus life and celebrations from the maintained JYC visual archive.</p></div><div className="jyc57-gallery-meta"><span><b>{items.length}</b> selected frames</span><span>Source-backed only</span></div></header>
+  {groups.map(([name,rows])=><section className="jyc57-featured" key={name} aria-labelledby={'best-'+name}><div className="jyc57-section-head"><div><span className="eyebrow">BEST OF JYC</span><h2 id={'best-'+name}>{name}</h2></div><span>{rows.length} frames</span></div><div className="jyc57-featured-grid">{rows.map((g,i)=><a className={'jyc57-feature-card feature-'+i%6} key={g.id||g.url} href={'/gallery?photo='+encodeURIComponent(g.id||g.url)}><ResponsivePhoto src={g.url} alt={g.alt||g.caption||'JYC archive photograph'} loading={i<2?'eager':'lazy'} fetchPriority={i<2?'high':undefined} decoding="async" sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 33vw" objectPosition={photoObjectPosition(g)} fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Photograph unavailable"/><span><small>{g.association||'JYC ARCHIVE'}{g.year?' · '+g.year:''}</small><strong>{g.caption||'JYC moment'}</strong></span></a>)}</div></section>)}
+  {!groups.length&&<Empty eyebrow="BEST OF JYC" title="The selection is waiting." text="Published source photography will appear here as the archive grows."/>}
+ </section>
+}
+
+export function JYC57Archive({data}){
+ const nav=useNavigate();const events=publishedEvents(data);const years=[...new Set(events.map(e=>String(e.date||'').slice(0,4)).filter(Boolean))].sort((a,b)=>Number(b)-Number(a));
+ const [year,setYear]=useState(years[0]||'all');const selected=year==='all'?events:events.filter(e=>String(e.date||'').startsWith(year));const photos=(data.gallery||[]).filter(g=>g?.url||g?.src).slice(0,6);
+ return <section className="section page unified-public-page jyc57-page">
+  <header className="jyc57-archive-head"><div><span className="eyebrow">JYC · 04 / HISTORY</span><h1>What happened stays.</h1><p>The public archive connects years, events and photographs so JYC feels like a living organisation rather than a list of current pages.</p></div><div className="jyc57-year-switch">{['all',...years].map(y=><button type="button" key={y} className={year===y?'active':''} onClick={()=>setYear(y)}>{y==='all'?'All':y}</button>)}</div></header>
+  <div className="jyc57-archive-grid"><div><div className="jyc57-list-head"><span>{selected.length} archived/published events</span><small>Year: {year==='all'?'All':year}</small></div>{selected.sort((a,b)=>safeDate(b)-safeDate(a)).map(e=><button type="button" className="jyc57-archive-row" key={e.id||e.title} onClick={()=>nav(eventPath(e))}><span>{e.date||'TBA'}</span><div><strong>{e.title}</strong><small>{e.club||'JYC'} · {e.venue||'JIIT Sector 128'}</small></div><b>↗</b></button>)}{!selected.length&&<Empty eyebrow="ARCHIVE" title="No records for this year." text="Published records will appear here when available."/>}</div><aside className="jyc57-archive-story"><span className="eyebrow">VISUAL MEMORY</span><h2>People. Places. Participation.</h2><div className="jyc57-story-grid">{photos.map((g,i)=><ResponsivePhoto key={g.id||i} src={g.url||g.src} alt={g.caption||'JYC archive'} loading="lazy" sizes="(max-width: 700px) 50vw, 20vw" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Photograph unavailable"/>)}</div><button type="button" className="jyc57-text-link" onClick={()=>nav('/gallery')}>Open the full gallery →</button></aside></div>
+ </section>
+}

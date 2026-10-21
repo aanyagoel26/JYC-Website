@@ -1,0 +1,56 @@
+{
+  "name": "JIIT Youth Club",
+  "short_name": "JYC",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#f5f1e6",
+  "theme_color": "#f5f1e6",
+  "description": "Official JIIT Youth Club website for JIIT Noida clubs, events, people and campus moments.",
+  "icons": [
+    {
+      "src": "/assets/jyc-logo.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "JYC Events",
+      "short_name": "Events",
+      "url": "/events",
+      "icons": [
+        {
+          "src": "/assets/jyc-logo.webp",
+          "sizes": "512x512",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "name": "JYC Clubs",
+      "short_name": "Clubs",
+      "url": "/clubs",
+      "icons": [
+        {
+          "src": "/assets/jyc-logo.webp",
+          "sizes": "512x512",
+          "type": "image/webp"
+        }
+      ]
+    },
+    {
+      "name": "JYC Moments",
+      "short_name": "Moments",
+      "url": "/gallery",
+      "icons": [
+        {
+          "src": "/assets/jyc-logo.webp",
+          "sizes": "512x512",
+          "type": "image/webp"
+        }
+      ]
+    }
+  ]
+}

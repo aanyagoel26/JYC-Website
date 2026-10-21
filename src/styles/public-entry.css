@@ -1,0 +1,381 @@
+/* Single public CSS entry point. Keep order aligned with the former main.jsx imports. */
+@import './public-system.css';
+@import '../jyc-design-upgrades.css';
+@import './jyc-pro-redesign.css';
+@import './jyc-visual-quality.css';
+
+
+/* V68 — final shared-surface pass after legacy style layers. Keep the editorial home
+   distinct while restoring subtle depth and image affordances on the wider public site. */
+.public-app :where(h1,h2,h3) { text-wrap: balance; }
+.public-app :where(.section-head h1,.section-head h2,.page h1,.page h2) { max-width: 24ch; }
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  .public-app .gallery-item:hover img,
+  .public-app .gallery-story-card:hover img,
+  .public-app .jyc57-photo:hover img,
+  .public-app .jyc57-feature-card:hover img {
+    transform: scale(1.035) !important;
+    filter: saturate(1.04) contrast(1.02) !important;
+  }
+  .public-app .gallery-item,
+  .public-app .gallery-story-card,
+  .public-app .jyc57-photo,
+  .public-app .jyc57-feature-card {
+    transition: transform .22s cubic-bezier(.2,.8,.2,1), border-color .22s ease, box-shadow .22s ease !important;
+  }
+  .public-app .gallery-item:hover,
+  .public-app .gallery-story-card:hover,
+  .public-app .jyc57-photo:hover,
+  .public-app .jyc57-feature-card:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 14px 34px rgba(26,25,29,.12) !important;
+  }
+}
+@media (hover:none), (pointer:coarse) {
+  .public-app .gallery-item:hover img,
+  .public-app .gallery-story-card:hover img,
+  .public-app .jyc57-photo:hover img,
+  .public-app .jyc57-feature-card:hover img { transform: none !important; filter: none !important; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .public-app .gallery-item,
+  .public-app .gallery-story-card,
+  .public-app .jyc57-photo,
+  .public-app .jyc57-feature-card,
+  .public-app .gallery-item img,
+  .public-app .gallery-story-card img,
+  .public-app .jyc57-photo img,
+  .public-app .jyc57-feature-card img { animation:none !important; transition:none !important; }
+  .public-app .gallery-item:hover,
+  .public-app .gallery-story-card:hover,
+  .public-app .jyc57-photo:hover,
+  .public-app .jyc57-feature-card:hover,
+  .public-app .gallery-item:hover img,
+  .public-app .gallery-story-card:hover img,
+  .public-app .jyc57-photo:hover img,
+  .public-app .jyc57-feature-card:hover img { transform:none !important; filter:none !important; }
+}
+
+/* V69 — flagship-fest art direction. Keep the year-round JYC shell editorial;
+   give the fest gateway a deeper, event-poster-like opening without forcing
+   a fest palette onto clubs, history, team or the rest of the portal. */
+.public-app .fests-page .compact-page-head {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(28px, 5vw, 64px);
+  border: 1px solid color-mix(in srgb, var(--jyc-champagne, #bf9c6f) 42%, transparent);
+  border-radius: clamp(18px, 2.4vw, 30px);
+  background:
+    radial-gradient(ellipse at 88% 12%, color-mix(in srgb, var(--jyc-champagne, #bf9c6f) 18%, transparent), transparent 42%),
+    linear-gradient(128deg, #17151b 0%, #24202a 56%, #3a2022 100%);
+  color: #fffaf0;
+  box-shadow: 0 24px 64px rgba(20, 16, 22, .14);
+}
+.public-app .fests-page .compact-page-head::after {
+  content: "JYC / FESTIVAL ARCHIVE";
+  position: absolute;
+  z-index: -1;
+  right: clamp(16px, 3vw, 38px);
+  bottom: clamp(12px, 2vw, 24px);
+  color: rgba(255, 250, 240, .055);
+  font: 700 clamp(22px, 4.6vw, 64px)/1 "Space Grotesk", Inter, sans-serif;
+  letter-spacing: -.06em;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.public-app .fests-page .compact-page-head :where(h1,h2) {
+  max-width: 14ch;
+  color: #fffaf0;
+  font-family: "Space Grotesk", Inter, ui-sans-serif, system-ui, sans-serif;
+  font-size: clamp(36px, 5.6vw, 72px);
+  line-height: .98;
+  letter-spacing: -.055em;
+  text-wrap: balance;
+}
+.public-app .fests-page .compact-page-head p {
+  max-width: 58ch;
+  color: rgba(255, 250, 240, .78);
+  font-size: clamp(15px, 1.35vw, 18px);
+  line-height: 1.7;
+  text-wrap: pretty;
+}
+.public-app .fests-page .compact-page-head .eyebrow {
+  color: #e9c994;
+}
+.public-app .fests-page .compact-page-head .page-stat-row {
+  position: relative;
+  z-index: 1;
+  color: #fffaf0;
+}
+.public-app .fests-page .compact-page-head .page-stat-row b {
+  color: #f1d5a4;
+  font-variant-numeric: tabular-nums;
+}
+.public-app .fests-page .fests-social-rail {
+  margin-block: clamp(24px, 4vw, 48px);
+}
+.public-app .fests-page .fests-social-rail > div {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+.public-app .fests-page .fests-social-rail a {
+  min-width: 0;
+  min-height: 76px;
+  padding: 16px;
+  border: 1px solid var(--line, rgba(21, 32, 48, .14));
+  border-radius: 14px;
+  background: var(--surface, #fff);
+  transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease;
+}
+.public-app .fests-page .fests-social-rail a b,
+.public-app .fests-page .fests-social-rail a span {
+  overflow-wrap: anywhere;
+}
+.public-app .fests-page .fests-social-rail a b {
+  font-family: "Space Grotesk", Inter, sans-serif;
+  font-size: 15px;
+}
+.public-app .fests-page .fests-social-rail a span {
+  color: var(--muted, #62616a);
+  font-size: 12px;
+}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  .public-app .fests-page .fests-social-rail a:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in srgb, var(--jyc-champagne, #bf9c6f) 70%, transparent);
+    box-shadow: 0 10px 24px rgba(20, 16, 22, .08);
+  }
+}
+@media (max-width: 760px) {
+  .public-app .fests-page .fests-social-rail > div {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 420px) {
+  .public-app .fests-page .compact-page-head::after {
+    font-size: 22px;
+    white-space: normal;
+    max-width: 100%;
+    text-align: right;
+  }
+  .public-app .fests-page .fests-social-rail > div {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .public-app .fests-page .fests-social-rail a {
+    transition: none;
+  }
+}
+
+
+/* WCAG 2.2 AA contrast repairs from the Lighthouse route audit. */
+.jh-cyber-badge b{color:#FFF8E1!important}
+.about-principles-v33 article>span,.about-history-badge{color:#A82420!important}
+.public-app .visible-breadcrumbs a,.public-app .search-topic-links a{color:#825F2B!important}
+.jyc-featured-event-note{color:#625A52!important}
+.jyc-footer-v6 .footer-v6-brand strong,
+.jyc-footer-v6 .footer-v6-intro h2,
+.jyc-footer-v6 .footer-v6-links button,
+.jyc-footer-v6 .footer-v6-connect a,
+.jyc-footer-v6 .footer-v6-biglink button{color:#FFF8E1!important}
+.jyc-footer-v6 .footer-v6-brand span,
+.jyc-footer-v6 .footer-v6-index,
+.jyc-footer-v6 .footer-v6-intro p,
+.jyc-footer-v6 .footer-v6-bottom,
+.jyc-footer-v6 .jyc-creator-credit{color:#A8A3B0!important}
+.jyc-footer-v6 .footer-v6-intro .eyebrow,
+.jyc-footer-v6 .footer-v6-links .eyebrow,
+.jyc-footer-v6 .footer-v6-connect .eyebrow{color:#FF7777!important}
+.jyc-footer-v6 .footer-v6-bottom a,
+.jyc-footer-v6 .jyc-creator-credit a{color:#D2B48C!important}
+@media(max-width:620px){
+ .jyc-bot-orb{width:48px!important;min-width:48px!important;height:48px!important;padding:0!important;gap:0!important;border-radius:50%!important}
+ .jyc-bot-label{display:none!important}
+ .jyc-bot-orb .jyc-bot-visual{width:36px!important;height:36px!important}
+}
+
+
+/* High-specificity WCAG contrast fixes verified against computed foreground/background pairs. */
+footer.jyc-footer.jyc-footer-v6 .footer-v6-inner .footer-bottom .jyc-creator-credit{color:#A8A3B0!important}
+footer.jyc-footer.jyc-footer-v6 .footer-v6-inner .footer-bottom .jyc-creator-credit a{color:#D2B48C!important}
+.about-history-node-card .about-history-cite>span,.about-source-note{color:#625A52!important}
+.about-history-node-card .about-history-cite a{color:#825F2B!important}
+.about-next-v28 .eyebrow{color:#A82420!important}
+.about-next-v28 h2{color:#1A191D!important}
+.about-next-v28 .btn{background:#A82420!important;color:#FFF8E1!important;border-color:#A82420!important}
+.about-next-v28 .btn.secondary{background:transparent!important;color:#1A191D!important;border-color:#A82420!important}
+.jyc-gallery-hero .jh-kicker,.jyc-gallery-hero .jh-kicker b,
+.jyc-clubs-header .jh-kicker,.jyc-clubs-header .jh-kicker b{color:#625A52!important}
+.jyc57-archive-nav>a{color:#825F2B!important}
+.jyc-section-head-bar>div>span{color:#625A52!important}
+.jyc57-media-filter+div>div>span,#jyc-gallery-years>span{color:#625A52!important}
+
+
+/* Release QA: correct final-layer contrast and touch-target fixes. */
+footer.jyc-footer .footer-v6-inner .footer-bottom .jyc-creator-credit {
+  color: #A8A3B0 !important;
+  opacity: 1 !important;
+}
+footer.jyc-footer .footer-v6-inner .footer-bottom .jyc-creator-credit a {
+  color: #D2B48C !important;
+  opacity: 1 !important;
+}
+html[data-theme="light"] .public-app .jyc-gallery-hero .jh-kicker b,
+html[data-theme="light"] .public-app .jyc-clubs-header .jh-kicker b {
+  color: #3F3024 !important;
+}
+html[data-theme="light"] .public-app .jh-final p,
+html[data-theme="light"] .public-app .jh-final .jh-section-number {
+  color: #FFF8E1 !important;
+  opacity: 1 !important;
+}
+.public-app .jyc57-breadcrumbs :is(a,button) {
+  min-width: 44px !important;
+  min-height: 44px !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* Release QA: keep public navigation and editorial copy legible at every viewport.
+   This final layer intentionally follows legacy CSS so breakpoint behavior is deterministic. */
+.mobile-dock { display: none !important; }
+@media (max-width: 760px) {
+  .mobile-dock {
+    display: grid !important;
+    position: fixed !important;
+    left: max(10px, env(safe-area-inset-left)) !important;
+    right: max(10px, env(safe-area-inset-right)) !important;
+    bottom: max(10px, env(safe-area-inset-bottom)) !important;
+    z-index: 12000 !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  }
+}
+:root:not([data-theme="dark"]) .public-app :is(
+  .eyebrow,.tag,.text-link,.reference-view-all,.card-topline,.club-index,
+  .latest-index,.moment-tile small,.jh-overline,
+  .jh-about-kicker,.jyc57-gallery-meta,.jyc57-gallery-eyebrow,
+  .jyc57-filter-group>span,.jyc57-pill,.gallery-source-ledger>span
+) {
+  color: #65451F !important;
+}
+:root:not([data-theme="dark"]) .public-app :is(.text-link,.reference-view-all,.jh-overline,.jh-about-kicker) {
+  color: #76211D !important;
+}
+:root:not([data-theme="dark"]) .public-app :is(
+  .jh-lead,.jh-assistant-info p,.jh-community-copy p,
+  .jh-pillar-card p,.jh-event-copy>p,.muted,.muted-text,.jyc57-empty p
+) {
+  color: #4B4650 !important;
+}
+
+
+/* Exact Lighthouse findings: tune contrast per surface instead of forcing one
+   foreground color across both paper panels and the red CTA panel. */
+.jyc-footer .jyc-creator-credit { color: #d6d2db !important; }
+.jyc-footer .jyc-creator-credit a { color: #e2c89f !important; }
+.public-app :is(.jyc-gallery-hero,.jyc-clubs-header) .jh-kicker b {
+  color: #3f2a12 !important;
+}
+.public-app .about-source-note { color: #4b4650 !important; }
+.public-app .about-next-v28 .eyebrow { color: #65451f !important; }
+.public-app .about-next-v28 h2 { color: #28242a !important; }
+.public-app .about-next-v28 .btn:not(.secondary) {
+  background: #a82420 !important;
+  border-color: #a82420 !important;
+  color: #fffaf0 !important;
+}
+.public-app .about-next-v28 .btn.secondary {
+  background: #fff !important;
+  border-color: #a82420 !important;
+  color: #28242a !important;
+}
+.public-app .jh-final :is(.jh-section-number,p) {
+  color: #fffaf0 !important;
+}
+
+
+/* Final public-control layer preserves the shared 44px touch-target contract. */
+.public-app button:not(.jyc57-photo):not(.jyc57-feature-card),
+.public-app .btn,
+.public-app .filter-toggle {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+
+/* A modal gallery lightbox owns the viewport and focus: hide floating launchers
+   and the persistent dock so they cannot cover photo actions or escape the dialog. */
+body:has(.jyc57-lightbox[aria-modal="true"]) :is(.jyc-bot-shell,.mobile-dock) {
+  display: none !important;
+}
+
+/* Lighthouse follow-up: pin the measured About-page foregrounds at the route root.
+   These selectors intentionally outrank legacy route/button rules that otherwise
+   wash the editorial text and CTA into the paper background. */
+#main-content.public-app .route-stage > section.section .about-source-note {
+  color: #4b4650 !important;
+  opacity: 1 !important;
+}
+#main-content.public-app .route-stage > section.section .about-next-v28 .eyebrow {
+  color: #65451f !important;
+  opacity: 1 !important;
+}
+#main-content.public-app .route-stage > section.section .about-next-v28 h2 {
+  color: #28242a !important;
+  opacity: 1 !important;
+}
+#main-content.public-app .route-stage > section.section .about-next-v28 button.btn:not(.secondary) {
+  background-color: #a82420 !important;
+  background-image: none !important;
+  border-color: #a82420 !important;
+  color: #fffaf0 !important;
+  opacity: 1 !important;
+}
+#main-content.public-app .route-stage > section.section .about-next-v28 button.btn.secondary {
+  background-color: #fff !important;
+  background-image: none !important;
+  border-color: #a82420 !important;
+  color: #28242a !important;
+  opacity: 1 !important;
+}
+
+
+/* Screen-reader announcements stay accessible but must never expand into visible text. */
+.public-app .flip-card__sr-only {
+  white-space: nowrap !important;
+}
+
+
+/* Visual QA: feature heroes use a permanently dark textured surface in both themes. Keep light-theme copy ivory rather than inheriting dark ink from the paper theme. */
+html[data-theme="light"] .public-app .feature-hero :is(h1,h2,h3,h4,h5,h6){color:#FFF8E1!important}
+html[data-theme="light"] .public-app .feature-hero :is(p,li,small){color:#D7D1C7!important}
+
+/* Restore the empty-state layout in the active consolidated public CSS entry. */
+.public-app .feature-empty{display:flex;flex-direction:column;gap:8px}
+.public-app .feature-empty.large{min-height:180px;justify-content:center;align-items:center;text-align:center;padding:clamp(24px,4vw,48px)}
+.public-app .feature-empty.large>strong{display:block;max-width:28ch;margin:0;line-height:1.25}
+.public-app .feature-empty.large>span{display:block;max-width:65ch;line-height:1.65}
+
+
+/* Sparse team tiers should not paint unused grid tracks. */
+.public-app .team-layer-grid--two{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  max-width:560px;
+  margin-inline:auto;
+  gap:16px!important;
+  background:transparent!important;
+}
+@media(max-width:620px){
+  /* Keep the fixed assistant from covering the homepage's primary actions. */
+  body:has(.jyc-editorial-home) .jyc-bot-shell{top:auto!important;bottom:calc(94px + env(safe-area-inset-bottom))!important}
+  .public-app .team-layer-grid--two{
+    grid-template-columns:minmax(0,1fr)!important;
+    max-width:100%;
+    gap:12px!important;
+  }
+}

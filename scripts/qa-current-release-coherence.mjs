@@ -1,0 +1,63 @@
+import fs from 'node:fs';
+import {spawnSync} from 'node:child_process';
+import path from 'node:path';
+const root=process.cwd();
+const read=p=>fs.readFileSync(path.join(root,p),'utf8');
+const pkg=JSON.parse(read('package.json'));
+const main=read('src/main.jsx');
+const home=read('src/jyc-editorial-home.jsx');
+const homeCss=read('src/jyc-editorial-home.css');
+const publicCss=read('src/styles/public-system.css');
+const suite=read('scripts/run-qa-suite.mjs');
+const admin=read('src/admin-chunk.jsx');
+const browser=read('scripts/browser-smoke.spec.js');
+const experience=read('src/jyc57-experience.jsx');
+const extra=read('src/extra-features.jsx');
+const design=read('src/jyc-design-upgrades.css');
+const updatesApi=read('api/jyc-updates.js');
+const eventDetail=main.slice(main.indexOf('function EventDetail'),main.indexOf('function Announcements'));
+const checks=[];
+const add=(name,ok,detail='')=>checks.push([name,Boolean(ok),detail]);
+add('release metadata is V64',/^64\.\d+\.\d+$/.test(pkg.version));
+const apiSyntax=spawnSync(process.execPath,['--check',path.join(root,'api/jyc-updates.js')],{encoding:'utf8'});
+add('updates API parses under the configured Node runtime',apiSyntax.status===0,(apiSyntax.stderr||apiSyntax.stdout||'').trim());
+add('YouTube updates parser returns its mapped list without syntax-breaking parentheses',updatesApi.includes("return ((await pr.json()).items||[]).map(x=>({")&&updatesApi.includes("verified:true}));"));
+add('JYC Now distinguishes remote live records from curated or database fallback, ignores empty config placeholders, and requires HTTPS RSS feeds',updatesApi.includes('const hasConfiguredSource=()=>Boolean(')&&updatesApi.includes('const remoteItems=unique(')&&updatesApi.includes('return {items,live:remoteItems.length>0}')&&updatesApi.includes('live:memory.live,configured:memory.configured,cached:true')&&updatesApi.includes('const live=collected.live===true,configured=hasConfiguredSource()')&&updatesApi.includes('const safeHttpsUrl=')&&updatesApi.includes('const remoteFeed=safeHttpsUrl(feedUrl)')&&!updatesApi.includes('configured:Boolean(process.env.META_ACCESS_TOKEN||process.env.YOUTUBE_API_KEY||process.env.LINKEDIN_ACCESS_TOKEN||process.env.JYC_RSS_FEEDS||process.env.JYC_MANUAL_UPDATES)'));
+add('homepage is content-first and visually consolidated',home.includes('jh-hero')&&home.includes('jh-about-editorial')&&home.includes('jh-pillars-section')&&home.includes('jh-events')&&home.includes('jh-photo-story')&&home.includes('jh-community')&&home.includes('jh-final')&&!home.includes('jh-archive-section'));
+add('homepage has no retired PhotoChapters mount',!home.includes('<PhotoChapters/>'));add('homepage magnetic Bento is lazy and uses the React Router callback',home.includes('LazyMagicBento')&&home.includes('enableMagnetism={true}')&&read('src/components/react-bits/MagicBento.jsx').includes('onNavigate?onNavigate(item.href)'));
+add('homepage has no retired DriftWall mount',!home.includes('LazyDriftWall'));
+add('homepage activity cards use curated source photography and responsive delivery',home.includes('const photoHubs = { technical: \'CICR\', cultural: \'VamUnique\', literary: \'Eloquence\', fests: \'Aakriti\', sports: \'Sports\', creative: \'Aura\' }')&&home.includes('sourceHubMedia(photoHubs[p.id])')&&home.includes("rankDiverseJycPhotos((source?.photoItems || []).filter(item => item?.url && (item.mediaKind || \'photo\') === \'photo\'), { limit: 1, maxPerAssociation: 1 })")&&homeCss.includes('.jyc-editorial-home .magic-bento-card__media { display: block; }')&&read('src/components/react-bits/MagicBento.jsx').includes('ResponsivePhoto'));
+add('homepage activity cards avoid uncurated gallery reuse',home.includes('LazyActivityBento activities={activities} nav={nav}')&&!home.includes('image:gallery['));
+add('homepage uses the current WebGL hero and featured-event image path',home.includes('jh-hero-webgl-stage-wrap')&&home.includes('<JYCHeroWebGLEmblem />')&&home.includes('jh-featured-event-photo'));
+add('event detail defines its poster source before rendering the poster',eventDetail.includes("const eventPoster=e.poster||sourceEventMedia(e)?.photoItems?.find(item=>item?.url)?.url||'';")&&eventDetail.indexOf('const eventPoster=')<eventDetail.indexOf('{eventPoster?'));
+add('event detail receives the reminder notification callback from the route',eventDetail.includes('function EventDetail({data,id,session,notify})')&&main.includes('<EventDetail data={data} id={slugId} session={session} notify={notify}/>'));
+add('tablet event/club hero switches to a safe single-column layout',design.includes('@media(max-width:900px)')&&design.includes('.public-app .jyc57-page .jyc57-hero{')&&design.includes('overflow-wrap:normal')&&design.includes('hyphens:none'));
+add('recruitment empty state provides next-step links',extra.includes('No published club has recruitment enabled right now.')&&extra.includes('Explore clubs ↗')&&extra.includes('See events →')&&extra.includes('Join JYC updates →'));
+add('Best of JYC photo cards support shareable photo deep links',experience.includes("href={'/gallery?photo='+encodeURIComponent(g.id||g.url)}")&&experience.includes("params.get('photo')")&&experience.includes("const albumRoute=value=>'/gallery/'+encodeURIComponent(value)")&&experience.includes("data-photo-id={String(g.id || g.url)}"));
+add('gallery album cards route to published collections and expose real photo metadata',experience.includes('publishedAlbums.slice(0, 12)')&&experience.includes("const albumRoute=value=>'/gallery/'+encodeURIComponent(value)")&&experience.includes('jyc_media_albums')&&experience.includes('jyc57-gallery-meta'));
+
+add('homepage photo stories use only published event/club photo records',home.includes("item?.mediaKind !== 'photo'")&&home.includes("!['event','club'].includes(role)")&&home.includes('item?.published === false'));
+add('homepage event links use the stored canonical slug used by event details and sitemap',home.includes('const eventPath = e =>')&&home.includes('/events/${slug(e?.slug||e?.title)}'));
+add('event card, archive, calendar and announcements links prefer canonical stored slugs',main.includes("href:'/events/'+slug(e.slug||e.title)")&&main.includes('encodeURIComponent(slug(e.slug||e.title))')&&main.includes("onClick={()=>nav('/events/'+slug(e.slug||e.title))"));
+add('gallery uses deterministic grid contract',publicCss.includes('.public-app .gallery-grid{')&&publicCss.includes('display:grid!important')&&publicCss.includes('column-count:unset!important')&&publicCss.includes('aspect-ratio:4/3!important'));
+add('gallery archive uses deterministic rows',publicCss.includes('.public-app .jyc57-masonry')&&publicCss.includes('grid-auto-rows:auto!important')&&publicCss.includes('.public-app .jyc57-masonry .jyc57-photo'));
+add('gallery has mobile layout contracts',publicCss.includes('@media(max-width:620px)')&&publicCss.includes('.public-app .gallery-grid'));
+add('homepage activity Bento has responsive photo frames and mobile layout',homeCss.includes('.jh-activity-bento-shell')&&homeCss.includes('.magic-bento__grid')&&homeCss.includes('.magic-bento-card__media { display: block; }')&&homeCss.includes('.magic-bento-card__media picture { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }')&&homeCss.includes('@media (max-width: 600px)'));
+add('active suite contains current media/layout QA',suite.includes('qa-media-layout.mjs')&&suite.includes('qa-current-release-coherence.mjs'));
+add('homepage CMS cannot restore retired visual surfaces',!admin.includes('move=(id,dir)')&&!admin.includes('Photo Chapters')&&!admin.includes('Hub Photo Wall'));
+add('browser QA guards homepage composition and gallery interactions',browser.includes('homepage renders the official emblem and a magnetic activity Bento')&&browser.includes('homepage photo-story horizontal overflow')&&browser.includes('gallery album routes are shareable and filter the archive'));
+const suiteFiles=[...suite.matchAll(/'([^']+\.mjs)'/g)].map(m=>m[1]).filter(p=>p.startsWith('qa-'));
+const stale=[];
+const stalePatterns=[/pkg\.version===['"](?:5[0-9]|6[0-3])\./,/release is v(?:5[0-9]|6[0-3])/i,/release version is V(?:5[0-9]|6[0-3])/i,/gallery\.slice\(0,4\)/,/jh-photo-grid/,/column-count:4/];
+for(const file of suiteFiles){
+ if(file==='qa-current-release-coherence.mjs'||file==='qa-zero-glitch-contract.mjs') continue;
+ const full=path.join('scripts',file);
+ if(!fs.existsSync(path.join(root,full))){stale.push(full+' (missing)');continue}
+ const text=read(full);
+ for(const pattern of stalePatterns) if(pattern.test(text)) stale.push(full+' :: '+pattern);
+}
+add('active QA suite has no stale homepage/layout assertions',stale.length===0,stale.slice(0,12).join('; '));
+const failures=checks.filter(x=>!x[1]);
+for(const [name,ok,detail] of checks) console.log((ok?'PASS':'FAIL')+' · '+name+(detail?' — '+detail:''));
+if(failures.length){console.error('\nCurrent release coherence QA failed: '+failures.length);process.exit(1)}
+console.log('\nCurrent release coherence QA PASS ('+checks.length+' checks).');
