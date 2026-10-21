@@ -162,3 +162,11 @@ After the initial audit was committed, additional live checks were performed:
 3. Repository/workflow administration must make exact-head CI execution possible and expose run results/artifacts before QA can be signed off.
 
 These are observed permission/configuration blockers, not code fixes. No custom-domain DNS, production alias, database content or access-control setting was changed during this follow-up.
+
+
+### 22 October follow-up — canonical event navigation
+
+- Found and fixed one additional route-integrity defect after the original audit: event-directory rows previously built detail URLs from `event.title` even when a stored canonical `event.slug` was available. Rows now prefer `slug(event.slug || event.title)`, preserving the title-derived fallback for older records.
+- Added a regression assertion to `scripts/qa-current-release-coherence.mjs`.
+- Merged PR [#2 — preserve canonical slugs in event directory](https://github.com/kaustubhdua/JYC-Website2/pull/2) as `ae8083820bb38545186cb778c3b339e8ed1b3fa4`. The merge and both source changes were verified against the GitHub API.
+- This source-level correction is **not** a full build/browser test. The latest recheck still returns zero GitHub Actions runs and zero commit statuses for the merge commit. The Vercel project still lists the old `kaustubhdua/JYC-Website` repository; the new repository is not yet proven deployed. Production release remains blocked by deployment provenance, automated test evidence, domain verification and the visual/content/media gates above.
