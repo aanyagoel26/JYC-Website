@@ -1756,7 +1756,89 @@ html[data-theme="light"] .unified-public-page {
   }
 }
 
+/* ==========================================================================
+   DISTINCTIVE IDENTITY & CYBER AURA STYLING: CLUBS & EVENTS
+   ========================================================================== */
+/* Technical Family: Electric Cyan / Indigo */
+.club-card-v41[data-family="Technical"],
+.jyc-event-card[data-category="Technical"] {
+  --hub-accent: #38bdf8;
+  --hub-glow: rgba(56, 189, 248, 0.22);
+  --hub-border: rgba(56, 189, 248, 0.35);
+}
+.club-card-v41[data-family="Technical"]:hover,
+.jyc-event-card[data-category="Technical"]:hover {
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5), 0 0 28px var(--hub-glow) !important;
+  border-color: var(--hub-border) !important;
+}
 
+/* Cultural Family: Vibrant Magenta / Violet */
+.club-card-v41[data-family="Cultural"],
+.jyc-event-card[data-category="Cultural"] {
+  --hub-accent: #f43f5e;
+  --hub-glow: rgba(244, 63, 94, 0.22);
+  --hub-border: rgba(244, 63, 94, 0.35);
+}
+.club-card-v41[data-family="Cultural"]:hover,
+.jyc-event-card[data-category="Cultural"]:hover {
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5), 0 0 28px var(--hub-glow) !important;
+  border-color: var(--hub-border) !important;
+}
 
+/* Creative & Fine Arts Family: Warm Amber / Gold */
+.club-card-v41[data-family="Creative"],
+.jyc-event-card[data-category="Creative"] {
+  --hub-accent: #f59e0b;
+  --hub-glow: rgba(245, 158, 11, 0.22);
+  --hub-border: rgba(245, 158, 11, 0.35);
+}
+.club-card-v41[data-family="Creative"]:hover,
+.jyc-event-card[data-category="Creative"]:hover {
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5), 0 0 28px var(--hub-glow) !important;
+  border-color: var(--hub-border) !important;
+}
 
+/* Literary & Debating Family: Emerald Mint / Teal */
+.club-card-v41[data-family="Literary"],
+.jyc-event-card[data-category="Literary"] {
+  --hub-accent: #10b981;
+  --hub-glow: rgba(16, 185, 129, 0.22);
+  --hub-border: rgba(16, 185, 129, 0.35);
+}
+.club-card-v41[data-family="Literary"]:hover,
+.jyc-event-card[data-category="Literary"] {
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5), 0 0 28px var(--hub-glow) !important;
+  border-color: var(--hub-border) !important;
+}
+
+/* Sports & Esports Family: Electric Neon Lime / Crimson */
+.club-card-v41[data-family="Sports"],
+.jyc-event-card[data-category="Sports"] {
+  --hub-accent: #84cc16;
+  --hub-glow: rgba(132, 204, 22, 0.22);
+  --hub-border: rgba(132, 204, 22, 0.35);
+}
+.club-card-v41[data-family="Sports"]:hover,
+.jyc-event-card[data-category="Sports"]:hover {
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.5), 0 0 28px var(--hub-glow) !important;
+  border-color: var(--hub-border) !important;
+}
+
+/* Flagship Festival Badges with Pulsing Shimmer */
+.jyc-event-card[data-featured="true"] {
+  border: 1px solid rgba(212, 175, 55, 0.45) !important;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.05) 0%, rgba(14, 18, 32, 0.92) 100%) !important;
+}
+
+.jyc-event-card[data-featured="true"]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #ffd700, #f59e0b, #ec4899, #38bdf8);
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+}
 
