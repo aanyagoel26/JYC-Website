@@ -142,3 +142,23 @@ Capture and inspect the exact merged commit at each of these viewport sizes: **3
 Call the site complete only when: all routes and controls work as intended; text and media are accurate and cleared for publication; dynamic services are genuinely configured or honestly labelled as unavailable/fallback; no high-severity accessibility/security defects remain; exact-head CI/browser/Lighthouse checks pass; all route/viewport screenshots are reviewed; the Vercel project deploys this repository's approved SHA; and the intended custom domain serves that exact release.
 
 **Current conclusion:** PR #1 is merged, but the website is not yet verified as complete or production-ready.
+
+
+## Execution follow-up — 22 October 2026
+
+After the initial audit was committed, additional live checks were performed:
+
+- Current `package.json` reports version `64.5.12` and defines build, source QA, responsive, browser, SEO, security, media, photo-integrity, performance and editorial QA commands. These commands have not been run successfully in this session; script presence is not a passing result.
+- Rechecked the Vercel team's Git project context: the team has a `jyc-website` project linked to `kaustubhdua/JYC-Website`, not `JYC-Website2`.
+- Attempted to create a separate Vercel Git-connected project `jyc-website2` for `kaustubhdua/JYC-Website2` so the old live project would not be disrupted. Vercel rejected project creation with HTTP 403 `forbidden` (“You don't have permission to create the project”). No Vercel project or deployment was created by this attempt.
+- Attempted to open a GitHub tracking issue for the release gates. GitHub returned HTTP 410: “Issues has been disabled in this repository.” No issue was created. The committed audit document remains the shared checklist.
+- Rechecked the merged commit status and current Actions API; no commit statuses or workflow runs were returned. CI state therefore remains unverified.
+- The repository's route inventory still explicitly marks the current route candidate as not visually verified. A complete current-SHA screenshot review has not been produced.
+
+### Newly confirmed external blockers
+
+1. An authorized Vercel project owner must grant project-creation access or create/link a Vercel project to `kaustubhdua/JYC-Website2`, then configure the correct deployment target.
+2. Repository administration must enable GitHub Issues if a tracked issue-based release gate is desired; until then, use this audit document as the checklist.
+3. Repository/workflow administration must make exact-head CI execution possible and expose run results/artifacts before QA can be signed off.
+
+These are observed permission/configuration blockers, not code fixes. No custom-domain DNS, production alias, database content or access-control setting was changed during this follow-up.
