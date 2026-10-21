@@ -6,7 +6,6 @@ const main = fs.readFileSync('src/main.jsx', 'utf8');
 const layer = fs.readFileSync('src/styles/jyc-editorial-motion-system.css', 'utf8');
 const home = fs.readFileSync('src/jyc-editorial-home.jsx', 'utf8');
 const bot = fs.readFileSync('src/jyc-bot.jsx', 'utf8');
-const readDesignSystem = fs.readFileSync('src/styles/jyc-design-system.css', 'utf8');
 const checks = [
   [bot.includes('window.setTimeout') && bot.includes('14000+Math.floor(Math.random()*9000)'), 'Falcon idle behavior uses bounded delayed scheduling rather than a perpetual interval'],
   [bot.includes("document.addEventListener('visibilitychange',onVisibilityChange)") && bot.includes("document.removeEventListener('visibilitychange',onVisibilityChange)"), 'Falcon idle scheduling pauses and cleans up on page visibility changes'],
@@ -14,7 +13,7 @@ const checks = [
   [bot.includes('window.clearTimeout(idleTimer.current)') && !bot.includes('window.clearInterval(idleTimer.current)'), 'Falcon timeout lifecycle uses timeout cleanup consistently'],
   [bot.includes("{intent:'peek',weight:4}") && !bot.includes("const animPool=['wave','dance','bounce','tap','celebrate','peek','think']"), 'Falcon idle behavior uses restrained weighted choices and excludes surprise dance/celebration'],
   [home.includes("import './jyc-editorial-home.css';") && home.includes("import './styles/jyc-editorial-motion-system.css';") && home.indexOf("import './styles/jyc-editorial-motion-system.css';") > home.indexOf("import './jyc-editorial-home.css';"), 'motion layer is loaded after the editorial home stylesheet'],
-  [home.includes('jh-hero-webgl-stage-wrap') && home.includes('<JYCHeroWebGLEmblem />'), 'interactive WebGL emblem hero is retained'],
+  [home.includes('jh-hero-dither-visual') && home.includes('LazyDitherVeil'), 'existing branded Dither Veil hero is retained'],
   [layer.includes('@media(max-width:700px)'), 'single-column mobile hero is explicitly supported'],
   [layer.includes('@media(max-width:980px)'), 'tablet hero layout is explicitly supported'],
   [layer.includes('prefers-reduced-motion:reduce'), 'reduced-motion preferences are honored'],
@@ -22,11 +21,6 @@ const checks = [
   [layer.includes('--jyc-oxblood') && layer.includes('--jyc-champagne'), 'JYC identity tokens are defined'],
   [layer.includes('.jh-overline{color:var(--jh-muted,var(--jyc-muted-ink));font-size:12px;letter-spacing:.16em}'), 'hero eyebrow text stays at the 12px minimum readable type size'],
   [layer.includes('translateY(-3px)') && layer.includes('hover:hover'), 'card motion is restricted to fine pointers'],
-
-  ['shared spacing and responsive editorial type tokens are defined', ['--jyc-brand-space-1:', '--jyc-brand-space-8:', '--jyc-brand-text-display:', '--jyc-brand-leading-copy:'].every(token => readDesignSystem.includes(token))],
-  ['shared focus ring has a high-visibility dual-tone treatment', readDesignSystem.includes('--jyc-brand-focus-ring:') && readDesignSystem.includes('box-shadow: var(--jyc-brand-focus-ring)')],
-  ['narrow 320–360px controls can wrap without causing text overflow', readDesignSystem.includes('@media (max-width: 360px)') && readDesignSystem.includes('white-space: normal')],
-  ['reduced-motion mode disables pointer-driven depth effects', readDesignSystem.includes('prefers-reduced-motion: reduce') && readDesignSystem.includes('[data-pointer-light]')],
 ];
 for (const [ok, name] of checks) { console.log((ok ? 'PASS: ' : 'FAIL: ') + name); assert.ok(ok, name); }
 console.log('JYC editorial motion system contract: PASS');

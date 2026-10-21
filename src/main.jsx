@@ -30,7 +30,7 @@ import {JYCBrandEditorial} from './jyc-next-experience.jsx';
 import {JYCEditorialHome} from './jyc-editorial-home.jsx';
 import {ResponsivePhoto} from './jyc-responsive-photo.jsx';
 import { teamPhotoFor } from './jyc-team-media.js';
-
+import {FeaturedEventPopup} from './featured-event-popup.jsx';
 import {JYC57Events,JYC57Clubs,JYC57Gallery,JYCBestOf} from './jyc57-experience.jsx';
 
 
@@ -86,7 +86,7 @@ function publicDemoData(){
  return mergePublicFallback(norm({...empty,clubs,events:PUBLIC_EVENT_FALLBACK,gallery:PUBLIC_GALLERY_FALLBACK,team:PUBLIC_TEAM_FALLBACK,homepage:{...empty.homepage,activities:PUBLIC_ACTIVITIES}}));
 }
 import { normalizeSearch, rankSearchResults } from './lib/search.js';
-import {CREATOR,CREATORS,JYC_CONTACTS} from './lib/site-config.js';
+import {CREATOR,JYC_CONTACTS} from './lib/site-config.js';
 
 import {MomentsSection} from './v14-platform.jsx';
 import {SkipLink,InstallPrompt,MaintenanceGate,ErrorBoundary,EventTools,DownloadICS,JsonLd,usePageMeta,Gallery,GalleryItems,RecruitmentHub,RegistrationPage} from './extra-features.jsx';
@@ -263,7 +263,7 @@ function App(){const loc=useLocation();const [data,setData]=useState(()=>import.
   if(!bootReady)return <Loading stage={bootStage} cached={Boolean(readSiteCache())}/>;
   const connectionNotice=(!online||error)?<div className={`connection-notice ${readSiteCache()?'cached':'offline'} ${error==='JYC data service is not deployed. Run supabase/FINAL-PRODUCTION-REPAIR.sql in the connected Supabase project, then refresh.'?'setup-needed':''}`} role="status"><span>{!online?'You are offline. JYC will keep using cached content until the connection returns.':error==='JYC data service is not deployed. Run supabase/FINAL-PRODUCTION-REPAIR.sql in the connected Supabase project, then refresh.'?'JYC data service needs setup.':readSiteCache()?`Showing the last saved JYC snapshot · ${formatCacheAge(siteCacheAge())}.`:'JYC content is currently offline.'}</span><button type="button" onClick={()=>window.dispatchEvent(new CustomEvent('jyc-refresh-data'))}>Refresh</button></div>:null;
  const isAdmin=loc.pathname.startsWith('/admin');
- const content=<div className="app-frame"><SkipLink/><ScrollProgress/><BackToTop/>{!isAdmin&&<Suspense fallback={null}><LazyJYCInnovationMotion/></Suspense>}{!isAdmin&&<><Navbar data={data} admin={admin} theme={theme} setTheme={setTheme}/></>} {connectionNotice}<div id="main-content" className={isAdmin?'app admin-app':'app public-app'}><div className="route-stage" key={`${loc.pathname}${loc.search}`}><JYCEditorialSystem><Routes data={data} admin={admin} session={session} setAdmin={setAdmin} commit={commit} notify={notify} theme={theme} setTheme={setTheme}/></JYCEditorialSystem></div></div>{!isAdmin&&<Footer data={data} admin={admin}/>} {!isAdmin&&<Suspense fallback={null}><LazyJYCBot data={data}/></Suspense>} {toast&&<div className={`toast toast-${toast.type||'success'}`} role="status"><span>{toast.type==='error'?'!':'✓'}</span>{toast.message}</div>} {confirm&&<ConfirmDialog request={confirm} onClose={ok=>{confirm.resolve?.(ok);setConfirm(null)}}/>}
+ const content=<div className="app-frame"><SkipLink/><ScrollProgress/><BackToTop/>{!isAdmin&&<Suspense fallback={null}><LazyJYCInnovationMotion/></Suspense>}{!isAdmin&&<><Navbar data={data} admin={admin} theme={theme} setTheme={setTheme}/></>} {connectionNotice}<div id="main-content" className={isAdmin?'app admin-app':'app public-app'}><div className="route-stage" key={`${loc.pathname}${loc.search}`}><JYCEditorialSystem><Routes data={data} admin={admin} session={session} setAdmin={setAdmin} commit={commit} notify={notify} theme={theme} setTheme={setTheme}/></JYCEditorialSystem></div></div>{!isAdmin&&<Footer data={data} admin={admin}/>} {!isAdmin&&<Suspense fallback={null}><LazyJYCBot data={data}/></Suspense>} {toast&&<div className={`toast toast-${toast.type||'success'}`} role="status"><span>{toast.type==='error'?'!':'✓'}</span>{toast.message}</div>} {confirm&&<ConfirmDialog request={confirm} onClose={ok=>{confirm.resolve?.(ok);setConfirm(null)}}/>}<FeaturedEventPopup />
       <InstallPrompt/></div>;
  return <MaintenanceGate data={isAdmin?{maintenance:{on:false}}:data}>{content}</MaintenanceGate>}
 
@@ -492,19 +492,16 @@ function Contact({data}){
    </a>
    <div className="contact-card contact-creator-card">
     <span>05</span>
-    <h3>Website Creators</h3>
-    <p>Website made by Aanya Goel and Kaustubh Dua</p>
-    <div style={{display:'flex',flexDirection:'column',gap:'12px',marginTop:'12px'}}>
-     {CREATORS.map(c=>(
-      <div key={c.name}>
-       <strong style={{color:'var(--gold,#bf9c6f)'}}>{c.name}</strong> · <span style={{fontSize:'12px',opacity:.8}}>{c.role}</span>
-       <div className="social-row" style={{marginTop:'6px'}}>
-        {c.linkedin&&<a href={c.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>}
-        {c.github&&<a href={c.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>}
-        {c.email&&<a href={'mailto:'+c.email}>Email ↗</a>}
-       </div>
-      </div>
-     ))}
+    <h3>Website Creator</h3>
+    <p>{data.creator.name} · {data.creator.role}</p>
+    <div className="social-row">
+     <a href={data.creator.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+     <a href={data.creator.instagram} target="_blank" rel="noopener noreferrer">Instagram ↗</a>
+     <a href={data.creator.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+    </div>
+    <div className="contact-email-copy-row">
+     <code>{data.creator.email}</code>
+     <button type="button" className="btn-copy-mini" onClick={()=>copyEmail(data.creator.email,'Creator email')}>Copy Email 📋</button>
     </div>
    </div>
   </div>
@@ -548,7 +545,7 @@ function EventDirectoryList({events}){
    const ended=end?new Date(end+'T23:59:59')<new Date():false;
    const canRegister=(event.publicStatus!=='planned'||event.registrationVerified===true)&&!ended&&Boolean(safeExternalUrl(event.registrationUrl))&&(!event.registrationDeadline||new Date(event.registrationDeadline)>new Date());
    const registrationState=event.publicStatus==='planned'?'REGISTRATION NOT PUBLISHED':canRegister?'REGISTER':safeExternalUrl(event.registrationUrl)?'REGISTRATION CLOSED':'VIEW EVENT';
-   return <button type="button" className="event-directory-row" key={event.id||event.title} onClick={()=>nav('/events/'+slug(event.slug||event.title))}><span className="event-row-number">{String(index+1).padStart(2,'0')}</span><span className="event-row-date"><b>{fmtDate(event.date)}</b><small>{event.start||'TIME TBA'}</small></span><span className="event-row-copy"><small>{event.club||'JYC'}{event.venue?' · '+event.venue:''}</small><strong>{event.title}</strong><em>{event.description||'Open the official event record.'}</em></span><span className="event-row-state">{event.publicStatus==='planned'?'PLANNED':eventState(event).toUpperCase()}</span><span className="event-row-register">{registrationState}</span><b className="event-row-arrow" aria-hidden="true">↗</b></button>
+   return <button type="button" className="event-directory-row" key={event.id||event.title} onClick={()=>nav('/events/'+slug(event.title))}><span className="event-row-number">{String(index+1).padStart(2,'0')}</span><span className="event-row-date"><b>{fmtDate(event.date)}</b><small>{event.start||'TIME TBA'}</small></span><span className="event-row-copy"><small>{event.club||'JYC'}{event.venue?' · '+event.venue:''}</small><strong>{event.title}</strong><em>{event.description||'Open the official event record.'}</em></span><span className="event-row-state">{event.publicStatus==='planned'?'PLANNED':eventState(event).toUpperCase()}</span><span className="event-row-register">{registrationState}</span><b className="event-row-arrow" aria-hidden="true">↗</b></button>
  })}</div>
 }
 function Events({data}){
@@ -795,7 +792,7 @@ function Navbar({data,admin,theme,setTheme}){
    <nav className={open?'open':''}>{navButtons}<button type="button" className={`nav-more-trigger ${moreOpen?'active':''}`} onClick={()=>{setOpen(false);setMoreOpen(v=>!v)}} aria-expanded={moreOpen}>More <span aria-hidden="true">⌄</span></button></nav>
    <button type="button" className="nav-join-cta" onClick={()=>nav('/join-jyc')}>Join JYC <span>↗</span></button>
    <Theme theme={theme} setTheme={setTheme}/><button type="button" className={`hamb ${open?'open':''}`} onClick={()=>setOpen(v=>!v)} aria-label="Menu" aria-expanded={open}><i/><i/><i/></button>
-   {open&&<button type="button" className="mobile-nav-scrim" aria-label="Close navigation" onClick={()=>setOpen(false)}/>}<button type="button" className="search-trigger" aria-label="Search Ctrl K" onClick={()=>setSearch(true)} title="Search JYC (Ctrl/Cmd + K)"><span className="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg></span><span className="search-label">Search</span><kbd aria-hidden="true">Ctrl K</kbd></button>
+   {open&&<button type="button" className="mobile-nav-scrim" aria-label="Close navigation" onClick={()=>setOpen(false)}/>}<button type="button" className="search-trigger" aria-label="Search" onClick={()=>setSearch(true)} title="Search JYC (Ctrl/Cmd + K)"><span className="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg></span><span className="search-label">Search</span><kbd aria-hidden="true">Ctrl K</kbd></button>
  </div></header>
  {createPortal(dock,document.body)}{createPortal(more,document.body)}{searchView}</>
 }
@@ -955,7 +952,7 @@ function Footer({data,admin}){
       <div className="footer-v6-biglink"><button type="button" onClick={()=>nav('/recruitment')}>JOIN JYC <span aria-hidden="true">↗</span></button></div>
       <div className="footer-bottom footer-v6-bottom">
         <span>JIIT YOUTH CLUB · JIIT SECTOR 128</span>
-        <small className="jyc-creator-credit">Website made by <a href="https://www.linkedin.com/in/aanya-goel26" target="_blank" rel="noopener noreferrer">Aanya Goel</a> and <a href="https://www.linkedin.com/in/kaustubh-dua-2b5a76416" target="_blank" rel="noopener noreferrer">Kaustubh Dua</a></small>
+        <small className="jyc-creator-credit">Website Creator · <a href={data.creator.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${data.creator.name} on LinkedIn`}>{data.creator.name}</a></small>
       </div>
     </div>
   </footer>;
@@ -1056,7 +1053,7 @@ function EcosystemContextRail(){
  return <nav className="ecosystem-context-rail" aria-label="JYC ecosystem shortcuts"><span className="ecosystem-context-label">Explore</span>{items.map(item=><button type="button" key={item.name} onClick={()=>nav(item.path)}><small>{item.family}</small><strong>{item.name}</strong><b aria-hidden="true">↗</b></button>)}</nav>
 }
 function DetailSection({title,eyebrow='JYC DETAIL',children}){return <section className="detail-section reveal"><div className="detail-section-head"><div><span className="eyebrow">{eyebrow}</span><h2>{title}</h2></div></div>{children}</section>}
-function ShareButton({title='Share JYC'}){const share=async()=>{try{if(navigator.share){await navigator.share({title,text:title,url:window.location.href});return}await navigator.clipboard?.writeText(window.location.href);jycToast('Link copied to clipboard.')}catch{}};return <button type="button" className="btn secondary share-button" onClick={share} aria-label={`Share ↗ — ${title}`}>Share ↗</button>}
+function ShareButton({title='Share JYC'}){const share=async()=>{try{if(navigator.share){await navigator.share({title,text:title,url:window.location.href});return}await navigator.clipboard?.writeText(window.location.href);jycToast('Link copied to clipboard.')}catch{}};return <button type="button" className="btn secondary share-button" onClick={share} aria-label={title}>Share ↗</button>}
 
 function Card({children,className='',onClick}){const interactive=typeof onClick==='function';const ref=React.useRef(null);const handleClick=e=>{if(!interactive)return;if(e.target instanceof Element&&e.target.closest('button,a,input,textarea,select,[data-no-card-nav]'))return;onClick(e)};const handleKey=e=>{if(interactive&&e.currentTarget===e.target&&(e.key==='Enter'||e.key===' ')){e.preventDefault();onClick(e)}};const tilt=className.includes('tilt-card'),magnetic=className.includes('magnetic-card');const move=e=>{if((!tilt&&!magnetic)||!window.matchMedia?.('(hover:hover) and (pointer:fine)').matches||window.matchMedia?.('(prefers-reduced-motion: reduce)').matches)return;const el=ref.current;if(!el)return;const r=el.getBoundingClientRect();if(!r.width||!r.height)return;const x=(e.clientX-r.left)/r.width-.5;const y=(e.clientY-r.top)/r.height-.5;if(magnetic){el.style.setProperty('--magnetic-x',`${(x*7).toFixed(2)}px`);el.style.setProperty('--magnetic-y',`${(y*7).toFixed(2)}px`)}if(tilt){el.style.setProperty('--pointer-x',`${((x+.5)*100).toFixed(1)}%`);el.style.setProperty('--pointer-y',`${((y+.5)*100).toFixed(1)}%`);el.style.setProperty('--magnetic-rx',`${(-y*4).toFixed(2)}deg`);el.style.setProperty('--magnetic-ry',`${(x*5).toFixed(2)}deg`)}};const leave=()=>{const el=ref.current;if(!el)return;['--magnetic-x','--magnetic-y','--magnetic-rx','--magnetic-ry','--pointer-x','--pointer-y'].forEach(name=>el.style.removeProperty(name))};return <article ref={ref} className={`card ${className}`} onClick={handleClick} onKeyDown={handleKey} onPointerMove={move} onPointerLeave={leave} tabIndex={interactive?0:undefined}>{children}</article>}
 
@@ -1285,7 +1282,7 @@ function EventCard({e,index=0}){
  const registrationLabel=e.publicStatus==='planned'?'REGISTRATION NOT PUBLISHED':regOpen?'REGISTER':regClosed?'REGISTRATION CLOSED':'VIEW EVENT';
  const identityStyle={'--hub-accent':identity.accent,'--hub-accent-soft':'color-mix(in srgb, '+identity.accent+' 12%, transparent)','--hub-accent-line':'color-mix(in srgb, '+identity.accent+' 28%, transparent)','--identity-shape':'var(--jyc-shape-'+(identity.shape||'event')+')'};
  const openRegistration=(ev)=>{ev.stopPropagation();if(!regOpen)return;if(safeExternalUrl(e.registrationUrl))window.open(safeExternalUrl(e.registrationUrl),'_blank','noopener,noreferrer')};
- return <Card className="event-card event-card-premium reveal event-identity-card magnetic-card" data-hub={slug(e.club||'JYC')} style={identityStyle} onClick={()=>nav('/events/'+slug(e.slug||e.title))}><motion.div layoutId={`event-media-${slug(e.id||e.slug||e.title)}`} transition={{duration:shouldReduceMotion?0:.32,ease:[.22,1,.36,1]}} className="event-poster">{eventVisualFor(e,index)&&<ResponsivePhoto className="event-poster-photo" src={eventVisualFor(e,index)} alt="" loading="lazy" sizes="(max-width: 600px) 92vw, (max-width: 1000px) 45vw, 30vw" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Event image unavailable"/>}<span className={state==='live'?'live':e.publicStatus==='planned'?'planned':''}>{e.publicStatus==='planned'?'PLANNED':state==='live'?'LIVE NOW':fmtDate(e.date)}</span><span className="event-number">{String(index+1).padStart(2,'0')}</span><span className="event-domain-mark">{identity.glyph||'◆'}</span><span className="event-domain-label">{identity.motif}</span></motion.div><div className="card-body"><div className="event-identity-mini"><span>{identity.motif}</span><b>{identity.signature}</b><i>{identity.traits?.join(' · ')}</i></div><div className="card-topline"><span className="tag">{e.club||'JYC'}</span>{e.pinned&&<span className="pin-badge">FEATURED</span>}</div><h3>{e.title}</h3><p>{e.description||'Official JYC event details.'}</p>{e.publicStatus==='planned'&&<small className="event-planned-note">Planned programme date · source currently under review</small>}<div className="event-card-meta"><span><b>{e.start||'TBA'}</b>{e.end?' – '+e.end:''}</span><span>{e.venue||'Venue TBA'}</span></div><div className="event-card-actions"><span className="text-link">Open event details →</span>{regOpen?<button type="button" className="event-card-register" onClick={openRegistration} aria-label={'REGISTER ↗ — Register for '+e.title}>REGISTER ↗</button>:<span className={regClosed?'event-card-register event-card-register--closed':'event-card-register event-card-register--muted'}>{registrationLabel}</span>}</div></div></Card>;
+ return <Card className="event-card event-card-premium reveal event-identity-card magnetic-card" data-hub={slug(e.club||'JYC')} style={identityStyle} onClick={()=>nav('/events/'+slug(e.slug||e.title))}><motion.div layoutId={`event-media-${slug(e.id||e.slug||e.title)}`} transition={{duration:shouldReduceMotion?0:.32,ease:[.22,1,.36,1]}} className="event-poster">{eventVisualFor(e,index)&&<ResponsivePhoto className="event-poster-photo" src={eventVisualFor(e,index)} alt="" loading="lazy" sizes="(max-width: 600px) 92vw, (max-width: 1000px) 45vw, 30vw" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Event image unavailable"/>}<span className={state==='live'?'live':e.publicStatus==='planned'?'planned':''}>{e.publicStatus==='planned'?'PLANNED':state==='live'?'LIVE NOW':fmtDate(e.date)}</span><span className="event-number">{String(index+1).padStart(2,'0')}</span><span className="event-domain-mark">{identity.glyph||'◆'}</span><span className="event-domain-label">{identity.motif}</span></motion.div><div className="card-body"><div className="event-identity-mini"><span>{identity.motif}</span><b>{identity.signature}</b><i>{identity.traits?.join(' · ')}</i></div><div className="card-topline"><span className="tag">{e.club||'JYC'}</span>{e.pinned&&<span className="pin-badge">FEATURED</span>}</div><h3>{e.title}</h3><p>{e.description||'Official JYC event details.'}</p>{e.publicStatus==='planned'&&<small className="event-planned-note">Planned programme date · source currently under review</small>}<div className="event-card-meta"><span><b>{e.start||'TBA'}</b>{e.end?' – '+e.end:''}</span><span>{e.venue||'Venue TBA'}</span></div><div className="event-card-actions"><span className="text-link">Open event details →</span>{regOpen?<button type="button" className="event-card-register" onClick={openRegistration} aria-label={'Register for '+e.title}>REGISTER ↗</button>:<span className={regClosed?'event-card-register event-card-register--closed':'event-card-register event-card-register--muted'}>{registrationLabel}</span>}</div></div></Card>;
 }
 function EventTimelinePreview({events}){
  const nav=useNavigate();

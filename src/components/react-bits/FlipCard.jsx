@@ -77,6 +77,7 @@ export default function FlipCard({ front, back, children, className = '', label 
           <button
             type="button"
             className="flip-card__back-trigger"
+            aria-label={`Return to photo for ${label}`}
             onClick={handleFlipBack}
           >
             ← Back to photo

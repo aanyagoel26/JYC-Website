@@ -1,0 +1,25 @@
+name: Content issue
+description: Report incorrect, missing or outdated JYC content
+title: "[Content] "
+labels: ["content"]
+body:
+  - type: dropdown
+    id: type
+    attributes:
+      label: Content type
+      options: [Club, Event, Fest, Team, Gallery, Venue, Homepage, Contact]
+    validations: {required: true}
+  - type: textarea
+    id: issue
+    attributes:
+      label: What is incorrect or missing?
+    validations: {required: true}
+  - type: textarea
+    id: correct
+    attributes:
+      label: Correct information
+    validations: {required: true}
+  - type: textarea
+    id: source
+    attributes:
+      label: Official source / approval reference

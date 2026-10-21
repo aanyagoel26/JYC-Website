@@ -18,7 +18,7 @@ const checks = [
   ['cards use a shared surface language and fine-pointer motion', allCss.includes('.event-card') && allCss.includes('.club-card') && allCss.includes('pointer:fine') && allCss.includes('var(--jyc-ex-shadow-hover)')],
   ['mobile-specific page gutters and typography are defined, including narrow phones', allCss.includes('@media (max-width: 760px)') && allCss.includes('@media (max-width: 390px)') && allCss.includes('@media(max-width:380px)')],
   ['reduced-motion users receive non-animated card states', allCss.includes('prefers-reduced-motion: reduce') && allCss.includes('transition-duration: .01ms')],
-  ['homepage keeps the interactive WebGL emblem hero implementation', home.includes('<JYCHeroWebGLEmblem />') && home.includes('jh-hero-webgl-stage-wrap')],
+  ['homepage keeps the React Bits Dither Veil hero implementation', home.includes("DitherVeil.jsx") && home.includes('LazyDitherVeil')],
   ['gallery retains interactive image experience and keyboard lightbox', extra.includes('export function GalleryItems') && extra.includes("e.key==='ArrowRight'") && extra.includes("e.key==='Escape'")],
   ['team page retains the flip-card interaction implementation', main.includes('LazyFlipCard') && main.includes('FlipCard.jsx')],
   ['About JYC contains the single source-backed timeline and legacy history alias', main.includes('id="about-history-heading"') && main.includes("to=\"/about#history\"") && !main.includes("if(clean==='/history')return <>{schema}<JYCHistory data={data}/></>;")],

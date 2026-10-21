@@ -19,7 +19,7 @@ check(team.includes('Dr. Vinay Anand Tikkiwal')&&team.includes('Dr. Pankaj Kumar
 check(team.includes('Harisha')&&team.includes('Dhruv Choudhary'),'core heads missing');
 check(next.includes('23 COMMUNITIES'),'community count/source label missing');
 const editorialHome=read('src/jyc-editorial-home.jsx');
-check(!editorialHome.includes('<PhotoChapters/>')&&editorialHome.includes('JYCHeroWebGLEmblem')&&editorialHome.includes('jh-hero-webgl-stage-wrap')&&editorialHome.includes('JYCSpotlight'),'homepage should use the current WebGL emblem hero and JYC Spotlight surface');
+check(!editorialHome.includes('<PhotoChapters/>')&&editorialHome.includes('LazyDitherVeil')&&editorialHome.includes('jh-hero-dither-visual')&&editorialHome.includes('jh-hero-logo-plaque')&&editorialHome.includes('JYCSpotlight'),'homepage should use the current single-logo editorial hero and JYC Spotlight surface');
 check(main.includes('JYCNowStrip'),'homepage retains the consolidated JYC Now rail export');
 if(failures.length){failures.forEach(x=>console.error('FAIL:',x));process.exit(1)}
 console.log('Resource content QA PASS: source-derived hub, achievement, leadership and photo-story contracts are present.');
