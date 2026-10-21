@@ -1,8 +1,0 @@
-blank_issues_enabled: false
-contact_links:
-  - name: Architecture & ownership guide
-    url: https://github.com/kaustubhdua/JYC-Website/blob/main/docs/CODE-ORGANIZATION.md
-    about: Check where a function, component or feature belongs before opening an issue.
-  - name: Contribution guide
-    url: https://github.com/kaustubhdua/JYC-Website/blob/main/CONTRIBUTING.md
-    about: Read the repository workflow, QA and review rules.
