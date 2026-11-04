@@ -86,3 +86,10 @@ Research references:
 - A final contact-copy review also removed an unsupported claim that the retained WhatsApp invite is an official enrolled-student broadcast. The page now identifies it as a community invite and directs visitors to check the group's own current membership/announcement description.
 
 - RAF lifecycle follow-up: static redraws no longer clear the ID of a pending animation frame. The scheduled callback clears its own ID when it begins, so unmount/visibility cleanup can still cancel the active request and cannot leave a detached-canvas animation loop running.
+
+## DitherVeil reveal interaction correction
+
+- The hero was requesting a missing `/assets/jyc-logo-medium.avif` texture and relying on a fallback. It now uses the existing optimized AVIF directly with the existing WebP and original PNG fallbacks.
+- The DitherVeil container sat inside a `pointer-events:none` hero layer and its own CSS also disabled pointer events, while the effect listened only on the container. That prevented reveal tracking when the foreground emblem intercepted pointer movement. Added an opt-in global pointer-tracking mode for this hero, scoped to the container bounds, with blur cleanup.
+- Increased the hero veil's restrained opacity slightly so the effect is perceptible without overwhelming the editorial hero.
+- Added QA checks for source asset existence and global pointer wiring.

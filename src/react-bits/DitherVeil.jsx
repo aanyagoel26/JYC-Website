@@ -375,6 +375,7 @@ const DitherVeil = ({
   srcSet,
   fallbackSrc = DEFAULT_SRC,
   originalFallbackSrc = null,
+  globalPointer = false,
   fit = 'contain',
   pattern = 'floyd',
   pixelSize = 2,
@@ -816,11 +817,22 @@ const DitherVeil = ({
       bursts.push({ x: pointer.x, y: pointer.y, start: performance.now() });
       if (bursts.length > MAX_BURSTS) bursts.shift();
     };
-    container.addEventListener('pointermove', onMove, { passive: true });
-    container.addEventListener('pointerenter', onMove, { passive: true });
-    container.addEventListener('pointerdown', onDown, { passive: true });
-    container.addEventListener('pointerleave', onLeave, { passive: true });
-    container.addEventListener('pointercancel', onLeave, { passive: true });
+    const onGlobalMove = e => {
+      const rect = container.getBoundingClientRect();
+      const inside = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+      if (inside) onMove(e);
+      else if (pointer.inside) onLeave();
+    };
+    if (globalPointer) {
+      window.addEventListener('pointermove', onGlobalMove, { passive: true });
+      window.addEventListener('blur', onLeave);
+    } else {
+      container.addEventListener('pointermove', onMove, { passive: true });
+      container.addEventListener('pointerenter', onMove, { passive: true });
+      container.addEventListener('pointerdown', onDown, { passive: true });
+      container.addEventListener('pointerleave', onLeave, { passive: true });
+      container.addEventListener('pointercancel', onLeave, { passive: true });
+    }
 
     const resizeObserver = new ResizeObserver(() => {
       layout();
@@ -843,15 +855,20 @@ const DitherVeil = ({
       intersectionObserver.disconnect();
       img.onload = null;
       img.onerror = null;
-      container.removeEventListener('pointermove', onMove);
-      container.removeEventListener('pointerenter', onMove);
-      container.removeEventListener('pointerdown', onDown);
-      container.removeEventListener('pointerleave', onLeave);
-      container.removeEventListener('pointercancel', onLeave);
+      if (globalPointer) {
+        window.removeEventListener('pointermove', onGlobalMove);
+        window.removeEventListener('blur', onLeave);
+      } else {
+        container.removeEventListener('pointermove', onMove);
+        container.removeEventListener('pointerenter', onMove);
+        container.removeEventListener('pointerdown', onDown);
+        container.removeEventListener('pointerleave', onLeave);
+        container.removeEventListener('pointercancel', onLeave);
+      }
       gl.getExtension('WEBGL_lose_context')?.loseContext();
       if (canvas.parentNode) canvas.parentNode.removeChild(canvas);
     };
-  }, [src, fallbackSrc, originalFallbackSrc]);
+  }, [src, fallbackSrc, originalFallbackSrc, globalPointer]);
 
   return <div ref={containerRef} className={`dither-veil ${className}`.trim()} style={style}><img className="dither-veil__fallback" src={src} srcSet={srcSet} alt="" aria-hidden="true" width={160} height={160} loading="eager" fetchPriority="high" decoding="async" onError={event=>{const image=event.currentTarget;image.srcset='';const candidates=[fallbackSrc,originalFallbackSrc].filter(Boolean);let next=Number(image.dataset.logoFallbackStage||0);while(next<candidates.length&&new URL(candidates[next],window.location.href).href===image.src)next+=1;if(next<candidates.length){image.dataset.logoFallbackStage=String(next+1);image.src=candidates[next]}else image.hidden=true}} /></div>;
 };

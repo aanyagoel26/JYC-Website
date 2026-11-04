@@ -34,5 +34,10 @@ check('3D canvas avoids per-frame React state updates, preserves drag rotation a
 check('3D canvas pauses for reduced motion, hidden tabs and off-screen sections',explorer.includes("prefers-reduced-motion: reduce")&&explorer.includes("IntersectionObserver")&&explorer.includes("const canAnimate"));
 check('3D constellation provides keyboard selection and accurately identifies its 2D canvas rendering',explorer.includes("Choose a published JYC community")&&explorer.includes('aria-hidden="true"')&&explorer.includes("INTERACTIVE 3D CONSTELLATION")&&!explorer.includes("INTERACTIVE WEBGL TOPOLOGY"));
 
+
+check('DitherVeil uses existing optimized image assets instead of a missing hero texture path',home.includes('src="/assets/jyc-logo.avif"')&&home.includes('fallbackSrc="/assets/jyc-logo.webp"')&&!home.includes('jyc-logo-medium.avif'));
+check('DitherVeil reveal receives pointer movement even when foreground hero layers intercept it',home.includes('globalPointer')&&dither.includes('window.addEventListener(\'pointermove\', onGlobalMove')&&dither.includes('window.removeEventListener(\'pointermove\', onGlobalMove'));
+check('DitherVeil optimized source and fallback assets are present in the public build',fs.existsSync('public/assets/jyc-logo.avif')&&fs.existsSync('public/assets/jyc-logo.webp'));
+
 if(failures.length)process.exit(1);
 console.log('JYC animation/media performance contract: '+(totalChecks-failures.length)+'/'+totalChecks);

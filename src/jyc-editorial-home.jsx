@@ -17,8 +17,6 @@ import './styles/jyc-editorial-motion-system.css';
 
 const ORIGINAL_LOGO = '/JYC%20Logo(4).png';
 const FALLBACK = import.meta.env.PROD ? '/assets/jyc-logo.webp' : ORIGINAL_LOGO;
-const DITHER_SOURCE = import.meta.env.PROD ? '/assets/jyc-logo-medium.avif' : FALLBACK;
-const DITHER_SRCSET = import.meta.env.PROD ? '/assets/jyc-logo-medium.avif 1x, /assets/jyc-logo.avif 2x' : undefined;
 const handleHeroLogoFallback = event => {
   const image = event.currentTarget;
   image.srcset = '';
@@ -232,9 +230,10 @@ export function JYCEditorialHome({ data }) {
           <div className="jh-hero-dither-layer" aria-hidden="true">
             <Suspense fallback={<div className="jh-hero-dither-loading" />}>
               <LazyDitherVeil
-                src="/assets/jyc-logo-medium.avif"
-                fallbackSrc="/assets/jyc-logo.avif"
+                src="/assets/jyc-logo.avif"
+                fallbackSrc="/assets/jyc-logo.webp"
                 originalFallbackSrc="/JYC%20Logo(4).png"
+                globalPointer
                 fit="contain"
                 pattern="floyd"
                 pixelSize={2}

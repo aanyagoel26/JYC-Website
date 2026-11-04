@@ -2130,7 +2130,7 @@ html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-overline {
   align-items: center;
   justify-content: center;
   pointer-events: none;
-  opacity: .28;
+  opacity: .38;
   mix-blend-mode: multiply;
 }
 .jyc-editorial-home.jyc-home .jh-hero-dither-veil {
@@ -2151,7 +2151,7 @@ html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-overline {
   z-index: 1;
 }
 html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-hero-dither-layer {
-  opacity: .19;
+  opacity: .27;
   mix-blend-mode: screen;
   filter: invert(1) hue-rotate(180deg);
 }
