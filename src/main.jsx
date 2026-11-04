@@ -93,6 +93,9 @@ import {MomentsSection} from './v14-platform.jsx';
 import {SkipLink,InstallPrompt,MaintenanceGate,ErrorBoundary,EventTools,DownloadICS,JsonLd,usePageMeta,Gallery,GalleryItems,RecruitmentHub,RegistrationPage} from './extra-features.jsx';
 import {readSiteCache,writeSiteCache,siteCacheAge,formatCacheAge,armStoredReminders,googleCalendarUrl,hasLocalReminder,scheduleEventReminder,clearLocalReminder} from './v15-functional.js';
 
+/* Final global layer: keep after all application and component stylesheet imports. */
+import './styles/jai-hack-dark-theme.css';
+
 const logo='/assets/jyc-logo.avif';
 const logoTiny='/assets/jyc-logo-48.avif';
 const logoSmall='/assets/jyc-logo-small.avif';
