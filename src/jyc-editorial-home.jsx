@@ -226,8 +226,36 @@ export function JYCEditorialHome({ data }) {
 
         </div>
 
-        {/* MODERN 3D WEBGL HERO EMBLEM STAGE */}
+        {/* WebGL Dither Veil is a real mounted hero layer; the emblem remains the foreground focal point. */}
         <div className="jh-hero-visual jh-hero-webgl-stage-wrap">
+          <div className="jh-hero-dither-backdrop" aria-hidden="true" />
+          <div className="jh-hero-dither-layer" aria-hidden="true">
+            <Suspense fallback={<div className="jh-hero-dither-loading" />}>
+              <LazyDitherVeil
+                src="/assets/jyc-logo-medium.avif"
+                fallbackSrc="/assets/jyc-logo.avif"
+                originalFallbackSrc="/JYC%20Logo(4).png"
+                fit="contain"
+                pattern="floyd"
+                pixelSize={2}
+                levels={3}
+                palette="duotone"
+                inkColor="#211b1b"
+                paperColor="#f5f1e6"
+                contrast={1.18}
+                brightness={0.02}
+                revealRadius={190}
+                softness={0.7}
+                linger={1.25}
+                rimColor="#a82420"
+                rim={0.22}
+                wander={true}
+                clickBurst={false}
+                className="jh-hero-dither-veil"
+                style={{width:'100%',height:'100%'}}
+              />
+            </Suspense>
+          </div>
           <JYCHeroWebGLEmblem />
         </div>
       </section>

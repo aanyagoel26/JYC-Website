@@ -1,5 +1,14 @@
 # Changelog
 
+## V64.5.15 — Restore the homepage WebGL Dither Veil
+
+- Mount the lazy-loaded React Bits DitherVeil in the homepage hero; the previous bundle imported the component but never rendered it, so the requested visual effect could not appear.
+- Use the JYC logo asset, Floyd–Steinberg dither, three-level duotone palette and restrained oxblood reveal rim, layered behind the foreground hero emblem.
+- Keep the effect lazy, intersection-aware, capped-DPR and static-fallback safe on reduced-motion or constrained hardware; disable click bursts and use the bounded wander reveal.
+- Add responsive/dark-mode composition rules and make the homepage editorial-truth, React Bits, animation-performance and visual-redesign gates assert that the component is actually mounted.
+- Rotate the service-worker cache namespace to `jyc-cache-v64-5-15`.
+
+
 ## V64.5.14 — Public event trust and photo-type integrity
 
 - Remove unverified and editorial-review future events from public fallback publication; they remain in supplied programme material until an official event-level source confirms dates, organiser, venue and registration.

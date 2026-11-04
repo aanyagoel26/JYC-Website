@@ -8,6 +8,7 @@ import { spawnSync } from 'node:child_process';
  * assumptions. Current contracts below are the release source of truth.
  */
 const scripts = [
+  'qa-homepage-editorial-truth.mjs',
   'qa-site-origin.mjs',
   'qa-event-publication-trust.mjs',
   'qa-source-media-completeness.mjs',

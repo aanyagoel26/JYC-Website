@@ -2119,3 +2119,52 @@ html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-overline {
     overflow-wrap: anywhere;
   }
 }
+
+
+/* V64.5.15 — the real WebGL Dither Veil is mounted behind the JYC hero emblem. */
+.jyc-editorial-home.jyc-home .jh-hero-dither-layer {
+  position: absolute;
+  inset: -2%;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: .28;
+  mix-blend-mode: multiply;
+}
+.jyc-editorial-home.jyc-home .jh-hero-dither-veil {
+  width: min(90%, 480px);
+  max-width: 480px;
+  height: min(90%, 480px);
+  aspect-ratio: 1;
+  pointer-events: none;
+}
+.jyc-editorial-home.jyc-home .jh-hero-dither-loading {
+  width: min(76%, 390px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(168,36,32,.10), rgba(191,156,111,.10) 42%, transparent 72%);
+}
+.jyc-editorial-home.jyc-home .jh-hero-visual .jyc-hero-emblem-stage {
+  position: relative;
+  z-index: 1;
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-hero-dither-layer {
+  opacity: .19;
+  mix-blend-mode: screen;
+  filter: invert(1) hue-rotate(180deg);
+}
+@media (max-width: 680px) {
+  .jyc-editorial-home.jyc-home .jh-hero-dither-layer {
+    inset: 0;
+    opacity: .16;
+  }
+  .jyc-editorial-home.jyc-home .jh-hero-dither-veil {
+    width: min(88vw, 320px);
+    height: min(88vw, 320px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .jyc-editorial-home.jyc-home .jh-hero-dither-layer { opacity: .12; }
+}
