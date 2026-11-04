@@ -214,7 +214,7 @@ These are observed permission/configuration blockers, not code fixes. No custom-
 - The configured JYC project is `ogbanmjokjlxfuktkicj` (`supabase/config.toml` points to the same ref).
 - Supabase currently reports this project as **INACTIVE**, on the JYC Free organization, with PostgreSQL 17.6.1.166 in `ap-south-1`.
 - Read-only table inspection failed with `Database is possibly not accessible at the moment`; therefore no current live schema, row counts, migration history, RLS policies, or advisor results can be certified from this session.
-- A restore was attempted because the website's configured backend is inactive. Supabase rejected it with HTTP 403: the organization member `coolbandariya` has reached the maximum of two active free projects. The other active projects shown by the account are `common 1` and `rideforge-production`.
+- A restore was attempted because the website's configured backend is inactive. Supabase rejected it with HTTP 403: an organization member has reached the maximum of two active free projects. The other active projects shown by the account are `common 1` and `rideforge-production`.
 - No other Supabase project was paused, deleted, upgraded, or modified. I will not take one of those projects offline or incur an upgrade charge without the owner's explicit choice.
 - Supabase's 2026-10-30 Data API change now makes table/function exposure opt-in by default for all projects. The repository has explicit grants in recent hardening migrations for sensitive/public-read tables, but the inactive database prevents checking the deployed grants and migration application state. Re-run live grants/RLS/advisor verification after the project is restored.
 
