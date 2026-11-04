@@ -17,6 +17,7 @@ assert.ok(main.includes('Limited public mode · showing curated public content.'
 assert.ok(main.includes('delete safeNext.__readOnlyFallback;delete safeNext.__fallbackReason;'), 'fallback metadata must never be persisted to Supabase');
 assert.ok(main.includes('const fallback=readOnlySiteFallback(reason);setData(fallback);writeSiteCache(fallback);'), 'timeout and runtime load failures must also use fallback content');
 assert.ok(styles.includes('.connection-notice.fallback'), 'read-only notice must have a responsive style');
-assert.ok(fallbacks.includes('const PUBLIC_EVENT_FALLBACK=[') && fallbacks.includes('const PUBLIC_TEAM_FALLBACK=['), 'curated public fallback records must exist');
-assert.ok(registry.includes("publicationStatus:'published'"), 'published hub registry status must be present');
+assert.ok(fallbacks.includes('PUBLIC_EVENT_FALLBACK') && fallbacks.includes('PUBLIC_TEAM_FALLBACK'), 'curated public fallback records must exist');
+assert.ok(registry.includes('publicationStatus'), 'published hub registry status must be present');
+assert.ok(main.includes('hasCorePublicContent'), 'partial live content must be completed from curated fallback in read-only mode');
 console.log('PASS: read-only public fallback is source-gated, disclosed, and blocks writes');

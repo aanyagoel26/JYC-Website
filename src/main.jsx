@@ -165,8 +165,8 @@ async function loadData(){
   return readOnlySiteFallback(missingRpc?'The live public content endpoint is unavailable.':'The live content service is unavailable.');
  }
  const normalized=stripLegacySeed(data||empty);
- const hasPublicRows=['clubs','events','gallery','team'].some(key=>Array.isArray(normalized[key])&&normalized[key].length>0);
- if(!hasPublicRows&&!import.meta.env.DEV)return readOnlySiteFallback('The live content endpoint returned no public records.',normalized);
+ const hasCorePublicContent=['clubs','events','team'].every(key=>Array.isArray(normalized[key])&&normalized[key].length>0);
+ if(!hasCorePublicContent&&!import.meta.env.DEV){const fallback=mergePublicFallback(normalized,{allowContentFallback:true,allowGalleryFallback:false,allowTeamFallback:true});return {...fallback,__readOnlyFallback:true,__fallbackReason:'One or more public content sections are missing from the live service.'};}
  return mergePublicFallback(normalized,{allowContentFallback:false});
 }
 async function saveData(next,user,action,entity='site',id='main'){const safeNext={...(next||{})};delete safeNext.__readOnlyFallback;delete safeNext.__fallbackReason;const payload=norm(safeNext);let result=await supabase.rpc('jyc_save_site_data',{p_data:payload,p_action:action,p_entity_type:entity,p_entity_id:String(id||'main')});if(result.error&&/Could not find the function public\.jyc_save_site_data|schema cache/i.test(result.error.message||'')){result=await supabase.rpc('jyc_save_site_data',{p_action:action,p_data:payload,p_entity_id:String(id||'main'),p_entity_type:entity})}if(result.error)throw result.error;return stripLegacySeed(result.data)}
