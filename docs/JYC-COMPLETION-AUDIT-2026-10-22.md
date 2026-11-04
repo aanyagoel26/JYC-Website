@@ -306,3 +306,11 @@ See `docs/JYC-DEEP-RESEARCH-2026-11-05.md` for the research sources, library dec
 - Removed an unverified generic Linktree from the JYC-128 public identity/contact surface. The verified campus-specific LinkedIn and Instagram identities remain.
 - Removed unsupported contact-desk operating hours from the Contact page.
 - These are source/code corrections, not production deployment or database verification.
+
+
+## 5 November 2026 follow-up — 3D explorer performance and GLB QA
+
+- Rebuilt the 3D community constellation from the publication-gated hub registry; source-review/draft entries and unsupported member-count claims are no longer rendered.
+- Fixed the animation loop so it no longer schedules React state updates every frame. It now reads interaction state from a ref and pauses for reduced motion, hidden tabs and off-screen state.
+- Added keyboard-accessible community selection and corrected the UI label: the constellation is projected 3D on a 2D canvas, not a WebGL mesh renderer.
+- Added a GLB 2.0 structural integrity QA script for both tracked models, including Git blob SHA/size, chunk bounds, buffer/accessor references and glTF object references. The Draco-compressed geometry still requires an actual browser decoder/render test.

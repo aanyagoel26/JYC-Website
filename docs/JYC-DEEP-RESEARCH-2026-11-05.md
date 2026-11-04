@@ -64,3 +64,11 @@ Research references:
 ## Release verdict
 
 **NOT COMPLETE / NOT RELEASE-READY.** Source corrections are committed, but production deployment, active Supabase, exact-head CI, visual review, domain ownership, and upstream integration still require owner-controlled access and successful verification.
+
+
+## 3D explorer and binary asset integrity follow-up
+
+- The homepage's community constellation was not actually WebGL: it uses a projected 2D canvas. Its previous animation loop called React `setRotY` on every animation frame while also depending on `rotY` in the effect, causing repeated teardown/restart and avoidable React work. It also carried hard-coded membership counts and descriptions for source-review/draft communities.
+- The constellation is now explicitly described as a projected 3D canvas, reads its community names/families/descriptions from the publication-gated hub registry, excludes draft entries, removes unsupported membership counts, and adds a keyboard-accessible community selector. Animation now pauses for reduced-motion preference, hidden tabs and off-screen state; interaction state is read through a ref rather than scheduling React state updates each frame.
+- The repository contains two GLB assets. `public/models/jyc-spatial.glb` was inspected directly: GLB magic/version/declared length and chunk boundaries are valid; its glTF JSON declares version 2.0, one scene, one node, one mesh, four accessors, four bufferViews, one material and three embedded WebP textures. It uses `KHR_draco_mesh_compression` and `KHR_materials_specular`. The second, larger GLB could not be fully read through the GitHub text-file API in this session.
+- Added `scripts/qa-glb-integrity.mjs` to validate both tracked assets' Git blob identity, GLB 2.0 header/length/chunk boundaries, buffer/view/accessor bounds, mesh/node/scene/material/texture/animation references, and Draco extension declarations. It is registered in the canonical QA suite. This is structural integrity validation; it does not replace a browser decoder/render check of the Draco-compressed geometry.

@@ -8,9 +8,11 @@ const dither=read('src/react-bits/DitherVeil.jsx');
 const bento=read('src/components/react-bits/MagicBento.jsx');
 const home=read('src/jyc-editorial-home.jsx');
 const hero=read('src/components/JYCHeroWebGLEmblem.jsx');
+const explorer=read('src/components/JYC3DInteractiveExplorer.jsx');
 const main=read('src/main.jsx');
 const failures=[];
-const check=(name,ok)=>{console.log((ok?'PASS':'FAIL')+': '+name);if(!ok)failures.push(name)};
+let totalChecks=0;
+const check=(name,ok)=>{totalChecks++;console.log((ok?'PASS':'FAIL')+': '+name);if(!ok)failures.push(name)};
 
 check('DriftWall does not schedule an idle RAF when reduced/low-power/offscreen',drift.includes('if(reduced||lowPower||!visible.current)')&&drift.includes('if(!reduced&&!lowPower&&visible.current)frame.current=requestAnimationFrame(animate)'));
 check('Homepage uses the current canvas emblem and lazy magnetic Bento, not a continuously animated photo wall',home.includes('JYCHeroWebGLEmblem')&&home.includes('LazyMagicBento')&&!home.includes('LazyDriftWall')&&home.includes('jh-hero-webgl-stage-wrap')&&home.includes('activities.map'));
@@ -25,5 +27,12 @@ check('MagicBento coalesces pointer movement to one animation frame, cancels pen
 check('MagicBento does not permanently reserve transform compositing',read('src/components/react-bits/MagicBento.css').includes('.magic-bento-card:hover{will-change:transform')&&!read('src/components/react-bits/MagicBento.css').includes('background:#18161d;color:#fff8e9;isolation:isolate;box-shadow:0 16px 40px rgba(17,19,24,.08);transform-style:preserve-3d;will-change:transform'));
 check('Homepage non-critical imagery stays lazy',home.includes('loading="lazy"'));
 check('Canvas hero honors reduced motion while Bento is coarse-pointer/reduced-motion safe',hero.includes("prefers-reduced-motion: reduce")&&hero.includes('motionQuery.addEventListener')&&hero.includes('cancelAnimationFrame(animId)')&&bento.includes("'(pointer:coarse)'")&&bento.includes("'(prefers-reduced-motion: reduce)'")&&bento.includes('const disabled=disableAnimations||mobile||reducedMotion'));
+
+check('3D explorer content is generated only from published hub registry records',explorer.includes("JYC_HUB_SOURCE_REGISTRY")&&explorer.includes("hub.publicationStatus === 'published'")&&explorer.includes("JYC_HUB_CONTENT[hub.name]"));
+check('3D explorer has no unsupported static membership counts or independent content inventory',!explorer.includes("members: '")&&!explorer.includes("120+ Active")&&!explorer.includes("250+ Devs")&&!explorer.includes("80+ Pilots"));
+check('3D canvas does not schedule React state updates every animation frame',!explorer.includes("setRotY(r => r + 0.0028)")&&explorer.includes("interactionRef.current"));
+check('3D canvas pauses for reduced motion, hidden tabs and off-screen sections',explorer.includes("prefers-reduced-motion: reduce")&&explorer.includes("IntersectionObserver")&&explorer.includes("const canAnimate"));
+check('3D constellation provides keyboard selection and accurately identifies its 2D canvas rendering',explorer.includes("Choose a published JYC community")&&explorer.includes('aria-hidden="true"')&&explorer.includes("INTERACTIVE 3D CONSTELLATION")&&!explorer.includes("INTERACTIVE WEBGL TOPOLOGY"));
+
 if(failures.length)process.exit(1);
-console.log('JYC animation/media performance contract: '+(11-failures.length)+'/11');
+console.log('JYC animation/media performance contract: '+(totalChecks-failures.length)+'/'+totalChecks);

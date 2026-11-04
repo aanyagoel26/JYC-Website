@@ -14,6 +14,7 @@ const scripts = [
   'qa-source-media-completeness.mjs',
   'qa-source-integrity.mjs',
   'qa-hub-registry.mjs',
+  'qa-glb-integrity.mjs',
   'qa-resource-content-pass.mjs',
   'qa-search.mjs',
   'qa-security.mjs',

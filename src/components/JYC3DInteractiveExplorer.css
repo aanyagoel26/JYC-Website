@@ -1,5 +1,5 @@
 /* ==========================================================================
-   JYC 3D INTERACTIVE EXPLORER (WEBGL CONSTELLATION & HOLOGRAPHIC HUD)
+   JYC 3D INTERACTIVE EXPLORER (PROJECTED CANVAS CONSTELLATION & HUD)
    ========================================================================== */
 
 .jyc-3d-explorer-section {
@@ -162,7 +162,7 @@ html[data-theme="light"] .jyc-3d-tab {
   border-radius: 24px;
   overflow: hidden;
   cursor: grab;
-  touch-action: none;
+  touch-action: pan-y;
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
@@ -403,4 +403,47 @@ html[data-theme="light"] .hud-btn-secondary {
     margin-top: 14px;
     border-radius: 18px;
   }
+}
+
+
+/* Keyboard-accessible community selection; the canvas itself is decorative. */
+.jyc-3d-select {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  pointer-events: auto;
+  color: #cbd5e1;
+  font: 600 11px 'Space Grotesk', system-ui, sans-serif;
+  letter-spacing: .04em;
+}
+.jyc-3d-select select {
+  width: min(190px, 32vw);
+  min-height: 34px;
+  padding: 0 30px 0 10px;
+  border: 1px solid rgba(255,255,255,.16);
+  border-radius: 10px;
+  background: rgba(10,13,22,.82);
+  color: #f8fafc;
+  font: 600 12px 'DM Sans', system-ui, sans-serif;
+}
+html[data-theme="light"] .jyc-3d-select { color: #475569; }
+html[data-theme="light"] .jyc-3d-select select {
+  background: rgba(255,250,240,.94);
+  border-color: rgba(180,130,60,.28);
+  color: #1e293b;
+}
+.jyc-3d-select select:focus-visible {
+  outline: 3px solid #38bdf8;
+  outline-offset: 2px;
+}
+@media (max-width: 680px) {
+  .jyc-3d-top-controls { left: 12px; right: 12px; gap: 8px; }
+  .jyc-3d-drag-hint { display: none; }
+  .jyc-3d-select { margin-right: auto; }
+  .jyc-3d-select select { width: min(170px, 44vw); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .jyc-3d-explorer-section *,
+  .jyc-3d-explorer-section *::before,
+  .jyc-3d-explorer-section *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }

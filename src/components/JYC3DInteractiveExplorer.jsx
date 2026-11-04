@@ -2,54 +2,103 @@ import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './JYC3DInteractiveExplorer.css';
 
-const HUBS = [
-  { id: 'cicr', name: 'CICR', family: 'Technical', role: 'Robotics, IoT & Automation', color: '#FCD34D', icon: '🤖', x: -145, y: -55, z: 45, members: '120+ Active', highlight: 'National Robowars & Autonomous Drones' },
-  { id: 'jodc', name: 'JODC', family: 'Technical', role: 'Open Source & Dev Ecosystem', color: '#8B5CF6', icon: '💻', x: -115, y: 75, z: -45, members: '250+ Devs', highlight: 'Open Source Hackathons & Git Workshops' },
-  { id: 'dronotics', name: 'Dronotics', family: 'Technical', role: 'UAV & Aerial Robotics', color: '#0EA5E9', icon: '🛸', x: -175, y: 25, z: 25, members: '80+ Pilots', highlight: 'Dron-O-War Championship & Quad Racing' },
-  { id: 'rph', name: 'RPH', family: 'Technical', role: 'Algorithms & Competitive Programming', color: '#10B981', icon: '⚡', x: -130, y: -105, z: 15, members: '150+ Coders', highlight: 'Code Clash & ICPC Track' },
-  { id: 'cypherx', name: 'CypherX', family: 'Technical', role: 'Cybersecurity, Cryptography & CTFs', color: '#22C55E', icon: '🛡️', x: -85, y: 125, z: -15, members: '90+ Whitehats', highlight: 'Annual CTF & Vulnerability Research' },
-  { id: 'zencoders', name: 'Zencoders', family: 'Technical', role: 'Software Engineering & App Dev', color: '#2563EB', icon: '⚙️', x: -160, y: -15, z: -55, members: '110+ Builders', highlight: 'Production Web Apps & System Engineering' },
-  { id: 'neural-nexus', name: 'Neural Nexus', family: 'Technical', role: 'Artificial Intelligence & Machine Learning', color: '#D946EF', icon: '🧠', x: -95, y: -75, z: -65, members: '130+ Researchers', highlight: 'Agentic AI & Neural Hackathons' },
-  { id: 'gdg', name: 'GDG JIIT', family: 'Technical', role: 'Google Cloud, Android & Flutter', color: '#3B82F6', icon: '🌐', x: -150, y: 95, z: 35, members: '200+ Community', highlight: 'Google Solution Challenge & DevFests' },
-  { id: 'jiit-optica', name: 'JIIT Optica', family: 'Technical', role: 'Optics, Lasers & Applied Photonics', color: '#06B6D4', icon: '🔬', x: -70, y: -140, z: 35, members: '70+ Scholars', highlight: 'Optics Fair & International Conferences' },
-  { id: 'innovation', name: 'Innovation Hub', family: 'Technical', role: 'Maker Lab, Patents & Hardware Prototypes', color: '#EAB308', icon: '💡', x: -60, y: 45, z: 75, members: '85+ Makers', highlight: 'Startup Pitch & Hardware Hackdays' },
+import React, { useEffect, useRef, useState, useMemo } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { JYC_HUB_SOURCE_REGISTRY } from '../jyc-hub-registry.js';
+import { JYC_HUB_CONTENT } from '../v21-hub-content.js';
+import './JYC3DInteractiveExplorer.css';
 
-  { id: 'fortissimo', name: 'Fortissimo', family: 'Cultural', role: 'Music & Campus Live Bands', color: '#F59E0B', icon: '🎸', x: 135, y: -75, z: 55, members: '65+ Musicians', highlight: 'Battle of the Bands & Acoustic Jams' },
-  { id: 'vamunique', name: 'VamUnique', family: 'Cultural', role: 'Western, Hip-Hop & Classical Dance', color: '#EC4899', icon: '💃', x: 165, y: 35, z: -35, members: '90+ Dancers', highlight: 'Inter-College Dance Trophies & Flashmobs' },
-  { id: 'panache', name: 'Panache', family: 'Cultural', role: 'Fashion & Haute Couture Runway', color: '#D4AF37', icon: '✨', x: 125, y: 95, z: 45, members: '50+ Models', highlight: 'Converge Runway Night & Style Showcases' },
-  { id: 'abhivyakti', name: 'Abhivyakti', family: 'Cultural', role: 'Dramatics & Street Theatre', color: '#DC2626', icon: '🎭', x: 95, y: -25, z: -65, members: '70+ Actors', highlight: 'Award-winning Nukkad Natak & Stage Plays' },
-  { id: 'bds', name: 'BDS', family: 'Cultural', role: 'Bhangra, Folk Rhythm & Energy', color: '#F97316', icon: '🔥', x: 155, y: -35, z: 25, members: '60+ Performers', highlight: 'National Folk Festivals & Dhol Showcases' },
+const slugHub = value => String(value || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const FAMILY_STYLE = {
+  Technical: { color: '#0EA5E9', icon: '⚡' },
+  Cultural: { color: '#D97706', icon: '🎭' },
+  Creative: { color: '#8B5CF6', icon: '🎨' },
+  Literary: { color: '#0D9488', icon: '🖋️' },
+  Sports: { color: '#DC2626', icon: '🏆' }
+};
 
-  { id: 'aura', name: 'Aura', family: 'Creative', role: 'Photography & Visual Cinematography', color: '#38BDF8', icon: '📷', x: -25, y: -135, z: -45, members: '60+ Creators', highlight: 'Official Campus Media & Street Photo Walks' },
-  { id: 'aakriti', name: 'Aakriti', family: 'Creative', role: 'Fine Arts & Stage Installations', color: '#F43F5E', icon: '🎨', x: 45, y: -125, z: 45, members: '85+ Artists', highlight: 'Fest Set Design, Live Murals & Craft Art' },
-  { id: 'cinekala', name: 'Cinekala', family: 'Creative', role: 'Filmmaking, Screenwriting & Documentaries', color: '#E11D48', icon: '🎬', x: 75, y: -85, z: -25, members: '55+ Directors', highlight: 'Short Film Festivals & 48-Hour Film Projects' },
-  { id: 'prismatic', name: 'Prismatic', family: 'Creative', role: 'Visual Branding, Motion & Graphic Design', color: '#6366F1', icon: '📐', x: 15, y: -155, z: 15, members: '70+ Designers', highlight: 'Converge Brand Identity & UI Design Labs' },
-
-  { id: 'eloquence', name: 'Eloquence', family: 'Literary', role: 'Debate, MUN & Literary Arts', color: '#C59B27', icon: '🖋️', x: -45, y: 135, z: 35, members: '75+ Orators', highlight: 'Grand Conclave MUN & Youth Parliamentary' },
-  { id: 'qriosity', name: 'Qriosity', family: 'Literary', role: 'Quizzing, General Knowledge & Trivia', color: '#0D9488', icon: '❓', x: 25, y: 125, z: 55, members: '50+ Quizzers', highlight: 'Inter-College Quiz Leagues & Business Quizzes' },
-
-  { id: 'jsa', name: 'JSA Sports', family: 'Sports', role: 'Athletics, Football, Cricket & Basketball', color: '#EF4444', icon: '🏆', x: 35, y: 145, z: -45, members: '300+ Athletes', highlight: 'Kshitij Annual Sports Tournament' },
-  { id: 'arcadia', name: 'Arcadia', family: 'Sports', role: 'Esports, Competitive Gaming & Lan Tournaments', color: '#A855F7', icon: '🎮', x: 75, y: 105, z: -25, members: '180+ Gamers', highlight: 'BGMI, Valorant & FIFA Campus Cups' }
+// Positions/icons are visual layout only. Names, families, labels and descriptions
+// always come from the publication-gated JYC hub registry and content records.
+const HUB_LAYOUT = [
+  {id:'cicr',name:"CICR",icon:"🤖",x:-145,y:-55,z:45},
+  {id:'jodc',name:"JODC",icon:"💻",x:-115,y:75,z:-45},
+  {id:'dronotics',name:"Dronotics",icon:"🛸",x:-175,y:25,z:25},
+  {id:'rph',name:"RPH",icon:"⚡",x:-130,y:-105,z:15},
+  {id:'cypherx',name:"CypherX",icon:"🛡️",x:-85,y:125,z:-15},
+  {id:'zencoders',name:"Zencoders",icon:"⚙️",x:-160,y:-15,z:-55},
+  {id:'neural-nexus',name:"Neural Nexus",icon:"🧠",x:-95,y:-75,z:-65},
+  {id:'gdg',name:"GDG JIIT",icon:"🌐",x:-150,y:95,z:35},
+  {id:'jiit-optica',name:"JIIT Optica",icon:"🔬",x:-70,y:-140,z:35},
+  {id:'innovation',name:"Innovation Hub",icon:"💡",x:-60,y:45,z:75},
+  {id:'fortissimo',name:"Fortissimo",icon:"🎸",x:135,y:-75,z:55},
+  {id:'vamunique',name:"VamUnique",icon:"💃",x:165,y:35,z:-35},
+  {id:'panache',name:"Panache",icon:"✨",x:125,y:95,z:45},
+  {id:'abhivyakti',name:"Abhivyakti",icon:"🎭",x:95,y:-25,z:-65},
+  {id:'bds',name:"BDS",icon:"🔥",x:155,y:-35,z:25},
+  {id:'aura',name:"Aura",icon:"📷",x:-25,y:-135,z:-45},
+  {id:'aakriti',name:"Aakriti",icon:"🎨",x:45,y:-125,z:45},
+  {id:'cinekala',name:"Cinekala",icon:"🎬",x:75,y:-85,z:-25},
+  {id:'prismatic',name:"Prismatic",icon:"📐",x:15,y:-155,z:15},
+  {id:'eloquence',name:"Eloquence",icon:"🖋️",x:-45,y:135,z:35},
+  {id:'qriosity',name:"Qriosity",icon:"❓",x:25,y:125,z:55},
+  {id:'jsa',name:"JSA Sports",icon:"🏆",x:35,y:145,z:-45},
+  {id:'arcadia',name:"Arcadia",icon:"🎮",x:75,y:105,z:-25}
 ];
+const HUB_LAYOUT_BY_ID = new Map(HUB_LAYOUT.map(item => [item.id, item]));
+const HUBS = JYC_HUB_SOURCE_REGISTRY
+  .filter(hub => hub.publicationStatus === 'published')
+  .map((hub, index, published) => {
+    const id = slugHub(hub.name);
+    const layout = HUB_LAYOUT_BY_ID.get(id);
+    const content = JYC_HUB_CONTENT[hub.name] || {};
+    const angle = index * 2.399963229728653;
+    const radius = 118 + Math.sqrt(index + 1) * 18;
+    const family = FAMILY_STYLE[hub.family] || FAMILY_STYLE.Technical;
+    return {
+      id,
+      name: hub.name,
+      family: hub.family,
+      role: content.focus || content.summary || 'JYC community',
+      color: family.color,
+      icon: layout?.icon || family.icon,
+      x: layout?.x ?? Math.cos(angle) * radius,
+      y: layout?.y ?? Math.sin(index * 1.37) * 110,
+      z: layout?.z ?? Math.sin(angle) * 90,
+      sourceStatus: 'PUBLISHED PROFILE',
+      highlight: content.summary || 'Published JYC community profile.'
+    };
+  });
+
+
 
 export function JYC3DInteractiveExplorer() {
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
   const nav = useNavigate();
-  const [selectedHub, setSelectedHub] = useState(HUBS[0]);
+  const [selectedHub, setSelectedHub] = useState(HUBS[0] || null);
   const [activeFamily, setActiveFamily] = useState('ALL');
   const [rotX, setRotX] = useState(0.22);
   const [rotY, setRotY] = useState(0.48);
   const [zoom, setZoom] = useState(1.0);
   const [isDragging, setIsDragging] = useState(false);
   const lastMousePos = useRef({ x: 0, y: 0 });
+  const interactionRef = useRef({ rotX, rotY, zoom, selectedHub, isDragging });
+  const drawOnceRef = useRef(null);
+  interactionRef.current = { rotX, rotY, zoom, selectedHub, isDragging };
 
   const filteredHubs = useMemo(() => {
     if (activeFamily === 'ALL') return HUBS;
     return HUBS.filter(h => h.family.toUpperCase() === activeFamily);
   }, [activeFamily]);
 
-  // 3D Canvas Rendering
+  useEffect(() => {
+    if (filteredHubs.length && !filteredHubs.some(hub => hub.id === selectedHub?.id)) {
+      setSelectedHub(filteredHubs[0]);
+    }
+  }, [filteredHubs, selectedHub?.id]);
+
+  // Canvas-projected 3D constellation. Animation is paused for reduced motion,
+  // hidden tabs and off-screen sections; state changes still redraw a static frame.
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -59,20 +108,16 @@ export function JYC3DInteractiveExplorer() {
     let animId = 0;
     let width = 0;
     let height = 0;
-    let currentRotX = rotX;
-    let currentRotY = rotY;
-    let currentZoom = zoom;
+    let currentRotX = interactionRef.current.rotX;
+    let currentRotY = interactionRef.current.rotY;
+    let currentZoom = interactionRef.current.zoom;
     let time = 0;
+    let isVisible = !document.hidden;
+    let inView = true;
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let reducedMotion = motionQuery.matches;
+    const canAnimate = () => !reducedMotion && isVisible && inView;
 
-    // Moving energy pulse packets along lines
-    const pulses = Array.from({ length: 14 }, (_, i) => ({
-      from: i % HUBS.length,
-      to: (i + 3) % HUBS.length,
-      progress: (i * 0.15) % 1,
-      speed: 0.006 + Math.random() * 0.005
-    }));
-
-    // Orbiting satellite micro-particles
     const satellites = HUBS.map((_, i) => ({
       angle: (i * Math.PI) / 3,
       speed: 0.035 + (i % 3) * 0.015,
@@ -81,43 +126,43 @@ export function JYC3DInteractiveExplorer() {
 
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       width = canvas.width = Math.round(rect.width * dpr);
       height = canvas.height = Math.round(rect.height * dpr);
     };
     resize();
-    window.addEventListener('resize', resize, { passive: true });
 
-    let isVisible = true;
-    const handleVis = () => {
-      isVisible = !document.hidden;
-      if (isVisible && !animId) animId = requestAnimationFrame(render);
+    let renderFrame;
+    const stop = () => {
+      if (animId) cancelAnimationFrame(animId);
+      animId = 0;
     };
-    document.addEventListener('visibilitychange', handleVis);
+    const start = () => {
+      if (canAnimate() && !animId && renderFrame) {
+        animId = requestAnimationFrame(() => renderFrame(true));
+      }
+    };
 
-    const render = () => {
-      if (!isVisible) {
+    renderFrame = (schedule = true) => {
+      if (!isVisible || !inView) {
         animId = 0;
         return;
       }
-
-      time += 0.016;
-
-      // Auto-rotation with momentum
-      if (!isDragging) {
-        setRotY(r => r + 0.0028);
+      const interaction = interactionRef.current;
+      if (schedule && canAnimate()) time += 0.016;
+      currentRotX += (interaction.rotX - currentRotX) * 0.12;
+      if (interaction.isDragging) {
+        currentRotY += (interaction.rotY - currentRotY) * 0.12;
+      } else if (schedule && canAnimate()) {
+        currentRotY += 0.0028;
       }
-      currentRotX += (rotX - currentRotX) * 0.12;
-      currentRotY += (rotY - currentRotY) * 0.12;
-      currentZoom += (zoom - currentZoom) * 0.15;
+      currentZoom += (interaction.zoom - currentZoom) * 0.15;
 
       ctx.clearRect(0, 0, width, height);
-
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
       const cx = width / 2;
       const cy = height / 2;
       const fov = 420 * dpr * currentZoom;
-
       const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
 
       // 1. Draw 3D Space Background Aura & Radial Depth Grid
@@ -134,7 +179,6 @@ export function JYC3DInteractiveExplorer() {
       ctx.fillStyle = bgGrad;
       ctx.fillRect(0, 0, width, height);
 
-      // Transform nodes into 3D camera coordinates
       const cosY = Math.cos(currentRotY);
       const sinY = Math.sin(currentRotY);
       const cosX = Math.cos(currentRotX);
@@ -150,16 +194,13 @@ export function JYC3DInteractiveExplorer() {
           const rx = Math.cos(theta) * r;
           const rz = Math.sin(theta) * r;
           const ry = Math.sin(theta * 2 + time * 0.5) * 6;
-
-          let x1 = rx * cosY - rz * sinY;
-          let z1 = rz * cosY + rx * sinY;
-          let y2 = ry * cosX - z1 * sinX;
-          let z2 = z1 * cosX + ry * sinX;
-
+          const x1 = rx * cosY - rz * sinY;
+          const z1 = rz * cosY + rx * sinY;
+          const y2 = ry * cosX - z1 * sinX;
+          const z2 = z1 * cosX + ry * sinX;
           const scale = fov / Math.max(80, z2 + 300);
           const px = cx + x1 * scale;
           const py = cy + y2 * scale;
-
           if (s === 0) ctx.moveTo(px, py);
           else ctx.lineTo(px, py);
         }
@@ -172,33 +213,27 @@ export function JYC3DInteractiveExplorer() {
         ctx.setLineDash([]);
       });
 
-      // 3. Project Hub Nodes
+      // 3. Project only published JYC communities
       const projected = filteredHubs.map((hub, idx) => {
-        let x1 = hub.x * cosY - hub.z * sinY;
-        let z1 = hub.z * cosY + hub.x * sinY;
-        let y2 = hub.y * cosX - z1 * sinX;
-        let z2 = z1 * cosX + hub.y * sinX;
-
+        const x1 = hub.x * cosY - hub.z * sinY;
+        const z1 = hub.z * cosY + hub.x * sinY;
+        const y2 = hub.y * cosX - z1 * sinX;
+        const z2 = z1 * cosX + hub.y * sinX;
         const depth = z2 + 300;
         const scale = fov / Math.max(80, depth);
-        const px = cx + x1 * scale * 0.95;
-        const py = cy + y2 * scale * 0.95;
-
         return {
           ...hub,
           idx,
-          px,
-          py,
+          px: cx + x1 * scale * 0.95,
+          py: cy + y2 * scale * 0.95,
           depth,
           scale,
-          isSelected: selectedHub?.id === hub.id
+          isSelected: interaction.selectedHub?.id === hub.id
         };
       });
-
-      // Sort back-to-front for proper 3D layering
       projected.sort((a, b) => b.depth - a.depth);
 
-      // 4. Draw 3D Constellation Laser Beams with Travelling Energy Pulses
+      // 4. Draw constellation connections
       ctx.lineWidth = 1.2 * dpr;
       for (let i = 0; i < projected.length; i++) {
         for (let j = i + 1; j < projected.length; j++) {
@@ -210,7 +245,6 @@ export function JYC3DInteractiveExplorer() {
             const beamGrad = ctx.createLinearGradient(a.px, a.py, b.px, b.py);
             beamGrad.addColorStop(0, `${a.color}${Math.round(alpha * 255).toString(16).padStart(2, '0')}`);
             beamGrad.addColorStop(1, `${b.color}${Math.round(alpha * 255).toString(16).padStart(2, '0')}`);
-
             ctx.strokeStyle = beamGrad;
             ctx.beginPath();
             ctx.moveTo(a.px, a.py);
@@ -220,35 +254,29 @@ export function JYC3DInteractiveExplorer() {
         }
       }
 
-      // 5. Draw Central Pulsar Core (JYC Sector 128 Sun)
+      // 5. Draw central JYC core
       const sunPulse = Math.sin(time * 3) * 3 * dpr;
       const sunRadius = (10 * dpr) + sunPulse;
       const sunGlow = ctx.createRadialGradient(cx, cy, 2 * dpr, cx, cy, sunRadius * 3);
       sunGlow.addColorStop(0, isDark ? '#ffd700' : '#b8860b');
       sunGlow.addColorStop(0.4, isDark ? 'rgba(212, 175, 55, 0.5)' : 'rgba(184, 134, 11, 0.4)');
       sunGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
-
       ctx.fillStyle = sunGlow;
       ctx.beginPath();
       ctx.arc(cx, cy, sunRadius * 3, 0, Math.PI * 2);
       ctx.fill();
-
       ctx.fillStyle = isDark ? '#ffffff' : '#ffd700';
       ctx.beginPath();
       ctx.arc(cx, cy, sunRadius * 0.75, 0, Math.PI * 2);
       ctx.fill();
-
-      // Core Label
       ctx.fillStyle = isDark ? 'rgba(255, 215, 0, 0.9)' : 'rgba(153, 101, 21, 0.95)';
       ctx.font = `700 ${Math.max(9, 10 * dpr)}px 'Space Grotesk', sans-serif`;
       ctx.textAlign = 'center';
       ctx.fillText('JYC · 128', cx, cy + sunRadius * 2.8);
 
-      // 6. Draw Nodes with Atmospheric Planetary Glow & Orbiting Satellites
+      // 6. Draw published community nodes
       projected.forEach(node => {
         const radius = (node.isSelected ? 13 : 8.5) * dpr;
-
-        // Targeted Reticle for Selected Node
         if (node.isSelected) {
           const reticleRadius = radius * 2.4;
           ctx.strokeStyle = node.color;
@@ -256,13 +284,10 @@ export function JYC3DInteractiveExplorer() {
           ctx.beginPath();
           ctx.arc(node.px, node.py, reticleRadius, time * 2, time * 2 + Math.PI * 1.5);
           ctx.stroke();
-
           ctx.beginPath();
           ctx.arc(node.px, node.py, reticleRadius + 4 * dpr, -time * 1.5, -time * 1.5 + Math.PI);
           ctx.stroke();
         }
-
-        // Multi-layered Planetary Glow Halo
         const haloGrad = ctx.createRadialGradient(node.px, node.py, radius * 0.5, node.px, node.py, radius * 2.2);
         haloGrad.addColorStop(0, `${node.color}${node.isSelected ? '88' : '44'}`);
         haloGrad.addColorStop(1, `${node.color}00`);
@@ -270,8 +295,6 @@ export function JYC3DInteractiveExplorer() {
         ctx.beginPath();
         ctx.arc(node.px, node.py, radius * 2.2, 0, Math.PI * 2);
         ctx.fill();
-
-        // Node Sphere with Specular Highlight
         ctx.beginPath();
         ctx.arc(node.px, node.py, radius, 0, Math.PI * 2);
         ctx.fillStyle = node.color;
@@ -279,19 +302,14 @@ export function JYC3DInteractiveExplorer() {
         ctx.shadowBlur = (node.isSelected ? 24 : 12) * dpr;
         ctx.fill();
         ctx.shadowBlur = 0;
-
-        // Specular 3D Highlight
         ctx.beginPath();
         ctx.arc(node.px - radius * 0.3, node.py - radius * 0.3, radius * 0.35, 0, Math.PI * 2);
         ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
         ctx.fill();
-
-        // Orbiting Satellite Particle
         const sat = satellites[node.idx % satellites.length];
-        sat.angle += sat.speed;
+        if (schedule && canAnimate()) sat.angle += sat.speed;
         const satX = node.px + Math.cos(sat.angle) * (sat.dist * dpr);
         const satY = node.py + Math.sin(sat.angle) * (sat.dist * 0.6 * dpr);
-
         ctx.beginPath();
         ctx.arc(satX, satY, 1.8 * dpr, 0, Math.PI * 2);
         ctx.fillStyle = isDark ? '#ffffff' : node.color;
@@ -299,43 +317,73 @@ export function JYC3DInteractiveExplorer() {
         ctx.shadowBlur = 6 * dpr;
         ctx.fill();
         ctx.shadowBlur = 0;
-
-        // Node Label Pill
         const fontSize = Math.max(9, (node.isSelected ? 12 : 10.5) * dpr);
         ctx.font = `${node.isSelected ? '700' : '600'} ${fontSize}px 'Space Grotesk', sans-serif`;
         ctx.textAlign = 'center';
-
-        const labelText = node.name;
-        const textWidth = ctx.measureText(labelText).width;
+        const textWidth = ctx.measureText(node.name).width;
         const badgeY = node.py + radius + 15 * dpr;
-
-        // Label pill background
         ctx.fillStyle = isDark
           ? (node.isSelected ? 'rgba(14, 21, 38, 0.95)' : 'rgba(10, 13, 22, 0.82)')
           : (node.isSelected ? 'rgba(255, 255, 255, 0.98)' : 'rgba(255, 250, 240, 0.92)');
         ctx.strokeStyle = node.isSelected ? node.color : (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(180,130,60,0.2)');
         ctx.lineWidth = 1 * dpr;
-
         ctx.beginPath();
         ctx.roundRect(node.px - textWidth / 2 - 8 * dpr, badgeY - fontSize * 0.85, textWidth + 16 * dpr, fontSize + 8 * dpr, 6 * dpr);
         ctx.fill();
         ctx.stroke();
-
         ctx.fillStyle = isDark ? (node.isSelected ? '#ffffff' : '#cbd5e1') : (node.isSelected ? '#0f172a' : '#334155');
-        ctx.fillText(labelText, node.px, badgeY);
+        ctx.fillText(node.name, node.px, badgeY);
       });
 
-      animId = requestAnimationFrame(render);
+      if (schedule && canAnimate()) animId = requestAnimationFrame(() => renderFrame(true));
+      else animId = 0;
     };
 
-    animId = requestAnimationFrame(render);
+    const handleVisibility = () => {
+      isVisible = !document.hidden;
+      if (canAnimate()) start();
+      else { stop(); renderFrame(false); }
+    };
+    const handleMotionPreference = () => {
+      reducedMotion = motionQuery.matches;
+      if (canAnimate()) start();
+      else { stop(); renderFrame(false); }
+    };
+    const handleResize = () => {
+      resize();
+      if (canAnimate()) start();
+      else renderFrame(false);
+    };
+    const observer = typeof IntersectionObserver !== 'undefined' && containerRef.current
+      ? new IntersectionObserver(entries => {
+          inView = Boolean(entries[0]?.isIntersecting);
+          if (canAnimate()) start();
+          else { stop(); renderFrame(false); }
+        }, { rootMargin: '120px' })
+      : null;
+    observer?.observe(containerRef.current);
+    window.addEventListener('resize', handleResize, { passive: true });
+    document.addEventListener('visibilitychange', handleVisibility);
+    motionQuery.addEventListener?.('change', handleMotionPreference);
+    drawOnceRef.current = () => renderFrame(false);
+    if (canAnimate()) start();
+    else renderFrame(false);
 
     return () => {
-      cancelAnimationFrame(animId);
-      window.removeEventListener('resize', resize);
-      document.removeEventListener('visibilitychange', handleVis);
+      stop();
+      drawOnceRef.current = null;
+      observer?.disconnect();
+      window.removeEventListener('resize', handleResize);
+      document.removeEventListener('visibilitychange', handleVisibility);
+      motionQuery.removeEventListener?.('change', handleMotionPreference);
     };
-  }, [filteredHubs, rotX, rotY, zoom, selectedHub, isDragging]);
+  }, [filteredHubs]);
+
+  useEffect(() => {
+    drawOnceRef.current?.();
+  }, [rotX, rotY, zoom, selectedHub, isDragging, filteredHubs]);
+
+
 
   // Pointer interactions for dragging in 3D
   const handlePointerDown = e => {
@@ -367,7 +415,7 @@ export function JYC3DInteractiveExplorer() {
     const canvas = canvasRef.current;
     if (!canvas) return;
     const rect = canvas.getBoundingClientRect();
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
     const clickX = (e.clientX - rect.left) * dpr;
     const clickY = (e.clientY - rect.top) * dpr;
 
@@ -402,7 +450,7 @@ export function JYC3DInteractiveExplorer() {
     }
   };
 
-  const FAMILIES = ['ALL', 'TECHNICAL', 'CULTURAL', 'CREATIVE', 'LITERARY', 'SPORTS'];
+  const FAMILIES = ['ALL', ...new Set(HUBS.map(hub => hub.family.toUpperCase()))];
 
   return (
     <section className="jyc-3d-explorer-section reveal" aria-labelledby="jyc-3d-title">
@@ -410,14 +458,14 @@ export function JYC3DInteractiveExplorer() {
         <div className="jyc-3d-title-group">
           <div className="jyc-3d-cyber-tag">
             <span className="cyber-pulse-dot" />
-            <span>INTERACTIVE WEBGL TOPOLOGY · SECTOR 128 CLUSTERS</span>
+            <span>INTERACTIVE 3D CONSTELLATION · PUBLISHED SECTOR 128 COMMUNITIES</span>
           </div>
           <h2 id="jyc-3d-title">
             Explore the JYC Constellation.<br />
             <em className="title-gold-gradient">In 3D Digital Space.</em>
           </h2>
           <p>
-            An interactive 3D digital topology of JIIT-128 student societies, technical hubs, cultural troops and athletic programs. Rotate the cluster, zoom, and inspect any community.
+            An interactive, projected 3D view of published JIIT-128 communities. Rotate or zoom the constellation, or choose a community directly. Names, categories and descriptions come from the maintained JYC hub registry.
           </p>
         </div>
 
@@ -446,14 +494,20 @@ export function JYC3DInteractiveExplorer() {
         onWheel={handleWheel}
         onClick={handleCanvasClick}
       >
-        {/* WebGL Canvas */}
-        <canvas ref={canvasRef} className="jyc-3d-canvas" />
+        {/* Canvas-projected 3D view; the selector below provides keyboard access. */}
+        <canvas ref={canvasRef} className="jyc-3d-canvas" aria-hidden="true" />
 
         {/* Top Controls: Drag Hint & Zoom */}
         <div className="jyc-3d-top-controls">
           <div className="jyc-3d-drag-hint">
             <span>⤹ Drag to rotate · Scroll to zoom · Click node to lock</span>
           </div>
+          <label className="jyc-3d-select" onClick={e => e.stopPropagation()}>
+            <span>Community</span>
+            <select aria-label="Choose a published JYC community" value={selectedHub?.id || ''} onChange={e => setSelectedHub(filteredHubs.find(hub => hub.id === e.target.value) || HUBS[0] || null)}>
+              {filteredHubs.map(hub => <option key={hub.id} value={hub.id}>{hub.name}</option>)}
+            </select>
+          </label>
           <div className="jyc-3d-zoom-btns" onClick={e => e.stopPropagation()}>
             <button type="button" onClick={() => setZoom(z => Math.min(1.6, z + 0.15))} title="Zoom In">+</button>
             <button type="button" onClick={() => setZoom(z => Math.max(0.65, z - 0.15))} title="Zoom Out">−</button>
@@ -468,7 +522,7 @@ export function JYC3DInteractiveExplorer() {
             <div className="hud-header">
               <span className="hud-icon">{selectedHub.icon}</span>
               <div>
-                <span className="hud-family">{selectedHub.family} FAMILY · {selectedHub.members}</span>
+                <span className="hud-family">{selectedHub.family} FAMILY · {selectedHub.sourceStatus}</span>
                 <h3 className="hud-name">{selectedHub.name}</h3>
               </div>
             </div>
