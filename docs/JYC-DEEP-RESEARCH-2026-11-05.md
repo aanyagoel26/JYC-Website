@@ -84,3 +84,5 @@ Research references:
 - The gallery fallback remains constrained; this change does not widen media rights/publication access.
 
 - A final contact-copy review also removed an unsupported claim that the retained WhatsApp invite is an official enrolled-student broadcast. The page now identifies it as a community invite and directs visitors to check the group's own current membership/announcement description.
+
+- RAF lifecycle follow-up: static redraws no longer clear the ID of a pending animation frame. The scheduled callback clears its own ID when it begins, so unmount/visibility cleanup can still cancel the active request and cannot leave a detached-canvas animation loop running.

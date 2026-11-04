@@ -145,10 +145,8 @@ export function JYC3DInteractiveExplorer() {
     };
 
     renderFrame = (schedule = true) => {
-      if (!isVisible || !inView) {
-        animId = 0;
-        return;
-      }
+      if (schedule) animId = 0;
+      if (!isVisible || !inView) return;
       const interaction = interactionRef.current;
       if (schedule && canAnimate()) time += 0.016;
       currentRotX += (interaction.rotX - currentRotX) * 0.12;
@@ -338,7 +336,6 @@ export function JYC3DInteractiveExplorer() {
       });
 
       if (schedule && canAnimate()) animId = requestAnimationFrame(() => renderFrame(true));
-      else animId = 0;
     };
 
     const handleVisibility = () => {

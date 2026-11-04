@@ -30,7 +30,7 @@ check('Canvas hero honors reduced motion while Bento is coarse-pointer/reduced-m
 
 check('3D explorer content is generated only from published hub registry records',explorer.includes("JYC_HUB_SOURCE_REGISTRY")&&explorer.includes("hub.publicationStatus === 'published'")&&explorer.includes("JYC_HUB_CONTENT[hub.name]"));
 check('3D explorer has no unsupported static membership counts or independent content inventory',!explorer.includes("members: '")&&!explorer.includes("120+ Active")&&!explorer.includes("250+ Devs")&&!explorer.includes("80+ Pilots"));
-check('3D canvas does not schedule React state updates every animation frame and rebases drag on the current visual angle',!explorer.includes("setRotY(r => r + 0.0028)")&&explorer.includes("interactionRef.current")&&explorer.includes("visualRotationRef.current.y"));
+check('3D canvas avoids per-frame React state updates, preserves drag rotation and retains RAF handles for cleanup',!explorer.includes("setRotY(r => r + 0.0028)")&&explorer.includes("interactionRef.current")&&explorer.includes("visualRotationRef.current.y")&&explorer.includes('if (schedule) animId = 0;')&&!explorer.includes('else animId = 0;'));
 check('3D canvas pauses for reduced motion, hidden tabs and off-screen sections',explorer.includes("prefers-reduced-motion: reduce")&&explorer.includes("IntersectionObserver")&&explorer.includes("const canAnimate"));
 check('3D constellation provides keyboard selection and accurately identifies its 2D canvas rendering',explorer.includes("Choose a published JYC community")&&explorer.includes('aria-hidden="true"')&&explorer.includes("INTERACTIVE 3D CONSTELLATION")&&!explorer.includes("INTERACTIVE WEBGL TOPOLOGY"));
 
