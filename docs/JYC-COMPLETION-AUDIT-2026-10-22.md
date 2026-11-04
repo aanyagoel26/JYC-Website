@@ -205,3 +205,35 @@ These are observed permission/configuration blockers, not code fixes. No custom-
 ### Current release verdict
 
 **Still NOT COMPLETE / NOT RELEASE-READY.** Source changes are committed and the previous build succeeded, but exact-head quality/browser/Lighthouse/CodeQL evidence, route-by-route visual review, upstream integration, Vercel project linkage, production deployment provenance, custom-domain verification, live Supabase checks, and media rights/content sign-off remain open. Treat these as release gates, not as completed work.
+
+
+## Execution follow-up — 5 November 2026 — live Supabase and deployment access
+
+### Supabase project state (live account query)
+
+- The configured JYC project is `ogbanmjokjlxfuktkicj` (`supabase/config.toml` points to the same ref).
+- Supabase currently reports this project as **INACTIVE**, on the JYC Free organization, with PostgreSQL 17.6.1.166 in `ap-south-1`.
+- Read-only table inspection failed with `Database is possibly not accessible at the moment`; therefore no current live schema, row counts, migration history, RLS policies, or advisor results can be certified from this session.
+- A restore was attempted because the website's configured backend is inactive. Supabase rejected it with HTTP 403: the organization member `coolbandariya` has reached the maximum of two active free projects. The other active projects shown by the account are `common 1` and `rideforge-production`.
+- No other Supabase project was paused, deleted, upgraded, or modified. I will not take one of those projects offline or incur an upgrade charge without the owner's explicit choice.
+- Supabase's 2026-10-30 Data API change now makes table/function exposure opt-in by default for all projects. The repository has explicit grants in recent hardening migrations for sensitive/public-read tables, but the inactive database prevents checking the deployed grants and migration application state. Re-run live grants/RLS/advisor verification after the project is restored.
+
+### Vercel state
+
+- The authenticated Vercel team context available in this session does not list a project connected to `kaustubhdua/JYC-Website2`.
+- Listing deployments for the previous `jyc-website` name returned zero deployment records in the current team context; fetching the previously shared `jyc-website-zeta.vercel.app` URL returned a Vercel deployment-not-found/access response.
+- The prior project-creation attempt was denied with HTTP 403. No project was created, no deployment was made, and no production alias or DNS record was changed.
+
+### Current exact-head CI state
+
+- The audit record commit before this section was `ccbeecfe6da2803a3e71fcdc0466527a4cb57c35`.
+- Runs triggered for that SHA were Quality Gate `41896497274`, Browser QA `41896497529`, Lighthouse CI `41896497556`, JYC CI `41896497525`, CodeQL `41896497428`, and Datadog `41896497825`. At the last check, all were still queued or pending; no exact-head pass is claimed.
+
+### Additional hard blockers requiring owner action
+
+1. Restore JYC Supabase only after the owner decides which existing active free project to pause, or authorizes an organization-plan upgrade. Do not pause `common 1` or `rideforge-production` automatically.
+2. Grant Vercel permission to create/link a project for `kaustubhdua/JYC-Website2`, or have the project owner connect the intended repository.
+3. Ensure GitHub Actions runners/queue are available and let the exact-head Quality, Browser, Lighthouse, CI and CodeQL runs complete.
+4. Have the owner of `aanyagoel26/JYC-Website` review and merge PR #1 if that repository is still the canonical upstream. It remains open and unmerged in the observed state.
+
+**Release verdict remains NOT COMPLETE.** The frontend theme/source work is committed, but the configured live database is paused, deployment ownership is unresolved, and exact-head automated and visual evidence is still unavailable.
