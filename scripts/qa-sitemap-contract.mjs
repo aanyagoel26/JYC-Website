@@ -10,8 +10,7 @@ const site='https://jyc-qa.invalid';
 const core=['/','/about','/clubs','/events','/fests','/gallery','/archive','/team','/contact','/calendar','/announcements','/updates','/achievements','/best-of-jyc','/join-jyc','/recruitment'];
 const slug=value=>String(value||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 const staticEventRoutes=PUBLIC_EVENT_FALLBACK.filter(event=>event?.published&&event?.archived!==true).map(event=>'/events/'+slug(event.slug||event.title));
-const hiddenEventIds=new Set(['ride-hack-2026','ebullience-2026','reverberance-2026','rangmanch-2026','cybersrishti-2026','codeclash-2026','vamfest-2026','aakriti-art-fiesta-2026','kshitij-sports-2026','panache-runway-2026','grand-conclave-2026','arcadia-esports-open','converge-2026','innovate-3-2026','bitbox-6-2026']);
-const hiddenEventRoutes=PUBLIC_EVENT_FALLBACK.filter(event=>hiddenEventIds.has(event.id)).map(event=>'/events/'+slug(event.slug||event.title));
+const hiddenEventRoutes=PUBLIC_EVENT_FALLBACK.filter(event=>!event?.published||event?.archived===true).map(event=>'/events/'+slug(event.slug||event.title));
 const allowed=new Set([...core,...staticEventRoutes]);
 for(const hub of JYC_HUB_SOURCE_REGISTRY.filter(item=>item.publicationStatus==='published')) allowed.add('/clubs/'+slug(hub.name));
 

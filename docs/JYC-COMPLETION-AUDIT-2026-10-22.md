@@ -274,3 +274,23 @@ These are observed permission/configuration blockers, not code fixes. No custom-
 - No exact-head browser screenshots or manual route-by-route visual sign-off have been produced.
 
 **Release verdict: NOT COMPLETE / NOT PRODUCTION-READY.** The source has received substantive repairs, but exact-head automated tests, visual verification, upstream merge, authorized Vercel project linkage, a valid production canonical domain and restoration/verification of the configured Supabase backend remain release gates.
+
+
+## Execution follow-up — 5 November 2026 — published-only route generation
+
+- Release `V64.5.16`, source commit before this audit update: `7784b1aa6b09936fd60dbce6dafd745ed991a279`.
+- Found a second publication leak after hiding unverified static event fallbacks: the sitemap still hard-coded URLs for unpublished/archived events, and static route-shell metadata still hard-coded those same routes. This would have continued advertising hidden events to crawlers and creating direct-entry shells for them.
+- Replaced hard-coded event URL lists with `PUBLIC_EVENT_FALLBACK`-derived routes filtered to `published && !archived`. Dynamic CMS event routes retain their published/non-archived filter.
+- Static club sitemap routes now use only `JYC_HUB_SOURCE_REGISTRY` entries with `publicationStatus === 'published'`, matching the public club fallback and route-shell behavior.
+- Added `/archive` and `/recruitment` to the canonical sitemap's core public routes.
+- Found and fixed a slug mismatch: DRONO-O-WAR was linked through the title-derived slug `drono-o-war-1-0` while the old sitemap advertised `drono-o-war-2026`. The fallback now stores `slug: 'drono-o-war-2026'`, so cards, detail pages, sitemap and route shells share the canonical route.
+- Found one more unsupported event fallback, Arcadia Esports Winter Cup, tied to a club that remains a draft. It is now unpublished and excluded from public event routes.
+- Expanded sitemap and route-shell tests to check all published fallback routes are present, every unpublished/archived fallback route is absent, draft club routes are absent, and stale hard-coded event shells do not return.
+- Package, lockfile, README and service-worker cache are synchronized to `V64.5.16`.
+
+### Latest execution status
+
+- The route-hardening commit triggered exact-head CI runs, but the GitHub Actions API still showed the jobs queued/pending at the last poll. No successful exact-head quality, browser, Lighthouse or CodeQL result is claimed.
+- Supabase, Vercel, upstream PR and manual visual-verification blockers remain as recorded above.
+
+**Release remains NOT COMPLETE / NOT PRODUCTION-READY until exact-head QA passes, the actual production project/domain is connected, the database decision is resolved, upstream integration is approved, and rendered routes are visually signed off.**

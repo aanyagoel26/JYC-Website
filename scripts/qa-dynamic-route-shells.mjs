@@ -7,6 +7,7 @@ const checks=[
  ['published events are filtered', source.includes('event?.published')],
  ['static event shells derive only from published, non-archived fallback records', source.includes('PUBLIC_EVENT_FALLBACK.filter(item=>item?.published&&item?.archived!==true)')],
  ['static hub shells exclude draft source-registry entries', source.includes("JYC_HUB_SOURCE_REGISTRY.filter(item=>item.publicationStatus==='published')")],
+ ['stale hard-coded event shells are not reintroduced', !source.includes("'/events/ride-hack-2026':") && !source.includes("'/events/converge-2026':")],
  ['published clubs are filtered', source.includes('club?.published')],
  ['curated route metadata is preserved', source.includes('if(routes[route])continue;')],
  ['CMS outage is non-fatal', source.includes('dynamic metadata unavailable')],
