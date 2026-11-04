@@ -36,7 +36,20 @@ add('Sitemap carries maintained hub photography',fs.readFileSync(path.join(root,
 add('LLMs discovery file',llms.includes('JIIT Youth Club') && llms.includes('/clubs') && llms.includes('/events'));
 add('Sitemap includes the public Join JYC coming-soon page',sitemap.includes('/join-jyc'));
 add('Sitemap does not fabricate build-date lastmod values',!sitemap.includes('fallbackDate')&&!sitemap.includes('dynamicDates.get(u)||fallbackDate'));
-add('Flagship event URLs use canonical current slugs',(()=>{const s=fs.readFileSync(path.join(root,'scripts/generate-sitemap.mjs'),'utf8');const expected=['/events/jai-2026-jaypee-agentic-ai-hackathon','/events/ride-hack-2026','/events/converge-2026','/events/drono-o-war-2026','/events/innovate-3-0-2026','/events/bitbox-6-0-2026'];const legacy=['/events/agentic-ai-2026','/events/codeai-hackathon'];return expected.every(x=>s.includes(x))&&legacy.every(x=>!s.includes(x));})());
+const { PUBLIC_EVENT_FALLBACK } = await import('../src/content/jyc-public-fallbacks.js');
+const eventSlug = value => String(value || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const publishedEventRoutes = PUBLIC_EVENT_FALLBACK
+  .filter(event => event?.published && event?.archived !== true)
+  .map(event => `/events/${eventSlug(event.slug || event.title)}`);
+add('Flagship event URLs use canonical published, non-archived slugs', (() => {
+  const source = fs.readFileSync(path.join(root, 'scripts/generate-sitemap.mjs'), 'utf8');
+  return source.includes('PUBLIC_EVENT_FALLBACK.filter(event=>event?.published&&event?.archived!==true)')
+    && source.includes('slug(event.slug||event.title)')
+    && publishedEventRoutes.includes('/events/jai-2026-jaypee-agentic-ai-hackathon')
+    && publishedEventRoutes.includes('/events/drono-o-war-2026')
+    && !publishedEventRoutes.includes('/events/ride-hack-2026')
+    && !publishedEventRoutes.includes('/events/converge-2026');
+})());
 add('Sitemap generator exists',fs.existsSync(path.join(root,'scripts/generate-sitemap.mjs')));
 add('SEO pages have useful route metadata',main.includes('JIIT Clubs & Student Communities') && main.includes('JIIT Events & Campus Activities') && main.includes('About JIIT Youth Club') && main.includes('JIIT Fests & Flagship Events'));
 add('Fest discovery route exists',main.includes("clean==='/fests'") && llms.includes('/fests'));
