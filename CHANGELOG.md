@@ -1,5 +1,16 @@
 # Changelog
 
+## V64.5.14 — Public event trust and photo-type integrity
+
+- Remove unverified and editorial-review future events from public fallback publication; they remain in supplied programme material until an official event-level source confirms dates, organiser, venue and registration.
+- Keep RIDE Hack unpublished until its conflicting registration/publication evidence is resolved by the organiser.
+- Correct the stale RPH Code Clash fallback date: the current source trail records the 2026 contest as completed, not a future 20 November event. Keep the record unpublished until the exact event date and official event record are confirmed.
+- Let current live CMS event records override same-ID static fallback records, so a later approved publication can supersede a hidden fallback safely.
+- Type JAI campus photography separately from summit artwork, poster graphics, QR codes and logos; exclude non-photo assets from photo archive/Best-of presentation.
+- Remove the completed JAI event from featured/pinned priority while retaining its historical event record and closed-registration state.
+- Rotate the service-worker cache namespace to `jyc-cache-v64-5-14`.
+
+
 ## V64.5.13 — Canonical-origin and deployment identity hardening
 
 - Remove the retired, non-existent `jyc-website-eight.vercel.app` hostname from source defaults and stop publishing it in canonical tags, Open Graph metadata, structured data or sitemap output.

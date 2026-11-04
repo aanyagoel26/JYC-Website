@@ -67,9 +67,7 @@ function mergePublicFallback(d,{allowContentFallback=true}={}){
  const gallery=[...sourceGallery,...JAI_OFFICIAL_MEDIA,...(allowContentFallback?[...PDF_HUB_GALLERY,...PDF_HUB_EXTRA_GALLERY,...PUBLIC_GALLERY_FALLBACK]:[])].filter((g,i,a)=>a.findIndex(x=>x.id===g.id)===i).filter(g=>g&&g.published!==false&&!String(g.url||'').toLowerCase().includes('jyc-01')&&!String(g.url||'').toLowerCase().includes('jyc-02')&&!String(g.url||'').toLowerCase().includes('jyc-03')&&!String(g.url||'').toLowerCase().includes('vamunique-03')&&!String(g.caption||'').toLowerCase().includes('portrait from the supplied archive'));
  const liveEvents=Array.isArray(x.events)?x.events:[];
  const fallbackEvents=allowContentFallback?PUBLIC_EVENT_FALLBACK:[];
- const events=allowContentFallback
-   ? [...fallbackEvents,...liveEvents.filter(e=>!fallbackEvents.some(f=>String(f.id)===String(e.id)))]
-   : liveEvents;
+ const events=mergePublicEvents(liveEvents,fallbackEvents,allowContentFallback);
  const eventsWithVerifiedSources=events.map(event=>{
    const source=festSocialProfile(event.title);
    return source?{
@@ -87,6 +85,7 @@ function publicDemoData(){
  return mergePublicFallback(norm({...empty,clubs,events:PUBLIC_EVENT_FALLBACK,gallery:PUBLIC_GALLERY_FALLBACK,team:PUBLIC_TEAM_FALLBACK,homepage:{...empty.homepage,activities:PUBLIC_ACTIVITIES}}));
 }
 import { normalizeSearch, rankSearchResults } from './lib/search.js';
+import {mergePublicEvents} from './lib/public-content.js';
 import {CREATOR,JYC_CONTACTS} from './lib/site-config.js';
 
 import {MomentsSection} from './v14-platform.jsx';
