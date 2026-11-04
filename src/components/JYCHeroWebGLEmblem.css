@@ -2,6 +2,7 @@
    JYC HERO WEBGL EMBLEM · STATE-OF-THE-ART 3D INTERACTIVE STAGE
    ========================================================================== */
 
+/* Keep vertical page scrolling available while the emblem and spatial viewer receive pointer input. */
 .jyc-hero-emblem-stage {
   position: relative;
   width: 100%;
@@ -12,7 +13,7 @@
   justify-content: center;
   margin: 0 auto;
   user-select: none;
-  touch-action: none;
+  touch-action: pan-y;
   cursor: grab;
 }
 

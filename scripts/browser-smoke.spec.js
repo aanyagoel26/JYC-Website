@@ -556,6 +556,31 @@ test('homepage renders the official emblem and a magnetic activity Bento', async
   expect(result.storyTiles).toBeLessThanOrEqual(3);
 });
 
+test('hero spatial GLB is lazy-loaded and preserves mobile page scrolling', async ({ page }) => {
+  await page.route('https://ajax.googleapis.com/ajax/libs/model-viewer/4.4.0/model-viewer.min.js', route => route.fulfill({
+    status: 200,
+    contentType: 'text/javascript',
+    body: "if (!customElements.get('model-viewer')) customElements.define('model-viewer', class extends HTMLElement {});"
+  }));
+  await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'spatial hero model');
+  const stage = page.locator('.jh-hero-webgl-stage-wrap .jyc-hero-emblem-stage');
+  await expect(stage).toBeVisible();
+  await expect(stage).toHaveCSS('touch-action', 'pan-y');
+  await expect(page.locator('model-viewer.jyc-hero-model-viewer')).toHaveCount(0);
+
+  await page.getByRole('button', { name: /3D MESH/ }).click();
+  const viewer = page.locator('model-viewer.jyc-hero-model-viewer');
+  await expect(viewer).toBeVisible();
+  await expect(viewer).toHaveAttribute('src', '/models/jyc-spatial.glb');
+  await expect(viewer).toHaveAttribute('touch-action', 'pan-y');
+  await expect.poll(() => page.locator('script[data-jyc-model-viewer]').getAttribute('src')).toContain('/4.4.0/');
+  const modelResponse = await page.request.get(base + '/models/jyc-spatial.glb');
+  expect(modelResponse.ok(), 'the validated spatial GLB is served by the application').toBe(true);
+  const modelBytes = await modelResponse.body();
+  expect(modelBytes.subarray(0, 4).toString(), 'the served model has a GLB signature').toBe('glTF');
+});
+
 test('gallery archive uses deterministic responsive image frames', async ({ page }) => {
   await page.goto(base + '/gallery', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'gallery layout');
