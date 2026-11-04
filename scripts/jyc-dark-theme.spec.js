@@ -15,6 +15,7 @@ test.describe('JYC Jai Hack-inspired dark theme', () => {
         await page.locator('.public-app').waitFor({ state: 'visible', timeout: 25000 });
         await page.waitForFunction(
           () => document.documentElement.dataset.jycContentReady === 'true',
+          null,
           { timeout: 20000 }
         );
 
