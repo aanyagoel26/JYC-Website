@@ -84,6 +84,7 @@ export function JYC3DInteractiveExplorer() {
   const lastMousePos = useRef({ x: 0, y: 0 });
   const interactionRef = useRef({ rotX, rotY, zoom, selectedHub, isDragging });
   const drawOnceRef = useRef(null);
+  const visualRotationRef = useRef({ x: 0.22, y: 0.48 });
   interactionRef.current = { rotX, rotY, zoom, selectedHub, isDragging };
 
   const filteredHubs = useMemo(() => {
@@ -157,6 +158,7 @@ export function JYC3DInteractiveExplorer() {
         currentRotY += 0.0028;
       }
       currentZoom += (interaction.zoom - currentZoom) * 0.15;
+      visualRotationRef.current = { x: currentRotX, y: currentRotY };
 
       ctx.clearRect(0, 0, width, height);
       const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
@@ -387,6 +389,9 @@ export function JYC3DInteractiveExplorer() {
 
   // Pointer interactions for dragging in 3D
   const handlePointerDown = e => {
+    // Rebase the drag target on the auto-rotated visual angle to avoid snapping.
+    setRotX(visualRotationRef.current.x);
+    setRotY(visualRotationRef.current.y);
     setIsDragging(true);
     lastMousePos.current = { x: e.clientX, y: e.clientY };
   };
