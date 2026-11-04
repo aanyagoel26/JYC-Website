@@ -39,5 +39,6 @@ check('DitherVeil uses existing optimized image assets instead of a missing hero
 check('DitherVeil reveal receives pointer movement even when foreground hero layers intercept it',home.includes('globalPointer')&&dither.includes('window.addEventListener(\'pointermove\', onGlobalMove')&&dither.includes('window.removeEventListener(\'pointermove\', onGlobalMove'));
 check('DitherVeil optimized source and fallback assets are present in the public build',fs.existsSync('public/assets/jyc-logo.avif')&&fs.existsSync('public/assets/jyc-logo.webp'));
 
+check('DitherVeil keeps WebGL enabled on typical four-core mobile devices while retaining a low-memory fallback',dither.includes('const constrainedHardware = (navigator.hardwareConcurrency || 4) < 4 || (navigator.deviceMemory || 4) < 2')&&dither.includes('coarsePointer ? 1'));
 if(failures.length)process.exit(1);
 console.log('JYC animation/media performance contract: '+(totalChecks-failures.length)+'/'+totalChecks);

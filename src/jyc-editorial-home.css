@@ -2158,7 +2158,7 @@ html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-hero-dither-layer {
 @media (max-width: 680px) {
   .jyc-editorial-home.jyc-home .jh-hero-dither-layer {
     inset: 0;
-    opacity: .16;
+    opacity: .22;
   }
   .jyc-editorial-home.jyc-home .jh-hero-dither-veil {
     width: min(88vw, 320px);

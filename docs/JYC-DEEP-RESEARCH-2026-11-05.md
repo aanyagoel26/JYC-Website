@@ -93,3 +93,5 @@ Research references:
 - The DitherVeil container sat inside a `pointer-events:none` hero layer and its own CSS also disabled pointer events, while the effect listened only on the container. That prevented reveal tracking when the foreground emblem intercepted pointer movement. Added an opt-in global pointer-tracking mode for this hero, scoped to the container bounds, with blur cleanup.
 - Increased the hero veil's restrained opacity slightly so the effect is perceptible without overwhelming the editorial hero.
 - Added QA checks for source asset existence and global pointer wiring.
+
+- The original DitherVeil low-power guard disabled WebGL on any device reporting fewer than six CPU cores, which can exclude ordinary four-core phones. Relaxed the gate to very-low CPU/memory devices only; coarse-pointer devices still render at DPR 1. The mobile veil opacity was also raised slightly while keeping the effect restrained.
