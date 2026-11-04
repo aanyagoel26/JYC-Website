@@ -19,5 +19,5 @@ assert.ok(main.includes('const fallback=readOnlySiteFallback(reason);setData(fal
 assert.ok(styles.includes('.connection-notice.fallback'), 'read-only notice must have a responsive style');
 assert.ok(fallbacks.includes('PUBLIC_EVENT_FALLBACK') && fallbacks.includes('PUBLIC_TEAM_FALLBACK'), 'curated public fallback records must exist');
 assert.ok(registry.includes('publicationStatus'), 'published hub registry status must be present');
-assert.ok(main.includes('hasCorePublicContent'), 'partial live content must be completed from curated fallback in read-only mode');
+assert.ok(main.includes('hasCorePublicContent') && main.includes('hasPublishedRows'), 'partial or unpublished-only collections must be completed from curated fallback in read-only mode');
 console.log('PASS: read-only public fallback is source-gated, disclosed, and blocks writes');

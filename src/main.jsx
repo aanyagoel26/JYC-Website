@@ -57,7 +57,8 @@ function mergePublicFallback(d,{allowContentFallback=true,allowGalleryFallback=a
  const x=norm(d||{});
  const publicHubNames=new Set(JYC_HUB_SOURCE_REGISTRY.filter(meta=>meta.publicationStatus==='published').map(meta=>meta.name));
  const fallbackClubs=enrichSourceClubs(Object.entries(JYC_HUB_CONTENT).filter(([name])=>publicHubNames.has(name)).map(([name,p],i)=>({id:'hub-'+slug(name),name,type:p.family==='Technical'?'Technical':'Non-Technical',category:p.focus,description:p.summary,about:p.detail,interests:[p.family,p.focus],published:true,status:'published',pinned:i<5,theme:'jyc'})));
- const baseClubs=allowContentFallback&&x.clubs?.length===0?fallbackClubs:x.clubs;
+ const hasPublishedRows=rows=>Array.isArray(rows)&&rows.some(row=>row?.published!==false&&row?.status!=='draft'&&row?.status!=='source-material');
+ const baseClubs=allowContentFallback&&!hasPublishedRows(x.clubs)?fallbackClubs:x.clubs;
  const enrichedClubs=enrichSourceClubs(baseClubs).map(club=>{const social=socialProfile(club.name);return social&&is128SocialProfile(social)?{...club,socials:{...(club.socials||{}),instagram:club.socials?.instagram||social.instagram||'',linkedin:club.socials?.linkedin||social.linkedin||'',website:club.socials?.website||social.website||'',instagramHandle:club.socials?.instagramHandle||social.instagramHandle||'',socialVerifiedBy:social.verifiedBy||'',socialVerifiedOn:social.verifiedOn||''}}:club;});
  const existingClubNames=new Set(enrichedClubs.map(c=>String(c.name||'').trim().toLowerCase()));
  const sourceOnlyClubs=JYC_HUB_SOURCE_ONLY.filter(meta=>!existingClubNames.has(meta.name.toLowerCase())).map(meta=>{const p=JYC_HUB_CONTENT[meta.name]||{};return enrichSourceClubs([{id:`hub-${slug(meta.name)}`,name:meta.name,type:p.family==='Technical'?'Technical':'Non-Technical',category:p.focus||p.family,description:p.summary||`${meta.name} is retained in the JYC source ecosystem.`,about:p.detail||'',interests:[p.family,p.focus].filter(Boolean),published:false,status:'source-material',sourceVerification:'source-material',sourceLabel:meta.source,theme:'jyc'}])[0]});
@@ -77,7 +78,7 @@ function mergePublicFallback(d,{allowContentFallback=true,allowGalleryFallback=a
      officialSourceLabel:event.officialSourceLabel||source.label||''
    }:event;
  });
- return {...x,clubs,events:eventsWithVerifiedSources,gallery,team:((allowTeamFallback&&x.team?.length===0?PUBLIC_TEAM_FALLBACK:enrichedTeam)),homepage:{...x.homepage,activities:Array.isArray(x.homepage?.activities)&&x.homepage.activities.length?x.homepage.activities:PUBLIC_ACTIVITIES}};
+ return {...x,clubs,events:eventsWithVerifiedSources,gallery,team:((allowTeamFallback&&!hasPublishedRows(x.team)?PUBLIC_TEAM_FALLBACK:enrichedTeam)),homepage:{...x.homepage,activities:Array.isArray(x.homepage?.activities)&&x.homepage.activities.length?x.homepage.activities:PUBLIC_ACTIVITIES}};
 }
 const QA_FIXTURES=import.meta.env.VITE_JYC_QA_FIXTURES==='true';
 function publicDemoData(){
@@ -165,7 +166,7 @@ async function loadData(){
   return readOnlySiteFallback(missingRpc?'The live public content endpoint is unavailable.':'The live content service is unavailable.');
  }
  const normalized=stripLegacySeed(data||empty);
- const hasCorePublicContent=['clubs','events','team'].every(key=>Array.isArray(normalized[key])&&normalized[key].length>0);
+ const hasCorePublicContent=['clubs','events','team'].every(key=>Array.isArray(normalized[key])&&normalized[key].some(row=>row?.published!==false&&row?.status!=='draft'&&row?.status!=='source-material'));
  if(!hasCorePublicContent&&!import.meta.env.DEV){const fallback=mergePublicFallback(normalized,{allowContentFallback:true,allowGalleryFallback:false,allowTeamFallback:true});return {...fallback,__readOnlyFallback:true,__fallbackReason:'One or more public content sections are missing from the live service.'};}
  return mergePublicFallback(normalized,{allowContentFallback:false});
 }
