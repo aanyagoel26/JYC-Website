@@ -29,6 +29,7 @@ for (const name of ['Arcadia', 'Neural Nexus']) {
   assert.equal(hub?.publicationStatus, 'draft', `${name} remains publication-gated until its official identity is verified`);
 }
 const mainSource = fs.readFileSync(new URL('../src/main.jsx', import.meta.url), 'utf8');
+assert.ok(mainSource.includes("import {mergePublicEvents} from './lib/public-content.js';"), 'live/fallback event merge helper must be imported');
 assert.ok(mainSource.includes("filter(([name])=>publicHubNames.has(name))"), 'static fallback clubs must follow the source registry publication gate');
 assert.ok(mainSource.includes("published:false,status:'source-material'"), 'source-only clubs must not become public profiles');
 
