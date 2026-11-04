@@ -237,3 +237,40 @@ These are observed permission/configuration blockers, not code fixes. No custom-
 4. Have the owner of `aanyagoel26/JYC-Website` review and merge PR #1 if that repository is still the canonical upstream. It remains open and unmerged in the observed state.
 
 **Release verdict remains NOT COMPLETE.** The frontend theme/source work is committed, but the configured live database is paused, deployment ownership is unresolved, and exact-head automated and visual evidence is still unavailable.
+
+
+## Execution follow-up — 5 November 2026 — content-trust, canonical SEO and hero-effect repairs
+
+### Current source head and release
+
+- Current `main`: `6aecb541aad6b82d5bd2a4e239fa74b34d84db65`.
+- Package release: `V64.5.15`.
+- The working changes remain in `kaustubhdua/JYC-Website2`; upstream integration PR #1 to `aanyagoel26/JYC-Website` is still open and unmerged.
+
+### Research findings and changes implemented
+
+1. **Canonical origin was pointed at a retired deployment.** The repository's example environment, HTML metadata and runtime fallback referred to `jyc-website-eight.vercel.app`. The canonical-origin resolver now uses an explicitly verified JYC origin first, then Vercel's `VERCEL_PROJECT_PRODUCTION_URL`, then `VERCEL_URL`; local builds use localhost only. Vercel builds fail closed if no HTTPS origin can be resolved. Static route shells write a canonical-origin meta tag so SPA navigation preserves the production canonical host even on preview deployments. Sitemap, route shells and runtime metadata share this resolver.
+2. **The JYC custom domain is not currently safe to assume as the production canonical.** Public crawl inspection showed `www.jiityouthclub128.in` currently serves the JAI 2026 event microsite rather than a general JYC website. The previous `jyc-website-eight.vercel.app` hostname is not a verified live deployment. The JAI domain was deliberately not substituted as the JYC canonical origin.
+3. **The homepage Dither Veil was imported but never rendered.** The source contained only the lazy import; the homepage hero did not mount `LazyDitherVeil`. It is now mounted behind the foreground JYC emblem with the JYC logo source, Floyd–Steinberg dithering, restrained oxblood rim and wander reveal. The OGL/WebGL2 implementation retains capped DPR, intersection/visibility lifecycle, reduced-motion and constrained-hardware static fallbacks. Homepage truth, React Bits, animation-performance and visual-redesign checks now require the component to be mounted.
+4. **Static event fallbacks contained unsupported upcoming records.** Event-level web research did not establish reliable official date/registration sources for the future CyberSrishti, VamFest, Aakriti, Kshitij, Panache and Grand Conclave entries. The Code Clash fallback had a future 20 November date even though current public participant posts record Code Clash 2026 as already completed; its exact official date was not established. RIDE Hack was already marked for editorial review in prior source audits. These records are now unpublished in the static fallback until event-level official evidence confirms the date, organiser, venue and registration. The JAI event remains as a completed historical record but is no longer featured or pinned.
+5. **Live CMS records now take precedence over same-ID static fallbacks.** A newly approved CMS event can supersede a hidden fallback rather than being discarded by the previous fallback-first merge order. Regression coverage exercises this precedence.
+6. **Club publication gates were not applied to the static fallback.** Arcadia and Neural Nexus are source-material/orientation records but remain drafts in the editorial source audit. Their registry entries now say `publicationStatus:'draft'`; static fallback clubs are filtered through the registry publication status, and source-only clubs remain unpublished.
+7. **JAI artwork was not typed consistently.** Campus photography is explicitly marked as a photo; logos, summit artwork and QR material are classified as graphics/QR, preventing them from being misrepresented as photography in the Best-of and archive surfaces.
+
+### QA added or expanded
+
+- `scripts/site-origin.mjs` and `scripts/qa-site-origin.mjs`: deployment-aware origin validation and precedence tests.
+- `scripts/lib/public-content.js` (source path: `src/lib/public-content.js`) and `scripts/qa-event-publication-trust.mjs`: live-event precedence, unverified event publication gates, draft club publication gates and typed JAI media.
+- Homepage editorial-truth QA is now part of the QA suite and checks that the Dither Veil is actually mounted with the JYC red rim.
+- React Bits, animation-performance and visual-redesign checks also assert the Dither Veil mount and its reduced-motion/low-power safeguards.
+- Release metadata, lockfile, README and service-worker cache namespace are synchronized to `V64.5.15`.
+
+### Latest exact-head CI and release blockers
+
+- Workflow runs created for `6aecb541aad6b82d5bd2a4e239fa74b34d84db65`: Quality Gate `41899127294`, Browser QA `41899127185`, Lighthouse CI `41899127222`, JYC CI `41899127094`, CodeQL `41899127132`, and Datadog `41899127322`. At the time of this update, jobs were still queued/pending; no exact-head passing result is claimed.
+- Supabase still reports the configured JYC project `ogbanmjokjlxfuktkicj` as INACTIVE. Restore was rejected because the free organization has reached its two-active-project limit. No other project was paused or deleted.
+- Vercel's connected team context still does not show a project linked to `kaustubhdua/JYC-Website2`; project creation was previously denied with HTTP 403. No production deployment or custom-domain alias is verified.
+- PR #1 to the original repository remains open and unmerged.
+- No exact-head browser screenshots or manual route-by-route visual sign-off have been produced.
+
+**Release verdict: NOT COMPLETE / NOT PRODUCTION-READY.** The source has received substantive repairs, but exact-head automated tests, visual verification, upstream merge, authorized Vercel project linkage, a valid production canonical domain and restoration/verification of the configured Supabase backend remain release gates.
