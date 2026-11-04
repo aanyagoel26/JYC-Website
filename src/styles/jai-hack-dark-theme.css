@@ -31,6 +31,26 @@ html[data-theme="dark"] {
   --jyc-green: #34d399;
   --jyc-violet: #a855f7;
   --jyc-amber: #fbbf24;
+  --jyc-paper: #050811;
+  --jyc-paper-raised: #0d1526;
+  --jyc-ink: #edf2f7;
+  --jyc-muted-ink: #94a3b8;
+  --jyc-oxblood: #38bdf8;
+  --jyc-champagne: #60a5fa;
+  --jyc-hairline: rgba(56,189,248,.14);
+  --jh-bg: #050811;
+  --jh-gold: #60a5fa;
+  --jh-surface: #0d1526;
+  --jh-surface-elevated: #101a2e;
+  --jh-surface-glass: rgba(13,21,38,.92);
+  --jh-ink: #edf2f7;
+  --jh-muted: #94a3b8;
+  --jh-accent: #38bdf8;
+  --jh-accent-glow: rgba(56,189,248,.12);
+  --jh-cyan: #38bdf8;
+  --jh-cyan-glow: rgba(56,189,248,.09);
+  --jh-line: rgba(56,189,248,.14);
+  --jh-line-accent: rgba(56,189,248,.3);
   /* Bridge the existing JYC token system into the new cool-toned dark palette. */
   --jyc-brand-paper: #050811;
   --jyc-brand-paper-raised: #0d1526;
@@ -47,6 +67,25 @@ html[data-theme="dark"] {
   --jyc-panel: rgba(13,21,38,.76);
   --jyc-panel-raised: rgba(16,26,46,.82);
   --jyc-glass-border: rgba(56,189,248,.16);
+}
+
+
+/* The editorial homepage declares a more-specific legacy dark palette on its root.
+   Rebind that component contract explicitly so it shares the same Jai Hack identity. */
+html[data-theme="dark"] .jyc-editorial-home.jyc-home {
+  --jh-bg: #050811;
+  --jh-gold: #60a5fa;
+  --jh-surface: #0d1526;
+  --jh-surface-elevated: #101a2e;
+  --jh-surface-glass: rgba(13,21,38,.92);
+  --jh-ink: #edf2f7;
+  --jh-muted: #94a3b8;
+  --jh-accent: #38bdf8;
+  --jh-accent-glow: rgba(56,189,248,.12);
+  --jh-cyan: #38bdf8;
+  --jh-cyan-glow: rgba(56,189,248,.09);
+  --jh-line: rgba(56,189,248,.14);
+  --jh-line-accent: rgba(56,189,248,.3);
 }
 
 html[data-theme="dark"] body,
