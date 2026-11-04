@@ -176,7 +176,7 @@ These are observed permission/configuration blockers, not code fixes. No custom-
 
 ### Changes committed to `main`
 
-- Latest commit at time of this update: `e2ce3ef5fdc51d141df018e4047c20895ad7524a`.
+- Dark-theme implementation and README correction commit: `e2ce3ef5fdc51d141df018e4047c20895ad7524a`. The audit follow-up itself was committed as `3aa02a59925beefd8213a2c53fcd34a500d40377`.
 - Added `src/styles/jai-hack-dark-theme.css`: midnight navy surfaces, cyan/indigo accents, DM Sans / Space Grotesk / DM Mono typography, acrylic navigation, component surfaces, form and dialog treatments, focus visibility and reduced-motion handling. The theme is scoped to `html[data-theme="dark"]`; light mode is intentionally preserved.
 - Corrected stylesheet placement: the Jai Hack theme is imported after the application's global stylesheet imports in `src/main.jsx`, avoiding the earlier cascade-order problem. The redundant early import was removed from `src/styles/public-entry.css`.
 - Bridged both the legacy JYC design tokens and the editorial homepage's separate `--jh-*` variables to the new palette, so the homepage does not retain the old red/gold palette.
@@ -191,13 +191,14 @@ These are observed permission/configuration blockers, not code fixes. No custom-
 - On commit `dbe41b49a96ac6b7b9769c026083688c119f383b`, GitHub Actions completed the Vite production build successfully. The quality workflow then failed at `scripts/qa-current-release-integrity.mjs` because the README did not contain the exact `Current release: V64.5.12` marker. That marker was added in the subsequent commit `e2ce3ef5fdc51d141df018e4047c20895ad7524a`.
 - The preceding quality log showed the dependency-lock contract, 22 zero-glitch static assertions, 12 media-layout contracts, 15 public-journey assertions, 18/18 reference-archive readiness assertions, and 28 current-release coherence assertions passing before the README integrity failure.
 - Datadog synthetic workflow completed successfully on `dbe41b49a96ac6b7b9769c026083688c119f383b`.
-- New workflow runs were created for exact SHA `e2ce3ef5fdc51d141df018e4047c20895ad7524a`: JYC Quality Gate run `41895534329`, Browser QA `41895534271`, Lighthouse CI `41895534210`, JYC CI `41895534191`, CodeQL `41895534510`, and Datadog `41895534419`. At the time of this audit update, the runs/jobs were still queued; none is recorded as passing on this exact SHA. The README correction therefore has not yet been proven by a successful exact-head quality run.
+- Workflow runs for implementation SHA `e2ce3ef5fdc51d141df018e4047c20895ad7524a` remained queued when last inspected; none was recorded as passing on that SHA.
+- The audit commit `3aa02a59925beefd8213a2c53fcd34a500d40377` triggered a fresh set: Quality Gate `41896308649`, Browser QA `41896308830`, Lighthouse CI `41896309161`, JYC CI `41896309112`, CodeQL `41896308769`, and Datadog `41896308860`. At the latest inspection, the Quality Gate was pending with its job queued and the other runs were queued. No exact-head result is recorded as passing. The README correction therefore remains unverified by a successful exact-head quality run.
 - No browser screenshots or human visual sign-off have been produced for this exact SHA. The new Playwright coverage is registered, but its execution remains pending.
 
 ### Repository integration and deployment
 
-- `kaustubhdua/JYC-Website2` main currently points to `e2ce3ef5fdc51d141df018e4047c20895ad7524a`.
-- Cross-repository PR [#1](https://github.com/aanyagoel26/JYC-Website/pull/1) remains **open and unmerged**. Its head is the current `JYC-Website2` main SHA and its base repository is `aanyagoel26/JYC-Website`. Do not describe the changes as integrated into the upstream repository.
+- `kaustubhdua/JYC-Website2` main currently points to `3aa02a59925beefd8213a2c53fcd34a500d40377`.
+- Cross-repository PR [#1](https://github.com/aanyagoel26/JYC-Website/pull/1) remains **open and unmerged**. Its head is the current `JYC-Website2` main SHA (`3aa02a59925beefd8213a2c53fcd34a500d40377`) and its base repository is `aanyagoel26/JYC-Website`. Do not describe the changes as integrated into the upstream repository.
 - The current Vercel team deployment-context response did not list a project linked to `kaustubhdua/JYC-Website2`. Earlier project-creation attempt was rejected with HTTP 403. An authenticated fetch of the previously shared preview URL returned a Vercel lookup 404/access response, which is not sufficient evidence that the public site is down or healthy.
 - No production project settings, DNS records, custom-domain assignments, Supabase data or access policies were changed. No production deployment from this exact SHA is verified.
 
