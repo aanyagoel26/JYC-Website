@@ -95,3 +95,11 @@ Research references:
 - Added QA checks for source asset existence and global pointer wiring.
 
 - The original DitherVeil low-power guard disabled WebGL on any device reporting fewer than six CPU cores, which can exclude ordinary four-core phones. Relaxed the gate to very-low CPU/memory devices only; coarse-pointer devices still render at DPR 1. The mobile veil opacity was also raised slightly while keeping the effect restrained.
+
+## First-visit visual system and actual GLB viewer integration
+
+- First-time visitors now receive the midnight/cyan theme. Explicit saved light/dark preferences remain respected, and both browser theme-color meta entries track the active selection.
+- Replaced the remaining JYC hero's oxblood/brass/magenta canvas accents and DitherVeil rim with cyan/blue/indigo tones.
+- Found a functional 3D gap: the hero already rendered a `<model-viewer>` element for `/models/jyc-spatial.glb`, but the Google model-viewer web component was never registered. The spatial toggle therefore rendered an inert unknown custom element.
+- The spatial mode now lazy-loads pinned `@google/model-viewer` 4.4.0 from Google's CDN only when the visitor selects it, waits for `customElements.whenDefined`, shows a loading/error state and offers the GLB download as a fallback. This avoids loading the 3D viewer on every route/initial page view.
+- Updated Vercel CSP for the pinned Google loader, gstatic Draco decoder resources and WebAssembly. The GLB QA now checks both asset integrity and the viewer/CSP integration.

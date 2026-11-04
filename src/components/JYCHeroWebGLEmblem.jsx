@@ -4,6 +4,8 @@ import { jycAudio } from '../lib/jyc-audio.js';
 
 const LOGO_SRC = '/JYC%20Logo(4).png';
 const LOGO_FALLBACK = '/assets/jyc-logo.avif';
+const MODEL_URL = '/models/jyc-spatial.glb';
+const MODEL_VIEWER_CDN = 'https://ajax.googleapis.com/ajax/libs/model-viewer/4.4.0/model-viewer.min.js';
 
 export function JYCHeroWebGLEmblem() {
   const containerRef = useRef(null);
@@ -11,7 +13,56 @@ export function JYCHeroWebGLEmblem() {
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [isHovered, setIsHovered] = useState(false);
   const [mode3D, setMode3D] = useState('hologram'); // 'hologram' | 'spatial'
+  const [modelViewerReady, setModelViewerReady] = useState(() => typeof window !== 'undefined' && !!window.customElements?.get('model-viewer'));
+  const [modelViewerError, setModelViewerError] = useState(false);
   const [isAudioActive, setIsAudioActive] = useState(false);
+
+  useEffect(() => {
+    if (mode3D !== 'spatial') return;
+    if (typeof window === 'undefined' || !window.customElements) {
+      setModelViewerError(true);
+      return;
+    }
+    if (window.customElements.get('model-viewer')) {
+      setModelViewerReady(true);
+      setModelViewerError(false);
+      return;
+    }
+    setModelViewerReady(false);
+    setModelViewerError(false);
+    let active = true;
+    let script = document.querySelector('script[data-jyc-model-viewer]');
+    if (!script) {
+      script = document.createElement('script');
+      script.type = 'module';
+      script.src = MODEL_VIEWER_CDN;
+      script.dataset.jycModelViewer = 'true';
+    }
+    const handleError = () => {
+      if (!active) return;
+      setModelViewerError(true);
+      script.remove();
+    };
+    script.addEventListener('error', handleError, { once: true });
+    const timeout = window.setTimeout(() => {
+      if (active && !window.customElements.get('model-viewer')) setModelViewerError(true);
+    }, 15000);
+    window.customElements.whenDefined('model-viewer').then(() => {
+      if (active) {
+        setModelViewerReady(true);
+        setModelViewerError(false);
+      }
+    });
+    if (!script.isConnected) document.head.appendChild(script);
+    return () => {
+      active = false;
+      window.clearTimeout(timeout);
+      script.removeEventListener('error', handleError);
+      if (!window.customElements.get('model-viewer') && script.dataset.jycModelViewer === 'true') script.remove();
+    };
+  }, [mode3D]);
+
+
 
   const toggleSound = e => {
     e.stopPropagation();
@@ -19,7 +70,7 @@ export function JYCHeroWebGLEmblem() {
     setIsAudioActive(active);
   };
 
-  // WebGL 3D Gyroscopic Rings, Particle Nebulae & Laser Coronas
+  // Canvas-rendered 3D-style gyroscopic rings; optional spatial mode uses the GLB WebGL viewer.
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
@@ -53,7 +104,7 @@ export function JYCHeroWebGLEmblem() {
       size: 1.2 + (i % 3) * 0.9,
       alpha: 0.25 + (i % 6) * 0.12,
       tiltAxis: (i % 3) * 0.35,
-      color: i % 4 === 0 ? '#38bdf8' : i % 4 === 1 ? '#e5b869' : i % 4 === 2 ? '#d946ef' : '#ffd700'
+      color: i % 4 === 0 ? '#38bdf8' : i % 4 === 1 ? '#38bdf8' : i % 4 === 2 ? '#818cf8' : '#60a5fa'
     }));
 
     // Mouse movement inertia
@@ -103,20 +154,20 @@ export function JYCHeroWebGLEmblem() {
       const baseRadius = Math.min(width, height) * 0.38;
 
       const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
-      const goldStroke = isDark ? 'rgba(229, 184, 105, ' : 'rgba(197, 155, 39, ';
-      const cyanStroke = isDark ? 'rgba(56, 189, 248, ' : 'rgba(168, 36, 32, ';
-      const purpleStroke = isDark ? 'rgba(217, 70, 239, ' : 'rgba(180, 120, 40, ';
+      const primaryStroke = isDark ? 'rgba(56, 189, 248, ' : 'rgba(14, 165, 233, ';
+      const secondaryStroke = isDark ? 'rgba(96, 165, 250, ' : 'rgba(37, 99, 235, ';
+      const tertiaryStroke = isDark ? 'rgba(129, 140, 248, ' : 'rgba(99, 102, 241, ';
 
       // 1. Ambient Central Coronas
       const glowGrad = ctx.createRadialGradient(cx, cy, baseRadius * 0.15, cx, cy, baseRadius * 1.6);
       if (isDark) {
-        glowGrad.addColorStop(0, 'rgba(229, 184, 105, 0.20)');
-        glowGrad.addColorStop(0.35, 'rgba(56, 189, 248, 0.10)');
-        glowGrad.addColorStop(0.7, 'rgba(139, 92, 246, 0.04)');
+        glowGrad.addColorStop(0, 'rgba(56, 189, 248, 0.20)');
+        glowGrad.addColorStop(0.35, 'rgba(96, 165, 250, 0.10)');
+        glowGrad.addColorStop(0.7, 'rgba(99, 102, 241, 0.05)');
         glowGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
       } else {
-        glowGrad.addColorStop(0, 'rgba(255, 200, 80, 0.24)');
-        glowGrad.addColorStop(0.4, 'rgba(212, 175, 55, 0.12)');
+        glowGrad.addColorStop(0, 'rgba(14, 165, 233, 0.20)');
+        glowGrad.addColorStop(0.4, 'rgba(99, 102, 241, 0.10)');
         glowGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
       }
       ctx.fillStyle = glowGrad;
@@ -129,7 +180,7 @@ export function JYCHeroWebGLEmblem() {
       ctx.translate(cx, cy);
 
       // Ring A - Outer telemetry coordinate track
-      ctx.strokeStyle = goldStroke + '0.28)';
+      ctx.strokeStyle = primaryStroke + '0.28)';
       ctx.lineWidth = 1.2 * dpr;
       ctx.setLineDash([6 * dpr, 8 * dpr]);
       ctx.beginPath();
@@ -137,7 +188,7 @@ export function JYCHeroWebGLEmblem() {
       ctx.stroke();
 
       // Ring B - Middle counter-rotating neon laser track
-      ctx.strokeStyle = cyanStroke + '0.42)';
+      ctx.strokeStyle = secondaryStroke + '0.42)';
       ctx.lineWidth = 1.4 * dpr;
       ctx.setLineDash([14 * dpr, 20 * dpr]);
       ctx.beginPath();
@@ -145,7 +196,7 @@ export function JYCHeroWebGLEmblem() {
       ctx.stroke();
 
       // Ring C - Third tilted gyroscopic orbit
-      ctx.strokeStyle = purpleStroke + '0.35)';
+      ctx.strokeStyle = tertiaryStroke + '0.35)';
       ctx.lineWidth = 1 * dpr;
       ctx.setLineDash([4 * dpr, 10 * dpr]);
       ctx.beginPath();
@@ -153,7 +204,7 @@ export function JYCHeroWebGLEmblem() {
       ctx.stroke();
 
       // Inner crisp solid gold rim
-      ctx.strokeStyle = goldStroke + '0.65)';
+      ctx.strokeStyle = primaryStroke + '0.65)';
       ctx.lineWidth = 1.6 * dpr;
       ctx.setLineDash([]);
       ctx.beginPath();
@@ -166,7 +217,7 @@ export function JYCHeroWebGLEmblem() {
         const a = (i / ticks) * Math.PI * 2 + time * 0.08;
         const r1 = baseRadius * 0.97;
         const r2 = baseRadius * (i % 6 === 0 ? 1.08 : i % 2 === 0 ? 1.04 : 1.01);
-        ctx.strokeStyle = i % 6 === 0 ? (isDark ? '#38bdf8' : '#a82420') : (goldStroke + '0.45)');
+        ctx.strokeStyle = i % 6 === 0 ? (isDark ? '#38bdf8' : '#0ea5e9') : (primaryStroke + '0.45)');
         ctx.lineWidth = (i % 6 === 0 ? 1.8 : 1) * dpr;
         ctx.beginPath();
         ctx.moveTo(Math.cos(a) * r1, Math.sin(a) * r1);
@@ -233,9 +284,9 @@ export function JYCHeroWebGLEmblem() {
         jycAudio.playNodeHover();
       }}
       onPointerLeave={handlePointerLeave}
-      aria-label="Official JIIT Youth Club Holographic Emblem Stage"
+      aria-label="JYC animated emblem with optional interactive 3D model"
     >
-      {/* Background WebGL / Canvas Orbital System */}
+      {/* Canvas orbital system; the optional spatial mode uses the GLB WebGL viewer. */}
       <canvas ref={canvasRef} className="jyc-emblem-canvas" aria-hidden="true" />
 
       {/* 3D Perspective Tilt Card */}
@@ -251,19 +302,34 @@ export function JYCHeroWebGLEmblem() {
         {/* Central Display: Holographic Crest or Spatial 3D Model */}
         {mode3D === 'spatial' ? (
           <div className="jyc-emblem-model-viewer-wrap" style={{ transform: 'translateZ(28px)' }}>
-            <model-viewer
-              src="/models/jyc-spatial.glb"
-              poster="/assets/jyc-logo-48.avif"
-              camera-orbit="0deg 75deg auto"
-              auto-rotate
-              rotation-per-second="25deg"
-              interaction-prompt="none"
-              camera-controls
-              shadow-intensity="0.6"
-              exposure="1.2"
-              className="jyc-hero-model-viewer"
-              alt="3D Spatial JYC Emblem"
-            />
+            {modelViewerReady && !modelViewerError ? (
+              <model-viewer
+                src={MODEL_URL}
+                poster="/assets/jyc-logo.avif"
+                camera-orbit="0deg 75deg auto"
+                auto-rotate
+                rotation-per-second="18deg"
+                interaction-prompt="none"
+                camera-controls
+                shadow-intensity="0.6"
+                exposure="1.2"
+                loading="lazy"
+                reveal="auto"
+                className="jyc-hero-model-viewer"
+                alt="Interactive 3D JYC spatial emblem"
+                aria-label="Interactive 3D JYC spatial emblem. Drag to rotate."
+                onError={() => setModelViewerError(true)}
+              />
+            ) : (
+              <div className="jyc-emblem-model-viewer-state" role="status">
+                {modelViewerError ? (
+                  <>
+                    <span>The 3D preview is unavailable right now.</span>
+                    <a href={MODEL_URL} download>Download the spatial model</a>
+                  </>
+                ) : <span>Loading the JYC spatial model…</span>}
+              </div>
+            )}
           </div>
         ) : (
           <div className="jyc-emblem-seal-container">

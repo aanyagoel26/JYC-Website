@@ -8,6 +8,10 @@ const models = [
 const errors = [];
 const list = value => Array.isArray(value) ? value : [];
 const fail = (file, message) => errors.push(`${file}: ${message}`);
+const heroSource = fs.readFileSync('src/components/JYCHeroWebGLEmblem.jsx', 'utf8');
+const vercelConfig = JSON.parse(fs.readFileSync('vercel.json', 'utf8'));
+const csp = (vercelConfig.headers || []).flatMap(entry => entry.headers || []).find(header => header.key === 'Content-Security-Policy')?.value || '';
+
 const ref = (value, collection, label, file) => {
   if (!Number.isInteger(value) || value < 0 || value >= collection.length) fail(file, `${label} reference ${value} is out of range`);
 };
@@ -183,6 +187,10 @@ function inspectModel(model) {
     console.log(`PASS: ${file} — GLB 2.0, ${bytes.length.toLocaleString('en-US')} bytes, ${scenes.length} scene(s), ${nodes.length} node(s), ${meshes.length} mesh(es), ${accessors.length} accessor(s)`);
   }
 }
+
+if (!heroSource.includes("https://ajax.googleapis.com/ajax/libs/model-viewer/4.4.0/model-viewer.min.js") || !heroSource.includes("window.customElements.whenDefined('model-viewer')")) fail('model-viewer', 'The spatial GLB viewer must lazy-load the pinned Google model-viewer web component.');
+if (!heroSource.includes('src={MODEL_URL}') || !heroSource.includes('poster="/assets/jyc-logo.avif"')) fail('model-viewer', 'The viewer must point to the validated GLB and an existing poster asset.');
+if (!csp.includes('https://ajax.googleapis.com') || !csp.includes('https://www.gstatic.com') || !csp.includes("'wasm-unsafe-eval'")) fail('model-viewer', 'CSP must permit the pinned viewer, Draco decoder resources and WebAssembly compilation.');
 
 for (const model of models) inspectModel(model);
 if (errors.length) {

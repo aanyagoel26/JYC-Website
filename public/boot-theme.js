@@ -2,13 +2,11 @@
   let theme = 'dark';
   try {
     const saved = localStorage.getItem('jyc-theme');
-    theme = saved === 'dark' || saved === 'light'
-      ? saved
-      : (window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-  } catch {
-    theme = window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  }
+    if (saved === 'dark' || saved === 'light') theme = saved;
+  } catch {}
   document.documentElement.dataset.theme = theme;
-  const themeColor = document.querySelector('meta[name="theme-color"]');
-  if (themeColor) themeColor.content = theme === 'dark' ? '#0f0e11' : '#f5f1e6';
+  const themeColor = theme === 'dark' ? '#050811' : '#f8fafc';
+  document.querySelectorAll('meta[name="theme-color"]').forEach(meta => {
+    meta.content = themeColor;
+  });
 })();
