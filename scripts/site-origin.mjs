@@ -6,7 +6,7 @@ export function resolveSiteOrigin(env = process.env) {
   if (!candidate) {
     throw new Error('Canonical origin is missing. Set VITE_CANONICAL_ORIGIN or provide Vercel deployment URL metadata.');
   }
-  const normalized = /^[a-z][a-z\d+.-]*:\/\//i.test(candidate) ? candidate : \`https://\${candidate}\`;
+  const normalized = /^[a-z][a-z\d+.-]*:\/\//i.test(candidate) ? candidate : 'https://' + candidate;
   let parsed;
   try { parsed = new URL(normalized); }
   catch { throw new Error('Canonical origin must be a valid HTTP(S) origin.'); }
