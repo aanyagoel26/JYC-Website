@@ -170,3 +170,37 @@ These are observed permission/configuration blockers, not code fixes. No custom-
 - Added a regression assertion to `scripts/qa-current-release-coherence.mjs`.
 - Merged PR [#2 — preserve canonical slugs in event directory](https://github.com/kaustubhdua/JYC-Website2/pull/2) as `ae8083820bb38545186cb778c3b339e8ed1b3fa4`. The merge and both source changes were verified against the GitHub API.
 - This source-level correction is **not** a full build/browser test. The latest recheck still returns zero GitHub Actions runs and zero commit statuses for the merge commit. The Vercel project still lists the old `kaustubhdua/JYC-Website` repository; the new repository is not yet proven deployed. Production release remains blocked by deployment provenance, automated test evidence, domain verification and the visual/content/media gates above.
+
+
+## Execution follow-up — 5 November 2026 — Jai Hack dark-theme integration
+
+### Changes committed to `main`
+
+- Latest commit at time of this update: `e2ce3ef5fdc51d141df018e4047c20895ad7524a`.
+- Added `src/styles/jai-hack-dark-theme.css`: midnight navy surfaces, cyan/indigo accents, DM Sans / Space Grotesk / DM Mono typography, acrylic navigation, component surfaces, form and dialog treatments, focus visibility and reduced-motion handling. The theme is scoped to `html[data-theme="dark"]`; light mode is intentionally preserved.
+- Corrected stylesheet placement: the Jai Hack theme is imported after the application's global stylesheet imports in `src/main.jsx`, avoiding the earlier cascade-order problem. The redundant early import was removed from `src/styles/public-entry.css`.
+- Bridged both the legacy JYC design tokens and the editorial homepage's separate `--jh-*` variables to the new palette, so the homepage does not retain the old red/gold palette.
+- Added `scripts/jyc-dark-theme.spec.js` and registered it in the browser QA runner and Playwright configuration. The test contract covers homepage, clubs, events and gallery at desktop/mobile sizes, theme tokens, typography, navigation surface and light-theme isolation.
+- Updated `scripts/qa-visual-redesign.mjs` with static checks for the final theme cascade, dark-only scope, reduced motion and keyboard focus.
+- Added lazy loading and async decoding to the JYC assistant's three logo image instances in `src/jyc-assistant.jsx`.
+- Updated `README.md` to advertise the package's exact current release version, `V64.5.12`, after the quality workflow identified a release-integrity mismatch.
+- Adjusted the optional Datadog synthetic workflow to skip the integration when its required credentials are not configured.
+
+### Exact-head CI evidence and remaining uncertainty
+
+- On commit `dbe41b49a96ac6b7b9769c026083688c119f383b`, GitHub Actions completed the Vite production build successfully. The quality workflow then failed at `scripts/qa-current-release-integrity.mjs` because the README did not contain the exact `Current release: V64.5.12` marker. That marker was added in the subsequent commit `e2ce3ef5fdc51d141df018e4047c20895ad7524a`.
+- The preceding quality log showed the dependency-lock contract, 22 zero-glitch static assertions, 12 media-layout contracts, 15 public-journey assertions, 18/18 reference-archive readiness assertions, and 28 current-release coherence assertions passing before the README integrity failure.
+- Datadog synthetic workflow completed successfully on `dbe41b49a96ac6b7b9769c026083688c119f383b`.
+- New workflow runs were created for exact SHA `e2ce3ef5fdc51d141df018e4047c20895ad7524a`: JYC Quality Gate run `41895534329`, Browser QA `41895534271`, Lighthouse CI `41895534210`, JYC CI `41895534191`, CodeQL `41895534510`, and Datadog `41895534419`. At the time of this audit update, the runs/jobs were still queued; none is recorded as passing on this exact SHA. The README correction therefore has not yet been proven by a successful exact-head quality run.
+- No browser screenshots or human visual sign-off have been produced for this exact SHA. The new Playwright coverage is registered, but its execution remains pending.
+
+### Repository integration and deployment
+
+- `kaustubhdua/JYC-Website2` main currently points to `e2ce3ef5fdc51d141df018e4047c20895ad7524a`.
+- Cross-repository PR [#1](https://github.com/aanyagoel26/JYC-Website/pull/1) remains **open and unmerged**. Its head is the current `JYC-Website2` main SHA and its base repository is `aanyagoel26/JYC-Website`. Do not describe the changes as integrated into the upstream repository.
+- The current Vercel team deployment-context response did not list a project linked to `kaustubhdua/JYC-Website2`. Earlier project-creation attempt was rejected with HTTP 403. An authenticated fetch of the previously shared preview URL returned a Vercel lookup 404/access response, which is not sufficient evidence that the public site is down or healthy.
+- No production project settings, DNS records, custom-domain assignments, Supabase data or access policies were changed. No production deployment from this exact SHA is verified.
+
+### Current release verdict
+
+**Still NOT COMPLETE / NOT RELEASE-READY.** Source changes are committed and the previous build succeeded, but exact-head quality/browser/Lighthouse/CodeQL evidence, route-by-route visual review, upstream integration, Vercel project linkage, production deployment provenance, custom-domain verification, live Supabase checks, and media rights/content sign-off remain open. Treat these as release gates, not as completed work.
