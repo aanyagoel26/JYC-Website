@@ -294,3 +294,15 @@ These are observed permission/configuration blockers, not code fixes. No custom-
 - Supabase, Vercel, upstream PR and manual visual-verification blockers remain as recorded above.
 
 **Release remains NOT COMPLETE / NOT PRODUCTION-READY until exact-head QA passes, the actual production project/domain is connected, the database decision is resolved, upstream integration is approved, and rendered routes are visually signed off.**
+
+
+## 5 November 2026 follow-up — source-truth and event-state corrections
+
+See `docs/JYC-DEEP-RESEARCH-2026-11-05.md` for the research sources, library decisions, and complete release blocker record.
+
+- Removed the fabricated Converge 2027 live schedule, countdown, event programme and prize claims; `/converge` and `/converge-live` now redirect to the published archive.
+- JAI 2026 and RIDE Hack'26 JYC Now fallback cards now show their completed event dates. CICR TechTonic 2.0 remains date TBA.
+- The JYC Now empty/live-source fallback now distinguishes source snapshots from a live social feed.
+- Removed an unverified generic Linktree from the JYC-128 public identity/contact surface. The verified campus-specific LinkedIn and Instagram identities remain.
+- Removed unsupported contact-desk operating hours from the Contact page.
+- These are source/code corrections, not production deployment or database verification.

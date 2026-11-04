@@ -465,36 +465,30 @@ function Contact({data}){
   <SectionHead level={1} eyebrow="COMMUNICATION HUB" title="Stay connected with JYC." text="Official portals, verified community channels, and campus assistance."/>
   <div className="contact-sla-banner reveal">
    <span className="sla-dot"/>
-   <strong>STUDENT DESK ACTIVE</strong>
-   <span>Monday – Saturday · 9:00 AM – 6:00 PM IST · Verified JIIT Sector 128 Channels</span>
+   <strong>OFFICIAL JYC 128 CHANNELS</strong>
+   <span>Use the campus-specific Instagram and LinkedIn profiles for current announcements and contact routes.</span>
   </div>
   <div className="contact-grid">
-   <a className="contact-card" href={JYC_CONTACTS.official} target="_blank" rel="noreferrer">
-    <span>01</span>
-    <h3>Official Links</h3>
-    <p>Verified Linktree directory with registration portals.</p>
-    <span className="contact-arrow">↗</span>
-   </a>
    <a className="contact-card" href={JYC_CONTACTS.instagram} target="_blank" rel="noreferrer">
-    <span>02</span>
+    <span>01</span>
     <h3>Official Instagram</h3>
     <p>@jiityouthclub128 · Live story broadcasts, reels & recaps.</p>
     <span className="contact-arrow">↗</span>
    </a>
    <a className="contact-card" href={JYC_CONTACTS.linkedin} target="_blank" rel="noreferrer">
-    <span>03</span>
+    <span>02</span>
     <h3>LinkedIn Page</h3>
     <p>Professional updates, hackathons & achievements.</p>
     <span className="contact-arrow">↗</span>
    </a>
    <a className="contact-card" href={JYC_CONTACTS.whatsapp} target="_blank" rel="noreferrer">
-    <span>04</span>
+    <span>03</span>
     <h3>WhatsApp Community</h3>
     <p>Official broadcast group for enrolled JIIT students.</p>
     <span className="contact-arrow">↗</span>
    </a>
    <div className="contact-card contact-creator-card">
-    <span>05</span>
+    <span>04</span>
     <h3>Website Creator</h3>
     <p>{data.creator.name} · {data.creator.role}</p>
     <div className="social-row">
