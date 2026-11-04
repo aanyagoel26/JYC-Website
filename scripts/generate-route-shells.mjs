@@ -3,6 +3,7 @@ import path from 'node:path';
 import {resolveSiteOrigin} from './site-origin.mjs';
 import {JYC_HUB_SOURCE_REGISTRY} from '../src/jyc-hub-registry.js';
 import {JYC_HUB_CONTENT} from '../src/v21-hub-content.js';
+import {PUBLIC_EVENT_FALLBACK} from '../src/content/jyc-public-fallbacks.js';
 
 const root=process.cwd();
 const dist=path.join(root,'dist');
@@ -84,38 +85,6 @@ const routes={
     title:'Best of JYC | JIIT Youth Club 128',
     description:'A curated editorial selection of standout JYC communities, events and campus moments.'
   },
-  '/events/jai-2026-jaypee-agentic-ai-hackathon':{
-    title:'JAI 2026 — Jaypee Agentic AI Hackathon | JYC',
-    description:'Official JYC event record for JAI 2026, the Jaypee Agentic AI Hackathon.'
-  },
-  '/events/ride-hack-2026':{
-    title:'RIDE Hack 26 | JIIT Youth Club 128',
-    description:'Official JYC event record for RIDE Hack 26 and the JIIT innovation ecosystem.'
-  },
-  '/events/converge-2026':{
-    title:'Converge 2026 | JIIT Youth Club 128',
-    description:'Official JYC event record for Converge 2026 at JIIT Wish Town.'
-  },
-  '/events/drono-o-war-2026':{
-    title:'Drono-O-War 2026 | JIIT Youth Club 128',
-    description:'Official JYC event record for Drono-O-War 2026 and the JYC technical community.'
-  },
-  '/events/innovate-3-0-2026':{
-    title:'Innovate 3.0 2026 | JIIT Youth Club 128',
-    description:'Official JYC event record for Innovate 3.0 2026 at JIIT Wish Town.'
-  },
-  '/events/bitbox-6-0-2026':{
-    title:'BitBox 6.0 2026 | JIIT Youth Club 128',
-    description:'Official JYC event record for BitBox 6.0 2026 and the JYC technical community.'
-  },
-  '/events/sih-college-internals-26':{
-    title:'SIH College Internals 2026 | JIIT Youth Club 128',
-    description:'Official JYC event record for the Smart India Hackathon college internals at JIIT Wish Town.'
-  },
-  '/events/jyc-function-2026':{
-    title:'JYC Function 2026 | JIIT Youth Club 128',
-    description:'Official JYC event record for the JYC Function 2026.'
-  }
 };
 
 const slugify=value=>String(value||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
@@ -123,6 +92,19 @@ const plainText=value=>String(value||'').replace(/<[^>]*>/g,' ').replace(/&nbsp;
 const metaDescription=(value,fallback)=>{const text=plainText(value)||fallback;return text.length>160?text.slice(0,157).trimEnd()+'...':text;};
 const escapeHtml=value=>String(value||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 const escapeAttr=value=>escapeHtml(value).replace(/\"/g,'&quot;');
+
+// Generate static event shells only for source-approved, currently published records.
+for(const event of PUBLIC_EVENT_FALLBACK.filter(item=>item?.published&&item?.archived!==true)){
+  const name=plainText(event.title||event.name);
+  const eventSlug=slugify(event.slug||name)||String(event.id||'');
+  if(!name||!eventSlug)continue;
+  const route='/events/'+eventSlug;
+  if(routes[route])continue;
+  routes[route]={
+    title:name+' | JIIT Youth Club 128',
+    description:metaDescription(event.description,'Official JYC event details for '+name+' at JIIT Wish Town Campus, Sector 128, Noida.')
+  };
+}
 
 // Public records may be edited after this source bundle was authored. Add
 // route-specific shells for every currently published record available to the

@@ -7,7 +7,7 @@ import fs from 'node:fs';
 const unverifiedFallbackIds = [
   'ride-hack-2026','ebullience-2026','reverberance-2026','rangmanch-2026',
   'cybersrishti-2026','codeclash-2026','vamfest-2026','aakriti-art-fiesta-2026',
-  'kshitij-sports-2026','panache-runway-2026','grand-conclave-2026'
+  'kshitij-sports-2026','panache-runway-2026','grand-conclave-2026','arcadia-esports-open'
 ];
 for (const id of unverifiedFallbackIds) {
   const event = PUBLIC_EVENT_FALLBACK.find(item => item.id === id);
@@ -15,6 +15,8 @@ for (const id of unverifiedFallbackIds) {
   assert.equal(event.published, false, `${id} must remain unpublished until event-level sources verify its details`);
 }
 
+const drono = PUBLIC_EVENT_FALLBACK.find(item => item.id === 'drono-o-war-2026');
+assert.equal(drono?.slug, 'drono-o-war-2026', 'published Drono route must use its canonical slug');
 const jai = PUBLIC_EVENT_FALLBACK.find(item => item.id === 'jai-2026-jaypee-agentic-ai-hackathon');
 assert.equal(jai?.published, true);
 assert.equal(jai?.featured, false, 'completed JAI event must not remain featured');

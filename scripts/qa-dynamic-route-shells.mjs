@@ -5,6 +5,8 @@ const checks=[
  ['dynamic route loader exists', source.includes('async function loadDynamicRoutes()')],
  ['loader is awaited before shells are written', source.includes('await loadDynamicRoutes();')],
  ['published events are filtered', source.includes('event?.published')],
+ ['static event shells derive only from published, non-archived fallback records', source.includes('PUBLIC_EVENT_FALLBACK.filter(item=>item?.published&&item?.archived!==true)')],
+ ['static hub shells exclude draft source-registry entries', source.includes("JYC_HUB_SOURCE_REGISTRY.filter(item=>item.publicationStatus==='published')")],
  ['published clubs are filtered', source.includes('club?.published')],
  ['curated route metadata is preserved', source.includes('if(routes[route])continue;')],
  ['CMS outage is non-fatal', source.includes('dynamic metadata unavailable')],

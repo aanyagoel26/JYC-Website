@@ -1,5 +1,16 @@
 # Changelog
 
+## V64.5.16 — Publish only verified routes in sitemap and static shells
+
+- Remove hard-coded event route lists from sitemap and static route-shell generation. Both now derive static event routes from published, non-archived event records; dynamic CMS routes remain source-gated at build time.
+- Restrict static hub sitemap routes to source-registry entries with `publicationStatus: published`, matching the club directory and route-shell publication gates.
+- Add missing public `/archive` and `/recruitment` core routes to the sitemap.
+- Hide the unverified Arcadia Esports Winter Cup fallback while Arcadia itself remains a publication-gated draft.
+- Give DRONO-O-WAR its canonical `drono-o-war-2026` slug so event cards, detail links, sitemap and static route shell resolve to one URL.
+- Expand sitemap and route-shell QA to assert published-only routes and exclude unverified/archived fallback records.
+- Rotate the service-worker cache namespace to `jyc-cache-v64-5-16`.
+
+
 ## V64.5.15 — Restore the homepage WebGL Dither Veil
 
 - Mount the lazy-loaded React Bits DitherVeil in the homepage hero; the previous bundle imported the component but never rendered it, so the requested visual effect could not appear.
