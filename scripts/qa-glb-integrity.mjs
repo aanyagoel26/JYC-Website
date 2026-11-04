@@ -119,8 +119,12 @@ function inspectModel(model) {
       if (view && bytesPerElement && (accessor.byteOffset || 0) + accessor.count * bytesPerElement > view.byteLength && !accessor.sparse) {
         fail(file, `accessor ${index} exceeds its bufferView`);
       }
-    } else if (!accessor.sparse) {
-      fail(file, `accessor ${index} has neither bufferView nor sparse data`);
+    } else if (accessor.byteOffset !== undefined) {
+      // glTF 2.0 permits accessors without a bufferView: their base values are
+      // zero-initialized, and extensions such as KHR_draco_mesh_compression
+      // may supply the actual decoded geometry. byteOffset is forbidden
+      // when bufferView is omitted.
+      fail(file, `accessor ${index} defines byteOffset without a bufferView`);
     }
   }
 
