@@ -24,7 +24,8 @@ else {
 const socials=read('src/jyc-socials.js');
 if(socials.includes("instagram: 'https://www.instagram.com/jiityouthclub/'")) failures.push('legacy JYC Instagram remains in canonical social registry');
 if(socials.includes("linkedin: 'https://www.linkedin.com/company/jiityouthclub/'")) failures.push('legacy JYC LinkedIn remains in canonical social registry');
-if(!socials.includes("official: 'https://linktr.ee/jiityouthclub'")) failures.push('verified JYC link hub missing');
+if(!socials.includes("instagram: 'https://www.instagram.com/jiityouthclub128/'")) failures.push('verified JYC 128 Instagram missing');
+if(!socials.includes('Generic JIIT Youth Club link directories are not treated as Sector 128 sources without campus-specific verification.')) failures.push('generic legacy link directories are not excluded from JYC 128 source attribution');
 if(!socials.includes("linkedin: 'https://in.linkedin.com/in/jyc128'")) failures.push('verified JYC 128 LinkedIn missing');
 
 const main=read('src/main.jsx');
