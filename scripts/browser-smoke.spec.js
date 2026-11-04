@@ -429,11 +429,21 @@ test('JAI event does not advertise an expired registration QR as open', async ({
   await expect(page.locator('#event-register').getByRole('button', { name: /REGISTRATION LINK UNAVAILABLE/i })).toBeDisabled();
 });
 
-test('first visit keeps the V20 light palette even when OS requests dark', async ({ page }) => {
-  await page.emulateMedia({ colorScheme: 'dark' });
-  await page.addInitScript(() => localStorage.removeItem('jyc-theme'));
+test('first visit defaults to midnight theme and saved preferences remain respected', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'light' });
+  await page.addInitScript(() => {
+    if (!sessionStorage.getItem('jyc-theme-test-cleared')) {
+      localStorage.removeItem('jyc-theme');
+      sessionStorage.setItem('jyc-theme-test-cleared', '1');
+    }
+  });
   await page.goto(base, { waitUntil: 'domcontentloaded' });
-  await waitForAppMount(page, 'V20 default theme');
+  await waitForAppMount(page, 'midnight default theme');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect(page.locator('meta[name="theme-color"]').first()).toHaveAttribute('content', '#050811');
+  await page.evaluate(() => localStorage.setItem('jyc-theme', 'light'));
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'saved light theme');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
   await expect(page.locator('.jyc-editorial-home .jh-hero')).toBeVisible();
 });

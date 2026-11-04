@@ -20,7 +20,8 @@ assert.ok(gallery.includes('className="jyc57-masonry"') && gallery.includes('cla
 assert.ok(main.includes('event-jai-registration-closed') && main.includes('regOpen&&registrationTarget'), 'expired JAI registration must not expose an active QR/link');
 assert.ok(fallback.includes("registrationDeadline:'2026-10-15T23:59:00+05:30'"), 'JAI fallback must retain the verified deadline');
 assert.ok(browser.includes('JAI event does not advertise an expired registration QR as open'), 'browser regression for expired registration must exist');
-assert.ok(main.includes("if(saved==='dark'||saved==='light')return saved;") && main.includes("return 'light';"), 'first visit must retain the approved warm V20 palette even when the OS requests dark mode');
+const bootTheme=fs.readFileSync('public/boot-theme.js','utf8');
+assert.ok(main.includes("if(saved==='dark'||saved==='light')return saved;") && main.includes("return 'dark';") && bootTheme.includes("let theme = 'dark';") && bootTheme.includes("saved === 'dark' || saved === 'light'"), 'first visit defaults to midnight theme while saved preferences remain respected');
 assert.ok(css.includes('grid-auto-flow: row dense !important') && css.includes('align-content: start !important'), 'photo wall must pack variable-height frames without avoidable empty grid tracks');
 assert.ok(css.includes('repeat(auto-fit, minmax(min(100%, 260px), 1fr))') && css.includes('.jyc-memory-card:focus-visible'), 'album cards must adapt to available width and remain keyboard visible');
 assert.ok(gallery.includes('const registrationOpen=(e)=>') && gallery.includes('{registrationOpen(e)&&<span className="jyc57-reg-pill">REGISTRATION OPEN ↗</span>}'), 'event directory must not claim registration is open after its deadline');
