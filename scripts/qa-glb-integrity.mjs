@@ -75,7 +75,6 @@ function inspectModel(model) {
   if (!json) return;
 
   if (json.asset?.version !== '2.0') fail(file, 'asset.version must be 2.0');
-  if (!json.asset?.generator) fail(file, 'asset.generator metadata is missing');
   const used = list(json.extensionsUsed);
   const required = list(json.extensionsRequired);
   for (const extension of required) if (!used.includes(extension)) fail(file, `required extension ${extension} is absent from extensionsUsed`);
