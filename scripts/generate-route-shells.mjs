@@ -204,6 +204,9 @@ function shellFor(meta,route){
       out=out.replace(/<meta name="twitter:description" content="[^"]*"\s*\/>/i,`<meta name="twitter:description" content="${esc}" />`);
     }
   }
+  const canonicalOriginTag=`<meta name="jyc-canonical-origin" content="${escapeAttr(siteOrigin)}" />`;
+  if(/<meta name="jyc-canonical-origin" content="[^"]*"\s*\/>/i.test(out)) out=out.replace(/<meta name="jyc-canonical-origin" content="[^"]*"\s*\/>/i,canonicalOriginTag);
+  else out=out.replace('</head>',`  ${canonicalOriginTag}\n  </head>`);
   const canonicalUrl=`${siteOrigin}${route === '/history' ? '/about' : route}`;
   const canonicalTag=`<link rel="canonical" href="${canonicalUrl}" />`;
   if(/<link rel="canonical" href="[^"]*"\s*\/>/i.test(out)){

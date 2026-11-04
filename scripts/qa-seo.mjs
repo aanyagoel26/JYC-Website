@@ -25,6 +25,7 @@ add('Event structured data',meta.includes("'@type':'Event'") && meta.includes('s
 add('Breadcrumb structured data',meta.includes("'@type':'BreadcrumbList'") && meta.includes('itemListElement'));
 add('Dynamic canonical URLs use the configured origin or the active browser origin, without a retired deployment fallback',meta.includes('canonical') && meta.includes('VITE_CANONICAL_ORIGIN') && meta.includes('window.location.origin') && !meta.includes('jyc-website-eight.vercel.app'));
 add('Static route shells replace the canonical-origin token throughout metadata and structured data',html.includes('__JYC_CANONICAL_ORIGIN__') && routeShells.includes("replaceAll('__JYC_CANONICAL_ORIGIN__',siteOrigin)"));
+add('SPA metadata retains the build-resolved production origin on preview deployments',html.includes('meta name="jyc-canonical-origin"') && routeShells.includes('canonicalOriginTag') && meta.includes('meta[name="jyc-canonical-origin"]'));
 add('Sitemap and route-shell generators share the validated Vercel-aware origin resolver',sitemap.includes('resolveSiteOrigin(process.env)') && routeShells.includes('resolveSiteOrigin(process.env)'));
 add('Open Graph image',meta.includes("og:image") && meta.includes("og:image:alt") && meta.includes('canonicalUrl') && meta.includes('imageType') && html.includes('og:image'));
 add('Private route noindex',main.includes("clean.startsWith('/qr/')") && meta.includes("noindex,nofollow"));
