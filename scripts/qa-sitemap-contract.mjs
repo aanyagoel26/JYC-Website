@@ -5,13 +5,13 @@ import {JYC_HUB_SOURCE_REGISTRY} from '../src/jyc-hub-registry.js';
 
 const root=process.cwd();
 const sitemapPath=path.join(root,'public','sitemap.xml');
-const site='https://jyc-website-eight.vercel.app';
+const site='https://jyc-qa.invalid';
 const core=['/','/about','/clubs','/events','/fests','/gallery','/team','/contact','/calendar','/announcements','/updates','/achievements','/best-of-jyc','/join-jyc','/events/jai-2026-jaypee-agentic-ai-hackathon','/events/ride-hack-2026','/events/converge-2026','/events/drono-o-war-2026','/events/innovate-3-0-2026','/events/bitbox-6-0-2026','/events/sih-college-internals-26','/events/jyc-function-2026'];
 const slug=value=>String(value||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
 const allowed=new Set(core);
 for(const hub of JYC_HUB_SOURCE_REGISTRY) allowed.add('/clubs/'+slug(hub.name));
 
-const run=spawnSync(process.execPath,['scripts/generate-sitemap.mjs'],{cwd:root,env:{...process.env,JYC_CANONICAL_ORIGIN:site},encoding:'utf8'});
+const run=spawnSync(process.execPath,['scripts/generate-sitemap.mjs'],{cwd:root,env:{...process.env,VITE_CANONICAL_ORIGIN:site,JYC_CANONICAL_ORIGIN:'',VITE_SITE_URL:'',VERCEL_PROJECT_PRODUCTION_URL:'',VERCEL_URL:''},encoding:'utf8'});
 if(run.status!==0){console.error(run.stdout||'');console.error(run.stderr||'');process.exit(run.status||1)}
 const xml=fs.readFileSync(sitemapPath,'utf8');
 const locs=[...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>m[1].replace(site,''));

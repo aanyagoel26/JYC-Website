@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import {resolveSiteOrigin} from './site-origin.mjs';
 import {JYC_HUB_SOURCE_REGISTRY} from '../src/jyc-hub-registry.js';
 import {JYC_HUB_CONTENT} from '../src/v21-hub-content.js';
 
@@ -13,7 +14,7 @@ if(!fs.existsSync(index)){
 }
 
 const html=fs.readFileSync(index,'utf8');
-const siteOrigin=new URL(process.env.VITE_CANONICAL_ORIGIN||process.env.JYC_CANONICAL_ORIGIN||process.env.VITE_SITE_URL||'https://jyc-website-eight.vercel.app').origin;
+const siteOrigin=resolveSiteOrigin(process.env);
 const routes={
   '/':{
     title:'JIIT Youth Club 128 — Official JYC Website | JIIT Wish Town, Noida',
@@ -179,7 +180,7 @@ async function loadDynamicRoutes(){
 }
 
 function shellFor(meta,route){
-  let out=html;
+  let out=html.replaceAll('__JYC_CANONICAL_ORIGIN__',siteOrigin).replaceAll('https://jyc-website-eight.vercel.app',siteOrigin);
   const tags=[
     ['title',meta.title],
     ['meta[name="description"]',meta.description],

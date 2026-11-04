@@ -8,6 +8,7 @@ import { spawnSync } from 'node:child_process';
  * assumptions. Current contracts below are the release source of truth.
  */
 const scripts = [
+  'qa-site-origin.mjs',
   'qa-source-media-completeness.mjs',
   'qa-source-integrity.mjs',
   'qa-hub-registry.mjs',

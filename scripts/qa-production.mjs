@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import {resolveSiteOrigin} from './site-origin.mjs';
 
 const root=process.cwd();
 const read=(p)=>fs.readFileSync(path.join(root,p),'utf8');
@@ -17,8 +18,7 @@ if(/https:\/\/[^*\s]+\.supabase\.co/.test(vercel)) fail('Vercel CSP does not har
 if(vercel.includes('X-Content-Type-Options')&&vercel.includes('X-Frame-Options')&&vercel.includes('Referrer-Policy')) pass('Baseline security headers present'); else fail('Baseline security headers incomplete');
 if(vercel.includes('Strict-Transport-Security')) pass('HSTS header present'); else fail('HSTS header missing');
 const robots=read('public/robots.txt');
-const configuredSite=(process.env.VITE_CANONICAL_ORIGIN||'https://jyc-website-eight.vercel.app').trim();
-const siteOrigin=(()=>{try{const candidate=/^[a-z][a-z\d+.-]*:\/\//i.test(configuredSite)?configuredSite:`https://${configuredSite}`;const parsed=new URL(candidate);if(!['http:','https:'].includes(parsed.protocol)||parsed.username||parsed.password)throw new Error('Invalid site URL');return parsed.origin}catch{throw new Error('VITE_CANONICAL_ORIGIN must be a valid HTTP(S) origin')}})();
+const siteOrigin=resolveSiteOrigin(process.env);
 const sitemap=path.join(root,'public','sitemap.xml');
 if(fs.existsSync(sitemap)){
   const sitemapText=read('public/sitemap.xml');

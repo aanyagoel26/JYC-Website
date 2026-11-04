@@ -9,6 +9,7 @@ const robots=read('public/robots.txt');
 const llms=read('public/llms.txt');
 const meta=read('src/extra-features.jsx');
 const sitemap=read('scripts/generate-sitemap.mjs');
+const routeShells=read('scripts/generate-route-shells.mjs');
 const main=read('src/main.jsx');
 const pkg=JSON.parse(read('package.json'));
 add('Homepage title targets JIIT Youth Club + clubs/events/fests',html.includes('JIIT Youth Club 128') && main.includes('Clubs, Events & Fests'));
@@ -22,7 +23,9 @@ add('Gallery collection structured data',meta.includes("'@type':'CollectionPage'
 add('Event schema uses source images and full campus address',meta.includes('sourceEventMedia(item)')&&meta.includes('streetAddress')&&meta.includes('Sector 128, Wish Town Campus'));
 add('Event structured data',meta.includes("'@type':'Event'") && meta.includes('startDate'));
 add('Breadcrumb structured data',meta.includes("'@type':'BreadcrumbList'") && meta.includes('itemListElement'));
-add('Dynamic canonical URLs use the explicit production origin',meta.includes('canonical') && meta.includes('VITE_CANONICAL_ORIGIN') && meta.includes('https://jyc-website-eight.vercel.app') && !meta.includes('const origin=(import.meta.env.VITE_SITE_URL||window.location.origin)'));
+add('Dynamic canonical URLs use the configured origin or the active browser origin, without a retired deployment fallback',meta.includes('canonical') && meta.includes('VITE_CANONICAL_ORIGIN') && meta.includes('window.location.origin') && !meta.includes('jyc-website-eight.vercel.app'));
+add('Static route shells replace the canonical-origin token throughout metadata and structured data',html.includes('__JYC_CANONICAL_ORIGIN__') && routeShells.includes("replaceAll('__JYC_CANONICAL_ORIGIN__',siteOrigin)"));
+add('Sitemap and route-shell generators share the validated Vercel-aware origin resolver',sitemap.includes('resolveSiteOrigin(process.env)') && routeShells.includes('resolveSiteOrigin(process.env)'));
 add('Open Graph image',meta.includes("og:image") && meta.includes("og:image:alt") && meta.includes('canonicalUrl') && meta.includes('imageType') && html.includes('og:image'));
 add('Private route noindex',main.includes("clean.startsWith('/qr/')") && meta.includes("noindex,nofollow"));
 add('Robots allows public crawling',robots.includes('Allow: /') && robots.includes('Disallow: /admin'));

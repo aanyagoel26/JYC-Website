@@ -1,5 +1,15 @@
 # Changelog
 
+## V64.5.13 — Canonical-origin and deployment identity hardening
+
+- Remove the retired, non-existent `jyc-website-eight.vercel.app` hostname from source defaults and stop publishing it in canonical tags, Open Graph metadata, structured data or sitemap output.
+- Resolve one validated site origin consistently across runtime metadata, static route shells and sitemap generation: explicit verified JYC origin first, then Vercel's production URL, then the deployment URL. Local builds use localhost only.
+- Fail closed on Vercel builds that cannot resolve an HTTPS deployment/production origin rather than emitting broken or unrelated canonical URLs.
+- Add a shared origin resolver and regression cases covering precedence, normalization, local builds and unsafe/missing origins.
+- Keep the JAI event microsite domain separate; do not redirect JYC SEO identity to an unrelated summit microsite.
+- Rotate the service-worker cache namespace to `jyc-cache-v64-5-13`.
+
+
 ## V64.5.9 — Semantic image fallback and release-source correction
 
 - Render the terminal JYC image placeholder with valid `<picture>` semantics using CSS pseudo-elements and an accessible label; avoid injecting a `span` into the picture content model.
