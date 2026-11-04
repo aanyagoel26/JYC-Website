@@ -41,4 +41,20 @@ assert.equal(merged.find(item => item.id === liveApproved.id), liveApproved, 'li
 assert.equal(mergePublicEvents([liveApproved], PUBLIC_EVENT_FALLBACK, false).length, 1, 'fallbacks must be disabled when requested');
 assert.equal(mergePublicEvents([], PUBLIC_EVENT_FALLBACK).length, PUBLIC_EVENT_FALLBACK.length);
 
+const vercelConfig = JSON.parse(fs.readFileSync(new URL('../vercel.json', import.meta.url), 'utf8'));
+const redirects = new Map((vercelConfig.redirects || []).map(item => [item.source, item]));
+for (const route of ['/converge', '/converge-live']) {
+  assert.equal(redirects.get(route)?.destination, '/archive', `${route} must lead to the published archive, not an invented live schedule`);
+  assert.equal(redirects.get(route)?.permanent, true, `${route} archive redirect must be permanent`);
+}
+const routeRedirectStart = mainSource.indexOf('const routeRedirects={');
+const routeRedirectEnd = mainSource.indexOf('};', routeRedirectStart);
+const routeRedirects = mainSource.slice(routeRedirectStart, routeRedirectEnd);
+assert.ok(routeRedirects.includes("'/converge':'/archive'") && routeRedirects.includes("'/converge-live':'/archive'"), 'client routing must retire the unverified Converge Live experience');
+assert.ok(!mainSource.includes('JYCConvergeLive'), 'unverified Converge Live component must not be mounted');
+assert.equal(fs.existsSync(new URL('../src/components/JYCConvergeLive.jsx', import.meta.url)), false, 'fabricated Converge schedule component must be removed');
+assert.equal(fs.existsSync(new URL('../src/components/jyc-converge-live.css', import.meta.url)), false, 'retired Converge live styling must be removed');
+const updatesSource = fs.readFileSync(new URL('../src/jyc-now.jsx', import.meta.url), 'utf8');
+assert.ok(updatesSource.includes('Event concluded · 31 Oct 2026') && updatesSource.includes('Event concluded · 1 Nov 2026'), 'JAI and RIDE fallback cards must reflect completed event dates');
+assert.ok(updatesSource.includes('No live updates are available right now.'), 'curated source snapshots must not be presented as a live feed');
 console.log(`PASS: public content publication trust (${unverifiedFallbackIds.length} gated fallbacks, typed media, live CMS precedence)`);

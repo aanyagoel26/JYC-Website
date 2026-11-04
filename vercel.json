@@ -112,6 +112,16 @@
   ],
   "redirects": [
     {
+      "source": "/converge-live",
+      "destination": "/archive",
+      "permanent": true
+    },
+    {
+      "source": "/converge",
+      "destination": "/archive",
+      "permanent": true
+    },
+    {
       "source": "/admin",
       "destination": "/",
       "permanent": true

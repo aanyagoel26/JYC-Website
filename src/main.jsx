@@ -32,7 +32,6 @@ import {ResponsivePhoto} from './jyc-responsive-photo.jsx';
 import { teamPhotoFor } from './jyc-team-media.js';
 import {FeaturedEventPopup} from './featured-event-popup.jsx';
 import {JYC57Events,JYC57Clubs,JYC57Gallery,JYCBestOf} from './jyc57-experience.jsx';
-import {JYCConvergeLive} from './components/JYCConvergeLive.jsx';
 
 
 import {PUBLIC_TEAM_FALLBACK,JAI_OFFICIAL_MEDIA,PUBLIC_GALLERY_FALLBACK,PUBLIC_EVENT_FALLBACK} from './content/jyc-public-fallbacks.js';
@@ -661,6 +660,8 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
   '/clubs':'JIIT Clubs & Student Communities | JIIT Youth Club',
   '/events':'JIIT Events & Campus Activities | JIIT Youth Club',
   '/fests':'JIIT Fests & Flagship Events | JIIT Youth Club',
+  '/converge':'Converge archive | JIIT Youth Club 128',
+  '/converge-live':'Converge archive | JIIT Youth Club 128',
   '/team':'JYC 128 Leadership | Faculty, Apex & Core Team',
   '/leadership':'JYC 128 Leadership | Faculty, Apex & Core Team',
   '/gallery':'JYC Gallery | JIIT Youth Club 128',
@@ -685,6 +686,8 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
   '/clubs':'Explore the official JIIT club list and student communities across technical, cultural, literary, creative, sports and other campus interests through JIIT Youth Club.',
   '/events':'Find JIIT events, workshops, competitions, cultural activities and campus events published by JIIT Youth Club at JIIT Noida.',
   '/fests':'Explore JIIT fests and flagship campus events such as officially published JYC programmes, with dates, venues, clubs and registration details when available.',
+  '/converge':'Browse the published Converge event archive. Future schedules and live status will appear only after official confirmation.',
+  '/converge-live':'Browse the published Converge event archive. Future schedules and live status will appear only after official confirmation.',
   '/resources':'JIIT Youth Club — official clubs, events, fests and community information.',
   '/guide':'About JIIT Youth Club — purpose, communities, events and campus life.',
     '/calendar':'Browse the JYC 128 event calendar by date, category and event status.',
@@ -701,11 +704,11 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
   '/join-jyc':'Join JYC 128 is currently coming soon. Recruitment and application opportunities will be published here when the next official cycle opens.'
  };
  const privateRoute=clean==='/admin'||clean.startsWith('/admin/');
- const knownPublic=['/','/about','/history','/clubs','/events','/fests','/gallery','/team','/leadership','/contact','/archive','/calendar','/event-calendar','/achievements','/best-of-jyc','/announcements','/updates','/recruitment','/join-jyc'].includes(clean)||clean.startsWith('/gallery/');
+ const knownPublic=['/','/about','/history','/clubs','/events','/fests','/converge','/converge-live','/gallery','/team','/leadership','/contact','/archive','/calendar','/event-calendar','/achievements','/best-of-jyc','/announcements','/updates','/recruitment','/join-jyc'].includes(clean)||clean.startsWith('/gallery/');
  const knownDetail=Boolean(club||event);
  const unknownRoute=!privateRoute&&!knownPublic&&!knownDetail;
- const pageType=club?'club':event?'event':clean==='/fests'?'fests':clean==='/clubs'?'clubs':clean==='/events'?'events':clean.startsWith('/gallery')?'gallery':clean==='/team'||clean==='/leadership'?'team':clean==='/history'||clean==='/about'?'about':clean==='/archive'?'archive':clean==='/announcements'?'announcements':clean==='/updates'?'updates':clean==='/achievements'?'achievements':clean==='/best-of-jyc'?'best-of-jyc':clean==='/calendar'||clean==='/event-calendar'?'calendar':clean==='/recruitment'?'recruitment':clean==='/join-jyc'?'join-jyc':clean==='/contact'?'contact':'home';
- const canonicalPath=club?`/clubs/${slug(club.name)}`:event?`/events/${slug(event.slug||event.title)}${parts[2]==='register'?'/register':''}`:clean;
+ const pageType=club?'club':event?'event':clean==='/converge'||clean==='/converge-live'||clean==='/archive'?'archive':clean==='/fests'?'fests':clean==='/clubs'?'clubs':clean==='/events'?'events':clean.startsWith('/gallery')?'gallery':clean==='/team'||clean==='/leadership'?'team':clean==='/history'||clean==='/about'?'about':clean==='/archive'?'archive':clean==='/announcements'?'announcements':clean==='/updates'?'updates':clean==='/achievements'?'achievements':clean==='/best-of-jyc'?'best-of-jyc':clean==='/calendar'||clean==='/event-calendar'?'calendar':clean==='/recruitment'?'recruitment':clean==='/join-jyc'?'join-jyc':clean==='/contact'?'contact':'home';
+ const canonicalPath=club?`/clubs/${slug(club.name)}`:event?`/events/${slug(event.slug||event.title)}${parts[2]==='register'?'/register':''}`:clean==='/converge'||clean==='/converge-live'?'/archive':clean;
  useEffect(()=>{if((club||event)&&(slugId!==slug(event?(event.slug||event.title):club.name)||Boolean(legacyEventSlugMap[slugId]))){const target=event?`/events/${slug(event.slug||event.title)}${parts[2]==='register'?'/register':''}`:`/clubs/${slug(club.name)}`;nav(target,{replace:true});}},[slugId,club?.id,event?.id,parts[2],nav]);
  const galleryAlbumName=clean.startsWith('/gallery/')?decodeURIComponent(parts[1]||'').replace(/-/g,' '):'';
  const title=club?`${club.name} — ${club.category||'Student Community'} | JIIT Youth Club 128`:event?`${event.title} | JIIT Event · JYC`:galleryAlbumName?`${galleryAlbumName} — JYC Visual Archive`:titles[clean]||'JIIT Youth Club';
@@ -714,7 +717,7 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
  const schema=<JsonLd data={data} pageType={pageType} item={club||event} path={canonicalPath}/>;
  // Resolve route aliases after all hooks have run, keeping hook order stable on navigation.
  const routeRedirects={
-  '/admin':'/','/leadership':'/team','/event-calendar':'/calendar','/moments':'/gallery',
+  '/admin':'/','/leadership':'/team','/event-calendar':'/calendar','/moments':'/gallery','/converge':'/archive','/converge-live':'/archive',
   '/planner':'/events','/agenda':'/events','/discover':'/clubs','/guide':'/about','/resources':'/about',
   '/my-jyc':'/','/login':'/','/notifications':'/','/settings':'/about','/download':'/about',
   '/projects':'/clubs','/projects/submit':'/clubs','/map':'/events'
@@ -727,7 +730,7 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
  if(clean==='/achievements')return <>{schema}<Achievements data={data}/></>;
  if(clean==='/best-of-jyc')return <>{schema}<JYCBestOf data={data}/></>;
  if(clean==='/about')return <>{schema}<About data={data}/></>;if(clean==='/clubs')return <>{schema}<JYC57Clubs data={data}/></>;if(club)return <>{schema}<ClubDetail data={data} id={slugId} virtualName={hubKey||undefined}/></>;
- if(clean==='/events')return <>{schema}<JYC57Events data={data}/></>;if(clean==='/fests')return <>{schema}<FestsPage data={data}/></>;if(clean==='/converge'||clean==='/converge-live')return <>{schema}<JYCConvergeLive data={data}/></>;if(clean.startsWith('/events/')&&legacyEventRedirect)return <Navigate to={'/events/'+legacyEventRedirect} replace/>;if(event&&parts[2]==='register')return <><RegistrationPage data={data} id={slugId} session={session}/></>;if(event)return <>{schema}<EventDetail data={data} id={slugId} session={session} notify={notify}/></>;
+ if(clean==='/events')return <>{schema}<JYC57Events data={data}/></>;if(clean==='/fests')return <>{schema}<FestsPage data={data}/></>;if(clean.startsWith('/events/')&&legacyEventRedirect)return <Navigate to={'/events/'+legacyEventRedirect} replace/>;if(event&&parts[2]==='register')return <><RegistrationPage data={data} id={slugId} session={session}/></>;if(event)return <>{schema}<EventDetail data={data} id={slugId} session={session} notify={notify}/></>;
  if(clean==='/gallery'||clean.startsWith('/gallery/'))return <>{schema}<JYC57Gallery data={data}/></>;if(clean==='/leadership')return <Navigate to="/team" replace/>;if(clean==='/team')return <>{schema}<Team data={data}/></>;if(clean==='/contact')return <>{schema}<Contact data={data}/></>;if(clean==='/archive')return <>{schema}<Suspense fallback={<div className="jyc57-empty" role="status">Loading the JYC archive…</div>}><LazyJYC57Archive data={data}/></Suspense></>;
  if(clean==='/announcements')return <>{schema}<Announcements data={data}/></>;
  if(clean==='/updates')return <>{schema}<JYCNowPage data={data}/></>;
