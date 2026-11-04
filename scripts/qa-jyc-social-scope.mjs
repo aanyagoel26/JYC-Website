@@ -38,5 +38,6 @@ if(index.includes(unverifiedLinktree)) failures.push('unverified general JYC Lin
 if(nowSource.includes(unverifiedLinktree)) failures.push('unverified general JYC Linktree remains in JYC Now fallback');
 if(main.includes('JYC_CONTACTS.official')||main.includes('Verified Linktree directory')) failures.push('contact page still presents the unverified Linktree as an official 128 portal');
 if(main.includes('STUDENT DESK ACTIVE')||main.includes('Monday – Saturday · 9:00 AM – 6:00 PM IST')) failures.push('contact page advertises unverified desk operating hours');
+if(main.includes('Official broadcast group for enrolled JIIT students')) failures.push('WhatsApp invite is described as an official enrolled-student broadcast without campus-specific verification');
 if(failures.length){failures.forEach(x=>console.error('FAIL:',x));process.exit(1)}
 console.log('PASS: social source policy is explicitly restricted to JIIT Sector 128');

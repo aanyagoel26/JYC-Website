@@ -82,3 +82,5 @@ Research references:
 - Added a read-only fallback mode: use the last saved public cache when present; otherwise render the 21 publication-approved hub profiles, source-reviewed event records and current 2026–27 leadership campaign. It deliberately excludes the extra PDF/gallery fallback collection until the database/media rights pipeline is available.
 - The fallback mode is explicitly disclosed in a responsive notice. Content edits/publishing are blocked while in fallback mode, and fallback-only metadata is stripped before any save payload.
 - The gallery fallback remains constrained; this change does not widen media rights/publication access.
+
+- A final contact-copy review also removed an unsupported claim that the retained WhatsApp invite is an official enrolled-student broadcast. The page now identifies it as a community invite and directs visitors to check the group's own current membership/announcement description.

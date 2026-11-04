@@ -487,7 +487,7 @@ function Contact({data}){
  }finally{setSending(false)}};
  return <section className="section page contact-page">
   <Back label="Back to home" to="/"/>
-  <SectionHead level={1} eyebrow="COMMUNICATION HUB" title="Stay connected with JYC." text="Official portals, verified community channels, and campus assistance."/>
+  <SectionHead level={1} eyebrow="COMMUNICATION HUB" title="Stay connected with JYC." text="Campus-specific social channels, community contact routes, and campus assistance."/>
   <div className="contact-sla-banner reveal">
    <span className="sla-dot"/>
    <strong>OFFICIAL JYC 128 CHANNELS</strong>
@@ -509,7 +509,7 @@ function Contact({data}){
    <a className="contact-card" href={JYC_CONTACTS.whatsapp} target="_blank" rel="noreferrer">
     <span>03</span>
     <h3>WhatsApp Community</h3>
-    <p>Official broadcast group for enrolled JIIT students.</p>
+    <p>Open the community invite and review the group description for current membership and announcements.</p>
     <span className="contact-arrow">↗</span>
    </a>
    <div className="contact-card contact-creator-card">
