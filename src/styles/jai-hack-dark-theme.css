@@ -31,6 +31,19 @@ html[data-theme="dark"] {
   --jyc-green: #34d399;
   --jyc-violet: #a855f7;
   --jyc-amber: #fbbf24;
+  /* Bridge the existing JYC token system into the new cool-toned dark palette. */
+  --jyc-brand-paper: #050811;
+  --jyc-brand-paper-raised: #0d1526;
+  --jyc-brand-ink: #edf2f7;
+  --jyc-brand-muted: #94a3b8;
+  --jyc-brand-oxblood: #38bdf8;
+  --jyc-brand-oxblood-hover: #0ea5e9;
+  --jyc-brand-champagne: #60a5fa;
+  --jyc-brand-line: rgba(56,189,248,.14);
+  --jyc-brand-line-strong: rgba(56,189,248,.26);
+  --jyc-brand-shadow-sm: 0 2px 10px rgba(0,0,0,.22);
+  --jyc-brand-shadow-md: 0 12px 34px rgba(0,0,0,.3);
+  --jyc-brand-shadow-lg: 0 24px 64px rgba(0,0,0,.42);
   --jyc-panel: rgba(13,21,38,.76);
   --jyc-panel-raised: rgba(16,26,46,.82);
   --jyc-glass-border: rgba(56,189,248,.16);
@@ -152,7 +165,7 @@ html[data-theme="dark"] .public-app .nav :where(.theme-toggle,.search-trigger,.h
 html[data-theme="dark"] .public-app .nav .hamb i { background: #e2e8f0 !important; }
 
 /* Reusable panels, cards, content blocks and editorial feature surfaces. */
-html[data-theme="dark"] .public-app :where(.card,.club-card,.event-card,.feature-card,.featured,.search-topic-band,.search-result,.compact-page-head,.about-hero-v28,.achievements-hero,.announcements-hero,.archive-hero,.join-soon-hero,.club-card-premium,.event-card-premium,.jyc57-feature-card,.jyc57-photo,.jyc-source-archive-ledger,.jyc-photo-story-scrubber,.team-card,.contact-card,.gallery-item,.gallery-story-card) {
+html[data-theme="dark"] .public-app :where(.card,.club-card,.event-card,.activity-card,.team-layer-card,.hub-story-card,.jyc-journal-card,.club-identity-card,.event-identity-card,.feature-card,.featured,.search-topic-band,.search-result,.compact-page-head,.about-hero-v28,.achievements-hero,.announcements-hero,.archive-hero,.join-soon-hero,.club-card-premium,.event-card-premium,.jyc57-feature-card,.jyc57-photo,.jyc-source-archive-ledger,.jyc-photo-story-scrubber,.team-card,.contact-card,.gallery-item,.gallery-story-card) {
   color: #edf2f7 !important;
   background: linear-gradient(145deg, rgba(16,26,46,.88), rgba(9,15,27,.92)) !important;
   border: 1px solid rgba(56,189,248,.14) !important;
@@ -207,7 +220,7 @@ html[data-theme="dark"] .public-app :where(.more-sheet button,.more-sheet a,.sea
 html[data-theme="dark"] .public-app :where(.more-sheet button:hover,.more-sheet a:hover,.search-modal button:hover) { background: rgba(56,189,248,.09) !important; }
 
 /* Buttons: cyan primary, restrained outlined secondary, consistent tactile feedback. */
-html[data-theme="dark"] .public-app .btn:not(.secondary),
+html[data-theme="dark"] .public-app :where(.btn:not(.secondary),.btn-primary,.jh-btn-primary,[data-variant="primary"]),
 html[data-theme="dark"] .public-app :where(button.primary,.button-primary,.nav-join-cta) {
   color: #04101b !important;
   background: linear-gradient(135deg,#38bdf8,#60a5fa) !important;
@@ -216,7 +229,7 @@ html[data-theme="dark"] .public-app :where(button.primary,.button-primary,.nav-j
   box-shadow: 0 7px 22px rgba(56,189,248,.15) !important;
   font-weight: 700 !important;
 }
-html[data-theme="dark"] .public-app .btn.secondary,
+html[data-theme="dark"] .public-app :where(.btn.secondary,.btn-secondary,.button-secondary,[data-variant="secondary"]),
 html[data-theme="dark"] .public-app :where(button.secondary,.button-secondary) {
   color: #dbeafe !important;
   background: rgba(16,26,46,.62) !important;
