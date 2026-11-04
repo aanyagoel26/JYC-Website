@@ -27,6 +27,10 @@ const checks = [
   ['shared focus ring has a high-visibility dual-tone treatment', readDesignSystem.includes('--jyc-brand-focus-ring:') && readDesignSystem.includes('box-shadow: var(--jyc-brand-focus-ring)')],
   ['narrow 320–360px controls can wrap without causing text overflow', readDesignSystem.includes('@media (max-width: 360px)') && readDesignSystem.includes('white-space: normal')],
   ['reduced-motion mode disables pointer-driven depth effects', readDesignSystem.includes('prefers-reduced-motion: reduce') && readDesignSystem.includes('[data-pointer-light]')],
+  ['Jai Hack dark theme loads after the application stylesheet graph', main.indexOf("import './styles/jai-hack-dark-theme.css';") > main.indexOf("from './v15-functional.js';")],
+  ['Jai Hack dark theme is scoped to explicit dark mode', fs.readFileSync('src/styles/jai-hack-dark-theme.css', 'utf8').includes('html[data-theme="dark"]')],
+  ['Jai Hack dark theme preserves reduced-motion preferences', fs.readFileSync('src/styles/jai-hack-dark-theme.css', 'utf8').includes('prefers-reduced-motion: reduce')],
+  ['Jai Hack dark theme defines visible cyan keyboard focus', fs.readFileSync('src/styles/jai-hack-dark-theme.css', 'utf8').includes('outline: 2px solid #38bdf8')],
 ];
 for (const [ok, name] of checks) { console.log((ok ? 'PASS: ' : 'FAIL: ') + name); assert.ok(ok, name); }
 console.log('JYC editorial motion system contract: PASS');
