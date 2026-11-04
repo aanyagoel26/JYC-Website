@@ -35,7 +35,10 @@ test.describe('JYC Jai Hack-inspired dark theme', () => {
             bodyBackground: body.backgroundColor,
             bodyFont: body.fontFamily,
             headingFont: heading ? getComputedStyle(heading).fontFamily : '',
-            navBackground: nav ? getComputedStyle(nav).backgroundColor : ''
+            navBackground: nav ? getComputedStyle(nav).backgroundColor : '',
+            homeBackground: document.querySelector('.jyc-editorial-home.jyc-home')
+              ? getComputedStyle(document.querySelector('.jyc-editorial-home.jyc-home')).getPropertyValue('--jh-bg').trim()
+              : ''
           };
         });
 
@@ -45,6 +48,7 @@ test.describe('JYC Jai Hack-inspired dark theme', () => {
         expect(dark.bodyFont).toContain('DM Sans');
         expect(dark.headingFont).toContain('Space Grotesk');
         expect(dark.navBackground).not.toBe('rgba(0, 0, 0, 0)');
+        if (route === '/') expect(dark.homeBackground).toBe('#050811');
 
         // The new visual contract must not bleed into the existing light theme.
         await page.evaluate(() => { document.documentElement.dataset.theme = 'light'; });
