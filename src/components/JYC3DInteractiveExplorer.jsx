@@ -475,11 +475,12 @@ export function JYC3DInteractiveExplorer() {
         </div>
 
         {/* Family Filter Tabs */}
-        <div className="jyc-3d-family-tabs" role="tablist">
+        <div className="jyc-3d-family-tabs" role="group" aria-label="Filter published communities by family">
           {FAMILIES.map(fam => (
             <button
               key={fam}
               type="button"
+              aria-pressed={activeFamily === fam}
               className={`jyc-3d-tab ${activeFamily === fam ? 'active' : ''}`}
               onClick={() => setActiveFamily(fam)}
             >
@@ -514,9 +515,9 @@ export function JYC3DInteractiveExplorer() {
             </select>
           </label>
           <div className="jyc-3d-zoom-btns" onClick={e => e.stopPropagation()}>
-            <button type="button" onClick={() => setZoom(z => Math.min(1.6, z + 0.15))} title="Zoom In">+</button>
-            <button type="button" onClick={() => setZoom(z => Math.max(0.65, z - 0.15))} title="Zoom Out">−</button>
-            <button type="button" onClick={() => { setZoom(1.0); setRotX(0.22); setRotY(0.48); }} title="Reset View">↺</button>
+            <button type="button" onClick={() => setZoom(z => Math.min(1.6, z + 0.15))} title="Zoom In" aria-label="Zoom in">+</button>
+            <button type="button" onClick={() => setZoom(z => Math.max(0.65, z - 0.15))} title="Zoom Out" aria-label="Zoom out">−</button>
+            <button type="button" onClick={() => { setZoom(1.0); setRotX(0.22); setRotY(0.48); }} title="Reset View" aria-label="Reset constellation view">↺</button>
           </div>
         </div>
 

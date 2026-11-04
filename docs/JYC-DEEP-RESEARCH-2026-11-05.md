@@ -74,3 +74,11 @@ Research references:
 - Added `scripts/qa-glb-integrity.mjs` to validate both tracked assets' Git blob identity, GLB 2.0 header/length/chunk boundaries, buffer/view/accessor bounds, mesh/node/scene/material/texture/animation references, and Draco extension declarations. It is registered in the canonical QA suite. This is structural integrity validation; it does not replace a browser decoder/render check of the Draco-compressed geometry.
 
 - Follow-up interaction correction: when a user begins dragging after auto-rotation, the drag target is rebased to the current visual rotation so the constellation does not snap back to a stale React state angle.
+
+
+## Live-backend resilience correction
+
+- The production loader previously returned `norm(empty)` when Supabase was unconfigured, paused, timed out, or returned an RPC error. With the connected JYC project currently inactive, that meant the production app could lose its club/event directory even though the repository contains publication-gated public records.
+- Added a read-only fallback mode: use the last saved public cache when present; otherwise render the 21 publication-approved hub profiles, source-reviewed event records and current 2026–27 leadership campaign. It deliberately excludes the extra PDF/gallery fallback collection until the database/media rights pipeline is available.
+- The fallback mode is explicitly disclosed in a responsive notice. Content edits/publishing are blocked while in fallback mode, and fallback-only metadata is stripped before any save payload.
+- The gallery fallback remains constrained; this change does not widen media rights/publication access.

@@ -314,3 +314,10 @@ See `docs/JYC-DEEP-RESEARCH-2026-11-05.md` for the research sources, library dec
 - Fixed the animation loop so it no longer schedules React state updates every frame. It now reads interaction state from a ref and pauses for reduced motion, hidden tabs and off-screen state.
 - Added keyboard-accessible community selection and corrected the UI label: the constellation is projected 3D on a 2D canvas, not a WebGL mesh renderer.
 - Added a GLB 2.0 structural integrity QA script for both tracked models, including Git blob SHA/size, chunk bounds, buffer/accessor references and glTF object references. The Draco-compressed geometry still requires an actual browser decoder/render test.
+
+
+## 5 November 2026 follow-up — production read-only fallback
+
+- Fixed the production data loader's empty-state behavior: when Supabase is unconfigured, paused, times out, or the public RPC fails, the site now uses the last saved cache or curated publication-gated public fallback records instead of rendering empty club/event data.
+- Offline fallback excludes the extra PDF gallery collection, is visibly labelled as limited public mode, and blocks content writes until the live database reconnects.
+- This improves public browsing resilience but does not restore sign-in, internal submissions, or the inactive Supabase project.
