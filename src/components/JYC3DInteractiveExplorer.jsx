@@ -1,9 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './JYC3DInteractiveExplorer.css';
-
-import React, { useEffect, useRef, useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { JYC_HUB_SOURCE_REGISTRY } from '../jyc-hub-registry.js';
 import { JYC_HUB_CONTENT } from '../v21-hub-content.js';
 import './JYC3DInteractiveExplorer.css';
