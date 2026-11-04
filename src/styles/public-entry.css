@@ -379,3 +379,6 @@ html[data-theme="light"] .public-app .feature-hero :is(p,li,small){color:#D7D1C7
     gap:12px!important;
   }
 }
+
+/* Jai Hack-inspired midnight/cyan dark-mode layer. Loaded last intentionally. */
+@import './jai-hack-dark-theme.css';
