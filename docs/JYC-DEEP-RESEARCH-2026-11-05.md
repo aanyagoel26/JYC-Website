@@ -103,3 +103,5 @@ Research references:
 - Found a functional 3D gap: the hero already rendered a `<model-viewer>` element for `/models/jyc-spatial.glb`, but the Google model-viewer web component was never registered. The spatial toggle therefore rendered an inert unknown custom element.
 - The spatial mode now lazy-loads pinned `@google/model-viewer` 4.4.0 from Google's CDN only when the visitor selects it, waits for `customElements.whenDefined`, shows a loading/error state and offers the GLB download as a fallback. This avoids loading the 3D viewer on every route/initial page view.
 - Updated Vercel CSP for the pinned Google loader, gstatic Draco decoder resources and WebAssembly. The GLB QA now checks both asset integrity and the viewer/CSP integration.
+
+- Added the model-viewer's recommended `touch-action="pan-y"` interaction contract so mobile visitors can orbit the model without losing vertical page scrolling.

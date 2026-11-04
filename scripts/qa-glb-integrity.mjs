@@ -190,6 +190,7 @@ function inspectModel(model) {
 
 if (!heroSource.includes("https://ajax.googleapis.com/ajax/libs/model-viewer/4.4.0/model-viewer.min.js") || !heroSource.includes("window.customElements.whenDefined('model-viewer')")) fail('model-viewer', 'The spatial GLB viewer must lazy-load the pinned Google model-viewer web component.');
 if (!heroSource.includes('src={MODEL_URL}') || !heroSource.includes('poster="/assets/jyc-logo.avif"')) fail('model-viewer', 'The viewer must point to the validated GLB and an existing poster asset.');
+if (!heroSource.includes('touch-action="pan-y"')) fail('model-viewer', 'The mobile model viewer must preserve vertical page scrolling while allowing horizontal orbit gestures.');
 if (!csp.includes('https://ajax.googleapis.com') || !csp.includes('https://www.gstatic.com') || !csp.includes("'wasm-unsafe-eval'")) fail('model-viewer', 'CSP must permit the pinned viewer, Draco decoder resources and WebAssembly compilation.');
 
 for (const model of models) inspectModel(model);

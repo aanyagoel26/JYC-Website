@@ -311,6 +311,7 @@ export function JYCHeroWebGLEmblem() {
                 rotation-per-second="18deg"
                 interaction-prompt="none"
                 camera-controls
+                touch-action="pan-y"
                 shadow-intensity="0.6"
                 exposure="1.2"
                 loading="lazy"
