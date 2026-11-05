@@ -1,6 +1,7 @@
 import { relevanceScore, rankSearchResults } from '../src/lib/search.js';
 const fail=[];
-const ok=(name,cond)=>{if(cond)console.log(`PASS: ${name}`);else{console.log(`FAIL: ${name}`);fail.push(name)}};
+let checks=0;
+const ok=(name,cond)=>{checks++;if(cond)console.log(`PASS: ${name}`);else{console.log(`FAIL: ${name}`);fail.push(name)}};
 const exact=relevanceScore({title:'AITronics',meta:'Technical club',text:'AI and robotics',query:'AITronics'});
 const meta=relevanceScore({title:'Technical Club',meta:'AITronics',text:'AI robotics',query:'AITronics'});
 const typo=relevanceScore({title:'AITronics',meta:'Technical club',text:'AI robotics',query:'AItroncs'});
@@ -20,4 +21,4 @@ const many=rankSearchResults(Array.from({length:24},(_,i)=>({key:`item-${i}`,tit
 ok('ranking preserves every match so the UI can report an accurate total',many.length===24);
 ok('ranking remains relevance ordered beyond the first 16 results',many[0]?._score>=many[15]?._score&&many[15]?._score>=many[23]?._score);
 if(fail.length)process.exit(1);
-console.log(`Search QA complete: ${5+1}/6 checks passed.`);
+console.log(`Search QA complete: ${checks-fail.length}/${checks} checks passed.`);
