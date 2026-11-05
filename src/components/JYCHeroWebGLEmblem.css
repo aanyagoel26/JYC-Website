@@ -350,3 +350,75 @@ html[data-theme="light"] .emblem-control-pill {
   color:#38bdf8;text-decoration:underline;text-underline-offset:3px;font-weight:700;
 }
 .jyc-hero-model-viewer{--poster-color:transparent;--progress-bar-color:#38bdf8;--progress-mask:#050811;}
+
+
+/* JYC emblem art direction: align every floating badge and control with its theme. */
+html[data-theme="dark"] .jyc-emblem-glow-backing {
+  background:radial-gradient(circle,rgba(173,151,226,.26) 0%,rgba(100,112,170,.14) 48%,transparent 76%) !important;
+}
+html[data-theme="dark"] .jyc-emblem-badge,
+:root:not([data-theme="light"]) .jyc-emblem-badge {
+  background:rgba(18,22,44,.82) !important;
+  border-color:rgba(201,184,242,.32) !important;
+  color:#f2efff !important;
+  box-shadow:0 12px 34px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.06) !important;
+}
+html[data-theme="dark"] .jyc-emblem-badge:hover,
+:root:not([data-theme="light"]) .jyc-emblem-badge:hover {
+  background:rgba(31,35,64,.94) !important;
+  border-color:rgba(230,212,168,.55) !important;
+  box-shadow:0 16px 42px rgba(0,0,0,.42),0 0 24px rgba(173,151,226,.14) !important;
+}
+html[data-theme="dark"] .badge-accent,
+:root:not([data-theme="light"]) .badge-accent { color:#e6d4a8 !important;border-right-color:rgba(230,212,168,.34) !important; }
+html[data-theme="dark"] .badge-live-pulse,
+:root:not([data-theme="light"]) .badge-live-pulse { background:#e6d4a8 !important;box-shadow:0 0 9px rgba(230,212,168,.72) !important; }
+html[data-theme="dark"] .emblem-control-pill {
+  border-color:rgba(201,184,242,.34) !important;
+  background:rgba(17,20,42,.9) !important;
+  color:#d9cef5 !important;
+}
+html[data-theme="dark"] .emblem-control-pill:hover {
+  border-color:#e6d4a8 !important;color:#fff8e8 !important;
+  box-shadow:0 12px 32px rgba(173,151,226,.2) !important;
+}
+html[data-theme="dark"] .emblem-control-pill.active {
+  background:linear-gradient(135deg,rgba(201,184,242,.24),rgba(230,212,168,.16)) !important;
+  border-color:#c9b8f2 !important;color:#f2efff !important;
+  box-shadow:0 0 22px rgba(173,151,226,.24) !important;
+}
+html[data-theme="dark"] .audio-sound-wave { background:#e6d4a8 !important; }
+html[data-theme="dark"] .jyc-emblem-model-viewer-state a { color:#e6d4a8 !important; }
+html[data-theme="dark"] .jyc-hero-model-viewer {
+  --progress-bar-color:#c9b8f2 !important;
+  --progress-mask:#090b19 !important;
+}
+html[data-theme="light"] .jyc-emblem-glow-backing {
+  background:radial-gradient(circle,rgba(143,41,37,.18) 0%,rgba(185,155,112,.14) 50%,transparent 76%) !important;
+}
+html[data-theme="light"] .jyc-emblem-badge:hover {
+  border-color:rgba(143,41,37,.55) !important;
+  box-shadow:0 12px 36px rgba(143,41,37,.14) !important;
+}
+html[data-theme="light"] .badge-accent { color:#843b35 !important;border-right-color:rgba(132,59,53,.3) !important; }
+html[data-theme="light"] .emblem-control-pill {
+  border-color:rgba(143,41,37,.26) !important;
+  background:rgba(255,253,248,.94) !important;
+  color:#843b35 !important;
+}
+html[data-theme="light"] .emblem-control-pill:hover,
+html[data-theme="light"] .emblem-control-pill.active {
+  border-color:#843b35 !important;color:#682d29 !important;
+  box-shadow:0 10px 26px rgba(132,59,53,.14) !important;
+}
+html[data-theme="light"] .emblem-control-pill.active { background:rgba(143,41,37,.08) !important; }
+html[data-theme="light"] .audio-sound-wave { background:#98784e !important; }
+html[data-theme="light"] .jyc-emblem-model-viewer-state a { color:#843b35 !important; }
+html[data-theme="light"] .jyc-hero-model-viewer { --progress-bar-color:#843b35 !important;--progress-mask:#f6f2e9 !important; }
+@media (prefers-reduced-motion:reduce) {
+  .jyc-emblem-glow-backing,.jyc-emblem-badge,.badge-top-left,.badge-top-right,
+  .badge-bottom,.badge-live-pulse,.audio-sound-wave {
+    animation:none !important;transition:none !important;
+  }
+  .jyc-hero-emblem-stage:hover .jyc-emblem-logo-img { transform:none !important; }
+}
