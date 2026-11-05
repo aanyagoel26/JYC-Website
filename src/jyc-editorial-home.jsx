@@ -239,14 +239,14 @@ export function JYCEditorialHome({ data }) {
                 pixelSize={2}
                 levels={3}
                 palette="duotone"
-                inkColor="#0b1220"
-                paperColor="#e2e8f0"
+                inkColor="#4b3e69"
+                paperColor="#f6f2e9"
                 contrast={1.18}
                 brightness={0.02}
                 revealRadius={190}
                 softness={0.7}
                 linger={1.25}
-                rimColor="#38bdf8"
+                rimColor="#b99b70"
                 rim={0.22}
                 wander={true}
                 clickBurst={false}
