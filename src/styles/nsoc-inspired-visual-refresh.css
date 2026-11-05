@@ -1350,10 +1350,7 @@ html[data-theme="dark"] .jyc-search-result.is-selected { background:#252a4a !imp
   .public-app :where(.jh-btn):not(:disabled):hover { filter:brightness(1.045); }
   .public-app :where(.jh-btn):not(:disabled):active { filter:brightness(.98); }
   .public-app :where(.card,.club-card,.event-card,.team-card,.contact-card,.feature-card,.gallery-item,.gallery-story-card,.jh-story-card) {
-    transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s ease,border-color .3s ease;
-  }
-  .public-app :where(.card,.club-card,.event-card,.team-card,.contact-card,.feature-card,.gallery-item,.gallery-story-card,.jh-story-card):hover {
-    transform:translateY(-4px);
+    transition:box-shadow .3s ease,border-color .3s ease;
   }
 }
 html[data-theme="dark"] .public-app :where(.card,.club-card,.event-card,.team-card,.contact-card,.feature-card,.gallery-item,.gallery-story-card,.jh-story-card) {
