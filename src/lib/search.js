@@ -58,7 +58,11 @@ export function relevanceScore({title='',meta='',text='',type='',query=''}){
 }
 export function rankSearchResults(results,query){
   // Keep the full ranked set so callers can report an honest total. UI layers
-  // may still render a bounded window for responsiveness.
-  return results.map((item,index)=>({...item,_score:relevanceScore({...item,query}),_sourceIndex:index}))
-    .sort((a,b)=>b._score-a._score||a._sourceIndex-b._sourceIndex);
+  // may still render a bounded window for responsiveness. Intent shortcuts
+  // can provide a small explicit priority without bypassing relevance order.
+  return results.map((item,index)=>({
+    ...item,
+    _score:relevanceScore({...item,query})+(Number.isFinite(Number(item.priority))?Number(item.priority):0),
+    _sourceIndex:index
+  })).sort((a,b)=>b._score-a._score||a._sourceIndex-b._sourceIndex);
 }
