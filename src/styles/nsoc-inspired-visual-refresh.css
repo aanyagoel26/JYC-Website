@@ -1498,3 +1498,16 @@ html[data-theme="light"] .jyc-editorial-home.jyc-home :where(.jh-event-list butt
   background:#fffdf8 !important;border-color:rgba(45,36,39,.12) !important;
   box-shadow:0 12px 30px rgba(45,36,39,.055);
 }
+
+
+/* Subtle route continuity: fade the new page in without shifting its layout. */
+@keyframes jyc-route-enter {
+  from { opacity:.72; }
+  to { opacity:1; }
+}
+html[data-jyc-route] .route-stage {
+  animation:jyc-route-enter .38s ease-out both;
+}
+@media(prefers-reduced-motion:reduce) {
+  html[data-jyc-route] .route-stage { animation:none !important; }
+}
