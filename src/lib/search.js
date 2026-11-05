@@ -57,7 +57,8 @@ export function relevanceScore({title='',meta='',text='',type='',query=''}){
   return Math.round(score);
 }
 export function rankSearchResults(results,query){
+  // Keep the full ranked set so callers can report an honest total. UI layers
+  // may still render a bounded window for responsiveness.
   return results.map((item,index)=>({...item,_score:relevanceScore({...item,query}),_sourceIndex:index}))
-    .sort((a,b)=>b._score-a._score||a._sourceIndex-b._sourceIndex)
-    .slice(0,16);
+    .sort((a,b)=>b._score-a._score||a._sourceIndex-b._sourceIndex);
 }
