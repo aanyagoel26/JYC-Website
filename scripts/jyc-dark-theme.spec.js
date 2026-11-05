@@ -151,3 +151,49 @@ test('About page chapter navigation reaches every published section on desktop a
     }
   }
 });
+
+
+test('About page inherited editorial layers resolve to the exact site palette', async ({ page }) => {
+  await page.goto('/about', { waitUntil: 'domcontentloaded' });
+  const about = page.locator('.public-app .about-page');
+  await expect(about).toBeVisible();
+  await page.waitForFunction(() => document.documentElement.dataset.jycContentReady === 'true');
+  const read = () => about.evaluate(el => {
+    const root = getComputedStyle(el);
+    const hero = el.querySelector('.about-hero-v28');
+    const logoTile = el.querySelector('.about-hero-mark>div');
+    const metric = el.querySelector('.v40-about-metrics article strong');
+    const snapshot = el.querySelector('.v40-about-snapshot-intro');
+    return {
+      bg: root.getPropertyValue('--v40-bg').trim(),
+      surface: root.getPropertyValue('--v40-surface').trim(),
+      text: root.getPropertyValue('--v40-text').trim(),
+      muted: root.getPropertyValue('--v40-muted').trim(),
+      accent: root.getPropertyValue('--v40-bronze').trim(),
+      gold: root.getPropertyValue('--v40-champ').trim(),
+      heroBackground: hero ? getComputedStyle(hero).backgroundColor : '',
+      logoTileBackground: logoTile ? getComputedStyle(logoTile).backgroundColor : '',
+      metricColor: metric ? getComputedStyle(metric).color : '',
+      snapshotBackground: snapshot ? getComputedStyle(snapshot).backgroundImage : ''
+    };
+  });
+
+  await page.evaluate(() => { document.documentElement.dataset.theme = 'dark'; });
+  const dark = await read();
+  expect(dark.bg).toBe('#090b19');
+  expect(dark.surface).toBe('#15182b');
+  expect(dark.text).toBe('#f2efff');
+  expect(dark.muted).toBe('#c0bad5');
+  expect(dark.accent).toBe('#c9b8f2');
+  expect(dark.gold).toBe('#e6d4a8');
+  expect(dark.metricColor).toBe('rgb(230, 212, 168)');
+
+  await page.evaluate(() => { document.documentElement.dataset.theme = 'light'; });
+  const light = await read();
+  expect(light.bg).toBe('#f6f2e9');
+  expect(light.surface).toBe('#fffdf8');
+  expect(light.text).toBe('#211d22');
+  expect(light.muted).toBe('#655d66');
+  expect(light.accent).toBe('#843b35');
+  expect(light.gold).toBe('#98784e');
+});
