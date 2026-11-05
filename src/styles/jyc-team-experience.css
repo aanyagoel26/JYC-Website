@@ -133,7 +133,7 @@
 .team-page .team-filter-tab {
   display: inline-flex; align-items: center; justify-content: center; gap: 9px;
   min-height: 44px; padding: 0 15px; border: 1px solid transparent; border-radius: 12px;
-  background: transparent; color: var(--jyc-muted, #5f5c6b); font: 700 12px/1.2 inherit; cursor: pointer;
+  background: transparent; color: var(--jyc-muted, #5f5c6b); font-family: inherit; font-size: 12px; font-weight: 700; line-height: 1.2; cursor: pointer;
   transition: background .2s var(--jyc-motion, ease), color .2s var(--jyc-motion, ease), border-color .2s var(--jyc-motion, ease), transform .2s var(--jyc-motion, ease);
 }
 .team-page .team-filter-tab b {
