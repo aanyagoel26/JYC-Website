@@ -3,14 +3,14 @@ const getPublishableKey=()=>readNamedKey('SUPABASE_PUBLISHABLE_KEYS','SUPABASE_A
 const getSecretKey=()=>readNamedKey('SUPABASE_SECRET_KEYS','SUPABASE_SERVICE_ROLE_KEY');
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.117.2';
 
-const allowedOrigin = (origin:string|null) => {
-  const configured = (Deno.env.get('SITE_ORIGINS') || Deno.env.get('SITE_ORIGIN') || '')
-    .split(',').map(x=>x.trim()).filter(Boolean);
-  const known = new Set(configured);
-  if (origin && known.has(origin)) return origin;
-  if (origin && /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) return origin;
-  return known.values().next().value || 'null';
+const configuredOrigins=()=> (Deno.env.get('SITE_ORIGINS') || Deno.env.get('SITE_ORIGIN') || '')
+  .split(',').map(x=>x.trim()).filter(Boolean);
+const isAllowedOrigin=(origin:string|null)=>{
+  if(!origin)return false;
+  if(/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin))return true;
+  return configuredOrigins().includes(origin);
 };
+const allowedOrigin=(origin:string|null)=>isAllowedOrigin(origin)?origin:'null';
 
 const json=(body:unknown,status=200,origin:string|null=null)=>new Response(JSON.stringify(body),{
   status,
@@ -24,7 +24,8 @@ const json=(body:unknown,status=200,origin:string|null=null)=>new Response(JSON.
 });
 
 async function fingerprint(req:Request){
-  const ip=(req.headers.get('x-forwarded-for')||req.headers.get('x-real-ip')||'unknown').split(',')[0].trim();
+  const forwarded=(req.headers.get('x-forwarded-for')||'').split(',').map(x=>x.trim()).filter(Boolean);
+  const ip=(req.headers.get('cf-connecting-ip')||req.headers.get('x-real-ip')||forwarded.at(-1)||'unknown').trim();
   const ua=(req.headers.get('user-agent')||'unknown').slice(0,300);
   const bytes=new TextEncoder().encode(ip+'|'+ua);
   const digest=await crypto.subtle.digest('SHA-256',bytes);
@@ -33,11 +34,12 @@ async function fingerprint(req:Request){
 
 Deno.serve(async req=>{
   const origin=req.headers.get('Origin');
-  if(req.method==='OPTIONS') return new Response('ok',{headers:{...json({},200,origin).headers}});
+  if(req.method==='OPTIONS'){
+    if(!isAllowedOrigin(origin))return json({error:'Origin not allowed.'},403,origin);
+    return new Response(null,{status:204,headers:{'Access-Control-Allow-Origin':origin!,'Access-Control-Allow-Headers':'content-type','Access-Control-Allow-Methods':'POST, OPTIONS','Vary':'Origin','Cache-Control':'no-store'}});
+  }
   if(req.method!=='POST') return json({error:'POST only.'},405,origin);
-  const configuredOrigins=(Deno.env.get('SITE_ORIGINS') || Deno.env.get('SITE_ORIGIN') || '').split(',').map(x=>x.trim()).filter(Boolean);
-  const originAllowed=origin && (configuredOrigins.includes(origin) || /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin));
-  if(!originAllowed) return json({error:'Origin not allowed.'},403,origin);
+  if(!isAllowedOrigin(origin)) return json({error:'Origin not allowed.'},403,origin);
 
   const contentLength=Number(req.headers.get('content-length')||0);
   if(contentLength>18000) return json({error:'Request is too large.'},413,origin);
@@ -62,7 +64,7 @@ Deno.serve(async req=>{
     p_stack:typeof body?.stack==='string'?body.stack.slice(0,12000):null,
     p_path:typeof body?.path==='string'?body.path.slice(0,500):null,
     p_user_agent:typeof body?.user_agent==='string'?body.user_agent.slice(0,1000):null,
-    p_metadata:body?.metadata&&typeof body.metadata==='object'?body.metadata:{}
+    p_metadata:body?.metadata&&typeof body.metadata==='object'&&!Array.isArray(body.metadata)?body.metadata:{}
   });
 
   if(error) return json({error:'Could not record the application error.'},500,origin);
