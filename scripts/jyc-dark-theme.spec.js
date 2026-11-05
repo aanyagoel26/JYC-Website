@@ -126,3 +126,28 @@ test('Search and More overlays inherit the active theme, including their micro-c
     expect(moreColors.color).not.toBe('rgb(0, 0, 0)');
   }
 });
+
+
+test('About page chapter navigation reaches every published section on desktop and mobile', async ({ page }) => {
+  for (const viewport of [{width:1440,height:960},{width:390,height:844}]) {
+    await page.setViewportSize(viewport);
+    await page.goto('/about', { waitUntil: 'domcontentloaded' });
+    await page.locator('.public-app .about-page').waitFor({ state: 'visible', timeout: 25000 });
+    await page.waitForFunction(() => document.documentElement.dataset.jycContentReady === 'true');
+    const nav = page.locator('.about-chapter-nav');
+    await expect(nav).toBeVisible();
+    const targets = ['about-at-a-glance','about-purpose','about-ecosystem','about-how-it-works','about-programmes','history'];
+    for (const id of targets) {
+      await expect(page.locator(`#${id}`)).toHaveCount(1);
+      const link = nav.locator(`a[href="#${id}"]`);
+      await expect(link).toBeVisible();
+      await link.click();
+      await expect(page).toHaveURL(new RegExp(`#${id}$`));
+      const visible = await page.locator(`#${id}`).evaluate(el => {
+        const rect = el.getBoundingClientRect();
+        return rect.top >= 0 && rect.top < window.innerHeight;
+      });
+      expect(visible, `About chapter ${id} should scroll into view`).toBeTruthy();
+    }
+  }
+});
