@@ -31,6 +31,18 @@ test.describe('JYC Search and More interaction contract', () => {
       const width = await search.evaluate(el => ({ scroll:el.scrollWidth, client:el.clientWidth }));
       expect(width.scroll).toBeLessThanOrEqual(width.client+1);
 
+      // A category filter belongs to the current query only. Changing the query must restore All.
+      await input.fill('AITronics');
+      const clubFilter = search.locator('.search-category-filters button').filter({ hasText:/CLUB/ }).first();
+      if (await clubFilter.count()) {
+        await clubFilter.click();
+        await expect(clubFilter).toHaveAttribute('aria-pressed','true');
+        await input.fill('Devansh Tripathi');
+        await expect(search.locator('.search-category-filters button').first()).toHaveAttribute('aria-pressed','true');
+        await expect(search.locator('.search-category-filters button').first()).toContainText('All');
+        await expect(search.locator('.search-result-active')).toContainText('Devansh Tripathi');
+      }
+
       await input.fill('quantum banana no-match');
       await expect(search.locator('.search-no-results')).toBeVisible();
       await search.locator('.search-input-wrap .search-clear').click();
