@@ -820,19 +820,22 @@ function Navbar({data,admin,theme,setTheme}){
    <nav className={open?'open':''}>{navButtons}<button type="button" className={`nav-more-trigger ${moreOpen?'active':''}`} onClick={()=>{setOpen(false);setMoreOpen(v=>!v)}} aria-expanded={moreOpen}>More <span aria-hidden="true">⌄</span></button></nav>
    <button type="button" className="nav-join-cta" onClick={()=>nav('/join-jyc')}>Join JYC <span>↗</span></button>
    <Theme theme={theme} setTheme={setTheme}/><button type="button" className={`hamb ${open?'open':''}`} onClick={()=>setOpen(v=>!v)} aria-label="Menu" aria-expanded={open}><i/><i/><i/></button>
-   {open&&<button type="button" className="mobile-nav-scrim" aria-label="Close navigation" onClick={()=>setOpen(false)}/>}<button type="button" className="search-trigger" aria-label="Search" onClick={()=>setSearch(true)} title="Search JYC (Ctrl/Cmd + K)"><span className="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg></span><span className="search-label">Search</span><kbd aria-hidden="true">Ctrl K</kbd></button>
+   {open&&<button type="button" className="mobile-nav-scrim" aria-label="Close navigation" onClick={()=>setOpen(false)}/>}<button type="button" className="search-trigger" data-jyc-search-trigger aria-label="Search" onClick={()=>setSearch(true)} title="Search JYC (Ctrl/Cmd + K)"><span className="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg></span><span className="search-label">Search</span><kbd aria-hidden="true">Ctrl K</kbd></button>
  </div></header>
  {createPortal(dock,document.body)}{createPortal(more,document.body)}{searchView}</>
 }
 function MobileMoreSheet({data,admin,close,openSearch}){
  const nav=useNavigate();
  const sheetRef=React.useRef(null);
+ const closeRef=React.useRef(close);
+ closeRef.current=close;
  useEffect(()=>{
+  const returnFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
   const previous=document.body.style.overflow;
   document.body.style.overflow='hidden';
   const timer=setTimeout(()=>sheetRef.current?.querySelector('button,a')?.focus(),30);
   const onKey=e=>{
-   if(e.key==='Escape'){e.preventDefault();close();return}
+   if(e.key==='Escape'){e.preventDefault();closeRef.current();return}
    if(e.key!=='Tab')return;
    const root=sheetRef.current;if(!root)return;
    const focusable=[...root.querySelectorAll('button,a,input,[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled&&el.offsetParent!==null);
@@ -842,12 +845,11 @@ function MobileMoreSheet({data,admin,close,openSearch}){
    else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}
   };
   document.addEventListener('keydown',onKey);
-  return()=>{clearTimeout(timer);document.body.style.overflow=previous;document.removeEventListener('keydown',onKey)};
- },[close]);
+  return()=>{clearTimeout(timer);document.body.style.overflow=previous;document.removeEventListener('keydown',onKey);if(returnFocus?.isConnected)requestAnimationFrame(()=>returnFocus.focus())};
+ },[]);
  const go=p=>{close();nav(p)};
 const explore=[
     ['/about','About JYC','Purpose, communities, values and the JYC story'],
-    ['/converge','Converge Live Fest','Multi-arena schedule, leaderboard and live fest stream'],
     ['/team','Leadership','Faculty, Apex and Core Team'],
     ['/clubs','Clubs & Communities','Explore the official hub ecosystem'],
     ['/events','Events','Upcoming, ongoing and completed experiences'],
@@ -878,8 +880,9 @@ function Search({data,admin,close}){
  const [selected,setSelected]=useState(0);
  const [recent,setRecent]=useState(()=>{try{return JSON.parse(storageGet('jyc-search-recent','[]')).filter(Boolean).slice(0,5)}catch{return []}});
  const inputRef=React.useRef(null);
+ const returnFocusRef=React.useRef(null);
  const term=normalizeSearch(q);
- useEffect(()=>{const previous=document.body.style.overflow;document.body.style.overflow='hidden';const timer=setTimeout(()=>inputRef.current?.focus(),40);const onKeyDown=e=>{if(e.key!=='Tab')return;const root=document.querySelector('.search-modal');if(!root)return;const focusable=[...root.querySelectorAll('button,input,a,[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled&&el.offsetParent!==null);if(!focusable.length)return;const first=focusable[0],last=focusable[focusable.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}};document.addEventListener('keydown',onKeyDown);return()=>{clearTimeout(timer);document.body.style.overflow=previous;document.removeEventListener('keydown',onKeyDown)}},[]);
+ useEffect(()=>{const active=document.activeElement;returnFocusRef.current=active instanceof HTMLElement?active:document.querySelector('[data-jyc-search-trigger]');const previous=document.body.style.overflow;document.body.style.overflow='hidden';const timer=setTimeout(()=>inputRef.current?.focus(),40);const onKeyDown=e=>{if(e.key!=='Tab')return;const root=document.querySelector('.search-modal');if(!root)return;const focusable=[...root.querySelectorAll('button,input,a,[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled&&el.offsetParent!==null);if(!focusable.length)return;const first=focusable[0],last=focusable[focusable.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}};document.addEventListener('keydown',onKeyDown);return()=>{clearTimeout(timer);document.body.style.overflow=previous;document.removeEventListener('keydown',onKeyDown);const target=returnFocusRef.current?.isConnected?returnFocusRef.current:document.querySelector('[data-jyc-search-trigger]');if(target instanceof HTMLElement)requestAnimationFrame(()=>target.focus())}},[]);
  useEffect(()=>{setSelected(0)},[term]);
  const remember=value=>{if(!value)return;try{const next=[value,...recent.filter(x=>x!==value)].slice(0,5);storageSet('jyc-search-recent',JSON.stringify(next));setRecent(next)}catch{}};
  const clubs=data.clubs.filter(c=>c.published&&c.status!=='archived');
