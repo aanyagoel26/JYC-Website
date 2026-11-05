@@ -348,10 +348,23 @@ function ClubDetail({data,id,virtualName}){
 function Team({data}){
  const nav=useNavigate();
  const [activeTier,setActiveTier]=useState('all');
- const members=data.team.filter(m=>m.published===true);
+ const [query,setQuery]=useState('');
+ const rawMembers=Array.isArray(data?.team)?data.team:[];
+ const members=rawMembers.filter(m=>m&&m.published===true);
  const faculty=members.filter(m=>/faculty|advisor|coordinator/i.test(String(m.role||m.position||'')));
  const apex=members.filter(m=>/president|vice president|general secretary|joint secretary|finance secretary|treasurer/i.test(String(m.role||m.position||''))&&!/faculty/i.test(String(m.role||'')));
  const core=members.filter(m=>!faculty.includes(m)&&!apex.includes(m));
+ const normalizedQuery=query.trim().toLocaleLowerCase();
+ const matchesQuery=m=>{
+  if(!normalizedQuery)return true;
+  return [m.name,m.role,m.position,m.bio,m.about,m.description,m.linkedinHeadline,m.linkedin_headline,m.headline,m.tagline,m.department,m.family,m.focus]
+   .filter(Boolean).join(' ').toLocaleLowerCase().includes(normalizedQuery);
+ };
+ const visibleFaculty=faculty.filter(matchesQuery);
+ const visibleApex=apex.filter(matchesQuery);
+ const visibleCore=core.filter(matchesQuery);
+ const visibleMembers=members.filter(matchesQuery);
+ const activeCount=activeTier==='faculty'?visibleFaculty.length:activeTier==='apex'?visibleApex.length:activeTier==='core'?visibleCore.length:visibleMembers.length;
  const MemberCard=({m,index})=>{
   const name=m.name||'JYC Team Member';
   const role=m.role||m.position||'JYC Team';
@@ -359,86 +372,72 @@ function Team({data}){
   const linkedinHeadline=m.linkedinHeadline||m.linkedin_headline||m.headline||m.tagline||'';
   const about=m.bio||m.about||m.description||m.linkedinBio||m.linkedin_bio||linkedinHeadline||'Official JYC leadership profile.';
   const linkedin=safeExternalUrl(m.linkedin||m.linkedinUrl||m.linkedin_url||m.socials?.linkedin);
-  return <article className="team-layer-card team-flip-member reveal" key={m.id||name||index}>
+  return <article className="team-layer-card team-flip-member" key={m.id||name||index}>
    <Suspense fallback={<div className="team-flip-loading" aria-hidden="true"/>}>
-    <LazyFlipCard label={`Open profile for ${name}`} className="team-member-flip">
-     {/* Front Face: High-Res Portrait, Name, Position, Flip Trigger */}
+    <LazyFlipCard label={\`Open profile for \${name}\`} className="team-member-flip">
      <div className="team-member-face-content" style={{position:'absolute',inset:0,width:'100%',height:'100%',minHeight:'100%',overflow:'hidden',padding:0}}>
       <div className="team-photo-editorial">
-       {photo?<ResponsivePhoto src={photo} alt={name} width={600} height={720} loading="lazy" decoding="async" sizes="(max-width: 420px) 90vw, (max-width: 760px) 45vw, 25vw" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt={`Portrait unavailable for ${name}`}/>:<span className="jyc-logo-fallback team-photo-missing-logo" role="img" aria-label={`Portrait unavailable for ${name}`}>{String(name||'JYC').trim().split(/\s+/).map(x=>x[0]).slice(0,2).join('').toUpperCase()}</span>}
+       {photo?<ResponsivePhoto src={photo} alt={\`Portrait of \${name}\`} width={600} height={720} loading="lazy" decoding="async" sizes="(max-width: 420px) 90vw, (max-width: 760px) 45vw, 25vw" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt={\`Portrait unavailable for \${name}\`}/>:<span className="jyc-logo-fallback team-photo-missing-logo" role="img" aria-label={\`Portrait unavailable for \${name}\`}>{String(name).trim().split(/\s+/).map(x=>x[0]).slice(0,2).join('').toUpperCase()}</span>}
       </div>
       <div className="team-front-overlay">
        <span className="team-role-tag">{role}</span>
        <h3 className="team-name-front">{name}</h3>
-       <span className="team-flip-indicator">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" width="13" height="13"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
-        Click to view bio
-       </span>
+       <span className="team-flip-indicator"><span aria-hidden="true">↻</span> Tap to view profile</span>
       </div>
      </div>
-     {/* Back Face: Role, Name, Bio, LinkedIn Button, Return Trigger */}
      <div className="team-back-content">
-      <div>
-       <span className="team-back-role-eyebrow">{role} · JYC 128</span>
-       <h3 className="team-back-name">{name}</h3>
-       {linkedinHeadline&&linkedinHeadline!==about&&<div className="team-back-headline">{linkedinHeadline}</div>}
-      </div>
+      <div><span className="team-back-role-eyebrow">{role} · JYC 128</span><h3 className="team-back-name">{name}</h3>{linkedinHeadline&&linkedinHeadline!==about&&<div className="team-back-headline">{linkedinHeadline}</div>}</div>
       <p className="team-back-bio">{about}</p>
       <div className="team-back-actions">
-       {linkedin&&<a href={linkedin} target="_blank" rel="noopener noreferrer" className="team-linkedin-btn" onClick={e=>e.stopPropagation()}>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.6 1.6 0 0 0-1.6 1.6 1.6 1.6 0 0 0 1.6 1.6 1.6 1.6 0 0 0 1.6-1.6 1.6 1.6 0 0 0-1.6-1.6Z"/></svg>
-        LinkedIn Profile ↗
+       {linkedin&&<a href={linkedin} target="_blank" rel="noopener noreferrer" className="team-linkedin-btn" onClick={e=>e.stopPropagation()} aria-label={\`Open \${name}'s LinkedIn profile in a new tab\`}>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.6 1.6 0 0 0-1.6 1.6 1.6 1.6 0 0 0 1.6 1.6 1.6 1.6 0 0 0 1.6-1.6 1.6 1.6 0 0 0-1.6-1.6Z"/></svg>
+        LinkedIn profile <span aria-hidden="true">↗</span>
        </a>}
-       
       </div>
      </div>
     </LazyFlipCard>
    </Suspense>
   </article>;
  };
- const roleFallback=members.length?null:<State title="The JYC team is being prepared." text="Official team profiles will appear here when JYC publishes them from the Control Center."><Button secondary onClick={()=>nav('/about')}>Learn about JYC →</Button></State>;
+ const renderSection=(key,label,title,description,items)=>{
+  if(activeTier!=='all'&&activeTier!==key)return null;
+  if(!items.length)return null;
+  return <section className="team-layer" aria-labelledby={\`team-\${key}-heading\`}>
+   <div className="team-layer-head"><span className="eyebrow">{label}</span><h2 id={\`team-\${key}-heading\`}>{title}</h2><p>{description}</p></div>
+   <div className={items.length===2?'team-layer-grid team-layer-grid--two':'team-layer-grid'}>{items.map((m,i)=><MemberCard m={m} index={i} key={m.id||m.name||i}/>)}</div>
+  </section>;
+ };
  return <section className="section page team-page jyc-team-page unified-public-page">
   <Breadcrumbs items={[{label:'Team'}]}/><EcosystemContextRail/>
-  <div className="team-hero-panel reveal">
-   <div><span className="eyebrow">JYC 128 · AY 2026–27</span><h1>Meet the people<br/><em>who move JYC.</em></h1><p>Faculty guidance, student leadership and committee heads form the people layer behind JYC communities, events and campus experiences.</p></div>
-   <div className="team-hero-identity" aria-hidden="true"><div className="team-hero-logo"><LogoImage alt=""/></div><b>PEOPLE · PURPOSE · PARTICIPATION</b></div>
+  <header className="team-hero-panel">
+   <div className="team-hero-copy"><span className="eyebrow">JIIT YOUTH CLUB · SECTOR 128</span><h1>Meet the people<br/><em>behind the movement.</em></h1><p>Discover the faculty guides and student leaders who bring JYC's communities, programmes and campus experiences to life.</p><div className="team-hero-actions"><Button onClick={()=>nav('/clubs')}>Explore communities <span aria-hidden="true">↗</span></Button><Button secondary onClick={()=>nav('/about')}>About JYC</Button></div></div>
+   <div className="team-hero-identity" aria-label="JIIT Youth Club identity"><div className="team-hero-logo"><LogoImage alt="JIIT Youth Club crest"/></div><b>PEOPLE · PURPOSE · PARTICIPATION</b><span>One campus. Many communities.</span></div>
+  </header>
+  <div className="team-command-strip" aria-label="Published team overview">
+   <article><b>{faculty.length}</b><span>Faculty guides</span></article><article><b>{apex.length}</b><span>Apex leaders</span></article><article><b>{core.length}</b><span>Core team members</span></article><article><b>{JYC_HUB_FAMILIES.length}</b><span>Community families</span></article>
   </div>
-  <div className="team-command-strip reveal">
-   <article><b>{faculty.length || '—'}</b><span>{faculty.length ? 'Faculty profiles' : 'Faculty profiles awaiting publication'}</span></article>
-   <article><b>{apex.length || '—'}</b><span>{apex.length ? 'Apex leaders' : 'Apex profiles awaiting publication'}</span></article>
-   <article><b>{core.length || '—'}</b><span>{core.length ? 'Core team profiles' : 'Core profiles awaiting publication'}</span></article>
-   <article><b>{JYC_HUB_FAMILIES.length}</b><span>Community families</span></article>
-  </div>
-  <div className="team-filter-bar reveal" role="tablist" aria-label="Filter leadership tiers">
+  <section className="team-discovery" aria-label="Find a team member">
+   <div className="team-discovery-copy"><span className="eyebrow">THE PEOPLE DIRECTORY</span><h2>Find your people.</h2><p>Search by name, role or area of responsibility.</p></div>
+   <label className="team-search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><input type="search" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search names, roles and teams…" aria-label="Search JYC team members"/>{query&&<button type="button" onClick={()=>setQuery('')} aria-label="Clear team search">×</button>}</label>
+  </section>
+  <div className="team-filter-bar" role="group" aria-label="Filter team members by leadership tier">
    {[
-     ['all', 'All Leadership', members.length],
-     ['apex', 'Apex Leadership', apex.length],
-     ['core', 'Core Committee Heads', core.length],
-     ['faculty', 'Faculty Coordinators', faculty.length]
-   ].map(([key, label, count]) => (
-     <button
-       type="button"
-       key={key}
-       role="tab"
-       aria-selected={activeTier === key}
-       className={`team-filter-tab ${activeTier === key ? 'is-active' : ''}`}
-       onClick={() => setActiveTier(key)}
-     >
-       <span>{label}</span>
-       <b>{count}</b>
-     </button>
-   ))}
+    ['all','Everyone',members.length],
+    ['apex','Apex leadership',apex.length],
+    ['core','Core team',core.length],
+    ['faculty','Faculty guides',faculty.length]
+   ].map(([key,label,count])=><button type="button" key={key} aria-pressed={activeTier===key} className={\`team-filter-tab \${activeTier===key?'is-active':''}\`} onClick={()=>setActiveTier(key)}><span>{label}</span><b>{count}</b></button>)}
   </div>
-  <section className="team-structure-visual reveal"><span className="eyebrow">ORGANIZATIONAL STRUCTURE</span><h2>Faculty → Apex → Core → Clubs & Hubs.</h2><div className="team-structure-flow"><div><b>01</b><strong>Faculty Coordinators</strong><span>Guidance & institutional support</span></div><i>↓</i><div><b>02</b><strong>JYC Apex</strong><span>Student leadership & coordination</span></div><i>↓</i><div><b>03</b><strong>Core Team</strong><span>Committee heads & operations</span></div><i>↓</i><div><b>04</b><strong>Clubs & Hubs</strong><span>Communities · coordinators · volunteers</span></div></div></section>
-  {(activeTier==='all'||activeTier==='faculty')&&faculty.length>0&&<section className="team-layer reveal"><div className="team-layer-head"><span className="eyebrow">01 · FACULTY COORDINATORS</span><h2>Institutional guidance.</h2><p>Faculty advisors provide guidance and institutional support to the student ecosystem.</p></div><div className={faculty.length===2?'team-layer-grid team-layer-grid--two':'team-layer-grid'}>{faculty.map((m,i)=><MemberCard m={m} index={i} key={m.id||m.name||i}/>)}</div></section>}
-  {(activeTier==='all'||activeTier==='apex')&&apex.length>0&&<section className="team-layer reveal"><div className="team-layer-head"><span className="eyebrow">02 · JYC APEX</span><h2>Student leadership.</h2><p>The apex body coordinates the wider JYC ecosystem and its campus-facing execution.</p></div><div className="team-layer-grid">{apex.map((m,i)=><MemberCard m={m} index={i} key={m.id||m.name||i}/>)}</div></section>}
-  {(activeTier==='all'||activeTier==='core')&&core.length>0&&<section className="team-layer reveal"><div className="team-layer-head"><span className="eyebrow">03 · CORE TEAM</span><h2>Heads who make programmes happen.</h2><p>Media, creative, PR, hospitality, security, management, digital and executive responsibilities sit here.</p></div><div className="team-layer-grid">{core.map((m,i)=><MemberCard m={m} index={i} key={m.id||m.name||i}/>)}</div></section>}
-  <section className="team-layer reveal"><div className="team-layer-head"><span className="eyebrow">04 · CLUBS & HUBS</span><h2>One leadership layer. {Object.keys(JYC_HUB_CONTENT).length} named communities.</h2><p>Explore the five JYC families and open any community to see its profile, activities, events and official links.</p></div><div className="team-hub-directory">{Object.entries(JYC_HUB_CONTENT).map(([name,p])=><a href={'/clubs/'+slug(name)} key={name}><small>{p.family}</small><strong>{name}</strong></a>)}</div></section>
-  {roleFallback}
-  <div className="team-closeout reveal"><div className="team-closeout-mark"><LogoImage alt="JIIT Youth Club logo"/></div><div><span className="eyebrow">DIFFERENT ROLES · DIFFERENT COMMUNITIES</span><h2>One JYC.</h2><p>Explore the people, communities and experiences that make the JYC ecosystem visible on campus.</p><div className="hero-actions"><Button onClick={()=>nav('/clubs')}>Find your community ↗</Button><Button secondary onClick={()=>nav('/events')}>See events →</Button></div></div></div>
- </section>
+  <p className="team-results-count" role="status" aria-live="polite">Showing <strong>{activeCount}</strong> of {activeTier==='faculty'?faculty.length:activeTier==='apex'?apex.length:activeTier==='core'?core.length:members.length} published profiles</p>
+  <section className="team-structure-visual" aria-label="How JYC leadership works"><span className="eyebrow">HOW JYC WORKS</span><h2>Guidance, leadership, and communities — connected.</h2><div className="team-structure-flow"><div><b>01</b><strong>Faculty guides</strong><span>Institutional guidance</span></div><i aria-hidden="true">↓</i><div><b>02</b><strong>Apex leadership</strong><span>Direction & coordination</span></div><i aria-hidden="true">↓</i><div><b>03</b><strong>Core team</strong><span>Planning & execution</span></div><i aria-hidden="true">↓</i><div><b>04</b><strong>Clubs & hubs</strong><span>Participation & community</span></div></div></section>
+  {renderSection('faculty','01 · FACULTY GUIDES','Guidance that grounds us.','Faculty advisors provide direction and institutional support to the student ecosystem.',visibleFaculty)}
+  {renderSection('apex','02 · APEX LEADERSHIP','The people setting direction.','The apex team coordinates the wider JYC ecosystem and its campus-facing execution.',visibleApex)}
+  {renderSection('core','03 · CORE TEAM','The people who make it happen.','From communications and creative to hospitality, finance and event operations, the core team turns plans into experiences.',visibleCore)}
+  {activeCount===0&&<div className="team-empty-state" role="status"><span aria-hidden="true">⌕</span><h2>No matching profiles</h2><p>Try a different name or role, or clear the search to see the full published team.</p><Button secondary onClick={()=>{setQuery('');setActiveTier('all');}}>Clear filters</Button></div>}
+  <section className="team-layer team-hub-layer"><div className="team-layer-head"><span className="eyebrow">04 · CLUBS & HUBS</span><h2>One ecosystem. Many ways to belong.</h2><p>Explore JYC's named communities and find the spaces that match your interests.</p></div><div className="team-hub-directory">{Object.entries(JYC_HUB_CONTENT).map(([name,p])=><a href={'/clubs/'+slug(name)} key={name}><small>{p.family}</small><strong>{name}</strong><span aria-hidden="true">↗</span></a>)}</div></section>
+  <div className="team-closeout"><div className="team-closeout-mark"><LogoImage alt="JIIT Youth Club crest"/></div><div><span className="eyebrow">YOUR CAMPUS. YOUR COMMUNITY.</span><h2>There's a place for you here.</h2><p>Explore the communities, discover upcoming events and become part of the JYC experience.</p><div className="hero-actions"><Button onClick={()=>nav('/clubs')}>Find your community <span aria-hidden="true">↗</span></Button><Button secondary onClick={()=>nav('/events')}>Explore events</Button></div></div></div>
+ </section>;
 }
-
 
 function Contact({data}){
  const [form,setForm]=useState({name:'',email:'',message:''});
