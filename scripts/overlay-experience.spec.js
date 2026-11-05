@@ -13,9 +13,12 @@ async function ready(page) {
 
 test.describe('JYC Search and More interaction contract', () => {
   for (const viewport of viewports) {
-    test(`Search and More work without clipping on ${viewport.name}`, async ({ page }) => {
+    for (const theme of ['light','dark']) {
+      test(`Search and More work without clipping on ${viewport.name} in ${theme} theme`, async ({ page }) => {
       await page.setViewportSize({ width:viewport.width, height:viewport.height });
+      await page.addInitScript(value => localStorage.setItem('jyc-theme', value), theme);
       await ready(page);
+      await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
 
       const searchTrigger = page.locator('[data-jyc-search-trigger]');
       await expect(searchTrigger).toBeVisible();
@@ -68,6 +71,7 @@ test.describe('JYC Search and More interaction contract', () => {
       await expect(page.getByRole('dialog', { name:'JYC search' })).toBeVisible();
       await page.keyboard.press('Escape');
       await expect(page.getByRole('dialog', { name:'JYC search' })).toHaveCount(0);
-    });
+      });
+    }
   }
 });
