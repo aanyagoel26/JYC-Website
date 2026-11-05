@@ -17,6 +17,7 @@ import './styles/jyc-editorial-motion-system.css';
 
 const ORIGINAL_LOGO = '/JYC%20Logo(4).png';
 const FALLBACK = import.meta.env.PROD ? '/assets/jyc-logo.webp' : ORIGINAL_LOGO;
+const DITHER_SOURCE = import.meta.env.PROD ? '/assets/jyc-logo-medium.avif' : FALLBACK;
 const handleHeroLogoFallback = event => {
   const image = event.currentTarget;
   image.srcset = '';
@@ -227,12 +228,12 @@ export function JYCEditorialHome({ data }) {
         {/* WebGL Dither Veil is a real mounted hero layer; the emblem remains the foreground focal point. */}
         <div className="jh-hero-visual jh-hero-webgl-stage-wrap">
           <div className="jh-hero-dither-backdrop" aria-hidden="true" />
-          <div className="jh-hero-dither-layer" aria-hidden="true">
+          <div className="jh-hero-dither-layer jh-dither-mark" aria-hidden="true">
             <Suspense fallback={<div className="jh-hero-dither-loading" />}>
               <LazyDitherVeil
-                src="/assets/jyc-logo-medium.avif"
-                fallbackSrc="/assets/jyc-logo.webp"
-                originalFallbackSrc="/JYC%20Logo(4).png"
+                src={DITHER_SOURCE}
+                fallbackSrc={FALLBACK}
+                originalFallbackSrc={ORIGINAL_LOGO}
                 globalPointer
                 fit="contain"
                 pattern="floyd"
