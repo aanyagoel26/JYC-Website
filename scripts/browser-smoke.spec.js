@@ -485,15 +485,19 @@ test('failed gallery photos use the neutral unavailable-photo asset, not a logo 
   await page.goto(base + '/gallery', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'gallery failed-image fallback');
 
-  // Scroll the original lazy image into view first. The neutral fallback is
-  // created only after the deliberately failed request fires, so it cannot be
-  // the locator used to trigger that request.
-  const originalPhoto = page.locator('.jyc57-editorial-photo img').first();
-  await originalPhoto.scrollIntoViewIfNeeded();
-  const fallback = page.locator('.jyc57-editorial-photo img[src="/assets/photo-unavailable.svg"]').first();
-  await expect(fallback).toBeVisible({ timeout: 15000 });
-  await expect(fallback).toHaveAttribute('alt', 'Photograph unavailable');
-  await expect(page.locator('.jyc57-editorial-photo img[src*="jyc-logo"]').first()).toHaveCount(0);
+  // Use the current gallery photo surfaces. Some published collections have no
+  // photograph URL and render the neutral fallback immediately; image-backed
+  // tiles must switch to that same asset after the deliberately failed request.
+  const imageBackedPhoto = page.locator('.jyc57-editorial-photo img:not([src="/assets/photo-unavailable.svg"]), .jyc57-photo img:not([src="/assets/photo-unavailable.svg"])').first();
+  if (await imageBackedPhoto.count()) {
+    await imageBackedPhoto.scrollIntoViewIfNeeded();
+    const fallback = page.locator('.jyc57-editorial-photo img[src="/assets/photo-unavailable.svg"], .jyc57-photo img[src="/assets/photo-unavailable.svg"]').first();
+    await expect(fallback).toBeVisible({ timeout: 15000 });
+    await expect(fallback).toHaveAttribute('alt', 'Photograph unavailable');
+  } else {
+    await expect(page.locator('.jyc57-editorial-photo img[src="/assets/photo-unavailable.svg"], .jyc57-photo img[src="/assets/photo-unavailable.svg"]').first()).toBeVisible();
+  }
+  await expect(page.locator('.jyc57-editorial-photo img[src*="jyc-logo"], .jyc57-photo img[src*="jyc-logo"]')).toHaveCount(0);
 
   await page.goto(base + '/events', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'event photo fallback');
@@ -505,10 +509,25 @@ test('failed gallery photos use the neutral unavailable-photo asset, not a logo 
 
   await page.goto(base + '/clubs', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'club photo fallback');
-  const clubFallback = page.locator('.jyc57-club-card img[src="/assets/photo-unavailable.svg"]').first();
-  await expect(clubFallback).toBeVisible({ timeout: 15000 });
-  await expect(clubFallback).toHaveAttribute('alt', 'Club photograph unavailable');
-  await expect(page.locator('.jyc57-club-card picture img[src*="jyc-logo"]')).toHaveCount(0);
+  const imageBackedClub = page.locator('.jyc57-club-card > .jyc-responsive-picture img').first();
+  if (await imageBackedClub.count()) {
+    await imageBackedClub.scrollIntoViewIfNeeded();
+    const clubFallback = page.locator('.jyc57-club-card img[src="/assets/photo-unavailable.svg"]').first();
+    await expect(clubFallback).toBeVisible({ timeout: 15000 });
+    await expect(clubFallback).toHaveAttribute('alt', 'Club photograph unavailable');
+  } else {
+    await expect(page.locator('.jyc57-club-card .jyc57-club-fallback').first()).toBeVisible();
+  }
+  await expect(page.locator('.jyc57-club-card img[src*="jyc-logo"]')).toHaveCount(0);
+});
+
+test('Dither Veil falls back from the compact AVIF to the official WebP logo', async ({ page }) => {
+  await page.route('**/assets/jyc-logo-medium.avif', route => route.abort());
+  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'Dither Veil logo fallback');
+  const logo = page.locator('.jh-hero-dither-layer img.dither-veil__fallback');
+  await expect(logo).toHaveAttribute('src', '/assets/jyc-logo.webp');
+  await expect.poll(() => logo.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
 });
 
 test('homepage renders the official emblem and a magnetic activity Bento', async ({ page }) => {
@@ -517,6 +536,9 @@ test('homepage renders the official emblem and a magnetic activity Bento', async
   await waitForAppMount(page, 'homepage identity and activity design');
   await expect(page.locator('.jh-hero-webgl-stage-wrap .jyc-hero-emblem-stage')).toBeVisible();
   await expect(page.locator('.jh-hero-webgl-stage-wrap canvas.jyc-emblem-canvas')).toHaveCount(1);
+  const ditherLogo = page.locator('.jh-hero-dither-layer img.dither-veil__fallback');
+  await expect(ditherLogo).toHaveAttribute('src', '/assets/jyc-logo-medium.avif');
+  await expect.poll(() => ditherLogo.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
   const crest = page.getByRole('img', { name: 'JIIT Youth Club Crest' });
   await expect(crest).toBeVisible();
   await expect.poll(() => crest.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
@@ -1541,10 +1563,11 @@ test('JYC Assistant search and keyboard close stay functional', async ({ page })
   await expect(dialog).toBeVisible();
   await expect(dialog).toHaveAttribute('aria-modal', 'true');
 
-  const search = page.getByRole('textbox', { name: 'Search JYC content' });
+  await dialog.getByRole('button', { name: /Fast Directory Search/ }).click();
+  const search = page.getByRole('textbox', { name: 'Search JYC directory' });
   await expect(search).toBeFocused();
   await search.fill('JAI 2026');
-  await expect(page.locator('.jyc-assistant-result').first()).toBeVisible();
+  await expect(page.locator('.search-result-item').first()).toBeVisible();
 
   await page.keyboard.press('Escape');
   await expect(dialog).toHaveCount(0);
@@ -1567,6 +1590,21 @@ test('runtime metadata keeps canonical URLs on the production domain from a prev
 
 
 
+test('static boot screen follows the operating-system theme when no preference is saved', async ({ page }) => {
+  await page.addInitScript(() => localStorage.removeItem('jyc-theme'));
+  await page.route('**/*', route => {
+    const pathname = new URL(route.request().url()).pathname;
+    if ((pathname.startsWith('/assets/') && /\\.(?:js|jsx|mjs)$/.test(pathname)) || pathname === '/@vite/client') return route.abort();
+    return route.continue();
+  });
+  for (const theme of ['dark', 'light']) {
+    await page.emulateMedia({ colorScheme: theme });
+    await page.goto(base, { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('.boot-fallback')).toBeVisible();
+    await expect.poll(() => page.locator('html').getAttribute('data-theme')).toBe(theme);
+  }
+});
+
 test('static boot screen respects the saved light/dark theme before React mounts', async ({ page }) => {
   await page.addInitScript(value => localStorage.setItem('jyc-theme', value), 'light');
   await page.route('**/*', route => {
@@ -1582,7 +1620,8 @@ test('static boot screen respects the saved light/dark theme before React mounts
     const boot = page.locator('.boot-fallback');
     await expect(boot).toBeVisible();
     const bootLogo = boot.locator('img.boot-logo');
-    await expect(bootLogo).toHaveAttribute('src', '/assets/jyc-logo.webp');
+    await expect(bootLogo).toHaveAttribute('src', '/assets/jyc-logo.avif');
+    await expect(bootLogo).toHaveAttribute('data-boot-fallback', '/JYC%20Logo(4).png');
     await expect.poll(() => bootLogo.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
     samples[theme] = await boot.evaluate(el => {
       const parse = value => { const match=String(value||'').match(/rgba?\((\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i); return match?[+match[1],+match[2],+match[3]]:null; };
@@ -1636,9 +1675,10 @@ test('JYC Assistant quick routes are distinct and navigate to their labelled des
   await waitForAppMount(page, 'JYC assistant quick routes');
   await page.getByRole('button', { name: 'Open JYC Assistant' }).click();
 
-  const dialog = page.getByRole('dialog', { name: 'Ask JYC. Find your route.' });
+  const dialog = page.getByRole('dialog', { name: 'Ask JYC. Instant Campus Knowledge.' });
   await expect(dialog).toBeVisible();
-  const routes = dialog.locator('.jyc-assistant-quick button');
+  await dialog.getByRole('button', { name: /Fast Directory Search/ }).click();
+  const routes = dialog.locator('.preset-buttons button');
   await expect(routes).toHaveCount(4);
   await expect(routes).toContainText(['Explore all clubs', 'Upcoming events', 'JYC archive', 'Contact JYC']);
 
@@ -1655,9 +1695,9 @@ test('JYC Assistant traps keyboard focus and restores focus after closing', asyn
   await trigger.focus();
   await trigger.press('Enter');
 
-  const dialog = page.getByRole('dialog', { name: 'Ask JYC. Find your route.' });
+  const dialog = page.getByRole('dialog', { name: 'Ask JYC. Instant Campus Knowledge.' });
   await expect(dialog).toBeVisible();
-  await expect(page.getByRole('textbox', { name: 'Search JYC content' })).toBeFocused();
+  await expect(page.getByRole('textbox', { name: 'Ask JYC AI a question' })).toBeFocused();
 
   const focusables = dialog.locator('button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])');
   await focusables.last().focus();
@@ -1694,7 +1734,7 @@ test('tablet events hero keeps the headline inside its text frame', async ({ pag
   await page.setViewportSize({ width: 768, height: 900 });
   await page.goto(base + '/events', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'tablet events directory');
-  const geometry = await page.locator('.events-page .compact-page-head h1').evaluate(el => {
+  const geometry = await page.locator('.jyc-events-header h1').evaluate(el => {
     const rect = el.getBoundingClientRect();
     return { client: el.clientWidth, scroll: el.scrollWidth, left: rect.left, right: rect.right, viewport: innerWidth };
   });
@@ -1921,9 +1961,121 @@ test('sparse faculty layout uses only populated tracks and mobile home actions s
     const box = selector => { const el = document.querySelector(selector); if (!el) return null; const r = el.getBoundingClientRect(); return { left:r.left, right:r.right, top:r.top, bottom:r.bottom }; };
     const intersects = (a,b) => Boolean(a&&b&&Math.max(0,Math.min(a.right,b.right)-Math.max(a.left,b.left))>0&&Math.max(0,Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top))>0);
     const bot = box('.jyc-bot-shell');
-    return { action:intersects(bot,box('.jyc-editorial-home .hero-actions')), nav:intersects(bot,box('.nav')) };
+    return { action:intersects(bot,box('.jyc-editorial-home .hero-actions')), nav:intersects(bot,box('.nav')), badge:intersects(bot,box('.jh-cyber-badge')) };
   });
   expect(fixedOverlap.action, 'mobile assistant must not cover homepage primary actions').toBe(false);
   expect(fixedOverlap.nav, 'mobile assistant must not cover the navigation controls').toBe(false);
+  expect(fixedOverlap.badge, 'mobile assistant must not cover the academic-year badge').toBe(false);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1), 'mobile homepage should not overflow').toBeTruthy();
+});
+
+
+test('More navigation and Search modal work with keyboard, empty states and focus handoff', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'More and Search interaction regression');
+  const searchTrigger = page.locator('.search-trigger');
+  const search = page.locator('.search-modal');
+  const input = page.getByRole('textbox', { name: 'Search JYC' });
+
+  await searchTrigger.click();
+  await expect(search).toBeVisible();
+  await expect(input).toBeFocused();
+  await input.fill('clubs');
+  await expect(page.locator('.search-result-active')).toContainText('Clubs');
+  await expect(page.locator('.search-category-filters')).toBeVisible();
+  await expect(page.locator('.search-match').first()).toBeVisible();
+  const clubCategory = page.locator('.search-category-filters button').filter({ hasText: /^CLUB \\(/ }).first();
+  await expect(clubCategory).toBeVisible();
+  await clubCategory.click();
+  const filteredTypes = await page.locator('#jyc-search-results [role="option"] small').allTextContents();
+  expect(filteredTypes.length).toBeGreaterThan(0);
+  expect(filteredTypes.every(label => label.includes('CLUB'))).toBe(true);
+  await page.locator('.search-category-filters button').filter({ hasText: /^All \\(/ }).click();
+
+  await input.press('ArrowDown');
+  await expect(page.locator('#jyc-search-result-1')).toHaveAttribute('aria-selected', 'true');
+  await input.press('ArrowUp');
+  await expect(page.locator('#jyc-search-result-0')).toHaveAttribute('aria-selected', 'true');
+  await input.press('Enter');
+  await expect(page).toHaveURL(/\/clubs(?:\/)?$/);
+  await expect(page.locator('.search-overlay')).toHaveCount(0);
+  await expect(searchTrigger).toBeFocused();
+
+  await searchTrigger.click();
+  await input.fill('zzzzunrelatedtoken');
+  await expect(page.getByText(/No matches for/)).toBeVisible();
+  await page.locator('.search-no-results button').getByText('Clear search', { exact: true }).click();
+  await expect(input).toBeFocused();
+  await input.press('Escape');
+  await expect(page.locator('.search-overlay')).toHaveCount(0);
+  await expect(searchTrigger).toBeFocused();
+
+  await searchTrigger.click();
+  await input.fill('JYC Now');
+  await input.press('Enter');
+  await expect(page).toHaveURL(/\/updates(?:\/)?$/);
+  await expect(page.locator('.search-overlay')).toHaveCount(0);
+
+  await searchTrigger.click();
+  await input.fill('Join JYC');
+  await input.press('Enter');
+  await expect(page).toHaveURL(/\/join-jyc(?:\/)?$/);
+  await expect(page.locator('.search-overlay')).toHaveCount(0);
+
+  await searchTrigger.click();
+  await input.fill('Smart India Hackathon finalist');
+  const achievementCategory = page.locator('.search-category-filters button').filter({ hasText: /^ACHIEVEMENT \\(/ }).first();
+  await expect(achievementCategory).toBeVisible();
+  await achievementCategory.click();
+  await expect(page.locator('#jyc-search-results [role="option"]').first()).toContainText('Smart India Hackathon finalist');
+  await input.press('Enter');
+  await expect(page).toHaveURL(/\\/achievements(?:\\/)?$/);
+  await expect(page.locator('.search-overlay')).toHaveCount(0);
+
+  await searchTrigger.click();
+  await input.fill('RIDE Hack');
+  const updateCategory = page.locator('.search-category-filters button').filter({ hasText: /^UPDATE \\(/ }).first();
+  await expect(updateCategory).toBeVisible();
+  await updateCategory.click();
+  await expect(page.locator('#jyc-search-results [role="option"]').first()).toContainText('RIDE Hack');
+  await input.press('Enter');
+  await expect(page).toHaveURL(/\\/updates(?:\\/)?$/);
+  await expect(page.locator('.search-overlay')).toHaveCount(0);
+
+  const moreTrigger = page.locator('.nav-more-trigger');
+  const more = page.getByRole('dialog', { name: 'More JYC' });
+  await moreTrigger.click();
+  await expect(more).toBeVisible();
+  await more.getByRole('button', { name: /About JYC/ }).click();
+  await expect(page).toHaveURL(/\/about(?:\/)?$/);
+  await expect(page.locator('.more-sheet-overlay')).toHaveCount(0);
+
+  await moreTrigger.click();
+  await expect(more).toBeVisible();
+  await page.keyboard.press('Control+k');
+  await expect(page.locator('.more-sheet-overlay')).toHaveCount(0);
+  await expect(page.locator('.search-overlay')).toBeVisible();
+  await expect(input).toBeFocused();
+  await input.press('Escape');
+  await expect(page.locator('.search-overlay')).toHaveCount(0);
+
+  await moreTrigger.click();
+  await expect(more).toBeVisible();
+  await more.getByRole('button', { name: 'Search JYC' }).click();
+  await expect(page.locator('.more-sheet-overlay')).toHaveCount(0);
+  await expect(page.locator('.search-overlay')).toBeVisible();
+  await expect(input).toBeFocused();
+  await input.press('Escape');
+  await expect(page.locator('.search-overlay')).toHaveCount(0);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'mobile More sheet regression');
+  const mobileMoreTrigger = page.locator('.mobile-dock').getByRole('button', { name: 'More' });
+  await mobileMoreTrigger.click();
+  await expect(more).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.more-sheet-overlay')).toHaveCount(0);
+  await expect(mobileMoreTrigger).toBeFocused();
 });
