@@ -194,7 +194,7 @@ test('About closing CTA keeps readable foregrounds in both themes', async ({ pag
     const heading = el.querySelector('h2');
     const eyebrow = el.querySelector('.eyebrow');
     const parse = value => {
-      const match = value.match(/[\\d.]+/g);
+      const match = value.match(/[\d.]+/g);
       return match ? match.slice(0, 3).map(Number) : [0,0,0];
     };
     const luminance = value => parse(value).map(channel => channel/255).map(channel => channel <= .04045 ? channel/12.92 : ((channel+.055)/1.055)**2.4).reduce((sum,channel,index) => sum + channel*[.2126,.7152,.0722][index],0);
