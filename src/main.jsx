@@ -739,7 +739,7 @@ function Navbar({data,admin,theme,setTheme}){
  const nav=useNavigate();const loc=useLocation();
  const [open,setOpen]=useState(false),[moreOpen,setMoreOpen]=useState(false),[search,setSearch]=useState(false),[homeSection,setHomeSection]=useState('hero');
  const shortcutRef=React.useRef('');
- const routeLinks=[['Home','/'],['About','/about'],['Clubs','/clubs'],['Events','/events'],['Gallery','/gallery'],['Leadership','/team'],['Contact','/contact']];
+ const routeLinks=[['Home','/'],['Explore','/clubs'],['Events','/events'],['About','/about']];
  const homeLinks=[['Home','hero'],['About','about'],['Clubs','clubs'],['Events','events'],['Gallery','moments'],['Team','team'],['Contact','/contact']];
  useEffect(()=>{
    const onKey=e=>{
