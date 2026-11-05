@@ -53,7 +53,7 @@ test.describe('JYC celestial night-sky dark theme', () => {
         expect(dark.bodyFont).toMatch(/Inter|system-ui/i);
         expect(dark.headingFont).toContain('Space Grotesk');
         expect(dark.navBackground).not.toBe('rgba(0, 0, 0, 0)');
-        if (route === '/') expect(dark.homeBackground).toBe('#151019');
+        if (route === '/') expect(dark.homeBackground).toBe('#090b19');
 
         // The new visual contract must not bleed into the existing light theme.
         await page.evaluate(() => { document.documentElement.dataset.theme = 'light'; });
