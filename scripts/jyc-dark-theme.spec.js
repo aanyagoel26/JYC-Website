@@ -28,7 +28,9 @@ test.describe('JYC celestial night-sky dark theme', () => {
           const root = getComputedStyle(document.documentElement);
           const body = getComputedStyle(document.body);
           const heading = document.querySelector('.public-app h1');
-          const nav = document.querySelector('.public-app .nav');\n          const constellation = document.querySelector('.jyc-3d-explorer-section');\n          const hud = document.querySelector('.jyc-3d-hud-card');
+          const nav = document.querySelector('.public-app .nav');
+          const constellation = document.querySelector('.jyc-3d-explorer-section');
+          const hud = document.querySelector('.jyc-3d-hud-card');
           return {
             backgroundToken: root.getPropertyValue('--jyc-bg').trim(),
             primaryToken: root.getPropertyValue('--jyc-brand-oxblood').trim(),
