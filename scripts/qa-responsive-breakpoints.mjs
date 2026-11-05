@@ -74,23 +74,6 @@ for (const comp of requiredRoutes) {
 // 7.5. Fixed mobile chrome clearance.
 add('mobile page content clears the fixed navigation dock', publicCss.includes('padding-bottom:calc(96px + env(safe-area-inset-bottom))'));
 
-// 8. Output Results
-let failed = 0;
-for (const c of checks) {
-  const status = c.ok ? '✓ PASS' : '✗ FAIL';
-  console.log(`${status} · ${c.name} ${c.details ? `(${c.details})` : ''}`);
-  if (!c.ok) failed++;
-}
-
-console.log(`\nAudit completed: ${checks.length - failed}/${checks.length} passed.`);
-
-if (failed > 0) {
-  process.exit(1);
-} else {
-  console.log('All responsive breakpoint and color harmony audits PASSED!');
-}
-
-
 // 9. Independent desktop/mobile experience contracts.
 const desktopExperience = read('src/styles/jyc-desktop-experience.css');
 const mobileExperience = read('src/styles/jyc-mobile-experience.css');
@@ -111,3 +94,15 @@ add('Mobile content has a single-column grid and horizontal filter rails',
   mobileExperience.includes('overflow-x: auto'));
 add('Narrow phone layout has a dedicated <=390px breakpoint',
   /@media\s*\(max-width:\s*390px\)/.test(mobileExperience));
+
+
+// 10. Final consolidated result (after all contract checks).
+let failed = 0;
+for (const c of checks) {
+  const status = c.ok ? '✓ PASS' : '✗ FAIL';
+  console.log(`${status} · ${c.name} ${c.details ? `(${c.details})` : ''}`);
+  if (!c.ok) failed++;
+}
+console.log(`\\nAudit completed: ${checks.length - failed}/${checks.length} passed.`);
+if (failed > 0) process.exit(1);
+else console.log('All responsive breakpoint and independent experience audits PASSED!');
