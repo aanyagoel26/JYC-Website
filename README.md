@@ -32,3 +32,7 @@ JYC 128 is the central coordinating body for major campus events, cultural fests
 ## 🔒 Access & Maintenance Policy
 
 This project is proprietary and internal to JIIT Youth Club 128. All repository issues, discussions, and external contributions are restricted.
+
+---
+
+Website created by [Aanya Goel](https://www.linkedin.com/in/aanya-goel26) and [Kaustubh Dua](https://www.linkedin.com/in/kaustubh-dua-2b5a76416).

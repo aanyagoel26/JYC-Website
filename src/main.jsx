@@ -87,7 +87,7 @@ function publicDemoData(){
 }
 import { normalizeSearch, rankSearchResults } from './lib/search.js';
 import {mergePublicEvents} from './lib/public-content.js';
-import {CREATOR,JYC_CONTACTS} from './lib/site-config.js';
+import {CREATOR,CREATORS,JYC_CONTACTS} from './lib/site-config.js';
 
 import {MomentsSection} from './v14-platform.jsx';
 import {SkipLink,InstallPrompt,MaintenanceGate,ErrorBoundary,EventTools,DownloadICS,JsonLd,usePageMeta,Gallery,GalleryItems,RecruitmentHub,RegistrationPage} from './extra-features.jsx';
@@ -513,16 +513,19 @@ function Contact({data}){
    </a>
    <div className="contact-card contact-creator-card">
     <span>04</span>
-    <h3>Website Creator</h3>
-    <p>{data.creator.name} · {data.creator.role}</p>
-    <div className="social-row">
-     <a href={data.creator.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
-     <a href={data.creator.instagram} target="_blank" rel="noopener noreferrer">Instagram ↗</a>
-     <a href={data.creator.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
-    </div>
-    <div className="contact-email-copy-row">
-     <code>{data.creator.email}</code>
-     <button type="button" className="btn-copy-mini" onClick={()=>copyEmail(data.creator.email,'Creator email')}>Copy Email 📋</button>
+    <h3>Website Creators</h3>
+    <p>Website made by Aanya Goel and Kaustubh Dua</p>
+    <div style={{display:'flex',flexDirection:'column',gap:'12px',marginTop:'12px'}}>
+     {CREATORS.map(c=>(
+      <div key={c.name}>
+       <strong style={{color:'var(--gold,#bf9c6f)'}}>{c.name}</strong> · <span style={{fontSize:'12px',opacity:.8}}>{c.role}</span>
+       <div className="social-row" style={{marginTop:'6px'}}>
+        {c.linkedin&&<a href={c.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>}
+        {c.github&&<a href={c.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>}
+        {c.email&&<a href={'mailto:'+c.email}>Email ↗</a>}
+       </div>
+      </div>
+     ))}
     </div>
    </div>
   </div>
@@ -978,7 +981,7 @@ function Footer({data,admin}){
       <div className="footer-v6-biglink"><button type="button" onClick={()=>nav('/recruitment')}>JOIN JYC <span aria-hidden="true">↗</span></button></div>
       <div className="footer-bottom footer-v6-bottom">
         <span>JIIT YOUTH CLUB · JIIT SECTOR 128</span>
-        <small className="jyc-creator-credit">Website Creator · <a href={data.creator.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${data.creator.name} on LinkedIn`}>{data.creator.name}</a></small>
+        <small className="jyc-creator-credit">Website made by <a href="https://www.linkedin.com/in/aanya-goel26" target="_blank" rel="noopener noreferrer">Aanya Goel</a> and <a href="https://www.linkedin.com/in/kaustubh-dua-2b5a76416" target="_blank" rel="noopener noreferrer">Kaustubh Dua</a></small>
       </div>
     </div>
   </footer>;
