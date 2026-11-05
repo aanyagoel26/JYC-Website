@@ -1,4 +1,4 @@
-import { relevanceScore, rankSearchResults } from '../src/lib/search.js';
+import { relevanceScore, rankSearchResults, matchSearchResults } from '../src/lib/search.js';
 const fail=[];
 let checks=0;
 const ok=(name,cond)=>{checks++;if(cond)console.log(`PASS: ${name}`);else{console.log(`FAIL: ${name}`);fail.push(name)}};
@@ -20,7 +20,10 @@ ok('prefix match follows exact title',ranked[1]?.key==='prefix');
 const brand=rankSearchResults([{key:'club',title:'JYC Technical Club',meta:'club',text:'',type:'CLUB'},{key:'home',title:'JIIT Youth Club',meta:'Official JYC website',text:'JIIT Noida clubs events',type:'PAGE'}],'JYC');
 ok('official JIIT Youth Club page leads brand search',brand[0]?.key==='home');
 const many=rankSearchResults(Array.from({length:24},(_,i)=>({key:`item-${i}`,title:`AITronics ${i+1}`,meta:'Technical club',text:'AI robotics',type:'CLUB'})),'AITronics');
-ok('ranking preserves every match so the UI can report an accurate total',many.length===24);
+ok('ranking preserves every candidate so the UI can report an accurate total',many.length===24);
+const filtered=matchSearchResults([{key:'hit',title:'AITronics',meta:'Technical club',searchText:'robotics',type:'CLUB'},{key:'miss',title:'Literary Society',meta:'Books and writing',searchText:'poetry',type:'CLUB'}],'AITronics');
+ok('search results exclude zero-score non-matches',filtered.length===1&&filtered[0]?.key==='hit');
+ok('unrelated queries produce a real empty result set',matchSearchResults([{title:'Literary Society',meta:'Books',searchText:'poetry',type:'CLUB'}],'quantum banana').length===0);
 ok('ranking remains relevance ordered beyond the first 16 results',many[0]?._score>=many[15]?._score&&many[15]?._score>=many[23]?._score);
 const intentSource={key:'intent',title:'Upcoming events',meta:'Open the event calendar',text:'',type:'QUICK ACTION',priority:120};
 const intent=rankSearchResults([{key:'page',title:'Events',meta:'JYC events',text:'',type:'PAGE'},intentSource],'upcoming events');
