@@ -16,7 +16,7 @@ test.describe('JYC Search and More overlay experience',()=>{
       await expect(search).toBeVisible();
       await expect(search.locator('input[aria-label="Search JYC content"]')).toBeFocused();
       await expect(page.locator('body')).toHaveCSS('overflow','hidden');
-      await search.getByRole('textbox',{name:'Search JYC content'}).fill('robotics');
+      await search.locator('input[aria-label="Search JYC content"]').fill('robotics');
       await expect(search.getByRole('group',{name:'Filter search results'})).toBeVisible();
       await search.getByRole('button',{name:'Clubs',exact:true}).click();
       await expect(search.locator('.jyc-search-count')).toContainText(/match/);
@@ -34,7 +34,7 @@ test.describe('JYC Search and More overlay experience',()=>{
       await expect(more).toBeVisible();
       await expect(more.locator('input[aria-label="Search the More directory"]')).toBeFocused();
       await expect(page.locator('body')).toHaveCSS('overflow','hidden');
-      await more.getByRole('textbox',{name:'Search the More directory'}).fill('calendar');
+      await more.locator('input[aria-label="Search the More directory"]').fill('calendar');
       await expect(more.getByRole('button',{name:/event calendar/i})).toBeVisible();
       const moreBounds=await more.evaluate(el=>({scrollWidth:el.scrollWidth,clientWidth:el.clientWidth}));
       expect(moreBounds.scrollWidth).toBeLessThanOrEqual(moreBounds.clientWidth+2);
