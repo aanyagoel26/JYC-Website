@@ -33,16 +33,19 @@ test.describe('JYC team directory interactions', () => {
 
   test('profile flip cards are keyboard operable and restore the front face on Escape', async ({ page }) => {
     const card = page.locator('.team-member-flip').first();
-    await expect(card).toBeVisible();
-    await card.focus();
-    await expect(card).toBeFocused();
+    const frontTrigger = card.locator('.flip-card__front-trigger');
+    await expect(frontTrigger).toBeVisible();
+    await frontTrigger.focus();
+    await expect(frontTrigger).toBeFocused();
     await page.keyboard.press('Space');
-    await expect(card).toHaveAttribute('aria-expanded', 'true');
+    await expect(frontTrigger).toHaveAttribute('aria-expanded', 'true');
     await expect(card.locator('.flip-card__back')).toBeVisible();
     await expect(card.locator('.flip-card__front')).toHaveAttribute('aria-hidden', 'true');
+    await expect(card.locator('.flip-card__back')).toBeFocused();
     await page.keyboard.press('Escape');
-    await expect(card).toHaveAttribute('aria-expanded', 'false');
+    await expect(frontTrigger).toHaveAttribute('aria-expanded', 'false');
     await expect(card.locator('.flip-card__front')).toBeVisible();
+    await expect(frontTrigger).toBeFocused();
   });
 
   test('switches and persists the day and night theme', async ({ page }) => {
