@@ -185,3 +185,30 @@ test('About page remains structured and readable at 320px', async ({ page }) => 
   expect(layout.familyGrid.width).toBeLessThanOrEqual(322);
   expect(layout.metrics.width).toBeLessThanOrEqual(322);
 });
+
+test('About closing CTA keeps readable foregrounds in both themes', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/about', { waitUntil: 'domcontentloaded' });
+  await page.waitForFunction(() => document.documentElement.dataset.jycContentReady === 'true', null, { timeout: 20000 });
+  const read = () => page.locator('.about-next-v28').evaluate(el => {
+    const heading = el.querySelector('h2');
+    const paragraph = el.querySelector('p');
+    const eyebrow = el.querySelector('.eyebrow');
+    const rgb = value => value.match(/[\\d.]+/g)?.slice(0,3).map(Number) || [0,0,0];
+    const lum = value => rgb(value).map(v => v/255).map(v => v <= .04045 ? v/12.92 : ((v+.055)/1.055)**2.4).reduce((a,v,i)=>a+v*[.2126,.7152,.0722][i],0);
+    const ratio = (a,b) => { const pair=[lum(a),lum(b)].sort((x,y)=>y-x); return (pair[0]+.05)/(pair[1]+.05); };
+    const bg = getComputedStyle(el).backgroundColor;
+    const fg = value => getComputedStyle(value).color;
+    return { heading:ratio(fg(heading),bg), paragraph:ratio(fg(paragraph),bg), eyebrow:ratio(fg(eyebrow),bg) };
+  });
+  await page.evaluate(() => { document.documentElement.dataset.theme = 'dark'; });
+  const dark = await read();
+  expect(dark.heading, 'dark About CTA heading contrast').toBeGreaterThanOrEqual(4.5);
+  expect(dark.paragraph, 'dark About CTA paragraph contrast').toBeGreaterThanOrEqual(4.5);
+  expect(dark.eyebrow, 'dark About CTA eyebrow contrast').toBeGreaterThanOrEqual(4.5);
+  await page.evaluate(() => { document.documentElement.dataset.theme = 'light'; });
+  const light = await read();
+  expect(light.heading, 'light About CTA heading contrast').toBeGreaterThanOrEqual(4.5);
+  expect(light.paragraph, 'light About CTA paragraph contrast').toBeGreaterThanOrEqual(4.5);
+  expect(light.eyebrow, 'light About CTA eyebrow contrast').toBeGreaterThanOrEqual(4.5);
+});
