@@ -6,7 +6,7 @@
     if (saved === 'dark' || saved === 'light') theme = saved;
   } catch {}
   document.documentElement.dataset.theme = theme;
-  const themeColor = theme === 'dark' ? '#050811' : '#f8fafc';
+  const themeColor = theme === 'dark' ? '#0F0E11' : '#F5F1E6';
   document.querySelectorAll('meta[name="theme-color"]').forEach(meta => {
     meta.content = themeColor;
   });
