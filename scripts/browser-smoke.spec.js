@@ -1136,6 +1136,11 @@ test('homepage copy, crest and actions remain readable on compact phones in both
       await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
       await expect(page.locator('.jh-hero-copy h1')).toBeVisible();
       await expect(page.locator('.jh-hero-copy .jh-lead')).toBeVisible();
+      await expect.poll(() => page.evaluate(() => {
+        const logo = document.querySelector('.jyc-emblem-logo-img');
+        const fallback = document.querySelector('.jyc-emblem-logo-fallback');
+        return Boolean(fallback || (logo?.complete && logo.naturalWidth > 0));
+      })).toBe(true);
       const snapshot = await page.evaluate(() => {
         const parse = value => {
           const match = String(value).match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
