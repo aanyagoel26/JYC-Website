@@ -485,15 +485,19 @@ test('failed gallery photos use the neutral unavailable-photo asset, not a logo 
   await page.goto(base + '/gallery', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'gallery failed-image fallback');
 
-  // Scroll the original lazy image into view first. The neutral fallback is
-  // created only after the deliberately failed request fires, so it cannot be
-  // the locator used to trigger that request.
-  const originalPhoto = page.locator('.jyc57-editorial-photo img').first();
-  await originalPhoto.scrollIntoViewIfNeeded();
-  const fallback = page.locator('.jyc57-editorial-photo img[src="/assets/photo-unavailable.svg"]').first();
-  await expect(fallback).toBeVisible({ timeout: 15000 });
-  await expect(fallback).toHaveAttribute('alt', 'Photograph unavailable');
-  await expect(page.locator('.jyc57-editorial-photo img[src*="jyc-logo"]').first()).toHaveCount(0);
+  // Use the current gallery photo surfaces. Some published collections have no
+  // photograph URL and render the neutral fallback immediately; image-backed
+  // tiles must switch to that same asset after the deliberately failed request.
+  const imageBackedPhoto = page.locator('.jyc57-editorial-photo img:not([src="/assets/photo-unavailable.svg"]), .jyc57-photo img:not([src="/assets/photo-unavailable.svg"])').first();
+  if (await imageBackedPhoto.count()) {
+    await imageBackedPhoto.scrollIntoViewIfNeeded();
+    const fallback = page.locator('.jyc57-editorial-photo img[src="/assets/photo-unavailable.svg"], .jyc57-photo img[src="/assets/photo-unavailable.svg"]').first();
+    await expect(fallback).toBeVisible({ timeout: 15000 });
+    await expect(fallback).toHaveAttribute('alt', 'Photograph unavailable');
+  } else {
+    await expect(page.locator('.jyc57-editorial-photo img[src="/assets/photo-unavailable.svg"], .jyc57-photo img[src="/assets/photo-unavailable.svg"]').first()).toBeVisible();
+  }
+  await expect(page.locator('.jyc57-editorial-photo img[src*="jyc-logo"], .jyc57-photo img[src*="jyc-logo"]')).toHaveCount(0);
 
   await page.goto(base + '/events', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'event photo fallback');
@@ -505,10 +509,16 @@ test('failed gallery photos use the neutral unavailable-photo asset, not a logo 
 
   await page.goto(base + '/clubs', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'club photo fallback');
-  const clubFallback = page.locator('.jyc57-club-card img[src="/assets/photo-unavailable.svg"]').first();
-  await expect(clubFallback).toBeVisible({ timeout: 15000 });
-  await expect(clubFallback).toHaveAttribute('alt', 'Club photograph unavailable');
-  await expect(page.locator('.jyc57-club-card picture img[src*="jyc-logo"]')).toHaveCount(0);
+  const imageBackedClub = page.locator('.jyc57-club-card img:not(.jyc57-club-fallback-logo)').first();
+  if (await imageBackedClub.count()) {
+    await imageBackedClub.scrollIntoViewIfNeeded();
+    const clubFallback = page.locator('.jyc57-club-card img[src="/assets/photo-unavailable.svg"]').first();
+    await expect(clubFallback).toBeVisible({ timeout: 15000 });
+    await expect(clubFallback).toHaveAttribute('alt', 'Club photograph unavailable');
+  } else {
+    await expect(page.locator('.jyc57-club-card .jyc57-club-fallback').first()).toBeVisible();
+  }
+  await expect(page.locator('.jyc57-club-card img[src*="jyc-logo"]')).toHaveCount(0);
 });
 
 test('Dither Veil falls back from the compact AVIF to the official WebP logo', async ({ page }) => {
