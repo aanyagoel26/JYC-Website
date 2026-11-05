@@ -75,7 +75,8 @@ function useAtmosphericCanvas(canvasRef) {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let reducedMotion = motionQuery.matches;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
@@ -153,12 +154,12 @@ function useAtmosphericCanvas(canvasRef) {
     let isHidden = document.hidden;
     const onVisibilityChange = () => {
       isHidden = document.hidden;
-      if (!isHidden && !animId) animId = requestAnimationFrame(loop);
+      if (!isHidden && !reducedMotion && !animId) animId = requestAnimationFrame(loop);
     };
     document.addEventListener('visibilitychange', onVisibilityChange);
 
     const loop = (timestamp) => {
-      if (isHidden) {
+      if (isHidden || reducedMotion) {
         animId = 0;
         return;
       }
@@ -378,10 +379,22 @@ function useAtmosphericCanvas(canvasRef) {
       animId = requestAnimationFrame(loop);
     };
 
-    animId = requestAnimationFrame(loop);
+    const onMotionChange = () => {
+      reducedMotion = motionQuery.matches;
+      if (reducedMotion) {
+        if (animId) cancelAnimationFrame(animId);
+        animId = 0;
+        ctx.clearRect(0, 0, width, height);
+      } else if (!isHidden && !animId) {
+        animId = requestAnimationFrame(loop);
+      }
+    };
+    motionQuery.addEventListener?.('change', onMotionChange);
+    if (!reducedMotion && !isHidden) animId = requestAnimationFrame(loop);
 
     return () => {
       if (animId) cancelAnimationFrame(animId);
+      motionQuery.removeEventListener?.('change', onMotionChange);
       window.removeEventListener('resize', resize);
       if (!isCoarsePointer) window.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('visibilitychange', onVisibilityChange);
