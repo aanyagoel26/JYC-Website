@@ -6,11 +6,11 @@ import './JYC3DInteractiveExplorer.css';
 
 const slugHub = value => String(value || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const FAMILY_STYLE = {
-  Technical: { color: '#0EA5E9', icon: '⚡' },
-  Cultural: { color: '#D97706', icon: '🎭' },
-  Creative: { color: '#8B5CF6', icon: '🎨' },
-  Literary: { color: '#0D9488', icon: '🖋️' },
-  Sports: { color: '#DC2626', icon: '🏆' }
+  Technical: { color: '#A82420', icon: '⚡' },
+  Cultural: { color: '#BF9C6F', icon: '🎭' },
+  Creative: { color: '#8D642F', icon: '🎨' },
+  Literary: { color: '#6E6A75', icon: '🖋️' },
+  Sports: { color: '#C92A2A', icon: '🏆' }
 };
 
 // Positions/icons are visual layout only. Names, families, labels and descriptions
@@ -164,12 +164,12 @@ export function JYC3DInteractiveExplorer() {
       // 1. Draw 3D Space Background Aura & Radial Depth Grid
       const bgGrad = ctx.createRadialGradient(cx, cy, 20 * dpr, cx, cy, Math.max(width, height) * 0.55);
       if (isDark) {
-        bgGrad.addColorStop(0, 'rgba(56, 189, 248, 0.07)');
-        bgGrad.addColorStop(0.5, 'rgba(147, 51, 234, 0.035)');
+        bgGrad.addColorStop(0, 'rgba(191, 156, 111, 0.07)');
+        bgGrad.addColorStop(0.5, 'rgba(168, 36, 32, 0.035)');
         bgGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
       } else {
-        bgGrad.addColorStop(0, 'rgba(212, 175, 55, 0.12)');
-        bgGrad.addColorStop(0.6, 'rgba(245, 158, 11, 0.04)');
+        bgGrad.addColorStop(0, 'rgba(191, 156, 111, 0.12)');
+        bgGrad.addColorStop(0.6, 'rgba(191, 156, 111, 0.04)');
         bgGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
       }
       ctx.fillStyle = bgGrad;
@@ -201,8 +201,8 @@ export function JYC3DInteractiveExplorer() {
           else ctx.lineTo(px, py);
         }
         ctx.strokeStyle = isDark
-          ? `rgba(56, 189, 248, ${0.08 - idx * 0.02})`
-          : `rgba(184, 134, 11, ${0.14 - idx * 0.03})`;
+          ? `rgba(191, 156, 111, ${0.08 - idx * 0.02})`
+          : `rgba(141, 100, 47, ${0.14 - idx * 0.03})`;
         ctx.lineWidth = 1 * dpr;
         ctx.setLineDash([4 * dpr, 6 * dpr]);
         ctx.stroke();
@@ -254,14 +254,14 @@ export function JYC3DInteractiveExplorer() {
       const sunPulse = Math.sin(time * 3) * 3 * dpr;
       const sunRadius = (10 * dpr) + sunPulse;
       const sunGlow = ctx.createRadialGradient(cx, cy, 2 * dpr, cx, cy, sunRadius * 3);
-      sunGlow.addColorStop(0, isDark ? '#ffd700' : '#b8860b');
-      sunGlow.addColorStop(0.4, isDark ? 'rgba(212, 175, 55, 0.5)' : 'rgba(184, 134, 11, 0.4)');
+      sunGlow.addColorStop(0, isDark ? '#D2B48C' : '#8D642F');
+      sunGlow.addColorStop(0.4, isDark ? 'rgba(191, 156, 111, 0.5)' : 'rgba(141, 100, 47, 0.4)');
       sunGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
       ctx.fillStyle = sunGlow;
       ctx.beginPath();
       ctx.arc(cx, cy, sunRadius * 3, 0, Math.PI * 2);
       ctx.fill();
-      ctx.fillStyle = isDark ? '#ffffff' : '#ffd700';
+      ctx.fillStyle = isDark ? '#F5F1E6' : '#D2B48C';
       ctx.beginPath();
       ctx.arc(cx, cy, sunRadius * 0.75, 0, Math.PI * 2);
       ctx.fill();
@@ -308,7 +308,7 @@ export function JYC3DInteractiveExplorer() {
         const satY = node.py + Math.sin(sat.angle) * (sat.dist * 0.6 * dpr);
         ctx.beginPath();
         ctx.arc(satX, satY, 1.8 * dpr, 0, Math.PI * 2);
-        ctx.fillStyle = isDark ? '#ffffff' : node.color;
+        ctx.fillStyle = isDark ? '#F5F1E6' : node.color;
         ctx.shadowColor = node.color;
         ctx.shadowBlur = 6 * dpr;
         ctx.fill();
@@ -319,7 +319,7 @@ export function JYC3DInteractiveExplorer() {
         const textWidth = ctx.measureText(node.name).width;
         const badgeY = node.py + radius + 15 * dpr;
         ctx.fillStyle = isDark
-          ? (node.isSelected ? 'rgba(14, 21, 38, 0.95)' : 'rgba(10, 13, 22, 0.82)')
+          ? (node.isSelected ? 'rgba(24, 22, 29, 0.95)' : 'rgba(24, 22, 29, 0.82)')
           : (node.isSelected ? 'rgba(255, 255, 255, 0.98)' : 'rgba(255, 250, 240, 0.92)');
         ctx.strokeStyle = node.isSelected ? node.color : (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(180,130,60,0.2)');
         ctx.lineWidth = 1 * dpr;
@@ -327,7 +327,7 @@ export function JYC3DInteractiveExplorer() {
         ctx.roundRect(node.px - textWidth / 2 - 8 * dpr, badgeY - fontSize * 0.85, textWidth + 16 * dpr, fontSize + 8 * dpr, 6 * dpr);
         ctx.fill();
         ctx.stroke();
-        ctx.fillStyle = isDark ? (node.isSelected ? '#ffffff' : '#cbd5e1') : (node.isSelected ? '#0f172a' : '#334155');
+        ctx.fillStyle = isDark ? (node.isSelected ? '#F5F1E6' : '#E5DDD2') : (node.isSelected ? '#1A191D' : '#514B50');
         ctx.fillText(node.name, node.px, badgeY);
       });
 
