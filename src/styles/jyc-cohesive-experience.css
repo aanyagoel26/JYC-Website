@@ -32,6 +32,8 @@
   --jyc-brand-ink: var(--jyc-text-strong);
   --jyc-brand-muted: var(--jyc-muted);
   --jyc-brand-oxblood: var(--jyc-accent);
+  --jyc-restoration-red: var(--jyc-accent);
+  --jyc-restoration-red-bright: var(--jyc-accent-strong);
   --jyc-brand-oxblood-hover: var(--jyc-accent-strong);
   --jyc-brand-champagne: var(--jyc-gold);
   --jyc-brand-line: var(--jyc-line);
