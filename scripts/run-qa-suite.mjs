@@ -53,7 +53,12 @@ for (const script of scripts) {
   console.log(`\n===== QA: ${script} =====`);
   const result = spawnSync(process.execPath, [`scripts/${script}`], {
     stdio: 'inherit',
-    env: process.env
+    // Static QA runs without a deployment provider. Carry the repository's
+    // configured canonical origin explicitly so hosting metadata is never required.
+    env: {
+      ...process.env,
+      VITE_CANONICAL_ORIGIN: process.env.VITE_CANONICAL_ORIGIN || 'https://www.jiityouthclub128.in'
+    }
   });
   if (result.status !== 0) {
     console.error(`::error file=scripts/${script}::QA script failed: ${script} (exit ${result.status ?? 'unknown'})`);
