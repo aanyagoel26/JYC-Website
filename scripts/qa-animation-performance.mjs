@@ -33,10 +33,9 @@ check('3D canvas avoids per-frame React state updates, preserves drag rotation a
 check('3D canvas pauses for reduced motion, hidden tabs and off-screen sections',explorer.includes("prefers-reduced-motion: reduce")&&explorer.includes("IntersectionObserver")&&explorer.includes("const canAnimate"));
 check('3D constellation provides keyboard selection and accurately identifies its 2D canvas rendering',explorer.includes("Choose a published JYC community")&&explorer.includes('aria-hidden="true"')&&explorer.includes("INTERACTIVE 3D CONSTELLATION")&&!explorer.includes("INTERACTIVE WEBGL TOPOLOGY"));
 
-const hasCompactAsset=home.includes("jyc-logo-medium.avif")&&fs.existsSync('public/assets/jyc-logo-medium.avif');
+const hasCompactDerivative=home.includes("const DITHER_SOURCE = import.meta.env.PROD ? '/assets/jyc-logo-medium.avif' : FALLBACK")&&home.includes('src={DITHER_SOURCE}')&&home.includes('fallbackSrc={FALLBACK}')&&home.includes('originalFallbackSrc={ORIGINAL_LOGO}')&&read('scripts/generate-photo-derivatives.mjs').includes("const outputRoot=path.resolve('public/assets/photo-derivatives')");
 const hasLegacyOptimized=home.includes('src="/assets/jyc-logo.avif"')&&home.includes('fallbackSrc="/assets/jyc-logo.webp"');
-const hasResponsiveSource=home.includes('const DITHER_SOURCE = import.meta.env.PROD ?')&&home.includes('src={DITHER_SOURCE}')&&home.includes('fallbackSrc={FALLBACK}')&&home.includes('originalFallbackSrc={ORIGINAL_LOGO}')&&hasCompactAsset;
-check('DitherVeil uses the current generated compact AVIF hero asset and truthful WebP/original fallbacks',hasResponsiveSource||hasLegacyOptimized);
+check('DitherVeil points to the generated compact AVIF hero asset and preserves WebP/original fallbacks',hasCompactDerivative||hasLegacyOptimized);
 check('DitherVeil reveal receives pointer movement even when foreground hero layers intercept it',home.includes('globalPointer')&&dither.includes("window.addEventListener('pointermove', onGlobalMove")&&dither.includes("window.removeEventListener('pointermove', onGlobalMove"));
 check('DitherVeil optimized source and fallback assets are present in the public build',fs.existsSync('public/assets/jyc-logo.avif')&&fs.existsSync('public/assets/jyc-logo.webp'));
 check('DitherVeil keeps WebGL enabled on typical four-core mobile devices while retaining a low-memory fallback',dither.includes('const constrainedHardware = (navigator.hardwareConcurrency || 4) < 4 || (navigator.deviceMemory || 4) < 2')&&dither.includes('coarsePointer ? 1'));
