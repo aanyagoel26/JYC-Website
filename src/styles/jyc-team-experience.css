@@ -318,3 +318,30 @@ html[data-theme="dark"] .team-page .team-hub-directory>a:hover { border-color: r
   .team-page *::before,
   .team-page *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* V65 phone-first team directory polish. */
+.team-page .team-member-flip:focus-visible{outline:3px solid var(--jyc-focus)!important;outline-offset:4px}
+.team-page .team-front-overlay{padding:54px 22px 22px;background:linear-gradient(180deg,transparent 0%,rgba(8,12,25,.46) 28%,rgba(8,12,25,.91) 72%,rgba(8,12,25,.97) 100%)}
+.team-page .team-role-tag{font-size:11px;letter-spacing:.015em;background:rgba(12,17,32,.72);backdrop-filter:blur(10px)}
+.team-page .team-name-front{font-size:clamp(22px,2.2vw,28px)}
+.team-page .team-flip-indicator{font-size:12px}
+@media(max-width:600px){
+.team-page .team-hero-panel{padding:22px 16px 18px}
+.team-page .team-hero-copy h1{font-size:clamp(35px,10.2vw,44px)}
+.team-page .team-hero-actions{grid-template-columns:minmax(0,1fr)}
+.team-page .team-hero-logo{width:clamp(132px,36vw,150px)}
+.team-page .team-command-strip article{min-height:82px;align-content:center}
+.team-page .team-filter-tab{min-height:48px;font-size:12px}
+.team-page .team-layer-card{width:min(100%,420px)}
+.team-page .team-member-flip{aspect-ratio:4/4.75}
+.team-page .team-back-content{gap:14px;padding:18px}
+.team-page .team-back-bio{font-size:14px;line-height:1.7}
+}
+@media(max-width:360px){
+.team-page .team-hero-copy h1{font-size:33px}
+.team-page .team-command-strip article{padding:12px 9px}
+.team-page .team-filter-tab{font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){
+.team-page .team-layer-card,.team-page .team-photo-editorial img{transition:none!important}
+}
