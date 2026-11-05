@@ -1861,3 +1861,26 @@ html[data-theme="dark"] .public-app :where(.jyc-photo-chapter-collage button>spa
   .jyc-photo-story-caption,.jyc57-photo span) {
   border-color:rgba(201,184,242,.2) !important;
 }
+
+
+/* Final aliases consumed by older editorial and identity modules. */
+html[data-theme="light"] {
+  --jyc-paper:#f6f2e9;
+  --jyc-paper-raised:#fffdf8;
+  --jyc-muted-ink:#655d66;
+  --jyc-oxblood:#843b35;
+  --jyc-champagne:#98784e;
+}
+html[data-theme="dark"] {
+  --jyc-paper:#090b19;
+  --jyc-paper-raised:#15182b;
+  --jyc-muted-ink:#c0bad5;
+  --jyc-oxblood:#c9b8f2;
+  --jyc-champagne:#e6d4a8;
+}
+html[data-theme="dark"] .public-app .theme-toggle-track::after {
+  color:rgba(230,212,168,.7) !important;
+}
+html[data-theme="light"] .public-app .theme-toggle-track::after {
+  color:rgba(152,120,78,.62) !important;
+}
