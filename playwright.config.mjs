@@ -12,6 +12,8 @@ const searchMore = /JYC Search and More interaction contract/i;
 const teamDirectory = /JYC team directory interactions/i;
 const aboutInteractions = /About family cards open the matching filtered clubs directory/i;
 const crossBrowser = /browser-compat:/i;
+const textReadability = /JYC text readability/i;
+const motionAccessibility = /JYC motion system/i;
 
 export default defineConfig({
   testDir: './scripts',
@@ -41,6 +43,8 @@ export default defineConfig({
     { name: 'search-more', use: { viewport: { width: 390, height: 844 }, isMobile: true }, grep: searchMore },
     { name: 'team-directory', use: { viewport: { width: 390, height: 844 }, isMobile: true }, grep: teamDirectory },
     { name: 'about-interactions', use: { viewport: { width: 390, height: 844 }, isMobile: true }, grep: aboutInteractions },
+    { name: 'text-readability', use: { viewport: { width: 1440, height: 960 } }, grep: textReadability },
+    { name: 'motion-accessibility', use: { viewport: { width: 1280, height: 900 } }, grep: motionAccessibility },
     { name: 'compat-chromium', use: { browserName: 'chromium', viewport: { width: 1280, height: 900 } }, grep: crossBrowser },
     { name: 'compat-firefox', use: { browserName: 'firefox', viewport: { width: 1280, height: 900 } }, grep: crossBrowser },
     { name: 'compat-webkit', use: { browserName: 'webkit', viewport: { width: 1280, height: 900 } }, grep: crossBrowser },
