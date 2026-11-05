@@ -2023,7 +2023,7 @@ test('More navigation and Search modal work with keyboard, empty states and focu
 
   await searchTrigger.click();
   await input.fill('Smart India Hackathon finalist');
-  const achievementCategory = page.locator('.search-category-filters button').filter({ hasText: /^ACHIEVEMENT \\(/ }).first();
+  const achievementCategory = page.locator('.search-category-filters button').filter({ hasText: /^ACHIEVEMENT \(/ }).first();
   await expect(achievementCategory).toBeVisible();
   await achievementCategory.click();
   await expect(page.locator('#jyc-search-results [role="option"]').first()).toContainText('Smart India Hackathon finalist');
@@ -2033,7 +2033,7 @@ test('More navigation and Search modal work with keyboard, empty states and focu
 
   await searchTrigger.click();
   await input.fill('RIDE Hack');
-  const updateCategory = page.locator('.search-category-filters button').filter({ hasText: /^UPDATE \\(/ }).first();
+  const updateCategory = page.locator('.search-category-filters button').filter({ hasText: /^UPDATE \(/ }).first();
   await expect(updateCategory).toBeVisible();
   await updateCategory.click();
   await expect(page.locator('#jyc-search-results [role="option"]').first()).toContainText('RIDE Hack');
