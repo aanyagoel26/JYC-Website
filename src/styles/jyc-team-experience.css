@@ -345,3 +345,19 @@ html[data-theme="dark"] .team-page .team-hub-directory>a:hover { border-color: r
 @media(prefers-reduced-motion:reduce){
 .team-page .team-layer-card,.team-page .team-photo-editorial img{transition:none!important}
 }
+
+/* Keep the biography face within the card: the back content owns its padding,
+   while the return control remains visible and independently reachable. */
+.team-page .team-member-flip .flip-card__back { padding: 0; }
+.team-page .team-member-flip .team-back-content {
+  min-height: 0;
+  height: auto;
+  flex: 1 1 auto;
+}
+.team-page .team-member-flip .flip-card__back-trigger {
+  flex: 0 0 auto;
+  margin: 0 20px 20px;
+}
+@media (max-width: 600px) {
+  .team-page .team-member-flip .flip-card__back-trigger { margin: 0 18px 18px; }
+}
