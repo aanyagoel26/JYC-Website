@@ -65,4 +65,23 @@ test.describe('JYC motion system', () => {
     })));
     expect(states.every(state => state.visible && state.opacity > 0.98)).toBe(true);
   });
+  test('ambient canvas pauses and clears when reduced motion is enabled at runtime', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await ready(page, '/');
+    const canvas = page.locator('.jyc-ambient-canvas');
+    await expect(canvas).toBeAttached();
+    await page.waitForTimeout(180);
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await page.waitForTimeout(80);
+    const pausedFrame = await canvas.evaluate(node => node.toDataURL());
+    await page.waitForTimeout(160);
+    const nextFrame = await canvas.evaluate(node => node.toDataURL());
+    expect(nextFrame).toBe(pausedFrame);
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await page.waitForTimeout(180);
+    const resumedFrame = await canvas.evaluate(node => node.toDataURL());
+    expect(resumedFrame).not.toBe(pausedFrame);
+  });
+
 });
