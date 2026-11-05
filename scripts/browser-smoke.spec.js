@@ -1960,6 +1960,18 @@ test('More navigation and Search modal work with keyboard, empty states and focu
   await expect(page.locator('.search-overlay')).toHaveCount(0);
   await expect(searchTrigger).toBeFocused();
 
+  await searchTrigger.click();
+  await input.fill('JYC Now');
+  await input.press('Enter');
+  await expect(page).toHaveURL(/\\/updates(?:\\/)?$/);
+  await expect(page.locator('.search-overlay')).toHaveCount(0);
+
+  await searchTrigger.click();
+  await input.fill('Join JYC');
+  await input.press('Enter');
+  await expect(page).toHaveURL(/\\/join-jyc(?:\\/)?$/);
+  await expect(page.locator('.search-overlay')).toHaveCount(0);
+
   const moreTrigger = page.locator('.nav-more-trigger');
   const more = page.getByRole('dialog', { name: 'More JYC' });
   await moreTrigger.click();
