@@ -1590,6 +1590,14 @@ test('runtime metadata keeps canonical URLs on the production domain from a prev
 
 
 
+test('static boot logo falls back to the original PNG when generated AVIF files fail', async ({ page }) => {
+  await page.route('**/assets/jyc-logo*.avif', route => route.abort());
+  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  const logo = page.locator('.boot-logo');
+  await expect(logo).toHaveAttribute('src', '/JYC%20Logo(4).png');
+  await expect.poll(() => logo.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+});
+
 test('static boot screen follows the operating-system theme when no preference is saved', async ({ page }) => {
   await page.addInitScript(() => localStorage.removeItem('jyc-theme'));
   await page.route('**/*', route => {
