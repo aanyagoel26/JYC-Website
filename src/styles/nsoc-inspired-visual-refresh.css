@@ -969,3 +969,66 @@ html[data-theme="dark"] .jyc-editorial-home.jyc-home .badge-live-pulse{backgroun
 @media(prefers-reduced-motion:reduce){
  .jyc-editorial-home *, .jyc-editorial-home *::before,.jyc-editorial-home *::after{scroll-behavior:auto!important}
 }
+
+
+/* Mobile navigation: compact, safe-area aware and thumb-first. */
+@media(max-width:680px){
+ body{padding-bottom:calc(78px + env(safe-area-inset-bottom,0px))}
+ body.menu-open{overflow:hidden}
+ .mobile-dock{
+  position:fixed!important;z-index:1200!important;
+  left:10px!important;right:10px!important;bottom:calc(8px + env(safe-area-inset-bottom,0px))!important;
+  width:auto!important;min-height:62px!important;
+  display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  align-items:center!important;gap:2px!important;padding:6px!important;
+  border:1px solid rgba(143,41,37,.15)!important;border-radius:18px!important;
+  background:rgba(255,253,248,.94)!important;
+  box-shadow:0 12px 38px rgba(39,26,25,.16)!important;
+  backdrop-filter:blur(22px) saturate(1.3)!important;-webkit-backdrop-filter:blur(22px) saturate(1.3)!important;
+ }
+ .mobile-dock button{
+  position:relative!important;z-index:1!important;min-width:0!important;min-height:48px!important;
+  display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+  gap:3px!important;padding:4px 2px!important;border:0!important;border-radius:12px!important;
+  background:transparent!important;color:#746967!important;
+ }
+ .mobile-dock button>span{display:grid;place-items:center;width:26px;height:24px}
+ .mobile-dock button svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+ .mobile-dock button b{font-size:9px!important;line-height:1.1!important;font-weight:750!important;letter-spacing:.015em}
+ .mobile-dock button.active{color:#8f2925!important}
+ .mobile-dock button.active>span{transform:translateY(-1px)}
+ .mobile-dock .dock-active-pill{
+  position:absolute!important;z-index:0!important;left:calc(var(--dock-index)*20% + 2px)!important;
+  top:5px!important;bottom:5px!important;width:calc(20% - 4px)!important;
+  border-radius:13px!important;background:rgba(143,41,37,.075)!important;
+  transition:left .25s cubic-bezier(.2,.8,.2,1)!important;pointer-events:none!important;
+ }
+ html[data-theme="dark"] .mobile-dock{
+  background:rgba(28,21,31,.94)!important;border-color:rgba(216,183,125,.18)!important;
+  box-shadow:0 12px 38px rgba(0,0,0,.35)!important;
+ }
+ html[data-theme="dark"] .mobile-dock button{color:#c2b5be!important}
+ html[data-theme="dark"] .mobile-dock button.active{color:#ed8064!important}
+ html[data-theme="dark"] .mobile-dock .dock-active-pill{background:rgba(237,128,100,.12)!important}
+ .nav{padding-top:env(safe-area-inset-top,0px)}
+ .nav .nav-inner{min-height:62px!important;padding-inline:14px!important;gap:9px!important}
+ .nav .brand{min-width:0!important;gap:8px!important;font-size:10px!important;letter-spacing:.055em!important}
+ .nav .brand-mark{width:34px!important;height:34px!important;flex:0 0 34px}
+ .nav .brand>span:last-child{white-space:nowrap}
+ .nav .search-trigger{width:38px!important;height:38px!important;min-width:38px!important;padding:0!important;justify-content:center!important}
+ .nav .search-trigger .search-label,.nav .search-trigger kbd{display:none!important}
+ .nav .hamb{width:38px!important;height:38px!important;flex:0 0 38px}
+ .nav .nav-join-cta{display:none!important}
+ .nav nav{max-height:calc(100svh - 90px);overflow-y:auto;overscroll-behavior:contain}
+}
+@media(max-width:360px){
+ .mobile-dock{left:7px!important;right:7px!important;padding:4px!important;min-height:58px!important}
+ .mobile-dock button{min-height:46px!important}
+ .mobile-dock button b{font-size:8px!important}
+ .nav .nav-inner{padding-inline:10px!important;gap:6px!important}
+ .nav .brand{font-size:9px!important}
+}
+@media(min-width:681px){body{padding-bottom:0}}
+@media(prefers-reduced-motion:reduce){
+ .mobile-dock .dock-active-pill{transition:none!important}
+}
