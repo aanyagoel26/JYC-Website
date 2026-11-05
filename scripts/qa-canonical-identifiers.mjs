@@ -17,7 +17,8 @@ const checks=[
  ['canonical JAI slug is present in the runtime',main.includes(canonical)],
  ['event canonicalization prefers stored event slugs',main.includes("slug(event.slug||event.title)")&&main.includes("slug(e.slug||e.title)")],
  ['legacy JAI redirect is explicit',main.includes(`legacyEventSlugMap={'${legacy}':'${canonical}'}`)],
- ['sitemap generator contains canonical JAI slug',fs.readFileSync(path.join(root,'scripts/generate-sitemap.mjs'),'utf8').includes(canonical)],
+ ['sitemap generator derives routes from stored event slugs',fs.readFileSync(path.join(root,'scripts/generate-sitemap.mjs'),'utf8').includes('event.slug||event.title')&&fs.readFileSync(path.join(root,'src','content','jyc-public-fallbacks.js'),'utf8').includes(canonical)],
+ ['generated sitemap includes the canonical JAI event route',fs.readFileSync(path.join(root,'public','sitemap.xml'),'utf8').includes('/events/'+canonical)],
  ['no stale JAI slug remains in runtime/sitemap generator',failures.length===0,failures.join(', ')],
 ];
 let failed=0;for(const [name,ok,detail] of checks){console.log((ok?'PASS':'FAIL')+': '+name+(detail&&!ok?' — '+detail:''));if(!ok)failed++}
