@@ -93,7 +93,7 @@ test.describe('JYC motion system', () => {
   });
 
   test('ambient canvas pauses and clears when reduced motion is enabled at runtime', async ({ page }) => {
-    await page.addInitScript(() => Object.defineProperty(navigator, 'hardwareConcurrency', { value: 8, configurable: true }));
+    await page.addInitScript(() => { Object.defineProperty(navigator, 'hardwareConcurrency', { value: 8, configurable: true }); Object.defineProperty(navigator, 'deviceMemory', { value: 8, configurable: true }); Object.defineProperty(navigator, 'connection', { value: { saveData: false }, configurable: true }); });
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     await page.setViewportSize({ width: 1280, height: 900 });
     await ready(page, '/');
