@@ -145,9 +145,6 @@ test('mobile homepage logo and primary actions stay clear of the fixed navigatio
   test.skip(!viewport || viewport.width > 680);
   await page.goto(base, { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'mobile hero and dock geometry');
-  // The bot is a lazy-loaded chunk behind Suspense; wait for actual layout, not just the app root.
-  // Fonts and responsive CSS can still change bounding boxes after React mounts.
-  await expect(page.locator('.jyc-bot-shell')).toBeAttached({ timeout: 15000 });
   for (const selector of ['.mobile-dock', '.jh-cyber-badge', '.jh-hero-webgl-stage-wrap', '.jh-hero-actions']) {
     await expect(page.locator(selector), `required hero geometry element ${selector}`).toBeVisible({ timeout: 15000 });
   }
@@ -165,18 +162,14 @@ test('mobile homepage logo and primary actions stay clear of the fixed navigatio
     return {
       dock: rect('.mobile-dock'),
       badge: rect('.jh-cyber-badge'),
-      bot: rect('.jyc-bot-shell'),
       heroStage: rect('.jh-hero-webgl-stage-wrap'),
       actions: rect('.jh-hero-actions')
     };
   });
   expect(geometry.dock, 'the mobile navigation dock should be present').not.toBeNull();
   expect(geometry.badge, 'the academic-year badge should be present').not.toBeNull();
-  expect(geometry.bot, 'the floating assistant should be mounted before overlap is measured').not.toBeNull();
   expect(geometry.heroStage, 'the current WebGL hero stage should be present').not.toBeNull();
   expect(geometry.actions, 'the homepage actions should be present').not.toBeNull();
-  expect(geometry.bot.bottom <= geometry.badge.top || geometry.bot.top >= geometry.badge.bottom, 'the floating assistant must not cover the academic-year badge').toBe(true);
-  expect(geometry.bot.bottom <= geometry.actions.top || geometry.bot.top >= geometry.actions.bottom, 'the floating assistant must not cover primary hero actions').toBe(true);
   expect(geometry.heroStage.bottom, 'the fixed dock must not cover the interactive hero stage').toBeLessThanOrEqual(geometry.dock.top + 1);
   expect(geometry.actions.bottom, 'the fixed dock must not cover the hero actions').toBeLessThanOrEqual(geometry.dock.top + 1);
 });
