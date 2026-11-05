@@ -20,8 +20,6 @@ function setupReveal() {
     container.querySelectorAll?.('.public-app .reveal').forEach(observe);
   };
   const observeAddedNodes = records => records.forEach(record => record.addedNodes.forEach(scan));
-  const nodes = [...document.querySelectorAll('.public-app .reveal')];
-  if (!nodes.length) return () => {};
   if (!reducedMotion && typeof IntersectionObserver === 'function') {
     root.classList.add('jyc-motion-ready');
     observer = new IntersectionObserver(entries => {
