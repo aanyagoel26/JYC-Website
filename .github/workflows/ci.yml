@@ -18,6 +18,8 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      VITE_CANONICAL_ORIGIN: https://www.jiityouthclub128.in
     steps:
       - uses: actions/checkout@v7
         with:
@@ -37,8 +39,6 @@ jobs:
       # Build first so photo-integrity QA validates generated manifest/derivative outputs.
       - name: Build production bundle and media derivatives
         run: npm run build
-        env:
-          VITE_CANONICAL_ORIGIN: https://www.jiityouthclub128.in
       - name: Verify responsive breakpoint contracts
         run: npm run qa:responsive
 
