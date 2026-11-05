@@ -35,15 +35,17 @@ function setupReveal() {
   };
 
   observer = createObserver();
-  observeNode(document.querySelector('.public-app') || document.body);
+  const root = document.querySelector('.public-app') || document.body;
 
-  // The app is a client-side router: new route sections arrive after the
-  // initial mount. Observe them too, rather than leaving their reveal state
-  // permanently at opacity .001 after navigation.
+  // Only enable the hidden-before-reveal state after the route observer is
+  // installed. If this enhancement cannot initialize, CSS leaves all content
+  // visible instead of hiding text behind an animation that never runs.
   const mutationObserver = typeof MutationObserver === 'function'
     ? new MutationObserver(records => records.forEach(record => record.addedNodes.forEach(observeNode)))
     : null;
-  mutationObserver?.observe(document.querySelector('.public-app') || document.body, { childList: true, subtree: true });
+  if (mutationObserver) document.documentElement.classList.add('jyc-motion-ready');
+  observeNode(root);
+  mutationObserver?.observe(root, { childList: true, subtree: true });
 
   const onMotionChange = () => {
     observer?.disconnect();
@@ -62,6 +64,7 @@ function setupReveal() {
   return () => {
     mutationObserver?.disconnect();
     observer?.disconnect();
+    document.documentElement.classList.remove('jyc-motion-ready');
     motionQuery.removeEventListener?.('change', onMotionChange);
   };
 }
