@@ -1,3 +1,20 @@
+/* Ambient canvas is a fixed atmosphere layer, never a layout block. */
+.app-frame{position:relative;isolation:isolate;min-height:100vh}
+.jyc-ambient-canvas{
+  position:fixed;inset:0;z-index:-1;display:block;
+  width:100vw;height:100vh;pointer-events:none;
+  opacity:.34;mix-blend-mode:screen;
+}
+html[data-theme="light"] .jyc-ambient-canvas{opacity:.28;mix-blend-mode:multiply}
+html[data-theme="dark"] .jyc-ambient-canvas{opacity:.38;mix-blend-mode:screen}
+@media(max-width:760px){
+  .jyc-ambient-canvas{opacity:.18}
+  html[data-theme="light"] .jyc-ambient-canvas{opacity:.16}
+}
+@media(prefers-reduced-motion:reduce){
+  .jyc-ambient-canvas{display:none!important}
+}
+
 /* V56.14 — Innovation-inspired interaction layer.
    Motion is editorial: reveal, depth, and feedback — never decorative overload. */
 .public-app .jyc-scroll-progress{
