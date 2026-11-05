@@ -2028,7 +2028,7 @@ test('More navigation and Search modal work with keyboard, empty states and focu
   await achievementCategory.click();
   await expect(page.locator('#jyc-search-results [role="option"]').first()).toContainText('Smart India Hackathon finalist');
   await input.press('Enter');
-  await expect(page).toHaveURL(/\\/achievements(?:\\/)?$/);
+  await expect(page).toHaveURL(/\/achievements(?:\/)?$/);
   await expect(page.locator('.search-overlay')).toHaveCount(0);
 
   await searchTrigger.click();
@@ -2038,7 +2038,7 @@ test('More navigation and Search modal work with keyboard, empty states and focu
   await updateCategory.click();
   await expect(page.locator('#jyc-search-results [role="option"]').first()).toContainText('RIDE Hack');
   await input.press('Enter');
-  await expect(page).toHaveURL(/\\/updates(?:\\/)?$/);
+  await expect(page).toHaveURL(/\/updates(?:\/)?$/);
   await expect(page.locator('.search-overlay')).toHaveCount(0);
 
   const moreTrigger = page.locator('.nav-more-trigger');
