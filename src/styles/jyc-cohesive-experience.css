@@ -1130,3 +1130,59 @@ html[data-theme] .about-page {
   .jyc-editorial-home .jyc-hero-emblem-stage,
   .jyc-editorial-home .jyc-emblem-card-3d { transform:none !important; }
 }
+
+/* V65 — deeper public atmosphere and more readable phone typography. */
+.jyc-editorial-home.jyc-home::after{content:"";position:absolute;z-index:-1;inset:0 0 auto;height:min(980px,110svh);pointer-events:none;background:radial-gradient(ellipse 42rem 26rem at 86% 20%,rgba(200,188,255,.10),transparent 72%),radial-gradient(ellipse 34rem 24rem at 10% 54%,rgba(231,209,155,.07),transparent 74%);opacity:.9}
+html[data-theme="light"] .jyc-editorial-home.jyc-home::after{background:radial-gradient(ellipse 40rem 28rem at 86% 12%,rgba(231,198,132,.19),transparent 72%),radial-gradient(ellipse 32rem 25rem at 12% 54%,rgba(160,148,198,.11),transparent 74%);opacity:1}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home::after{background:radial-gradient(ellipse 42rem 28rem at 82% 14%,rgba(133,116,205,.17),transparent 72%),radial-gradient(ellipse 36rem 26rem at 8% 55%,rgba(77,105,165,.12),transparent 74%),radial-gradient(ellipse 30rem 22rem at 52% 88%,rgba(231,209,155,.055),transparent 76%)}
+.jyc-editorial-home.jyc-home :where(.jh-lead,.jh-about-editorial-copy p,.jh-photo-story-intro p,.jh-community-copy p,.jh-final p,.jh-event-copy>p,.jh-pillar-card p){color:var(--jyc-muted)!important;text-shadow:none!important}
+.jyc-editorial-home.jyc-home .jh-hero-copy>.jh-overline{color:var(--jyc-muted)!important;font-size:12px;line-height:1.5;letter-spacing:.08em}
+.jyc-editorial-home.jyc-home .jh-hero-copy>.jh-lead{max-width:58ch;font-size:clamp(16px,1.35vw,19px);line-height:1.72}
+.jyc-editorial-home.jyc-home .jh-btn{min-height:48px;font-size:13px;line-height:1.3;letter-spacing:.025em}
+.jyc-editorial-home.jyc-home .jh-team-list button{color:var(--jyc-text-strong)!important;background:color-mix(in srgb,var(--jyc-surface) 88%,transparent)!important;border-color:var(--jyc-line)!important}
+.jyc-editorial-home.jyc-home .jh-team-list button :where(small,strong){color:var(--jyc-text-strong)!important}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home :where(.jh-team-list,.jh-featured-event,.jh-story-card){background:linear-gradient(145deg,rgba(23,35,61,.94),rgba(12,20,39,.98))!important;border-color:rgba(200,188,255,.18)!important;box-shadow:0 22px 58px rgba(0,0,0,.30),inset 0 1px 0 rgba(235,233,255,.055)}
+html[data-theme="light"] .jyc-editorial-home.jyc-home :where(.jh-team-list,.jh-featured-event,.jh-story-card){background:linear-gradient(145deg,rgba(255,255,255,.96),rgba(250,246,237,.96))!important;border-color:rgba(140,109,54,.20)!important;box-shadow:0 18px 46px rgba(69,57,86,.09),inset 0 1px 0 rgba(255,255,255,.92)}
+.about-page .about-hero-v28{position:relative;overflow:hidden;isolation:isolate;background:radial-gradient(ellipse at 90% 0%,var(--jyc-glow),transparent 46%),radial-gradient(ellipse at 0% 100%,var(--jyc-accent-soft),transparent 52%),linear-gradient(135deg,var(--jyc-surface),var(--jyc-canvas-raised))!important;box-shadow:var(--jyc-shadow),0 0 42px color-mix(in srgb,var(--jyc-glow) 48%,transparent)}
+html[data-theme="dark"] .about-page .about-hero-v28{background:radial-gradient(ellipse at 90% 0%,rgba(148,132,219,.20),transparent 48%),radial-gradient(ellipse at 0% 100%,rgba(72,99,157,.15),transparent 54%),linear-gradient(135deg,#14203a,#0c1428 76%)!important;border-color:rgba(200,188,255,.22);box-shadow:0 26px 76px rgba(0,0,0,.30),0 0 52px rgba(148,132,219,.09),inset 0 1px 0 rgba(240,237,255,.05)}
+html[data-theme="light"] .about-page .about-hero-v28{box-shadow:0 22px 60px rgba(69,57,86,.10),0 0 44px rgba(231,198,132,.12)}
+.about-page :where(.about-principles-v28 article,.about-family-grid-v28>button,.about-flow-grid-v28 article,.about-programme-grid-v28>article,.about-vision-v28 article,.about-history-node-card,.v40-about-metrics article,.v40-about-leadership){transition:border-color .22s var(--jyc-motion),box-shadow .22s var(--jyc-motion),transform .22s var(--jyc-motion)}
+html[data-theme="dark"] .about-page :where(.about-principles-v28 article,.about-family-grid-v28>button,.about-flow-grid-v28 article,.about-programme-grid-v28>article,.about-vision-v28 article,.about-history-node-card,.v40-about-metrics article,.v40-about-leadership){background:linear-gradient(145deg,rgba(23,35,61,.96),rgba(15,25,46,.98));border-color:rgba(200,188,255,.16);box-shadow:0 16px 42px rgba(0,0,0,.20),inset 0 1px 0 rgba(235,233,255,.04)}
+html[data-theme="dark"] .about-page :where(.about-family-grid-v28>button:hover,.about-principles-v28 article:hover,.about-programme-grid-v28>article:hover){border-color:rgba(231,209,155,.42);box-shadow:0 22px 54px rgba(0,0,0,.28),0 0 24px rgba(148,132,219,.10)}
+html[data-theme="light"] .about-page :where(.about-principles-v28 article,.about-family-grid-v28>button,.about-flow-grid-v28 article,.about-programme-grid-v28>article,.about-vision-v28 article,.about-history-node-card,.v40-about-metrics article,.v40-about-leadership){box-shadow:0 14px 36px rgba(69,57,86,.065),inset 0 1px 0 rgba(255,255,255,.88)}
+html[data-theme] .jyc-editorial-home .jyc-emblem-badge{color:var(--jyc-text-strong)!important;background:color-mix(in srgb,var(--jyc-surface) 90%,transparent)!important;border:1px solid var(--jyc-line-strong)!important;box-shadow:var(--jyc-shadow-soft),0 0 20px var(--jyc-accent-soft)}
+html[data-theme] .jyc-editorial-home .jyc-emblem-badge:hover{border-color:var(--jyc-gold)!important;box-shadow:var(--jyc-shadow),0 0 24px var(--jyc-gold-soft)}
+html[data-theme] .jyc-editorial-home .jyc-emblem-badge .badge-accent{color:var(--jyc-gold)!important;border-color:var(--jyc-line-strong)!important}
+html[data-theme] .jyc-editorial-home .emblem-control-pill{color:var(--jyc-text-strong)!important;background:var(--jyc-surface)!important;border-color:var(--jyc-line-strong)!important;box-shadow:var(--jyc-shadow-soft)}
+html[data-theme] .jyc-editorial-home .emblem-control-pill:hover{color:var(--jyc-accent-strong)!important;border-color:var(--jyc-gold)!important;box-shadow:0 12px 30px var(--jyc-accent-soft)}
+html[data-theme="dark"] .jyc-editorial-home .emblem-control-pill.active{color:#17142a!important;background:linear-gradient(120deg,#d8d0ff,#e7d19b)!important;border-color:transparent!important}
+html[data-theme="light"] .jyc-editorial-home .emblem-control-pill.active{color:#fffdf8!important;background:linear-gradient(120deg,#625889,#8175a8)!important;border-color:transparent!important}
+@media(max-width:680px){
+.jyc-editorial-home.jyc-home .jh-hero{grid-template-columns:minmax(0,1fr);gap:10px!important;min-height:0!important;padding:16px 0 28px!important}
+.jyc-editorial-home.jyc-home .jh-hero-copy>.jh-cyber-badge{min-height:30px;font-size:10px!important;padding:5px 10px!important}
+.jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;margin-top:14px!important}
+.jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn{min-height:48px!important;padding:9px 8px!important;font-size:12px!important;letter-spacing:0!important}
+.jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn:nth-child(3){grid-column:1/-1!important}
+.jyc-editorial-home.jyc-home .jh-hero-copy>h1{font-size:clamp(32px,9.2vw,40px)!important;line-height:1.02!important;letter-spacing:-.045em!important}
+.jyc-editorial-home.jyc-home .jh-hero-copy>.jh-lead{display:block!important;overflow:visible!important;-webkit-line-clamp:unset!important;font-size:14.5px!important;line-height:1.55!important;max-width:42ch!important}
+.jyc-editorial-home.jyc-home .jh-hero-visual{min-height:0!important;height:auto!important;padding-block:0 6px}
+.jyc-editorial-home.jyc-home .jyc-hero-emblem-stage{width:min(88vw,330px)!important;max-width:330px!important}
+.jyc-editorial-home.jyc-home .jh-hero-dither-layer{inset:0;opacity:.2}
+.jyc-editorial-home.jyc-home .jh-hero-dither-veil{width:min(78vw,280px);height:min(78vw,280px)}
+.jyc-editorial-home.jyc-home .jh-team-list button{min-height:68px;gap:10px;padding:12px 13px}
+.jyc-editorial-home.jyc-home .jh-team-list button strong{font-size:14px;line-height:1.35}
+.jyc-editorial-home.jyc-home .jh-team-list button small{font-size:11px;line-height:1.35}
+.about-page .about-hero-v28{padding:24px 18px!important}
+.about-page .about-hero-copy p{font-size:15px!important;line-height:1.72!important}
+}
+@media(max-width:360px){
+.jyc-editorial-home.jyc-home .jh-hero-copy>.jh-overline{font-size:11px!important;line-height:1.45!important;letter-spacing:.035em!important}
+.jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions{grid-template-columns:minmax(0,1fr)!important}
+.jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn:nth-child(3){grid-column:auto!important}
+.jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn{min-height:48px!important;font-size:13px!important}
+.jyc-editorial-home.jyc-home .jyc-hero-emblem-stage{width:min(82vw,286px)!important}
+}
+@media(prefers-reduced-motion:reduce){
+.jyc-editorial-home.jyc-home::after{display:none!important}
+.jyc-editorial-home.jyc-home :where(.jh-team-list,.jh-featured-event,.jh-story-card,.jh-pillar-card){transition:none!important;transform:none!important}
+}
