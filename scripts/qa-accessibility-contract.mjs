@@ -30,5 +30,11 @@ const publicButtonFiles=['src/main.jsx','src/extra-features.jsx','src/jyc-editor
 check('public buttons declare an explicit type',publicButtonFiles.every(file=>{const text=read(file);return [...text.matchAll(/<button\b([^>]*)>/g)].every(m=>/\btype\s*=/.test(m[1]));}));
 check('filter groups do not misuse tablist semantics without tabs',!/className="hub-family-row" role="tablist"/.test(main)&&!/className="calendar-mode-tabs" role="tablist"/.test(extras));
 check('campus selector is a button group with pressed state',campus.includes('className="campus-switch" role="group"')&&campus.includes('aria-pressed={campus===x.id}'));
+const searchStart=main.indexOf('function Search(');
+const moreStart=main.indexOf('function MobileMoreSheet(');
+const searchSource=searchStart>=0?main.slice(searchStart):'';
+const moreSource=moreStart>=0?main.slice(moreStart,searchStart>moreStart?searchStart:undefined):'';
+check('Search dialog restores focus to its original trigger or stable header trigger',main.includes('data-jyc-search-trigger')&&searchSource.includes('returnFocusRef.current')&&searchSource.includes('target.focus()'));
+check('More sheet restores focus to the element that opened it',moreSource.includes('const returnFocus=document.activeElement')&&moreSource.includes('returnFocus.focus()'));
 if(failures.length) process.exit(1);
 console.log('Accessibility contract QA PASS ('+(checksCount-failures.length)+' checks)');
