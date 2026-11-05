@@ -917,3 +917,55 @@ html[data-theme="dark"] .jyc-editorial-home.jyc-home .jyc-emblem-badge{border-co
 html[data-theme="dark"] .jyc-editorial-home.jyc-home .badge-accent{color:#ed8064!important}
 html[data-theme="dark"] .jyc-editorial-home.jyc-home .badge-live-pulse{background:#ed8064!important;box-shadow:0 0 8px rgba(237,128,100,.45)!important}
 @media(max-width:680px){.jyc-editorial-home.jyc-home .jyc-emblem-controls-bar{bottom:7px!important;gap:5px!important}.jyc-editorial-home.jyc-home .emblem-control-pill{padding:6px 8px!important;font-size:7px!important}}
+
+
+/* ==========================================================================
+   MOBILE-FIRST QUALITY PASS — JYC site-wide
+   Tested by design constraints: 320px–680px, touch, safe areas, long content.
+   ========================================================================== */
+@media(max-width:680px){
+ html,body,#root{max-width:100%;overflow-x:clip}
+ body{font-size:15px;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+ button,a,[role="button"],input,select,textarea{-webkit-tap-highlight-color:transparent}
+ button,a,[role="button"]{touch-action:manipulation}
+ a,button{min-width:0}
+ img,video,canvas,svg{max-width:100%}
+ .jyc-editorial-home,.jyc-home{width:100%;max-width:100%;overflow-x:clip}
+ .jyc-editorial-home :is(section,article,main,header,footer){min-width:0}
+ .jyc-editorial-home :is(h1,h2,h3,p,a,button,span){overflow-wrap:anywhere}
+ .jyc-editorial-home :is(.jh-container,.jh-section-head,.jh-section-inner){width:calc(100% - 36px)!important;max-width:100%!important;margin-inline:auto!important}
+ .jyc-editorial-home :is(.jh-section-head,.jh-section-header){align-items:flex-start!important;gap:12px!important;flex-direction:column!important}
+ .jyc-editorial-home :is(.jh-section-head h2,.jh-section-header h2){font-size:clamp(27px,8vw,38px)!important;line-height:1.04!important;letter-spacing:-.055em!important}
+ .jyc-editorial-home :is(.jh-pillars-section,.jh-events-section,.jh-community-section,.jh-gallery-section,.jh-final){padding-block:48px!important}
+ .jyc-editorial-home :is(.jh-pillars-grid,.jh-pillar-grid,.jh-events-grid,.jh-community-grid,.jh-gallery-grid){grid-template-columns:minmax(0,1fr)!important;gap:12px!important}
+ .jyc-editorial-home :is(.jh-pillar-card,.jh-event-card,.jh-community-card){min-width:0}
+ .jyc-editorial-home :is(.jh-pillar-card,.jh-event-card,.jh-community-card) img{width:100%;height:auto;object-fit:cover}
+ .jyc-editorial-home :is(.jh-btn,.jh-hero-actions .jh-btn){min-height:46px}
+ .jyc-editorial-home :is(.jh-lead,.jh-section-head p,.jh-community-copy p){font-size:14px!important;line-height:1.7!important}
+ .jyc-editorial-home .jh-hero{overflow:visible}
+ .jyc-editorial-home .jh-hero-visual{isolation:isolate}
+ .jyc-editorial-home .jh-hero-visual::before,.jyc-editorial-home .jh-hero-visual::after{pointer-events:none}
+ .jyc-editorial-home .jh-hero-dither-layer{pointer-events:none}
+ .jyc-editorial-home .jh-hero-visual .jyc-hero-emblem-stage{max-width:100%;overflow:visible}
+ .jyc-editorial-home .jh-hero-visual .jyc-emblem-controls-bar{max-width:calc(100% - 16px)}
+ .jyc-editorial-home .jh-hero-visual .jyc-emblem-badge{max-width:42%;white-space:normal;text-align:center}
+}
+@media(max-width:380px){
+ .jyc-editorial-home.jyc-home .jh-hero{width:calc(100% - 28px)!important;padding-top:25px!important}
+ .jyc-editorial-home.jyc-home .jh-hero h1{font-size:clamp(43px,13vw,52px)!important;letter-spacing:-.075em!important}
+ .jyc-editorial-home.jyc-home .jh-hero-actions{grid-template-columns:minmax(0,1fr)!important}
+ .jyc-editorial-home.jyc-home .jh-hero-actions .jh-btn:nth-child(3){grid-column:auto!important}
+ .jyc-editorial-home.jyc-home .jh-hero-domain-rail{font-size:6.5px;gap:6px}
+ .jyc-editorial-home.jyc-home .jh-hero-visual{height:285px!important}
+}
+@media(min-width:381px) and (max-width:680px){
+ .jyc-editorial-home.jyc-home .jh-hero-visual{height:clamp(310px,84vw,390px)!important}
+}
+@media(hover:none) and (pointer:coarse){
+ .jyc-editorial-home :is(.jh-btn,.jh-pillar-card,.jh-event-card,.jh-community-card){transition:none!important}
+ .jyc-editorial-home :is(.jh-btn,.jh-pillar-card,.jh-event-card,.jh-community-card):hover{transform:none!important}
+ .jyc-editorial-home :is(.jh-btn,.jh-card-link,.jh-more-link){-webkit-user-select:none;user-select:none}
+}
+@media(prefers-reduced-motion:reduce){
+ .jyc-editorial-home *, .jyc-editorial-home *::before,.jyc-editorial-home *::after{scroll-behavior:auto!important}
+}
