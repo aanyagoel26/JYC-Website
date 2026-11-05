@@ -416,7 +416,7 @@ function Team({data}){
    <div className="team-hero-identity" aria-label="JIIT Youth Club identity"><div className="team-hero-logo"><LogoImage alt="JIIT Youth Club crest" width={256} height={256} fetchPriority="high"/></div><b>PEOPLE · PURPOSE · PARTICIPATION</b><span>One campus. Many communities.</span></div>
   </header>
   <div className="team-command-strip" aria-label="Published team overview">
-   <article><b>{faculty.length}</b><span>Faculty guides</span></article><article><b>{apex.length}</b><span>Apex leaders</span></article><article><b>{core.length}</b><span>Core team members</span></article><article><b>{JYC_HUB_FAMILIES.length}</b><span>Community families</span></article>
+   <article aria-label={faculty.length?`${faculty.length} published faculty guides`:'Faculty profiles awaiting publication' }><b>{faculty.length || '—'}</b><span>Faculty guides</span></article><article aria-label={apex.length?`${apex.length} published Apex leaders`:'Apex profiles awaiting publication' }><b>{apex.length || '—'}</b><span>Apex leaders</span></article><article aria-label={core.length?`${core.length} published core team members`:'Core profiles awaiting publication' }><b>{core.length || '—'}</b><span>Core team members</span></article><article><b>{JYC_HUB_FAMILIES.length}</b><span>Community families</span></article>
   </div>
   <section className="team-discovery" aria-label="Find a team member">
    <div className="team-discovery-copy"><span className="eyebrow">THE PEOPLE DIRECTORY</span><h2>Find your people.</h2><p>Search by name, role or area of responsibility.</p></div>
