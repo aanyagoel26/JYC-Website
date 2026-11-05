@@ -80,7 +80,7 @@ function useAtmosphericCanvas(canvasRef) {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     const lowPower = (navigator.hardwareConcurrency || 4) < 4 || (navigator.deviceMemory || 4) < 2 || Boolean(navigator.connection?.saveData);
-    if (lowPower) return; // CSS aurora/nebula remains as a static fallback on constrained devices.
+    if (lowPower) { canvas.style.display = 'none'; return; } // CSS aurora/nebula remains as a static fallback on constrained devices.
 
     let width = 0;
     let height = 0;
