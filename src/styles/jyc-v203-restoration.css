@@ -224,11 +224,14 @@ html[data-theme="light"] .public-app .jyc-memory-count {
   color: #F2D7A7 !important;
 }
 @media (max-width: 900px) {
-  .public-app button,
+  .public-app button:not(.jyc57-photo):not(.jyc57-feature-card),
+  .public-app .btn,
+  .public-app .filter-toggle,
   .nav button,
   .more-sheet button,
   .search-modal button,
   .jyc-assistant-panel button {
+    min-width: 44px;
     min-height: 45px;
   }
   .more-sheet a,
