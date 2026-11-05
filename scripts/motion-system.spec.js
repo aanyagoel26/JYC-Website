@@ -65,6 +65,33 @@ test.describe('JYC motion system', () => {
     })));
     expect(states.every(state => state.visible && state.opacity > 0.98)).toBe(true);
   });
+  test('ambient canvas stays fixed behind content and never occupies page layout', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await ready(page, '/');
+    const metrics = await page.locator('.jyc-ambient-canvas').evaluate(canvas => {
+      const rect = canvas.getBoundingClientRect();
+      const style = getComputedStyle(canvas);
+      return {
+        position: style.position,
+        pointerEvents: style.pointerEvents,
+        zIndex: style.zIndex,
+        top: rect.top,
+        left: rect.left,
+        width: rect.width,
+        height: rect.height,
+        viewportWidth: window.innerWidth,
+        viewportHeight: window.innerHeight
+      };
+    });
+    expect(metrics.position).toBe('fixed');
+    expect(metrics.pointerEvents).toBe('none');
+    expect(Number(metrics.zIndex)).toBeLessThan(0);
+    expect(Math.abs(metrics.top)).toBeLessThanOrEqual(1);
+    expect(Math.abs(metrics.left)).toBeLessThanOrEqual(1);
+    expect(Math.abs(metrics.width - metrics.viewportWidth)).toBeLessThanOrEqual(1);
+    expect(Math.abs(metrics.height - metrics.viewportHeight)).toBeLessThanOrEqual(1);
+  });
+
   test('ambient canvas pauses and clears when reduced motion is enabled at runtime', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     await page.setViewportSize({ width: 1280, height: 900 });
