@@ -1735,3 +1735,68 @@ html[data-theme="light"] .public-app :where(.jyc57-page,.jyc-route-section,
   html[data-theme] .public-app .fest-shell *,
   html[data-theme] .public-app .jyc57-page * { scroll-behavior:auto !important; }
 }
+
+
+/* Legacy micro-decoration cleanup: no unrelated neon, cyan, red or rainbow
+   accents survive in the shared public experience. */
+html[data-theme="dark"] .public-app :where(.jyc-blob-1,.jyc-blob-2,.jyc-blob-3,.jyc-blob-4) {
+  background:radial-gradient(circle,rgba(201,184,242,.52),rgba(230,212,168,.24),transparent 72%) !important;
+}
+html[data-theme="light"] .public-app :where(.jyc-blob-1,.jyc-blob-2,.jyc-blob-3,.jyc-blob-4) {
+  background:radial-gradient(circle,rgba(132,59,53,.3),rgba(152,120,78,.18),transparent 72%) !important;
+}
+html[data-theme="dark"] .public-app :where(.jh-title-gradient,.jyc-gradient-text) {
+  background:linear-gradient(110deg,#f2efff 0%,#c9b8f2 52%,#e6d4a8 100%) !important;
+  -webkit-background-clip:text !important;background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+}
+html[data-theme="light"] .public-app :where(.jh-title-gradient,.jyc-gradient-text) {
+  background:linear-gradient(110deg,#843b35 0%,#98784e 100%) !important;
+  -webkit-background-clip:text !important;background-clip:text !important;
+  -webkit-text-fill-color:transparent !important;
+}
+html[data-theme="dark"] .public-app :where(.jh-btn-glass,.jh-btn-outline,.jh-text-link,
+  .jyc-text-link,.text-link,.reference-view-all) {
+  color:#c9b8f2 !important;border-color:rgba(201,184,242,.34) !important;
+  background:rgba(201,184,242,.055) !important;
+}
+html[data-theme="dark"] .public-app :where(.jh-stat-item,.jh-countdown-digit) {
+  color:#f2efff !important;background:linear-gradient(145deg,#15182b,#101329) !important;
+  border-color:rgba(201,184,242,.22) !important;text-shadow:none !important;
+}
+html[data-theme="dark"] .public-app :where(.jh-stat-item strong,.jh-countdown-digit,
+  .jh-countdown-digit b) { color:#e6d4a8 !important; }
+html[data-theme="dark"] .public-app :where(.lightbox-close,.jyc57-close,.modal-close,
+  .dialog-close,.search-close,.more-close) {
+  color:#f2efff !important;background:#15182b !important;
+  border:1px solid rgba(201,184,242,.28) !important;
+}
+html[data-theme="light"] .public-app :where(.lightbox-close,.jyc57-close,.modal-close,
+  .dialog-close,.search-close,.more-close) {
+  color:#211d22 !important;background:#fffdf8 !important;
+  border:1px solid rgba(45,36,39,.2) !important;
+}
+html[data-theme="dark"] .public-app .theme-toggle-orb {
+  color:#171629 !important;
+  background:linear-gradient(135deg,#c9b8f2,#e6d4a8) !important;
+  box-shadow:0 0 16px rgba(201,184,242,.24) !important;
+}
+html[data-theme="light"] .public-app .theme-toggle-orb {
+  color:#211d22 !important;
+  background:linear-gradient(135deg,#fffdf8,#e6d4a8) !important;
+  box-shadow:0 0 14px rgba(152,120,78,.2) !important;
+}
+html[data-theme="dark"] .public-app :where(.jh-event-meta,.jh-section-number,
+  .event-domain-mark,.event-domain-label,.club-index,.latest-index,.pin-badge,
+  .event-row-number,.event-row-state,.archive-year-strip a,.achievement-seal,
+  .team-card .role,.contact-card .icon) {
+  color:#e6d4a8 !important;
+}
+html[data-theme="dark"] .public-app :where(.pin-badge,.event-row-state,.archive-year-strip a) {
+  border-color:rgba(230,212,168,.24) !important;
+  background:rgba(230,212,168,.07) !important;
+}
+html[data-theme="dark"] .public-app :where(.toast,.toast-success,.toast-error) {
+  color:#f2efff !important;background:#15182b !important;
+  border:1px solid rgba(201,184,242,.24) !important;
+}
