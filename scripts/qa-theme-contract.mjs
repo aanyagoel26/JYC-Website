@@ -17,6 +17,8 @@ check('theme contract loads after team and other global CSS',contractImport>team
 check('public entry does not re-import already nested design upgrades',!entry.includes("@import '../jyc-design-upgrades.css';"));
 check('public entry does not re-import nested pro redesign',!entry.includes("@import './jyc-pro-redesign.css';"));
 check('public system remains the single historical layer aggregator',system.includes("@import '../jyc-design-upgrades.css';")&&system.includes("@import './jyc-pro-redesign.css';"));
+check('obsolete dark red palette override is removed from public system',!system.includes('--champagne:#A82420')&&!system.includes('--accent:#ef4444'));
+check('light public-system accent no longer defaults to red',system.includes('--jyc-accent: #625889;')&&!system.includes('--jyc-accent: #A82420;'));
 check('light palette uses warm paper, violet and champagne tokens',contract.includes('--jyc-canvas: #f5f1e8;')&&contract.includes('--jyc-accent: #625889;')&&contract.includes('--jyc-gold: #76572b;'));
 check('dark palette uses midnight, lavender and champagne tokens',contract.includes('--jyc-canvas: #080d1c;')&&contract.includes('--jyc-accent: #c8bcff;')&&contract.includes('--jyc-gold: #e7d19b;'));
 check('legacy red and cyan aliases resolve through the active JYC accent',contract.includes('--accent-red: var(--jyc-accent);')&&contract.includes('--tech-cyan: var(--jyc-accent);')&&contract.includes('--tech-crimson: var(--jyc-accent);'));
