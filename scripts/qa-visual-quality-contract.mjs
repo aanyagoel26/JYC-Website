@@ -32,8 +32,8 @@ assert.ok(visual.includes('.event-identity-page') && visual.includes('--event-ac
 
 assert.ok(entry.includes('.fests-page .compact-page-head') && entry.includes('.fests-social-rail'), 
   'flagship fests must have a scoped responsive art direction');
-assert.ok(main.includes("['/best-of-jyc','Best of JYC','A curated visual selection of published JYC moments']") &&
-  main.includes("['/achievements','Achievements','Source-backed milestones and community outcomes']"),
+assert.ok(main.includes("path:'/best-of-jyc',title:'Best of JYC'") &&
+  main.includes("path:'/achievements',title:'Achievements'"),
   'More sheet must surface editorial routes');
 assert.ok(main.includes("['Best of JYC','Curated published JYC photography and memories.','PAGE','/best-of-jyc']") &&
   main.includes("['Achievements','Source-backed JYC milestones and community outcomes.','PAGE','/achievements']"),
