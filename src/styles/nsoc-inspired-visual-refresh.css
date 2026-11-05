@@ -903,3 +903,17 @@ html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-hero-dither-layer{opaci
  .jyc-editorial-home.jyc-home .jh-hero-visual::before,
  .jyc-editorial-home.jyc-home .jh-hero-visual::after{transform:none!important}
 }
+
+/* Hero emblem controls follow the same restrained paper / oxblood / brass system. */
+.jyc-editorial-home.jyc-home .jyc-emblem-controls-bar{bottom:clamp(12px,3vw,28px)!important;gap:7px!important}
+.jyc-editorial-home.jyc-home .emblem-control-pill{min-height:32px;padding:7px 11px!important;border-radius:3px!important;border:1px solid rgba(143,41,37,.22)!important;background:rgba(255,253,248,.88)!important;color:#76201e!important;box-shadow:0 5px 18px rgba(54,34,27,.08)!important;font-size:8px!important;letter-spacing:.09em!important}
+.jyc-editorial-home.jyc-home .emblem-control-pill:hover,.jyc-editorial-home.jyc-home .emblem-control-pill.active{border-color:#8f2925!important;background:#8f2925!important;color:#fffaf4!important}
+.jyc-editorial-home.jyc-home .jyc-emblem-badge{border-color:rgba(143,41,37,.18)!important;background:rgba(255,253,248,.88)!important;color:#76201e!important;box-shadow:0 8px 24px rgba(54,34,27,.07)!important}
+.jyc-editorial-home.jyc-home .badge-accent{color:#8f2925!important}
+.jyc-editorial-home.jyc-home .badge-live-pulse{background:#8f2925!important;box-shadow:0 0 8px rgba(143,41,37,.4)!important}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .emblem-control-pill{border-color:rgba(216,183,125,.24)!important;background:rgba(33,25,35,.9)!important;color:#edc8a1!important}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .emblem-control-pill:hover,html[data-theme="dark"] .jyc-editorial-home.jyc-home .emblem-control-pill.active{border-color:#ed8064!important;background:#ed8064!important;color:#21161a!important}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jyc-emblem-badge{border-color:rgba(216,183,125,.22)!important;background:rgba(33,25,35,.9)!important;color:#f5eee8!important}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .badge-accent{color:#ed8064!important}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .badge-live-pulse{background:#ed8064!important;box-shadow:0 0 8px rgba(237,128,100,.45)!important}
+@media(max-width:680px){.jyc-editorial-home.jyc-home .jyc-emblem-controls-bar{bottom:7px!important;gap:5px!important}.jyc-editorial-home.jyc-home .emblem-control-pill{padding:6px 8px!important;font-size:7px!important}}
