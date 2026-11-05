@@ -96,7 +96,7 @@
   width: 650px;
   height: 650px;
   background: radial-gradient(circle, rgba(220, 38, 38, 0.25) 0%, rgba(168, 36, 32, 0.08) 50%, transparent 75%);
-  animation: jh-float-1 14s ease-in-out infinite alternate;
+  animation: none;
 }
 
 .jh-ambient-orb-2 {
@@ -105,7 +105,7 @@
   width: 550px;
   height: 550px;
   background: radial-gradient(circle, rgba(191, 156, 111, 0.154) 0%, rgba(191, 156, 111, 0.060) 50%, transparent 75%);
-  animation: jh-float-2 18s ease-in-out infinite alternate;
+  animation: none;
 }
 
 .jh-ambient-orb-3 {
@@ -114,7 +114,7 @@
   width: 580px;
   height: 580px;
   background: radial-gradient(circle, rgba(191, 156, 111, 0.088) 0%, rgba(168, 36, 32, 0.020) 50%, transparent 70%);
-  animation: jh-float-1 22s ease-in-out infinite alternate-reverse;
+  animation: none;
 }
 
 .jh-ambient-grid {
@@ -126,18 +126,6 @@
   background-size: 56px 56px;
   mask-image: radial-gradient(ellipse 90% 70% at 50% 20%, #000 40%, transparent 95%);
   -webkit-mask-image: radial-gradient(ellipse 90% 70% at 50% 20%, #000 40%, transparent 95%);
-}
-
-@keyframes jh-float-1 {
-  0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-60px, 80px) scale(1.12); }
-  100% { transform: translate(40px, -40px) scale(0.95); }
-}
-
-@keyframes jh-float-2 {
-  0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(70px, -60px) scale(1.08); }
-  100% { transform: translate(-50px, 50px) scale(0.92); }
 }
 
 /* --------------------------------------------------------------------------
@@ -182,12 +170,7 @@
   border-radius: 50%;
   background: #BF9C6F;
   box-shadow: 0 0 10px #BF9C6F;
-  animation: jh-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-}
-
-@keyframes jh-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.85); }
+  animation: none;
 }
 
 .jh-cyber-badge b {
