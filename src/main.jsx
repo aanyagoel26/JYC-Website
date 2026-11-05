@@ -964,17 +964,16 @@ function Search({data,admin,close}){
   {title:'Contact JYC',description:'Find official ways to get in touch with JYC.',path:'/contact',terms:'contact email connect'}
  ];
  const rawResults=[
-  ...pages.map(p=>({key:'page:'+p.path,type:'PAGE',title:p.title,meta:p.description,searchText:p.title+' '+p.description+' '+p.terms+' JYC JIIT Noida',icon:'↗',path:p.path})),
-  ...clubs.map(c=>({key:'club:'+c.id,type:'CLUB',title:c.name,meta:[c.category,c.type].filter(Boolean).join(' · ')||'JYC community',searchText:[c.name,c.category,c.type,(Array.isArray(c.interests)?c.interests:[]).join(' '),c.description].filter(Boolean).join(' '),icon:'◈',path:'/clubs/'+encodeURIComponent(slug(c.name))})),
-  ...events.map(e=>({key:'event:'+e.id,type:'EVENT',title:e.title,meta:[e.club,e.venue,e.date].filter(Boolean).join(' · ')||'JYC event',searchText:[e.title,e.club,e.venue,e.eventType,e.date,(Array.isArray(e.highlights)?e.highlights:[]).join(' ')].filter(Boolean).join(' '),icon:'◷',path:'/events/'+encodeURIComponent(slug(e.slug||e.title))})),
-  ...team.map(m=>({key:'person:'+m.id,type:'PEOPLE',title:m.name,meta:m.role||'JYC team',searchText:[m.name,m.role,m.bio].filter(Boolean).join(' '),icon:'✦',path:'/team'})),
-  ...photos.map((g,i)=>({key:'photo:'+(g.id||i),type:'PHOTO',title:g.caption||g.title||g.association||'JYC photograph',meta:[g.association,g.year].filter(Boolean).join(' · ')||'JYC visual archive',searchText:[g.caption,g.title,g.association,g.year,g.alt,g.sourceLabel].filter(Boolean).join(' '),icon:'▧',path:'/gallery'}))
+  ...pages.map(p=>({key:'page:'+p.path,type:'PAGE',title:p.title,meta:p.description,text:p.title+' '+p.description+' '+p.terms+' JYC JIIT Noida',icon:'↗',path:p.path})),
+  ...clubs.map(c=>({key:'club:'+c.id,type:'CLUB',title:c.name,meta:[c.category,c.type].filter(Boolean).join(' · ')||'JYC community',text:[c.name,c.category,c.type,(Array.isArray(c.interests)?c.interests:[]).join(' '),c.description].filter(Boolean).join(' '),icon:'◈',path:'/clubs/'+encodeURIComponent(slug(c.name))})),
+  ...events.map(e=>({key:'event:'+e.id,type:'EVENT',title:e.title,meta:[e.club,e.venue,e.date].filter(Boolean).join(' · ')||'JYC event',text:[e.title,e.club,e.venue,e.eventType,e.date,(Array.isArray(e.highlights)?e.highlights:[]).join(' ')].filter(Boolean).join(' '),icon:'◷',path:'/events/'+encodeURIComponent(slug(e.slug||e.title))})),
+  ...team.map(m=>({key:'person:'+m.id,type:'PEOPLE',title:m.name,meta:m.role||'JYC team',text:[m.name,m.role,m.bio].filter(Boolean).join(' '),icon:'✦',path:'/team'})),
+  ...photos.map((g,i)=>({key:'photo:'+(g.id||i),type:'PHOTO',title:g.caption||g.title||g.association||'JYC photograph',meta:[g.association,g.year].filter(Boolean).join(' · ')||'JYC visual archive',text:[g.caption,g.title,g.association,g.year,g.alt,g.sourceLabel].filter(Boolean).join(' '),icon:'▧',path:'/gallery'}))
  ];
- const matched=term?rankSearchResults(rawResults,term):[];
  const categoryType={PAGES:'PAGE',CLUBS:'CLUB',EVENTS:'EVENT',PEOPLE:'PEOPLE',PHOTOS:'PHOTO'};
- const categoryMatches=matched.filter(r=>category==='ALL'||r.type===categoryType[category]);
- const filtered=categoryMatches.slice(0,18);
- const totalForCategory=categoryMatches.length;
+ const categoryPool=rawResults.filter(r=>category==='ALL'||r.type===categoryType[category]);
+ const filtered=term?rankSearchResults(categoryPool,term).filter(r=>r._score>0):[];
+ const totalForCategory=filtered.length;
  const openResult=r=>goTo(r.path,term);
  const onInputKeyDown=e=>{
   if(e.key==='ArrowDown'&&filtered.length){e.preventDefault();setSelected(i=>(i+1)%filtered.length)}
