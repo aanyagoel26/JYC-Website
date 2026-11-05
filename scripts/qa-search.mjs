@@ -31,3 +31,11 @@ ok('intent shortcuts participate in the same ranking and can surface above gener
 ok('intent priority is additive and does not mutate source objects',intent[0]?._score>intent[1]?._score&&!Object.hasOwn(intentSource,'_score'));
 if(fail.length)process.exit(1);
 console.log(`Search QA complete: ${checks-fail.length}/${checks} checks passed.`);
+
+import { isPublicSearchRecord } from '../src/lib/search.js';
+ok('CMS boolean published records are searchable',isPublicSearchRecord({name:'CineKala',published:true}));
+ok('registry published status records are searchable',isPublicSearchRecord({name:'CICR',status:'published'}));
+ok('registry publicationStatus records are searchable',isPublicSearchRecord({name:'AITronics',publicationStatus:'published'}));
+ok('draft records are excluded from public search',!isPublicSearchRecord({name:'Draft Hub',status:'draft'}));
+ok('source-material records are excluded from public search',!isPublicSearchRecord({name:'Unverified Hub',publicationStatus:'source-material'}));
+ok('archived records stay excluded even if legacy published flag remains true',!isPublicSearchRecord({name:'Old Event',published:true,archived:true}));
