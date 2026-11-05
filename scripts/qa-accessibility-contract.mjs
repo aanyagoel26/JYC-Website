@@ -37,6 +37,7 @@ check('team profile front face is a native button with expanded state and a link
 check('inactive team profile face is hidden and inert, and the active face is keyboard reachable',flip.includes('aria-hidden={flipped}')&&flip.includes('inert={flipped}')&&flip.includes('aria-hidden={!flipped}')&&flip.includes('inert={!flipped}')&&flip.includes('tabIndex={-1}'));
 check('Escape closes the team profile and restores focus to the front trigger',flip.includes("event.key === 'Escape'")&&flip.includes('frontTriggerRef.current?.focus')&&teamTest.includes("await expect(frontTrigger).toBeFocused()"));
 check('team profile trigger has a visible theme-aware focus indicator',flipCss.includes('.flip-card__front-trigger:focus-visible')&&flipCss.includes('outline: 3px solid'));
+check('team profile cards use the shared lavender/champagne palette without legacy red accents',flipCss.includes('var(--jyc-accent')&&flipCss.includes('var(--jyc-gold')&&!flipCss.includes('#A82420'));
 check('theme switch accessible name includes its visible theme label and next action',main.includes("aria-label={`${theme==='dark'?'Night':'Day'} Theme — switch to ${nextLabel} theme`}"));
 check('Search trigger accessible name includes its visible label and keyboard shortcut',main.includes('aria-label="Search, Ctrl K"'));
 check('About dark closing CTA overrides the paper-only legacy foregrounds',read('src/styles/jyc-cohesive-experience.css').includes('Dark About closing CTA')&&read('src/styles/jyc-cohesive-experience.css').includes('about-next-v28 h2'));
