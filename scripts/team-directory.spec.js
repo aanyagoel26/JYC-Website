@@ -44,6 +44,23 @@ test.describe('JYC team directory interactions', () => {
     await expect(card.locator('.flip-card__front')).toBeVisible();
   });
 
+  test('switches and persists the day and night theme', async ({ page }) => {
+    const toggle = page.locator('.theme-toggle').first();
+    await expect(toggle).toBeVisible();
+    const before = await page.locator('html').getAttribute('data-theme');
+    const expected = before === 'dark' ? 'light' : 'dark';
+    await toggle.click();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', expected);
+    await expect(toggle).toHaveAttribute('aria-pressed', expected === 'dark' ? 'true' : 'false');
+    await page.reload({ waitUntil: 'domcontentloaded' });
+    await page.locator('.team-page').waitFor({ state: 'visible', timeout: 25000 });
+    await expect(page.locator('html')).toHaveAttribute('data-theme', expected);
+  });
+
+  test('shows a working JYC crest fallback in the Team identity', async ({ page }) => {
+    await expect(page.getByRole('img', { name: 'JIIT Youth Club crest' }).first()).toBeVisible();
+  });
+
   test('keeps the directory usable at narrow phone widths', async ({ page }) => {
     for (const width of [320, 360, 390, 430]) {
       await page.setViewportSize({ width, height: 820 });
