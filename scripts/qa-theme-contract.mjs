@@ -24,6 +24,7 @@ check('dark palette uses midnight, lavender and champagne tokens',contract.inclu
 check('legacy red and cyan aliases resolve through the active JYC accent',contract.includes('--accent-red: var(--jyc-accent);')&&contract.includes('--tech-cyan: var(--jyc-accent);')&&contract.includes('--tech-crimson: var(--jyc-accent);'));
 check('legacy surfaces and text aliases resolve through canonical tokens',contract.includes('--bg-card: var(--jyc-surface);')&&contract.includes('--text-primary: var(--jyc-text-strong);')&&contract.includes('--text-muted: var(--jyc-muted);'));
 check('shared public surfaces inherit theme tokens',contract.includes('.public-app :where(.card,.featured,.contact-card,.search-modal'));
+check('portal-mounted navigation and search surfaces inherit theme tokens',contract.includes('html[data-theme="dark"] .nav')&&contract.includes('html[data-theme="dark"] .search-modal')&&contract.includes('html[data-theme="light"] .more-sheet'));
 check('reduced-motion is respected by final public contract',contract.includes('@media (prefers-reduced-motion: reduce)'));
 
 if(checks.some(x=>!x.ok)) process.exit(1);
