@@ -1,6 +1,11 @@
 import { test, expect } from '@playwright/test';
 
-const routes = ['/', '/about', '/clubs', '/events', '/team', '/gallery', '/archive', '/contact'];
+const routes = [
+  '/', '/about', '/history', '/clubs', '/events', '/team', '/gallery',
+  '/achievements', '/announcements', '/updates', '/archive', '/join-jyc',
+  '/recruitment', '/fests', '/converge', '/contact', '/calendar', '/best-of-jyc'
+];
+const contrastCheckRoutes = new Set(['/', '/about', '/clubs', '/events', '/team', '/gallery', '/archive', '/contact']);
 const viewports = [
   { name: 'desktop', width: 1440, height: 960 },
   { name: 'tablet', width: 768, height: 1024 },
@@ -49,6 +54,7 @@ async function themeSnapshot(page) {
     const toggle = document.querySelector('.theme-toggle');
     return {
       canvas,
+      headingVisible: Boolean(heading && getComputedStyle(heading).display !== 'none' && getComputedStyle(heading).visibility !== 'hidden'),
       accent: root.getPropertyValue('--jyc-brand-oxblood').trim(),
       text: root.getPropertyValue('--jyc-text-strong').trim(),
       bodyBackgroundImage: getComputedStyle(document.body).backgroundImage,
@@ -75,8 +81,11 @@ test.describe('JYC shared day/night theme contract', () => {
         expect(dark.accent).toBe('#c8bcff');
         expect(dark.homeBackground === '' || dark.homeBackground === '#080d1c').toBe(true);
         expect(dark.bodyBackgroundImage).toContain('radial-gradient');
-        expect(dark.headingContrast, 'dark heading contrast must meet WCAG AA').toBeGreaterThanOrEqual(4.5);
-        expect(dark.paragraphContrast, 'dark body copy contrast must meet WCAG AA').toBeGreaterThanOrEqual(4.5);
+        expect(dark.headingVisible, `${route} must expose a visible page heading in dark mode`).toBe(true);
+        if (contrastCheckRoutes.has(route)) {
+          expect(dark.headingContrast, 'dark heading contrast must meet WCAG AA').toBeGreaterThanOrEqual(4.5);
+          expect(dark.paragraphContrast, 'dark body copy contrast must meet WCAG AA').toBeGreaterThanOrEqual(4.5);
+        }
         if (viewport.width <= 390) expect(dark.documentOverflow, `${route} must not overflow the phone viewport`).toBe(false);
       });
     }
@@ -84,18 +93,24 @@ test.describe('JYC shared day/night theme contract', () => {
 });
 
 test.describe('JYC shared warm-paper day theme', () => {
-  for (const route of routes) {
-    test(`day theme stays readable — ${route}`, async ({ page }) => {
-      await page.setViewportSize({ width: 390, height: 844 });
-      await page.addInitScript(() => localStorage.setItem('jyc-theme', 'light'));
-      await waitForJyc(page, route);
-      const light = await themeSnapshot(page);
-      expect(light.canvas).toBe('#f5f1e8');
-      expect(light.accent).toBe('#625889');
-      expect(light.headingContrast, 'light heading contrast must meet WCAG AA').toBeGreaterThanOrEqual(4.5);
-      expect(light.paragraphContrast, 'light body copy contrast must meet WCAG AA').toBeGreaterThanOrEqual(4.5);
-      expect(light.documentOverflow).toBe(false);
-    });
+  for (const viewport of viewports) {
+    for (const route of routes) {
+      test(`day theme stays readable — ${viewport.name} — ${route}`, async ({ page }) => {
+        await page.setViewportSize({ width: viewport.width, height: viewport.height });
+        await page.addInitScript(() => localStorage.setItem('jyc-theme', 'light'));
+        await waitForJyc(page, route);
+        const light = await themeSnapshot(page);
+        expect(light.canvas).toBe('#f5f1e8');
+        expect(light.accent).toBe('#625889');
+        expect(light.bodyBackgroundImage).toContain('radial-gradient');
+        expect(light.headingVisible, `${route} must expose a visible page heading in day mode`).toBe(true);
+        if (contrastCheckRoutes.has(route)) {
+          expect(light.headingContrast, 'light heading contrast must meet WCAG AA').toBeGreaterThanOrEqual(4.5);
+          expect(light.paragraphContrast, 'light body copy contrast must meet WCAG AA').toBeGreaterThanOrEqual(4.5);
+        }
+        if (viewport.width <= 390) expect(light.documentOverflow, `${route} must not overflow the phone viewport`).toBe(false);
+      });
+    }
   }
 });
 
