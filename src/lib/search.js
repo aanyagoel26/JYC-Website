@@ -66,3 +66,8 @@ export function rankSearchResults(results,query){
     _sourceIndex:index
   })).sort((a,b)=>b._score-a._score||a._sourceIndex-b._sourceIndex);
 }
+
+// Return only genuine matches; callers can safely show an empty state for unrelated queries.
+export function matchSearchResults(results,query){
+  return rankSearchResults(results,query).filter(item=>item._score>0);
+}
