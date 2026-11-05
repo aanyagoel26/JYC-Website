@@ -30,7 +30,6 @@ import {JYCBrandEditorial} from './jyc-next-experience.jsx';
 import {JYCEditorialHome} from './jyc-editorial-home.jsx';
 import {ResponsivePhoto} from './jyc-responsive-photo.jsx';
 import { teamPhotoFor } from './jyc-team-media.js';
-import {FeaturedEventPopup} from './featured-event-popup.jsx';
 import {JYC57Events,JYC57Clubs,JYC57Gallery,JYCBestOf} from './jyc57-experience.jsx';
 
 
@@ -85,7 +84,7 @@ function publicDemoData(){
  const clubs=Object.entries(JYC_HUB_CONTENT).map(([name,p],i)=>({id:`hub-${name.toLowerCase().replace(/[^a-z0-9]+/g,'-')}`,name,type:p.family==='Technical'?'Technical':'Non-Technical',category:p.focus,description:p.summary,about:p.detail,interests:[p.family,p.focus],published:true,status:'published',pinned:i<5,theme:'jyc'}));
  return mergePublicFallback(norm({...empty,clubs,events:PUBLIC_EVENT_FALLBACK,gallery:PUBLIC_GALLERY_FALLBACK,team:PUBLIC_TEAM_FALLBACK,homepage:{...empty.homepage,activities:PUBLIC_ACTIVITIES}}));
 }
-import { normalizeSearch, rankSearchResults } from './lib/search.js';
+import { normalizeSearch, matchSearchResults } from './lib/search.js';
 import {mergePublicEvents} from './lib/public-content.js';
 import {CREATOR,CREATORS,JYC_CONTACTS} from './lib/site-config.js';
 
@@ -234,9 +233,8 @@ function EventReminderControl({event,notify}){if(!event?.date||eventState(event)
 function App(){const loc=useLocation();const [data,setData]=useState(()=>import.meta.env.DEV?publicDemoData():norm(empty));const [loading,setLoading]=useState(true);const [bootReady,setBootReady]=useState(false);const [bootStage,setBootStage]=useState('INITIALIZING');const [error,setError]=useState('');const [online,setOnline]=useState(()=>navigator.onLine!==false);const [theme,setTheme]=useState(()=>{
   const saved=storageGet('jyc-theme',null);
   if(saved==='dark'||saved==='light')return saved;
-  // The midnight/cyan design system is the first-visit default.
-  // An explicit saved light-mode preference is always respected.
-  return 'dark';
+  // Follow the operating-system preference until the visitor chooses a theme.
+  return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 });const [session,setSession]=useState(null);const [admin,setAdmin]=useState(null);const [toast,setToast]=useState(null);const [confirm,setConfirm]=useState(null);
 
  useEffect(()=>{const onToast=e=>notify(e.detail?.message||'',e.detail?.type||'success');const onConfirm=e=>setConfirm(e.detail||null);window.addEventListener('jyc-toast',onToast);window.addEventListener('jyc-confirm',onConfirm);return()=>{window.removeEventListener('jyc-toast',onToast);window.removeEventListener('jyc-confirm',onConfirm)}},[]);
@@ -291,7 +289,7 @@ function App(){const loc=useLocation();const [data,setData]=useState(()=>import.
   if(!bootReady)return <Loading stage={bootStage} cached={Boolean(readSiteCache())}/>;
   const connectionNotice=(data.__readOnlyFallback||!online||error)?<div className={`connection-notice ${data.__readOnlyFallback?'fallback':readSiteCache()?'cached':'offline'} ${error==='JYC data service is not deployed. Run supabase/FINAL-PRODUCTION-REPAIR.sql in the connected Supabase project, then refresh.'?'setup-needed':''}`} role="status"><span>{data.__readOnlyFallback?(readSiteCache()?`Limited public mode · showing the last saved snapshot (${formatCacheAge(siteCacheAge())}). Sign-in and internal submissions may be unavailable.`:'Limited public mode · showing curated public content. Sign-in and internal submissions may be unavailable until the database reconnects.'):!online?'You are offline. JYC will keep using cached content until the connection returns.':error==='JYC data service is not deployed. Run supabase/FINAL-PRODUCTION-REPAIR.sql in the connected Supabase project, then refresh.'?'JYC data service needs setup.':readSiteCache()?`Showing the last saved JYC snapshot · ${formatCacheAge(siteCacheAge())}.`:'JYC content is currently offline.'}</span><button type="button" onClick={()=>window.dispatchEvent(new CustomEvent('jyc-refresh-data'))}>Refresh</button></div>:null;
  const isAdmin=loc.pathname.startsWith('/admin');
- const content=<div className="app-frame"><SkipLink/><ScrollProgress/><BackToTop/>{!isAdmin&&<Suspense fallback={null}><LazyJYCInnovationMotion/></Suspense>}{!isAdmin&&<><Navbar data={data} admin={admin} theme={theme} setTheme={setTheme}/></>} {connectionNotice}<div id="main-content" className={isAdmin?'app admin-app':'app public-app'}><div className="route-stage" key={`${loc.pathname}${loc.search}`}><JYCEditorialSystem><Routes data={data} admin={admin} session={session} setAdmin={setAdmin} commit={commit} notify={notify} theme={theme} setTheme={setTheme}/></JYCEditorialSystem></div></div>{!isAdmin&&<Footer data={data} admin={admin}/>} {!isAdmin&&<Suspense fallback={null}><LazyJYCBot data={data}/></Suspense>} {toast&&<div className={`toast toast-${toast.type||'success'}`} role="status"><span>{toast.type==='error'?'!':'✓'}</span>{toast.message}</div>} {confirm&&<ConfirmDialog request={confirm} onClose={ok=>{confirm.resolve?.(ok);setConfirm(null)}}/>}<FeaturedEventPopup />
+ const content=<div className="app-frame"><SkipLink/><ScrollProgress/><BackToTop/>{!isAdmin&&<Suspense fallback={null}><LazyJYCInnovationMotion/></Suspense>}{!isAdmin&&<><Navbar data={data} admin={admin} theme={theme} setTheme={setTheme}/></>} {connectionNotice}<div id="main-content" className={isAdmin?'app admin-app':'app public-app'}><div className="route-stage" key={`${loc.pathname}${loc.search}`}><JYCEditorialSystem><Routes data={data} admin={admin} session={session} setAdmin={setAdmin} commit={commit} notify={notify} theme={theme} setTheme={setTheme}/></JYCEditorialSystem></div></div>{!isAdmin&&<Footer data={data} admin={admin}/>} {!isAdmin&&<Suspense fallback={null}><LazyJYCBot data={data}/></Suspense>} {toast&&<div className={`toast toast-${toast.type||'success'}`} role="status"><span>{toast.type==='error'?'!':'✓'}</span>{toast.message}</div>} {confirm&&<ConfirmDialog request={confirm} onClose={ok=>{confirm.resolve?.(ok);setConfirm(null)}}/>}
       <InstallPrompt/></div>;
  return <MaintenanceGate data={isAdmin?{maintenance:{on:false}}:data}>{content}</MaintenanceGate>}
 
@@ -603,7 +601,7 @@ function Events({data}){
   if(/creative|design|media|photography|film/.test(key))return 'Creative';
   return raw;
 };
- const filtered=all.filter(e=>filter==='All'||e.club===filter).filter(e=>family==='All'||eventCategoryOf(e).toLowerCase()===family.toLowerCase()).filter(e=>!q||`${e.title} ${e.club} ${e.venue} ${eventCategoryOf(e)} ${(e.highlights||[]).join(' ')}`.toLowerCase().includes(q.toLowerCase()));
+ const filtered=all.filter(e=>filter==='All'||e.club===filter).filter(e=>family==='All'||eventCategoryOf(e).toLowerCase()===family.toLowerCase()).filter(e=>!q||`${e.title} ${e.club} ${e.venue} ${eventCategoryOf(e)} ${Array.isArray(e.highlights)?e.highlights.join(' '):''} ${e.description||''} ${e.eligibility||''}`.toLowerCase().includes(q.toLowerCase()));
  const planned=filtered.filter(e=>e.publicStatus==='planned');
  const dated=filtered.filter(e=>e.publicStatus!=='planned');
  const upcoming=dated.filter(e=>eventState(e)!=='past'),live=dated.filter(e=>eventState(e)==='live'),past=dated.filter(e=>eventState(e)==='past');
@@ -769,8 +767,8 @@ function Navbar({data,admin,theme,setTheme}){
  const homeLinks=[['Home','hero'],['About','about'],['Clubs','clubs'],['Events','events'],['Gallery','moments'],['Team','team'],['Contact','/contact']];
  useEffect(()=>{
    const onKey=e=>{
-     if((e.ctrlKey||e.metaKey)&&(e.key?.toLowerCase()==='k'||e.code==='KeyK')){e.preventDefault();e.stopPropagation();setSearch(true);return}
-     if(e.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)){e.preventDefault();setSearch(true);return}
+     if((e.ctrlKey||e.metaKey)&&(e.key?.toLowerCase()==='k'||e.code==='KeyK')){e.preventDefault();e.stopPropagation();setMoreOpen(false);setSearch(true);return}
+     if(e.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)){e.preventDefault();setMoreOpen(false);setSearch(true);return}
      if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName))return;
      if(e.key.toLowerCase()==='g'){shortcutRef.current='g';window.clearTimeout(shortcutRef._timer);shortcutRef._timer=window.setTimeout(()=>shortcutRef.current='',700);return}
      if(shortcutRef.current==='g'){const routes={c:'/clubs',e:'/events',t:'/team',a:'/archive',m:'/gallery'};if(routes[e.key.toLowerCase()]){e.preventDefault();shortcutRef.current='';nav(routes[e.key.toLowerCase()]);return}}
@@ -795,7 +793,7 @@ function Navbar({data,admin,theme,setTheme}){
  const goHomeSection=id=>{setOpen(false);setMoreOpen(false);if(String(id).startsWith('/')){nav(id);return}if(loc.pathname!=='/'){nav('/#'+id);return}document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});setHomeSection(id)};
  const dockItems=[['Home','/','home'],['Clubs','/clubs','clubs'],['Events','/events','events'],['Gallery','/gallery','gallery'],['More','__more','more']];
  const dockActive=loc.pathname==='/'?0:loc.pathname.startsWith('/clubs')?1:loc.pathname.startsWith('/events')?2:loc.pathname.startsWith('/gallery')?3:4;
- const dock=<div className="mobile-dock" style={{'--dock-index':dockActive}} aria-label="Mobile navigation"><i className="dock-active-pill" aria-hidden="true"/>{dockItems.map(([n,p,icon],i)=>{const active=i===dockActive;return <button type="button" key={n} className={active?'active':''} onClick={()=>p==='__more'?setMoreOpen(v=>!v):nav(p)} aria-current={active?'page':undefined}><span><NavIcon kind={icon}/></span><b>{n}</b></button>})}</div>;
+ const dock=<div className="mobile-dock" style={{'--dock-index':dockActive}} aria-label="Mobile navigation"><i className="dock-active-pill" aria-hidden="true"/>{dockItems.map(([n,p,icon],i)=>{const active=i===dockActive;return <button type="button" key={n} className={active?'active':''} onClick={()=>p==='__more'?setMoreOpen(v=>!v):nav(p)} aria-current={active?'page':undefined} aria-expanded={p==='__more'?moreOpen:undefined} aria-controls={p==='__more'&&moreOpen?'jyc-more-dialog':undefined}><span><NavIcon kind={icon}/></span><b>{n}</b></button>})}</div>;
  const more=moreOpen?<MobileMoreSheet data={data} admin={admin} close={()=>setMoreOpen(false)} openSearch={()=>{setMoreOpen(false);setSearch(true)}}/>:null;
  const searchView=search?<Search data={data} admin={admin} close={()=>setSearch(false)}/>:null;
  const navButtons = routeLinks.map(([n, p]) => {
@@ -818,22 +816,25 @@ function Navbar({data,admin,theme,setTheme}){
  return <>
  <header className="nav"><div className="nav-inner">
    <button type="button" className="brand" aria-label="JIIT Youth Club home" onClick={()=>{setOpen(false);nav('/')}}><span className="brand-mark"><LogoImage alt="JIIT Youth Club logo" loading="eager" fetchPriority="high" srcSet={`${logoTiny} 1x, ${logoSmall} 2x`}/></span><span>JIIT YOUTH CLUB</span></button>
-   <nav className={open?'open':''}>{navButtons}<button type="button" className={`nav-more-trigger ${moreOpen?'active':''}`} onClick={()=>{setOpen(false);setMoreOpen(v=>!v)}} aria-expanded={moreOpen}>More <span aria-hidden="true">⌄</span></button></nav>
+   <nav className={open?'open':''}>{navButtons}<button type="button" className={`nav-more-trigger ${moreOpen?'active':''}`} onClick={()=>{setOpen(false);setMoreOpen(v=>!v)}} aria-expanded={moreOpen} aria-controls={moreOpen?'jyc-more-dialog':undefined}>More <span aria-hidden="true">⌄</span></button></nav>
    <button type="button" className="nav-join-cta" onClick={()=>nav('/join-jyc')}>Join JYC <span>↗</span></button>
    <Theme theme={theme} setTheme={setTheme}/><button type="button" className={`hamb ${open?'open':''}`} onClick={()=>setOpen(v=>!v)} aria-label="Menu" aria-expanded={open}><i/><i/><i/></button>
-   {open&&<button type="button" className="mobile-nav-scrim" aria-label="Close navigation" onClick={()=>setOpen(false)}/>}<button type="button" className="search-trigger" aria-label="Search" onClick={()=>setSearch(true)} title="Search JYC (Ctrl/Cmd + K)"><span className="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg></span><span className="search-label">Search</span><kbd aria-hidden="true">Ctrl K</kbd></button>
+   {open&&<button type="button" className="mobile-nav-scrim" aria-label="Close navigation" onClick={()=>setOpen(false)}/>}<button type="button" className="search-trigger" data-jyc-search-trigger aria-label="Search" aria-expanded={search} aria-controls={search?'jyc-search-dialog':undefined} onClick={()=>setSearch(true)} title="Search JYC (Ctrl/Cmd + K)"><span className="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg></span><span className="search-label">Search</span><kbd aria-hidden="true">Ctrl K</kbd></button>
  </div></header>
  {createPortal(dock,document.body)}{createPortal(more,document.body)}{searchView}</>
 }
 function MobileMoreSheet({data,admin,close,openSearch}){
  const nav=useNavigate();
  const sheetRef=React.useRef(null);
+ const closeRef=React.useRef(close);
+ closeRef.current=close;
  useEffect(()=>{
+  const returnFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
   const previous=document.body.style.overflow;
   document.body.style.overflow='hidden';
   const timer=setTimeout(()=>sheetRef.current?.querySelector('button,a')?.focus(),30);
   const onKey=e=>{
-   if(e.key==='Escape'){e.preventDefault();close();return}
+   if(e.key==='Escape'){e.preventDefault();closeRef.current();return}
    if(e.key!=='Tab')return;
    const root=sheetRef.current;if(!root)return;
    const focusable=[...root.querySelectorAll('button,a,input,[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled&&el.offsetParent!==null);
@@ -843,12 +844,11 @@ function MobileMoreSheet({data,admin,close,openSearch}){
    else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}
   };
   document.addEventListener('keydown',onKey);
-  return()=>{clearTimeout(timer);document.body.style.overflow=previous;document.removeEventListener('keydown',onKey)};
- },[close]);
+  return()=>{clearTimeout(timer);document.body.style.overflow=previous;document.removeEventListener('keydown',onKey);if(returnFocus?.isConnected)requestAnimationFrame(()=>{if(!document.querySelector('.search-overlay'))returnFocus.focus()})};
+ },[]);
  const go=p=>{close();nav(p)};
 const explore=[
     ['/about','About JYC','Purpose, communities, values and the JYC story'],
-    ['/converge','Converge Live Fest','Multi-arena schedule, leaderboard and live fest stream'],
     ['/team','Leadership','Faculty, Apex and Core Team'],
     ['/clubs','Clubs & Communities','Explore the official hub ecosystem'],
     ['/events','Events','Upcoming, ongoing and completed experiences'],
@@ -862,10 +862,10 @@ const explore=[
     ['/archive','Archive','The published JYC story by year'],
     ['/contact','Contact','Official public channels and query form']
    ];
- return <div ref={sheetRef} className="more-sheet-overlay" role="dialog" aria-modal="true" aria-label="More JYC" onMouseDown={e=>{if(e.target===e.currentTarget)close()}}>
+ return <div id="jyc-more-dialog" ref={sheetRef} className="more-sheet-overlay" role="dialog" aria-modal="true" aria-label="More JYC" onMouseDown={e=>{if(e.target===e.currentTarget)close()}}>
   <div className="more-sheet jyc-more-club-sheet">
    <div className="sheet-grabber"/>
-   <div className="more-sheet-head"><div><span className="eyebrow">MORE JYC</span><h3>Useful pages. Nothing repeated.</h3><p>About, communities, events, archive and official JYC channels live here.</p></div><button type="button" className="sheet-close" onClick={close}>×</button></div>
+   <div className="more-sheet-head"><div><span className="eyebrow">MORE JYC</span><h3>Useful pages. Nothing repeated.</h3><p>About, communities, events, archive and official JYC channels live here.</p></div><button type="button" className="sheet-close" onClick={close} aria-label="Close More JYC">×</button></div>
    <div className="more-sheet-section"><span className="eyebrow">JYC</span><div className="more-sheet-grid jyc-more-grid">{explore.map(([path,title,text])=><button type="button" key={path} onClick={()=>go(path)}><b>{title}</b><span>{text} →</span></button>)}</div></div>
    <div className="more-sheet-section"><span className="eyebrow">SEARCH JYC</span><div className="more-sheet-grid more-sheet-guide"><button type="button" onClick={openSearch}><b>Search JYC</b><span>Find a page, club or event →</span></button>{safeExternalUrl(data.homepage?.jtvUrl)&&<a className="more-sheet-link" href={safeExternalUrl(data.homepage.jtvUrl)} target="_blank" rel="noopener noreferrer"><b>JTV</b><span>Official JYC media ↗</span></a>}</div></div>
    <div className="more-sheet-connect"><span className="eyebrow">CONNECT WITH JYC</span><div><a href={JYC_CONTACTS.instagram} target="_blank" rel="noreferrer">Instagram ↗</a><a href={JYC_CONTACTS.whatsapp} target="_blank" rel="noreferrer">WhatsApp ↗</a><a href={'mailto:'+data.creator.email}>Email ↗</a></div></div>
@@ -873,19 +873,37 @@ const explore=[
  </div>
 }
 
+function SearchMatch({value,term}){
+ const source=String(value??'');
+ const words=String(term??'').trim().split(/\s+/).filter(Boolean).slice(0,8);
+ if(!words.length)return source;
+ const escape=value=>value.replace(/[.*+?^${}()|[\]\\]/g,char=>'\\'+char);
+ const pattern=new RegExp('('+words.map(escape).join('|')+')','ig');
+ return <>{source.split(pattern).map((part,index)=>words.some(word=>word.toLowerCase()===part.toLowerCase())?<mark className="search-match" key={index}>{part}</mark>:part)}</>;
+}
+function Search({data,admin,close}){');
+ const pattern=new RegExp('('+words.map(escape).join('|')+')','ig');
+ return <>{source.split(pattern).map((part,index)=>words.some(word=>word.toLowerCase()===part.toLowerCase())?<mark className="search-match" key={index}>{part}</mark>:part)}</>;
+}
 function Search({data,admin,close}){
  const nav=useNavigate();
  const [q,setQ]=useState(()=>{try{return new URLSearchParams(window.location.search).get('q')||''}catch{return ''}});
  const [selected,setSelected]=useState(0);
- const [recent,setRecent]=useState(()=>{try{return JSON.parse(storageGet('jyc-search-recent','[]')).filter(Boolean).slice(0,5)}catch{return []}});
+ const [categoryFilter,setCategoryFilter]=useState('ALL');
+ const [recent,setRecent]=useState(()=>{try{const stored=JSON.parse(storageGet('jyc-search-recent','[]'));return Array.isArray(stored)?stored.filter(value=>typeof value==='string'&&value.trim()).slice(0,5):[]}catch{return []}});
  const inputRef=React.useRef(null);
+ const returnFocusRef=React.useRef(null);
  const term=normalizeSearch(q);
- useEffect(()=>{const previous=document.body.style.overflow;document.body.style.overflow='hidden';const timer=setTimeout(()=>inputRef.current?.focus(),40);const onKeyDown=e=>{if(e.key!=='Tab')return;const root=document.querySelector('.search-modal');if(!root)return;const focusable=[...root.querySelectorAll('button,input,a,[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled&&el.offsetParent!==null);if(!focusable.length)return;const first=focusable[0],last=focusable[focusable.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}};document.addEventListener('keydown',onKeyDown);return()=>{clearTimeout(timer);document.body.style.overflow=previous;document.removeEventListener('keydown',onKeyDown)}},[]);
- useEffect(()=>{setSelected(0)},[term]);
+ useEffect(()=>{const active=document.activeElement;returnFocusRef.current=active instanceof HTMLElement?active:document.querySelector('[data-jyc-search-trigger]');const previous=document.body.style.overflow;document.body.style.overflow='hidden';const timer=setTimeout(()=>inputRef.current?.focus(),40);const onKeyDown=e=>{if(e.key!=='Tab')return;const root=document.querySelector('.search-modal');if(!root)return;const focusable=[...root.querySelectorAll('button,input,a,[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled&&el.offsetParent!==null);if(!focusable.length)return;const first=focusable[0],last=focusable[focusable.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}};document.addEventListener('keydown',onKeyDown);return()=>{clearTimeout(timer);document.body.style.overflow=previous;document.removeEventListener('keydown',onKeyDown);const target=returnFocusRef.current?.isConnected?returnFocusRef.current:document.querySelector('[data-jyc-search-trigger]');if(target instanceof HTMLElement)requestAnimationFrame(()=>target.focus())}},[]);
+ useEffect(()=>{setSelected(0)},[term,categoryFilter]);
  const remember=value=>{if(!value)return;try{const next=[value,...recent.filter(x=>x!==value)].slice(0,5);storageSet('jyc-search-recent',JSON.stringify(next));setRecent(next)}catch{}};
- const clubs=data.clubs.filter(c=>c.published&&c.status!=='archived');
- const events=data.events.filter(e=>e.published&&!e.archived);
- const team=data.team.filter(m=>m.published===true);
+ const sourceData=data&&typeof data==='object'?data:{};
+ const clubs=(Array.isArray(sourceData.clubs)?sourceData.clubs:[]).filter(c=>c&&typeof c==='object'&&c.published&&c.status!=='archived'&&c.status!=='draft'&&c.status!=='source-material'&&String(c.name||'').trim());
+ const events=(Array.isArray(sourceData.events)?sourceData.events:[]).filter(e=>e&&typeof e==='object'&&e.published&&!e.archived&&e.status!=='draft'&&e.status!=='source-material'&&String(e.title||'').trim());
+ const team=(Array.isArray(sourceData.team)?sourceData.team:[]).filter(m=>m&&typeof m==='object'&&m.published===true&&m.status!=='draft'&&m.status!=='archived'&&String(m.name||'').trim());
+ const achievements=(Array.isArray(sourceData.achievements)?sourceData.achievements:JYC_EDITORIAL_ACHIEVEMENTS).filter(item=>item&&typeof item==='object'&&item.published!==false&&item.status!=='draft'&&item.status!=='archived'&&item.status!=='source-material'&&String(item.title||item.name||'').trim());
+ const announcements=(Array.isArray(sourceData.announcements)?sourceData.announcements:[]).filter(item=>item&&typeof item==='object'&&item.published===true&&item.status!=='draft'&&item.status!=='archived'&&String(item.title||item.text||'').trim());
+ const updates=(Array.isArray(sourceData.updates)?sourceData.updates:[]).filter(item=>item&&typeof item==='object'&&item.published===true&&item.status!=='draft'&&item.status!=='archived'&&String(item.title||item.headline||'').trim());
  const pageIndex=[
   ['JIIT Youth Club','Official JYC website for JIIT Noida clubs, events, people and campus experiences.','PAGE','/'],
   ['About JYC','About the JIIT Youth Club community, purpose and student-led work.','PAGE','/about'],
@@ -898,30 +916,37 @@ function Search({data,admin,close}){
   ['Best of JYC','Curated published JYC photography and memories.','PAGE','/best-of-jyc'],
   ['Achievements','Source-backed JYC milestones and community outcomes.','PAGE','/achievements'],
   ['Announcements','JYC announcements, registration notices and updates.','PAGE','/announcements'],
-  ['Achievements','JYC achievements, wall of fame and published outcomes.','PAGE','/achievements'],
-  ['JYC Event Calendar','Published JYC events by date.','PAGE','/calendar'],
-  ['Events & venues','Find published JYC event locations.','PAGE','/events']
+  ['JYC Now','Latest published JYC updates, campus news and hub activity.','PAGE','/updates'],
+  ['Join JYC','Official recruitment pathway and onboarding guide.','PAGE','/join-jyc'],
+  ['JYC Event Calendar','Published JYC events by date.','PAGE','/calendar']
  ];
  const adminPages=[];
  const rawResults=[
   ...adminPages.map(x=>({key:'a'+x[3]+x[0],type:x[2],title:x[0],meta:x[1],searchText:`${x[0]} ${x[1]} JYC JIIT`,icon:'⚙',go:()=>nav(x[3])})),
   ...pageIndex.map(x=>({key:'p'+x[3],type:x[2],title:x[0],meta:x[1],searchText:`${x[0]} ${x[1]} JYC JIIT Noida`,icon:'⌘',go:()=>nav(x[3])})),
-  ...clubs.map(c=>({key:'c'+c.id,type:'CLUB',title:c.name,meta:c.category||'Community',searchText:`${c.name} ${c.category||''} ${(c.interests||[]).join(' ')} ${c.description||''}`,icon:'◈',go:()=>nav('/clubs/'+encodeURIComponent(slug(c.name)))})),
-  ...events.map(e=>({key:'e'+e.id,type:'EVENT',title:e.title,meta:e.club||'JYC',searchText:`${e.title} ${e.club||''} ${e.venue||''} ${e.eventType||''} ${e.date||''} ${(e.highlights||[]).join(' ')}`,icon:'◷',go:()=>nav('/events/'+encodeURIComponent(slug(e.slug||e.title)))})),
+  ...clubs.map(c=>({key:'c'+c.id,type:'CLUB',title:c.name,meta:c.category||'Community',searchText:`${c.name} ${c.category||''} ${Array.isArray(c.interests)?c.interests.join(' '):''} ${c.description||''} ${c.about||''}`,icon:'◈',go:()=>nav('/clubs/'+encodeURIComponent(slug(c.name)))})),
+  ...events.map(e=>({key:'e'+e.id,type:'EVENT',title:e.title,meta:e.club||'JYC',searchText:`${e.title} ${e.club||''} ${e.venue||''} ${e.eventType||''} ${e.date||''} ${Array.isArray(e.highlights)?e.highlights.join(' '):''}`,icon:'◷',go:()=>nav('/events/'+encodeURIComponent(slug(e.slug||e.title)))})),
   ...team.map(m=>({key:'t'+m.id,type:'TEAM',title:m.name,meta:m.role||'JYC Team',searchText:`${m.name} ${m.role||''} ${m.bio||''}`,icon:'✦',go:()=>nav('/team')})),
-  ...data.gallery.filter(g=>g&&g.url).map((g,i)=>({key:'g'+(g.id||i),type:'PHOTO',title:g.caption||g.title||g.association||'JYC photo',meta:[g.association,g.year].filter(Boolean).join(' · ')||'JYC visual archive',searchText:`${g.caption||''} ${g.title||''} ${g.association||''} ${g.year||''} ${g.alt||''} ${g.sourceLabel||''}`,icon:'▧',go:()=>nav('/gallery')})),
+  ...achievements.map((item,i)=>({key:'achievement-'+(item.id||i),type:'ACHIEVEMENT',title:item.title||item.name,meta:[item.category,item.year,item.status].filter(Boolean).join(' · ')||'JYC achievement',searchText:[item.title||item.name,item.summary||item.description,item.category,item.organisation,item.year,item.sourceLabel].filter(Boolean).join(' '),icon:'✦',go:()=>nav('/achievements')})),
+  ...announcements.map((item,i)=>({key:'announcement-'+(item.id||i),type:'ANNOUNCEMENT',title:item.title||item.text,meta:item.date||item.category||'JYC announcement',searchText:[item.title,item.text,item.description,item.category,item.date].filter(Boolean).join(' '),icon:'◉',go:()=>nav('/announcements')})),
+  ...updates.map((item,i)=>({key:'update-'+(item.id||i),type:'UPDATE',title:item.title||item.headline,meta:item.date||item.category||'JYC update',searchText:[item.title,item.headline,item.summary,item.description,item.text,item.category,item.date].filter(Boolean).join(' '),icon:'◷',go:()=>nav('/updates')})),
+  ...(sourceData.announcement?.on&&String(sourceData.announcement.text||'').trim()?[{key:'site-announcement',type:'ANNOUNCEMENT',title:String(sourceData.announcement.text).trim(),meta:'Current site announcement',searchText:String(sourceData.announcement.text)+' JYC announcement',icon:'◉',go:()=>nav('/announcements')}]:[]),
+  ...(Array.isArray(sourceData.gallery)?sourceData.gallery:[]).filter(g=>g&&typeof g==='object'&&g.url&&g.published!==false&&g.status!=='draft'&&g.status!=='source-material').map((g,i)=>({key:'g'+(g.id||i),type:'PHOTO',title:g.caption||g.title||g.association||'JYC photo',meta:[g.association,g.year].filter(Boolean).join(' · ')||'JYC visual archive',searchText:`${g.caption||''} ${g.title||''} ${g.association||''} ${g.year||''} ${g.alt||''} ${g.sourceLabel||''}`,icon:'▧',go:()=>nav('/gallery')})),
  ];
- const intentResults=term?(
-  /(tomorrow|today|this week|upcoming|events)/.test(term)?[{key:'intent-events',type:'QUICK ACTION',title:'Upcoming events',meta:'Open the JYC event calendar',searchText:'upcoming events today tomorrow this week',icon:'◷',priority:120,go:()=>nav('/events')}]:
-  /(sector\s*62|62 campus|sector\s*128|128 campus|venue|where)/.test(term)?[{key:'intent-map',type:'QUICK ACTION',title:'Events & venues',meta:'Find event venues from published JYC events',searchText:'venue event location',icon:'⌖',priority:100,go:()=>nav('/events')}]:
-  false?[]:
-  []
- ):[];
- const ranked=rankSearchResults(rawResults,term).map(r=>({...r, _score:r._score+(r.priority||0)}));
- const results=term?ranked.sort((a,b)=>b._score-a._score).slice(0,16):[];
- const searchResults=[...results,...(results.length<16?intentResults:[])];
- const total=results.length;
- const goResult=r=>{remember(term);r.go();close()};
+ const intentResults=term&&/(tomorrow|today|this week|upcoming|events)/.test(term)
+  ?[{key:'intent-events',type:'QUICK ACTION',title:'Upcoming events',meta:'Open the JYC event calendar',searchText:'upcoming events today tomorrow this week',icon:'◷',priority:120,go:()=>nav('/events')}]
+  :term&&/(sector\s*62|62 campus|sector\s*128|128 campus|venue|where)/.test(term)
+   ?[{key:'intent-map',type:'QUICK ACTION',title:'Events & venues',meta:'Find published JYC event locations and venues',searchText:'venue event location where sector 62 sector 128 62 campus 128 campus',icon:'⌖',priority:100,go:()=>nav('/events')}]
+   :[];
+ const ranked=matchSearchResults([...rawResults,...intentResults],term);
+ const categoryOptions=['ALL',...new Set(ranked.map(result=>result.type))];
+ const categoryResults=categoryFilter==='ALL'?ranked:ranked.filter(result=>result.type===categoryFilter);
+ const total=categoryResults.length;
+ const queryActive=Boolean(term);
+ const results=queryActive?categoryResults.slice(0,16):[];
+ const searchResults=results;
+ const resultSummary=total>results.length?`Showing ${results.length} of ${total} ranked results`:`${total} ranked result${total===1?'':'s'}`;
+ const goResult=r=>{remember(q.trim());r.go();close()};
  const runRecent=x=>{setQ(x);setTimeout(()=>inputRef.current?.focus(),0)};
  const onInputKeyDown=e=>{
    if(e.key==='Escape'){e.preventDefault();close();return;}
@@ -929,15 +954,16 @@ function Search({data,admin,close}){
    if(e.key==='ArrowUp'&&searchResults.length){e.preventDefault();setSelected(i=>(i-1+searchResults.length)%searchResults.length);return}
    if(e.key==='Enter'&&searchResults[selected]){e.preventDefault();goResult(searchResults[selected]);}
  };
- const content=<div className="overlay search-overlay" role="dialog" aria-modal="true" aria-label="JYC search" onMouseDown={close} onTouchStart={e=>{if(e.target===e.currentTarget)close()}}>
+ const content=<div id="jyc-search-dialog" className="overlay search-overlay" role="dialog" aria-modal="true" aria-label="JYC search" onMouseDown={close} onTouchStart={e=>{if(e.target===e.currentTarget)close()}}>
   <div className="search-modal" onMouseDown={e=>e.stopPropagation()}>
    <div className="search-mobile-grabber"/>
    <div className="modal-head"><div><span className="eyebrow">JYC SEARCH</span><span className="search-subtitle">Search the whole public JYC experience.</span></div><button type="button" className="icon-btn search-close" onClick={close} aria-label="Close search"><span>ESC</span><b>×</b></button></div>
-   <div className="search-input-wrap"><span className="search-field-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg></span><input ref={inputRef} autoFocus aria-autocomplete="list" aria-expanded={Boolean(q&&searchResults.length)} aria-controls="jyc-search-results" value={q} onChange={e=>setQ(e.target.value)} onKeyDown={onInputKeyDown} placeholder={isFestMode(data)?"Search clubs, events, people, fests…":"Search clubs, events and people…"} aria-label="Search JYC" aria-activedescendant={searchResults[selected]?`jyc-search-result-${selected}`:undefined}/><kbd>↑↓</kbd>{q&&<button type="button" className="search-clear" onClick={()=>{setQ('');inputRef.current?.focus()}} aria-label="Clear search">×</button>}</div>
-   {!q&&<div className="search-suggestions"><span>EXPLORE</span>{[['EXPLORE CLUBS','/clubs'],['FIND EVENTS','/events'],...(isFestMode(data)?[['JIIT FESTS','/fests']]:[]),['JYC TEAM','/team'],['JYC ARCHIVE','/archive']].map(([label,path])=><button type="button" key={path} onClick={()=>{remember(label.toLowerCase());nav(path);close()}}>{label}<b>↗</b></button>)}</div>}
-   {!q&&recent.length>0&&<div className="search-recent"><span>RECENT</span>{recent.map(x=><button type="button" key={x} onClick={()=>runRecent(x)}>{x}<b>×</b></button>)}</div>}
-   <div className="search-meta"><span>{q?`${total} ranked result${total===1?'':'s'}`:'Search published JYC content'}</span><span className="search-shortcuts"><kbd>↑↓</kbd><span>move</span><kbd>Enter</kbd><span>open</span><kbd>Esc</kbd><span>close</span></span></div>
-   <div className="search-list" id="jyc-search-results" role="listbox" aria-label="JYC search results">{q&&searchResults.length>0&&searchResults.map((r,i)=><button type="button" id={`jyc-search-result-${i}`} role="option" aria-selected={i===selected} className={i===selected?'search-result-active':''} key={r.key} style={{'--result-delay':`${Math.min(i*25,180)}ms`}} onMouseEnter={()=>setSelected(i)} onClick={()=>goResult(r)}><small>{i===0?'BEST MATCH · ':''}{r.icon} {r.type}</small><strong>{r.title}</strong><span>{r.meta}</span><b>↗</b></button>)}{q&&!searchResults.length&&<div className="search-no-results"><span>⌕</span><strong>No matches for “{q}”</strong><p>Try the exact club name, event title, person, fest or venue.</p><button type="button" onClick={()=>setQ('')}>Clear search</button></div>}{!q&&<div className="search-empty"><span className="search-empty-icon">⌕</span><strong>Start with a JYC route.</strong><p>Search exact club names, event titles, people, fests or venues — or jump straight into a section.</p><div className="search-empty-actions"><button type="button" onClick={()=>{remember('clubs');nav('/clubs');close()}}>Clubs <b>↗</b></button><button type="button" onClick={()=>{remember('events');nav('/events');close()}}>Events <b>↗</b></button><button type="button" onClick={()=>{remember('archive');nav('/archive');close()}}>Archive <b>↗</b></button></div><div className="search-key-hints"><kbd>Ctrl K</kbd><kbd>/</kbd><kbd>↑↓</kbd><kbd>Enter</kbd></div></div>}</div>
+   <div className="search-input-wrap"><span className="search-field-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg></span><input ref={inputRef} autoFocus aria-autocomplete="list" aria-expanded={Boolean(queryActive&&searchResults.length)} aria-controls={queryActive&&searchResults.length?"jyc-search-results":undefined} value={q} onChange={e=>setQ(e.target.value)} onKeyDown={onInputKeyDown} placeholder={isFestMode(data)?"Search clubs, events, people, fests…":"Search clubs, events and people…"} aria-label="Search JYC" aria-activedescendant={searchResults[selected]?`jyc-search-result-${selected}`:undefined}/><kbd>↑↓</kbd>{q&&<button type="button" className="search-clear" onClick={()=>{setQ('');inputRef.current?.focus()}} aria-label="Clear search">×</button>}</div>
+   {!queryActive&&<div className="search-suggestions"><span>EXPLORE</span>{[['EXPLORE CLUBS','/clubs'],['FIND EVENTS','/events'],...(isFestMode(data)?[['JIIT FESTS','/fests']]:[]),['JYC TEAM','/team'],['JYC ARCHIVE','/archive']].map(([label,path])=><button type="button" key={path} onClick={()=>{remember(label.toLowerCase());nav(path);close()}}>{label}<b>↗</b></button>)}</div>}
+   {!queryActive&&recent.length>0&&<div className="search-recent"><span>RECENT</span>{recent.map(x=><button type="button" key={x} onClick={()=>runRecent(x)}>{x}<b>↗</b></button>)}</div>}
+   {queryActive&&ranked.length>0&&<div className="search-category-filters" role="group" aria-label="Filter search results by category">{categoryOptions.map(category=><button type="button" key={category} aria-pressed={categoryFilter===category} onClick={()=>{setCategoryFilter(category);setSelected(0)}}>{category==='ALL'?'All':category} ({category==='ALL'?ranked.length:ranked.filter(result=>result.type===category).length})</button>)}</div>}
+   <div className="search-meta" aria-live="polite"><span>{queryActive?resultSummary:'Search published JYC content'}</span><span className="search-shortcuts"><kbd>↑↓</kbd><span>move</span><kbd>Enter</kbd><span>open</span><kbd>Esc</kbd><span>close</span></span></div>
+   <div className="search-list" id="jyc-search-results" role={queryActive&&searchResults.length?"listbox":"region"} aria-label="JYC search results">{queryActive&&searchResults.length>0&&searchResults.map((r,i)=><button type="button" id={`jyc-search-result-${i}`} role="option" aria-selected={i===selected} className={i===selected?'search-result-active':''} key={r.key} style={{'--result-delay':`${Math.min(i*25,180)}ms`}} onMouseEnter={()=>setSelected(i)} onClick={()=>goResult(r)}><small>{i===0?'BEST MATCH · ':''}{r.icon} {r.type}</small><strong><SearchMatch value={r.title} term={term}/></strong><span><SearchMatch value={r.meta} term={term}/></span><b>↗</b></button>)}{queryActive&&!searchResults.length&&<div className="search-no-results"><span>⌕</span><strong>{categoryFilter==='ALL'?`No matches for “${q}”`:`No ${categoryFilter.toLowerCase()} matches for “${q}”`}</strong><p>Try the exact club name, event title, person, fest or venue.</p><button type="button" onClick={()=>{setQ('');inputRef.current?.focus()}}>Clear search</button></div>}{!queryActive&&<div className="search-empty"><span className="search-empty-icon">⌕</span><strong>Start with a JYC route.</strong><p>Search exact club names, event titles, people, fests or venues — or jump straight into a section.</p><div className="search-empty-actions"><button type="button" onClick={()=>{remember('clubs');nav('/clubs');close()}}>Clubs <b>↗</b></button><button type="button" onClick={()=>{remember('events');nav('/events');close()}}>Events <b>↗</b></button><button type="button" onClick={()=>{remember('archive');nav('/archive');close()}}>Archive <b>↗</b></button></div><div className="search-key-hints"><kbd>Ctrl K</kbd><kbd>/</kbd><kbd>↑↓</kbd><kbd>Enter</kbd></div></div>}</div>
    <div className="search-footer"><span>JIIT YOUTH CLUB · SECTOR 128</span><span>RELEVANCE FIRST</span></div>
   </div>
  </div>;
@@ -1053,27 +1079,12 @@ function Theme({theme,setTheme}){
    if(document.startViewTransition&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
     const transition=document.startViewTransition(apply);
     Promise.resolve(transition.finished).then(finish,finish);
-   }else{
-    apply();
-    finish();
-   }
-  }catch{
-   apply();
-   finish();
-  }
+   }else{apply();finish();}
+  }catch{apply();finish();}
  };
  const nextLabel=theme==='dark'?'day':'night';
- return <button
-  type="button"
-  className={`theme-toggle theme-toggle-rb ${theme==='dark'?'is-dark':'is-light'}`}
-  onClick={switchMode}
-  aria-pressed={theme==='dark'}
-  aria-label={`Switch to ${nextLabel} theme`}
-  title={`Switch to ${nextLabel} theme`}
- >
-  <span className="theme-toggle-track" aria-hidden="true">
-   <span className="theme-toggle-orb"><span>{theme==='dark'?'☾':'☀'}</span></span>
-  </span>
+ return <button type="button" className={`theme-toggle theme-toggle-rb ${theme==='dark'?'is-dark':'is-light'}`} onClick={switchMode} aria-pressed={theme==='dark'} aria-label={`Switch to ${nextLabel} theme`} title={`Switch to ${nextLabel} theme`}>
+  <span className="theme-toggle-track" aria-hidden="true"><span className="theme-toggle-orb"><span>{theme==='dark'?'☾':'☀'}</span></span></span>
   <span className="theme-toggle-copy"><b>{theme==='dark'?'Night':'Day'}</b><small>Theme</small></span>
  </button>
 }
@@ -1194,7 +1205,7 @@ function About({data}){
    <div className="v40-about-leadership"><div><span className="eyebrow">LEADERSHIP LAYERS</span><strong>Faculty → Apex → Core → Communities</strong><p>The public structure reflects the supplied orientation material instead of inventing a parallel hierarchy.</p></div><button type="button" className="reference-view-all" onClick={()=>nav('/team')}>Meet the team →</button></div>
   </section>
   <section className="about-intro-v28 reveal"><span className="eyebrow">WHY JYC EXISTS</span><h2>A place to participate, create, lead and belong.</h2><p>JYC is a student-governed organisation that gives students a platform to display their talents, organises inter- and intra-institutional activities and helps first-year students acclimate to campus life.</p><div className="about-principles-v28">{(principles.length?principles:[{title:'Student-led, faculty-advised',text:'Student leadership works with faculty guidance and institutional support.'},{title:'Communities with purpose',text:'Clubs and hubs give students focused spaces to learn, create, compete and perform.'},{title:'Experiences that connect',text:'Events turn those communities into shared campus moments.'}]).map((p,i)=><article key={i}><b>{String(i+1).padStart(2,'0')}</b><h3>{p.title}</h3><p>{p.text}</p></article>)}</div></section>
-  <section className="about-families-v28 reveal"><div className="about-section-title-v28"><span className="eyebrow">THE JYC ECOSYSTEM</span><h2>Five families. Many ways to belong.</h2><p>The supplied JYC material groups communities across Cultural, Technical, Creative, Literary and Sports families. The current named list on this site is derived directly from that supplied orientation material.</p></div><div className="about-family-grid-v28">{JYC_HUB_FAMILIES.map((family,i)=>{const profile=JYC_ORIENTATION_FAMILIES.find(item=>item.name===family);const count=Object.values(JYC_HUB_CONTENT).filter(item=>item.family===family).length;return <button type="button" key={family} style={{'--family-accent':['#A82420','#A82420','#BF9C6F','#BF9C6F','#BF9C6F'][i%5]}} onClick={()=>nav('/clubs')}><span>{String(i+1).padStart(2,'0')} / {String(count).padStart(2,'0')}</span><strong>{profile?.label||family}</strong><p>{profile?.description||`Explore the ${family.toLowerCase()} communities in JYC.`}</p><small>{(profile?.examples||[]).slice(0,4).join(' · ')||`${count} communities`} →</small></button>})}</div></section>
+  <section className="about-families-v28 reveal"><div className="about-section-title-v28"><span className="eyebrow">THE JYC ECOSYSTEM</span><h2>Five families. Many ways to belong.</h2><p>The supplied JYC material groups communities across Cultural, Technical, Creative, Literary and Sports families. The current named list on this site is derived directly from that supplied orientation material.</p></div><div className="about-family-grid-v28">{JYC_HUB_FAMILIES.map((family,i)=>{const profile=JYC_ORIENTATION_FAMILIES.find(item=>item.name===family);const count=Object.values(JYC_HUB_CONTENT).filter(item=>item.family===family).length;return <button type="button" key={family} style={{'--family-accent':['var(--jyc-accent)','var(--jyc-gold)','var(--jyc-accent)','var(--jyc-gold)','var(--jyc-accent)'][i%5]}} onClick={()=>nav('/clubs')}><span>{String(i+1).padStart(2,'0')} / {String(count).padStart(2,'0')}</span><strong>{profile?.label||family}</strong><p>{profile?.description||`Explore the ${family.toLowerCase()} communities in JYC.`}</p><small>{(profile?.examples||[]).slice(0,4).join(' · ')||`${count} communities`} →</small></button>})}</div></section>
   <section className="about-flow-v28 reveal"><div className="about-section-title-v28"><span className="eyebrow">HOW JYC WORKS</span><h2>Guidance → leadership → communities → experiences.</h2></div><div className="about-flow-grid-v28">{[['01','Faculty guidance','Institutional support and direction'],['02','Apex Body','Student leadership and coordination'],['03','Hubs & Societies','Communities built around interests and talent'],['04','Coordinators & Volunteers','People who turn plans into execution'],['05','Events & Experiences','The campus moments students actually join']].map(x=><article key={x[0]}><span>{x[0]}</span><strong>{x[1]}</strong><p>{x[2]}</p></article>)}</div></section>
   <section className="about-programmes-v28 reveal"><div className="about-section-title-v28"><span className="eyebrow">THE CAMPUS RHYTHM</span><h2>From welcome to farewell.</h2><p>The supplied JYC programme material highlights recurring major experiences. Current dates and registrations remain controlled by published event records.</p></div><div className="about-programme-grid-v28">{PDF_HUB_PROGRAMME.map((p,i)=><article key={p.name}><div className="about-programme-image"><ResponsivePhoto src={p.image} alt={p.name+' · JYC programme'} loading="lazy" sizes="(max-width: 760px) 100vw, 30vw"/><span>{String(i+1).padStart(2,'0')}</span></div><div><small>{p.type}</small><h3>{p.name}</h3><p>{p.text}</p><button type="button" onClick={()=>nav('/events')}>Open events →</button></div></article>)}</div></section>
   <section className="about-vision-v28 reveal"><article><span className="eyebrow">VISION</span><h2>A campus where every student can find a place to participate, create, lead and belong.</h2></article><article><span className="eyebrow">MISSION</span><p>Connect students with clubs and communities, create meaningful experiences, develop leadership and teamwork, and make campus life more participatory.</p><div className="about-inline-links"><button type="button" onClick={()=>nav('/team')}>Meet the people →</button><button type="button" onClick={()=>nav('/gallery')}>See the archive →</button></div></article></section>
