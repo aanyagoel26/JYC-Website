@@ -343,7 +343,7 @@ export function JYCHeroWebGLEmblem() {
             <div className="jyc-emblem-glow-backing" aria-hidden="true" />
             {logoFailed ? <span className="jyc-emblem-logo-fallback" role="img" aria-label="JIIT Youth Club logo">JYC</span> : <img
               src={LOGO_SRC}
-              alt="JIIT Youth Club official crest"
+              alt="JIIT Youth Club Crest"
               className="jyc-emblem-logo-img"
               width="480"
               height="480"
