@@ -24,8 +24,9 @@ test.describe('JYC team directory interactions', () => {
   test('filters the directory by leadership tier without changing published totals', async ({ page }) => {
     await page.getByRole('button', { name: /Apex leadership/ }).click();
     await expect(page.getByRole('button', { name: /Apex leadership/ })).toHaveAttribute('aria-pressed', 'true');
-    await expect(page.locator('.team-layer-head')).toContainText('APEX LEADERSHIP');
-    await expect(page.locator('.team-layer-head')).not.toContainText('CORE TEAM');
+    const activeSection = page.locator('.team-layer').filter({ hasText: 'APEX LEADERSHIP' });
+    await expect(activeSection.locator('.team-layer-head')).toContainText('APEX LEADERSHIP');
+    await expect(page.locator('.team-layer').filter({ hasText: 'CORE TEAM' })).toHaveCount(0);
     await page.getByRole('button', { name: /Everyone/ }).click();
     await expect(page.getByRole('button', { name: /Everyone/ })).toHaveAttribute('aria-pressed', 'true');
   });
