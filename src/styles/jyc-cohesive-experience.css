@@ -57,6 +57,7 @@ html[data-theme="light"] {
   --jh-ink: var(--jyc-text-strong);
   --jh-muted: var(--jyc-muted);
   --jh-accent: var(--jyc-accent);
+  --jh-gold: var(--jyc-gold);
   --jh-accent-glow: rgba(98,88,137,.12);
   --jh-cyan: var(--jyc-accent);
   --jh-cyan-glow: rgba(98,88,137,.08);
@@ -112,6 +113,7 @@ html[data-theme="dark"] {
   --jh-ink: #f7f5ff;
   --jh-muted: #c0c4da;
   --jh-accent: #c8bcff;
+  --jh-gold: #e7d19b;
   --jh-accent-glow: rgba(200,188,255,.16);
   --jh-cyan: #c8bcff;
   --jh-cyan-glow: rgba(200,188,255,.12);
@@ -289,6 +291,7 @@ html[data-theme="light"] .jyc-editorial-home.jyc-home {
   --jh-ink: #191827;
   --jh-muted: #5f5c6b;
   --jh-accent: #625889;
+  --jh-gold: #8c6d36;
   --jh-accent-glow: rgba(98,88,137,.13);
   --jh-cyan: #625889;
   --jh-cyan-glow: rgba(98,88,137,.09);
