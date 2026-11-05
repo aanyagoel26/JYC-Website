@@ -45,6 +45,13 @@
   --accent-red: var(--jyc-accent);
   --accent-gold: var(--jyc-gold);
   --jyc-red: var(--jyc-accent);
+  --jyc-design-accent: var(--jyc-accent);
+  --jyc-design-copper: var(--jyc-gold);
+  --jyc-final-bg: var(--jyc-canvas);
+  --jyc-final-ink: var(--jyc-text-strong);
+  --tech-bg: var(--jyc-canvas);
+  --tech-crimson: var(--jyc-accent);
+  --tech-gold: var(--jyc-gold);
   --color-accent-cyan: var(--jyc-accent);
 }
 html[data-theme="light"] {
