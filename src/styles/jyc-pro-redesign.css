@@ -347,15 +347,9 @@ body::before {
   background: conic-gradient(from 0deg at 50% 50%, #A82420, #BF9C6F, #D2B48C, #C92A2A, #A82420);
   filter: blur(32px);
   opacity: 0.45;
-  animation: jycHaloSpin 12s linear infinite;
+  animation: none;
   pointer-events: none;
   z-index: 0;
-}
-
-@keyframes jycHaloSpin {
-  0% { transform: rotate(0deg) scale(0.96); }
-  50% { transform: rotate(180deg) scale(1.04); }
-  100% { transform: rotate(360deg) scale(0.96); }
 }
 
 :root[data-theme="light"] .jh-logo-halo {
@@ -2882,12 +2876,7 @@ body::before {
   background: #BF9C6F;
   box-shadow: 0 0 10px #BF9C6F;
   flex-shrink: 0;
-  animation: slaPulse 2s ease infinite;
-}
-
-@keyframes slaPulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(0.85); }
+  animation: none;
 }
 
 .contact-sla-banner strong {
@@ -3260,12 +3249,7 @@ body::before {
   background: color-mix(in srgb, var(--jyc-red, #C92A2A) 18%, transparent);
   color: var(--jyc-red, #C92A2A);
   border: 1px solid color-mix(in srgb, var(--jyc-red, #C92A2A) 40%, transparent);
-  animation: jyc-pulse-subtle 2s infinite ease-in-out;
-}
-
-@keyframes jyc-pulse-subtle {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.85; transform: scale(0.98); }
+  animation: none;
 }
 
 /* ==========================================================================
