@@ -39,5 +39,6 @@ check('More sheet restores focus to the element that opened it without stealing 
 check('More sheet close control has an accessible name',moreSource.includes('aria-label="Close More JYC"'));
 check('Search intent shortcuts are included before ranking and are not appended after the result limit',searchSource.includes('rankSearchResults([...rawResults,...intentResults],term)')&&searchSource.includes('const searchResults=results;'));
 check('Search page index does not contain duplicate destinations',(()=>{const block=searchSource.match(/const pageIndex=\[([\s\S]*?)\n \];/);if(!block)return false;const routes=[...block[1].matchAll(/'PAGE','([^']+)'/g)].map(x=>x[1]);return new Set(routes).size===routes.length})());
+check('Search recent history validates local storage shape and searchable arrays',searchSource.includes('Array.isArray(stored)?stored.filter(value=>typeof value===\'string\'&&value.trim())')&&searchSource.includes('Array.isArray(c.interests)?')&&searchSource.includes('Array.isArray(e.highlights)?'));
 if(failures.length) process.exit(1);
 console.log('Accessibility contract QA PASS ('+(checksCount-failures.length)+' checks)');
