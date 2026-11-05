@@ -16,6 +16,7 @@ const viewports = [
   { name: 'mobile', width: 390, height: 844 },
   { name: 'mobile-430', width: 430, height: 932 },
   { name: 'mobile-360', width: 360, height: 800 },
+  { name: 'mobile-landscape', width: 844, height: 390 },
   { name: 'narrow-320', width: 320, height: 740 }
 ];
 
