@@ -2,7 +2,7 @@ import { spawnSync } from 'node:child_process';
 
 try { await import('@playwright/test'); }
 catch {
-  console.error('BROWSER QA NOT RUN: Playwright is not installed. Run `npm install`, then `npx playwright install chromium`.');
+  console.error('BROWSER QA NOT RUN: Playwright is not installed. Run `npm install`, then `npx playwright install chromium firefox webkit`.');
   process.exit(2);
 }
 
