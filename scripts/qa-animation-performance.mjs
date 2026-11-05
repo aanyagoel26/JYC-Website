@@ -27,18 +27,18 @@ check('MagicBento coalesces pointer movement to one animation frame, cancels pen
 check('MagicBento does not permanently reserve transform compositing',read('src/components/react-bits/MagicBento.css').includes('.magic-bento-card:hover{will-change:transform')&&!read('src/components/react-bits/MagicBento.css').includes('background:#18161d;color:#fff8e9;isolation:isolate;box-shadow:0 16px 40px rgba(17,19,24,.08);transform-style:preserve-3d;will-change:transform'));
 check('Homepage non-critical imagery stays lazy',home.includes('loading="lazy"'));
 check('Canvas hero honors reduced motion while Bento is coarse-pointer/reduced-motion safe',hero.includes("prefers-reduced-motion: reduce")&&hero.includes('motionQuery.addEventListener')&&hero.includes('cancelAnimationFrame(animId)')&&bento.includes("'(pointer:coarse)'")&&bento.includes("'(prefers-reduced-motion: reduce)'")&&bento.includes('const disabled=disableAnimations||mobile||reducedMotion'));
-
 check('3D explorer content is generated only from published hub registry records',explorer.includes("JYC_HUB_SOURCE_REGISTRY")&&explorer.includes("hub.publicationStatus === 'published'")&&explorer.includes("JYC_HUB_CONTENT[hub.name]"));
 check('3D explorer has no unsupported static membership counts or independent content inventory',!explorer.includes("members: '")&&!explorer.includes("120+ Active")&&!explorer.includes("250+ Devs")&&!explorer.includes("80+ Pilots"));
 check('3D canvas avoids per-frame React state updates, preserves drag rotation and retains RAF handles for cleanup',!explorer.includes("setRotY(r => r + 0.0028)")&&explorer.includes("interactionRef.current")&&explorer.includes("visualRotationRef.current.y")&&explorer.includes('if (schedule) animId = 0;')&&!explorer.includes('else animId = 0;'));
 check('3D canvas pauses for reduced motion, hidden tabs and off-screen sections',explorer.includes("prefers-reduced-motion: reduce")&&explorer.includes("IntersectionObserver")&&explorer.includes("const canAnimate"));
 check('3D constellation provides keyboard selection and accurately identifies its 2D canvas rendering',explorer.includes("Choose a published JYC community")&&explorer.includes('aria-hidden="true"')&&explorer.includes("INTERACTIVE 3D CONSTELLATION")&&!explorer.includes("INTERACTIVE WEBGL TOPOLOGY"));
 
-
-check('DitherVeil uses existing optimized image assets instead of a missing hero texture path',home.includes('src="/assets/jyc-logo.avif"')&&home.includes('fallbackSrc="/assets/jyc-logo.webp"')&&!home.includes('jyc-logo-medium.avif'));
-check('DitherVeil reveal receives pointer movement even when foreground hero layers intercept it',home.includes('globalPointer')&&dither.includes('window.addEventListener(\'pointermove\', onGlobalMove')&&dither.includes('window.removeEventListener(\'pointermove\', onGlobalMove'));
+const hasCompactAsset=home.includes("jyc-logo-medium.avif")&&fs.existsSync('public/assets/jyc-logo-medium.avif');
+const hasLegacyOptimized=home.includes('src="/assets/jyc-logo.avif"')&&home.includes('fallbackSrc="/assets/jyc-logo.webp"');
+const hasResponsiveSource=home.includes('const DITHER_SOURCE = import.meta.env.PROD ?')&&home.includes('src={DITHER_SOURCE}')&&home.includes('fallbackSrc={FALLBACK}')&&home.includes('originalFallbackSrc={ORIGINAL_LOGO}')&&hasCompactAsset;
+check('DitherVeil uses the current generated compact AVIF hero asset and truthful WebP/original fallbacks',hasResponsiveSource||hasLegacyOptimized);
+check('DitherVeil reveal receives pointer movement even when foreground hero layers intercept it',home.includes('globalPointer')&&dither.includes("window.addEventListener('pointermove', onGlobalMove")&&dither.includes("window.removeEventListener('pointermove', onGlobalMove"));
 check('DitherVeil optimized source and fallback assets are present in the public build',fs.existsSync('public/assets/jyc-logo.avif')&&fs.existsSync('public/assets/jyc-logo.webp'));
-
 check('DitherVeil keeps WebGL enabled on typical four-core mobile devices while retaining a low-memory fallback',dither.includes('const constrainedHardware = (navigator.hardwareConcurrency || 4) < 4 || (navigator.deviceMemory || 4) < 2')&&dither.includes('coarsePointer ? 1'));
 if(failures.length)process.exit(1);
 console.log('JYC animation/media performance contract: '+(totalChecks-failures.length)+'/'+totalChecks);
