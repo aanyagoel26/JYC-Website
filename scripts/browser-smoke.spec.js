@@ -1927,3 +1927,63 @@ test('sparse faculty layout uses only populated tracks and mobile home actions s
   expect(fixedOverlap.nav, 'mobile assistant must not cover the navigation controls').toBe(false);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1), 'mobile homepage should not overflow').toBeTruthy();
 });
+
+
+test('More navigation and Search modal work with keyboard, empty states and focus handoff', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 900 });
+  await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'More and Search interaction regression');
+  const searchTrigger = page.locator('.search-trigger');
+  const search = page.locator('.search-modal');
+  const input = page.getByRole('textbox', { name: 'Search JYC' });
+
+  await searchTrigger.click();
+  await expect(search).toBeVisible();
+  await expect(input).toBeFocused();
+  await input.fill('clubs');
+  await expect(page.locator('.search-result-active')).toContainText('Clubs');
+  await input.press('ArrowDown');
+  await expect(page.locator('#jyc-search-result-1')).toHaveAttribute('aria-selected', 'true');
+  await input.press('ArrowUp');
+  await expect(page.locator('#jyc-search-result-0')).toHaveAttribute('aria-selected', 'true');
+  await input.press('Enter');
+  await expect(page).toHaveURL(/\\/clubs(?:\\/)?$/);
+  await expect(page.locator('.search-overlay')).toHaveCount(0);
+  await expect(searchTrigger).toBeFocused();
+
+  await searchTrigger.click();
+  await input.fill('zzzzunrelatedtoken');
+  await expect(page.getByText(/No matches for/)).toBeVisible();
+  await page.getByRole('button', { name: 'Clear search' }).click();
+  await expect(input).toBeFocused();
+  await input.press('Escape');
+  await expect(page.locator('.search-overlay')).toHaveCount(0);
+  await expect(searchTrigger).toBeFocused();
+
+  const moreTrigger = page.locator('.nav-more-trigger');
+  const more = page.getByRole('dialog', { name: 'More JYC' });
+  await moreTrigger.click();
+  await expect(more).toBeVisible();
+  await more.getByRole('button', { name: /About JYC/ }).click();
+  await expect(page).toHaveURL(/\\/about(?:\\/)?$/);
+  await expect(page.locator('.more-sheet-overlay')).toHaveCount(0);
+
+  await moreTrigger.click();
+  await expect(more).toBeVisible();
+  await more.getByRole('button', { name: 'Search JYC' }).click();
+  await expect(page.locator('.more-sheet-overlay')).toHaveCount(0);
+  await expect(page.locator('.search-overlay')).toBeVisible();
+  await expect(input).toBeFocused();
+  await input.press('Escape');
+  await expect(page.locator('.search-overlay')).toHaveCount(0);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'mobile More sheet regression');
+  const mobileMoreTrigger = page.locator('.mobile-dock').getByRole('button', { name: 'More' });
+  await mobileMoreTrigger.click();
+  await expect(more).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(page.locator('.more-sheet-overlay')).toHaveCount(0);
+  await expect(mobileMoreTrigger).toBeFocused();
+});
