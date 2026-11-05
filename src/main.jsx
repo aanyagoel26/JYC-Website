@@ -96,6 +96,7 @@ import {readSiteCache,writeSiteCache,siteCacheAge,formatCacheAge,armStoredRemind
 /* Final global layer: keep after all application and component stylesheet imports. */
 import './styles/jai-hack-dark-theme.css';
 import './styles/jyc-cohesive-experience.css';
+import './styles/jyc-hero-layout-fix.css';
 import './styles/jyc-team-experience.css';
 
 const logo='/assets/jyc-logo.avif';
