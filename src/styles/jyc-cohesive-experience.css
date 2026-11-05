@@ -45,6 +45,7 @@
   --accent-red: var(--jyc-accent);
   --accent-gold: var(--jyc-gold);
   --jyc-red: var(--jyc-accent);
+  --color-accent-cyan: var(--jyc-accent);
 }
 html[data-theme="light"] {
   color-scheme: light;
