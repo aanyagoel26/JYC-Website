@@ -14,6 +14,8 @@ const ranked=rankSearchResults([
  {key:'prefix',title:'AITronics Workshop',meta:'Event',text:'',type:'EVENT'}
 ],'AITronics');
 ok('best match is the exact searched entity',ranked[0]?.key==='target');
+const descriptive=rankSearchResults([{key:'description',title:'Creative Society',meta:'Community',searchText:'photography filmmaking visual storytelling',type:'CLUB'},{key:'other',title:'Technical Club',meta:'Technology',searchText:'coding robotics',type:'CLUB'}],'filmmaking');
+ok('search indexes descriptive text beyond title and metadata',descriptive[0]?.key==='description'&&descriptive[0]?._score>descriptive[1]?._score);
 ok('prefix match follows exact title',ranked[1]?.key==='prefix');
 const brand=rankSearchResults([{key:'club',title:'JYC Technical Club',meta:'club',text:'',type:'CLUB'},{key:'home',title:'JIIT Youth Club',meta:'Official JYC website',text:'JIIT Noida clubs events',type:'PAGE'}],'JYC');
 ok('official JIIT Youth Club page leads brand search',brand[0]?.key==='home');
