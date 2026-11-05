@@ -509,7 +509,7 @@ test('failed gallery photos use the neutral unavailable-photo asset, not a logo 
 
   await page.goto(base + '/clubs', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'club photo fallback');
-  const imageBackedClub = page.locator('.jyc57-club-card img:not(.jyc57-club-fallback-logo)').first();
+  const imageBackedClub = page.locator('.jyc57-club-card > .jyc-responsive-picture img').first();
   if (await imageBackedClub.count()) {
     await imageBackedClub.scrollIntoViewIfNeeded();
     const clubFallback = page.locator('.jyc57-club-card img[src="/assets/photo-unavailable.svg"]').first();
