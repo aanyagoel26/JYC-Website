@@ -447,3 +447,70 @@ html[data-theme="light"] .jyc-3d-select select {
   .jyc-3d-explorer-section *::before,
   .jyc-3d-explorer-section *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+
+/* Celestial mode for the interactive community constellation. */
+html[data-theme="dark"] .jyc-3d-explorer-section {
+  color:#f2efff;
+  border-color:rgba(201,184,242,.2);
+  background:
+    radial-gradient(ellipse at 50% 0%,rgba(103,91,157,.22),transparent 58%),
+    linear-gradient(145deg,rgba(21,24,43,.94),rgba(9,11,25,.98)) !important;
+  box-shadow:0 28px 80px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.04) !important;
+}
+html[data-theme="dark"] .jyc-3d-explorer-section :where(h2,h3) { color:#f2efff; }
+html[data-theme="dark"] .jyc-3d-explorer-section :where(p,.jyc-3d-select,.jyc-3d-drag-hint) { color:#c0bad5; }
+html[data-theme="dark"] .jyc-3d-cyber-tag,
+html[data-theme="dark"] .jyc-3d-family-tabs .jyc-3d-tab {
+  color:#d8cff3;background:rgba(201,184,242,.07);
+  border-color:rgba(201,184,242,.2);
+}
+html[data-theme="dark"] .jyc-3d-family-tabs .jyc-3d-tab.active {
+  color:#171629;background:linear-gradient(110deg,#d7c9f5,#e6d4a8);
+  border-color:#e6d4a8;box-shadow:0 8px 22px rgba(173,151,226,.16);
+}
+html[data-theme="dark"] .jyc-3d-stage-wrapper {
+  border-color:rgba(201,184,242,.18);
+  background:
+    radial-gradient(ellipse at 50% 45%,rgba(103,91,157,.16),transparent 56%),
+    linear-gradient(155deg,#101329,#090b19) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.035),0 22px 60px rgba(0,0,0,.3);
+}
+html[data-theme="dark"] .jyc-3d-select select,
+html[data-theme="dark"] .jyc-3d-zoom-btns button {
+  color:#f2efff;background:rgba(21,24,43,.92);
+  border-color:rgba(201,184,242,.28);
+}
+html[data-theme="dark"] .jyc-3d-select select:focus-visible,
+html[data-theme="dark"] .jyc-3d-zoom-btns button:focus-visible {
+  outline-color:#e6d4a8;
+}
+html[data-theme="dark"] .jyc-3d-hud-card {
+  --hud-color:#c9b8f2 !important;
+  background:linear-gradient(145deg,rgba(31,35,61,.98),rgba(12,15,31,.99));
+  border-color:rgba(201,184,242,.3);
+  box-shadow:0 28px 72px rgba(0,0,0,.48),0 0 28px rgba(173,151,226,.1);
+}
+html[data-theme="dark"] .jyc-3d-hud-card .hud-card-accent-bar {
+  background:linear-gradient(90deg,#c9b8f2,#e6d4a8);
+}
+html[data-theme="dark"] .jyc-3d-hud-card .hud-family,
+html[data-theme="dark"] .jyc-3d-hud-card .hud-tag-icon { color:#e6d4a8; }
+html[data-theme="dark"] .jyc-3d-hud-card .hud-highlight-tag {
+  color:#e6def6;background:rgba(201,184,242,.07);
+  border-color:rgba(201,184,242,.18);
+}
+html[data-theme="dark"] .jyc-3d-hud-card .hud-btn-primary {
+  color:#171629;background:linear-gradient(110deg,#d7c9f5,#e6d4a8);
+  box-shadow:0 8px 24px rgba(173,151,226,.16);
+}
+html[data-theme="dark"] .jyc-3d-hud-card .hud-btn-secondary {
+  color:#e6def6;border-color:rgba(201,184,242,.28);
+}
+@media(max-width:680px) {
+  .jyc-3d-explorer-section { min-width:0; }
+  .jyc-3d-top-controls { flex-wrap:wrap; }
+  .jyc-3d-select { min-width:0; }
+  .jyc-3d-select select { min-width:0;max-width:42vw; }
+  .jyc-3d-zoom-btns { flex:0 0 auto; }
+}
