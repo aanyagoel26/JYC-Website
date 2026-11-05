@@ -549,7 +549,7 @@ test('About family cards open the matching filtered clubs directory', async ({ p
   const familyCard = page.locator('.about-family-grid-v28 > button').first();
   await expect(familyCard).toBeVisible();
   await familyCard.click();
-  await expect(page).toHaveURL(/\\/clubs\\?family=/);
+  await expect(page).toHaveURL(/\/clubs\?family=/);
   const selectedFamily = new URL(page.url()).searchParams.get('family');
   expect(['Technical','Cultural','Creative','Literary','Sports']).toContain(selectedFamily);
   await expect(page.locator('.hub-spectrum-tags button.is-active')).toContainText(selectedFamily);
