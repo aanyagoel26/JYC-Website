@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 const routes = [
   '/', '/about', '/history', '/clubs', '/events', '/team', '/gallery',
   '/achievements', '/announcements', '/updates', '/archive', '/join-jyc',
-  '/recruitment', '/fests', '/converge', '/contact', '/calendar', '/best-of-jyc'
+  '/recruitment', '/fests', '/converge', '/contact', '/calendar', '/best-of-jyc', '/clubs/dronotics', '/events/jai-2026-jaypee-agentic-ai-hackathon', '/gallery/dronotics'
 ];
 const contrastCheckRoutes = new Set(['/', '/about', '/clubs', '/events', '/team', '/gallery', '/archive', '/contact']);
 const viewports = [
