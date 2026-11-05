@@ -768,8 +768,8 @@ function Navbar({data,admin,theme,setTheme}){
  const homeLinks=[['Home','hero'],['About','about'],['Clubs','clubs'],['Events','events'],['Gallery','moments'],['Team','team'],['Contact','/contact']];
  useEffect(()=>{
    const onKey=e=>{
-     if((e.ctrlKey||e.metaKey)&&(e.key?.toLowerCase()==='k'||e.code==='KeyK')){e.preventDefault();e.stopPropagation();setSearch(true);return}
-     if(e.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)){e.preventDefault();setSearch(true);return}
+     if((e.ctrlKey||e.metaKey)&&(e.key?.toLowerCase()==='k'||e.code==='KeyK')){e.preventDefault();e.stopPropagation();setMoreOpen(false);setSearch(true);return}
+     if(e.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)){e.preventDefault();setMoreOpen(false);setSearch(true);return}
      if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName))return;
      if(e.key.toLowerCase()==='g'){shortcutRef.current='g';window.clearTimeout(shortcutRef._timer);shortcutRef._timer=window.setTimeout(()=>shortcutRef.current='',700);return}
      if(shortcutRef.current==='g'){const routes={c:'/clubs',e:'/events',t:'/team',a:'/archive',m:'/gallery'};if(routes[e.key.toLowerCase()]){e.preventDefault();shortcutRef.current='';nav(routes[e.key.toLowerCase()]);return}}
