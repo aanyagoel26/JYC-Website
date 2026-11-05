@@ -151,9 +151,9 @@ test('sitewide routes load every visible image successfully and expose alt text'
 
 test('mobile pages remain centered and controls meet touch-safe sizing', async ({page})=>{
   test.setTimeout(90000);
-  test.skip(!['mobile-390','mobile-430','tablet-768'].includes(test.info().project.name));
+  test.skip(!['mobile-390','mobile-430','tablet-768','mobile-landscape'].includes(test.info().project.name));
   for(const route of ['/', '/clubs', '/events', '/gallery', '/contact']){
-    await page.setViewportSize(test.info().project.name==='mobile-430'?{width:430,height:932}:test.info().project.name==='tablet-768'?{width:768,height:1024}:{width:390,height:844});
+    await page.setViewportSize(test.info().project.name==='mobile-430'?{width:430,height:932}:test.info().project.name==='tablet-768'?{width:768,height:1024}:test.info().project.name==='mobile-landscape'?{width:844,height:390}:{width:390,height:844});
     await page.goto(route,{waitUntil:'domcontentloaded'});
     await waitForPublicApp(page,route);
     const result=await page.evaluate(()=>{
