@@ -6,7 +6,7 @@ const viewports = [
   { name: 'mobile', width: 390, height: 844 }
 ];
 
-test.describe('JYC Jai Hack-inspired dark theme', () => {
+test.describe('JYC celestial night-sky dark theme', () => {
   for (const viewport of viewports) {
     for (const route of routes) {
       test(`dark theme contract — ${viewport.name} — ${route}`, async ({ page }) => {
@@ -42,8 +42,8 @@ test.describe('JYC Jai Hack-inspired dark theme', () => {
           };
         });
 
-        expect(dark.backgroundToken).toBe('#151019');
-        expect(dark.primaryToken).toBe('#ed8064');
+        expect(dark.backgroundToken).toBe('#090b19');
+        expect(dark.primaryToken).toBe('#c9b8f2');
         expect(dark.bodyBackground).toMatch(/rgba?\(/);
         expect(dark.bodyFont).toMatch(/Inter|system-ui/i);
         expect(dark.headingFont).toContain('Space Grotesk');
