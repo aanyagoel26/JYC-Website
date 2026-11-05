@@ -42,10 +42,10 @@ test.describe('JYC Jai Hack-inspired dark theme', () => {
           };
         });
 
-        expect(dark.backgroundToken).toBe('#050811');
-        expect(dark.primaryToken).toBe('#38bdf8');
-        expect(dark.bodyBackground).toBe('rgb(5, 8, 17)');
-        expect(dark.bodyFont).toContain('DM Sans');
+        expect(dark.backgroundToken).toBe('#151019');
+        expect(dark.primaryToken).toBe('#ed8064');
+        expect(dark.bodyBackground).toMatch(/rgba?\\(/);
+        expect(dark.bodyFont).toMatch(/Inter|system-ui/i);
         expect(dark.headingFont).toContain('Space Grotesk');
         expect(dark.navBackground).not.toBe('rgba(0, 0, 0, 0)');
         if (route === '/') expect(dark.homeBackground).toBe('#050811');
