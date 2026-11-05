@@ -881,10 +881,6 @@ function SearchMatch({value,term}){
  const pattern=new RegExp('('+words.map(escape).join('|')+')','ig');
  return <>{source.split(pattern).map((part,index)=>words.some(word=>word.toLowerCase()===part.toLowerCase())?<mark className="search-match" key={index}>{part}</mark>:part)}</>;
 }
-function Search({data,admin,close}){');
- const pattern=new RegExp('('+words.map(escape).join('|')+')','ig');
- return <>{source.split(pattern).map((part,index)=>words.some(word=>word.toLowerCase()===part.toLowerCase())?<mark className="search-match" key={index}>{part}</mark>:part)}</>;
-}
 function Search({data,admin,close}){
  const nav=useNavigate();
  const [q,setQ]=useState(()=>{try{return new URLSearchParams(window.location.search).get('q')||''}catch{return ''}});
