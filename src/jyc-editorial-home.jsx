@@ -197,31 +197,32 @@ export function JYCEditorialHome({ data }) {
         <div className="jh-hero-copy">
           <div className="jh-cyber-badge">
             <span className="jh-live-pulse-dot" />
-            <span>THE JIIT 128 COMMUNITY</span>
+            <span>THE JIIT 128 STUDENT ECOSYSTEM</span>
             <b>AY 2026–27</b>
           </div>
-          <p className="jh-overline">JAYPEE INSTITUTE OF INFORMATION TECHNOLOGY · WISH TOWN</p>
+          <p className="jh-overline">STUDENT LIFE, BUILT TOGETHER <i aria-hidden="true">/</i> SECTOR 128, NOIDA</p>
           <h1 id="jh-title">
             <span>Find your people.</span>
             <span>Make your mark.</span>
             <em className="jh-title-gradient">At JIIT 128.</em>
           </h1>
           <p className="jh-lead">
-            From clubs and competitions to performances, projects and campus traditions, JYC helps you find the people and experiences that make JIIT feel like yours.
+            A campus is more than classrooms. Discover the communities, creative spaces, competitions and shared experiences that make JIIT feel like your own.
           </p>
           <div className="jh-actions jh-hero-actions">
-            <button type="button" className="jh-btn jh-btn-primary" onClick={() => nav('/events')}>
-              ⚡ Explore Events <span>↗</span>
+            <button type="button" className="jh-btn jh-btn-primary" onClick={() => nav('/clubs')}>
+              Explore communities <span>↗</span>
             </button>
-            <button type="button" className="jh-btn jh-btn-glass" onClick={() => nav('/clubs')}>
-              Explore Clubs <span>→</span>
+            <button type="button" className="jh-btn jh-btn-glass" onClick={() => nav('/events')}>
+              Discover events <span>↗</span>
             </button>
-            <button type="button" className="jh-btn jh-btn-outline" onClick={() => nav('/join-jyc')}>
-              Join JYC <span>→</span>
+            <button type="button" className="jh-btn jh-btn-outline" onClick={() => nav('/team')}>
+              Meet the people <span>↗</span>
             </button>
           </div>
-
-
+          <div className="jh-hero-domain-rail" aria-label="JYC community areas">
+            <span>TECHNOLOGY</span><i/><span>CULTURE</span><i/><span>CREATIVITY</span><i/><span>LITERATURE</span><i/><span>SPORT</span>
+          </div>
         </div>
 
         {/* WebGL Dither Veil is a real mounted hero layer; the emblem remains the foreground focal point. */}
@@ -239,14 +240,14 @@ export function JYCEditorialHome({ data }) {
                 pixelSize={2}
                 levels={3}
                 palette="duotone"
-                inkColor="#0b1220"
-                paperColor="#e2e8f0"
+                inkColor="#4b1f25"
+                paperColor="#f6f2e9"
                 contrast={1.18}
                 brightness={0.02}
                 revealRadius={190}
                 softness={0.7}
                 linger={1.25}
-                rimColor="#38bdf8"
+                rimColor="#b99b70"
                 rim={0.22}
                 wander={true}
                 clickBurst={false}
