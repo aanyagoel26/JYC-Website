@@ -1091,6 +1091,6 @@ html[data-theme="dark"] .jyc-editorial-home.jyc-home .badge-live-pulse{backgroun
 @media (max-width: 680px) {
   .public-app :where(p,li) { line-height: 1.6; }
   .public-app :where(small,.eyebrow,.tag,.jh-cyber-badge,.jh-overline,.jh-hero-domain-rail,.emblem-control-pill,.mobile-dock button b) {
-    font-size: max(10px, 1em) !important;
+    font-size: max(11px, 1em) !important;
   }
 }
