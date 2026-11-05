@@ -542,6 +542,20 @@ test('failed gallery photos use the neutral unavailable-photo asset, not a logo 
   await expect(page.locator('.jyc57-club-card img[src*="jyc-logo"]')).toHaveCount(0);
 });
 
+test('About family cards open the matching filtered clubs directory', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(base + '/about', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'About family navigation');
+  const familyCard = page.locator('.about-family-grid-v28 > button').first();
+  await expect(familyCard).toBeVisible();
+  await familyCard.click();
+  await expect(page).toHaveURL(/\\/clubs\\?family=/);
+  const selectedFamily = new URL(page.url()).searchParams.get('family');
+  expect(['Technical','Cultural','Creative','Literary','Sports']).toContain(selectedFamily);
+  await expect(page.locator('.hub-spectrum-tags button.is-active')).toContainText(selectedFamily);
+  await expect(page.locator('.results-line')).toContainText(/communities found/);
+});
+
 test('Dither Veil falls back from the compact AVIF to the official WebP logo', async ({ page }) => {
   await page.route('**/assets/jyc-logo-medium.avif', route => route.abort());
   await page.goto(base, { waitUntil: 'domcontentloaded' });
