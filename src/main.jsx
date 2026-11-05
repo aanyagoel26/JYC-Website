@@ -13,8 +13,6 @@ import './styles/v20-reference-restoration.css';
 import './styles/innovation-inspired-3d.css';
 import './styles/jyc-design-system.css';
 import './styles/jyc-v203-restoration.css';
-import './styles/jyc-cohesive-experience.css';
-import './styles/jyc-team-experience.css';
 import {JYCEditorialSystem} from './jyc-editorial-system.jsx';
 import {JYC_HUB_CONTENT, JYC_HUB_FAMILIES, hubProfile} from './v21-hub-content.js';
 import {JYC_HUB_SOURCE_REGISTRY,JYC_HUB_SOURCE_ONLY} from './jyc-hub-registry.js';
@@ -52,6 +50,9 @@ const LazyJYC57Archive=lazy(()=>import('./jyc57-archive.jsx').then(m=>({default:
 
 
 
+
+import './styles/jyc-cohesive-experience.css';
+import './styles/jyc-team-experience.css';
 
 const PUBLIC_ACTIVITIES=JYC_PUBLIC_ACTIVITIES;
 function mergePublicFallback(d,{allowContentFallback=true,allowGalleryFallback=allowContentFallback,allowTeamFallback=allowContentFallback}={}){
