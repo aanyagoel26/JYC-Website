@@ -1441,3 +1441,24 @@ html[data-theme="light"] .jyc-editorial-home.jyc-home .jh-title-gradient {
     transition:none !important;
   }
 }
+
+
+/* Final specificity pass: remove legacy coral from every active dark navigation state. */
+html[data-theme="dark"] .public-app .nav nav button.active,
+html[data-theme="dark"] .public-app .nav .nav-more-trigger.active {
+  color:#f2efff !important;
+  background:linear-gradient(100deg,rgba(201,184,242,.2),rgba(230,212,168,.1)) !important;
+  border-color:rgba(201,184,242,.38) !important;
+  box-shadow:inset 2px 0 0 #c9b8f2 !important;
+}
+html[data-theme="dark"] .public-app .nav nav button.active::after { background:#e6d4a8 !important; }
+html[data-theme="dark"] .public-app .nav .brand-mark {
+  background:linear-gradient(145deg,rgba(201,184,242,.2),rgba(230,212,168,.12)) !important;
+  border-color:rgba(201,184,242,.3) !important;
+  box-shadow:0 0 24px rgba(173,151,226,.12),inset 0 1px 0 rgba(255,255,255,.06) !important;
+}
+html[data-theme="dark"] .public-app .nav .nav-join-cta {
+  color:#171629 !important;
+  background:linear-gradient(110deg,#d7c9f5,#e6d4a8) !important;
+  border-color:rgba(230,212,168,.48) !important;
+}
