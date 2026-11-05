@@ -1071,3 +1071,26 @@ html[data-theme="dark"] .jyc-editorial-home.jyc-home .badge-live-pulse{backgroun
  .jyc-editorial-home.jyc-home .jh-hero-copy{max-width:720px!important}
  .jyc-editorial-home.jyc-home .jh-hero-visual{min-height:clamp(500px,44vw,680px)!important}
 }
+
+
+/* TEXT READABILITY FLOOR — avoid micro-type in navigation, metadata and hero labels. */
+.public-app :where(p,li) {
+  font-size: max(14px, 1em);
+  line-height: 1.55;
+}
+.public-app :where(small,.eyebrow,.tag,.jh-cyber-badge,.jh-overline,.jh-hero-domain-rail,.emblem-control-pill,.mobile-dock button b,.nav .brand,.nav nav button,.nav .nav-more-trigger) {
+  font-size: max(11px, 1em) !important;
+  line-height: 1.35 !important;
+}
+.public-app :where(button,a,[role="button"]) {
+  text-decoration-thickness: max(1px, .06em);
+}
+.public-app :where(p,li,dd,dt,blockquote) {
+  text-wrap: pretty;
+}
+@media (max-width: 680px) {
+  .public-app :where(p,li) { line-height: 1.6; }
+  .public-app :where(small,.eyebrow,.tag,.jh-cyber-badge,.jh-overline,.jh-hero-domain-rail,.emblem-control-pill,.mobile-dock button b) {
+    font-size: max(10px, 1em) !important;
+  }
+}
