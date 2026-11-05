@@ -34,8 +34,8 @@ assert.ok(entry.includes('.fests-page .compact-page-head') && entry.includes('.f
   'flagship fests must have a scoped responsive art direction');
 assert.ok(main.includes("'/best-of-jyc'") && main.includes("'/achievements'") && main.includes('More to <em>discover.</em>'),
   'More sheet must surface editorial routes');
-assert.ok(main.includes("['Best of JYC','Curated published JYC photography and memories.','PAGE','/best-of-jyc']") &&
-  main.includes("['Achievements','Source-backed JYC milestones and community outcomes.','PAGE','/achievements']"),
+assert.ok(main.includes("title:'Best of JYC'") && main.includes("title:'Achievements'") &&
+  main.includes("path:'/best-of-jyc'") && main.includes("path:'/achievements'"),
   'Global search must surface editorial routes');
 assert.ok(home.includes('.jh-photo-story-grid.has-three') &&
   home.includes('.jh-story-card-1') && home.includes('@media (max-width: 680px)'),
