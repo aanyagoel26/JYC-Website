@@ -27,6 +27,7 @@ export default defineConfig({
     { name: 'mobile-360', use: { viewport: { width: 360, height: 800 }, isMobile: true }, grep: mobileCore },
     { name: 'mobile-390', use: { viewport: { width: 390, height: 844 }, isMobile: true }, grep: mobileCore },
     { name: 'mobile-430', use: { viewport: { width: 430, height: 932 }, isMobile: true }, grep: mobile430 },
+    { name: 'mobile-landscape', use: { viewport: { width: 844, height: 390 }, isMobile: true }, grep: /mobile pages remain centered and controls meet touch-safe sizing|homepage accessibility and responsive guardrails/ },
     { name: 'tablet-768', use: { viewport: { width: 768, height: 1024 } }, grep: tabletCore },
     { name: 'tablet-1024', use: { viewport: { width: 1024, height: 768 } }, grep: tabletCore },
     { name: 'desktop-1280', grep: desktopCore, use: { viewport: { width: 1280, height: 900 } } },
