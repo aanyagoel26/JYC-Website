@@ -302,7 +302,7 @@ export function JYCEditorialHome({ data }) {
                 key={story.id || story.url}
                 onClick={() => nav('/gallery?q=' + encodeURIComponent(story.association || story.caption || ''))}
                 onMouseMove={handleSpotlight}
-                aria-label={`Explore ${story.association} photography in the JYC gallery`}
+                aria-label={`${story.year || 'JYC ARCHIVE'} ${story.association} ${story.caption || story.association} Explore album`}
               >
                 <ResponsivePhoto
                   className="jh-story-photo"
@@ -444,7 +444,7 @@ export function JYCEditorialHome({ data }) {
             </div>
             {team.length ? (
               team.map((m, i) => (
-                <button type="button" key={m.id || i} onClick={() => nav('/team')} aria-label={`Meet ${m.name || 'JYC team member'}, ${m.role || m.position || 'JYC Apex'}`}>
+                <button type="button" key={m.id || i} onClick={() => nav('/team')} aria-label={`Meet ${m.role || m.position || 'JYC Apex'} ${m.name || 'JYC team member'}`}>
                   <span className="jh-team-monogram" aria-hidden="true">
                     {teamPhotoFor(m)
                       ? <ResponsivePhoto className="jh-team-thumb" src={teamPhotoFor(m)} alt="" loading="lazy" decoding="async" sizes="48px" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Portrait unavailable" />
@@ -454,7 +454,7 @@ export function JYCEditorialHome({ data }) {
                     <small>{m.role || m.position || 'JYC Apex'}</small>
                     <strong>{m.name || 'Team Member'}</strong>
                   </span>
-                  <b>↗</b>
+                  <b aria-hidden="true">↗</b>
                 </button>
               ))
             ) : (
