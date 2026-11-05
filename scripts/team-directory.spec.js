@@ -40,6 +40,11 @@ test.describe('JYC team directory interactions', () => {
     await page.keyboard.press('Space');
     await expect(frontTrigger).toHaveAttribute('aria-expanded', 'true');
     await expect(card.locator('.flip-card__back')).toBeVisible();
+    const returnButton = card.getByRole('button', { name: '← Back to photo' });
+    await expect(returnButton).toBeVisible();
+    const cardBounds = await card.boundingBox();
+    const returnBounds = await returnButton.boundingBox();
+    expect(returnBounds.y + returnBounds.height).toBeLessThanOrEqual(cardBounds.y + cardBounds.height + 1);
     await expect(card.locator('.flip-card__front')).toHaveAttribute('aria-hidden', 'true');
     await expect(card.locator('.flip-card__back')).toBeFocused();
     await page.keyboard.press('Escape');
