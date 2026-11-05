@@ -320,7 +320,7 @@ html[data-theme="dark"] .team-page .team-hub-directory>a:hover { border-color: r
 }
 
 /* V65 phone-first team directory polish. */
-.team-page .team-member-flip:focus-visible{outline:3px solid var(--jyc-focus)!important;outline-offset:4px}
+.team-page .team-member-flip .flip-card__front-trigger:focus-visible{outline:3px solid var(--jyc-focus)!important;outline-offset:-5px;border-radius:inherit}
 .team-page .team-front-overlay{padding:54px 22px 22px;background:linear-gradient(180deg,transparent 0%,rgba(8,12,25,.46) 28%,rgba(8,12,25,.91) 72%,rgba(8,12,25,.97) 100%)}
 .team-page .team-role-tag{font-size:11px;letter-spacing:.015em;background:rgba(12,17,32,.72);backdrop-filter:blur(10px)}
 .team-page .team-name-front{font-size:clamp(22px,2.2vw,28px)}
