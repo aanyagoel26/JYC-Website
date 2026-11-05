@@ -1800,3 +1800,64 @@ html[data-theme="dark"] .public-app :where(.toast,.toast-success,.toast-error) {
   color:#f2efff !important;background:#15182b !important;
   border:1px solid rgba(201,184,242,.24) !important;
 }
+
+
+/* Data-driven cards use inline accent variables; normalize those too. */
+html[data-theme="light"] .public-app :where(.club-card,.event-card,.hub-card,
+  .club-identity-card,.event-identity-card,.about-family-grid-v28>button,
+  .join-domain-card,.jyc-route-card,.jyc-hub-signal-card) {
+  --hub-accent:#843b35 !important;
+  --hub-accent-soft:rgba(132,59,53,.09) !important;
+  --route-accent:#98784e !important;
+  --family-accent:#843b35 !important;
+  --domain-accent:#843b35 !important;
+  --event-accent:#843b35 !important;
+}
+html[data-theme="dark"] .public-app :where(.club-card,.event-card,.hub-card,
+  .club-identity-card,.event-identity-card,.about-family-grid-v28>button,
+  .join-domain-card,.jyc-route-card,.jyc-hub-signal-card) {
+  --hub-accent:#c9b8f2 !important;
+  --hub-accent-soft:rgba(201,184,242,.11) !important;
+  --route-accent:#e6d4a8 !important;
+  --family-accent:#c9b8f2 !important;
+  --domain-accent:#c9b8f2 !important;
+  --event-accent:#c9b8f2 !important;
+}
+html[data-theme="dark"] .public-app :where(.hub-identity-glyph,.event-domain-mark,
+  .event-domain-label,.club-identity-mini,.event-identity-mini,.family-accent,
+  .join-domain-card>span,.about-family-grid-v28>button>span,
+  .jyc-hub-source-status,.jyc-source-status,.jyc-flagship-steps>b) {
+  color:#e6d4a8 !important;
+  border-color:rgba(230,212,168,.28) !important;
+}
+html[data-theme="dark"] .public-app :where(.about-family-grid-v28>button,
+  .join-domain-card,.jyc-flagship-countdown-strip,.jyc-flagship-steps,
+  .jh-update-list button,.update-item,.jh-family,.jh-activity-card,
+  .jh-pillar-card,.hub-card,.announcement-card) {
+  color:#f2efff !important;
+  background:linear-gradient(145deg,rgba(31,35,61,.96),rgba(17,20,39,.98)) !important;
+  border-color:rgba(201,184,242,.2) !important;
+}
+html[data-theme="dark"] .public-app :where(.about-family-grid-v28>button p,
+  .join-domain-card p,.jh-update-list button p,.update-item p,
+  .jh-family p,.jh-activity-card p,.jh-pillar-card p) {
+  color:#c0bad5 !important;
+}
+html[data-theme="dark"] .public-app :where(.about-family-grid-v28>button small,
+  .join-domain-card small,.jh-update-list button b,.update-item b) {
+  color:#e6d4a8 !important;
+}
+html[data-theme="dark"] .public-app :where(.jyc-flagship-actions .btn:not(.secondary)) {
+  color:#171629 !important;background:#c9b8f2 !important;border-color:#c9b8f2 !important;
+}
+html[data-theme="dark"] .public-app :where(.jyc-flagship-actions .btn.secondary) {
+  color:#f2efff !important;background:transparent !important;border-color:rgba(201,184,242,.3) !important;
+}
+html[data-theme="dark"] .public-app :where(.jyc-flagship-copy h3,.jyc-flagship-steps strong) {
+  color:#f2efff !important;
+}
+html[data-theme="dark"] .public-app :where(.jyc-flagship-steps p) { color:#c0bad5 !important; }
+html[data-theme="dark"] .public-app :where(.jyc-photo-chapter-collage button>span,
+  .jyc-photo-story-caption,.jyc57-photo span) {
+  border-color:rgba(201,184,242,.2) !important;
+}
