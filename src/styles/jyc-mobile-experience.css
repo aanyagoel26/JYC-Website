@@ -1,0 +1,52 @@
+/* JYC MOBILE EXPERIENCE
+   Phone-first information hierarchy, thumb reach and stacked reading flow.
+   These are mobile layout rules, not a compressed desktop grid. */
+@media (max-width: 900px) {
+  :root { --jyc-experience-gutter: 18px; --jyc-experience-section-space: 48px; }
+  html, body, #root { max-width: 100%; overflow-x: clip; }
+  .public-app { width: 100%; padding-bottom: 0; }
+  .public-app :where(.page,.section,.page-shell,.content-shell,.unified-public-page) {
+    width: calc(100% - 2 * var(--jyc-experience-gutter));
+    max-width: 760px; margin-inline: auto;
+  }
+  .public-app :where(.page,.section) { padding-block: var(--jyc-experience-section-space); }
+  .public-app :where(.page-heading,.section-head,.section-inline-head,.section-heading) {
+    display: flex; flex-direction: column; align-items: flex-start; gap: 12px;
+    margin-bottom: 24px; min-width: 0;
+  }
+  .public-app :where(.page-heading h1,.section-head h1,.section-head h2,.section-inline-head h2) {
+    max-width: 15ch; font-size: clamp(30px, 8vw, 48px); line-height: 1.02;
+  }
+  .public-app :where(.page-intro,.page-lead,.section-intro,.lead) {
+    max-width: 100%; font-size: 15px; line-height: 1.65;
+  }
+  .public-app :where(.club-grid,.team-grid,.events-grid,.event-grid,.gallery-grid,.gallery-wall,.card-grid,.contact-grid) {
+    display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; min-width: 0;
+  }
+  .public-app :where(.filter-row,.gallery-filters,.event-filters,.club-filters,.filter-chips) {
+    display: flex; flex-wrap: nowrap; max-width: 100%; overflow-x: auto;
+    overscroll-behavior-inline: contain; scrollbar-width: none; padding: 2px 1px 8px;
+  }
+  .public-app :where(.filter-row,.gallery-filters,.event-filters,.club-filters,.filter-chips)::-webkit-scrollbar { display:none; }
+  .public-app :where(.filter-row button,.gallery-filters button,.event-filters button,.club-filters button,.filter-chips button) { flex: 0 0 auto; }
+  .public-app :where(.featured,.feature-page,.about-hero-v28,.about-hero-editorial) {
+    display: grid; grid-template-columns: minmax(0,1fr); gap: 18px;
+  }
+  .public-app :where(.featured > div:last-child) { padding: 22px; }
+  .public-app :where(.featured-image) { min-height: 230px; }
+  .public-app :where(.club-card) { grid-template-columns: 64px minmax(0,1fr); gap: 14px; padding: 16px; }
+  .public-app :where(.club-logo) { width:64px; height:64px; }
+  .public-app :where(.hero-actions,.event-actions,.about-hero-actions) { display:flex; flex-wrap:wrap; gap:9px; }
+  .public-app :where(.hero-actions a,.hero-actions button,.event-actions a,.event-actions button,.about-hero-actions a,.about-hero-actions button) {
+    min-height: 46px; max-width: 100%;
+  }
+  .public-app :where(.page, .section, .page-shell, .content-shell) :where(img,video,iframe) { max-width:100%; }
+}
+@media (max-width: 390px) {
+  :root { --jyc-experience-gutter: 14px; --jyc-experience-section-space: 38px; }
+  .public-app :where(.page-heading h1,.section-head h1,.section-head h2,.section-inline-head h2) {
+    font-size: clamp(28px, 8.5vw, 36px);
+  }
+  .public-app :where(.club-card) { grid-template-columns: 52px minmax(0,1fr); padding:13px; gap:11px; }
+  .public-app :where(.club-logo) { width:52px; height:52px; }
+}
