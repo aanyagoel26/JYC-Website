@@ -900,7 +900,6 @@ function Search({data,admin,close}){
   ['Best of JYC','Curated published JYC photography and memories.','PAGE','/best-of-jyc'],
   ['Achievements','Source-backed JYC milestones and community outcomes.','PAGE','/achievements'],
   ['Announcements','JYC announcements, registration notices and updates.','PAGE','/announcements'],
-  ['Achievements','JYC achievements, wall of fame and published outcomes.','PAGE','/achievements'],
   ['JYC Event Calendar','Published JYC events by date.','PAGE','/calendar']
  ];
  const adminPages=[];
