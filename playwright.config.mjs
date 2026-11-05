@@ -35,6 +35,7 @@ export default defineConfig({
     { name: 'desktop-1920', use: { viewport: { width: 1920, height: 1080 } }, grep: desktopCore },
     { name: 'dark-theme', use: { viewport: { width: 390, height: 844 } }, grep: /dark theme contract/ },
     { name: 'navigation-overlays', use: { viewport: { width: 1280, height: 900 } }, grep: /More navigation and Search modal work with keyboard, empty states and focus handoff/ },
+    { name: 'motion-accessibility', use: { viewport: { width: 1280, height: 900 } }, grep: /scroll reveal remains visible when IntersectionObserver is unavailable|scroll reveal observes new content after SPA route changes/ },
     { name: 'compat-chromium', use: { browserName: 'chromium', viewport: { width: 1280, height: 900 } }, grep: /browser-compat:/ },
     { name: 'compat-edge', use: { browserName: 'chromium', channel: 'msedge', viewport: { width: 1280, height: 900 } }, grep: /browser-compat:/ },
     { name: 'compat-firefox', use: { browserName: 'firefox', viewport: { width: 1280, height: 900 } }, grep: /browser-compat:/ },
