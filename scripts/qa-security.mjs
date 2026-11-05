@@ -60,6 +60,10 @@ add('Session identifiers use Web Crypto with no insecure random fallback',/const
 add('Pageview local storage rejects malformed shapes and invalid counters',/const parsed=JSON\.parse\(storageGet\(key,'\{\}'\)\);[\s\S]{0,650}!Array\.isArray\(parsed\)[\s\S]{0,250}Number\.isSafeInteger\(count\)/.test(read(path.join(root,'src/main.jsx'))));
 const featuredEventPopup=read(path.join(root,'src/featured-event-popup.jsx'));
 add('Retired featured-event popup remains inert and cannot write dismissal storage',/export function FeaturedEventPopup\(\)\s*\{\s*return null;\s*\}/.test(featuredEventPopup)&&!/localStorage|sessionStorage|FEATURED_EVENT_DISMISS/.test(featuredEventPopup));
+const errorReport=read(path.join(root,'supabase/functions/error-report/index.ts'));
+add('Error-report CORS never falls back to an unrelated configured origin',errorReport.includes("const allowedOrigin=(origin:string|null)=>isAllowedOrigin(origin)?origin:'null'")&&errorReport.includes('const isAllowedOrigin='));
+add('Error-report preflight rejects unapproved origins',/if\(req\.method==='OPTIONS'\)\s*\{\s*if\(!isAllowedOrigin\(origin\)\)/.test(errorReport));
+add('Error-report fingerprints prefer trusted edge IP and do not trust the first forwarded entry',errorReport.includes("req.headers.get('cf-connecting-ip')")&&errorReport.includes('forwarded.at(-1)')&&!errorReport.includes("split(',')[0].trim()"));
 const updatesApi=read(path.join(root,'api/jyc-updates.js'));
 const recordGuardMatch=updatesApi.match(/const isRecord=(value=>[^;]+);/);
 let recordGuard;
