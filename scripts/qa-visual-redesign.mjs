@@ -10,7 +10,7 @@ const html = fs.readFileSync('index.html', 'utf8');
 const bot = fs.readFileSync('src/jyc-bot.jsx', 'utf8');
 const readDesignSystem = fs.readFileSync('src/styles/jyc-design-system.css', 'utf8');
 const checks = [
-  [bootTheme.includes("let theme = 'dark';") && main.includes("return 'dark';") && bootTheme.includes("saved === 'dark' || saved === 'light'"), 'first visit defaults to the midnight theme while saved preferences are preserved'],
+  [bootTheme.includes("let theme = null;") && main.includes("return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';") && bootTheme.includes("window.matchMedia?.('(prefers-color-scheme: dark)').matches") && bootTheme.includes("saved === 'dark' || saved === 'light'"), 'first visit follows the operating-system theme preference while saved preferences are preserved'],
   [main.includes("querySelectorAll('meta[name=\"theme-color\"]')") && bootTheme.includes("querySelectorAll('meta[name=\"theme-color\"]')") && html.includes('content="#050811"'), 'browser theme-color follows the selected site theme'],
   [home.includes('inkColor="#0b1220"') && home.includes('paperColor="#e2e8f0"') && home.includes('rimColor="#38bdf8"'), 'hero DitherVeil uses the midnight/cyan palette'],
 
