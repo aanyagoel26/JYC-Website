@@ -1,5 +1,6 @@
 (() => {
-  let theme = 'dark';
+  const systemPrefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches === true;
+  let theme = systemPrefersDark ? 'dark' : 'light';
   try {
     const saved = localStorage.getItem('jyc-theme');
     if (saved === 'dark' || saved === 'light') theme = saved;
