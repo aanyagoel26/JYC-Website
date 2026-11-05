@@ -1557,7 +1557,7 @@ test('gallery load-more control expands the archive without replacing the route'
 test('JYC Assistant search and keyboard close stay functional', async ({ page }) => {
   await page.goto(base, { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'JYC assistant');
-  const bot = page.getByRole('button', { name: 'Open JYC Assistant' });
+  const bot = page.getByRole('button', { name: 'Ask JYC' });
   await expect(bot).toBeVisible();
   await bot.click();
 
@@ -1585,7 +1585,7 @@ test('runtime metadata keeps canonical URLs on the production domain from a prev
   await page.goto(base + route, { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'canonical metadata on preview host');
 
-  const canonical = 'https://jyc-website-eight.vercel.app' + route;
+  const canonical = 'https://jyc-qa.invalid' + route;
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', canonical);
   await expect(page.locator('meta[property="og:url"]')).toHaveAttribute('content', canonical);
 });
@@ -1665,7 +1665,7 @@ test('public route shells keep route-specific SEO content and one primary headin
     const primaryHeading = page.getByRole('heading', { level: 1 });
     await expect(primaryHeading).toHaveCount(1);
     await expect(primaryHeading).toHaveText(title);
-    const canonical = 'https://jyc-website-eight.vercel.app' + path;
+    const canonical = 'https://jyc-qa.invalid' + path;
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', canonical);
     const schemas = await page.locator('script[type="application/ld+json"]').evaluateAll(nodes => nodes.map(node => JSON.parse(node.textContent || '{}')));
     expect(schemas.some(schema => schema['@type'] === 'WebPage' && schema.name === title && schema.url === canonical)).toBeTruthy();
@@ -1676,17 +1676,17 @@ test('public route shells keep route-specific SEO content and one primary headin
 test('JYC Assistant quick routes are distinct and navigate to their labelled destinations', async ({ page }) => {
   await page.goto(base + '/clubs', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'JYC assistant quick routes');
-  await page.getByRole('button', { name: 'Open JYC Assistant' }).click();
+  await page.getByRole('button', { name: 'Explore hubs' }).click();
 
   const dialog = page.getByRole('dialog', { name: 'Ask JYC. Instant Campus Knowledge.' });
   await expect(dialog).toBeVisible();
   await dialog.getByRole('button', { name: /Fast Directory Search/ }).click();
   const routes = dialog.locator('.preset-buttons button');
-  await expect(routes).toHaveCount(4);
-  await expect(routes).toContainText(['Explore all clubs', 'Upcoming events', 'JYC archive', 'Contact JYC']);
+  await expect(routes).toHaveCount(3);
+  await expect(routes).toContainText(['All Clubs ↗', 'All Events ↗', 'Leadership Team ↗']);
 
-  await routes.filter({ hasText: 'Contact JYC' }).click();
-  await expect.poll(() => new URL(page.url()).pathname).toBe('/contact');
+  await routes.filter({ hasText: 'Leadership Team' }).click();
+  await expect.poll(() => new URL(page.url()).pathname).toBe('/team');
   await expect(dialog).toHaveCount(0);
 });
 
@@ -1694,7 +1694,7 @@ test('JYC Assistant quick routes are distinct and navigate to their labelled des
 test('JYC Assistant traps keyboard focus and restores focus after closing', async ({ page }) => {
   await page.goto(base, { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'JYC assistant focus management');
-  const trigger = page.getByRole('button', { name: 'Open JYC Assistant' });
+  const trigger = page.getByRole('button', { name: 'Ask JYC' });
   await trigger.focus();
   await trigger.press('Enter');
 

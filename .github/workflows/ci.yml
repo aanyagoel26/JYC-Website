@@ -37,6 +37,8 @@ jobs:
       # Build first so photo-integrity QA validates generated manifest/derivative outputs.
       - name: Build production bundle and media derivatives
         run: npm run build
+        env:
+          VITE_CANONICAL_ORIGIN: https://jyc-qa.invalid
       - name: Verify responsive breakpoint contracts
         run: npm run qa:responsive
 

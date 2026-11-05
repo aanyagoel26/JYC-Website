@@ -35,6 +35,8 @@ jobs:
 
       - name: Production build
         run: npm run build
+        env:
+          VITE_CANONICAL_ORIGIN: https://jyc-qa.invalid
 
       - name: Run full static release QA
         run: npm run qa

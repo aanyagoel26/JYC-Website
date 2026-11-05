@@ -29,6 +29,8 @@ jobs:
       - run: npm ci
       - name: Build production bundle
         run: npm run build
+        env:
+          VITE_CANONICAL_ORIGIN: https://jyc-qa.invalid
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
       - name: Validate Lighthouse server readiness matcher
