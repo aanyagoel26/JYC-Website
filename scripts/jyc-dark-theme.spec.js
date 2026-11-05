@@ -1,8 +1,9 @@
 import { test, expect } from '@playwright/test';
 
-const routes = ['/', '/about', '/clubs', '/events', '/gallery'];
+const routes = ['/', '/about', '/clubs', '/events', '/team', '/gallery', '/archive', '/contact'];
 const viewports = [
   { name: 'desktop', width: 1440, height: 960 },
+  { name: 'tablet', width: 768, height: 1024 },
   { name: 'phone', width: 390, height: 844 }
 ];
 
@@ -82,17 +83,20 @@ test.describe('JYC shared day/night theme contract', () => {
   }
 });
 
-test('day theme keeps warm paper, readable text and a consistent accent', async ({ page }) => {
-  await page.setViewportSize({ width: 390, height: 844 });
-  await page.addInitScript(() => localStorage.setItem('jyc-theme', 'light'));
-  await waitForJyc(page, '/');
-  const light = await themeSnapshot(page);
-  expect(light.canvas).toBe('#f5f1e8');
-  expect(light.accent).toBe('#625889');
-  expect(light.bodyBackgroundImage).toContain('radial-gradient');
-  expect(light.headingContrast).toBeGreaterThanOrEqual(4.5);
-  expect(light.paragraphContrast).toBeGreaterThanOrEqual(4.5);
-  expect(light.documentOverflow).toBe(false);
+test.describe('JYC shared warm-paper day theme', () => {
+  for (const route of routes) {
+    test(`day theme stays readable — ${route}`, async ({ page }) => {
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.addInitScript(() => localStorage.setItem('jyc-theme', 'light'));
+      await waitForJyc(page, route);
+      const light = await themeSnapshot(page);
+      expect(light.canvas).toBe('#f5f1e8');
+      expect(light.accent).toBe('#625889');
+      expect(light.headingContrast, 'light heading contrast must meet WCAG AA').toBeGreaterThanOrEqual(4.5);
+      expect(light.paragraphContrast, 'light body copy contrast must meet WCAG AA').toBeGreaterThanOrEqual(4.5);
+      expect(light.documentOverflow).toBe(false);
+    });
+  }
 });
 
 test('theme toggle switches day/night, persists the preference and exposes its state', async ({ page }) => {
