@@ -85,7 +85,7 @@ function publicDemoData(){
  const clubs=Object.entries(JYC_HUB_CONTENT).map(([name,p],i)=>({id:`hub-${name.toLowerCase().replace(/[^a-z0-9]+/g,'-')}`,name,type:p.family==='Technical'?'Technical':'Non-Technical',category:p.focus,description:p.summary,about:p.detail,interests:[p.family,p.focus],published:true,status:'published',pinned:i<5,theme:'jyc'}));
  return mergePublicFallback(norm({...empty,clubs,events:PUBLIC_EVENT_FALLBACK,gallery:PUBLIC_GALLERY_FALLBACK,team:PUBLIC_TEAM_FALLBACK,homepage:{...empty.homepage,activities:PUBLIC_ACTIVITIES}}));
 }
-import { normalizeSearch, rankSearchResults } from './lib/search.js';
+import { normalizeSearch, matchSearchResults } from './lib/search.js';
 import {mergePublicEvents} from './lib/public-content.js';
 import {CREATOR,CREATORS,JYC_CONTACTS} from './lib/site-config.js';
 
@@ -916,7 +916,7 @@ function Search({data,admin,close}){
   :term&&/(sector\s*62|62 campus|sector\s*128|128 campus|venue|where)/.test(term)
    ?[{key:'intent-map',type:'QUICK ACTION',title:'Events & venues',meta:'Find event venues from published JYC events',searchText:'venue event location',icon:'⌖',priority:100,go:()=>nav('/events')}]
    :[];
- const ranked=rankSearchResults([...rawResults,...intentResults],term);
+ const ranked=matchSearchResults([...rawResults,...intentResults],term);
  const total=ranked.length;
  const results=term?ranked.slice(0,16):[];
  const searchResults=results;
