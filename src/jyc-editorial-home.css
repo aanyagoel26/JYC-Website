@@ -1437,7 +1437,7 @@
 .jyc-editorial-home .jh-ambient-orb { opacity: .07; filter: blur(110px); mix-blend-mode: multiply; }
 .jyc-editorial-home .jh-ambient-orb-1 { background: radial-gradient(circle, rgba(168,36,32,.14), transparent 72%); }
 .jyc-editorial-home .jh-ambient-orb-2 { background: radial-gradient(circle, rgba(191,156,111,.18), transparent 72%); }
-.jyc-editorial-home .jh-ambient-orb-3 { background: radial-gradient(circle, rgba(191,156,111,.10), transparent 72%); }
+.jyc-editorial-home .jh-ambient-orb-3 { background: radial-gradient(circle, rgba(99,102,241,.08), transparent 72%); }
 .jyc-editorial-home .jh-ambient-grid { opacity: .025; }
 .jyc-editorial-home .jh-title-gradient { background: none !important; color: var(--jh-accent) !important; -webkit-text-fill-color: currentColor !important; }
 .jyc-editorial-home .jh-cyber-badge,
@@ -1446,7 +1446,7 @@
 .jyc-editorial-home .jh-live-pulse-dot { background: var(--jh-accent); box-shadow: none; animation: none; }
 .jyc-editorial-home .jh-hero-logo-plaque { border-color: var(--jh-line-accent); background: linear-gradient(145deg, rgba(24,22,29,.90), rgba(24,22,29,.72)); box-shadow: 0 24px 60px rgba(26,25,29,.14); backdrop-filter: blur(3px); }
 .jyc-editorial-home .jh-hero-dither-backdrop { inset: 0; }
-.jyc-editorial-home .jh-logo-halo { inset: 0; background: radial-gradient(circle, rgba(191,156,111,.24), rgba(168,36,32,.10) 42%, transparent 72%); filter: blur(22px); opacity: .5; animation: none; }
+.jyc-editorial-home .jh-logo-halo { inset: 0; background: radial-gradient(circle, rgba(191,156,111,.24), rgba(56,189,248,.12) 42%, transparent 72%); filter: blur(22px); opacity: .5; animation: none; }
 .jyc-editorial-home .jh-hero-dither-visual,
 .jyc-editorial-home .jh-hero-drift-wall { border-color: var(--jh-line-accent); box-shadow: 0 22px 64px rgba(26,25,29,.12); }
 .jyc-editorial-home .jh-pillar-card,
@@ -1954,9 +1954,7 @@
   --jh-accent: #d45b60;
   --jh-accent-glow: rgba(212,91,96,.13);
   --jh-line: rgba(248,242,232,.14);
-  background:
-    radial-gradient(ellipse at 82% 10%,rgba(198,167,119,.10),transparent 34%),
-    #121113;
+  background: transparent !important;
 }
 [data-theme="dark"] .jyc-editorial-home.jyc-home .jh-hero-logo-plaque {
   background: radial-gradient(ellipse at 50% 40%,rgba(55,46,49,.98),rgba(28,25,28,.92) 62%,rgba(20,18,20,.95));
@@ -2120,4 +2118,53 @@ html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-overline {
     text-wrap: pretty;
     overflow-wrap: anywhere;
   }
+}
+
+
+/* V64.5.15 — the real WebGL Dither Veil is mounted behind the JYC hero emblem. */
+.jyc-editorial-home.jyc-home .jh-hero-dither-layer {
+  position: absolute;
+  inset: -2%;
+  z-index: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  opacity: .38;
+  mix-blend-mode: multiply;
+}
+.jyc-editorial-home.jyc-home .jh-hero-dither-veil {
+  width: min(90%, 480px);
+  max-width: 480px;
+  height: min(90%, 480px);
+  aspect-ratio: 1;
+  pointer-events: none;
+}
+.jyc-editorial-home.jyc-home .jh-hero-dither-loading {
+  width: min(76%, 390px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(56,189,248,.12), rgba(99,102,241,.08) 42%, transparent 72%);
+}
+.jyc-editorial-home.jyc-home .jh-hero-visual .jyc-hero-emblem-stage {
+  position: relative;
+  z-index: 1;
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-hero-dither-layer {
+  opacity: .27;
+  mix-blend-mode: screen;
+  filter: invert(1) hue-rotate(180deg);
+}
+@media (max-width: 680px) {
+  .jyc-editorial-home.jyc-home .jh-hero-dither-layer {
+    inset: 0;
+    opacity: .22;
+  }
+  .jyc-editorial-home.jyc-home .jh-hero-dither-veil {
+    width: min(88vw, 320px);
+    height: min(88vw, 320px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .jyc-editorial-home.jyc-home .jh-hero-dither-layer { opacity: .12; }
 }

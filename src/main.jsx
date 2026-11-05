@@ -30,7 +30,7 @@ import {JYCBrandEditorial} from './jyc-next-experience.jsx';
 import {JYCEditorialHome} from './jyc-editorial-home.jsx';
 import {ResponsivePhoto} from './jyc-responsive-photo.jsx';
 import { teamPhotoFor } from './jyc-team-media.js';
-
+import {FeaturedEventPopup} from './featured-event-popup.jsx';
 import {JYC57Events,JYC57Clubs,JYC57Gallery,JYCBestOf} from './jyc57-experience.jsx';
 
 
@@ -53,22 +53,22 @@ const LazyJYC57Archive=lazy(()=>import('./jyc57-archive.jsx').then(m=>({default:
 
 
 const PUBLIC_ACTIVITIES=JYC_PUBLIC_ACTIVITIES;
-function mergePublicFallback(d,{allowContentFallback=true}={}){
+function mergePublicFallback(d,{allowContentFallback=true,allowGalleryFallback=allowContentFallback,allowTeamFallback=allowContentFallback}={}){
  const x=norm(d||{});
- const fallbackClubs=enrichSourceClubs(Object.entries(JYC_HUB_CONTENT).map(([name,p],i)=>({id:'hub-'+slug(name),name,type:p.family==='Technical'?'Technical':'Non-Technical',category:p.focus,description:p.summary,about:p.detail,interests:[p.family,p.focus],published:true,status:'published',pinned:i<5,theme:'jyc'})));
- const baseClubs=allowContentFallback&&x.clubs?.length===0?fallbackClubs:x.clubs;
+ const publicHubNames=new Set(JYC_HUB_SOURCE_REGISTRY.filter(meta=>meta.publicationStatus==='published').map(meta=>meta.name));
+ const fallbackClubs=enrichSourceClubs(Object.entries(JYC_HUB_CONTENT).filter(([name])=>publicHubNames.has(name)).map(([name,p],i)=>({id:'hub-'+slug(name),name,type:p.family==='Technical'?'Technical':'Non-Technical',category:p.focus,description:p.summary,about:p.detail,interests:[p.family,p.focus],published:true,status:'published',pinned:i<5,theme:'jyc'})));
+ const hasPublishedRows=rows=>Array.isArray(rows)&&rows.some(row=>row?.published!==false&&row?.status!=='draft'&&row?.status!=='source-material');
+ const baseClubs=allowContentFallback&&!hasPublishedRows(x.clubs)?fallbackClubs:x.clubs;
  const enrichedClubs=enrichSourceClubs(baseClubs).map(club=>{const social=socialProfile(club.name);return social&&is128SocialProfile(social)?{...club,socials:{...(club.socials||{}),instagram:club.socials?.instagram||social.instagram||'',linkedin:club.socials?.linkedin||social.linkedin||'',website:club.socials?.website||social.website||'',instagramHandle:club.socials?.instagramHandle||social.instagramHandle||'',socialVerifiedBy:social.verifiedBy||'',socialVerifiedOn:social.verifiedOn||''}}:club;});
  const existingClubNames=new Set(enrichedClubs.map(c=>String(c.name||'').trim().toLowerCase()));
- const sourceOnlyClubs=JYC_HUB_SOURCE_ONLY.filter(meta=>!existingClubNames.has(meta.name.toLowerCase())).map(meta=>{const p=JYC_HUB_CONTENT[meta.name]||{};return enrichSourceClubs([{id:`hub-${slug(meta.name)}`,name:meta.name,type:p.family==='Technical'?'Technical':'Non-Technical',category:p.focus||p.family,description:p.summary||`${meta.name} is retained in the JYC source ecosystem.`,about:p.detail||'',interests:[p.family,p.focus].filter(Boolean),published:true,status:'source-material',sourceVerification:'source-material',sourceLabel:meta.source,theme:'jyc'}])[0]});
+ const sourceOnlyClubs=JYC_HUB_SOURCE_ONLY.filter(meta=>!existingClubNames.has(meta.name.toLowerCase())).map(meta=>{const p=JYC_HUB_CONTENT[meta.name]||{};return enrichSourceClubs([{id:`hub-${slug(meta.name)}`,name:meta.name,type:p.family==='Technical'?'Technical':'Non-Technical',category:p.focus||p.family,description:p.summary||`${meta.name} is retained in the JYC source ecosystem.`,about:p.detail||'',interests:[p.family,p.focus].filter(Boolean),published:false,status:'source-material',sourceVerification:'source-material',sourceLabel:meta.source,theme:'jyc'}])[0]});
  const clubs=[...enrichedClubs,...sourceOnlyClubs];
  const enrichedTeam=(Array.isArray(x.team)?x.team:[]).map(member=>{const key=Object.keys(JYC_TEAM_SOCIALS).find(n=>n.toLowerCase()===String(member?.name||'').trim().toLowerCase());const social=key?JYC_TEAM_SOCIALS[key]:null;return social?{...member,socials:{...(member.socials||{}),linkedin:member.socials?.linkedin||social.linkedin||''},linkedin:member.linkedin||social.linkedin||'',socialVerifiedBy:social.verifiedBy||'',socialVerifiedOn:social.verifiedOn||''}:member});
  const sourceGallery=mergeSourceGallery(x.gallery);
- const gallery=[...sourceGallery,...JAI_OFFICIAL_MEDIA,...(allowContentFallback?[...PDF_HUB_GALLERY,...PDF_HUB_EXTRA_GALLERY,...PUBLIC_GALLERY_FALLBACK]:[])].filter((g,i,a)=>a.findIndex(x=>x.id===g.id)===i).filter(g=>g&&g.published!==false&&!String(g.url||'').toLowerCase().includes('jyc-01')&&!String(g.url||'').toLowerCase().includes('jyc-02')&&!String(g.url||'').toLowerCase().includes('jyc-03')&&!String(g.url||'').toLowerCase().includes('vamunique-03')&&!String(g.caption||'').toLowerCase().includes('portrait from the supplied archive'));
+ const gallery=[...sourceGallery,...JAI_OFFICIAL_MEDIA,...(allowGalleryFallback?[...PDF_HUB_GALLERY,...PDF_HUB_EXTRA_GALLERY,...PUBLIC_GALLERY_FALLBACK]:[])].filter((g,i,a)=>a.findIndex(x=>x.id===g.id)===i).filter(g=>g&&g.published!==false&&!String(g.url||'').toLowerCase().includes('jyc-01')&&!String(g.url||'').toLowerCase().includes('jyc-02')&&!String(g.url||'').toLowerCase().includes('jyc-03')&&!String(g.url||'').toLowerCase().includes('vamunique-03')&&!String(g.caption||'').toLowerCase().includes('portrait from the supplied archive'));
  const liveEvents=Array.isArray(x.events)?x.events:[];
  const fallbackEvents=allowContentFallback?PUBLIC_EVENT_FALLBACK:[];
- const events=allowContentFallback
-   ? [...fallbackEvents,...liveEvents.filter(e=>!fallbackEvents.some(f=>String(f.id)===String(e.id)))]
-   : liveEvents;
+ const events=mergePublicEvents(liveEvents,fallbackEvents,allowContentFallback);
  const eventsWithVerifiedSources=events.map(event=>{
    const source=festSocialProfile(event.title);
    return source?{
@@ -78,7 +78,7 @@ function mergePublicFallback(d,{allowContentFallback=true}={}){
      officialSourceLabel:event.officialSourceLabel||source.label||''
    }:event;
  });
- return {...x,clubs,events:eventsWithVerifiedSources,gallery,team:((allowContentFallback&&x.team?.length===0?PUBLIC_TEAM_FALLBACK:enrichedTeam)),homepage:{...x.homepage,activities:Array.isArray(x.homepage?.activities)&&x.homepage.activities.length?x.homepage.activities:PUBLIC_ACTIVITIES}};
+ return {...x,clubs,events:eventsWithVerifiedSources,gallery,team:((allowTeamFallback&&!hasPublishedRows(x.team)?PUBLIC_TEAM_FALLBACK:enrichedTeam)),homepage:{...x.homepage,activities:Array.isArray(x.homepage?.activities)&&x.homepage.activities.length?x.homepage.activities:PUBLIC_ACTIVITIES}};
 }
 const QA_FIXTURES=import.meta.env.VITE_JYC_QA_FIXTURES==='true';
 function publicDemoData(){
@@ -86,11 +86,15 @@ function publicDemoData(){
  return mergePublicFallback(norm({...empty,clubs,events:PUBLIC_EVENT_FALLBACK,gallery:PUBLIC_GALLERY_FALLBACK,team:PUBLIC_TEAM_FALLBACK,homepage:{...empty.homepage,activities:PUBLIC_ACTIVITIES}}));
 }
 import { normalizeSearch, rankSearchResults } from './lib/search.js';
-import {CREATOR,CREATORS,JYC_CONTACTS} from './lib/site-config.js';
+import {mergePublicEvents} from './lib/public-content.js';
+import {CREATOR,JYC_CONTACTS} from './lib/site-config.js';
 
 import {MomentsSection} from './v14-platform.jsx';
 import {SkipLink,InstallPrompt,MaintenanceGate,ErrorBoundary,EventTools,DownloadICS,JsonLd,usePageMeta,Gallery,GalleryItems,RecruitmentHub,RegistrationPage} from './extra-features.jsx';
 import {readSiteCache,writeSiteCache,siteCacheAge,formatCacheAge,armStoredReminders,googleCalendarUrl,hasLocalReminder,scheduleEventReminder,clearLocalReminder} from './v15-functional.js';
+
+/* Final global layer: keep after all application and component stylesheet imports. */
+import './styles/jai-hack-dark-theme.css';
 
 const logo='/assets/jyc-logo.avif';
 const logoTiny='/assets/jyc-logo-48.avif';
@@ -141,8 +145,32 @@ function norm(d){
   }
 }
 function stripLegacySeed(d){return norm(d)}
-async function loadData(){if(QA_FIXTURES)return publicDemoData();if(supabase.__configured===false){const cached=readSiteCache();const usable=cached&&((cached.clubs||[]).length||(cached.events||[]).length||(cached.team||[]).length);if(usable)return mergePublicFallback(stripLegacySeed(cached),{allowContentFallback:false});if(import.meta.env.DEV)return publicDemoData();return norm(empty)}const {data,error}=await supabase.rpc('jyc_read_site_data');if(error){const message=String(error.message||'');const missingRpc=/Could not find the function public\.jyc_read_site_data|function public\.jyc_read_site_data|PGRST202|404|Not Found/i.test(message);if(missingRpc){if(import.meta.env.DEV)return publicDemoData();return norm(empty)}if(import.meta.env.DEV)return publicDemoData();return norm(empty)}return mergePublicFallback(stripLegacySeed(data||empty),{allowContentFallback:false})}
-async function saveData(next,user,action,entity='site',id='main'){const payload=norm(next);let result=await supabase.rpc('jyc_save_site_data',{p_data:payload,p_action:action,p_entity_type:entity,p_entity_id:String(id||'main')});if(result.error&&/Could not find the function public\.jyc_save_site_data|schema cache/i.test(result.error.message||'')){result=await supabase.rpc('jyc_save_site_data',{p_action:action,p_data:payload,p_entity_id:String(id||'main'),p_entity_type:entity})}if(result.error)throw result.error;return stripLegacySeed(result.data)}
+function readOnlySiteFallback(reason,sourceData){
+ const cached=readSiteCache();
+ const usable=cached&&((cached.clubs||[]).length||(cached.events||[]).length||(cached.team||[]).length||(cached.gallery||[]).length);
+ const source=usable?stripLegacySeed(cached):norm(sourceData||empty);
+ const base=mergePublicFallback(source,{allowContentFallback:true,allowGalleryFallback:false,allowTeamFallback:true});
+ return {...base,__readOnlyFallback:true,__fallbackReason:reason||'Live content services are unavailable.'};
+}
+async function loadData(){
+ if(QA_FIXTURES)return publicDemoData();
+ if(supabase.__configured===false){
+  if(import.meta.env.DEV)return publicDemoData();
+  return readOnlySiteFallback('Live Supabase is not configured.');
+ }
+ const {data,error}=await supabase.rpc('jyc_read_site_data');
+ if(error){
+  const message=String(error.message||'');
+  const missingRpc=/Could not find the function public\.jyc_read_site_data|function public\.jyc_read_site_data|PGRST202|404|Not Found/i.test(message);
+  if(import.meta.env.DEV)return publicDemoData();
+  return readOnlySiteFallback(missingRpc?'The live public content endpoint is unavailable.':'The live content service is unavailable.');
+ }
+ const normalized=stripLegacySeed(data||empty);
+ const hasCorePublicContent=['clubs','events','team'].every(key=>Array.isArray(normalized[key])&&normalized[key].some(row=>row?.published!==false&&row?.status!=='draft'&&row?.status!=='source-material'));
+ if(!hasCorePublicContent&&!import.meta.env.DEV){const fallback=mergePublicFallback(normalized,{allowContentFallback:true,allowGalleryFallback:false,allowTeamFallback:true});return {...fallback,__readOnlyFallback:true,__fallbackReason:'One or more public content sections are missing from the live service.'};}
+ return mergePublicFallback(normalized,{allowContentFallback:false});
+}
+async function saveData(next,user,action,entity='site',id='main'){const safeNext={...(next||{})};delete safeNext.__readOnlyFallback;delete safeNext.__fallbackReason;const payload=norm(safeNext);let result=await supabase.rpc('jyc_save_site_data',{p_data:payload,p_action:action,p_entity_type:entity,p_entity_id:String(id||'main')});if(result.error&&/Could not find the function public\.jyc_save_site_data|schema cache/i.test(result.error.message||'')){result=await supabase.rpc('jyc_save_site_data',{p_action:action,p_data:payload,p_entity_id:String(id||'main'),p_entity_type:entity})}if(result.error)throw result.error;return stripLegacySeed(result.data)}
 async function compressImage(file){if(file.size<900*1024)return file;const bitmap=await createImageBitmap(file);const max=2200;const scale=Math.min(1,max/Math.max(bitmap.width,bitmap.height));const canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(bitmap.width*scale));canvas.height=Math.max(1,Math.round(bitmap.height*scale));const ctx=canvas.getContext('2d');ctx.drawImage(bitmap,0,0,canvas.width,canvas.height);const blob=await new Promise(resolve=>canvas.toBlob(resolve,'image/webp',.82));return blob?new File([blob],(file.name.replace(/\.[^.]+$/,'')||'image')+'.webp',{type:'image/webp'}):file}
 async function uploadMedia(file,folder='general'){if(!file)throw Error('Choose an image first.');if(!file.type.startsWith('image/'))throw Error('Only image files are allowed.');if(file.size>8*1024*1024)throw Error('Image must be 8 MB or smaller.');const optimized=await compressImage(file);return uploadJycMedia(optimized,folder)}
 async function enablePushNotifications(){if(!('serviceWorker' in navigator)||!('PushManager' in window))throw Error('Web push is not supported in this browser.');const vapid=import.meta.env.VITE_VAPID_PUBLIC_KEY;if(!vapid)throw Error('VITE_VAPID_PUBLIC_KEY is not configured yet.');const permission=await Notification.requestPermission();if(permission!=='granted')throw Error('Notification permission was not granted.');const registration=await navigator.serviceWorker.ready;let subscription=await registration.pushManager.getSubscription();if(!subscription)subscription=await registration.pushManager.subscribe({userVisibleOnly:true,applicationServerKey:urlBase64ToUint8Array(vapid)});const {data:userData}=await supabase.auth.getUser();if(!userData?.user?.id)throw Error('Sign in before enabling JYC notifications.');const {error}=await supabase.from('jyc_push_subscriptions').upsert({endpoint:subscription.endpoint,subscription:subscription.toJSON(),user_id:userData.user.id},{onConflict:'endpoint'});if(error)throw error;return true}
@@ -205,20 +233,19 @@ function EventReminderControl({event,notify}){if(!event?.date||eventState(event)
 function App(){const loc=useLocation();const [data,setData]=useState(()=>import.meta.env.DEV?publicDemoData():norm(empty));const [loading,setLoading]=useState(true);const [bootReady,setBootReady]=useState(false);const [bootStage,setBootStage]=useState('INITIALIZING');const [error,setError]=useState('');const [online,setOnline]=useState(()=>navigator.onLine!==false);const [theme,setTheme]=useState(()=>{
   const saved=storageGet('jyc-theme',null);
   if(saved==='dark'||saved==='light')return saved;
-  // The approved JYC V20 identity is the warm paper/brass/oxblood system.
-  // Respect an explicit saved choice, but do not let an OS dark-mode preference
-  // silently replace the site's intended launch palette on first visit.
-  return 'light';
+  // The midnight/cyan design system is the first-visit default.
+  // An explicit saved light-mode preference is always respected.
+  return 'dark';
 });const [session,setSession]=useState(null);const [admin,setAdmin]=useState(null);const [toast,setToast]=useState(null);const [confirm,setConfirm]=useState(null);
 
  useEffect(()=>{const onToast=e=>notify(e.detail?.message||'',e.detail?.type||'success');const onConfirm=e=>setConfirm(e.detail||null);window.addEventListener('jyc-toast',onToast);window.addEventListener('jyc-confirm',onConfirm);return()=>{window.removeEventListener('jyc-toast',onToast);window.removeEventListener('jyc-confirm',onConfirm)}},[]);
  useEffect(()=>{const on=()=>setOnline(true),off=()=>setOnline(false);window.addEventListener('online',on);window.addEventListener('offline',off);return()=>{window.removeEventListener('online',on);window.removeEventListener('offline',off)}},[]);
- useEffect(()=>{document.documentElement.dataset.theme=theme;storageSet('jyc-theme',theme);document.querySelector('meta[name="theme-color"]')?.setAttribute('content',theme==='dark'?'#0F0E11':'#f8fafc');},[theme]);
+ useEffect(()=>{document.documentElement.dataset.theme=theme;storageSet('jyc-theme',theme);document.querySelectorAll('meta[name="theme-color"]').forEach(meta=>meta.setAttribute('content',theme==='dark'?'#050811':'#f8fafc'));},[theme]);
  useEffect(()=>{const low=Boolean(navigator.connection?.saveData||((navigator.deviceMemory||8)<4)||((navigator.hardwareConcurrency||8)<4));document.documentElement.dataset.performance=low?'lite':'full';document.documentElement.dataset.reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches?'true':'false'},[]);
  useEffect(()=>{const id=setTimeout(()=>setBootStage(readSiteCache()?'SYNCING':'LOADING'),420);return()=>clearTimeout(id)},[]);
- useEffect(()=>{let alive=true;const cached=readSiteCache();if(cached){setData(stripLegacySeed(cached));setLoading(false);setBootStage('SYNCING')}const refresh=async()=>{try{const next=await Promise.race([loadData(),new Promise((_,reject)=>setTimeout(()=>reject(new Error('JYC data service is taking too long to respond.')),4500))]);if(alive){setData(next);writeSiteCache(next);setError('');setBootStage('READY');armStoredReminders(next.events||[])}}catch(e){if(alive){setError(e?.message||'Could not load JYC content.');setBootStage(cached?'READY':'OFFLINE')}}finally{if(alive)setLoading(false)}};refresh();const retry=()=>refresh();window.addEventListener('jyc-refresh-data',retry);supabase.auth.getSession().then(({data:{session:s}})=>resolve(s)).catch(()=>{});const {data:l}=supabase.auth.onAuthStateChange((_,s)=>resolve(s));return()=>{alive=false;l.subscription.unsubscribe();window.removeEventListener('jyc-refresh-data',retry)}},[]);
+ useEffect(()=>{let alive=true;const cached=readSiteCache();if(cached){setData(stripLegacySeed(cached));setLoading(false);setBootStage('SYNCING')}const refresh=async()=>{try{const next=await Promise.race([loadData(),new Promise((_,reject)=>setTimeout(()=>reject(new Error('JYC data service is taking too long to respond.')),4500))]);if(alive){setData(next);writeSiteCache(next);setError('');setBootStage('READY');armStoredReminders(next.events||[])}}catch(e){if(alive){const reason=e?.message||'Could not load JYC content.';const fallback=readOnlySiteFallback(reason);setData(fallback);writeSiteCache(fallback);setError('');setBootStage('READY')}}finally{if(alive)setLoading(false)}};refresh();const retry=()=>refresh();window.addEventListener('jyc-refresh-data',retry);supabase.auth.getSession().then(({data:{session:s}})=>resolve(s)).catch(()=>{});const {data:l}=supabase.auth.onAuthStateChange((_,s)=>resolve(s));return()=>{alive=false;l.subscription.unsubscribe();window.removeEventListener('jyc-refresh-data',retry)}},[]);
  const resolve=async s=>{setSession(s);if(!s?.user){setAdmin(null);return}let q=await supabase.from('jyc_admins').select('role,display_name,is_active,club_id').eq('user_id',s.user.id).eq('is_active',true).maybeSingle();if(q.error){q=await supabase.from('jyc_admins').select('role,display_name,is_active').eq('user_id',s.user.id).eq('is_active',true).maybeSingle()}if(q.data)setAdmin({userId:s.user.id,email:s.user.email||'',name:q.data.display_name||'JYC Administrator',role:q.data.role||'jyc_admin',clubId:q.data.club_id||null});else setAdmin(null)};
- const commit=async(next,action,entity,id)=>{if(!admin?.userId)throw Error('Administrator session expired. Please log in again.');const saved=await saveData(next,admin.userId,action,entity,id);setData(saved);writeSiteCache(saved);try{const latest=await supabase.from('jyc_content_versions').select('version_number').eq('entity_type',entity||'site').eq('entity_id',String(id||'main')).order('version_number',{ascending:false}).limit(1).maybeSingle();const version=(latest.data?.version_number||0)+1;await supabase.from('jyc_content_versions').insert({entity_type:entity||'site',entity_id:String(id||'main'),version_number:version,snapshot:next,changed_by:admin.userId,change_summary:action})}catch{}try{if(admin.role==='club_admin'&&(entity==='club'||entity==='event'))await supabase.from('jyc_content_reviews').insert({entity_type:entity,entity_id:String(id||'main'),submitted_by:admin.userId,status:'submitted',review_note:'Submitted from Club Admin Control Center.'})}catch{}notify('Saved successfully');return saved};
+ const commit=async(next,action,entity,id)=>{if(data.__readOnlyFallback)throw Error('JYC is in read-only public mode. Reconnect the live database before editing or publishing content.');if(!admin?.userId)throw Error('Administrator session expired. Please log in again.');const saved=await saveData(next,admin.userId,action,entity,id);setData(saved);writeSiteCache(saved);try{const latest=await supabase.from('jyc_content_versions').select('version_number').eq('entity_type',entity||'site').eq('entity_id',String(id||'main')).order('version_number',{ascending:false}).limit(1).maybeSingle();const version=(latest.data?.version_number||0)+1;await supabase.from('jyc_content_versions').insert({entity_type:entity||'site',entity_id:String(id||'main'),version_number:version,snapshot:next,changed_by:admin.userId,change_summary:action})}catch{}try{if(admin.role==='club_admin'&&(entity==='club'||entity==='event'))await supabase.from('jyc_content_reviews').insert({entity_type:entity,entity_id:String(id||'main'),submitted_by:admin.userId,status:'submitted',review_note:'Submitted from Club Admin Control Center.'})}catch{}notify('Saved successfully');return saved};
  const notify=(m,type='success')=>{setToast({message:m,type});setTimeout(()=>setToast(null),2800)};
  useEffect(()=>{window.scrollTo({top:0,behavior:'auto'})},[loc.pathname]);
  useEffect(()=>{
@@ -261,9 +288,9 @@ function App(){const loc=useLocation();const [data,setData]=useState(()=>import.
  useEffect(()=>{if(loading)return;const minimum=error?150:(readSiteCache()?120:250);const id=setTimeout(()=>setBootReady(true),minimum);return()=>clearTimeout(id)},[loading,error]);
  useEffect(()=>{if(!bootReady){delete document.documentElement.dataset.jycContentReady;return}document.documentElement.dataset.jycContentReady='true';return()=>{delete document.documentElement.dataset.jycContentReady}},[bootReady,loc.pathname]);
   if(!bootReady)return <Loading stage={bootStage} cached={Boolean(readSiteCache())}/>;
-  const connectionNotice=(!online||error)?<div className={`connection-notice ${readSiteCache()?'cached':'offline'} ${error==='JYC data service is not deployed. Run supabase/FINAL-PRODUCTION-REPAIR.sql in the connected Supabase project, then refresh.'?'setup-needed':''}`} role="status"><span>{!online?'You are offline. JYC will keep using cached content until the connection returns.':error==='JYC data service is not deployed. Run supabase/FINAL-PRODUCTION-REPAIR.sql in the connected Supabase project, then refresh.'?'JYC data service needs setup.':readSiteCache()?`Showing the last saved JYC snapshot · ${formatCacheAge(siteCacheAge())}.`:'JYC content is currently offline.'}</span><button type="button" onClick={()=>window.dispatchEvent(new CustomEvent('jyc-refresh-data'))}>Refresh</button></div>:null;
+  const connectionNotice=(data.__readOnlyFallback||!online||error)?<div className={`connection-notice ${data.__readOnlyFallback?'fallback':readSiteCache()?'cached':'offline'} ${error==='JYC data service is not deployed. Run supabase/FINAL-PRODUCTION-REPAIR.sql in the connected Supabase project, then refresh.'?'setup-needed':''}`} role="status"><span>{data.__readOnlyFallback?(readSiteCache()?`Limited public mode · showing the last saved snapshot (${formatCacheAge(siteCacheAge())}). Sign-in and internal submissions may be unavailable.`:'Limited public mode · showing curated public content. Sign-in and internal submissions may be unavailable until the database reconnects.'):!online?'You are offline. JYC will keep using cached content until the connection returns.':error==='JYC data service is not deployed. Run supabase/FINAL-PRODUCTION-REPAIR.sql in the connected Supabase project, then refresh.'?'JYC data service needs setup.':readSiteCache()?`Showing the last saved JYC snapshot · ${formatCacheAge(siteCacheAge())}.`:'JYC content is currently offline.'}</span><button type="button" onClick={()=>window.dispatchEvent(new CustomEvent('jyc-refresh-data'))}>Refresh</button></div>:null;
  const isAdmin=loc.pathname.startsWith('/admin');
- const content=<div className="app-frame"><SkipLink/><ScrollProgress/><BackToTop/>{!isAdmin&&<Suspense fallback={null}><LazyJYCInnovationMotion/></Suspense>}{!isAdmin&&<><Navbar data={data} admin={admin} theme={theme} setTheme={setTheme}/></>} {connectionNotice}<div id="main-content" className={isAdmin?'app admin-app':'app public-app'}><div className="route-stage" key={`${loc.pathname}${loc.search}`}><JYCEditorialSystem><Routes data={data} admin={admin} session={session} setAdmin={setAdmin} commit={commit} notify={notify} theme={theme} setTheme={setTheme}/></JYCEditorialSystem></div></div>{!isAdmin&&<Footer data={data} admin={admin}/>} {!isAdmin&&<Suspense fallback={null}><LazyJYCBot data={data}/></Suspense>} {toast&&<div className={`toast toast-${toast.type||'success'}`} role="status"><span>{toast.type==='error'?'!':'✓'}</span>{toast.message}</div>} {confirm&&<ConfirmDialog request={confirm} onClose={ok=>{confirm.resolve?.(ok);setConfirm(null)}}/>}
+ const content=<div className="app-frame"><SkipLink/><ScrollProgress/><BackToTop/>{!isAdmin&&<Suspense fallback={null}><LazyJYCInnovationMotion/></Suspense>}{!isAdmin&&<><Navbar data={data} admin={admin} theme={theme} setTheme={setTheme}/></>} {connectionNotice}<div id="main-content" className={isAdmin?'app admin-app':'app public-app'}><div className="route-stage" key={`${loc.pathname}${loc.search}`}><JYCEditorialSystem><Routes data={data} admin={admin} session={session} setAdmin={setAdmin} commit={commit} notify={notify} theme={theme} setTheme={setTheme}/></JYCEditorialSystem></div></div>{!isAdmin&&<Footer data={data} admin={admin}/>} {!isAdmin&&<Suspense fallback={null}><LazyJYCBot data={data}/></Suspense>} {toast&&<div className={`toast toast-${toast.type||'success'}`} role="status"><span>{toast.type==='error'?'!':'✓'}</span>{toast.message}</div>} {confirm&&<ConfirmDialog request={confirm} onClose={ok=>{confirm.resolve?.(ok);setConfirm(null)}}/>}<FeaturedEventPopup />
       <InstallPrompt/></div>;
  return <MaintenanceGate data={isAdmin?{maintenance:{on:false}}:data}>{content}</MaintenanceGate>}
 
@@ -459,52 +486,43 @@ function Contact({data}){
  }finally{setSending(false)}};
  return <section className="section page contact-page">
   <Back label="Back to home" to="/"/>
-  <SectionHead level={1} eyebrow="COMMUNICATION HUB" title="Stay connected with JYC." text="Official portals, verified community channels, and campus assistance."/>
+  <SectionHead level={1} eyebrow="COMMUNICATION HUB" title="Stay connected with JYC." text="Campus-specific social channels, community contact routes, and campus assistance."/>
   <div className="contact-sla-banner reveal">
    <span className="sla-dot"/>
-   <strong>STUDENT DESK ACTIVE</strong>
-   <span>Monday – Saturday · 9:00 AM – 6:00 PM IST · Verified JIIT Sector 128 Channels</span>
+   <strong>OFFICIAL JYC 128 CHANNELS</strong>
+   <span>Use the campus-specific Instagram and LinkedIn profiles for current announcements and contact routes.</span>
   </div>
   <div className="contact-grid">
-   <a className="contact-card" href={JYC_CONTACTS.official} target="_blank" rel="noreferrer">
-    <span>01</span>
-    <h3>Official Links</h3>
-    <p>Verified Linktree directory with registration portals.</p>
-    <span className="contact-arrow">↗</span>
-   </a>
    <a className="contact-card" href={JYC_CONTACTS.instagram} target="_blank" rel="noreferrer">
-    <span>02</span>
+    <span>01</span>
     <h3>Official Instagram</h3>
     <p>@jiityouthclub128 · Live story broadcasts, reels & recaps.</p>
     <span className="contact-arrow">↗</span>
    </a>
    <a className="contact-card" href={JYC_CONTACTS.linkedin} target="_blank" rel="noreferrer">
-    <span>03</span>
+    <span>02</span>
     <h3>LinkedIn Page</h3>
     <p>Professional updates, hackathons & achievements.</p>
     <span className="contact-arrow">↗</span>
    </a>
    <a className="contact-card" href={JYC_CONTACTS.whatsapp} target="_blank" rel="noreferrer">
-    <span>04</span>
+    <span>03</span>
     <h3>WhatsApp Community</h3>
-    <p>Official broadcast group for enrolled JIIT students.</p>
+    <p>Open the community invite and review the group description for current membership and announcements.</p>
     <span className="contact-arrow">↗</span>
    </a>
    <div className="contact-card contact-creator-card">
-    <span>05</span>
-    <h3>Website Creators</h3>
-    <p>Website made by Aanya Goel and Kaustubh Dua</p>
-    <div style={{display:'flex',flexDirection:'column',gap:'12px',marginTop:'12px'}}>
-     {CREATORS.map(c=>(
-      <div key={c.name}>
-       <strong style={{color:'var(--gold,#bf9c6f)'}}>{c.name}</strong> · <span style={{fontSize:'12px',opacity:.8}}>{c.role}</span>
-       <div className="social-row" style={{marginTop:'6px'}}>
-        {c.linkedin&&<a href={c.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>}
-        {c.github&&<a href={c.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>}
-        {c.email&&<a href={'mailto:'+c.email}>Email ↗</a>}
-       </div>
-      </div>
-     ))}
+    <span>04</span>
+    <h3>Website Creator</h3>
+    <p>{data.creator.name} · {data.creator.role}</p>
+    <div className="social-row">
+     <a href={data.creator.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+     <a href={data.creator.instagram} target="_blank" rel="noopener noreferrer">Instagram ↗</a>
+     <a href={data.creator.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>
+    </div>
+    <div className="contact-email-copy-row">
+     <code>{data.creator.email}</code>
+     <button type="button" className="btn-copy-mini" onClick={()=>copyEmail(data.creator.email,'Creator email')}>Copy Email 📋</button>
     </div>
    </div>
   </div>
@@ -660,6 +678,8 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
   '/clubs':'JIIT Clubs & Student Communities | JIIT Youth Club',
   '/events':'JIIT Events & Campus Activities | JIIT Youth Club',
   '/fests':'JIIT Fests & Flagship Events | JIIT Youth Club',
+  '/converge':'Converge archive | JIIT Youth Club 128',
+  '/converge-live':'Converge archive | JIIT Youth Club 128',
   '/team':'JYC 128 Leadership | Faculty, Apex & Core Team',
   '/leadership':'JYC 128 Leadership | Faculty, Apex & Core Team',
   '/gallery':'JYC Gallery | JIIT Youth Club 128',
@@ -684,6 +704,8 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
   '/clubs':'Explore the official JIIT club list and student communities across technical, cultural, literary, creative, sports and other campus interests through JIIT Youth Club.',
   '/events':'Find JIIT events, workshops, competitions, cultural activities and campus events published by JIIT Youth Club at JIIT Noida.',
   '/fests':'Explore JIIT fests and flagship campus events such as officially published JYC programmes, with dates, venues, clubs and registration details when available.',
+  '/converge':'Browse the published Converge event archive. Future schedules and live status will appear only after official confirmation.',
+  '/converge-live':'Browse the published Converge event archive. Future schedules and live status will appear only after official confirmation.',
   '/resources':'JIIT Youth Club — official clubs, events, fests and community information.',
   '/guide':'About JIIT Youth Club — purpose, communities, events and campus life.',
     '/calendar':'Browse the JYC 128 event calendar by date, category and event status.',
@@ -700,11 +722,11 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
   '/join-jyc':'Join JYC 128 is currently coming soon. Recruitment and application opportunities will be published here when the next official cycle opens.'
  };
  const privateRoute=clean==='/admin'||clean.startsWith('/admin/');
- const knownPublic=['/','/about','/history','/clubs','/events','/fests','/gallery','/team','/leadership','/contact','/archive','/calendar','/event-calendar','/achievements','/best-of-jyc','/announcements','/updates','/recruitment','/join-jyc'].includes(clean)||clean.startsWith('/gallery/');
+ const knownPublic=['/','/about','/history','/clubs','/events','/fests','/converge','/converge-live','/gallery','/team','/leadership','/contact','/archive','/calendar','/event-calendar','/achievements','/best-of-jyc','/announcements','/updates','/recruitment','/join-jyc'].includes(clean)||clean.startsWith('/gallery/');
  const knownDetail=Boolean(club||event);
  const unknownRoute=!privateRoute&&!knownPublic&&!knownDetail;
- const pageType=club?'club':event?'event':clean==='/fests'?'fests':clean==='/clubs'?'clubs':clean==='/events'?'events':clean.startsWith('/gallery')?'gallery':clean==='/team'||clean==='/leadership'?'team':clean==='/history'||clean==='/about'?'about':clean==='/archive'?'archive':clean==='/announcements'?'announcements':clean==='/updates'?'updates':clean==='/achievements'?'achievements':clean==='/best-of-jyc'?'best-of-jyc':clean==='/calendar'||clean==='/event-calendar'?'calendar':clean==='/recruitment'?'recruitment':clean==='/join-jyc'?'join-jyc':clean==='/contact'?'contact':'home';
- const canonicalPath=club?`/clubs/${slug(club.name)}`:event?`/events/${slug(event.slug||event.title)}${parts[2]==='register'?'/register':''}`:clean;
+ const pageType=club?'club':event?'event':clean==='/converge'||clean==='/converge-live'||clean==='/archive'?'archive':clean==='/fests'?'fests':clean==='/clubs'?'clubs':clean==='/events'?'events':clean.startsWith('/gallery')?'gallery':clean==='/team'||clean==='/leadership'?'team':clean==='/history'||clean==='/about'?'about':clean==='/archive'?'archive':clean==='/announcements'?'announcements':clean==='/updates'?'updates':clean==='/achievements'?'achievements':clean==='/best-of-jyc'?'best-of-jyc':clean==='/calendar'||clean==='/event-calendar'?'calendar':clean==='/recruitment'?'recruitment':clean==='/join-jyc'?'join-jyc':clean==='/contact'?'contact':'home';
+ const canonicalPath=club?`/clubs/${slug(club.name)}`:event?`/events/${slug(event.slug||event.title)}${parts[2]==='register'?'/register':''}`:clean==='/converge'||clean==='/converge-live'?'/archive':clean;
  useEffect(()=>{if((club||event)&&(slugId!==slug(event?(event.slug||event.title):club.name)||Boolean(legacyEventSlugMap[slugId]))){const target=event?`/events/${slug(event.slug||event.title)}${parts[2]==='register'?'/register':''}`:`/clubs/${slug(club.name)}`;nav(target,{replace:true});}},[slugId,club?.id,event?.id,parts[2],nav]);
  const galleryAlbumName=clean.startsWith('/gallery/')?decodeURIComponent(parts[1]||'').replace(/-/g,' '):'';
  const title=club?`${club.name} — ${club.category||'Student Community'} | JIIT Youth Club 128`:event?`${event.title} | JIIT Event · JYC`:galleryAlbumName?`${galleryAlbumName} — JYC Visual Archive`:titles[clean]||'JIIT Youth Club';
@@ -713,7 +735,7 @@ function Routes({data,admin,session,setAdmin,commit,notify,theme,setTheme}){
  const schema=<JsonLd data={data} pageType={pageType} item={club||event} path={canonicalPath}/>;
  // Resolve route aliases after all hooks have run, keeping hook order stable on navigation.
  const routeRedirects={
-  '/admin':'/','/leadership':'/team','/event-calendar':'/calendar','/moments':'/gallery',
+  '/admin':'/','/leadership':'/team','/event-calendar':'/calendar','/moments':'/gallery','/converge':'/archive','/converge-live':'/archive',
   '/planner':'/events','/agenda':'/events','/discover':'/clubs','/guide':'/about','/resources':'/about',
   '/my-jyc':'/','/login':'/','/notifications':'/','/settings':'/about','/download':'/about',
   '/projects':'/clubs','/projects/submit':'/clubs','/map':'/events'
@@ -822,6 +844,7 @@ function MobileMoreSheet({data,admin,close,openSearch}){
  const go=p=>{close();nav(p)};
 const explore=[
     ['/about','About JYC','Purpose, communities, values and the JYC story'],
+    ['/converge','Converge Live Fest','Multi-arena schedule, leaderboard and live fest stream'],
     ['/team','Leadership','Faculty, Apex and Core Team'],
     ['/clubs','Clubs & Communities','Explore the official hub ecosystem'],
     ['/events','Events','Upcoming, ongoing and completed experiences'],
@@ -955,7 +978,7 @@ function Footer({data,admin}){
       <div className="footer-v6-biglink"><button type="button" onClick={()=>nav('/recruitment')}>JOIN JYC <span aria-hidden="true">↗</span></button></div>
       <div className="footer-bottom footer-v6-bottom">
         <span>JIIT YOUTH CLUB · JIIT SECTOR 128</span>
-        <small className="jyc-creator-credit">Website made by <a href="https://www.linkedin.com/in/aanya-goel26" target="_blank" rel="noopener noreferrer">Aanya Goel</a> and <a href="https://www.linkedin.com/in/kaustubh-dua-2b5a76416" target="_blank" rel="noopener noreferrer">Kaustubh Dua</a></small>
+        <small className="jyc-creator-credit">Website Creator · <a href={data.creator.linkedin} target="_blank" rel="noopener noreferrer" aria-label={`${data.creator.name} on LinkedIn`}>{data.creator.name}</a></small>
       </div>
     </div>
   </footer>;

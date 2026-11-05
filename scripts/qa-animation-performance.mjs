@@ -8,9 +8,11 @@ const dither=read('src/react-bits/DitherVeil.jsx');
 const bento=read('src/components/react-bits/MagicBento.jsx');
 const home=read('src/jyc-editorial-home.jsx');
 const hero=read('src/components/JYCHeroWebGLEmblem.jsx');
+const explorer=read('src/components/JYC3DInteractiveExplorer.jsx');
 const main=read('src/main.jsx');
 const failures=[];
-const check=(name,ok)=>{console.log((ok?'PASS':'FAIL')+': '+name);if(!ok)failures.push(name)};
+let totalChecks=0;
+const check=(name,ok)=>{totalChecks++;console.log((ok?'PASS':'FAIL')+': '+name);if(!ok)failures.push(name)};
 
 check('DriftWall does not schedule an idle RAF when reduced/low-power/offscreen',drift.includes('if(reduced||lowPower||!visible.current)')&&drift.includes('if(!reduced&&!lowPower&&visible.current)frame.current=requestAnimationFrame(animate)'));
 check('Homepage uses the current canvas emblem and lazy magnetic Bento, not a continuously animated photo wall',home.includes('JYCHeroWebGLEmblem')&&home.includes('LazyMagicBento')&&!home.includes('LazyDriftWall')&&home.includes('jh-hero-webgl-stage-wrap')&&home.includes('activities.map'));
@@ -18,11 +20,25 @@ check('DriftWall remains bounded on event and club rails',main.includes('event-d
 check('DriftWall remains bounded on Gallery page',read('src/extra-features.jsx').includes('const wallItems=useMemo(()=>rankJycPhotoItems(items,{limit:24}),[items])'));
 check('DriftWall images are lazy and async decoded',drift.includes('loading="lazy"')&&drift.includes('decoding="async"'));
 check('DitherVeil uses capped-DPR WebGL on capable touch devices and a static fallback for reduced motion or constrained hardware',dither.includes("(pointer: coarse)")&&dither.includes('reducedMotion || constrainedHardware')&&dither.includes('dither-veil__fallback')&&dither.includes('dpr: coarsePointer ? 1'));
+check('Homepage mounts the DitherVeil lazily behind the hero emblem with a bounded visual surface',home.includes('<LazyDitherVeil')&&home.includes('jh-hero-dither-layer')&&home.includes('wander={true}')&&home.includes('clickBurst={false}'));
 check('MagicBento disables heavy effects on coarse/mobile/reduced-motion',bento.includes('(pointer:coarse)')&&bento.includes("'(prefers-reduced-motion: reduce)'")&&bento.includes('const disabled=disableAnimations||mobile||reducedMotion'));
 check('MagicBento combines tilt/magnetism in one tween and resets on pointer leave',bento.includes('gsap.to(el,vars)')&&bento.includes('x:0,y:0,rotateX:0,rotateY:0')&&bento.includes("clearProps:'transform'"));
 check('MagicBento coalesces pointer movement to one animation frame, cancels pending work and guards zero-size cards',bento.includes('let moveFrame=0,lastEvent=null')&&bento.includes('moveFrame=requestAnimationFrame')&&bento.includes('if(moveFrame){cancelAnimationFrame(moveFrame);moveFrame=0}')&&bento.includes('if(moveFrame)cancelAnimationFrame(moveFrame)')&&bento.includes('Math.max(cy,1)')&&bento.includes('Math.max(cx,1)'));
 check('MagicBento does not permanently reserve transform compositing',read('src/components/react-bits/MagicBento.css').includes('.magic-bento-card:hover{will-change:transform')&&!read('src/components/react-bits/MagicBento.css').includes('background:#18161d;color:#fff8e9;isolation:isolate;box-shadow:0 16px 40px rgba(17,19,24,.08);transform-style:preserve-3d;will-change:transform'));
 check('Homepage non-critical imagery stays lazy',home.includes('loading="lazy"'));
 check('Canvas hero honors reduced motion while Bento is coarse-pointer/reduced-motion safe',hero.includes("prefers-reduced-motion: reduce")&&hero.includes('motionQuery.addEventListener')&&hero.includes('cancelAnimationFrame(animId)')&&bento.includes("'(pointer:coarse)'")&&bento.includes("'(prefers-reduced-motion: reduce)'")&&bento.includes('const disabled=disableAnimations||mobile||reducedMotion'));
+
+check('3D explorer content is generated only from published hub registry records',explorer.includes("JYC_HUB_SOURCE_REGISTRY")&&explorer.includes("hub.publicationStatus === 'published'")&&explorer.includes("JYC_HUB_CONTENT[hub.name]"));
+check('3D explorer has no unsupported static membership counts or independent content inventory',!explorer.includes("members: '")&&!explorer.includes("120+ Active")&&!explorer.includes("250+ Devs")&&!explorer.includes("80+ Pilots"));
+check('3D canvas avoids per-frame React state updates, preserves drag rotation and retains RAF handles for cleanup',!explorer.includes("setRotY(r => r + 0.0028)")&&explorer.includes("interactionRef.current")&&explorer.includes("visualRotationRef.current.y")&&explorer.includes('if (schedule) animId = 0;')&&!explorer.includes('else animId = 0;'));
+check('3D canvas pauses for reduced motion, hidden tabs and off-screen sections',explorer.includes("prefers-reduced-motion: reduce")&&explorer.includes("IntersectionObserver")&&explorer.includes("const canAnimate"));
+check('3D constellation provides keyboard selection and accurately identifies its 2D canvas rendering',explorer.includes("Choose a published JYC community")&&explorer.includes('aria-hidden="true"')&&explorer.includes("INTERACTIVE 3D CONSTELLATION")&&!explorer.includes("INTERACTIVE WEBGL TOPOLOGY"));
+
+
+check('DitherVeil uses existing optimized image assets instead of a missing hero texture path',home.includes('src="/assets/jyc-logo.avif"')&&home.includes('fallbackSrc="/assets/jyc-logo.webp"')&&!home.includes('jyc-logo-medium.avif'));
+check('DitherVeil reveal receives pointer movement even when foreground hero layers intercept it',home.includes('globalPointer')&&dither.includes('window.addEventListener(\'pointermove\', onGlobalMove')&&dither.includes('window.removeEventListener(\'pointermove\', onGlobalMove'));
+check('DitherVeil optimized source and fallback assets are present in the public build',fs.existsSync('public/assets/jyc-logo.avif')&&fs.existsSync('public/assets/jyc-logo.webp'));
+
+check('DitherVeil keeps WebGL enabled on typical four-core mobile devices while retaining a low-memory fallback',dither.includes('const constrainedHardware = (navigator.hardwareConcurrency || 4) < 4 || (navigator.deviceMemory || 4) < 2')&&dither.includes('coarsePointer ? 1'));
 if(failures.length)process.exit(1);
-console.log('JYC animation/media performance contract: '+(11-failures.length)+'/11');
+console.log('JYC animation/media performance contract: '+(totalChecks-failures.length)+'/'+totalChecks);

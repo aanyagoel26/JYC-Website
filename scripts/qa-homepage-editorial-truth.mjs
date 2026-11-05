@@ -10,7 +10,8 @@ assert.doesNotMatch(home, /new Date\(['"]2026-11-15T09:00:00/, 'homepage must no
 assert.doesNotMatch(home, /jh-flagship-countdown-strip|jh-countdown-timer/, 'homepage must not present an unverified flagship countdown');
 assert.doesNotMatch(home, /5,000<i>\+<\/i>|50<i>\+<\/i>|15<i>\+<\/i>/, 'homepage must not publish unverified reach, event or legacy counters');
 assert.doesNotMatch(home, /jh-ambient-backdrop|jh-ambient-orb/, 'homepage must not use generic ambient cyber decoration');
-assert.match(home, /rimColor="#a82420"/i, 'Dither Veil rim must use JYC red rather than cyan');
+assert.ok(home.includes('<LazyDitherVeil') && home.includes('rimColor="#38bdf8"') && home.includes('inkColor="#0b1220"') && home.includes('paperColor="#e2e8f0"'), 'Dither Veil must be mounted in the homepage hero with the midnight/cyan visual system');
+assert.ok(home.includes('wander={true}'), 'Dither Veil must reveal and animate on capable hardware');
 assert.match(css, /--jh-bg:\s*#F5F1E6/i, 'homepage background token must use the editorial paper palette');
 assert.match(css, /--jh-accent:\s*#A82420/i, 'homepage accent must use JYC red');
 assert.match(css, /prefers-reduced-motion:\s*reduce/, 'homepage motion must respect reduced-motion preferences');

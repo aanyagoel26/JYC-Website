@@ -429,11 +429,21 @@ test('JAI event does not advertise an expired registration QR as open', async ({
   await expect(page.locator('#event-register').getByRole('button', { name: /REGISTRATION LINK UNAVAILABLE/i })).toBeDisabled();
 });
 
-test('first visit keeps the V20 light palette even when OS requests dark', async ({ page }) => {
-  await page.emulateMedia({ colorScheme: 'dark' });
-  await page.addInitScript(() => localStorage.removeItem('jyc-theme'));
+test('first visit defaults to midnight theme and saved preferences remain respected', async ({ page }) => {
+  await page.emulateMedia({ colorScheme: 'light' });
+  await page.addInitScript(() => {
+    if (!sessionStorage.getItem('jyc-theme-test-cleared')) {
+      localStorage.removeItem('jyc-theme');
+      sessionStorage.setItem('jyc-theme-test-cleared', '1');
+    }
+  });
   await page.goto(base, { waitUntil: 'domcontentloaded' });
-  await waitForAppMount(page, 'V20 default theme');
+  await waitForAppMount(page, 'midnight default theme');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect(page.locator('meta[name="theme-color"]').first()).toHaveAttribute('content', '#050811');
+  await page.evaluate(() => localStorage.setItem('jyc-theme', 'light'));
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'saved light theme');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
   await expect(page.locator('.jyc-editorial-home .jh-hero')).toBeVisible();
 });
@@ -554,6 +564,31 @@ test('homepage renders the official emblem and a magnetic activity Bento', async
   expect(result.activityImages, 'activity discovery uses curated source photography instead of text-only cards').toBeGreaterThanOrEqual(4);
   expect(result.storyOverflow, 'homepage photo-story horizontal overflow').toBe(false);
   expect(result.storyTiles).toBeLessThanOrEqual(3);
+});
+
+test('hero spatial GLB is lazy-loaded and preserves mobile page scrolling', async ({ page }) => {
+  await page.route('https://ajax.googleapis.com/ajax/libs/model-viewer/4.4.0/model-viewer.min.js', route => route.fulfill({
+    status: 200,
+    contentType: 'text/javascript',
+    body: "if (!customElements.get('model-viewer')) customElements.define('model-viewer', class extends HTMLElement {});"
+  }));
+  await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'spatial hero model');
+  const stage = page.locator('.jh-hero-webgl-stage-wrap .jyc-hero-emblem-stage');
+  await expect(stage).toBeVisible();
+  await expect(stage).toHaveCSS('touch-action', 'pan-y');
+  await expect(page.locator('model-viewer.jyc-hero-model-viewer')).toHaveCount(0);
+
+  await page.getByRole('button', { name: /3D MESH/ }).click();
+  const viewer = page.locator('model-viewer.jyc-hero-model-viewer');
+  await expect(viewer).toBeVisible();
+  await expect(viewer).toHaveAttribute('src', '/models/jyc-spatial.glb');
+  await expect(viewer).toHaveAttribute('touch-action', 'pan-y');
+  await expect.poll(() => page.locator('script[data-jyc-model-viewer]').getAttribute('src')).toContain('/4.4.0/');
+  const modelResponse = await page.request.get(base + '/models/jyc-spatial.glb');
+  expect(modelResponse.ok(), 'the validated spatial GLB is served by the application').toBe(true);
+  const modelBytes = await modelResponse.body();
+  expect(modelBytes.subarray(0, 4).toString(), 'the served model has a GLB signature').toBe('glTF');
 });
 
 test('gallery archive uses deterministic responsive image frames', async ({ page }) => {

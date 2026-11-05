@@ -17,8 +17,6 @@ import './styles/jyc-editorial-motion-system.css';
 
 const ORIGINAL_LOGO = '/JYC%20Logo(4).png';
 const FALLBACK = import.meta.env.PROD ? '/assets/jyc-logo.webp' : ORIGINAL_LOGO;
-const DITHER_SOURCE = import.meta.env.PROD ? '/assets/jyc-logo-medium.avif' : FALLBACK;
-const DITHER_SRCSET = import.meta.env.PROD ? '/assets/jyc-logo-medium.avif 1x, /assets/jyc-logo.avif 2x' : undefined;
 const handleHeroLogoFallback = event => {
   const image = event.currentTarget;
   image.srcset = '';
@@ -226,8 +224,37 @@ export function JYCEditorialHome({ data }) {
 
         </div>
 
-        {/* MODERN 3D WEBGL HERO EMBLEM STAGE */}
+        {/* WebGL Dither Veil is a real mounted hero layer; the emblem remains the foreground focal point. */}
         <div className="jh-hero-visual jh-hero-webgl-stage-wrap">
+          <div className="jh-hero-dither-backdrop" aria-hidden="true" />
+          <div className="jh-hero-dither-layer" aria-hidden="true">
+            <Suspense fallback={<div className="jh-hero-dither-loading" />}>
+              <LazyDitherVeil
+                src="/assets/jyc-logo.avif"
+                fallbackSrc="/assets/jyc-logo.webp"
+                originalFallbackSrc="/JYC%20Logo(4).png"
+                globalPointer
+                fit="contain"
+                pattern="floyd"
+                pixelSize={2}
+                levels={3}
+                palette="duotone"
+                inkColor="#0b1220"
+                paperColor="#e2e8f0"
+                contrast={1.18}
+                brightness={0.02}
+                revealRadius={190}
+                softness={0.7}
+                linger={1.25}
+                rimColor="#38bdf8"
+                rim={0.22}
+                wander={true}
+                clickBurst={false}
+                className="jh-hero-dither-veil"
+                style={{width:'100%',height:'100%'}}
+              />
+            </Suspense>
+          </div>
           <JYCHeroWebGLEmblem />
         </div>
       </section>
