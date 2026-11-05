@@ -97,7 +97,7 @@ const checks=[
  ['Sector 128 event boundary remains enforced',main.includes('isSector128Venue')&&main.includes('events.filter(e=>isSector128Venue')],
  ['editorial QA remains wired',pkg.scripts?.['qa:editorial']==='node scripts/qa-editorial-system.mjs'],
  ['new V64 QA is wired',pkg.scripts?.['qa:v64-editorial']==='node scripts/qa-v64-editorial-release.mjs'],
- ['CI builds generated image manifest before running photo-integrity QA',ciWorkflow.indexOf('run: npm run build')>=0&&ciWorkflow.indexOf('run: npm run build')<ciWorkflow.indexOf('run: npm run qa')&&ciWorkflow.indexOf('run: npm run qa')>=0&&ciWorkflow.includes('VITE_CANONICAL_ORIGIN')],
+ ['CI builds generated image manifest before running photo-integrity QA',ciWorkflow.indexOf('run: npm run build')>=0&&ciWorkflow.indexOf('run: npm run build')<ciWorkflow.indexOf('run: npm run qa\n')&&ciWorkflow.indexOf('run: npm run qa\n')>=0&&ciWorkflow.includes('VITE_CANONICAL_ORIGIN')],
  ['CI avoids re-running the postbuild media optimizer',pkg.scripts?.postbuild?.includes('node scripts/optimize-production-media.mjs')&&!ciWorkflow.includes('node scripts/optimize-production-media.mjs')&&!qualityWorkflow.includes('node scripts/optimize-production-media.mjs')],
  ['release metadata is V64',/^64\.\d+\.\d+$/.test(pkg.version)],
  ['production prebuild generates real photo derivatives',pkg.scripts?.prebuild?.includes('generate-photo-derivatives.mjs')],
