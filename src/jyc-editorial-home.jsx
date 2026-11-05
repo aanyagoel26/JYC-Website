@@ -230,7 +230,7 @@ export function JYCEditorialHome({ data }) {
           <div className="jh-hero-dither-layer" aria-hidden="true">
             <Suspense fallback={<div className="jh-hero-dither-loading" />}>
               <LazyDitherVeil
-                src="/assets/jyc-logo.avif"
+                src="/assets/jyc-logo-medium.avif"
                 fallbackSrc="/assets/jyc-logo.webp"
                 originalFallbackSrc="/JYC%20Logo(4).png"
                 globalPointer
