@@ -211,3 +211,29 @@
     transform: none !important;
   }
 }
+
+
+/* Final paper-theme contrast and touch-target contract. These rules load after
+   the legacy route layers so they win without scattering overrides per page. */
+html[data-theme="light"] .public-app .team-hero-panel h1 em {
+  background: none !important;
+  color: #8D642F !important;
+  -webkit-text-fill-color: #8D642F !important;
+}
+html[data-theme="light"] .public-app .jyc-memory-count {
+  color: #F2D7A7 !important;
+}
+@media (max-width: 900px) {
+  .public-app button,
+  .nav button,
+  .more-sheet button,
+  .search-modal button,
+  .jyc-assistant-panel button {
+    min-height: 45px;
+  }
+  .more-sheet a,
+  .search-modal a,
+  .jyc-assistant-panel a {
+    min-height: 45px;
+  }
+}
