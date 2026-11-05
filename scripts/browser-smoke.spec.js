@@ -332,7 +332,7 @@ test('mobile visual guardrails keep core content centered and inside viewport', 
           .map(el => ({
             tag: el.tagName,
             cls: String(el.className || ''),
-            text: String(el.textContent || '').trim().replace(/\\s+/g,' ').slice(0,120),
+            text: String(el.textContent || '').trim().replace(/\s+/g,' ').slice(0,120),
             left: Math.round(el.getBoundingClientRect().left),
             right: Math.round(el.getBoundingClientRect().right),
             top: Math.round(el.getBoundingClientRect().top),
@@ -1594,7 +1594,7 @@ test('static boot screen defaults to the night theme when no preference is saved
   await page.addInitScript(() => localStorage.removeItem('jyc-theme'));
   await page.route('**/*', route => {
     const pathname = new URL(route.request().url()).pathname;
-    if ((pathname.startsWith('/assets/') && /\\.(?:js|jsx|mjs)$/.test(pathname)) || pathname === '/@vite/client') return route.abort();
+    if ((pathname.startsWith('/assets/') && /\.(?:js|jsx|mjs)$/.test(pathname)) || pathname === '/@vite/client') return route.abort();
     return route.continue();
   });
   await page.emulateMedia({ colorScheme: 'light' });
@@ -1983,13 +1983,13 @@ test('More navigation and Search modal work with keyboard, empty states and focu
   await expect(page.locator('.search-result-active')).toContainText('Clubs');
   await expect(page.locator('.search-category-filters')).toBeVisible();
   await expect(page.locator('.search-match').first()).toBeVisible();
-  const clubCategory = page.locator('.search-category-filters button').filter({ hasText: /^CLUB \\(/ }).first();
+  const clubCategory = page.locator('.search-category-filters button').filter({ hasText: /^CLUB \(/ }).first();
   await expect(clubCategory).toBeVisible();
   await clubCategory.click();
   const filteredTypes = await page.locator('#jyc-search-results [role="option"] small').allTextContents();
   expect(filteredTypes.length).toBeGreaterThan(0);
   expect(filteredTypes.every(label => label.includes('CLUB'))).toBe(true);
-  await page.locator('.search-category-filters button').filter({ hasText: /^All \\(/ }).click();
+  await page.locator('.search-category-filters button').filter({ hasText: /^All \(/ }).click();
 
   await input.press('ArrowDown');
   await expect(page.locator('#jyc-search-result-1')).toHaveAttribute('aria-selected', 'true');
