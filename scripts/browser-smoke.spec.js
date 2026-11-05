@@ -2021,6 +2021,16 @@ test('More navigation and Search modal work with keyboard, empty states and focu
   await expect(page).toHaveURL(/\\/achievements(?:\\/)?$/);
   await expect(page.locator('.search-overlay')).toHaveCount(0);
 
+  await searchTrigger.click();
+  await input.fill('RIDE Hack');
+  const updateCategory = page.locator('.search-category-filters button').filter({ hasText: /^UPDATE \\(/ }).first();
+  await expect(updateCategory).toBeVisible();
+  await updateCategory.click();
+  await expect(page.locator('#jyc-search-results [role="option"]').first()).toContainText('RIDE Hack');
+  await input.press('Enter');
+  await expect(page).toHaveURL(/\\/updates(?:\\/)?$/);
+  await expect(page.locator('.search-overlay')).toHaveCount(0);
+
   const moreTrigger = page.locator('.nav-more-trigger');
   const more = page.getByRole('dialog', { name: 'More JYC' });
   await moreTrigger.click();
