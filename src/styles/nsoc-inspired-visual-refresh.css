@@ -1988,3 +1988,90 @@ html[data-theme="dark"] .public-app .about-chapter-nav a:focus-visible {
 @media(prefers-reduced-motion:reduce) {
   .public-app .about-chapter-nav a { transition:none; }
 }
+
+
+/* Close inherited V40/V42 About-page palette leaks at their source. */
+html[data-theme="light"] .public-app .about-page {
+  --v40-bg:#f6f2e9;
+  --v40-surface:#fffdf8;
+  --v40-text:#211d22;
+  --v40-muted:#655d66;
+  --v40-ink:#211d22;
+  --v40-navy:#fffdf8;
+  --v40-navy-2:#f0e9dd;
+  --v40-ivory:#fffdf8;
+  --v40-champ:#98784e;
+  --v40-bronze:#843b35;
+  --v40-line:rgba(45,36,39,.16);
+  color:#211d22;
+}
+html[data-theme="dark"] .public-app .about-page {
+  --v40-bg:#090b19;
+  --v40-surface:#15182b;
+  --v40-text:#f2efff;
+  --v40-muted:#c0bad5;
+  --v40-ink:#f2efff;
+  --v40-navy:#15182b;
+  --v40-navy-2:#1d2038;
+  --v40-ivory:#f2efff;
+  --v40-champ:#e6d4a8;
+  --v40-bronze:#c9b8f2;
+  --v40-line:rgba(201,184,242,.2);
+  color:#f2efff;
+}
+html[data-theme="light"] .public-app .about-page .about-hero-mark>div {
+  background:radial-gradient(circle,#fffdf8,#f0e9dd) !important;
+  border-color:rgba(152,120,78,.35) !important;
+}
+html[data-theme="dark"] .public-app .about-page .about-hero-mark>div {
+  background:radial-gradient(circle,#1d2038,#15182b) !important;
+  border-color:rgba(201,184,242,.28) !important;
+}
+html[data-theme="light"] .public-app .about-page .v40-about-snapshot-intro,
+html[data-theme="light"] .public-app .about-page .v40-about-metrics,
+html[data-theme="light"] .public-app .about-page .v40-about-leadership {
+  background:linear-gradient(145deg,#fffdf8,#f0e9dd) !important;
+  border-color:rgba(45,36,39,.14) !important;
+  color:#211d22;
+}
+html[data-theme="dark"] .public-app .about-page .v40-about-snapshot-intro,
+html[data-theme="dark"] .public-app .about-page .v40-about-metrics,
+html[data-theme="dark"] .public-app .about-page .v40-about-leadership {
+  background:linear-gradient(145deg,#15182b,#101329) !important;
+  border-color:rgba(201,184,242,.2) !important;
+  color:#f2efff;
+}
+html[data-theme="light"] .public-app .about-page .v40-about-metrics article {
+  background:rgba(255,253,248,.88) !important;
+  border-color:rgba(152,120,78,.26) !important;
+}
+html[data-theme="dark"] .public-app .about-page .v40-about-metrics article {
+  background:rgba(29,32,56,.72) !important;
+  border-color:rgba(201,184,242,.2) !important;
+}
+.public-app .about-page .v40-about-metrics article strong {
+  color:var(--jyc-gold) !important;
+}
+html[data-theme="dark"] .public-app .about-page :where(.about-history-node-card,
+  .about-principles-v28 article,.about-flow-grid-v28 article,
+  .about-programme-grid-v28 article,.about-vision-v28 article) {
+  background:linear-gradient(145deg,#15182b,#101329) !important;
+  border-color:rgba(201,184,242,.2) !important;
+  color:#f2efff !important;
+}
+html[data-theme="light"] .public-app .about-page :where(.about-history-node-card,
+  .about-principles-v28 article,.about-flow-grid-v28 article,
+  .about-programme-grid-v28 article,.about-vision-v28 article) {
+  background:#fffdf8 !important;
+  border-color:rgba(45,36,39,.14) !important;
+  color:#211d22 !important;
+}
+html[data-theme="dark"] .public-app .about-page :where(.about-history-node-card p,
+  .about-principles-v28 article p,.about-flow-grid-v28 article p,
+  .about-programme-grid-v28 article p,.about-vision-v28 article p,
+  .about-source-note) { color:#c0bad5 !important; }
+html[data-theme="dark"] .public-app .about-page :where(.about-history-node-idx,
+  .about-history-node-yr,.about-history-badge,.about-flow-grid-v28 article>span,
+  .about-programme-grid-v28 article small) { color:#e6d4a8 !important; }
+html[data-theme="dark"] .public-app .about-page :where(.about-history-cite a,
+  .about-inline-links button,.about-programme-grid-v28 article button) { color:#c9b8f2 !important; }
