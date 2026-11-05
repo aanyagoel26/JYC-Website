@@ -4,7 +4,8 @@ import path from 'node:path';
 
 const routes = [
   '/', '/about', '/history', '/clubs', '/events', '/team', '/gallery',
-  '/achievements', '/recruitment', '/fests', '/contact', '/calendar', '/best-of-jyc'
+  '/achievements', '/announcements', '/updates', '/archive', '/join-jyc',
+  '/recruitment', '/fests', '/converge', '/contact', '/calendar', '/best-of-jyc'
 ];
 
 const viewports = [
@@ -22,7 +23,7 @@ const viewports = [
 test.describe('JYC visual capture and measurable design contracts', () => {
   for (const viewport of viewports) {
     test(`capture route matrix — ${viewport.name}`, async ({ page }, testInfo) => {
-      // Each viewport captures 13 long-form routes, scrolls lazy media into view,
+      // Each viewport captures 18 long-form routes, scrolls lazy media into view,
       // and writes full-page screenshots. Desktop/tablet captures can exceed the
       // default 30s while remaining healthy, so give this capture job room.
       test.setTimeout(120000);
