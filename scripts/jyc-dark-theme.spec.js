@@ -39,7 +39,9 @@ test.describe('JYC celestial night-sky dark theme', () => {
             bodyBackground: body.backgroundColor,
             bodyFont: body.fontFamily,
             headingFont: heading ? getComputedStyle(heading).fontFamily : '',
-            navBackground: nav ? getComputedStyle(nav).backgroundColor : '',\n            constellationBackground: constellation ? getComputedStyle(constellation).backgroundImage : '',\n            constellationHudAccent: hud ? getComputedStyle(hud).getPropertyValue('--hud-color').trim() : '',
+            navBackground: nav ? getComputedStyle(nav).backgroundColor : '',
+            constellationBackground: constellation ? getComputedStyle(constellation).backgroundImage : '',
+            constellationHudAccent: hud ? getComputedStyle(hud).getPropertyValue('--hud-color').trim() : '',
             homeBackground: document.querySelector('.jyc-editorial-home.jyc-home')
               ? getComputedStyle(document.querySelector('.jyc-editorial-home.jyc-home')).getPropertyValue('--jh-bg').trim()
               : ''
@@ -55,7 +57,11 @@ test.describe('JYC celestial night-sky dark theme', () => {
         expect(dark.bodyFont).toMatch(/Inter|system-ui/i);
         expect(dark.headingFont).toContain('Space Grotesk');
         expect(dark.navBackground).not.toBe('rgba(0, 0, 0, 0)');
-        if (route === '/') {\n          expect(dark.homeBackground).toBe('#090b19');\n          expect(dark.constellationBackground).toContain('gradient');\n          expect(dark.constellationHudAccent).toBe('#c9b8f2');\n        }
+        if (route === '/') {
+          expect(dark.homeBackground).toBe('#090b19');
+          expect(dark.constellationBackground).toContain('gradient');
+          expect(dark.constellationHudAccent).toBe('#c9b8f2');
+        }
 
         // The new visual contract must not bleed into the existing light theme.
         await page.evaluate(() => { document.documentElement.dataset.theme = 'light'; });
