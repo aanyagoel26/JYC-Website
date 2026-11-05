@@ -31,7 +31,9 @@ test.describe('JYC celestial night-sky dark theme', () => {
           const nav = document.querySelector('.public-app .nav');
           return {
             backgroundToken: root.getPropertyValue('--jyc-bg').trim(),
-            primaryToken: root.getPropertyValue('--jyc-brand-oxblood').trim(),\n            darkAccent: root.getPropertyValue('--accent-red').trim(),\n            moonlightToken: root.getPropertyValue('--jh-cyan').trim(),
+            primaryToken: root.getPropertyValue('--jyc-brand-oxblood').trim(),
+            darkAccent: root.getPropertyValue('--accent-red').trim(),
+            moonlightToken: root.getPropertyValue('--jh-cyan').trim(),
             bodyBackground: body.backgroundColor,
             bodyFont: body.fontFamily,
             headingFont: heading ? getComputedStyle(heading).fontFamily : '',
@@ -43,7 +45,10 @@ test.describe('JYC celestial night-sky dark theme', () => {
         });
 
         expect(dark.backgroundToken).toBe('#090b19');
-        expect(dark.primaryToken).toBe('#c9b8f2');\n        expect(dark.darkAccent).toBe('#c9b8f2');\n        expect(dark.moonlightToken).toBe('#e6d4a8');\n        expect(dark.primaryToken).not.toMatch(/#(?:ed8064|ff9a7e|38bdf8)/i);
+        expect(dark.primaryToken).toBe('#c9b8f2');
+        expect(dark.darkAccent).toBe('#c9b8f2');
+        expect(dark.moonlightToken).toBe('#e6d4a8');
+        expect(dark.primaryToken).not.toMatch(/#(?:ed8064|ff9a7e|38bdf8)/i);
         expect(dark.bodyBackground).toMatch(/rgba?\(/);
         expect(dark.bodyFont).toMatch(/Inter|system-ui/i);
         expect(dark.headingFont).toContain('Space Grotesk');
