@@ -14,7 +14,7 @@ test.describe('JYC Search and More overlay experience',()=>{
       await page.locator('.search-trigger').click();
       const search=page.getByRole('dialog',{name:/what are you looking for/i});
       await expect(search).toBeVisible();
-      await expect(search.getByRole('textbox',{name:'Search JYC content'})).toBeFocused();
+      await expect(search.locator('input[aria-label="Search JYC content"]')).toBeFocused();
       await expect(page.locator('body')).toHaveCSS('overflow','hidden');
       await search.getByRole('textbox',{name:'Search JYC content'}).fill('robotics');
       await expect(search.getByRole('group',{name:'Filter search results'})).toBeVisible();
@@ -32,7 +32,7 @@ test.describe('JYC Search and More overlay experience',()=>{
       }
       const more=page.getByRole('dialog',{name:/more to discover/i});
       await expect(more).toBeVisible();
-      await expect(more.getByRole('textbox',{name:'Search the More directory'})).toBeFocused();
+      await expect(more.locator('input[aria-label="Search the More directory"]')).toBeFocused();
       await expect(page.locator('body')).toHaveCSS('overflow','hidden');
       await more.getByRole('textbox',{name:'Search the More directory'}).fill('calendar');
       await expect(more.getByRole('button',{name:/event calendar/i})).toBeVisible();
