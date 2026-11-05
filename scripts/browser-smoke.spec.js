@@ -511,10 +511,18 @@ test('failed gallery photos use the neutral unavailable-photo asset, not a logo 
     const viewAll = page.getByRole('button', { name: /View All Events/ });
     if (await viewAll.count()) await viewAll.click();
   }
-  const eventFallback = page.locator('img[src="/assets/photo-unavailable.svg"]').first();
-  if (await eventFallback.count()) {
-    await expect(eventFallback).toBeVisible({ timeout: 15000 });
-    await expect(eventFallback).toHaveAttribute('alt', /Event (image|poster) unavailable/);
+  const eventCards = page.locator('.event-card');
+  if (await eventCards.count()) {
+    const firstEvent = eventCards.first();
+    const eventImage = firstEvent.locator('img').first();
+    if (await eventImage.count()) {
+      await eventImage.scrollIntoViewIfNeeded();
+      await expect(eventImage).toHaveAttribute('src', '/assets/photo-unavailable.svg', { timeout: 15000 });
+      await expect(eventImage).toHaveAttribute('alt', /Event (image|poster) unavailable/);
+    } else {
+      // A source-backed event without poster media uses its domain mark, not a fake image.
+      await expect(firstEvent.locator('.event-domain-mark, .event-card-mark').first()).toBeVisible();
+    }
   } else {
     await expect(page.getByRole('heading', { name: 'No events match your current filter.' })).toBeVisible();
     await expect(page.locator('.event-card')).toHaveCount(0);
