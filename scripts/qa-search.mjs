@@ -39,3 +39,5 @@ ok('registry publicationStatus records are searchable',isPublicSearchRecord({nam
 ok('draft records are excluded from public search',!isPublicSearchRecord({name:'Draft Hub',status:'draft'}));
 ok('source-material records are excluded from public search',!isPublicSearchRecord({name:'Unverified Hub',publicationStatus:'source-material'}));
 ok('archived records stay excluded even if legacy published flag remains true',!isPublicSearchRecord({name:'Old Event',published:true,archived:true}));
+
+ok('explicit unpublished flag overrides a published status',!isPublicSearchRecord({name:'Hidden Hub',published:false,status:'published'}));
