@@ -3,8 +3,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 const routes = [
-  '/', '/about', '/history', '/clubs', '/events', '/team', '/gallery',
-  '/achievements', '/recruitment', '/fests', '/contact', '/calendar', '/best-of-jyc'
+  '/', '/about', '/history', '/clubs', '/clubs/cicr', '/events',
+  '/events/jai-2026-jaypee-agentic-ai-hackathon', '/events/drono-o-war-2026',
+  '/team', '/gallery', '/achievements', '/recruitment', '/join-jyc', '/fests',
+  '/contact', '/calendar', '/announcements', '/updates', '/archive', '/best-of-jyc'
 ];
 
 const viewports = [
@@ -26,7 +28,7 @@ test.describe('JYC visual capture and measurable design contracts', () => {
       // Each viewport captures 13 long-form routes, scrolls lazy media into view,
       // and writes full-page screenshots. Desktop/tablet captures can exceed the
       // default 30s while remaining healthy, so give this capture job room.
-      test.setTimeout(120000);
+      test.setTimeout(240000);
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       await page.emulateMedia({ reducedMotion: 'reduce' });
       const errors = [];
