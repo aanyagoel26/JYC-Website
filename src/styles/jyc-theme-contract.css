@@ -156,7 +156,7 @@ html[data-theme="dark"] {
   --text-muted: var(--jyc-muted);
   --line: var(--jyc-line);
   --border-tech: var(--jyc-line);
-  --navy: #f7f5ff;
+  --navy: #080d1c;
   --navy-deep: #080d1c;
   --navy-soft: #111b31;
   --dark: #080d1c;
@@ -248,4 +248,59 @@ html[data-theme="light"] .public-app :where(.btn-primary,.nav-join-cta) { color:
     transition-duration: .001ms !important;
     scroll-behavior: auto !important;
   }
+}
+
+
+/* Explicitly neutralize legacy hard-coded red/cyan states that predate tokens. */
+html[data-theme="light"] .public-app :where(.jyc-filter-toggle-btn,.jyc-quick-pill,.jyc-filter-drawer,.jyc-filter-pill,.jyc-search-input) {
+  background-color: var(--jyc-surface) !important;
+  color: var(--jyc-text-strong) !important;
+  border-color: var(--jyc-line) !important;
+}
+html[data-theme="light"] .public-app :where(.jyc-filter-toggle-btn:hover,.jyc-filter-toggle-btn.is-active,.jyc-quick-pill.is-active,.jyc-filter-pill.is-active) {
+  background: var(--jyc-accent) !important;
+  color: #fff !important;
+  border-color: var(--jyc-accent) !important;
+}
+html[data-theme="dark"] .public-app :where(.jyc-filter-toggle-btn,.jyc-quick-pill,.jyc-filter-drawer,.jyc-filter-pill,.jyc-search-input) {
+  background-color: var(--jyc-surface) !important;
+  color: var(--jyc-text-strong) !important;
+  border-color: var(--jyc-line) !important;
+}
+html[data-theme="dark"] .public-app :where(.jyc-filter-toggle-btn:hover,.jyc-filter-toggle-btn.is-active,.jyc-quick-pill.is-active,.jyc-filter-pill.is-active) {
+  background: var(--jyc-gold) !important;
+  color: #080d1c !important;
+  border-color: var(--jyc-gold) !important;
+}
+html[data-theme="dark"] .public-app :where(.jyc-filter-pill:hover) {
+  background: var(--jyc-surface-strong) !important;
+  color: var(--jyc-text-strong) !important;
+  border-color: var(--jyc-line-strong) !important;
+}
+html[data-theme="light"] .public-app :where(.search-modal,.more-sheet,.search-list button,.search-suggestions button) {
+  background: var(--jyc-surface) !important;
+  color: var(--jyc-text-strong) !important;
+  border-color: var(--jyc-line) !important;
+  box-shadow: var(--jyc-shadow) !important;
+}
+html[data-theme="dark"] .public-app :where(.search-modal,.more-sheet,.search-list button,.search-suggestions button) {
+  background: var(--jyc-surface) !important;
+  color: var(--jyc-text-strong) !important;
+  border-color: var(--jyc-line) !important;
+  box-shadow: var(--jyc-shadow) !important;
+}
+html[data-theme="light"] .public-app :where(.search-overlay) {
+  background: rgba(245,241,232,.82) !important;
+}
+html[data-theme="dark"] .public-app :where(.search-overlay) {
+  background: rgba(5,10,22,.84) !important;
+}
+html[data-theme="light"] .public-app :where(.gallery-item:hover,.jyc57-photo:hover) {
+  box-shadow: 0 20px 50px rgba(56,45,72,.12), 0 0 24px rgba(172,139,79,.10) !important;
+}
+html[data-theme="dark"] .public-app :where(.gallery-item:hover,.jyc57-photo:hover) {
+  box-shadow: 0 24px 60px rgba(0,0,0,.48), 0 0 28px rgba(200,188,255,.10) !important;
+}
+.public-app :where(.jyc-filter-group-label,.jyc-clear-filters-btn,.jyc-filter-toggle-btn:hover) {
+  color: var(--jyc-gold) !important;
 }
