@@ -31,6 +31,19 @@ test.describe('JYC team directory interactions', () => {
     await expect(page.getByRole('button', { name: /Everyone/ })).toHaveAttribute('aria-pressed', 'true');
   });
 
+  test('profile flip cards are keyboard operable and restore the front face on Escape', async ({ page }) => {
+    const card = page.locator('.team-member-flip').first();
+    await expect(card).toBeVisible();
+    await card.focus();
+    await expect(card).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(card).toHaveAttribute('aria-expanded', 'true');
+    await expect(card.locator('.flip-card__back')).toBeVisible();
+    await page.keyboard.press('Escape');
+    await expect(card).toHaveAttribute('aria-expanded', 'false');
+    await expect(card.locator('.flip-card__front')).toBeVisible();
+  });
+
   test('keeps the directory usable at narrow phone widths', async ({ page }) => {
     for (const width of [320, 360, 390, 430]) {
       await page.setViewportSize({ width, height: 820 });
