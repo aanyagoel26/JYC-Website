@@ -360,31 +360,3 @@ html[data-theme="dark"] .public-app :where(a,button,input,select,textarea,[tabin
     scroll-behavior: auto !important;
   }
 }
-
-
-/* Light-theme editorial contrast repairs: text accents must remain readable on paper. */
-html[data-theme="light"] .jyc-editorial-home.jyc-home .jh-hero h1 {
-  color: #1A191D !important;
-}
-html[data-theme="light"] .jyc-editorial-home.jyc-home .jh-lead {
-  color: #5F5860 !important;
-}
-html[data-theme="light"] .public-app .team-hero-panel h1 em {
-  background: none !important;
-  color: #8D642F !important;
-  -webkit-text-fill-color: #8D642F !important;
-}
-html[data-theme="light"] .public-app .jyc-memory-count {
-  color: #F2D7A7 !important;
-}
-
-/* Touch controls use a small safety margin above the 44px target recommendation.
-   This applies to the site's compact filter and profile actions on tablet/phone. */
-@media (max-width: 900px) {
-  .public-app button:not(.jyc57-photo):not(.jyc57-feature-card),
-  .public-app .btn,
-  .public-app .filter-toggle,
-  .public-app .nav button {
-    min-height: 45px;
-  }
-}
