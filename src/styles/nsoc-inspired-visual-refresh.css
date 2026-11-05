@@ -1511,3 +1511,227 @@ html[data-jyc-route] .route-stage {
 @media(prefers-reduced-motion:reduce) {
   html[data-jyc-route] .route-stage { animation:none !important; }
 }
+
+
+/* --------------------------------------------------------------------------
+   CROSS-ROUTE THEME CLOSURE
+   The repository contains older visual layers with their own colour literals.
+   These final semantic aliases and scoped component rules keep every public
+   route, micro-control, icon, badge, overlay and standalone experience in the
+   current JYC editorial/night-sky system.
+   -------------------------------------------------------------------------- */
+html[data-theme="light"] {
+  --jyc-bg:#f6f2e9;
+  --jyc-surface:#fffdf8;
+  --jyc-surface-2:#f0e9dd;
+  --jyc-ink:#211d22;
+  --jyc-muted:#655d66;
+  --jyc-line:rgba(45,36,39,.15);
+  --jyc-line-strong:rgba(45,36,39,.25);
+  --jyc-red:#843b35;
+  --jyc-red-strong:#682d29;
+  --jyc-gold:#98784e;
+  --jyc-focus:#843b35;
+  --cream:#fffdf8;
+  --paper:#f6f2e9;
+  --ink:#211d22;
+  --muted:#655d66;
+  --surface:#fffdf8;
+  --dark:#211d22;
+  --gold:#98784e;
+  --red:#843b35;
+  --line:rgba(45,36,39,.15);
+  --jyc-final-bg:#211d22;
+  --jyc-final-surface:#fffdf8;
+  --jyc-final-ink:#211d22;
+  --jyc-final-muted:#655d66;
+  --jyc-final-line:rgba(45,36,39,.15);
+  --jyc-final-gold:#98784e;
+  --jyc-final-red:#843b35;
+  --tech-bg:#f6f2e9;
+  --tech-surface:#fffdf8;
+  --tech-surface-elevated:#fffdf8;
+  --tech-border:rgba(45,36,39,.15);
+  --tech-gold:#98784e;
+  --tech-cyan:#843b35;
+  --tech-crimson:#843b35;
+  --tech-emerald:#98784e;
+}
+html[data-theme="dark"] {
+  --cream:#f2efff;
+  --paper:#090b19;
+  --ink:#f2efff;
+  --muted:#c0bad5;
+  --surface:#15182b;
+  --dark:#090b19;
+  --gold:#e6d4a8;
+  --red:#c9b8f2;
+  --line:rgba(218,211,255,.16);
+  --jyc-ex-paper:#090b19;
+  --jyc-ex-paper-raised:#15182b;
+  --jyc-ex-ink:#f2efff;
+  --jyc-ex-muted:#c0bad5;
+  --jyc-ex-line:rgba(218,211,255,.16);
+  --jyc-ex-oxblood:#c9b8f2;
+  --jyc-ex-oxblood-deep:#a997d8;
+  --jyc-ex-champagne:#e6d4a8;
+  --jyc-restoration-paper:#090b19;
+  --jyc-restoration-paper-raised:#15182b;
+  --jyc-restoration-ink:#f2efff;
+  --jyc-restoration-muted:#c0bad5;
+  --jyc-restoration-red:#c9b8f2;
+  --jyc-restoration-red-bright:#e2d8ff;
+  --jyc-restoration-champagne:#e6d4a8;
+  --jyc-innovation-paper:#090b19;
+  --jyc-innovation-paper-raised:#15182b;
+  --jyc-innovation-ink:#f2efff;
+  --jyc-innovation-muted:#c0bad5;
+  --jyc-innovation-brass:#e6d4a8;
+  --jyc-innovation-oxblood:#c9b8f2;
+  --jyc-final-bg:#090b19;
+  --jyc-final-surface:#15182b;
+  --jyc-final-ink:#f2efff;
+  --jyc-final-muted:#c0bad5;
+  --jyc-final-line:rgba(218,211,255,.16);
+  --jyc-final-gold:#e6d4a8;
+  --jyc-final-red:#c9b8f2;
+  --tech-bg:#090b19;
+  --tech-surface:#15182b;
+  --tech-surface-elevated:#1d2038;
+  --tech-border:rgba(218,211,255,.16);
+  --tech-gold:#e6d4a8;
+  --tech-cyan:#c9b8f2;
+  --tech-crimson:#c9b8f2;
+  --tech-emerald:#e6d4a8;
+}
+
+/* V57 route family: use the active theme aliases instead of its legacy palette. */
+.public-app :where(.jyc57-page,.jyc-route-section,.jyc-photo-story-section,.jyc-hub-signal-section) {
+  color:var(--jyc-ink);
+}
+.public-app :where(.jyc57-page,.jyc-route-card,.jyc-hub-signal-card,.jyc-route-note,
+  .jyc-route-hubs button,.jyc-photo-story-rail button,.jyc-hub-source-filters button,
+  .jyc57-hero>div:first-child,.jyc57-archive-head>div:first-child,.jyc57-event-card,
+  .jyc57-archive-row,.jyc57-empty,.jyc57-lightbox-inner) {
+  color:var(--jyc-ink);
+  border-color:var(--jyc-line);
+}
+html[data-theme="light"] .public-app :where(.jyc-route-card,.jyc-hub-signal-card,
+  .jyc57-hero>div:first-child,.jyc57-archive-head>div:first-child,.jyc57-event-card,
+  .jyc57-archive-row,.jyc57-lightbox-inner) {
+  background:var(--jyc-surface);
+}
+html[data-theme="dark"] .public-app :where(.jyc-route-card,.jyc-hub-signal-card,
+  .jyc57-hero>div:first-child,.jyc57-archive-head>div:first-child,.jyc57-event-card,
+  .jyc57-archive-row,.jyc57-lightbox-inner,.jyc-route-note) {
+  color:var(--jyc-ink) !important;
+  background:linear-gradient(145deg,#15182b,#101329) !important;
+  border-color:rgba(201,184,242,.2) !important;
+}
+html[data-theme="dark"] .public-app :where(.jyc-route-card p,.jyc-route-note p,
+  .jyc57-hero p,.jyc57-archive-head p,.jyc57-event-copy p,.jyc57-empty p,
+  .jyc57-gallery-meta,.jyc57-archive-row small) { color:var(--jyc-muted) !important; }
+html[data-theme="dark"] .public-app :where(.jyc-route-index,.jyc-route-hubs b,
+  .jyc-route-footer button,.jyc-route-note>span,.jyc-hub-signal-card small,
+  .jyc-hub-signal-card b,.jyc57-gallery-meta b,.jyc57-feature span:last-child,
+  .jyc57-feature small,.jyc57-club-fallback,.jyc57-gallery-meta strong) {
+  color:var(--jyc-gold) !important;
+}
+html[data-theme="dark"] .public-app :where(.jyc-route-hubs button,
+  .jyc-photo-story-rail button,.jyc-hub-source-filters button,.jyc57-segment button,
+  .jyc57-category-row button,.jyc57-year-switch button) {
+  color:var(--jyc-ink) !important;
+  background:rgba(201,184,242,.055) !important;
+  border-color:var(--jyc-line) !important;
+}
+html[data-theme="dark"] .public-app :where(.jyc-route-hubs button.active,
+  .jyc-hub-source-filters button.active,.jyc57-segment button.active,
+  .jyc57-category-row button.active,.jyc57-year-switch button.active) {
+  color:#171629 !important;
+  background:linear-gradient(115deg,#c9b8f2,#e6d4a8) !important;
+  border-color:#c9b8f2 !important;
+}
+html[data-theme="dark"] .public-app :where(.jyc-photo-story,.jyc-photo-story-stage,
+  .jyc-photo-story-rail,.jyc-hub-signal-card>div,.jyc57-event-art,.jyc57-feature-fallback) {
+  background:#101329 !important;
+  border-color:var(--jyc-line) !important;
+}
+html[data-theme="dark"] .public-app :where(.jyc-photo-story-caption,
+  .jyc-photo-story-caption strong,.jyc-photo-story-caption small,
+  .jyc-photo-story-caption>span) { color:#f2efff !important; }
+html[data-theme="dark"] .public-app :where(.jyc57-pill,.jyc57-pill.live) {
+  color:#171629 !important;
+  background:#c9b8f2 !important;
+  border-color:rgba(230,212,168,.4) !important;
+}
+
+/* Fest is a nested experience, but its controls inherit the site theme. */
+html[data-theme="light"] .public-app .fest-shell {
+  --fest-bg:#f6f2e9;--fest-surface:#fffdf8;--fest-ink:#211d22;
+  --fest-muted:#655d66;--fest-accent:#843b35;--fest-metal:#98784e;
+  color:var(--fest-ink);
+}
+html[data-theme="dark"] .public-app .fest-shell {
+  --fest-bg:#090b19;--fest-surface:#15182b;--fest-ink:#f2efff;
+  --fest-muted:#c0bad5;--fest-accent:#c9b8f2;--fest-metal:#e6d4a8;
+  color:var(--fest-ink);
+}
+html[data-theme="dark"] .public-app .fest-shell :where(.fest-global-nav,.fest-content,
+  .fest-controlbar,.fest-tabs,.fest-category-scroll,.fest-programme-row,
+  .fest-update-card,.fest-gallery-panel,.fest-upnext-card,.fest-live-card,
+  .fest-search,.fest-mobile-dock) {
+  color:var(--fest-ink) !important;
+  background-color:var(--fest-surface) !important;
+  border-color:var(--jyc-line) !important;
+}
+html[data-theme="dark"] .public-app .fest-shell :where(h1,h2,h3,p,small,strong,
+  .eyebrow,.fest-live-indicator,.fest-programme-main span,.fest-programme-time span) {
+  color:var(--fest-ink);
+}
+html[data-theme="dark"] .public-app .fest-shell :where(p,small,.fest-programme-main span,
+  .fest-programme-time span) { color:var(--fest-muted) !important; }
+html[data-theme="dark"] .public-app .fest-shell :where(button,a,.fest-theme-switcher) {
+  color:var(--fest-ink);
+  border-color:var(--jyc-line);
+}
+html[data-theme="dark"] .public-app .fest-shell :where(button.active,.fest-category-scroll button.active,
+  .fest-tabs button.active,.fest-mobile-dock button.active,.fest-programme-meta em.live) {
+  color:#171629 !important;
+  background:linear-gradient(115deg,#c9b8f2,#e6d4a8) !important;
+  border-color:#c9b8f2 !important;
+}
+html[data-theme="dark"] .public-app .fest-shell :where(.fest-search input) {
+  color:var(--fest-ink) !important;background:transparent !important;
+}
+html[data-theme="dark"] .public-app .fest-shell :where(.fest-search input)::placeholder {
+  color:var(--fest-muted) !important;
+}
+
+/* Small controls should inherit their semantic foreground; decorative SVGs follow it. */
+.public-app :where(button,a,[role="button"],.icon-button,.icon-control) svg {
+  color:inherit;
+}
+html[data-theme="dark"] .public-app :where(.icon-button,.icon-control,.theme-toggle,
+  .hamb,.search-trigger,.nav-more-trigger,.sheet-close,.jyc57-close,
+  .fest-share-btn,.fest-nav-theme,.fest-theme-switcher button) {
+  color:var(--jyc-ink) !important;
+  background-color:var(--jyc-surface) !important;
+  border-color:var(--jyc-line) !important;
+}
+html[data-theme="dark"] .public-app :where(.icon-button,.icon-control,.theme-toggle,
+  .hamb,.search-trigger,.nav-more-trigger,.sheet-close,.jyc57-close,
+  .fest-share-btn,.fest-nav-theme,.fest-theme-switcher button) svg {
+  stroke:currentColor;
+}
+html[data-theme="dark"] .public-app :where(.jyc57-page,.jyc-route-section,
+  .jyc-photo-story-section,.jyc-hub-signal-section) :where(a:not(.btn),button:not(.active)) {
+  color:var(--jyc-ink);
+}
+html[data-theme="light"] .public-app :where(.jyc57-page,.jyc-route-section,
+  .jyc-photo-story-section,.jyc-hub-signal-section) :where(a:not(.btn),button:not(.active)) {
+  color:var(--jyc-ink);
+}
+@media(prefers-reduced-motion:reduce) {
+  html[data-theme] .public-app .fest-shell *,
+  html[data-theme] .public-app .jyc57-page * { scroll-behavior:auto !important; }
+}
