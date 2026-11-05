@@ -811,12 +811,15 @@ export function JYCAssistant({ data, onClose }) {
         }
 
         .preset-buttons {
-          display: flex;
+          display: grid;
+          grid-template-columns: repeat(2, minmax(0, 1fr));
           gap: 8px;
           margin-top: 10px;
         }
 
         .preset-buttons button {
+          min-width: 0;
+          min-height: 44px;
           padding: 8px 14px;
           border-radius: 10px;
           background: rgba(255, 255, 255, 0.05);
