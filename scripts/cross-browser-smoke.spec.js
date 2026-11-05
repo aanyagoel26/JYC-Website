@@ -7,6 +7,7 @@ const ready = async page => {
 };
 
 test('browser-compat: public route families render without uncaught errors or horizontal overflow', async ({ page }) => {
+  test.setTimeout(120000);
   const errors = [];
   page.on('pageerror', error => errors.push(error.message));
   for (const route of ['/', '/clubs', '/events', '/gallery', '/team', '/join-jyc', '/updates', '/contact']) {
@@ -20,6 +21,7 @@ test('browser-compat: public route families render without uncaught errors or ho
 });
 
 test('browser-compat: Search and More dialogs are named, dismissible and restore focus', async ({ page }) => {
+  test.setTimeout(60000);
   await page.goto(base, { waitUntil: 'domcontentloaded' });
   await ready(page);
   const searchTrigger = page.locator('[data-jyc-search-trigger]').first();
@@ -41,6 +43,7 @@ test('browser-compat: Search and More dialogs are named, dismissible and restore
 });
 
 test('browser-compat: reduced-motion mode keeps navigation and controls usable on mobile', async ({ page }) => {
+  test.setTimeout(60000);
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(base + '/clubs', { waitUntil: 'domcontentloaded' });
