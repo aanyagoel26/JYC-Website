@@ -1541,10 +1541,11 @@ test('JYC Assistant search and keyboard close stay functional', async ({ page })
   await expect(dialog).toBeVisible();
   await expect(dialog).toHaveAttribute('aria-modal', 'true');
 
-  const search = page.getByRole('textbox', { name: 'Search JYC content' });
+  await dialog.getByRole('button', { name: /Fast Directory Search/ }).click();
+  const search = page.getByRole('textbox', { name: 'Search JYC directory' });
   await expect(search).toBeFocused();
   await search.fill('JAI 2026');
-  await expect(page.locator('.jyc-assistant-result').first()).toBeVisible();
+  await expect(page.locator('.search-result-item').first()).toBeVisible();
 
   await page.keyboard.press('Escape');
   await expect(dialog).toHaveCount(0);
@@ -1636,9 +1637,9 @@ test('JYC Assistant quick routes are distinct and navigate to their labelled des
   await waitForAppMount(page, 'JYC assistant quick routes');
   await page.getByRole('button', { name: 'Open JYC Assistant' }).click();
 
-  const dialog = page.getByRole('dialog', { name: 'Ask JYC. Find your route.' });
+  const dialog = page.getByRole('dialog', { name: 'Ask JYC. Instant Campus Knowledge.' });
   await expect(dialog).toBeVisible();
-  const routes = dialog.locator('.jyc-assistant-quick button');
+  const routes = dialog.locator('.preset-buttons button');
   await expect(routes).toHaveCount(4);
   await expect(routes).toContainText(['Explore all clubs', 'Upcoming events', 'JYC archive', 'Contact JYC']);
 
@@ -1657,7 +1658,7 @@ test('JYC Assistant traps keyboard focus and restores focus after closing', asyn
 
   const dialog = page.getByRole('dialog', { name: 'Ask JYC. Find your route.' });
   await expect(dialog).toBeVisible();
-  await expect(page.getByRole('textbox', { name: 'Search JYC content' })).toBeFocused();
+  await expect(page.getByRole('textbox', { name: 'Ask JYC AI a question' })).toBeFocused();
 
   const focusables = dialog.locator('button:not([disabled]), input:not([disabled]), [tabindex]:not([tabindex="-1"])');
   await focusables.last().focus();
