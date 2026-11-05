@@ -1594,7 +1594,7 @@ test('static boot screen follows the operating-system theme before React mounts'
   await page.addInitScript(() => localStorage.removeItem('jyc-theme'));
   await page.route('**/*', route => {
     const pathname = new URL(route.request().url()).pathname;
-    if ((pathname.startsWith('/assets/') && /\\.(?:js|jsx|mjs)$/.test(pathname)) || pathname === '/@vite/client') return route.abort();
+    if ((pathname.startsWith('/assets/') && /\.(?:js|jsx|mjs)$/.test(pathname)) || pathname === '/@vite/client') return route.abort();
     return route.continue();
   });
   for (const theme of ['light', 'dark']) {
