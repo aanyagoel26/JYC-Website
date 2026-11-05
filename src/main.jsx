@@ -24,7 +24,7 @@ import {PDF_HUB_EXTRA_GALLERY,PDF_HUB_PROGRAMME} from './pdf-hub-extra.js';
 import {enrichSourceClubs,mergeSourceGallery,sourceHubMedia,sourceEventMedia} from './jyc-source-media.js';
 import {JYC_EVENT_CATEGORIES,JYC_COMMUNITY_DISCOVERY,JYC_PUBLIC_ACTIVITIES} from './public-v1/config.js';
 import {JYC_SOCIALS,festSocialProfile,socialProfile,is128SocialProfile} from './jyc-socials.js';
-import {JYCNowStrip,JYCNowPage,HubLatestUpdates} from './jyc-now.jsx';
+import {JYCNowStrip,JYCNowPage,HubLatestUpdates,JYC_NOW_FALLBACK} from './jyc-now.jsx';
 import {HISTORY} from './jyc-history-page.jsx';
 import {JYCBrandEditorial} from './jyc-next-experience.jsx';
 import {JYCEditorialHome} from './jyc-editorial-home.jsx';
@@ -902,7 +902,7 @@ function Search({data,admin,close}){
  const team=(Array.isArray(sourceData.team)?sourceData.team:[]).filter(m=>m&&typeof m==='object'&&m.published===true&&m.status!=='draft'&&m.status!=='archived'&&String(m.name||'').trim());
  const achievements=(Array.isArray(sourceData.achievements)?sourceData.achievements:JYC_EDITORIAL_ACHIEVEMENTS).filter(item=>item&&typeof item==='object'&&item.published!==false&&item.status!=='draft'&&item.status!=='archived'&&item.status!=='source-material'&&String(item.title||item.name||'').trim());
  const announcements=(Array.isArray(sourceData.announcements)?sourceData.announcements:[]).filter(item=>item&&typeof item==='object'&&item.published===true&&item.status!=='draft'&&item.status!=='archived'&&String(item.title||item.text||'').trim());
- const updates=(Array.isArray(sourceData.updates)?sourceData.updates:[]).filter(item=>item&&typeof item==='object'&&item.published===true&&item.status!=='draft'&&item.status!=='archived'&&String(item.title||item.headline||'').trim());
+ const updates=[...(Array.isArray(sourceData.updates)?sourceData.updates:[]),...JYC_NOW_FALLBACK].filter(item=>item&&typeof item==='object'&&(item.published===true||typeof item.verified==='boolean')&&item.status!=='draft'&&item.status!=='archived'&&String(item.title||item.headline||'').trim()&&safeExternalUrl(item.url));
  const pageIndex=[
   ['JIIT Youth Club','Official JYC website for JIIT Noida clubs, events, people and campus experiences.','PAGE','/'],
   ['About JYC','About the JIIT Youth Club community, purpose and student-led work.','PAGE','/about'],
