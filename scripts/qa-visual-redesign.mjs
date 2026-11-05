@@ -37,7 +37,7 @@ const checks = [
   ['Jai Hack dark theme loads after the application stylesheet graph', main.indexOf("import './styles/jai-hack-dark-theme.css';") > main.indexOf("from './v15-functional.js';")],
   ['Jai Hack dark theme is scoped to explicit dark mode', fs.readFileSync('src/styles/jai-hack-dark-theme.css', 'utf8').includes('html[data-theme="dark"]')],
   ['Jai Hack dark theme preserves reduced-motion preferences', fs.readFileSync('src/styles/jai-hack-dark-theme.css', 'utf8').includes('prefers-reduced-motion: reduce')],
-  ['Jai Hack dark theme defines visible cyan keyboard focus', fs.readFileSync('src/styles/jai-hack-dark-theme.css', 'utf8').includes('outline: 2px solid #38bdf8')],
+  ['JYC night-sky compatibility maps legacy accents to the shared palette and exposes lavender focus', (() => { const theme = fs.readFileSync('src/styles/jai-hack-dark-theme.css', 'utf8'); return theme.includes('--jyc-cyan: var(--jyc-accent)') && theme.includes('--jyc-blue: var(--jyc-accent)') && theme.includes('--jyc-gold: var(--jyc-gold)') && theme.includes('outline: 3px solid var(--jyc-focus)') && !theme.includes('#38bdf8') && !theme.includes('#60a5fa'); })()],
 ];
 for (const [ok, name] of checks) { console.log((ok ? 'PASS: ' : 'FAIL: ') + name); assert.ok(ok, name); }
 console.log('JYC editorial motion system contract: PASS');
