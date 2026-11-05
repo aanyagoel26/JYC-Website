@@ -11,6 +11,7 @@ const darkTheme = /JYC shared day\/night theme contract|JYC shared warm-paper da
 const searchMore = /JYC Search and More interaction contract/i;
 const teamDirectory = /JYC team directory interactions/i;
 const aboutInteractions = /About family cards open the matching filtered clubs directory/i;
+const crossBrowser = /browser-compat:/i;
 
 export default defineConfig({
   testDir: './scripts',
@@ -40,6 +41,9 @@ export default defineConfig({
     { name: 'search-more', use: { viewport: { width: 390, height: 844 }, isMobile: true }, grep: searchMore },
     { name: 'team-directory', use: { viewport: { width: 390, height: 844 }, isMobile: true }, grep: teamDirectory },
     { name: 'about-interactions', use: { viewport: { width: 390, height: 844 }, isMobile: true }, grep: aboutInteractions },
+    { name: 'compat-chromium', use: { browserName: 'chromium', viewport: { width: 1280, height: 900 } }, grep: crossBrowser },
+    { name: 'compat-firefox', use: { browserName: 'firefox', viewport: { width: 1280, height: 900 } }, grep: crossBrowser },
+    { name: 'compat-webkit', use: { browserName: 'webkit', viewport: { width: 1280, height: 900 } }, grep: crossBrowser },
     { name: 'visual-matrix', use: { viewport: { width: 1440, height: 900 } }, grep: /capture route matrix/ }
   ],
   webServer: {
