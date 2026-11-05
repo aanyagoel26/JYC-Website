@@ -794,7 +794,7 @@ function Navbar({data,admin,theme,setTheme}){
  const goHomeSection=id=>{setOpen(false);setMoreOpen(false);if(String(id).startsWith('/')){nav(id);return}if(loc.pathname!=='/'){nav('/#'+id);return}document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});setHomeSection(id)};
  const dockItems=[['Home','/','home'],['Clubs','/clubs','clubs'],['Events','/events','events'],['Gallery','/gallery','gallery'],['More','__more','more']];
  const dockActive=loc.pathname==='/'?0:loc.pathname.startsWith('/clubs')?1:loc.pathname.startsWith('/events')?2:loc.pathname.startsWith('/gallery')?3:4;
- const dock=<div className="mobile-dock" style={{'--dock-index':dockActive}} aria-label="Mobile navigation"><i className="dock-active-pill" aria-hidden="true"/>{dockItems.map(([n,p,icon],i)=>{const active=i===dockActive;return <button type="button" key={n} className={active?'active':''} onClick={()=>p==='__more'?setMoreOpen(v=>!v):nav(p)} aria-current={active?'page':undefined}><span><NavIcon kind={icon}/></span><b>{n}</b></button>})}</div>;
+ const dock=<div className="mobile-dock" style={{'--dock-index':dockActive}} aria-label="Mobile navigation"><i className="dock-active-pill" aria-hidden="true"/>{dockItems.map(([n,p,icon],i)=>{const active=i===dockActive;return <button type="button" key={n} className={active?'active':''} onClick={()=>p==='__more'?setMoreOpen(v=>!v):nav(p)} aria-current={active?'page':undefined} aria-expanded={p==='__more'?moreOpen:undefined} aria-controls={p==='__more'?'jyc-more-dialog':undefined}><span><NavIcon kind={icon}/></span><b>{n}</b></button>})}</div>;
  const more=moreOpen?<MobileMoreSheet data={data} admin={admin} close={()=>setMoreOpen(false)} openSearch={()=>{setMoreOpen(false);setSearch(true)}}/>:null;
  const searchView=search?<Search data={data} admin={admin} close={()=>setSearch(false)}/>:null;
  const navButtons = routeLinks.map(([n, p]) => {
@@ -817,10 +817,10 @@ function Navbar({data,admin,theme,setTheme}){
  return <>
  <header className="nav"><div className="nav-inner">
    <button type="button" className="brand" aria-label="JIIT Youth Club home" onClick={()=>{setOpen(false);nav('/')}}><span className="brand-mark"><LogoImage alt="JIIT Youth Club logo" loading="eager" fetchPriority="high" srcSet={`${logoTiny} 1x, ${logoSmall} 2x`}/></span><span>JIIT YOUTH CLUB</span></button>
-   <nav className={open?'open':''}>{navButtons}<button type="button" className={`nav-more-trigger ${moreOpen?'active':''}`} onClick={()=>{setOpen(false);setMoreOpen(v=>!v)}} aria-expanded={moreOpen}>More <span aria-hidden="true">⌄</span></button></nav>
+   <nav className={open?'open':''}>{navButtons}<button type="button" className={`nav-more-trigger ${moreOpen?'active':''}`} onClick={()=>{setOpen(false);setMoreOpen(v=>!v)}} aria-expanded={moreOpen} aria-controls="jyc-more-dialog">More <span aria-hidden="true">⌄</span></button></nav>
    <button type="button" className="nav-join-cta" onClick={()=>nav('/join-jyc')}>Join JYC <span>↗</span></button>
    <Theme theme={theme} setTheme={setTheme}/><button type="button" className={`hamb ${open?'open':''}`} onClick={()=>setOpen(v=>!v)} aria-label="Menu" aria-expanded={open}><i/><i/><i/></button>
-   {open&&<button type="button" className="mobile-nav-scrim" aria-label="Close navigation" onClick={()=>setOpen(false)}/>}<button type="button" className="search-trigger" data-jyc-search-trigger aria-label="Search" onClick={()=>setSearch(true)} title="Search JYC (Ctrl/Cmd + K)"><span className="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg></span><span className="search-label">Search</span><kbd aria-hidden="true">Ctrl K</kbd></button>
+   {open&&<button type="button" className="mobile-nav-scrim" aria-label="Close navigation" onClick={()=>setOpen(false)}/>}<button type="button" className="search-trigger" data-jyc-search-trigger aria-label="Search" aria-expanded={search} aria-controls="jyc-search-dialog" onClick={()=>setSearch(true)} title="Search JYC (Ctrl/Cmd + K)"><span className="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg></span><span className="search-label">Search</span><kbd aria-hidden="true">Ctrl K</kbd></button>
  </div></header>
  {createPortal(dock,document.body)}{createPortal(more,document.body)}{searchView}</>
 }
@@ -863,7 +863,7 @@ const explore=[
     ['/archive','Archive','The published JYC story by year'],
     ['/contact','Contact','Official public channels and query form']
    ];
- return <div ref={sheetRef} className="more-sheet-overlay" role="dialog" aria-modal="true" aria-label="More JYC" onMouseDown={e=>{if(e.target===e.currentTarget)close()}}>
+ return <div id="jyc-more-dialog" ref={sheetRef} className="more-sheet-overlay" role="dialog" aria-modal="true" aria-label="More JYC" onMouseDown={e=>{if(e.target===e.currentTarget)close()}}>
   <div className="more-sheet jyc-more-club-sheet">
    <div className="sheet-grabber"/>
    <div className="more-sheet-head"><div><span className="eyebrow">MORE JYC</span><h3>Useful pages. Nothing repeated.</h3><p>About, communities, events, archive and official JYC channels live here.</p></div><button type="button" className="sheet-close" onClick={close} aria-label="Close More JYC">×</button></div>
@@ -885,9 +885,10 @@ function Search({data,admin,close}){
  useEffect(()=>{const active=document.activeElement;returnFocusRef.current=active instanceof HTMLElement?active:document.querySelector('[data-jyc-search-trigger]');const previous=document.body.style.overflow;document.body.style.overflow='hidden';const timer=setTimeout(()=>inputRef.current?.focus(),40);const onKeyDown=e=>{if(e.key!=='Tab')return;const root=document.querySelector('.search-modal');if(!root)return;const focusable=[...root.querySelectorAll('button,input,a,[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled&&el.offsetParent!==null);if(!focusable.length)return;const first=focusable[0],last=focusable[focusable.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}};document.addEventListener('keydown',onKeyDown);return()=>{clearTimeout(timer);document.body.style.overflow=previous;document.removeEventListener('keydown',onKeyDown);const target=returnFocusRef.current?.isConnected?returnFocusRef.current:document.querySelector('[data-jyc-search-trigger]');if(target instanceof HTMLElement)requestAnimationFrame(()=>target.focus())}},[]);
  useEffect(()=>{setSelected(0)},[term]);
  const remember=value=>{if(!value)return;try{const next=[value,...recent.filter(x=>x!==value)].slice(0,5);storageSet('jyc-search-recent',JSON.stringify(next));setRecent(next)}catch{}};
- const clubs=data.clubs.filter(c=>c.published&&c.status!=='archived'&&c.status!=='draft'&&c.status!=='source-material');
- const events=data.events.filter(e=>e.published&&!e.archived&&e.status!=='draft'&&e.status!=='source-material');
- const team=data.team.filter(m=>m.published===true&&m.status!=='draft'&&m.status!=='archived');
+ const sourceData=data&&typeof data==='object'?data:{};
+ const clubs=(Array.isArray(sourceData.clubs)?sourceData.clubs:[]).filter(c=>c&&typeof c==='object'&&c.published&&c.status!=='archived'&&c.status!=='draft'&&c.status!=='source-material'&&String(c.name||'').trim());
+ const events=(Array.isArray(sourceData.events)?sourceData.events:[]).filter(e=>e&&typeof e==='object'&&e.published&&!e.archived&&e.status!=='draft'&&e.status!=='source-material'&&String(e.title||'').trim());
+ const team=(Array.isArray(sourceData.team)?sourceData.team:[]).filter(m=>m&&typeof m==='object'&&m.published===true&&m.status!=='draft'&&m.status!=='archived'&&String(m.name||'').trim());
  const pageIndex=[
   ['JIIT Youth Club','Official JYC website for JIIT Noida clubs, events, people and campus experiences.','PAGE','/'],
   ['About JYC','About the JIIT Youth Club community, purpose and student-led work.','PAGE','/about'],
@@ -909,7 +910,7 @@ function Search({data,admin,close}){
   ...clubs.map(c=>({key:'c'+c.id,type:'CLUB',title:c.name,meta:c.category||'Community',searchText:`${c.name} ${c.category||''} ${Array.isArray(c.interests)?c.interests.join(' '):''} ${c.description||''} ${c.about||''}`,icon:'◈',go:()=>nav('/clubs/'+encodeURIComponent(slug(c.name)))})),
   ...events.map(e=>({key:'e'+e.id,type:'EVENT',title:e.title,meta:e.club||'JYC',searchText:`${e.title} ${e.club||''} ${e.venue||''} ${e.eventType||''} ${e.date||''} ${Array.isArray(e.highlights)?e.highlights.join(' '):''}`,icon:'◷',go:()=>nav('/events/'+encodeURIComponent(slug(e.slug||e.title)))})),
   ...team.map(m=>({key:'t'+m.id,type:'TEAM',title:m.name,meta:m.role||'JYC Team',searchText:`${m.name} ${m.role||''} ${m.bio||''}`,icon:'✦',go:()=>nav('/team')})),
-  ...data.gallery.filter(g=>g&&g.url&&g.published!==false&&g.status!=='draft'&&g.status!=='source-material').map((g,i)=>({key:'g'+(g.id||i),type:'PHOTO',title:g.caption||g.title||g.association||'JYC photo',meta:[g.association,g.year].filter(Boolean).join(' · ')||'JYC visual archive',searchText:`${g.caption||''} ${g.title||''} ${g.association||''} ${g.year||''} ${g.alt||''} ${g.sourceLabel||''}`,icon:'▧',go:()=>nav('/gallery')})),
+  ...(Array.isArray(sourceData.gallery)?sourceData.gallery:[]).filter(g=>g&&typeof g==='object'&&g.url&&g.published!==false&&g.status!=='draft'&&g.status!=='source-material').map((g,i)=>({key:'g'+(g.id||i),type:'PHOTO',title:g.caption||g.title||g.association||'JYC photo',meta:[g.association,g.year].filter(Boolean).join(' · ')||'JYC visual archive',searchText:`${g.caption||''} ${g.title||''} ${g.association||''} ${g.year||''} ${g.alt||''} ${g.sourceLabel||''}`,icon:'▧',go:()=>nav('/gallery')})),
  ];
  const intentResults=term&&/(tomorrow|today|this week|upcoming|events)/.test(term)
   ?[{key:'intent-events',type:'QUICK ACTION',title:'Upcoming events',meta:'Open the JYC event calendar',searchText:'upcoming events today tomorrow this week',icon:'◷',priority:120,go:()=>nav('/events')}]
@@ -929,7 +930,7 @@ function Search({data,admin,close}){
    if(e.key==='ArrowUp'&&searchResults.length){e.preventDefault();setSelected(i=>(i-1+searchResults.length)%searchResults.length);return}
    if(e.key==='Enter'&&searchResults[selected]){e.preventDefault();goResult(searchResults[selected]);}
  };
- const content=<div className="overlay search-overlay" role="dialog" aria-modal="true" aria-label="JYC search" onMouseDown={close} onTouchStart={e=>{if(e.target===e.currentTarget)close()}}>
+ const content=<div id="jyc-search-dialog" className="overlay search-overlay" role="dialog" aria-modal="true" aria-label="JYC search" onMouseDown={close} onTouchStart={e=>{if(e.target===e.currentTarget)close()}}>
   <div className="search-modal" onMouseDown={e=>e.stopPropagation()}>
    <div className="search-mobile-grabber"/>
    <div className="modal-head"><div><span className="eyebrow">JYC SEARCH</span><span className="search-subtitle">Search the whole public JYC experience.</span></div><button type="button" className="icon-btn search-close" onClick={close} aria-label="Close search"><span>ESC</span><b>×</b></button></div>
