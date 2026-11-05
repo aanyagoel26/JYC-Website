@@ -2,22 +2,53 @@ import { useEffect, useRef } from 'react';
 import './jyc-innovation-motion.css';
 
 function setupReveal() {
+  const root = document.documentElement;
+  const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches === true;
+  let observer = null;
+  let mutation = null;
+  let fallbackTimer = null;
+  const reveal = node => node.classList.add('jyc-motion-visible');
+  const observe = node => {
+    if (!(node instanceof Element) || node.dataset.jycRevealObserved === 'true') return;
+    node.dataset.jycRevealObserved = 'true';
+    if (reducedMotion || typeof IntersectionObserver === 'undefined') reveal(node);
+    else observer.observe(node);
+  };
+  const scan = container => {
+    if (!(container instanceof Element) && container !== document) return;
+    if (container instanceof Element && container.matches('.public-app .reveal')) observe(container);
+    container.querySelectorAll?.('.public-app .reveal').forEach(observe);
+  };
+  const observeAddedNodes = records => records.forEach(record => record.addedNodes.forEach(scan));
   const nodes = [...document.querySelectorAll('.public-app .reveal')];
   if (!nodes.length) return () => {};
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    nodes.forEach(node => node.classList.add('jyc-motion-visible'));
-    return () => {};
+  if (!reducedMotion && typeof IntersectionObserver === 'function') {
+    root.classList.add('jyc-motion-ready');
+    observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          reveal(entry.target);
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
   }
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('jyc-motion-visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
-  nodes.forEach(node => observer.observe(node));
-  return () => observer.disconnect();
+  scan(document);
+  if (typeof MutationObserver === 'function' && document.body) {
+    mutation = new MutationObserver(observeAddedNodes);
+    mutation.observe(document.body, { childList: true, subtree: true });
+  }
+  if (!reducedMotion && observer) {
+    fallbackTimer = window.setTimeout(() => {
+      document.querySelectorAll('.public-app .reveal:not(.jyc-motion-visible)').forEach(reveal);
+    }, 4500);
+  }
+  return () => {
+    observer?.disconnect();
+    mutation?.disconnect();
+    if (fallbackTimer) window.clearTimeout(fallbackTimer);
+    root.classList.remove('jyc-motion-ready');
+  };
 }
 
 /**
