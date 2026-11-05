@@ -118,6 +118,8 @@ export function JYCAssistant({ data, onClose }) {
   const nav = useNavigate();
   const inputRef = useRef(null);
   const dialogRef = useRef(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
   const [activeTab, setActiveTab] = useState('chat'); // 'chat' or 'search'
   const [query, setQuery] = useState('');
   const [messages, setMessages] = useState([
@@ -132,7 +134,7 @@ export function JYCAssistant({ data, onClose }) {
   const [isTyping, setIsTyping] = useState(false);
 
   const { clubs, events, team, gallery } = useMemo(() => published(data), [data]);
-  const quickRoutes = [['Explore all clubs','/clubs'],['Upcoming events','/events'],['JYC archive','/archive'],['Join JYC','/join-jyc'],['Leadership team','/team'],['Contact JYC','/contact']];
+  const quickRoutes = [['Explore all clubs','/clubs'],['Upcoming events','/events'],['JYC archive','/archive'],['Contact JYC','/contact']];
 
   useEffect(() => {
     const returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
@@ -140,7 +142,7 @@ export function JYCAssistant({ data, onClose }) {
     document.body.style.overflow = 'hidden';
     const focusTimer = setTimeout(() => {
       const nodes = [...(dialogRef.current?.querySelectorAll('button:not([disabled]),input:not([disabled]),textarea:not([disabled]),a[href],[tabindex]:not([tabindex="-1"])') || [])].filter(node => node.offsetParent !== null);
-      (nodes[0] || inputRef.current)?.focus();
+      (inputRef.current || nodes[0])?.focus();
     }, 40);
     const onKey = event => {
       if (event.key === 'Escape') { event.preventDefault(); onClose?.(); return; }
@@ -158,7 +160,7 @@ export function JYCAssistant({ data, onClose }) {
       document.body.style.overflow = previousOverflow;
       if (returnFocus?.isConnected) requestAnimationFrame(() => returnFocus.focus({ preventScroll: true }));
     };
-  }, [onClose]);
+  }, []);
 
   const handleSendQuery = textToSend => {
     const q = (textToSend || query).trim();
