@@ -44,8 +44,6 @@ jobs:
 
       - name: Run static QA with the same canonical origin used by the build
         run: npm run qa
-        env:
-          VITE_CANONICAL_ORIGIN: https://jyc-qa.invalid
       - run: npm run qa:seo
       - name: Verify photo integrity
         run: npm run qa:photos
