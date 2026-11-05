@@ -16,5 +16,8 @@ ok('best match is the exact searched entity',ranked[0]?.key==='target');
 ok('prefix match follows exact title',ranked[1]?.key==='prefix');
 const brand=rankSearchResults([{key:'club',title:'JYC Technical Club',meta:'club',text:'',type:'CLUB'},{key:'home',title:'JIIT Youth Club',meta:'Official JYC website',text:'JIIT Noida clubs events',type:'PAGE'}],'JYC');
 ok('official JIIT Youth Club page leads brand search',brand[0]?.key==='home');
+const many=rankSearchResults(Array.from({length:24},(_,i)=>({key:`item-${i}`,title:`AITronics ${i+1}`,meta:'Technical club',text:'AI robotics',type:'CLUB'})),'AITronics');
+ok('ranking preserves every match so the UI can report an accurate total',many.length===24);
+ok('ranking remains relevance ordered beyond the first 16 results',many[0]?._score>=many[15]?._score&&many[15]?._score>=many[23]?._score);
 if(fail.length)process.exit(1);
 console.log(`Search QA complete: ${5+1}/6 checks passed.`);
