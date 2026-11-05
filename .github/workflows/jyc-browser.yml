@@ -39,7 +39,7 @@ jobs:
       - name: Build production bundle
         env:
           VITE_JYC_QA_FIXTURES: 'true'
-          VITE_CANONICAL_ORIGIN: https://jyc-qa.invalid
+          VITE_CANONICAL_ORIGIN: https://www.jiityouthclub128.in
         run: npm run build
 
       - name: Run browser smoke and responsive QA against production preview

@@ -38,7 +38,7 @@ jobs:
       - name: Build production bundle and media derivatives
         run: npm run build
         env:
-          VITE_CANONICAL_ORIGIN: https://jyc-qa.invalid
+          VITE_CANONICAL_ORIGIN: https://www.jiityouthclub128.in
       - name: Verify responsive breakpoint contracts
         run: npm run qa:responsive
 
