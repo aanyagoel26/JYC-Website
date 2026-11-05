@@ -1961,10 +1961,11 @@ test('sparse faculty layout uses only populated tracks and mobile home actions s
     const box = selector => { const el = document.querySelector(selector); if (!el) return null; const r = el.getBoundingClientRect(); return { left:r.left, right:r.right, top:r.top, bottom:r.bottom }; };
     const intersects = (a,b) => Boolean(a&&b&&Math.max(0,Math.min(a.right,b.right)-Math.max(a.left,b.left))>0&&Math.max(0,Math.min(a.bottom,b.bottom)-Math.max(a.top,b.top))>0);
     const bot = box('.jyc-bot-shell');
-    return { action:intersects(bot,box('.jyc-editorial-home .hero-actions')), nav:intersects(bot,box('.nav')) };
+    return { action:intersects(bot,box('.jyc-editorial-home .hero-actions')), nav:intersects(bot,box('.nav')), badge:intersects(bot,box('.jh-cyber-badge')) };
   });
   expect(fixedOverlap.action, 'mobile assistant must not cover homepage primary actions').toBe(false);
   expect(fixedOverlap.nav, 'mobile assistant must not cover the navigation controls').toBe(false);
+  expect(fixedOverlap.badge, 'mobile assistant must not cover the academic-year badge').toBe(false);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth + 1), 'mobile homepage should not overflow').toBeTruthy();
 });
 
