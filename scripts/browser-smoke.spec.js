@@ -1694,7 +1694,7 @@ test('tablet events hero keeps the headline inside its text frame', async ({ pag
   await page.setViewportSize({ width: 768, height: 900 });
   await page.goto(base + '/events', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'tablet events directory');
-  const geometry = await page.locator('.events-page .compact-page-head h1').evaluate(el => {
+  const geometry = await page.locator('.jyc-events-header h1').evaluate(el => {
     const rect = el.getBoundingClientRect();
     return { client: el.clientWidth, scroll: el.scrollWidth, left: rect.left, right: rect.right, viewport: innerWidth };
   });
@@ -1954,7 +1954,7 @@ test('More navigation and Search modal work with keyboard, empty states and focu
   await searchTrigger.click();
   await input.fill('zzzzunrelatedtoken');
   await expect(page.getByText(/No matches for/)).toBeVisible();
-  await page.getByRole('button', { name: 'Clear search' }).click();
+  await page.locator('.search-no-results button').getByText('Clear search', { exact: true }).click();
   await expect(input).toBeFocused();
   await input.press('Escape');
   await expect(page.locator('.search-overlay')).toHaveCount(0);
