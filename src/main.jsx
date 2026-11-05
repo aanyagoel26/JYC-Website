@@ -376,10 +376,10 @@ function Team({data}){
   const linkedin=safeExternalUrl(m.linkedin||m.linkedinUrl||m.linkedin_url||m.socials?.linkedin);
   return <article className="team-layer-card team-flip-member" key={m.id||name||index}>
    <Suspense fallback={<div className="team-flip-loading" aria-hidden="true"/>}>
-    <LazyFlipCard label={\`Open profile for \${name}\`} className="team-member-flip">
+    <LazyFlipCard label={`Open profile for ${name}`} className="team-member-flip">
      <div className="team-member-face-content" style={{position:'absolute',inset:0,width:'100%',height:'100%',minHeight:'100%',overflow:'hidden',padding:0}}>
       <div className="team-photo-editorial">
-       {photo?<ResponsivePhoto src={photo} alt={\`Portrait of \${name}\`} width={600} height={720} loading="lazy" decoding="async" sizes="(max-width: 420px) 90vw, (max-width: 760px) 45vw, 25vw" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt={\`Portrait unavailable for \${name}\`}/>:<span className="jyc-logo-fallback team-photo-missing-logo" role="img" aria-label={\`Portrait unavailable for \${name}\`}>{String(name).trim().split(/\s+/).map(x=>x[0]).slice(0,2).join('').toUpperCase()}</span>}
+       {photo?<ResponsivePhoto src={photo} alt={`Portrait of ${name}`} width={600} height={720} loading="lazy" decoding="async" sizes="(max-width: 420px) 90vw, (max-width: 760px) 45vw, 25vw" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt={`Portrait unavailable for ${name}`}/>:<span className="jyc-logo-fallback team-photo-missing-logo" role="img" aria-label={`Portrait unavailable for ${name}`}>{String(name).trim().split(/\s+/).map(x=>x[0]).slice(0,2).join('').toUpperCase()}</span>}
       </div>
       <div className="team-front-overlay">
        <span className="team-role-tag">{role}</span>
@@ -391,7 +391,7 @@ function Team({data}){
       <div><span className="team-back-role-eyebrow">{role} · JYC 128</span><h3 className="team-back-name">{name}</h3>{linkedinHeadline&&linkedinHeadline!==about&&<div className="team-back-headline">{linkedinHeadline}</div>}</div>
       <p className="team-back-bio">{about}</p>
       <div className="team-back-actions">
-       {linkedin&&<a href={linkedin} target="_blank" rel="noopener noreferrer" className="team-linkedin-btn" onClick={e=>e.stopPropagation()} aria-label={\`Open \${name}'s LinkedIn profile in a new tab\`}>
+       {linkedin&&<a href={linkedin} target="_blank" rel="noopener noreferrer" className="team-linkedin-btn" onClick={e=>e.stopPropagation()} aria-label={`Open ${name}'s LinkedIn profile in a new tab`}>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.46 10.9v8.37H9.2V10.9H6.46M7.83 6.45a1.6 1.6 0 0 0-1.6 1.6 1.6 1.6 0 0 0 1.6 1.6 1.6 1.6 0 0 0 1.6-1.6 1.6 1.6 0 0 0-1.6-1.6Z"/></svg>
         LinkedIn profile <span aria-hidden="true">↗</span>
        </a>}
@@ -404,8 +404,8 @@ function Team({data}){
  const renderSection=(key,label,title,description,items)=>{
   if(activeTier!=='all'&&activeTier!==key)return null;
   if(!items.length)return null;
-  return <section className="team-layer" aria-labelledby={\`team-\${key}-heading\`}>
-   <div className="team-layer-head"><span className="eyebrow">{label}</span><h2 id={\`team-\${key}-heading\`}>{title}</h2><p>{description}</p></div>
+  return <section className="team-layer" aria-labelledby={`team-${key}-heading`}>
+   <div className="team-layer-head"><span className="eyebrow">{label}</span><h2 id={`team-${key}-heading`}>{title}</h2><p>{description}</p></div>
    <div className={items.length===2?'team-layer-grid team-layer-grid--two':'team-layer-grid'}>{items.map((m,i)=><MemberCard m={m} index={i} key={m.id||m.name||i}/>)}</div>
   </section>;
  };
@@ -428,7 +428,7 @@ function Team({data}){
     ['apex','Apex leadership',apex.length],
     ['core','Core team',core.length],
     ['faculty','Faculty guides',faculty.length]
-   ].map(([key,label,count])=><button type="button" key={key} aria-pressed={activeTier===key} className={\`team-filter-tab \${activeTier===key?'is-active':''}\`} onClick={()=>setActiveTier(key)}><span>{label}</span><b>{count}</b></button>)}
+   ].map(([key,label,count])=><button type="button" key={key} aria-pressed={activeTier===key} className={`team-filter-tab ${activeTier===key?'is-active':''}`} onClick={()=>setActiveTier(key)}><span>{label}</span><b>{count}</b></button>)}
   </div>
   <p className="team-results-count" role="status" aria-live="polite">Showing <strong>{activeCount}</strong> of {activeTier==='faculty'?faculty.length:activeTier==='apex'?apex.length:activeTier==='core'?core.length:members.length} published profiles</p>
   <section className="team-structure-visual" aria-label="How JYC leadership works"><span className="eyebrow">HOW JYC WORKS</span><h2>Guidance, leadership, and communities — connected.</h2><div className="team-structure-flow"><div><b>01</b><strong>Faculty guides</strong><span>Institutional guidance</span></div><i aria-hidden="true">↓</i><div><b>02</b><strong>Apex leadership</strong><span>Direction & coordination</span></div><i aria-hidden="true">↓</i><div><b>03</b><strong>Core team</strong><span>Planning & execution</span></div><i aria-hidden="true">↓</i><div><b>04</b><strong>Clubs & hubs</strong><span>Participation & community</span></div></div></section>
