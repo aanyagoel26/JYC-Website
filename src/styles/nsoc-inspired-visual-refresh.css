@@ -1462,3 +1462,46 @@ html[data-theme="dark"] .public-app .nav .nav-join-cta {
   background:linear-gradient(110deg,#d7c9f5,#e6d4a8) !important;
   border-color:rgba(230,212,168,.48) !important;
 }
+
+
+/* Homepage section surfaces: keep each real content block inside the same mode. */
+html[data-theme="dark"] .jyc-editorial-home.jyc-home :where(.jh-event-list button,.jh-team-list button,.jh-about-participation-proof span,.jh-years span) {
+  color:#e6dff6 !important;
+  background:rgba(201,184,242,.055) !important;
+  border-color:rgba(201,184,242,.16) !important;
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home :where(.jh-event-list button:hover,.jh-team-list button:hover) {
+  background:rgba(201,184,242,.11) !important;
+  border-color:rgba(230,212,168,.3) !important;
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-community {
+  background:linear-gradient(150deg,rgba(21,24,43,.94),rgba(11,14,30,.98)) !important;
+  border-block:1px solid rgba(201,184,242,.12);
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-final {
+  background:
+    radial-gradient(ellipse at 80% 20%,rgba(103,91,157,.22),transparent 42%),
+    linear-gradient(145deg,#15182b,#090b19) !important;
+  border-block:1px solid rgba(201,184,242,.18);
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-about-editorial,
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-photo-story,
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-pillars-section,
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-events {
+  color:#f2efff;
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home :where(.jh-about-editorial-copy p,.jh-photo-story-intro p,.jh-event-copy>p,.jh-community-copy p,.jh-final p) {
+  color:#c0bad5 !important;
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home :where(.magic-bento-card,.jh-bento-loading-card) {
+  background:linear-gradient(145deg,rgba(31,35,61,.96),rgba(15,18,37,.98)) !important;
+  border-color:rgba(201,184,242,.2) !important;
+  box-shadow:0 18px 48px rgba(0,0,0,.28),inset 0 1px 0 rgba(255,255,255,.04) !important;
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home :where(.jh-text-link,.jh-team-list button>b,.jh-event-list button>b) {
+  color:#e6d4a8 !important;
+}
+html[data-theme="light"] .jyc-editorial-home.jyc-home :where(.jh-event-list button,.jh-team-list button,.jh-bento-loading-card) {
+  background:#fffdf8 !important;border-color:rgba(45,36,39,.12) !important;
+  box-shadow:0 12px 30px rgba(45,36,39,.055);
+}
