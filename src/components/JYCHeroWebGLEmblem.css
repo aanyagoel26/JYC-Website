@@ -131,7 +131,7 @@ html[data-theme="dark"] .jyc-emblem-badge,
 
 html[data-theme="dark"] .jyc-emblem-badge:hover,
 :root:not([data-theme="light"]) .jyc-emblem-badge:hover {
-  background: var(--jyc-surface-raised);
+  background: var(--jyc-surface-strong);
   border-color: var(--jyc-line-strong);
   box-shadow: 0 14px 40px var(--jyc-accent-soft);
 }
