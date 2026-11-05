@@ -858,6 +858,7 @@ const explore=[
     ['/updates','JYC Now','Recent verified updates from JYC and the hubs'],
     ['/announcements','Announcements','Registrations, notices and JYC updates'],
     ['/join-jyc','Join JYC','Official recruitment pathway and onboarding guide'],
+    ['/recruitment','Recruitment','Published openings, eligibility and application status'],
     ['/archive','Archive','The published JYC story by year'],
     ['/contact','Contact','Official public channels and query form']
    ];
@@ -914,6 +915,7 @@ function Search({data,admin,close}){
   ['Announcements','JYC announcements, registration notices and updates.','PAGE','/announcements'],
   ['JYC Now','Latest published JYC updates, campus news and hub activity.','PAGE','/updates'],
   ['Join JYC','Official recruitment pathway and onboarding guide.','PAGE','/join-jyc'],
+  ['Recruitment','Published JYC openings, eligibility and application status.','PAGE','/recruitment'],
   ['JYC Event Calendar','Published JYC events by date.','PAGE','/calendar']
  ];
  const adminPages=[];
@@ -955,7 +957,7 @@ function Search({data,admin,close}){
    <div className="search-mobile-grabber"/>
    <div className="modal-head"><div><span className="eyebrow">JYC SEARCH</span><span className="search-subtitle">Search the whole public JYC experience.</span></div><button type="button" className="icon-btn search-close" onClick={close} aria-label="Close search"><span>ESC</span><b>×</b></button></div>
    <div className="search-input-wrap"><span className="search-field-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg></span><input ref={inputRef} autoFocus aria-autocomplete="list" aria-expanded={Boolean(queryActive&&searchResults.length)} aria-controls={queryActive&&searchResults.length?"jyc-search-results":undefined} value={q} onChange={e=>setQ(e.target.value)} onKeyDown={onInputKeyDown} placeholder={isFestMode(data)?"Search clubs, events, people, fests…":"Search clubs, events and people…"} aria-label="Search JYC" aria-activedescendant={searchResults[selected]?`jyc-search-result-${selected}`:undefined}/><kbd>↑↓</kbd>{q&&<button type="button" className="search-clear" onClick={()=>{setQ('');inputRef.current?.focus()}} aria-label="Clear search">×</button>}</div>
-   {!queryActive&&<div className="search-suggestions"><span>EXPLORE</span>{[['EXPLORE CLUBS','/clubs'],['FIND EVENTS','/events'],...(isFestMode(data)?[['JIIT FESTS','/fests']]:[]),['JYC TEAM','/team'],['JYC ARCHIVE','/archive']].map(([label,path])=><button type="button" key={path} onClick={()=>{remember(label.toLowerCase());nav(path);close()}}>{label}<b>↗</b></button>)}</div>}
+   {!queryActive&&<div className="search-suggestions"><span>EXPLORE</span>{[['EXPLORE CLUBS','/clubs'],['FIND EVENTS','/events'],...(isFestMode(data)?[['JIIT FESTS','/fests']]:[]),['JYC TEAM','/team'],['JOIN JYC','/join-jyc'],['RECRUITMENT','/recruitment'],['JYC ARCHIVE','/archive']].map(([label,path])=><button type="button" key={path} onClick={()=>{remember(label.toLowerCase());nav(path);close()}}>{label}<b>↗</b></button>)}</div>}
    {!queryActive&&recent.length>0&&<div className="search-recent"><span>RECENT</span>{recent.map(x=><button type="button" key={x} onClick={()=>runRecent(x)}>{x}<b>↗</b></button>)}</div>}
    {queryActive&&ranked.length>0&&<div className="search-category-filters" role="group" aria-label="Filter search results by category">{categoryOptions.map(category=><button type="button" key={category} aria-pressed={categoryFilter===category} onClick={()=>{setCategoryFilter(category);setSelected(0)}}>{category==='ALL'?'All':category} ({category==='ALL'?ranked.length:ranked.filter(result=>result.type===category).length})</button>)}</div>}
    <div className="search-meta" aria-live="polite"><span>{queryActive?resultSummary:'Search published JYC content'}</span><span className="search-shortcuts"><kbd>↑↓</kbd><span>move</span><kbd>Enter</kbd><span>open</span><kbd>Esc</kbd><span>close</span></span></div>
@@ -972,7 +974,7 @@ function Footer({data,admin}){
   const links=[
     ['/about','About'],['/clubs','Clubs'],['/events','Events'],
     ...(isFestMode(data)?[['/fests','Fests']]:[]),
-    ['/team','Team'],['/recruitment','Join JYC'],['/calendar','Event calendar'],
+    ['/team','Team'],['/recruitment','Recruitment'],['/calendar','Event calendar'],
     ['/archive','Archive'],['/gallery','Gallery'],['/contact','Contact']
   ];
   return <footer className="jyc-footer jyc-footer-v6">
