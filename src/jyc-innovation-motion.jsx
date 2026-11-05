@@ -67,7 +67,7 @@ function useAtmosphericCanvas(canvasRef) {
       twinkleSpeed: Math.random() * 0.03 + 0.015,
       twinklePhase: Math.random() * Math.PI * 2,
       baseAlpha: Math.random() * 0.55 + 0.35,
-      color: Math.random() > 0.8 ? '#fcd34d' : (Math.random() > 0.5 ? '#93c5fd' : (Math.random() > 0.25 ? '#e0e7ff' : '#ffffff'))
+      color: Math.random() > 0.8 ? '#fcd34d' : (Math.random() > 0.5 ? '#D2B48C' : (Math.random() > 0.25 ? '#F5F1E6' : '#ffffff'))
     }));
 
     // Golden dust and luminous nodes for Light Mode
@@ -134,9 +134,9 @@ function useAtmosphericCanvas(canvasRef) {
           height * 0.28,
           width * 0.5
         );
-        nebula1.addColorStop(0, 'rgba(56, 189, 248, 0.048)');
-        nebula1.addColorStop(0.4, 'rgba(147, 51, 234, 0.028)');
-        nebula1.addColorStop(0.8, 'rgba(236, 72, 153, 0.012)');
+        nebula1.addColorStop(0, 'rgba(191, 156, 111, 0.048)');
+        nebula1.addColorStop(0.4, 'rgba(168, 36, 32, 0.028)');
+        nebula1.addColorStop(0.8, 'rgba(168, 36, 32, 0.012)');
         nebula1.addColorStop(1, 'rgba(0, 0, 0, 0)');
         ctx.fillStyle = nebula1;
         ctx.fillRect(0, 0, width, height);
@@ -150,7 +150,7 @@ function useAtmosphericCanvas(canvasRef) {
           width * 0.45
         );
         nebula2.addColorStop(0, 'rgba(212, 175, 55, 0.038)');
-        nebula2.addColorStop(0.5, 'rgba(59, 130, 246, 0.022)');
+        nebula2.addColorStop(0.5, 'rgba(141, 100, 47, 0.022)');
         nebula2.addColorStop(1, 'rgba(0, 0, 0, 0)');
         ctx.fillStyle = nebula2;
         ctx.fillRect(0, 0, width, height);
@@ -184,7 +184,7 @@ function useAtmosphericCanvas(canvasRef) {
             if (dist < connectDist) {
               const lineAlpha = (1 - dist / connectDist) * 0.18 * starCoords[i].alpha * starCoords[j].alpha;
               if (lineAlpha > 0.015) {
-                ctx.strokeStyle = `rgba(147, 197, 253, ${lineAlpha})`;
+                ctx.strokeStyle = `rgba(210, 180, 140, ${lineAlpha})`;
                 ctx.beginPath();
                 ctx.moveTo(starCoords[i].px, starCoords[i].py);
                 ctx.lineTo(starCoords[j].px, starCoords[j].py);
@@ -227,8 +227,8 @@ function useAtmosphericCanvas(canvasRef) {
           const streakGrad = ctx.createLinearGradient(s.x, s.y, tailX, tailY);
           streakGrad.addColorStop(0, `rgba(255, 255, 255, ${s.opacity})`);
           streakGrad.addColorStop(0.25, `rgba(212, 175, 55, ${s.opacity * 0.85})`);
-          streakGrad.addColorStop(0.7, `rgba(56, 189, 248, ${s.opacity * 0.4})`);
-          streakGrad.addColorStop(1, 'rgba(56, 189, 248, 0)');
+          streakGrad.addColorStop(0.7, `rgba(191, 156, 111, ${s.opacity * 0.4})`);
+          streakGrad.addColorStop(1, 'rgba(191, 156, 111, 0)');
 
           ctx.strokeStyle = streakGrad;
           ctx.lineWidth = s.width;
@@ -259,7 +259,7 @@ function useAtmosphericCanvas(canvasRef) {
           width * 0.55
         );
         aurora1.addColorStop(0, 'rgba(212, 175, 55, 0.08)');
-        aurora1.addColorStop(0.5, 'rgba(245, 158, 11, 0.035)');
+        aurora1.addColorStop(0.5, 'rgba(191, 156, 111, 0.035)');
         aurora1.addColorStop(1, 'rgba(255, 255, 255, 0)');
         ctx.fillStyle = aurora1;
         ctx.fillRect(0, 0, width, height);
@@ -272,8 +272,8 @@ function useAtmosphericCanvas(canvasRef) {
           height * 0.65,
           width * 0.48
         );
-        aurora2.addColorStop(0, 'rgba(251, 191, 36, 0.06)');
-        aurora2.addColorStop(0.6, 'rgba(217, 119, 6, 0.025)');
+        aurora2.addColorStop(0, 'rgba(191, 156, 111, 0.06)');
+        aurora2.addColorStop(0.6, 'rgba(141, 100, 47, 0.025)');
         aurora2.addColorStop(1, 'rgba(255, 255, 255, 0)');
         ctx.fillStyle = aurora2;
         ctx.fillRect(0, 0, width, height);
