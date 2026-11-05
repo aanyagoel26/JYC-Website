@@ -44,11 +44,11 @@ test.describe('JYC Jai Hack-inspired dark theme', () => {
 
         expect(dark.backgroundToken).toBe('#151019');
         expect(dark.primaryToken).toBe('#ed8064');
-        expect(dark.bodyBackground).toMatch(/rgba?\\(/);
+        expect(dark.bodyBackground).toMatch(/rgba?\(/);
         expect(dark.bodyFont).toMatch(/Inter|system-ui/i);
         expect(dark.headingFont).toContain('Space Grotesk');
         expect(dark.navBackground).not.toBe('rgba(0, 0, 0, 0)');
-        if (route === '/') expect(dark.homeBackground).toBe('#050811');
+        if (route === '/') expect(dark.homeBackground).toBe('#151019');
 
         // The new visual contract must not bleed into the existing light theme.
         await page.evaluate(() => { document.documentElement.dataset.theme = 'light'; });
