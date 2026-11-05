@@ -1125,6 +1125,58 @@ test('legacy public cards stay flat outside the intentional magnetic bento', asy
   expect(transforms.filter(value => value && value !== 'none' && value.includes('matrix3d')).length).toBe(0);
 });
 
+
+test('homepage copy, crest and actions remain readable on compact phones in both themes', async ({ page }) => {
+  for (const theme of ['light','dark']) {
+    for (const width of [320,390]) {
+      await page.addInitScript(value => localStorage.setItem('jyc-theme', value), theme);
+      await page.setViewportSize({ width, height: 820 });
+      await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
+      await waitForAppMount(page, `homepage phone readability ${theme} ${width}px`);
+      await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+      await expect(page.locator('.jh-hero-copy h1')).toBeVisible();
+      await expect(page.locator('.jh-hero-copy .jh-lead')).toBeVisible();
+      const snapshot = await page.evaluate(() => {
+        const parse = value => {
+          const match = String(value).match(/rgba?\((\d+),\s*(\d+),\s*(\d+)/);
+          if (match) return [Number(match[1]),Number(match[2]),Number(match[3])];
+          const hex = String(value).trim();
+          if (/^#[0-9a-f]{6}$/i.test(hex)) return [1,3,5].map(i=>parseInt(hex.slice(i,i+2),16));
+          return [0,0,0];
+        };
+        const luminance = color => color.map(v=>{const c=v/255;return c<=.04045?c/12.92:((c+.055)/1.055)**2.4;}).reduce((sum,v,i)=>sum+v*[.2126,.7152,.0722][i],0);
+        const contrast = (a,b) => {const x=luminance(a),y=luminance(b);return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);};
+        const heading = document.querySelector('.jh-hero-copy h1');
+        const lead = document.querySelector('.jh-hero-copy .jh-lead');
+        const buttons = [...document.querySelectorAll('.jh-hero-actions .jh-btn')];
+        const logo = document.querySelector('.jyc-emblem-logo-img');
+        const fallback = document.querySelector('.jyc-emblem-logo-fallback');
+        const canvas = getComputedStyle(document.documentElement).getPropertyValue('--jyc-canvas').trim();
+        return {
+          overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+          headingSize: parseFloat(getComputedStyle(heading).fontSize),
+          leadSize: parseFloat(getComputedStyle(lead).fontSize),
+          leadLineHeight: parseFloat(getComputedStyle(lead).lineHeight),
+          leadClamp: getComputedStyle(lead).webkitLineClamp,
+          leadContrast: contrast(parse(getComputedStyle(lead).color),parse(canvas)),
+          headingContrast: contrast(parse(getComputedStyle(heading).color),parse(canvas)),
+          buttons: buttons.map(el=>({height:el.getBoundingClientRect().height,fontSize:parseFloat(getComputedStyle(el).fontSize)})),
+          logoLoaded: Boolean(fallback || (logo?.complete && logo.naturalWidth > 0))
+        };
+      });
+      expect(snapshot.overflow, `${theme} homepage must fit ${width}px`).toBe(false);
+      expect(snapshot.headingSize, 'phone hero heading must remain readable').toBeGreaterThanOrEqual(31);
+      expect(snapshot.leadSize, 'phone hero body copy must remain readable').toBeGreaterThanOrEqual(14);
+      expect(snapshot.leadLineHeight, 'phone body copy must not be vertically compressed').toBeGreaterThanOrEqual(snapshot.leadSize*1.45);
+      expect(snapshot.leadClamp, 'phone hero copy must not be clipped by a line clamp').not.toBe('2');
+      expect(snapshot.leadContrast, 'phone hero body copy must meet WCAG AA').toBeGreaterThanOrEqual(4.5);
+      expect(snapshot.headingContrast, 'phone hero heading must meet WCAG AA').toBeGreaterThanOrEqual(4.5);
+      expect(snapshot.buttons.every(item=>item.height>=44&&item.fontSize>=12), 'phone hero actions must be readable and touch-sized').toBe(true);
+      expect(snapshot.logoLoaded, 'the official JYC hero emblem or its accessible fallback must render').toBe(true);
+    }
+  }
+});
+
 test('homepage hero uses the official JYC emblem without a continuous photo wall', async ({ page }) => {
   await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'JYC hero identity');
