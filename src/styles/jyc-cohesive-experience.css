@@ -342,10 +342,11 @@ html[data-theme="light"] .jyc-editorial-home.jyc-home {
 .jyc-editorial-home .jh-btn-primary {
   color: #fff !important;
   background: linear-gradient(120deg,var(--jyc-accent-strong),var(--jyc-accent)) !important;
+  background-color: var(--jyc-accent) !important;
   border-color: transparent !important;
   box-shadow: 0 10px 28px var(--jyc-accent-soft);
 }
-html[data-theme="dark"] .jyc-editorial-home .jh-btn-primary { color:#17142a !important;background:linear-gradient(120deg,#d8d0ff,#e7d19b) !important; }
+html[data-theme="dark"] .jyc-editorial-home .jh-btn-primary { color:#17142a !important;background:linear-gradient(120deg,#d8d0ff,#e7d19b) !important;background-color:#d8d0ff !important; }
 .jyc-editorial-home :where(.jh-btn-glass,.jh-btn-outline) {
   color: var(--jyc-text-strong) !important;
   background: var(--jyc-surface) !important;
