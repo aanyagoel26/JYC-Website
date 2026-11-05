@@ -264,7 +264,7 @@ export function JYCHeroWebGLEmblem() {
 
   // 3D Tilt calculation
   const handlePointerMove = e => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || !window.matchMedia?.('(hover:hover) and (pointer:fine)').matches || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
     const rect = containerRef.current.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
@@ -285,6 +285,7 @@ export function JYCHeroWebGLEmblem() {
       className={`jyc-hero-emblem-stage ${isHovered ? 'is-hovered' : ''}`}
       onPointerMove={handlePointerMove}
       onPointerEnter={() => {
+        if (!window.matchMedia?.('(hover:hover) and (pointer:fine)').matches || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
         setIsHovered(true);
         jycAudio.playNodeHover();
       }}
