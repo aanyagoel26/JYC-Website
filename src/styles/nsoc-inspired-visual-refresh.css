@@ -1,0 +1,244 @@
+/* JYC visual refresh — original editorial direction informed by NSoC's
+   confident typography, numbered wayfinding, strong contrast and restrained motion.
+   This is a JYC-native treatment: it preserves JYC content, routes and interactions. */
+
+:root {
+  --jyc-editorial-ink: #211d22;
+  --jyc-editorial-muted: #655d66;
+  --jyc-editorial-paper: #f6f2e9;
+  --jyc-editorial-paper-raised: #fffdf8;
+  --jyc-editorial-accent: #8f2925;
+  --jyc-editorial-accent-hover: #76201e;
+  --jyc-editorial-metal: #b99b70;
+  --jyc-editorial-line: rgba(33, 29, 34, .14);
+  --jyc-editorial-glow: rgba(143, 41, 37, .12);
+  --jyc-editorial-ease: cubic-bezier(.22, 1, .36, 1);
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+  --jyc-brand-paper: var(--jyc-editorial-paper);
+  --jyc-brand-paper-raised: var(--jyc-editorial-paper-raised);
+  --jyc-brand-ink: var(--jyc-editorial-ink);
+  --jyc-brand-muted: var(--jyc-editorial-muted);
+  --jyc-brand-oxblood: var(--jyc-editorial-accent);
+  --jyc-brand-oxblood-hover: var(--jyc-editorial-accent-hover);
+  --jyc-brand-champagne: var(--jyc-editorial-metal);
+  --jyc-brand-line: var(--jyc-editorial-line);
+  --jyc-brand-line-strong: rgba(33, 29, 34, .24);
+  --jh-bg: var(--jyc-editorial-paper);
+  --jh-surface: #fffdf8;
+  --jh-surface-elevated: #fff;
+  --jh-surface-glass: rgba(255, 253, 248, .88);
+  --jh-ink: var(--jyc-editorial-ink);
+  --jh-muted: var(--jyc-editorial-muted);
+  --jh-accent: var(--jyc-editorial-accent);
+  --jh-accent-glow: var(--jyc-editorial-glow);
+  --jh-cyan: var(--jyc-editorial-accent);
+  --jh-cyan-glow: var(--jyc-editorial-glow);
+  --jh-line: var(--jyc-editorial-line);
+  --jh-line-accent: rgba(185, 155, 112, .46);
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --jyc-editorial-ink: #f5eee8;
+  --jyc-editorial-muted: #b9abb4;
+  --jyc-editorial-paper: #151019;
+  --jyc-editorial-paper-raised: #211923;
+  --jyc-editorial-accent: #ed8064;
+  --jyc-editorial-accent-hover: #ff9a7e;
+  --jyc-editorial-metal: #d8b77d;
+  --jyc-editorial-line: rgba(245, 238, 232, .14);
+  --jyc-editorial-glow: rgba(237, 128, 100, .14);
+  --jyc-brand-paper: var(--jyc-editorial-paper);
+  --jyc-brand-paper-raised: var(--jyc-editorial-paper-raised);
+  --jyc-brand-ink: var(--jyc-editorial-ink);
+  --jyc-brand-muted: var(--jyc-editorial-muted);
+  --jyc-brand-oxblood: var(--jyc-editorial-accent);
+  --jyc-brand-oxblood-hover: var(--jyc-editorial-accent-hover);
+  --jyc-brand-champagne: var(--jyc-editorial-metal);
+  --jyc-brand-line: var(--jyc-editorial-line);
+  --jyc-brand-line-strong: rgba(245, 238, 232, .24);
+  --jyc-bg: #151019;
+  --jyc-surface: #211923;
+  --jyc-surface-2: #2a202b;
+  --jyc-ink: #f5eee8;
+  --jyc-muted: #b9abb4;
+  --jyc-line: rgba(245, 238, 232, .14);
+  --jyc-line-strong: rgba(216, 183, 125, .32);
+  --jyc-red: #ed8064;
+  --jyc-red-strong: #ff9a7e;
+  --jyc-gold: #d8b77d;
+  --jyc-focus: #ed8064;
+  --bg-main: #151019;
+  --bg-card: rgba(33, 25, 35, .9);
+  --text-primary: #f5eee8;
+  --text-muted: #b9abb4;
+  --accent-red: #ed8064;
+  --accent-gold: #d8b77d;
+  --border-tech: rgba(216, 183, 125, .2);
+  --shadow: 0 24px 70px rgba(0, 0, 0, .38);
+  --jh-bg: #151019;
+  --jh-gold: #d8b77d;
+  --jh-surface: #211923;
+  --jh-surface-elevated: #2a202b;
+  --jh-surface-glass: rgba(33, 25, 35, .9);
+  --jh-ink: #f5eee8;
+  --jh-muted: #b9abb4;
+  --jh-accent: #ed8064;
+  --jh-accent-glow: rgba(237, 128, 100, .14);
+  --jh-cyan: #ed8064;
+  --jh-cyan-glow: rgba(237, 128, 100, .1);
+  --jh-line: rgba(245, 238, 232, .14);
+  --jh-line-accent: rgba(216, 183, 125, .32);
+}
+
+html[data-theme="dark"] body,
+html[data-theme="dark"] body:has(.public-app) {
+  color: #f5eee8 !important;
+  background:
+    radial-gradient(ellipse at 82% 0%, rgba(237, 128, 100, .10), transparent 34%),
+    radial-gradient(ellipse at 8% 42%, rgba(216, 183, 125, .07), transparent 36%),
+    #151019 !important;
+}
+
+html[data-theme="dark"] body::before {
+  background-image:
+    linear-gradient(rgba(216, 183, 125, .025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(216, 183, 125, .025) 1px, transparent 1px);
+  background-size: 64px 64px;
+  opacity: .7;
+}
+
+html[data-theme="dark"] .public-app {
+  --bg-main: #151019 !important;
+  --bg-card: rgba(33, 25, 35, .9) !important;
+  --text-primary: #f5eee8 !important;
+  --text-muted: #b9abb4 !important;
+  --accent-red: #ed8064 !important;
+  --accent-gold: #d8b77d !important;
+  --border-tech: rgba(216, 183, 125, .2) !important;
+  --jyc-final-bg: #151019;
+  --jyc-final-surface: rgba(33, 25, 35, .9);
+  --jyc-final-ink: #f5eee8;
+  --jyc-final-muted: #b9abb4;
+  --jyc-final-line: rgba(245, 238, 232, .14);
+  --jyc-final-gold: #d8b77d;
+  --jyc-final-red: #ed8064;
+  color: #f5eee8 !important;
+  background: transparent !important;
+}
+
+html[data-theme="dark"] .jyc-editorial-home.jyc-home {
+  --jh-bg: #151019;
+  --jh-surface: #211923;
+  --jh-surface-elevated: #2a202b;
+  --jh-surface-glass: rgba(33, 25, 35, .9);
+  --jh-ink: #f5eee8;
+  --jh-muted: #b9abb4;
+  --jh-accent: #ed8064;
+  --jh-accent-glow: rgba(237, 128, 100, .14);
+  --jh-cyan: #ed8064;
+  --jh-cyan-glow: rgba(237, 128, 100, .1);
+  --jh-line: rgba(245, 238, 232, .14);
+  --jh-line-accent: rgba(216, 183, 125, .32);
+}
+
+html[data-theme="dark"] .public-app .nav {
+  background: rgba(21, 16, 25, .86) !important;
+  border-bottom-color: rgba(216, 183, 125, .2) !important;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, .22) !important;
+}
+html[data-theme="dark"] .public-app .nav .brand-mark {
+  background: linear-gradient(145deg, rgba(237, 128, 100, .18), rgba(216, 183, 125, .12)) !important;
+  border-color: rgba(216, 183, 125, .28) !important;
+  box-shadow: 0 0 24px rgba(237, 128, 100, .08), inset 0 1px 0 rgba(255, 255, 255, .06) !important;
+}
+html[data-theme="dark"] .public-app .nav nav button.active,
+html[data-theme="dark"] .public-app .nav .nav-more-trigger.active {
+  background: linear-gradient(100deg, rgba(237, 128, 100, .18), rgba(216, 183, 125, .08)) !important;
+  border-color: rgba(237, 128, 100, .28) !important;
+  box-shadow: inset 2px 0 0 #ed8064 !important;
+}
+html[data-theme="dark"] .public-app .nav nav button.active::after { background: #ed8064 !important; }
+
+html[data-theme="dark"] .public-app :where(.card,.club-card,.event-card,.activity-card,.team-layer-card,.hub-story-card,.jyc-journal-card,.club-identity-card,.event-identity-card,.feature-card,.featured,.search-topic-band,.search-result,.compact-page-head,.about-hero-v28,.achievements-hero,.announcements-hero,.archive-hero,.join-soon-hero,.club-card-premium,.event-card-premium,.jyc57-feature-card,.jyc57-photo,.jyc-source-archive-ledger,.jyc-photo-story-scrubber,.team-card,.contact-card,.gallery-item,.gallery-story-card) {
+  background: linear-gradient(145deg, rgba(42, 32, 43, .94), rgba(29, 22, 32, .96)) !important;
+  border-color: rgba(216, 183, 125, .17) !important;
+  box-shadow: 0 14px 36px rgba(0, 0, 0, .2), inset 0 1px 0 rgba(255, 255, 255, .025) !important;
+}
+html[data-theme="dark"] .public-app :where(.card h3,.club-card-premium h3,.event-card-premium h3,.featured h2,.featured h3,.team-card h3) {
+  color: #fff8f0 !important;
+}
+html[data-theme="dark"] .public-app :where(.eyebrow,.tag,.jh-overline,.jh-about-kicker,.panel-kicker,.section-index,.card-topline,.club-index,.latest-index,.jyc57-gallery-eyebrow,.jyc57-filter-group>span) {
+  color: #e5bd82 !important;
+  text-shadow: none !important;
+}
+html[data-theme="dark"] .public-app :where(.btn-primary,.button-primary,.jh-btn-primary,[data-variant="primary"]) {
+  color: #21161a !important;
+  background: linear-gradient(115deg, #ed8064, #d8b77d) !important;
+  border-color: transparent !important;
+  box-shadow: 0 8px 24px rgba(237, 128, 100, .16) !important;
+}
+html[data-theme="dark"] .public-app :where(.btn-primary,.button-primary,.jh-btn-primary,[data-variant="primary"]):hover {
+  color: #21161a !important;
+  filter: brightness(1.06);
+}
+html[data-theme="dark"] .public-app :where(input,textarea,select,.filters,.event-toolbar,.search-modal>*,.more-sheet,.modal,.dialog,.popover,.dropdown-menu,.filter-panel) {
+  color: #f5eee8 !important;
+  background-color: #211923 !important;
+  border-color: rgba(216, 183, 125, .22) !important;
+}
+html[data-theme="dark"] .public-app :where(input,textarea,select)::placeholder { color: #b9abb4 !important; }
+
+.public-app :where(.btn-primary,.button-primary,.jh-btn-primary,[data-variant="primary"]) {
+  transition: transform .28s var(--jyc-editorial-ease), box-shadow .28s ease, filter .28s ease;
+}
+.public-app :where(.card,.club-card,.event-card,.activity-card,.team-layer-card,.hub-story-card,.jyc-journal-card,.event-related-card,.club-identity-card,.event-identity-card,.gallery-item,.gallery-story-card,.jyc57-feature-card) {
+  transition: transform .38s var(--jyc-editorial-ease), border-color .3s ease, box-shadow .38s ease;
+}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  .public-app :where(.btn-primary,.button-primary,.jh-btn-primary,[data-variant="primary"]):hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px var(--jyc-editorial-glow);
+  }
+  .public-app :where(.card,.club-card,.event-card,.activity-card,.team-layer-card,.hub-story-card,.jyc-journal-card,.event-related-card,.club-identity-card,.event-identity-card,.gallery-item,.gallery-story-card,.jyc57-feature-card):hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--jyc-editorial-metal) 58%, transparent);
+    box-shadow: 0 18px 44px rgba(33, 29, 34, .12);
+  }
+  html[data-theme="dark"] .public-app :where(.card,.club-card,.event-card,.activity-card,.team-layer-card,.hub-story-card,.jyc-journal-card,.event-related-card,.club-identity-card,.event-identity-card,.gallery-item,.gallery-story-card,.jyc57-feature-card):hover {
+    box-shadow: 0 18px 44px rgba(0, 0, 0, .28), 0 0 22px rgba(237, 128, 100, .055);
+  }
+  .public-app .route-stage :where(.gallery-item,.gallery-story-card,.jyc57-photo) img {
+    transition: transform .7s var(--jyc-editorial-ease), filter .7s ease;
+  }
+  .public-app .route-stage :where(.gallery-item,.gallery-story-card,.jyc57-photo):hover img {
+    transform: scale(1.035);
+  }
+}
+
+@keyframes jyc-editorial-enter {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes jyc-editorial-drift {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -9px, 0); }
+}
+@media (prefers-reduced-motion:no-preference) {
+  .jyc-editorial-home .jh-hero-copy { animation: jyc-editorial-enter .75s var(--jyc-editorial-ease) both; }
+  .jyc-editorial-home .jh-hero-visual { animation: jyc-editorial-enter .9s .12s var(--jyc-editorial-ease) both; }
+  .jyc-editorial-home .jh-hero-logo-plaque { animation: jyc-editorial-drift 8s 1s ease-in-out infinite; }
+  .jyc-editorial-home .jh-ambient-orb { will-change: transform; }
+}
+@media (prefers-reduced-motion:reduce) {
+  .jyc-editorial-home .jh-hero-copy,
+  .jyc-editorial-home .jh-hero-visual,
+  .jyc-editorial-home .jh-hero-logo-plaque { animation: none !important; }
+  .public-app :where(.card,.club-card,.event-card,.activity-card,.team-layer-card,.hub-story-card,.jyc-journal-card,.event-related-card,.club-identity-card,.event-identity-card,.gallery-item,.gallery-story-card,.jyc57-feature-card,.btn-primary,.button-primary,.jh-btn-primary) {
+    transition: none !important;
+    transform: none !important;
+  }
+}
