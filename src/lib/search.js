@@ -83,7 +83,7 @@ export function isPublicSearchRecord(record) {
   if (!record || typeof record !== 'object') return false;
   const status = String(record.status ?? '').trim().toLowerCase();
   const publicationStatus = String(record.publicationStatus ?? '').trim().toLowerCase();
-  if (record.archived === true || record.isArchived === true || record.private === true) return false;
+  if (record.published === false || record.archived === true || record.isArchived === true || record.private === true) return false;
   if (['draft', 'archived', 'private', 'unpublished', 'source-material'].includes(status)) return false;
   if (['draft', 'archived', 'private', 'unpublished', 'source-material'].includes(publicationStatus)) return false;
   return record.published === true || status === 'published' || publicationStatus === 'published';
