@@ -530,6 +530,29 @@ test('Dither Veil falls back from the compact AVIF to the official WebP logo', a
   await expect.poll(() => logo.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
 });
 
+test('scroll reveal remains visible when IntersectionObserver is unavailable', async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(window, 'IntersectionObserver', { configurable: true, value: undefined });
+  });
+  await page.goto(base + '/about', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'reveal fail-open');
+  const hidden = await page.locator('.public-app .reveal').evaluateAll(nodes =>
+    nodes.filter(node => Number.parseFloat(getComputedStyle(node).opacity) < 0.95).length
+  );
+  expect(hidden).toBe(0);
+});
+
+test('scroll reveal observes new content after SPA route changes', async ({ page }) => {
+  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'reveal SPA route');
+  await page.locator('.nav nav button').filter({ hasText: /^About$/ }).click();
+  await expect(page).toHaveURL(/\\/about(?:\\/)?$/);
+  const reveal = page.locator('.public-app .reveal').first();
+  await expect(reveal).toBeAttached();
+  await reveal.scrollIntoViewIfNeeded();
+  await expect(reveal).toHaveClass(/jyc-motion-visible/, { timeout: 10000 });
+});
+
 test('homepage renders the official emblem and a magnetic activity Bento', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 960 });
   await page.goto(base, { waitUntil: 'domcontentloaded' });
