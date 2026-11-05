@@ -1942,6 +1942,16 @@ test('More navigation and Search modal work with keyboard, empty states and focu
   await expect(input).toBeFocused();
   await input.fill('clubs');
   await expect(page.locator('.search-result-active')).toContainText('Clubs');
+  await expect(page.locator('.search-category-filters')).toBeVisible();
+  await expect(page.locator('.search-match').first()).toBeVisible();
+  const clubCategory = page.locator('.search-category-filters button').filter({ hasText: /^CLUB \\(/ }).first();
+  await expect(clubCategory).toBeVisible();
+  await clubCategory.click();
+  const filteredTypes = await page.locator('#jyc-search-results [role="option"] small').allTextContents();
+  expect(filteredTypes.length).toBeGreaterThan(0);
+  expect(filteredTypes.every(label => label.includes('CLUB'))).toBe(true);
+  await page.locator('.search-category-filters button').filter({ hasText: /^All \\(/ }).click();
+
   await input.press('ArrowDown');
   await expect(page.locator('#jyc-search-result-1')).toHaveAttribute('aria-selected', 'true');
   await input.press('ArrowUp');
@@ -1970,6 +1980,16 @@ test('More navigation and Search modal work with keyboard, empty states and focu
   await input.fill('Join JYC');
   await input.press('Enter');
   await expect(page).toHaveURL(/\/join-jyc(?:\/)?$/);
+  await expect(page.locator('.search-overlay')).toHaveCount(0);
+
+  await searchTrigger.click();
+  await input.fill('Smart India Hackathon finalist');
+  const achievementCategory = page.locator('.search-category-filters button').filter({ hasText: /^ACHIEVEMENT \\(/ }).first();
+  await expect(achievementCategory).toBeVisible();
+  await achievementCategory.click();
+  await expect(page.locator('#jyc-search-results [role="option"]').first()).toContainText('Smart India Hackathon finalist');
+  await input.press('Enter');
+  await expect(page).toHaveURL(/\\/achievements(?:\\/)?$/);
   await expect(page.locator('.search-overlay')).toHaveCount(0);
 
   const moreTrigger = page.locator('.nav-more-trigger');
