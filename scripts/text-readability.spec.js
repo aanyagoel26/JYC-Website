@@ -21,7 +21,18 @@ test.describe('JYC text readability — all public routes, themes and device siz
   for (const viewport of viewports) {
     test(`text readability — ${viewport.name}`, async ({ page }) => {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
-      for (const route of routes) {
+      const detailRoutes = [];
+      for (const sourceRoute of ['/clubs', '/events', '/gallery']) {
+        await waitForContent(page, sourceRoute);
+        const prefix = sourceRoute + '/';
+        const hrefs = await page.locator('a[href^="' + prefix + '"]').evaluateAll(links =>
+          [...new Set(links.map(link => new URL(link.href).pathname))]
+            .filter(path => path.split('/').filter(Boolean).length > 1)
+            .slice(0, 3)
+        );
+        detailRoutes.push(...hrefs);
+      }
+      for (const route of [...routes, ...new Set(detailRoutes)]) {
         await waitForContent(page, route);
         for (const theme of ['light', 'dark']) {
           await page.evaluate(value => {
