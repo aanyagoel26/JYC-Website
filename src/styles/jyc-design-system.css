@@ -284,7 +284,7 @@ html[data-theme="dark"] .public-app :where(.btn-secondary,.button-secondary,[dat
   padding: 0 0 12px;
 }
 .search-category-filters button {
-  min-height: 36px;
+  min-height: 44px;
   padding: 7px 11px;
   border: 1px solid var(--jyc-brand-line-strong);
   border-radius: 999px;
@@ -298,13 +298,13 @@ html[data-theme="dark"] .public-app :where(.btn-secondary,.button-secondary,[dat
   background: var(--jyc-brand-oxblood);
   border-color: var(--jyc-brand-oxblood);
 }
-.search-modal .search-result .search-match {
+.search-modal .search-list [role="option"] .search-match {
   color: var(--jyc-brand-oxblood);
   background: color-mix(in srgb, var(--jyc-brand-champagne) 28%, transparent);
   border-radius: 3px;
   font-weight: 800;
 }
-html[data-theme="dark"] .search-modal .search-result .search-match {
+html[data-theme="dark"] .search-modal .search-list [role="option"] .search-match {
   color: #f8dcae;
   background: rgba(96,165,250,.18);
 }
