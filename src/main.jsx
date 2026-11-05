@@ -880,10 +880,6 @@ function SearchMatch({value,term}){
  const pattern=new RegExp('('+words.map(escape).join('|')+')','ig');
  return <>{source.split(pattern).map((part,index)=>words.some(word=>word.toLowerCase()===part.toLowerCase())?<mark className="search-match" key={index}>{part}</mark>:part)}</>;
 }
-function Search({data,admin,close}){');
- const pattern=new RegExp('('+words.map(escape).join('|')+')','ig');
- return <>{source.split(pattern).map((part,index)=>words.some(word=>word.toLowerCase()===part.toLowerCase())?<mark className="search-match" key={index}>{part}</mark>:part)}</>;
-}
 function Search({data,admin,close}){
  const nav=useNavigate();
  const [q,setQ]=useState(()=>{try{return new URLSearchParams(window.location.search).get('q')||''}catch{return ''}});
@@ -895,6 +891,7 @@ function Search({data,admin,close}){
  const term=normalizeSearch(q);
  useEffect(()=>{const active=document.activeElement;returnFocusRef.current=active instanceof HTMLElement?active:document.querySelector('[data-jyc-search-trigger]');const previous=document.body.style.overflow;document.body.style.overflow='hidden';const timer=setTimeout(()=>inputRef.current?.focus(),40);const onKeyDown=e=>{if(e.key!=='Tab')return;const root=document.querySelector('.search-modal');if(!root)return;const focusable=[...root.querySelectorAll('button,input,a,[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled&&el.offsetParent!==null);if(!focusable.length)return;const first=focusable[0],last=focusable[focusable.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}};document.addEventListener('keydown',onKeyDown);return()=>{clearTimeout(timer);document.body.style.overflow=previous;document.removeEventListener('keydown',onKeyDown);const target=returnFocusRef.current?.isConnected?returnFocusRef.current:document.querySelector('[data-jyc-search-trigger]');if(target instanceof HTMLElement)requestAnimationFrame(()=>target.focus())}},[]);
  useEffect(()=>{setSelected(0)},[term,categoryFilter]);
+ useEffect(()=>{setCategoryFilter('ALL')},[term]);
  const remember=value=>{if(!value)return;try{const next=[value,...recent.filter(x=>x!==value)].slice(0,5);storageSet('jyc-search-recent',JSON.stringify(next));setRecent(next)}catch{}};
  const sourceData=data&&typeof data==='object'?data:{};
  const clubs=(Array.isArray(sourceData.clubs)?sourceData.clubs:[]).filter(c=>c&&typeof c==='object'&&c.published&&c.status!=='archived'&&c.status!=='draft'&&c.status!=='source-material'&&String(c.name||'').trim());
