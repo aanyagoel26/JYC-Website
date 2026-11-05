@@ -361,3 +361,20 @@ html[data-theme="dark"] .team-page .team-hub-directory>a:hover { border-color: r
 @media (max-width: 600px) {
   .team-page .team-member-flip .flip-card__back-trigger { margin: 0 18px 18px; }
 }
+
+
+/* V66 phone ergonomics: prevent iOS input zoom and keep compact filters legible. */
+@media (max-width: 600px) {
+  .team-page .team-search-field input {
+    font-size: 16px;
+  }
+  .team-page .team-filter-tab {
+    font-size: 12px;
+  }
+}
+@media (max-width: 360px) {
+  .team-page .team-filter-tab {
+    font-size: 12px;
+    gap: 6px;
+  }
+}
