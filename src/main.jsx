@@ -901,6 +901,8 @@ function Search({data,admin,close}){
   ['Best of JYC','Curated published JYC photography and memories.','PAGE','/best-of-jyc'],
   ['Achievements','Source-backed JYC milestones and community outcomes.','PAGE','/achievements'],
   ['Announcements','JYC announcements, registration notices and updates.','PAGE','/announcements'],
+  ['JYC Now','Latest published JYC updates, campus news and hub activity.','PAGE','/updates'],
+  ['Join JYC','Official recruitment pathway and onboarding guide.','PAGE','/join-jyc'],
   ['JYC Event Calendar','Published JYC events by date.','PAGE','/calendar']
  ];
  const adminPages=[];
