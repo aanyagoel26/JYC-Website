@@ -42,7 +42,7 @@ check('theme switch has a concise action-oriented accessible name',main.includes
 check('Search trigger accessible name includes its visible label and keyboard shortcut',main.includes('aria-label="Search, Ctrl K"'));
 check('About dark closing CTA overrides the paper-only legacy foregrounds',read('src/styles/jyc-cohesive-experience.css').includes('Dark About closing CTA')&&read('src/styles/jyc-cohesive-experience.css').includes('about-next-v28 h2'));
 check('legacy restoration red aliases resolve through the shared theme accent instead of hard-coded red',read('src/styles/jyc-cohesive-experience.css').includes('--jyc-restoration-red: var(--jyc-accent)')&&read('src/styles/jyc-cohesive-experience.css').includes('--jyc-restoration-red-bright: var(--jyc-accent-strong)'));
-check('active design and restoration layers contain no hard-coded red theme accents',!/#(?:8f211f|d45b55|b8322c|741b19|ed7770)|rgba\(\\s*143\\s*,\\s*33\\s*,\\s*31/i.test(read('src/styles/jyc-design-system.css')+read('src/styles/jyc-v203-restoration.css')));
+check('active design and restoration layers contain no hard-coded red theme accents',!/#(?:8f211f|d45b55|b8322c|741b19|ed7770)|rgba\(\s*143\s*,\s*33\s*,\s*31/i.test(read('src/styles/jyc-design-system.css')+read('src/styles/jyc-v203-restoration.css')));
 const searchStart=main.indexOf('function Search(');
 const moreStart=main.indexOf('function MobileMoreSheet(');
 const searchSource=searchStart>=0?main.slice(searchStart):'';
