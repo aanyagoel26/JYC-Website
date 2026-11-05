@@ -65,6 +65,29 @@ test.describe('JYC motion system', () => {
     })));
     expect(states.every(state => state.visible && state.opacity > 0.98)).toBe(true);
   });
+  test('reveal content remains visible when the motion enhancement is not initialized', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await ready(page, '/about');
+    await page.evaluate(() => document.documentElement.classList.remove('jyc-motion-ready'));
+    const target = page.locator('.about-next-v28.reveal');
+    const state = await target.evaluate(el => ({
+      opacity: Number(getComputedStyle(el).opacity),
+      transform: getComputedStyle(el).transform
+    }));
+    expect(state.opacity).toBeGreaterThan(0.98);
+    expect(state.transform).toBe('none');
+  });
+
+  test('reveal content stays visible when MutationObserver is unavailable', async ({ page }) => {
+    await page.addInitScript(() => { window.MutationObserver = undefined; });
+    await page.setViewportSize({ width: 390, height: 844 });
+    await ready(page, '/about');
+    const target = page.locator('.about-next-v28.reveal');
+    await expect(target).toBeVisible();
+    await expect(page.locator('html')).not.toHaveClass(/jyc-motion-ready/);
+    await expect.poll(() => target.evaluate(el => Number(getComputedStyle(el).opacity))).toBeGreaterThan(0.98);
+  });
+
   test('ambient canvas stays fixed behind content and never occupies page layout', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await ready(page, '/');
