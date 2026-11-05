@@ -2168,3 +2168,12 @@ html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-hero-dither-layer {
 @media (prefers-reduced-motion: reduce) {
   .jyc-editorial-home.jyc-home .jh-hero-dither-layer { opacity: .12; }
 }
+
+
+/* Light paper theme: the hero heading is body text, not a decorative low-contrast overlay. */
+html[data-theme="light"] .jyc-editorial-home.jyc-home .jh-hero h1 {
+  color: #1A191D !important;
+}
+html[data-theme="light"] .jyc-editorial-home.jyc-home .jh-lead {
+  color: #5F5860 !important;
+}
