@@ -37,6 +37,9 @@ import {PUBLIC_TEAM_FALLBACK,JAI_OFFICIAL_MEDIA,PUBLIC_GALLERY_FALLBACK,PUBLIC_E
 import {JYC_EDITORIAL_ACHIEVEMENTS,JYC_TEAM_SOCIALS} from './jyc-editorial-content.js';
 
 
+import './styles/jyc-cohesive-experience.css';
+import './styles/jyc-team-experience.css';
+
 const LazyJYCBot=lazy(()=>import('./jyc-bot.jsx').then(m=>({default:m.JYCBot})));
 const LazyJYCInnovationMotion=lazy(()=>import('./jyc-innovation-motion.jsx').then(m=>({default:m.JYCInnovationMotion})));
 const LazyRubberSegment=lazy(()=>import('./react-bits/JYCMicro.jsx').then(m=>({default:m.RubberSegment})));
@@ -50,9 +53,6 @@ const LazyJYC57Archive=lazy(()=>import('./jyc57-archive.jsx').then(m=>({default:
 
 
 
-
-import './styles/jyc-cohesive-experience.css';
-import './styles/jyc-team-experience.css';
 
 const PUBLIC_ACTIVITIES=JYC_PUBLIC_ACTIVITIES;
 function mergePublicFallback(d,{allowContentFallback=true,allowGalleryFallback=allowContentFallback,allowTeamFallback=allowContentFallback}={}){
