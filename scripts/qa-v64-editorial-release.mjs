@@ -54,6 +54,11 @@ const routeShells=read('scripts/generate-route-shells.mjs');
 const siteOriginSource=read('scripts/site-origin.mjs');
 const sitemapOutput=read('public/sitemap.xml');
 const photoStory=editorialHome.slice(editorialHome.indexOf('className="jh-photo-story"'),editorialHome.indexOf('PILLARS / WHAT JYC DOES BENTO'));
+const heroEmblem=read('src/components/JYCHeroWebGLEmblem.jsx');
+const heroEmblemCss=read('src/components/JYCHeroWebGLEmblem.css');
+const explorer=read('src/components/JYC3DInteractiveExplorer.jsx');
+const explorerCss=read('src/components/JYC3DInteractiveExplorer.css');
+const innovationMotion=read('src/jyc-innovation-motion.jsx');
 const sitemap=read('scripts/generate-sitemap.mjs');
 const pkg=JSON.parse(read('package.json'));
 const ciWorkflow=read('.github/workflows/ci.yml');
@@ -61,6 +66,9 @@ const qualityWorkflow=read('.github/workflows/jyc-quality.yml');
 const revealKeyframes=depthCss.match(/@keyframes jycV36Reveal\s*\{([\s\S]*?)\n\}/)?.[1]||'';
 const checks=[
   ['scroll reveal animation preserves text contrast without opacity fades',Boolean(revealKeyframes)&&!/opacity\s*:/.test(revealKeyframes)&&/transform/.test(revealKeyframes)],
+  ['shared design system defines typography, spacing, motion and layer tokens',design.includes('--jyc-font-display')&&design.includes('--jyc-font-body')&&design.includes('--jyc-space-1')&&design.includes('--jyc-space-12')&&design.includes('--jyc-motion-fast')&&design.includes('--jyc-motion-ease-out')&&design.includes('--jyc-layer-overlay')],
+  ['search indexes published achievements, announcements and JYC Now source snapshots with category filters and match highlights',main.includes('JYC_EDITORIAL_ACHIEVEMENTS')&&main.includes('JYC_NOW_FALLBACK')&&main.includes('sourceData.announcement?.on')&&main.includes('search-category-filters')&&main.includes('function SearchMatch')&&main.includes('aria-pressed={categoryFilter===category}')],
+  ['homepage and campus visual effects use warm JYC accents and ambient motion is opt-in',!heroEmblem.includes('#38bdf8')&&!heroEmblem.includes('#818cf8')&&!heroEmblemCss.includes('#38bdf8')&&!heroEmblemCss.includes('#6366f1')&&!explorer.includes('#0EA5E9')&&!explorer.includes('#8B5CF6')&&!explorerCss.includes('#38bdf8')&&!explorerCss.includes('#6366f1')&&innovationMotion.includes('ambient = false')&&innovationMotion.includes('return ambient ? <canvas')],
   ['homepage restores the editorial intro and source-linked JYC Now update feed',editorialHome.includes('jh-about-editorial')&&editorialHome.includes('<JYCNowStrip limit={3} compact={false} />')],
   ['mobile homepage assistant remains clear of the hero badge, actions and dock',bot.includes('bottom:calc(94px + env(safe-area-inset-bottom))')&&browser.includes('the floating assistant must not cover the academic-year badge')&&browser.includes('the floating assistant must not cover primary hero actions')&&browser.includes('the fixed dock must not cover the hero actions')],
   ['homepage keeps student-centered identity copy, source-backed activity photography and photo stories before discovery',editorialHome.includes('<span>Find your people.</span>')&&editorialHome.includes('<span>Make your mark.</span>')&&editorialHome.includes('At JIIT 128.')&&editorialHome.includes("import { sourceEventMedia, sourceHubMedia }")&&editorialHome.includes('const photoHubs = { technical: \'CICR\', cultural: \'VamUnique\', literary: \'Eloquence\', fests: \'Aakriti\', sports: \'Sports\', creative: \'Aura\' }')&&editorialHome.includes("const image = rankDiverseJycPhotos((source?.photoItems || []).filter(item => item?.url && (item.mediaKind || 'photo') === 'photo'), { limit: 1, maxPerAssociation: 1 })[0]?.url || ''")&&homeCss.includes('.jyc-editorial-home .magic-bento-card__media { display: block; }')&&editorialHome.includes('Campus life,')&&editorialHome.includes('as it happened.')&&editorialHome.includes('real photographs from JYC clubs, events and campus life.')&&!editorialHome.includes('jh-assistant-spotlight')&&!editorialHome.includes('JYC Spatial Assistant')&&editorialHome.indexOf('jh-photo-story')<editorialHome.indexOf('jh-pillars-section')],
