@@ -338,9 +338,9 @@ function useAtmosphericCanvas(canvasRef) {
   }, [canvasRef]);
 }
 
-export function JYCInnovationMotion() {
+export function JYCInnovationMotion({ ambient = false } = {}) {
   const canvasRef = useRef(null);
   useEffect(() => setupReveal(), []);
   useAtmosphericCanvas(canvasRef);
-  return <canvas ref={canvasRef} className="jyc-ambient-canvas" aria-hidden="true" />;
+  return ambient ? <canvas ref={canvasRef} className="jyc-ambient-canvas" aria-hidden="true" /> : null;
 }
