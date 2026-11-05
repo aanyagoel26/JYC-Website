@@ -19,6 +19,7 @@ const scripts = [
   'qa-resource-content-pass.mjs',
   'qa-search.mjs',
   'qa-security.mjs',
+  'qa-sql-contract.mjs',
   'qa-seo.mjs',
   'qa-build-preflight.mjs',
   'qa-production.mjs',
