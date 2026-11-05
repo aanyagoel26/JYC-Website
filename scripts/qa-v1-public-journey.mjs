@@ -11,7 +11,7 @@ const gallery=read('src/jyc57-experience.jsx');
 
 const checks=[
   ['homepage hero action group is present',home.includes('className="jh-actions jh-hero-actions"')],
-  ['homepage exposes event, club and Join JYC routes',home.includes("nav('/events')")&&home.includes("nav('/clubs')")&&home.includes("nav('/join-jyc')")&&home.includes('Explore Events')&&home.includes('Explore Clubs')&&home.includes('Join JYC')],
+  ['homepage exposes event, club and Join JYC routes',home.includes("nav('/events')")&&home.includes("nav('/clubs')")&&home.includes("nav('/join-jyc')")&&home.includes('Discover events')&&home.includes('Explore communities')&&home.includes('Join JYC')],
   ['homepage has an editorial introduction and lazy activity discovery',home.includes('jh-about-editorial')&&home.includes('LazyActivityBento activities={activities} nav={nav}')],
   ['homepage avoids unsupported hub and student-reach counters',!home.includes('23+ hubs')&&!home.includes('5,000+')&&!home.includes('thousands of students')],
   ['Join JYC route stays honest about recruitment state',main.includes("clean==='/join-jyc'")&&main.includes('function JoinJYC')&&main.includes('coming soon')],
