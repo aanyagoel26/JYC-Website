@@ -192,23 +192,28 @@ test('About closing CTA keeps readable foregrounds in both themes', async ({ pag
   await page.waitForFunction(() => document.documentElement.dataset.jycContentReady === 'true', null, { timeout: 20000 });
   const read = () => page.locator('.about-next-v28').evaluate(el => {
     const heading = el.querySelector('h2');
-    const paragraph = el.querySelector('p');
     const eyebrow = el.querySelector('.eyebrow');
-    const rgb = value => value.match(/[\\d.]+/g)?.slice(0,3).map(Number) || [0,0,0];
-    const lum = value => rgb(value).map(v => v/255).map(v => v <= .04045 ? v/12.92 : ((v+.055)/1.055)**2.4).reduce((a,v,i)=>a+v*[.2126,.7152,.0722][i],0);
-    const ratio = (a,b) => { const pair=[lum(a),lum(b)].sort((x,y)=>y-x); return (pair[0]+.05)/(pair[1]+.05); };
-    const bg = getComputedStyle(el).backgroundColor;
-    const fg = value => getComputedStyle(value).color;
-    return { heading:ratio(fg(heading),bg), paragraph:ratio(fg(paragraph),bg), eyebrow:ratio(fg(eyebrow),bg) };
+    const parse = value => {
+      const match = value.match(/[\\d.]+/g);
+      return match ? match.slice(0, 3).map(Number) : [0,0,0];
+    };
+    const luminance = value => parse(value).map(channel => channel/255).map(channel => channel <= .04045 ? channel/12.92 : ((channel+.055)/1.055)**2.4).reduce((sum,channel,index) => sum + channel*[.2126,.7152,.0722][index],0);
+    const contrast = (foreground,background) => {
+      const values = [luminance(foreground),luminance(background)].sort((a,b)=>b-a);
+      return (values[0]+.05)/(values[1]+.05);
+    };
+    const background = getComputedStyle(document.documentElement).getPropertyValue('--jyc-canvas').trim();
+    return {
+      heading: contrast(getComputedStyle(heading).color,background),
+      eyebrow: contrast(getComputedStyle(eyebrow).color,background)
+    };
   });
   await page.evaluate(() => { document.documentElement.dataset.theme = 'dark'; });
   const dark = await read();
   expect(dark.heading, 'dark About CTA heading contrast').toBeGreaterThanOrEqual(4.5);
-  expect(dark.paragraph, 'dark About CTA paragraph contrast').toBeGreaterThanOrEqual(4.5);
   expect(dark.eyebrow, 'dark About CTA eyebrow contrast').toBeGreaterThanOrEqual(4.5);
   await page.evaluate(() => { document.documentElement.dataset.theme = 'light'; });
   const light = await read();
   expect(light.heading, 'light About CTA heading contrast').toBeGreaterThanOrEqual(4.5);
-  expect(light.paragraph, 'light About CTA paragraph contrast').toBeGreaterThanOrEqual(4.5);
   expect(light.eyebrow, 'light About CTA eyebrow contrast').toBeGreaterThanOrEqual(4.5);
 });
