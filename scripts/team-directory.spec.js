@@ -36,9 +36,10 @@ test.describe('JYC team directory interactions', () => {
     await expect(card).toBeVisible();
     await card.focus();
     await expect(card).toBeFocused();
-    await page.keyboard.press('Enter');
+    await page.keyboard.press('Space');
     await expect(card).toHaveAttribute('aria-expanded', 'true');
     await expect(card.locator('.flip-card__back')).toBeVisible();
+    await expect(card.locator('.flip-card__front')).toHaveAttribute('aria-hidden', 'true');
     await page.keyboard.press('Escape');
     await expect(card).toHaveAttribute('aria-expanded', 'false');
     await expect(card.locator('.flip-card__front')).toBeVisible();
@@ -59,6 +60,19 @@ test.describe('JYC team directory interactions', () => {
 
   test('shows a working JYC crest fallback in the Team identity', async ({ page }) => {
     await expect(page.getByRole('img', { name: 'JIIT Youth Club crest' }).first()).toBeVisible();
+  });
+
+  test('keeps both theme variants readable at 320px and 390px', async ({ page }) => {
+    for (const theme of ['light','dark']) {
+      await page.evaluate(value => { localStorage.setItem('jyc-theme', value); document.documentElement.dataset.theme = value; }, theme);
+      for (const width of [320,390]) {
+        await page.setViewportSize({ width, height: 820 });
+        const snapshot = await page.evaluate(() => ({ overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1, heading: getComputedStyle(document.querySelector('.team-hero-copy h1')).color, body: getComputedStyle(document.querySelector('.team-hero-copy p')).color, card: document.querySelector('.team-layer-card')?.getBoundingClientRect().width || 0, viewport: document.documentElement.clientWidth }));
+        expect(snapshot.overflow, `${theme} team layout overflows at ${width}px`).toBe(false);
+        expect(snapshot.card, `${theme} team cards fit at ${width}px`).toBeLessThanOrEqual(snapshot.viewport);
+        expect(snapshot.heading).not.toBe(snapshot.body);
+      }
+    }
   });
 
   test('keeps the directory usable at narrow phone widths', async ({ page }) => {
