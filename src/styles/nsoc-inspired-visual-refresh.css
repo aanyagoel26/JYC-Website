@@ -1317,3 +1317,127 @@ html[data-theme="dark"] .jyc-search-result.is-selected { background:#252a4a !imp
 @media(prefers-reduced-motion:reduce) {
   html[data-theme="dark"] body::before { animation:none !important; }
 }
+
+
+/* MOTION SYSTEM — purposeful, staggered, and opt-out friendly. */
+@keyframes jyc-section-arrive {
+  from { opacity:0;transform:translate3d(0,22px,0);filter:blur(3px); }
+  to { opacity:1;transform:translate3d(0,0,0);filter:blur(0); }
+}
+@keyframes jyc-celestial-twinkle {
+  0%,100% { opacity:.28; }
+  50% { opacity:.72; }
+}
+.public-app .jyc-reveal {
+  opacity:0;
+  transform:translate3d(0,22px,0);
+  filter:blur(3px);
+  transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1),filter .7s ease;
+  transition-delay:calc(var(--jyc-reveal-index,0)*55ms);
+  will-change:opacity,transform;
+}
+.public-app .jyc-reveal.jyc-reveal-visible {
+  opacity:1;transform:translate3d(0,0,0);filter:blur(0);will-change:auto;
+}
+.public-app :where(button,.btn,.button,[role="button"],.jh-btn) {
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  .public-app :where(button,.btn,.button,[role="button"],.jh-btn) {
+    transition:transform .22s cubic-bezier(.2,.8,.2,1),box-shadow .22s ease,border-color .22s ease,background-color .22s ease,color .22s ease;
+  }
+  .public-app :where(button,.btn,.button,[role="button"],.jh-btn):not(:disabled):hover {
+    transform:translateY(-2px);
+  }
+  .public-app :where(button,.btn,.button,[role="button"],.jh-btn):not(:disabled):active {
+    transform:translateY(0) scale(.985);
+  }
+  .public-app :where(.card,.club-card,.event-card,.team-card,.contact-card,.feature-card,.gallery-item,.gallery-story-card,.jh-story-card) {
+    transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s ease,border-color .3s ease;
+  }
+  .public-app :where(.card,.club-card,.event-card,.team-card,.contact-card,.feature-card,.gallery-item,.gallery-story-card,.jh-story-card):hover {
+    transform:translateY(-4px);
+  }
+}
+html[data-theme="dark"] .public-app :where(.card,.club-card,.event-card,.team-card,.contact-card,.feature-card,.gallery-item,.gallery-story-card,.jh-story-card) {
+  box-shadow:0 18px 48px rgba(0,0,0,.24),inset 0 1px 0 rgba(255,255,255,.035);
+}
+html[data-theme="dark"] .public-app :where(.card,.club-card,.event-card,.team-card,.contact-card,.feature-card,.gallery-item,.gallery-story-card,.jh-story-card):hover {
+  border-color:rgba(201,184,242,.38);
+  box-shadow:0 24px 60px rgba(0,0,0,.34),0 0 28px rgba(173,151,226,.09),inset 0 1px 0 rgba(255,255,255,.06);
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home {
+  --jh-bg:#090b19;
+  --jh-surface:#15182b;
+  --jh-surface-elevated:#1d2038;
+  --jh-surface-glass:rgba(21,24,43,.88);
+  --jh-ink:#f2efff;
+  --jh-muted:#c0bad5;
+  --jh-accent:#c9b8f2;
+  --jh-accent-glow:rgba(173,151,226,.16);
+  --jh-cyan:#e6d4a8;
+  --jh-cyan-glow:rgba(230,212,168,.1);
+  --jh-line:rgba(218,211,255,.16);
+  --jh-line-accent:rgba(201,184,242,.32);
+  background:transparent !important;
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-hero {
+  position:relative;isolation:isolate;
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-hero::after {
+  content:"";position:absolute;z-index:-1;pointer-events:none;
+  width:min(62vw,720px);aspect-ratio:1;border-radius:50%;
+  right:-8%;top:-18%;
+  background:radial-gradient(circle,rgba(122,108,180,.18),rgba(62,76,133,.08) 42%,transparent 72%);
+  filter:blur(18px);
+  animation:jyc-celestial-twinkle 9s ease-in-out infinite;
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-title-gradient {
+  background:linear-gradient(105deg,#f2efff 0%,#c9b8f2 48%,#e6d4a8 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-hero-dither-layer {
+  opacity:.2;mix-blend-mode:screen;filter:none;
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-hero-dither-loading {
+  background:radial-gradient(circle,rgba(173,151,226,.2),rgba(100,112,170,.1) 42%,transparent 72%);
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-cyber-badge,
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-team-list,
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-featured-event {
+  background:linear-gradient(145deg,rgba(28,33,60,.92),rgba(15,19,39,.96));
+  border-color:rgba(201,184,242,.2);
+  box-shadow:0 24px 64px rgba(0,0,0,.3),inset 0 1px 0 rgba(255,255,255,.04);
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-live-pulse-dot,
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-status-highlight {
+  color:#e6d4a8;
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-section-number,
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-about-kicker {
+  color:#e6d4a8;
+}
+html[data-theme="light"] .jyc-editorial-home.jyc-home .jh-title-gradient {
+  background:linear-gradient(105deg,#843b35 0%,#a36d51 55%,#98784e 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+@media(max-width:680px) {
+  .public-app .jyc-reveal { transform:translate3d(0,12px,0);filter:none;transition-duration:.48s; }
+  html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-hero::after {
+    width:90vw;right:-20%;top:0;opacity:.65;
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  .public-app .jyc-reveal,.public-app .jyc-reveal.jyc-reveal-visible {
+    opacity:1 !important;transform:none !important;filter:none !important;
+    transition:none !important;animation:none !important;will-change:auto !important;
+  }
+  html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-hero::after {
+    animation:none !important;
+  }
+  .public-app :where(button,.btn,.button,[role="button"],.jh-btn),
+  .public-app :where(.card,.club-card,.event-card,.team-card,.contact-card,.feature-card,.gallery-item,.gallery-story-card,.jh-story-card) {
+    transition:none !important;
+  }
+}
