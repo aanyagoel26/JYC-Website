@@ -451,9 +451,11 @@ test('first visit follows the operating-system theme preference and saved prefer
 test('event directory does not label JAI registration open after its deadline', async ({ page }) => {
   await page.goto(base + '/events', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'event directory registration state');
-  const jai = page.locator('.jyc57-event-card').filter({ hasText: 'JAI 2026' });
+  await page.getByRole('button', { name: /Status: Upcoming/ }).click();
+  await page.getByRole('button', { name: 'Past Archive' }).click();
+  const jai = page.locator('.jyc-event-card-v2').filter({ hasText: 'JAI 2026' });
   await expect(jai).toBeVisible();
-  await expect(jai.locator('.jyc57-reg-pill')).toHaveCount(0);
+  await expect(jai.locator('.reg-badge')).toHaveCount(0);
 });
 
 test('mobile event feature keeps a usable photo and readable copy column', async ({ page }) => {
