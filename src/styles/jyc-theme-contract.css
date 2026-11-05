@@ -304,3 +304,76 @@ html[data-theme="dark"] .public-app :where(.gallery-item:hover,.jyc57-photo:hove
 .public-app :where(.jyc-filter-group-label,.jyc-clear-filters-btn,.jyc-filter-toggle-btn:hover) {
   color: var(--jyc-gold) !important;
 }
+
+
+/* Portal-mounted navigation, search and More surfaces live outside .public-app. */
+html[data-theme="light"] .nav,
+html[data-theme="light"] .mobile-dock,
+html[data-theme="light"] .theme-toggle-rb {
+  color: var(--jyc-text-strong);
+  background: color-mix(in srgb,var(--jyc-surface) 92%,transparent);
+  border-color: var(--jyc-line);
+}
+html[data-theme="dark"] .nav,
+html[data-theme="dark"] .mobile-dock,
+html[data-theme="dark"] .theme-toggle-rb {
+  color: var(--jyc-text-strong);
+  background: color-mix(in srgb,var(--jyc-surface) 92%,transparent);
+  border-color: var(--jyc-line);
+}
+html[data-theme="light"] .nav nav button,
+html[data-theme="light"] .mobile-dock button,
+html[data-theme="light"] .search-trigger,
+html[data-theme="light"] .nav-join-cta,
+html[data-theme="light"] .more-sheet,
+html[data-theme="light"] .search-modal {
+  color: var(--jyc-text-strong);
+}
+html[data-theme="dark"] .nav nav button,
+html[data-theme="dark"] .mobile-dock button,
+html[data-theme="dark"] .search-trigger,
+html[data-theme="dark"] .nav-join-cta,
+html[data-theme="dark"] .more-sheet,
+html[data-theme="dark"] .search-modal {
+  color: var(--jyc-text-strong);
+}
+html[data-theme="light"] .nav nav button.active,
+html[data-theme="light"] .mobile-dock button.active {
+  color: var(--jyc-text-strong) !important;
+  background: color-mix(in srgb,var(--jyc-accent) 12%,var(--jyc-surface)) !important;
+  border-color: color-mix(in srgb,var(--jyc-accent) 30%,var(--jyc-line)) !important;
+}
+html[data-theme="dark"] .nav nav button.active,
+html[data-theme="dark"] .mobile-dock button.active {
+  color: #080d1c !important;
+  background: var(--jyc-gold) !important;
+  border-color: var(--jyc-gold) !important;
+}
+html[data-theme="light"] .search-modal,
+html[data-theme="light"] .more-sheet {
+  background: var(--jyc-surface) !important;
+  color: var(--jyc-text-strong) !important;
+  border: 1px solid var(--jyc-line) !important;
+}
+html[data-theme="dark"] .search-modal,
+html[data-theme="dark"] .more-sheet {
+  background: var(--jyc-surface) !important;
+  color: var(--jyc-text-strong) !important;
+  border: 1px solid var(--jyc-line) !important;
+}
+html[data-theme="light"] .search-overlay { background: rgba(245,241,232,.82) !important; }
+html[data-theme="dark"] .search-overlay { background: rgba(5,10,22,.84) !important; }
+html[data-theme="light"] .search-modal :where(input,button,small,p,span) { color: inherit; }
+html[data-theme="dark"] .search-modal :where(input,button,small,p,span) { color: inherit; }
+html[data-theme="light"] .search-modal input,
+html[data-theme="light"] .search-modal .search-input-wrap {
+  background: var(--jyc-canvas-raised) !important;
+  color: var(--jyc-text-strong) !important;
+  border-color: var(--jyc-line) !important;
+}
+html[data-theme="dark"] .search-modal input,
+html[data-theme="dark"] .search-modal .search-input-wrap {
+  background: var(--jyc-canvas-raised) !important;
+  color: var(--jyc-text-strong) !important;
+  border-color: var(--jyc-line) !important;
+}
