@@ -47,7 +47,7 @@ add('Interactive elements use touch-friendly spacing and padding', hasTouchTarge
 
 // 6. Cohesive JYC day/night palette and mobile-first layout contracts.
 const hasPaperCanvas = cohesiveCss.includes('--jh-bg: #f5f1e8') && cohesiveCss.includes('--jyc-canvas: #f5f1e8');
-const hasWarmGold = cohesiveCss.includes('--jyc-gold: #8c6d36') && cohesiveCss.includes('--jyc-gold: #e7d19b');
+const hasWarmGold = cohesiveCss.includes('--jyc-gold: #76572b') && cohesiveCss.includes('--jyc-gold: #e7d19b');
 const hasNightSky = cohesiveCss.includes('--jh-bg: #080d1c') && cohesiveCss.includes('--jh-accent: #c8bcff') && cohesiveCss.includes('--jh-line-accent: rgba(231,209,155,.32)');
 const hasSharedLegacyAliases = cohesiveCss.includes('--jyc-brand-oxblood: var(--jyc-accent)') && cohesiveCss.includes('--accent-red: var(--jyc-accent)');
 const hasPhoneFirst = cohesiveCss.includes('@media (max-width: 360px)') && cohesiveCss.includes('grid-template-columns:1fr !important') && cohesiveCss.includes('env(safe-area-inset-bottom)');
