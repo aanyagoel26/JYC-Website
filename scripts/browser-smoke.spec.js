@@ -1590,17 +1590,20 @@ test('runtime metadata keeps canonical URLs on the production domain from a prev
 
 
 
-test('static boot screen defaults to the night theme when no preference is saved', async ({ page }) => {
+test('static boot screen follows the operating-system theme before React mounts', async ({ page }) => {
   await page.addInitScript(() => localStorage.removeItem('jyc-theme'));
   await page.route('**/*', route => {
     const pathname = new URL(route.request().url()).pathname;
-    if ((pathname.startsWith('/assets/') && /\.(?:js|jsx|mjs)$/.test(pathname)) || pathname === '/@vite/client') return route.abort();
+    if ((pathname.startsWith('/assets/') && /\\.(?:js|jsx|mjs)$/.test(pathname)) || pathname === '/@vite/client') return route.abort();
     return route.continue();
   });
-  await page.emulateMedia({ colorScheme: 'light' });
-  await page.goto(base, { waitUntil: 'domcontentloaded' });
-  await expect(page.locator('.boot-fallback')).toBeVisible();
-  await expect.poll(() => page.locator('html').getAttribute('data-theme')).toBe('dark');
+  for (const theme of ['light', 'dark']) {
+    await page.emulateMedia({ colorScheme: theme });
+    await page.goto(base, { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('.boot-fallback')).toBeVisible();
+    await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+    await expect(page.locator('meta[name="theme-color"]').first()).toHaveAttribute('content', theme === 'dark' ? '#080d1c' : '#f5f1e8');
+  }
 });
 
 test('static boot screen respects the saved light/dark theme before React mounts', async ({ page }) => {
