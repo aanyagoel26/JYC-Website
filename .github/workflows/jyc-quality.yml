@@ -18,6 +18,8 @@ jobs:
   quality:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      VITE_CANONICAL_ORIGIN: https://www.jiityouthclub128.in
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -35,8 +37,6 @@ jobs:
 
       - name: Production build
         run: npm run build
-        env:
-          VITE_CANONICAL_ORIGIN: https://www.jiityouthclub128.in
 
       - name: Run full static release QA
         run: npm run qa
