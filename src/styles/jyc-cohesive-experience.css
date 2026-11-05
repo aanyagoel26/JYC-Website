@@ -244,6 +244,7 @@ html[data-theme="dark"] .public-app :where(.card:hover,.club-card:hover,.event-c
 
 /* Homepage: consistent editorial typography and palette. */
 .jyc-editorial-home.jyc-home {
+  position:relative;
   color: var(--jyc-text-strong) !important;
   background: transparent !important;
   isolation: isolate;
