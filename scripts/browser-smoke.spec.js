@@ -1947,7 +1947,7 @@ test('More navigation and Search modal work with keyboard, empty states and focu
   await input.press('ArrowUp');
   await expect(page.locator('#jyc-search-result-0')).toHaveAttribute('aria-selected', 'true');
   await input.press('Enter');
-  await expect(page).toHaveURL(/\\/clubs(?:\\/)?$/);
+  await expect(page).toHaveURL(/\/clubs(?:\/)?$/);
   await expect(page.locator('.search-overlay')).toHaveCount(0);
   await expect(searchTrigger).toBeFocused();
 
@@ -1965,7 +1965,7 @@ test('More navigation and Search modal work with keyboard, empty states and focu
   await moreTrigger.click();
   await expect(more).toBeVisible();
   await more.getByRole('button', { name: /About JYC/ }).click();
-  await expect(page).toHaveURL(/\\/about(?:\\/)?$/);
+  await expect(page).toHaveURL(/\/about(?:\/)?$/);
   await expect(page.locator('.more-sheet-overlay')).toHaveCount(0);
 
   await moreTrigger.click();
