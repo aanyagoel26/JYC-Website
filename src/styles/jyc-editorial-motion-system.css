@@ -648,3 +648,10 @@ html[data-theme="light"] .public-app .nav .search-trigger {
     max-width: 180px !important;
   }
 }
+
+
+/* Use the shared champagne/lavender orbit for the hero plaque in both themes. */
+.jyc-editorial-home.jyc-home .jh-hero-dither-visual::before {
+  border-color: var(--jyc-gold-soft,rgba(231,209,155,.48)) !important;
+  box-shadow: 0 0 0 18px rgba(231,209,155,.055),0 0 0 42px rgba(200,188,255,.035) !important;
+}
