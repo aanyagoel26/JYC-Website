@@ -2051,10 +2051,17 @@ test('More navigation and Search modal work with keyboard, empty states and focu
   await expect(page).toHaveURL(/\\/updates(?:\\/)?$/);
   await expect(page.locator('.search-overlay')).toHaveCount(0);
 
+  await searchTrigger.click();
+  await input.fill('Recruitment');
+  await input.press('Enter');
+  await expect(page).toHaveURL(/\\/recruitment(?:\\/)?$/);
+  await expect(page.locator('.search-overlay')).toHaveCount(0);
+
   const moreTrigger = page.locator('.nav-more-trigger');
   const more = page.getByRole('dialog', { name: 'More JYC' });
   await moreTrigger.click();
   await expect(more).toBeVisible();
+  await expect(more.getByRole('button', { name: 'Recruitment' })).toBeVisible();
   await more.getByRole('button', { name: /About JYC/ }).click();
   await expect(page).toHaveURL(/\/about(?:\/)?$/);
   await expect(page.locator('.more-sheet-overlay')).toHaveCount(0);
