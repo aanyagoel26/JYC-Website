@@ -42,9 +42,9 @@ html[data-theme="light"] {
   --jyc-ink: #1A191D;
   --jyc-muted: #6E6A75;
   --jyc-line: rgba(26, 25, 29, 0.12);
-  --jyc-accent: #A82420;
-  --jyc-gold: #BF9C6F;
-  --jyc-focus: #A82420;
+  --jyc-accent: #625889;
+  --jyc-gold: #76572b;
+  --jyc-focus: #514675;
 }
 
 html[data-theme="dark"] {
@@ -323,9 +323,7 @@ h1,h2,h3,h4,.brand span,.section-head h2,.page h1,.page h2{font-family:"Space Gr
  body{padding-bottom:78px}
 }
 
-:root{--navy:#080d1c;--ivory:#f7f5ff;--champagne:#e7d19b;--accent:var(--jyc-accent);--jyc-bg:#080d1c;--jyc-surface:#111b31;--jyc-ink:#f7f5ff;--jyc-muted:#c0c4da;--jyc-line:rgba(200,188,255,.18)}
-html[data-theme="dark"]{--navy:#0F0E11;--ivory:#f8fafc;--champagne:#A82420;--accent:#ef4444;--jyc-bg:#0F0E11;--jyc-surface:#18161D;--jyc-ink:#f8fafc;--jyc-muted:#94a3b8;--jyc-line:rgba(255,255,255,.1)}
-html[data-theme="light"]{--navy:#f5f1e8;--ivory:#191827;--champagne:#8c6d36;--accent:var(--jyc-accent);--jyc-bg:#f5f1e8;--jyc-surface:#fffdf8;--jyc-ink:#191827;--jyc-muted:#5f5c6b;--jyc-line:rgba(98,88,137,.18)}
+/* Legacy palette override removed: src/styles/jyc-theme-contract.css is the final theme-token authority. */
 :where(a,button,input,textarea,select,[tabindex]):focus-visible{outline:2px solid var(--red);outline-offset:3px}
 img{max-width:100%}svg{max-width:100%}.page a,.section a{text-decoration-thickness:1px;text-underline-offset:3px}.page button,.section button{font-family:inherit}
 
