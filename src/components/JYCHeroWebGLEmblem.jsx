@@ -104,7 +104,7 @@ export function JYCHeroWebGLEmblem() {
       size: 1.2 + (i % 3) * 0.9,
       alpha: 0.25 + (i % 6) * 0.12,
       tiltAxis: (i % 3) * 0.35,
-      color: i % 4 === 0 ? '#ed8064' : i % 4 === 1 ? '#d8b77d' : i % 4 === 2 ? '#b99b70' : '#c86b55'
+      color: i % 4 === 0 ? '#c9b8f2' : i % 4 === 1 ? '#e6d4a8' : i % 4 === 2 ? '#9f91c9' : '#d8d0f0'
     }));
 
     // Mouse movement inertia
@@ -154,16 +154,16 @@ export function JYCHeroWebGLEmblem() {
       const baseRadius = Math.min(width, height) * 0.38;
 
       const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
-      const primaryStroke = isDark ? 'rgba(237, 128, 100, ' : 'rgba(143, 41, 37, ';
-      const secondaryStroke = isDark ? 'rgba(216, 183, 125, ' : 'rgba(185, 155, 112, ';
-      const tertiaryStroke = isDark ? 'rgba(200, 107, 85, ' : 'rgba(118, 32, 30, ';
+      const primaryStroke = isDark ? 'rgba(201, 184, 242, ' : 'rgba(143, 41, 37, ';
+      const secondaryStroke = isDark ? 'rgba(230, 212, 168, ' : 'rgba(185, 155, 112, ';
+      const tertiaryStroke = isDark ? 'rgba(133, 124, 190, ' : 'rgba(118, 32, 30, ';
 
       // 1. Ambient Central Coronas
       const glowGrad = ctx.createRadialGradient(cx, cy, baseRadius * 0.15, cx, cy, baseRadius * 1.6);
       if (isDark) {
-        glowGrad.addColorStop(0, 'rgba(237, 128, 100, 0.20)');
-        glowGrad.addColorStop(0.35, 'rgba(216, 183, 125, 0.10)');
-        glowGrad.addColorStop(0.7, 'rgba(200, 107, 85, 0.05)');
+        glowGrad.addColorStop(0, 'rgba(173, 151, 226, 0.22)');
+        glowGrad.addColorStop(0.35, 'rgba(230, 212, 168, 0.12)');
+        glowGrad.addColorStop(0.7, 'rgba(100, 112, 170, 0.08)');
         glowGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
       } else {
         glowGrad.addColorStop(0, 'rgba(143, 41, 37, 0.18)');
@@ -217,7 +217,7 @@ export function JYCHeroWebGLEmblem() {
         const a = (i / ticks) * Math.PI * 2 + time * 0.08;
         const r1 = baseRadius * 0.97;
         const r2 = baseRadius * (i % 6 === 0 ? 1.08 : i % 2 === 0 ? 1.04 : 1.01);
-        ctx.strokeStyle = i % 6 === 0 ? (isDark ? '#ed8064' : '#8f2925') : (primaryStroke + '0.45)');
+        ctx.strokeStyle = i % 6 === 0 ? (isDark ? '#c9b8f2' : '#8f2925') : (primaryStroke + '0.45)');
         ctx.lineWidth = (i % 6 === 0 ? 1.8 : 1) * dpr;
         ctx.beginPath();
         ctx.moveTo(Math.cos(a) * r1, Math.sin(a) * r1);
