@@ -76,7 +76,7 @@ test.describe('JYC visual capture and measurable design contracts', () => {
               return {
                 tag: el.tagName.toLowerCase(),
                 className: typeof el.className === 'string' ? el.className : '',
-                text: (el.innerText || el.textContent || '').trim().replace(/\\s+/g, ' ').slice(0, 100),
+                text: (el.innerText || el.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 100),
                 fontSize: style.fontSize,
                 lineHeight: style.lineHeight
               };
