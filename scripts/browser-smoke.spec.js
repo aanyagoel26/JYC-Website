@@ -1666,6 +1666,7 @@ test('JYC Assistant quick routes are distinct and navigate to their labelled des
 
   const dialog = page.getByRole('dialog', { name: 'Ask JYC. Instant Campus Knowledge.' });
   await expect(dialog).toBeVisible();
+  await dialog.getByRole('button', { name: /Fast Directory Search/ }).click();
   const routes = dialog.locator('.preset-buttons button');
   await expect(routes).toHaveCount(4);
   await expect(routes).toContainText(['Explore all clubs', 'Upcoming events', 'JYC archive', 'Contact JYC']);
@@ -1683,7 +1684,7 @@ test('JYC Assistant traps keyboard focus and restores focus after closing', asyn
   await trigger.focus();
   await trigger.press('Enter');
 
-  const dialog = page.getByRole('dialog', { name: 'Ask JYC. Find your route.' });
+  const dialog = page.getByRole('dialog', { name: 'Ask JYC. Instant Campus Knowledge.' });
   await expect(dialog).toBeVisible();
   await expect(page.getByRole('textbox', { name: 'Ask JYC AI a question' })).toBeFocused();
 
