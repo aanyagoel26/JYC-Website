@@ -22,6 +22,29 @@
   --jyc-brand-ease: cubic-bezier(.2, .8, .2, 1);
   --jyc-brand-fast: 160ms;
   --jyc-brand-base: 240ms;
+  --jyc-font-display: 'Space Grotesk', Inter, system-ui, sans-serif;
+  --jyc-font-body: Inter, system-ui, sans-serif;
+  --jyc-font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --jyc-space-1: 4px;
+  --jyc-space-2: 8px;
+  --jyc-space-3: 12px;
+  --jyc-space-4: 16px;
+  --jyc-space-5: 20px;
+  --jyc-space-6: 24px;
+  --jyc-space-8: 32px;
+  --jyc-space-10: 40px;
+  --jyc-space-12: 48px;
+  --jyc-motion-fast: 140ms;
+  --jyc-motion-hover: 180ms;
+  --jyc-motion-overlay: 240ms;
+  --jyc-motion-enter: 360ms;
+  --jyc-motion-ease-in: cubic-bezier(.4, 0, 1, 1);
+  --jyc-motion-ease-out: cubic-bezier(0, 0, .2, 1);
+  --jyc-motion-ease-standard: cubic-bezier(.2, .8, .2, 1);
+  --jyc-layer-header: 40;
+  --jyc-layer-dock: 120;
+  --jyc-layer-overlay: 200;
+  --jyc-layer-lightbox: 300;
 }
 html[data-theme="dark"] {
   color-scheme: dark;
@@ -250,4 +273,41 @@ html[data-theme="dark"] .public-app :where(.btn-secondary,.button-secondary,[dat
     transform: none !important;
     filter: none !important;
   }
+}
+
+
+/* Search discovery controls share the global component system and remain compact. */
+.search-category-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 0 12px;
+}
+.search-category-filters button {
+  min-height: 36px;
+  padding: 7px 11px;
+  border: 1px solid var(--jyc-brand-line-strong);
+  border-radius: 999px;
+  color: var(--jyc-brand-muted);
+  background: var(--jyc-brand-paper-raised);
+  font: 700 11px/1.2 var(--jyc-font-body);
+  cursor: pointer;
+}
+.search-category-filters button[aria-pressed="true"] {
+  color: #fffaf0;
+  background: var(--jyc-brand-oxblood);
+  border-color: var(--jyc-brand-oxblood);
+}
+.search-modal .search-result .search-match {
+  color: var(--jyc-brand-oxblood);
+  background: color-mix(in srgb, var(--jyc-brand-champagne) 28%, transparent);
+  border-radius: 3px;
+  font-weight: 800;
+}
+html[data-theme="dark"] .search-modal .search-result .search-match {
+  color: #f8dcae;
+  background: rgba(96,165,250,.18);
+}
+@media (prefers-reduced-motion: reduce) {
+  .search-category-filters button { transition: none !important; }
 }
