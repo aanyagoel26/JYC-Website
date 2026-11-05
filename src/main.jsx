@@ -602,7 +602,7 @@ function Events({data}){
   if(/creative|design|media|photography|film/.test(key))return 'Creative';
   return raw;
 };
- const filtered=all.filter(e=>filter==='All'||e.club===filter).filter(e=>family==='All'||eventCategoryOf(e).toLowerCase()===family.toLowerCase()).filter(e=>!q||`${e.title} ${e.club} ${e.venue} ${eventCategoryOf(e)} ${Array.isArray(e.highlights)?e.highlights.join(' '):''}`.toLowerCase().includes(q.toLowerCase()));
+ const filtered=all.filter(e=>filter==='All'||e.club===filter).filter(e=>family==='All'||eventCategoryOf(e).toLowerCase()===family.toLowerCase()).filter(e=>!q||`${e.title} ${e.club} ${e.venue} ${eventCategoryOf(e)} ${Array.isArray(e.highlights)?e.highlights.join(' '):''} ${e.description||''} ${e.eligibility||''}`.toLowerCase().includes(q.toLowerCase()));
  const planned=filtered.filter(e=>e.publicStatus==='planned');
  const dated=filtered.filter(e=>e.publicStatus!=='planned');
  const upcoming=dated.filter(e=>eventState(e)!=='past'),live=dated.filter(e=>eventState(e)==='live'),past=dated.filter(e=>eventState(e)==='past');
@@ -885,9 +885,9 @@ function Search({data,admin,close}){
  useEffect(()=>{const active=document.activeElement;returnFocusRef.current=active instanceof HTMLElement?active:document.querySelector('[data-jyc-search-trigger]');const previous=document.body.style.overflow;document.body.style.overflow='hidden';const timer=setTimeout(()=>inputRef.current?.focus(),40);const onKeyDown=e=>{if(e.key!=='Tab')return;const root=document.querySelector('.search-modal');if(!root)return;const focusable=[...root.querySelectorAll('button,input,a,[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled&&el.offsetParent!==null);if(!focusable.length)return;const first=focusable[0],last=focusable[focusable.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}};document.addEventListener('keydown',onKeyDown);return()=>{clearTimeout(timer);document.body.style.overflow=previous;document.removeEventListener('keydown',onKeyDown);const target=returnFocusRef.current?.isConnected?returnFocusRef.current:document.querySelector('[data-jyc-search-trigger]');if(target instanceof HTMLElement)requestAnimationFrame(()=>target.focus())}},[]);
  useEffect(()=>{setSelected(0)},[term]);
  const remember=value=>{if(!value)return;try{const next=[value,...recent.filter(x=>x!==value)].slice(0,5);storageSet('jyc-search-recent',JSON.stringify(next));setRecent(next)}catch{}};
- const clubs=data.clubs.filter(c=>c.published&&c.status!=='archived');
- const events=data.events.filter(e=>e.published&&!e.archived);
- const team=data.team.filter(m=>m.published===true);
+ const clubs=data.clubs.filter(c=>c.published&&c.status!=='archived'&&c.status!=='draft'&&c.status!=='source-material');
+ const events=data.events.filter(e=>e.published&&!e.archived&&e.status!=='draft'&&e.status!=='source-material');
+ const team=data.team.filter(m=>m.published===true&&m.status!=='draft'&&m.status!=='archived');
  const pageIndex=[
   ['JIIT Youth Club','Official JYC website for JIIT Noida clubs, events, people and campus experiences.','PAGE','/'],
   ['About JYC','About the JIIT Youth Club community, purpose and student-led work.','PAGE','/about'],
@@ -906,10 +906,10 @@ function Search({data,admin,close}){
  const rawResults=[
   ...adminPages.map(x=>({key:'a'+x[3]+x[0],type:x[2],title:x[0],meta:x[1],searchText:`${x[0]} ${x[1]} JYC JIIT`,icon:'⚙',go:()=>nav(x[3])})),
   ...pageIndex.map(x=>({key:'p'+x[3],type:x[2],title:x[0],meta:x[1],searchText:`${x[0]} ${x[1]} JYC JIIT Noida`,icon:'⌘',go:()=>nav(x[3])})),
-  ...clubs.map(c=>({key:'c'+c.id,type:'CLUB',title:c.name,meta:c.category||'Community',searchText:`${c.name} ${c.category||''} ${Array.isArray(c.interests)?c.interests.join(' '):''} ${c.description||''}`,icon:'◈',go:()=>nav('/clubs/'+encodeURIComponent(slug(c.name)))})),
+  ...clubs.map(c=>({key:'c'+c.id,type:'CLUB',title:c.name,meta:c.category||'Community',searchText:`${c.name} ${c.category||''} ${Array.isArray(c.interests)?c.interests.join(' '):''} ${c.description||''} ${c.about||''}`,icon:'◈',go:()=>nav('/clubs/'+encodeURIComponent(slug(c.name)))})),
   ...events.map(e=>({key:'e'+e.id,type:'EVENT',title:e.title,meta:e.club||'JYC',searchText:`${e.title} ${e.club||''} ${e.venue||''} ${e.eventType||''} ${e.date||''} ${Array.isArray(e.highlights)?e.highlights.join(' '):''}`,icon:'◷',go:()=>nav('/events/'+encodeURIComponent(slug(e.slug||e.title)))})),
   ...team.map(m=>({key:'t'+m.id,type:'TEAM',title:m.name,meta:m.role||'JYC Team',searchText:`${m.name} ${m.role||''} ${m.bio||''}`,icon:'✦',go:()=>nav('/team')})),
-  ...data.gallery.filter(g=>g&&g.url).map((g,i)=>({key:'g'+(g.id||i),type:'PHOTO',title:g.caption||g.title||g.association||'JYC photo',meta:[g.association,g.year].filter(Boolean).join(' · ')||'JYC visual archive',searchText:`${g.caption||''} ${g.title||''} ${g.association||''} ${g.year||''} ${g.alt||''} ${g.sourceLabel||''}`,icon:'▧',go:()=>nav('/gallery')})),
+  ...data.gallery.filter(g=>g&&g.url&&g.published!==false&&g.status!=='draft'&&g.status!=='source-material').map((g,i)=>({key:'g'+(g.id||i),type:'PHOTO',title:g.caption||g.title||g.association||'JYC photo',meta:[g.association,g.year].filter(Boolean).join(' · ')||'JYC visual archive',searchText:`${g.caption||''} ${g.title||''} ${g.association||''} ${g.year||''} ${g.alt||''} ${g.sourceLabel||''}`,icon:'▧',go:()=>nav('/gallery')})),
  ];
  const intentResults=term&&/(tomorrow|today|this week|upcoming|events)/.test(term)
   ?[{key:'intent-events',type:'QUICK ACTION',title:'Upcoming events',meta:'Open the JYC event calendar',searchText:'upcoming events today tomorrow this week',icon:'◷',priority:120,go:()=>nav('/events')}]
