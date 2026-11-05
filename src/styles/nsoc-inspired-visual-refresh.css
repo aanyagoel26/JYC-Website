@@ -1884,3 +1884,107 @@ html[data-theme="dark"] .public-app .theme-toggle-track::after {
 html[data-theme="light"] .public-app .theme-toggle-track::after {
   color:rgba(152,120,78,.62) !important;
 }
+
+
+/* About page — editorial chapter navigation and a clearer reading rhythm. */
+.public-app .about-chapter-nav {
+  position:sticky;
+  top:82px;
+  z-index:24;
+  display:flex;
+  align-items:center;
+  gap:7px;
+  width:min(var(--jyc-content,1360px),calc(100% - 48px));
+  margin:18px auto 30px;
+  padding:9px;
+  overflow-x:auto;
+  overscroll-behavior-inline:contain;
+  scrollbar-width:thin;
+  border:1px solid var(--jyc-line);
+  border-radius:16px;
+  background:color-mix(in srgb,var(--jyc-surface) 91%,transparent);
+  box-shadow:0 12px 34px rgba(20,16,28,.07);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+}
+.public-app .about-chapter-label {
+  flex:0 0 auto;
+  padding:0 12px;
+  color:var(--jyc-muted);
+  font:800 9px/1.3 Inter,system-ui,sans-serif;
+  letter-spacing:.15em;
+  white-space:nowrap;
+}
+.public-app .about-chapter-nav a {
+  flex:0 0 auto;
+  display:inline-flex;
+  align-items:center;
+  gap:9px;
+  min-height:38px;
+  padding:0 12px;
+  border:1px solid transparent;
+  border-radius:10px;
+  color:var(--jyc-ink);
+  font:650 12px/1 Inter,system-ui,sans-serif;
+  text-decoration:none;
+  white-space:nowrap;
+  transition:background-color .2s ease,border-color .2s ease,color .2s ease;
+}
+.public-app .about-chapter-nav a span {
+  color:var(--jyc-gold);
+  font:800 9px/1 Inter,system-ui,sans-serif;
+  letter-spacing:.06em;
+}
+.public-app .about-chapter-nav a:hover,
+.public-app .about-chapter-nav a:focus-visible {
+  color:var(--jyc-red);
+  background:color-mix(in srgb,var(--jyc-red) 8%,var(--jyc-surface));
+  border-color:color-mix(in srgb,var(--jyc-red) 24%,transparent);
+}
+.public-app .about-page :where(#about-at-a-glance,#about-purpose,#about-ecosystem,
+  #about-how-it-works,#about-programmes,#history) {
+  scroll-margin-top:150px;
+}
+.public-app .about-page :where(.about-intro-v28,.about-families-v28,
+  .about-flow-v28,.about-programmes-v28,.about-vision-v28,.about-history-section) {
+  margin-top:clamp(52px,7vw,92px);
+}
+.public-app .about-page :where(.about-section-title-v28,.about-intro-v28>h2) {
+  max-width:900px;
+}
+.public-app .about-page :where(.about-section-title-v28 h2,.about-intro-v28>h2) {
+  text-wrap:balance;
+}
+html[data-theme="light"] .public-app .about-chapter-nav {
+  background:rgba(255,253,248,.92);
+  border-color:rgba(45,36,39,.13);
+}
+html[data-theme="dark"] .public-app .about-chapter-nav {
+  background:rgba(21,24,43,.92);
+  border-color:rgba(201,184,242,.2);
+  box-shadow:0 14px 40px rgba(0,0,0,.24);
+}
+html[data-theme="dark"] .public-app .about-chapter-nav a { color:#f2efff; }
+html[data-theme="dark"] .public-app .about-chapter-nav a span { color:#e6d4a8; }
+html[data-theme="dark"] .public-app .about-chapter-nav a:hover,
+html[data-theme="dark"] .public-app .about-chapter-nav a:focus-visible {
+  color:#f2efff;
+  background:rgba(201,184,242,.1);
+  border-color:rgba(201,184,242,.34);
+}
+@media(max-width:760px) {
+  .public-app .about-chapter-nav {
+    position:relative;
+    top:auto;
+    width:calc(100% - 32px);
+    margin:14px auto 24px;
+    border-radius:13px;
+  }
+  .public-app .about-chapter-label { display:none; }
+  .public-app .about-chapter-nav a { min-height:40px;padding:0 11px;font-size:11px; }
+  .public-app .about-page :where(#about-at-a-glance,#about-purpose,#about-ecosystem,
+    #about-how-it-works,#about-programmes,#history) { scroll-margin-top:92px; }
+}
+@media(prefers-reduced-motion:reduce) {
+  .public-app .about-chapter-nav a { transition:none; }
+}
