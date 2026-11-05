@@ -1345,14 +1345,10 @@ html[data-theme="dark"] .jyc-search-result.is-selected { background:#252a4a !imp
 }
 @media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
   .public-app :where(button,.btn,.button,[role="button"],.jh-btn) {
-    transition:transform .22s cubic-bezier(.2,.8,.2,1),box-shadow .22s ease,border-color .22s ease,background-color .22s ease,color .22s ease;
+    transition:box-shadow .22s ease,border-color .22s ease,background-color .22s ease,color .22s ease,filter .22s ease;
   }
-  .public-app :where(button,.btn,.button,[role="button"],.jh-btn):not(:disabled):hover {
-    transform:translateY(-2px);
-  }
-  .public-app :where(button,.btn,.button,[role="button"],.jh-btn):not(:disabled):active {
-    transform:translateY(0) scale(.985);
-  }
+  .public-app :where(.jh-btn):not(:disabled):hover { filter:brightness(1.045); }
+  .public-app :where(.jh-btn):not(:disabled):active { filter:brightness(.98); }
   .public-app :where(.card,.club-card,.event-card,.team-card,.contact-card,.feature-card,.gallery-item,.gallery-story-card,.jh-story-card) {
     transition:transform .3s cubic-bezier(.2,.8,.2,1),box-shadow .3s ease,border-color .3s ease;
   }
