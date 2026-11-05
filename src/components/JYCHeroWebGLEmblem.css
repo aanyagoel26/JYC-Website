@@ -366,3 +366,14 @@ html[data-theme] .jyc-hero-model-viewer {
   --progress-bar-color: var(--jyc-gold);
   --progress-mask: var(--jyc-canvas);
 }
+
+
+/* Keep the decorative crest glyph from shrinking into clipped text on narrow phones. */
+.jyc-emblem-badge .badge-icon {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.1em;
+  overflow: visible;
+}
