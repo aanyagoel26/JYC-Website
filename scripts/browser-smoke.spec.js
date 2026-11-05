@@ -511,12 +511,24 @@ test('failed gallery photos use the neutral unavailable-photo asset, not a logo 
   await expect(page.locator('.jyc57-club-card picture img[src*="jyc-logo"]')).toHaveCount(0);
 });
 
+test('Dither Veil falls back from the compact AVIF to the official WebP logo', async ({ page }) => {
+  await page.route('**/assets/jyc-logo-medium.avif', route => route.abort());
+  await page.goto(base, { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'Dither Veil logo fallback');
+  const logo = page.locator('.jh-hero-dither-layer img.dither-veil__fallback');
+  await expect(logo).toHaveAttribute('src', '/assets/jyc-logo.webp');
+  await expect.poll(() => logo.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+});
+
 test('homepage renders the official emblem and a magnetic activity Bento', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 960 });
   await page.goto(base, { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'homepage identity and activity design');
   await expect(page.locator('.jh-hero-webgl-stage-wrap .jyc-hero-emblem-stage')).toBeVisible();
   await expect(page.locator('.jh-hero-webgl-stage-wrap canvas.jyc-emblem-canvas')).toHaveCount(1);
+  const ditherLogo = page.locator('.jh-hero-dither-layer img.dither-veil__fallback');
+  await expect(ditherLogo).toHaveAttribute('src', '/assets/jyc-logo-medium.avif');
+  await expect.poll(() => ditherLogo.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
   const crest = page.getByRole('img', { name: 'JIIT Youth Club Crest' });
   await expect(crest).toBeVisible();
   await expect.poll(() => crest.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
@@ -1567,6 +1579,21 @@ test('runtime metadata keeps canonical URLs on the production domain from a prev
 });
 
 
+
+test('static boot screen follows the operating-system theme when no preference is saved', async ({ page }) => {
+  await page.addInitScript(() => localStorage.removeItem('jyc-theme'));
+  await page.route('**/*', route => {
+    const pathname = new URL(route.request().url()).pathname;
+    if ((pathname.startsWith('/assets/') && /\\.(?:js|jsx|mjs)$/.test(pathname)) || pathname === '/@vite/client') return route.abort();
+    return route.continue();
+  });
+  for (const theme of ['dark', 'light']) {
+    await page.emulateMedia({ colorScheme: theme });
+    await page.goto(base, { waitUntil: 'domcontentloaded' });
+    await expect(page.locator('.boot-fallback')).toBeVisible();
+    await expect.poll(() => page.locator('html').getAttribute('data-theme')).toBe(theme);
+  }
+});
 
 test('static boot screen respects the saved light/dark theme before React mounts', async ({ page }) => {
   await page.addInitScript(value => localStorage.setItem('jyc-theme', value), 'light');
