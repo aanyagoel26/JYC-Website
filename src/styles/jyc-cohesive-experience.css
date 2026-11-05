@@ -26,6 +26,25 @@
   --jyc-glow: rgba(173,145,91,.20);
   --jyc-radius-card: 22px;
   --jyc-motion: cubic-bezier(.2,.75,.2,1);
+  --jyc-bg: var(--jyc-canvas);
+  --jyc-brand-paper: var(--jyc-canvas);
+  --jyc-brand-paper-raised: var(--jyc-surface);
+  --jyc-brand-ink: var(--jyc-text-strong);
+  --jyc-brand-muted: var(--jyc-muted);
+  --jyc-brand-oxblood: var(--jyc-accent);
+  --jyc-brand-oxblood-hover: var(--jyc-accent-strong);
+  --jyc-brand-champagne: var(--jyc-gold);
+  --jyc-brand-line: var(--jyc-line);
+  --jyc-brand-line-strong: var(--jyc-line-strong);
+  --jyc-brand-shadow-sm: var(--jyc-shadow-soft);
+  --jyc-brand-shadow-md: var(--jyc-shadow);
+  --jyc-brand-shadow-lg: var(--jyc-shadow);
+  --jyc-champagne: var(--jyc-gold);
+  --jyc-final-gold: var(--jyc-gold);
+  --jyc-final-red: var(--jyc-accent);
+  --accent-red: var(--jyc-accent);
+  --accent-gold: var(--jyc-gold);
+  --jyc-red: var(--jyc-accent);
 }
 html[data-theme="light"] {
   color-scheme: light;
@@ -42,6 +61,25 @@ html[data-theme="light"] {
   --jh-cyan-glow: rgba(98,88,137,.08);
   --jh-line: var(--jyc-line);
   --jh-line-accent: var(--jyc-line-strong);
+  --jyc-bg: var(--jyc-canvas);
+  --jyc-brand-paper: var(--jyc-canvas);
+  --jyc-brand-paper-raised: var(--jyc-surface);
+  --jyc-brand-ink: var(--jyc-text-strong);
+  --jyc-brand-muted: var(--jyc-muted);
+  --jyc-brand-oxblood: var(--jyc-accent);
+  --jyc-brand-oxblood-hover: var(--jyc-accent-strong);
+  --jyc-brand-champagne: var(--jyc-gold);
+  --jyc-brand-line: var(--jyc-line);
+  --jyc-brand-line-strong: var(--jyc-line-strong);
+  --jyc-brand-shadow-sm: var(--jyc-shadow-soft);
+  --jyc-brand-shadow-md: var(--jyc-shadow);
+  --jyc-brand-shadow-lg: var(--jyc-shadow);
+  --jyc-champagne: var(--jyc-gold);
+  --jyc-final-gold: var(--jyc-gold);
+  --jyc-final-red: var(--jyc-accent);
+  --accent-red: var(--jyc-accent);
+  --accent-gold: var(--jyc-gold);
+  --jyc-red: var(--jyc-accent);
 }
 html[data-theme="dark"] {
   color-scheme: dark;
@@ -78,6 +116,25 @@ html[data-theme="dark"] {
   --jh-cyan-glow: rgba(200,188,255,.12);
   --jh-line: rgba(205,211,244,.15);
   --jh-line-accent: rgba(231,209,155,.30);
+  --jyc-bg: var(--jyc-canvas);
+  --jyc-brand-paper: var(--jyc-canvas);
+  --jyc-brand-paper-raised: var(--jyc-surface);
+  --jyc-brand-ink: var(--jyc-text-strong);
+  --jyc-brand-muted: var(--jyc-muted);
+  --jyc-brand-oxblood: var(--jyc-accent);
+  --jyc-brand-oxblood-hover: var(--jyc-accent-strong);
+  --jyc-brand-champagne: var(--jyc-gold);
+  --jyc-brand-line: var(--jyc-line);
+  --jyc-brand-line-strong: var(--jyc-line-strong);
+  --jyc-brand-shadow-sm: var(--jyc-shadow-soft);
+  --jyc-brand-shadow-md: var(--jyc-shadow);
+  --jyc-brand-shadow-lg: var(--jyc-shadow);
+  --jyc-champagne: var(--jyc-gold);
+  --jyc-final-gold: var(--jyc-gold);
+  --jyc-final-red: var(--jyc-accent);
+  --accent-red: var(--jyc-accent);
+  --accent-gold: var(--jyc-gold);
+  --jyc-red: var(--jyc-accent);
 }
 
 /* Global public surfaces inherit one semantic palette, not page-specific accent guesses. */
@@ -731,6 +788,47 @@ html[data-theme] .about-page {
 }
 .more-sheet .sheet-close,.search-modal .search-close {
   min-width:44px;min-height:44px;
+}
+
+/* PR4 search discovery controls: categories, result states and honest counts. */
+.search-modal .search-category-filters {
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:8px 0 12px;
+  scrollbar-width:thin;
+  overscroll-behavior-x:contain;
+}
+.search-modal .search-category-filters button {
+  flex:0 0 auto;
+  min-height:40px;
+  padding:8px 12px;
+  border:1px solid var(--jyc-line);
+  border-radius:999px;
+  color:var(--jyc-muted);
+  background:var(--jyc-surface-strong);
+  font-size:11px;
+  font-weight:750;
+  white-space:nowrap;
+}
+.search-modal .search-category-filters button[aria-pressed="true"] {
+  color:var(--jyc-text-strong);
+  border-color:var(--jyc-line-strong);
+  background:var(--jyc-accent-soft);
+  box-shadow:inset 0 0 0 1px var(--jyc-line);
+}
+.search-modal .search-meta { color:var(--jyc-muted); }
+.search-modal .search-no-results,.search-modal .search-empty {
+  color:var(--jyc-text);
+  border-color:var(--jyc-line);
+}
+.search-modal .search-no-results strong,.search-modal .search-empty strong { color:var(--jyc-text-strong); }
+.search-modal .search-no-results p,.search-modal .search-empty p { color:var(--jyc-muted);line-height:1.65; }
+.search-modal mark.search-match {
+  color:inherit;
+  background:var(--jyc-gold-soft);
+  border-radius:3px;
+  box-shadow:0 0 0 2px var(--jyc-gold-soft);
 }
 
 /* Phone-first layout: prevent clipping, reserve dock clearance and keep all controls reachable. */
