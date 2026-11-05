@@ -23,13 +23,8 @@
   background: radial-gradient(circle, rgba(194,154,89,.28), rgba(143,33,31,.09) 44%, transparent 72%);
   filter: blur(28px);
   opacity: .7;
-  animation: jyc-restoration-halo-breathe 7s ease-in-out infinite;
+  animation: none;
 }
-@keyframes jyc-restoration-halo-breathe {
-  0%, 100% { opacity: .52; transform: scale(.96); }
-  50% { opacity: .82; transform: scale(1.04); }
-}
-
 /* Editorial copy: keep type scale expressive but readable across routes. */
 .jyc-editorial-home.jyc-home .jh-about-editorial {
   padding-block: clamp(66px, 9vw, 132px);
