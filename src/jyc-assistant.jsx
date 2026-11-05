@@ -132,19 +132,31 @@ export function JYCAssistant({ data, onClose }) {
   const [isTyping, setIsTyping] = useState(false);
 
   const { clubs, events, team, gallery } = useMemo(() => published(data), [data]);
+  const quickRoutes = [['Explore all clubs','/clubs'],['Upcoming events','/events'],['JYC archive','/archive'],['Join JYC','/join-jyc'],['Leadership team','/team'],['Contact JYC','/contact']];
 
   useEffect(() => {
-    const focusTimer = setTimeout(() => inputRef.current?.focus(), 40);
-    const onKey = e => {
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        onClose?.();
-      }
+    const returnFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const focusTimer = setTimeout(() => {
+      const nodes = [...(dialogRef.current?.querySelectorAll('button:not([disabled]),input:not([disabled]),textarea:not([disabled]),a[href],[tabindex]:not([tabindex="-1"])') || [])].filter(node => node.offsetParent !== null);
+      (nodes[0] || inputRef.current)?.focus();
+    }, 40);
+    const onKey = event => {
+      if (event.key === 'Escape') { event.preventDefault(); onClose?.(); return; }
+      if (event.key !== 'Tab') return;
+      const nodes = [...(dialogRef.current?.querySelectorAll('button:not([disabled]),input:not([disabled]),textarea:not([disabled]),a[href],[tabindex]:not([tabindex="-1"])') || [])].filter(node => node.offsetParent !== null);
+      if (!nodes.length) { event.preventDefault(); return; }
+      const first = nodes[0], last = nodes[nodes.length - 1];
+      if (event.shiftKey && (document.activeElement === first || !dialogRef.current?.contains(document.activeElement))) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && (document.activeElement === last || !dialogRef.current?.contains(document.activeElement))) { event.preventDefault(); first.focus(); }
     };
     document.addEventListener('keydown', onKey);
     return () => {
       clearTimeout(focusTimer);
       document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = previousOverflow;
+      if (returnFocus?.isConnected) requestAnimationFrame(() => returnFocus.focus({ preventScroll: true }));
     };
   }, [onClose]);
 
@@ -194,20 +206,20 @@ export function JYCAssistant({ data, onClose }) {
   }, [rawSearch, query]);
 
   return (
-    <div className="jyc-assistant-overlay" role="dialog" aria-modal="true" onMouseDown={e => e.target === e.currentTarget && onClose?.()}>
+    <div className="jyc-assistant-overlay" role="dialog" aria-modal="true" aria-labelledby="jyc-assistant-title" onMouseDown={e => e.target === e.currentTarget && onClose?.()}>
       <section ref={dialogRef} className="jyc-assistant-panel">
         {/* Holographic Header */}
         <div className="jyc-assistant-head">
           <div className="jyc-assistant-brand">
             <span className="jyc-assistant-mark">
-              <img src={JYC_LOGO} alt="" loading="lazy" decoding="async" onError={e => { e.currentTarget.src = "/assets/jyc-logo.avif"; }} />
+              <img src={JYC_LOGO} alt="" loading="lazy" decoding="async" onError={e => { const image=e.currentTarget; if(image.dataset.logoFallback!=="1"){image.dataset.logoFallback="1";image.src="/JYC%20Logo(4).png";}else{image.onerror=null;image.src="/assets/jyc-logo.avif";} }} />
             </span>
             <div>
               <div className="jyc-assistant-status-tag">
                 <span className="assistant-dot" />
                 <span>JYC INTEL 2.0 · VERIFIED CAMPUS AI</span>
               </div>
-              <h2>Ask JYC. Instant Campus Knowledge.</h2>
+              <h2 id="jyc-assistant-title">Ask JYC. Instant Campus Knowledge.</h2>
             </div>
           </div>
           <button type="button" className="jyc-assistant-close" onClick={onClose} aria-label="Close Assistant">×</button>
@@ -316,6 +328,7 @@ export function JYCAssistant({ data, onClose }) {
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 placeholder="Search societies, events, or people..."
+                aria-label="Search JYC directory"
                 autoFocus
               />
               {query && <button type="button" onClick={() => setQuery('')}>×</button>}
@@ -339,9 +352,7 @@ export function JYCAssistant({ data, onClose }) {
                 <div className="search-preset-hints">
                   <span>Popular searches:</span>
                   <div className="preset-buttons">
-                    <button type="button" onClick={() => { onClose?.(); nav('/clubs'); }}>All Clubs ↗</button>
-                    <button type="button" onClick={() => { onClose?.(); nav('/events'); }}>All Events ↗</button>
-                    <button type="button" onClick={() => { onClose?.(); nav('/team'); }}>Leadership Team ↗</button>
+                    {quickRoutes.map(([label,path]) => <button key={label+'-'+path} type="button" onClick={() => { onClose?.(); nav(path); }}>{label} ↗</button>)}
                   </div>
                 </div>
               )}
