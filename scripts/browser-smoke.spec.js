@@ -438,9 +438,9 @@ test('first visit follows the operating-system theme preference and saved prefer
     }
   });
   await page.goto(base, { waitUntil: 'domcontentloaded' });
-  await waitForAppMount(page, 'midnight default theme');
-  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-  await expect(page.locator('meta[name="theme-color"]').first()).toHaveAttribute('content', '#050811');
+  await waitForAppMount(page, 'system light theme');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await expect(page.locator('meta[name="theme-color"]').first()).toHaveAttribute('content', '#f5f1e8');
   await page.evaluate(() => localStorage.setItem('jyc-theme', 'light'));
   await page.reload({ waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'saved light theme');
