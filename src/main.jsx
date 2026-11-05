@@ -97,6 +97,7 @@ import './styles/jai-hack-dark-theme.css';
 import './styles/jyc-cohesive-experience.css';
 import './styles/jyc-hero-layout-fix.css';
 import './styles/jyc-team-experience.css';
+import './styles/jyc-theme-contract.css';
 
 const logo='/assets/jyc-logo.avif';
 const logoTiny='/assets/jyc-logo-48.avif';
