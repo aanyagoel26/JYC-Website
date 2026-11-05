@@ -1982,6 +1982,15 @@ test('More navigation and Search modal work with keyboard, empty states and focu
 
   await moreTrigger.click();
   await expect(more).toBeVisible();
+  await page.keyboard.press('Control+k');
+  await expect(page.locator('.more-sheet-overlay')).toHaveCount(0);
+  await expect(page.locator('.search-overlay')).toBeVisible();
+  await expect(input).toBeFocused();
+  await input.press('Escape');
+  await expect(page.locator('.search-overlay')).toHaveCount(0);
+
+  await moreTrigger.click();
+  await expect(more).toBeVisible();
   await more.getByRole('button', { name: 'Search JYC' }).click();
   await expect(page.locator('.more-sheet-overlay')).toHaveCount(0);
   await expect(page.locator('.search-overlay')).toBeVisible();
