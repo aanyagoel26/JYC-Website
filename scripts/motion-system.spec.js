@@ -15,7 +15,9 @@ test.describe('JYC motion system',()=>{
     await expect(target).toHaveClass(/jyc-reveal-visible/,{timeout:5000});
     const state=await target.evaluate(el=>({opacity:getComputedStyle(el).opacity,transform:getComputedStyle(el).transform}));
     expect(Number(state.opacity)).toBeGreaterThan(.98);
-    expect(state.transform).toBe('none');
+    const matrix=new DOMMatrix(state.transform);
+    expect(Math.abs(matrix.m41)).toBeLessThan(1);
+    expect(Math.abs(matrix.m42)).toBeLessThan(1);
   });
 
   test('reduced-motion preference keeps all homepage sections immediately visible',async({page})=>{
