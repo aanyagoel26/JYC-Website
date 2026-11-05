@@ -1,0 +1,251 @@
+/*
+ * JYC THEME CONTRACT — final public-site token authority.
+ * All historical visual generations may keep their layout/interaction rules,
+ * but their colour aliases must resolve through this file. Keep imported last.
+ */
+:root,
+html[data-theme="light"] {
+  color-scheme: light;
+  --jyc-canvas: #f5f1e8;
+  --jyc-canvas-raised: #fbf8f1;
+  --jyc-surface: #fffdf8;
+  --jyc-surface-strong: #ffffff;
+  --jyc-surface-soft: #eee8dc;
+  --jyc-text: #252331;
+  --jyc-text-strong: #191827;
+  --jyc-muted: #5f5c6b;
+  --jyc-subtle: #696676;
+  --jyc-accent: #625889;
+  --jyc-accent-strong: #514675;
+  --jyc-accent-soft: rgba(98,88,137,.10);
+  --jyc-gold: #76572b;
+  --jyc-gold-soft: rgba(172,139,79,.16);
+  --jyc-line: rgba(54,48,73,.15);
+  --jyc-line-strong: rgba(92,78,126,.27);
+  --jyc-focus: #514675;
+  --jyc-shadow: 0 18px 48px rgba(56,45,72,.10);
+  --jyc-shadow-soft: 0 8px 24px rgba(56,45,72,.07);
+  --jyc-glow: rgba(173,145,91,.20);
+
+  /* Canonical component tokens. */
+  --jyc-bg: var(--jyc-canvas);
+  --jyc-surface-raised: var(--jyc-surface);
+  --jyc-ink: var(--jyc-text-strong);
+  --jyc-brand-ink: var(--jyc-text-strong);
+  --jyc-brand-muted: var(--jyc-muted);
+  --jyc-final-bg: var(--jyc-canvas);
+  --jyc-final-surface: var(--jyc-surface);
+  --jyc-final-ink: var(--jyc-text-strong);
+  --jyc-final-muted: var(--jyc-muted);
+  --jyc-final-line: var(--jyc-line);
+  --jyc-final-gold: var(--jyc-gold);
+  --jyc-final-red: var(--jyc-accent);
+
+  /* Compatibility aliases used by historical generations. */
+  --bg: var(--jyc-canvas);
+  --bg-main: var(--jyc-canvas);
+  --surface: var(--jyc-surface);
+  --bg-card: var(--jyc-surface);
+  --ink: var(--jyc-text-strong);
+  --text-primary: var(--jyc-text-strong);
+  --muted: var(--jyc-muted);
+  --text-muted: var(--jyc-muted);
+  --line: var(--jyc-line);
+  --border-tech: var(--jyc-line);
+  --navy: #191827;
+  --navy-deep: #171526;
+  --navy-soft: #252331;
+  --dark: #191827;
+  --dark-surface: #252331;
+  --paper: var(--jyc-canvas);
+  --cream: var(--jyc-canvas);
+  --ivory: #fffdf8;
+  --accent: var(--jyc-accent);
+  --red: var(--jyc-accent);
+  --accent-red: var(--jyc-accent);
+  --jyc-red: var(--jyc-accent);
+  --jyc-red-2: var(--jyc-accent);
+  --jyc-accent: #625889;
+  --jyc-design-accent: var(--jyc-accent);
+  --jyc-brand-oxblood: var(--jyc-accent);
+  --jyc-restoration-red: var(--jyc-accent);
+  --tech-cyan: var(--jyc-accent);
+  --tech-crimson: var(--jyc-accent);
+  --color-accent-cyan: var(--jyc-accent);
+  --tech-bg: var(--jyc-canvas);
+  --tech-surface: var(--jyc-surface);
+  --tech-surface-elevated: var(--jyc-surface-strong);
+  --tech-surface-glass: rgba(255,253,248,.88);
+  --tech-text-primary: var(--jyc-text-strong);
+  --tech-text-secondary: var(--jyc-muted);
+  --tech-text-muted: var(--jyc-muted);
+  --tech-border: var(--jyc-line);
+  --tech-gold: var(--jyc-gold);
+  --tech-emerald: var(--jyc-gold);
+  --tech-cyan-glow: var(--jyc-accent-soft);
+  --tech-crimson-glow: var(--jyc-accent-soft);
+  --jyc-design-copper: var(--jyc-gold);
+  --jyc-brand-champagne: var(--jyc-gold);
+  --gold: var(--jyc-gold);
+  --champagne: var(--jyc-gold);
+  --accent-gold: var(--jyc-gold);
+  --jyc-gold: #76572b;
+  --jyc-champagne: var(--jyc-gold);
+  --jyc-focus-color: var(--jyc-focus);
+  --jyc-glow: rgba(173,145,91,.20);
+  --jyc-line-color: var(--jyc-line);
+  --jyc-radius-card: 22px;
+  --jyc-motion: cubic-bezier(.2,.75,.2,1);
+  --jh-bg: var(--jyc-canvas);
+  --jh-surface: var(--jyc-surface);
+  --jh-surface-elevated: var(--jyc-surface-strong);
+  --jh-surface-glass: rgba(255,253,248,.88);
+  --jh-ink: var(--jyc-text-strong);
+  --jh-muted: var(--jyc-muted);
+  --jh-accent: var(--jyc-accent);
+  --jh-gold: var(--jyc-gold);
+  --jh-cyan: var(--jyc-accent);
+  --jh-line: var(--jyc-line);
+  --jh-line-accent: var(--jyc-line-strong);
+  --tech-text-primary: var(--jyc-text-strong);
+  --tech-text-muted: var(--jyc-muted);
+}
+
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --jyc-canvas: #080d1c;
+  --jyc-canvas-raised: #0d1629;
+  --jyc-surface: #111b31;
+  --jyc-surface-strong: #17233d;
+  --jyc-surface-soft: #1b2946;
+  --jyc-text: #e6e8f4;
+  --jyc-text-strong: #f7f5ff;
+  --jyc-muted: #c0c4da;
+  --jyc-subtle: #a2a9c6;
+  --jyc-accent: #c8bcff;
+  --jyc-accent-strong: #e0d9ff;
+  --jyc-accent-soft: rgba(200,188,255,.13);
+  --jyc-gold: #e7d19b;
+  --jyc-gold-soft: rgba(231,209,155,.13);
+  --jyc-line: rgba(205,211,244,.15);
+  --jyc-line-strong: rgba(200,188,255,.29);
+  --jyc-focus: #e7d19b;
+  --jyc-shadow: 0 24px 70px rgba(0,0,0,.38);
+  --jyc-shadow-soft: 0 10px 32px rgba(0,0,0,.24);
+  --jyc-glow: rgba(148,132,219,.20);
+
+  --jyc-bg: var(--jyc-canvas);
+  --jyc-ink: var(--jyc-text-strong);
+  --jyc-brand-ink: var(--jyc-text-strong);
+  --jyc-brand-muted: var(--jyc-muted);
+  --jyc-final-bg: var(--jyc-canvas);
+  --jyc-final-surface: var(--jyc-surface);
+  --jyc-final-ink: var(--jyc-text-strong);
+  --jyc-final-muted: var(--jyc-muted);
+  --jyc-final-line: var(--jyc-line);
+  --jyc-final-gold: var(--jyc-gold);
+  --jyc-final-red: var(--jyc-accent);
+
+  --bg: var(--jyc-canvas);
+  --bg-main: var(--jyc-canvas);
+  --surface: var(--jyc-surface);
+  --bg-card: var(--jyc-surface);
+  --ink: var(--jyc-text-strong);
+  --text-primary: var(--jyc-text-strong);
+  --muted: var(--jyc-muted);
+  --text-muted: var(--jyc-muted);
+  --line: var(--jyc-line);
+  --border-tech: var(--jyc-line);
+  --navy: #f7f5ff;
+  --navy-deep: #080d1c;
+  --navy-soft: #111b31;
+  --dark: #080d1c;
+  --dark-surface: #111b31;
+  --paper: var(--jyc-canvas);
+  --cream: var(--jyc-canvas);
+  --ivory: #f7f5ff;
+  --accent: var(--jyc-accent);
+  --red: var(--jyc-accent);
+  --accent-red: var(--jyc-accent);
+  --jyc-red: var(--jyc-accent);
+  --jyc-red-2: var(--jyc-accent);
+  --jyc-design-accent: var(--jyc-accent);
+  --jyc-brand-oxblood: var(--jyc-accent);
+  --jyc-restoration-red: var(--jyc-accent);
+  --tech-cyan: var(--jyc-accent);
+  --tech-crimson: var(--jyc-accent);
+  --color-accent-cyan: var(--jyc-accent);
+  --tech-bg: var(--jyc-canvas);
+  --tech-surface: var(--jyc-surface);
+  --tech-surface-elevated: var(--jyc-surface-strong);
+  --tech-surface-glass: rgba(13,20,39,.88);
+  --tech-text-primary: var(--jyc-text-strong);
+  --tech-text-secondary: var(--jyc-muted);
+  --tech-text-muted: var(--jyc-muted);
+  --tech-border: var(--jyc-line);
+  --tech-gold: var(--jyc-gold);
+  --tech-emerald: var(--jyc-gold);
+  --tech-cyan-glow: var(--jyc-accent-soft);
+  --tech-crimson-glow: var(--jyc-accent-soft);
+  --jyc-design-copper: var(--jyc-gold);
+  --jyc-brand-champagne: var(--jyc-gold);
+  --gold: var(--jyc-gold);
+  --champagne: var(--jyc-gold);
+  --accent-gold: var(--jyc-gold);
+  --jyc-champagne: var(--jyc-gold);
+  --jh-bg: var(--jyc-canvas);
+  --jh-surface: var(--jyc-surface);
+  --jh-surface-elevated: var(--jyc-surface-strong);
+  --jh-surface-glass: rgba(13,20,39,.88);
+  --jh-ink: var(--jyc-text-strong);
+  --jh-muted: var(--jyc-muted);
+  --jh-accent: var(--jyc-accent);
+  --jh-gold: var(--jyc-gold);
+  --jh-cyan: var(--jyc-accent);
+  --jh-line: var(--jyc-line);
+  --jh-line-accent: var(--jyc-line-strong);
+}
+
+html, body, #root { background: var(--jyc-canvas); color: var(--jyc-text-strong); }
+.public-app { color: var(--jyc-text-strong); background: var(--jyc-canvas); }
+.public-app :where(.card,.featured,.contact-card,.search-modal,.more-sheet,.discover-panel,.events-toolbar-premium,.club-detail-nav,.club-side-panel,.join-card,.leader-card,.calendar-panel,.admin-card) {
+  color: var(--jyc-text-strong);
+  border-color: var(--jyc-line);
+  background-color: var(--jyc-surface);
+}
+.public-app :where(.card p,.featured p,.contact-card p,.section-head p,.meta,.small-copy,.event-card-meta) {
+  color: var(--jyc-muted);
+}
+.public-app :where(.nav,.mobile-dock,.more-sheet,.search-modal,.search-trigger,.theme-toggle-rb) {
+  border-color: var(--jyc-line);
+}
+.public-app :where(.nav nav button,.footer-links a,.social-row a,.text-link,.side-link) { color: var(--jyc-text-strong); }
+.public-app :where(.nav nav button:hover,.footer-links a:hover,.social-row a:hover,.text-link:hover,.side-link:hover) { color: var(--jyc-accent); }
+.public-app :where(.eyebrow,.tag,.state-label.live,.live-pill,.live-db) { color: var(--jyc-gold); }
+.public-app :where(input,textarea,select) {
+  color: var(--jyc-text-strong);
+  background-color: var(--jyc-surface);
+  border-color: var(--jyc-line);
+}
+.public-app :where(input,textarea)::placeholder { color: var(--jyc-muted); opacity: .9; }
+.public-app :where(button,a,[role="button"]):focus-visible {
+  outline-color: var(--jyc-focus);
+}
+.public-app :where(.btn,.btn-primary,.nav-join-cta,.search-trigger) {
+  border-color: var(--jyc-gold);
+}
+.public-app :where(.btn-primary,.nav-join-cta) {
+  background: var(--jyc-gold);
+  color: #101a2d;
+}
+html[data-theme="dark"] .public-app :where(.btn-primary,.nav-join-cta) { color: #080d1c; }
+html[data-theme="light"] .public-app :where(.btn-primary,.nav-join-cta) { color: #191827; }
+
+@media (prefers-reduced-motion: reduce) {
+  .public-app *, .public-app *::before, .public-app *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
