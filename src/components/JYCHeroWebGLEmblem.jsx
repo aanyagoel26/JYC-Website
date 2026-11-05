@@ -90,6 +90,8 @@ export function JYCHeroWebGLEmblem() {
     let renderDpr = 1;
     const isMobile = window.matchMedia('(max-width: 768px), (pointer: coarse)').matches;
     const saveData = Boolean(navigator.connection?.saveData);
+    const targetFrameMs = isMobile ? 1000 / 24 : 1000 / 30;
+    let lastFrameAt = -Infinity;
 
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
@@ -101,7 +103,7 @@ export function JYCHeroWebGLEmblem() {
     window.addEventListener('resize', resize, { passive: true });
 
     // Orbital particles & shooting satellites
-    const particleCount = isMobile ? 20 : saveData ? 32 : 64;
+    const particleCount = isMobile ? 12 : saveData ? 24 : 40;
     const particles = Array.from({ length: particleCount }, (_, i) => ({
       angle: (i / particleCount) * Math.PI * 2,
       distance: 105 + (i % 8) * 16,
@@ -141,12 +143,14 @@ export function JYCHeroWebGLEmblem() {
     motionQuery.addEventListener('change', handleMotionPreference);
     document.addEventListener('visibilitychange', handleVisibility);
 
-    const draw = () => {
+    const draw = (timestamp = 0) => {
       if (!isVisible) {
         animId = 0;
         return;
       }
-      time += 0.016;
+      if (timestamp - lastFrameAt < targetFrameMs) { animId = requestAnimationFrame(draw); return; }
+      lastFrameAt = timestamp;
+      time += targetFrameMs / 1000;
       pointerX += (targetPointerX - pointerX) * 0.08;
       pointerY += (targetPointerY - pointerY) * 0.08;
 
@@ -376,7 +380,7 @@ export function JYCHeroWebGLEmblem() {
         </div>
 
         <div className="jyc-emblem-badge badge-bottom" style={{ transform: `translateZ(44px)` }}>
-          <span className="badge-icon">🦅</span>
+          <span className="badge-icon" aria-hidden="true">🦅</span>
           <span className="badge-text">READY TO SOAR · OFFICIAL MARK</span>
           <span className="badge-live-pulse" />
         </div>
@@ -399,10 +403,11 @@ export function JYCHeroWebGLEmblem() {
           className={`emblem-control-pill ${isAudioActive ? 'active sound-on' : ''}`}
           onClick={toggleSound}
           title="Toggle Ambient Cosmic Audio Synthesizer"
-          aria-label="Toggle Cosmic Audio"
+          aria-label={isAudioActive ? 'AUDIO ON' : 'COSMIC SOUND'}
           aria-pressed={isAudioActive}
         >
-          <span>{isAudioActive ? '🔊 AUDIO ON' : '🔈 COSMIC SOUND'}</span>
+          <span aria-hidden="true">{isAudioActive ? '🔊' : '🔈'}</span>
+          <span>{isAudioActive ? 'AUDIO ON' : 'COSMIC SOUND'}</span>
           {isAudioActive && <span className="audio-sound-wave" />}
         </button>
       </div>
