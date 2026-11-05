@@ -307,9 +307,7 @@ export function JYCHeroWebGLEmblem() {
                 src={MODEL_URL}
                 poster="/assets/jyc-logo.avif"
                 camera-orbit="0deg 75deg auto"
-                auto-rotate
-                rotation-per-second="18deg"
-                interaction-prompt="none"
+                                interaction-prompt="none"
                 camera-controls
                 touch-action="pan-y"
                 shadow-intensity="0.6"
