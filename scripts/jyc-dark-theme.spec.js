@@ -63,6 +63,9 @@ async function themeSnapshot(page) {
       headingContrast: headingColor ? contrast(headingColor, canvas) : 0,
       paragraphContrast: paragraphColor ? contrast(paragraphColor, canvas) : 0,
       homeBackground: home ? getComputedStyle(home).getPropertyValue('--jh-bg').trim() : '',
+      homeSurface: home ? getComputedStyle(home).getPropertyValue('--jh-surface').trim() : '',
+      homeInk: home ? getComputedStyle(home).getPropertyValue('--jh-ink').trim() : '',
+      homeMuted: home ? getComputedStyle(home).getPropertyValue('--jh-muted').trim() : '',
       togglePressed: toggle?.getAttribute('aria-pressed') ?? null,
       documentOverflow: document.documentElement.scrollWidth > window.innerWidth + 1
     };
@@ -80,6 +83,11 @@ test.describe('JYC shared day/night theme contract', () => {
         expect(dark.canvas).toBe('#080d1c');
         expect(dark.accent).toBe('#c8bcff');
         expect(dark.homeBackground === '' || dark.homeBackground === '#080d1c').toBe(true);
+        if (route === '/') {
+          expect(dark.homeSurface).toBe('#111b31');
+          expect(dark.homeInk).toBe('#f7f5ff');
+          expect(dark.homeMuted).toBe('#c0c4da');
+        }
         expect(dark.bodyBackgroundImage).toContain('radial-gradient');
         expect(dark.headingVisible, `${route} must expose a visible page heading in dark mode`).toBe(true);
         if (contrastCheckRoutes.has(route)) {
@@ -102,6 +110,12 @@ test.describe('JYC shared warm-paper day theme', () => {
         const light = await themeSnapshot(page);
         expect(light.canvas).toBe('#f5f1e8');
         expect(light.accent).toBe('#625889');
+        if (route === '/') {
+          expect(light.homeBackground).toBe('#f5f1e8');
+          expect(light.homeSurface).toBe('#fffdf8');
+          expect(light.homeInk).toBe('#191827');
+          expect(light.homeMuted).toBe('#5f5c6b');
+        }
         expect(light.bodyBackgroundImage).toContain('radial-gradient');
         expect(light.headingVisible, `${route} must expose a visible page heading in day mode`).toBe(true);
         if (contrastCheckRoutes.has(route)) {
