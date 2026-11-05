@@ -828,12 +828,35 @@ function Navbar({data,admin,theme,setTheme}){
 function MobileMoreSheet({data,admin,close,openSearch}){
  const nav=useNavigate();
  const sheetRef=React.useRef(null);
+ const searchRef=React.useRef(null);
+ const [query,setQuery]=useState('');
+ const explore=[
+  {path:'/about',title:'About JYC',description:'Our purpose, values and the story behind the community.',group:'Explore',number:'01',tag:'The club'},
+  {path:'/clubs',title:'Clubs & communities',description:'Find your people across technical and cultural communities.',group:'Explore',number:'02',tag:'Find a community'},
+  {path:'/events',title:'Events',description:'Discover what is happening across JYC.',group:'Explore',number:'03',tag:'What’s on'},
+  {path:'/calendar',title:'Event calendar',description:'See upcoming experiences in one date-wise view.',group:'Explore',number:'04',tag:'Plan ahead'},
+  {path:'/team',title:'Leadership',description:'Meet the faculty, Apex and Core Team.',group:'Explore',number:'05',tag:'The people'},
+  {path:'/contact',title:'Contact JYC',description:'Reach the team through official public channels.',group:'Explore',number:'06',tag:'Get in touch'},
+  {path:'/join-jyc',title:'Join JYC',description:'Learn about recruitment and how to become part of JYC.',group:'Get involved',number:'07',tag:'Take part'},
+  {path:'/converge',title:'Converge Live Fest',description:'Explore the fest experience, programme and live updates.',group:'Get involved',number:'08',tag:'Featured'},
+  {path:'/achievements',title:'Achievements',description:'Milestones and outcomes from the JYC community.',group:'Get involved',number:'09',tag:'Our impact'},
+  {path:'/gallery',title:'Gallery',description:'Browse moments, events and campus memories.',group:'Stories & updates',number:'10',tag:'Photo archive'},
+  {path:'/best-of-jyc',title:'Best of JYC',description:'A curated selection of published JYC moments.',group:'Stories & updates',number:'11',tag:'Editor’s picks'},
+  {path:'/updates',title:'JYC Now',description:'Recent updates from JYC and its communities.',group:'Stories & updates',number:'12',tag:'Latest'},
+  {path:'/announcements',title:'Announcements',description:'Official notices, registrations and important updates.',group:'Stories & updates',number:'13',tag:'Noticeboard'},
+  {path:'/archive',title:'Archive',description:'Explore the published JYC story across the years.',group:'Stories & updates',number:'14',tag:'From the archive'}
+ ];
+ const groups=['Explore','Get involved','Stories & updates'];
+ const term=query.trim().toLowerCase();
+ const filtered=explore.filter(item=>!term||[item.title,item.description,item.group,item.tag].join(' ').toLowerCase().includes(term));
+ const closeRef=React.useRef(close);
+ closeRef.current=close;
  useEffect(()=>{
   const previous=document.body.style.overflow;
   document.body.style.overflow='hidden';
-  const timer=setTimeout(()=>sheetRef.current?.querySelector('button,a')?.focus(),30);
+  const timer=setTimeout(()=>searchRef.current?.focus(),50);
   const onKey=e=>{
-   if(e.key==='Escape'){e.preventDefault();close();return}
+   if(e.key==='Escape'){e.preventDefault();closeRef.current();return}
    if(e.key!=='Tab')return;
    const root=sheetRef.current;if(!root)return;
    const focusable=[...root.querySelectorAll('button,a,input,[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled&&el.offsetParent!==null);
@@ -844,35 +867,40 @@ function MobileMoreSheet({data,admin,close,openSearch}){
   };
   document.addEventListener('keydown',onKey);
   return()=>{clearTimeout(timer);document.body.style.overflow=previous;document.removeEventListener('keydown',onKey)};
- },[close]);
- const go=p=>{close();nav(p)};
-const explore=[
-    ['/about','About JYC','Purpose, communities, values and the JYC story'],
-    ['/converge','Converge Live Fest','Multi-arena schedule, leaderboard and live fest stream'],
-    ['/team','Leadership','Faculty, Apex and Core Team'],
-    ['/clubs','Clubs & Communities','Explore the official hub ecosystem'],
-    ['/events','Events','Upcoming, ongoing and completed experiences'],
-    ['/calendar','Event Calendar','Browse JYC events by date'],
-    ['/gallery','Gallery','Event memories, years and visual archive'],
-    ['/best-of-jyc','Best of JYC','A curated visual selection of published JYC moments'],
-    ['/achievements','Achievements','Source-backed milestones and community outcomes'],
-    ['/updates','JYC Now','Recent verified updates from JYC and the hubs'],
-    ['/announcements','Announcements','Registrations, notices and JYC updates'],
-    ['/join-jyc','Join JYC','Official recruitment pathway and onboarding guide'],
-    ['/archive','Archive','The published JYC story by year'],
-    ['/contact','Contact','Official public channels and query form']
-   ];
- return <div ref={sheetRef} className="more-sheet-overlay" role="dialog" aria-modal="true" aria-label="More JYC" onMouseDown={e=>{if(e.target===e.currentTarget)close()}}>
-  <div className="more-sheet jyc-more-club-sheet">
-   <div className="sheet-grabber"/>
-   <div className="more-sheet-head"><div><span className="eyebrow">MORE JYC</span><h3>Useful pages. Nothing repeated.</h3><p>About, communities, events, archive and official JYC channels live here.</p></div><button type="button" className="sheet-close" onClick={close}>×</button></div>
-   <div className="more-sheet-section"><span className="eyebrow">JYC</span><div className="more-sheet-grid jyc-more-grid">{explore.map(([path,title,text])=><button type="button" key={path} onClick={()=>go(path)}><b>{title}</b><span>{text} →</span></button>)}</div></div>
-   <div className="more-sheet-section"><span className="eyebrow">SEARCH JYC</span><div className="more-sheet-grid more-sheet-guide"><button type="button" onClick={openSearch}><b>Search JYC</b><span>Find a page, club or event →</span></button>{safeExternalUrl(data.homepage?.jtvUrl)&&<a className="more-sheet-link" href={safeExternalUrl(data.homepage.jtvUrl)} target="_blank" rel="noopener noreferrer"><b>JTV</b><span>Official JYC media ↗</span></a>}</div></div>
-   <div className="more-sheet-connect"><span className="eyebrow">CONNECT WITH JYC</span><div><a href={JYC_CONTACTS.instagram} target="_blank" rel="noreferrer">Instagram ↗</a><a href={JYC_CONTACTS.whatsapp} target="_blank" rel="noreferrer">WhatsApp ↗</a><a href={'mailto:'+data.creator.email}>Email ↗</a></div></div>
-  </div>
+ },[]);
+ const go=path=>{close();nav(path)};
+ const jtv=safeExternalUrl(data.homepage?.jtvUrl);
+ return <div ref={sheetRef} className="more-sheet-overlay jyc-more-overlay" role="dialog" aria-modal="true" aria-labelledby="jyc-more-title" onMouseDown={e=>{if(e.target===e.currentTarget)close()}}>
+  <section className="more-sheet jyc-more-experience">
+   <div className="jyc-more-topline"><span><i/> JIIT YOUTH CLUB <b>/</b> DIRECTORY</span><span className="jyc-more-topline-index">128 · NOIDA</span><button type="button" className="jyc-more-close" onClick={close} aria-label="Close More menu">×</button></div>
+   <header className="jyc-more-heading">
+    <div><span className="jyc-more-kicker">THE JYC DIRECTORY <b>— 01 / 04</b></span><h2 id="jyc-more-title">More to <em>discover.</em></h2><p>Everything beyond the main navigation, gathered in one place.</p></div>
+    <div className="jyc-more-heading-mark" aria-hidden="true"><span>J</span><small>128</small></div>
+   </header>
+   <label className="jyc-more-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.6"/><path d="m16 16 5 5"/></svg><input ref={searchRef} type="search" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Find a page, community or update…" aria-label="Search the More directory"/><kbd>ESC</kbd></label>
+   <div className="jyc-more-directory" aria-live="polite">
+    {groups.map((group,index)=>{
+     const items=filtered.filter(item=>item.group===group);
+     if(!items.length)return null;
+     return <section className="jyc-more-group" key={group}>
+      <div className="jyc-more-group-head"><span>{String(index+1).padStart(2,'0')}</span><h3>{group}</h3><i/></div>
+      <div className="jyc-more-links">{items.map(item=><button type="button" className="jyc-more-link-card" key={item.path} onClick={()=>go(item.path)}>
+       <span className="jyc-more-link-number">{item.number}</span><span className="jyc-more-link-copy"><b>{item.title}</b><small>{item.description}</small></span><span className="jyc-more-link-tag">{item.tag}</span><span className="jyc-more-link-arrow" aria-hidden="true">↗</span>
+      </button>)}</div>
+     </section>
+    })}
+    {!filtered.length&&<div className="jyc-more-empty"><b>No matches yet.</b><span>Try another page name or search term.</span><button type="button" onClick={()=>setQuery('')}>Clear search</button></div>}
+   </div>
+   <footer className="jyc-more-footer">
+    <div className="jyc-more-footer-brand"><span className="jyc-more-footer-dot"/> ONE CAMPUS. MANY COMMUNITIES. ONE JYC.</div>
+    <div className="jyc-more-footer-actions"><button type="button" onClick={()=>{close();openSearch()}}>⌕ <span>Search all JYC</span></button>{jtv&&<a href={jtv} target="_blank" rel="noopener noreferrer">JYC TV ↗</a>}<a href={JYC_CONTACTS.instagram} target="_blank" rel="noopener noreferrer">Instagram ↗</a><a href={JYC_CONTACTS.whatsapp} target="_blank" rel="noopener noreferrer">WhatsApp ↗</a><a href={'mailto:'+data.creator.email}>Email ↗</a></div>
+   <span className="jyc-more-count">{filtered.length} / {explore.length} PAGES</span>
+   <span className="jyc-more-admin" aria-hidden="true">{admin?'ADMIN SESSION':'PUBLIC DIRECTORY'}</span>
+   <div className="jyc-more-footer-rule"/>
+  </footer>
+  </section>
  </div>
 }
-
 function Search({data,admin,close}){
  const nav=useNavigate();
  const [q,setQ]=useState(()=>{try{return new URLSearchParams(window.location.search).get('q')||''}catch{return ''}});
