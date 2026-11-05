@@ -6,11 +6,11 @@ import './JYC3DInteractiveExplorer.css';
 
 const slugHub = value => String(value || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const FAMILY_STYLE = {
-  Technical: { color: '#0EA5E9', icon: '⚡' },
-  Cultural: { color: '#D97706', icon: '🎭' },
-  Creative: { color: '#8B5CF6', icon: '🎨' },
-  Literary: { color: '#0D9488', icon: '🖋️' },
-  Sports: { color: '#DC2626', icon: '🏆' }
+  Technical: { color: '#aeb8e4', icon: '⚡' },
+  Cultural: { color: '#e7d19b', icon: '🎭' },
+  Creative: { color: '#c8bcff', icon: '🎨' },
+  Literary: { color: '#97a9dd', icon: '🖋️' },
+  Sports: { color: '#b7c7a8', icon: '🏆' }
 };
 
 // Positions/icons are visual layout only. Names, families, labels and descriptions

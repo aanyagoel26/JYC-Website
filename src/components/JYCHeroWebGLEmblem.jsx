@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import './JYCHeroWebGLEmblem.css';
 import { jycAudio } from '../lib/jyc-audio.js';
 
-const LOGO_SRC = '/JYC%20Logo(4).png';
-const LOGO_FALLBACK = '/assets/jyc-logo.avif';
+const LOGO_SRC = '/assets/jyc-logo.avif';
+const LOGO_FALLBACK = '/assets/jyc-logo.webp';
+const LOGO_ORIGINAL = '/JYC%20Logo(4).png';
 const MODEL_URL = '/models/jyc-spatial.glb';
 const MODEL_VIEWER_CDN = 'https://ajax.googleapis.com/ajax/libs/model-viewer/4.4.0/model-viewer.min.js';
 
@@ -16,6 +17,7 @@ export function JYCHeroWebGLEmblem() {
   const [modelViewerReady, setModelViewerReady] = useState(() => typeof window !== 'undefined' && !!window.customElements?.get('model-viewer'));
   const [modelViewerError, setModelViewerError] = useState(false);
   const [isAudioActive, setIsAudioActive] = useState(false);
+  const [logoFailed, setLogoFailed] = useState(false);
 
   useEffect(() => {
     if (mode3D !== 'spatial') return;
@@ -85,26 +87,30 @@ export function JYCHeroWebGLEmblem() {
     let pointerY = 0;
     let targetPointerX = 0;
     let targetPointerY = 0;
+    let renderDpr = 1;
+    const isMobile = window.matchMedia('(max-width: 768px), (pointer: coarse)').matches;
+    const saveData = Boolean(navigator.connection?.saveData);
+    const targetFrameMs = isMobile ? 1000 / 24 : 1000 / 30;
+    let lastFrameAt = -Infinity;
 
     const resize = () => {
       const rect = canvas.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      width = canvas.width = Math.round(rect.width * dpr);
-      height = canvas.height = Math.round(rect.height * dpr);
+      renderDpr = Math.min(window.devicePixelRatio || 1, isMobile ? 1.5 : 2);
+      width = canvas.width = Math.round(rect.width * renderDpr);
+      height = canvas.height = Math.round(rect.height * renderDpr);
     };
     resize();
     window.addEventListener('resize', resize, { passive: true });
 
     // Orbital particles & shooting satellites
-    const particleCount = 64;
+    const particleCount = isMobile ? 12 : saveData ? 24 : 40;
     const particles = Array.from({ length: particleCount }, (_, i) => ({
       angle: (i / particleCount) * Math.PI * 2,
       distance: 105 + (i % 8) * 16,
       speed: (0.004 + (i % 5) * 0.002) * (i % 2 === 0 ? 1 : -1),
       size: 1.2 + (i % 3) * 0.9,
-      alpha: 0.25 + (i % 6) * 0.12,
-      tiltAxis: (i % 3) * 0.35,
-      color: i % 4 === 0 ? '#38bdf8' : i % 4 === 1 ? '#38bdf8' : i % 4 === 2 ? '#818cf8' : '#60a5fa'
+      alpha: 0.22 + (i % 6) * 0.09,
+      tiltAxis: (i % 3) * 0.35
     }));
 
     // Mouse movement inertia
@@ -115,7 +121,7 @@ export function JYCHeroWebGLEmblem() {
       targetPointerX = nx * 40;
       targetPointerY = ny * 40;
     };
-    window.addEventListener('mousemove', handleMove, { passive: true });
+    if (!isMobile) window.addEventListener('mousemove', handleMove, { passive: true });
 
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     let reducedMotion = motionQuery.matches;
@@ -137,37 +143,39 @@ export function JYCHeroWebGLEmblem() {
     motionQuery.addEventListener('change', handleMotionPreference);
     document.addEventListener('visibilitychange', handleVisibility);
 
-    const draw = () => {
+    const draw = (timestamp = 0) => {
       if (!isVisible) {
         animId = 0;
         return;
       }
-      time += 0.016;
+      if (timestamp - lastFrameAt < targetFrameMs) { animId = requestAnimationFrame(draw); return; }
+      lastFrameAt = timestamp;
+      time += targetFrameMs / 1000;
       pointerX += (targetPointerX - pointerX) * 0.08;
       pointerY += (targetPointerY - pointerY) * 0.08;
 
       ctx.clearRect(0, 0, width, height);
 
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const dpr = renderDpr;
       const cx = width / 2 + pointerX * dpr;
       const cy = height / 2 + pointerY * dpr;
       const baseRadius = Math.min(width, height) * 0.38;
 
       const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
-      const primaryStroke = isDark ? 'rgba(56, 189, 248, ' : 'rgba(14, 165, 233, ';
-      const secondaryStroke = isDark ? 'rgba(96, 165, 250, ' : 'rgba(37, 99, 235, ';
-      const tertiaryStroke = isDark ? 'rgba(129, 140, 248, ' : 'rgba(99, 102, 241, ';
+      const primaryStroke = isDark ? 'rgba(200, 188, 255, ' : 'rgba(98, 88, 137, ';
+      const secondaryStroke = isDark ? 'rgba(231, 209, 155, ' : 'rgba(140, 109, 54, ';
+      const tertiaryStroke = isDark ? 'rgba(151, 169, 221, ' : 'rgba(145, 133, 183, ';
 
       // 1. Ambient Central Coronas
       const glowGrad = ctx.createRadialGradient(cx, cy, baseRadius * 0.15, cx, cy, baseRadius * 1.6);
       if (isDark) {
-        glowGrad.addColorStop(0, 'rgba(56, 189, 248, 0.20)');
-        glowGrad.addColorStop(0.35, 'rgba(96, 165, 250, 0.10)');
-        glowGrad.addColorStop(0.7, 'rgba(99, 102, 241, 0.05)');
+        glowGrad.addColorStop(0, 'rgba(200, 188, 255, 0.22)');
+        glowGrad.addColorStop(0.35, 'rgba(151, 169, 221, 0.12)');
+        glowGrad.addColorStop(0.7, 'rgba(231, 209, 155, 0.07)');
         glowGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
       } else {
-        glowGrad.addColorStop(0, 'rgba(14, 165, 233, 0.20)');
-        glowGrad.addColorStop(0.4, 'rgba(99, 102, 241, 0.10)');
+        glowGrad.addColorStop(0, 'rgba(172, 156, 207, 0.22)');
+        glowGrad.addColorStop(0.4, 'rgba(222, 188, 122, 0.13)');
         glowGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
       }
       ctx.fillStyle = glowGrad;
@@ -217,7 +225,7 @@ export function JYCHeroWebGLEmblem() {
         const a = (i / ticks) * Math.PI * 2 + time * 0.08;
         const r1 = baseRadius * 0.97;
         const r2 = baseRadius * (i % 6 === 0 ? 1.08 : i % 2 === 0 ? 1.04 : 1.01);
-        ctx.strokeStyle = i % 6 === 0 ? (isDark ? '#38bdf8' : '#0ea5e9') : (primaryStroke + '0.45)');
+        ctx.strokeStyle = i % 6 === 0 ? (isDark ? '#e7d19b' : '#8c6d36') : (primaryStroke + '0.45)');
         ctx.lineWidth = (i % 6 === 0 ? 1.8 : 1) * dpr;
         ctx.beginPath();
         ctx.moveTo(Math.cos(a) * r1, Math.sin(a) * r1);
@@ -228,14 +236,15 @@ export function JYCHeroWebGLEmblem() {
       ctx.restore();
 
       // 3. Stardust particles orbiting the emblem
-      particles.forEach(p => {
+      const particleColors = isDark ? ['#c8bcff', '#e7d19b', '#aeb8e4'] : ['#625889', '#8c6d36', '#b59a64'];
+      particles.forEach((p, index) => {
         p.angle += p.speed;
         const scale = dpr * (baseRadius / 155);
         const px = cx + Math.cos(p.angle) * p.distance * scale;
         const py = cy + Math.sin(p.angle) * p.distance * scale * 0.85;
         const pulse = 0.65 + Math.sin(time * 2.2 + p.angle * 3) * 0.35;
 
-        ctx.fillStyle = p.color;
+        ctx.fillStyle = particleColors[index % particleColors.length];
         ctx.globalAlpha = p.alpha * pulse;
         ctx.beginPath();
         ctx.arc(px, py, p.size * dpr, 0, Math.PI * 2);
@@ -251,7 +260,7 @@ export function JYCHeroWebGLEmblem() {
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener('resize', resize);
-      window.removeEventListener('mousemove', handleMove);
+      if (!isMobile) window.removeEventListener('mousemove', handleMove);
       document.removeEventListener('visibilitychange', handleVisibility);
       motionQuery.removeEventListener('change', handleMotionPreference);
     };
@@ -259,7 +268,7 @@ export function JYCHeroWebGLEmblem() {
 
   // 3D Tilt calculation
   const handlePointerMove = e => {
-    if (!containerRef.current) return;
+    if (!containerRef.current || !window.matchMedia?.('(hover:hover) and (pointer:fine)').matches || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
     const rect = containerRef.current.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
@@ -280,6 +289,7 @@ export function JYCHeroWebGLEmblem() {
       className={`jyc-hero-emblem-stage ${isHovered ? 'is-hovered' : ''}`}
       onPointerMove={handlePointerMove}
       onPointerEnter={() => {
+        if (!window.matchMedia?.('(hover:hover) and (pointer:fine)').matches || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
         setIsHovered(true);
         jycAudio.playNodeHover();
       }}
@@ -335,18 +345,26 @@ export function JYCHeroWebGLEmblem() {
         ) : (
           <div className="jyc-emblem-seal-container">
             <div className="jyc-emblem-glow-backing" aria-hidden="true" />
-            <img
+            {logoFailed ? <span className="jyc-emblem-logo-fallback" role="img" aria-label="JIIT Youth Club logo">JYC</span> : <img
               src={LOGO_SRC}
               alt="JIIT Youth Club Crest"
               className="jyc-emblem-logo-img"
+              width="480"
+              height="480"
               loading="eager"
               decoding="async"
               onError={e => {
-                if (e.currentTarget.src !== LOGO_FALLBACK) {
-                  e.currentTarget.src = LOGO_FALLBACK;
+                const image = e.currentTarget;
+                const stage = Number(image.dataset.logoFallbackStage || 0);
+                const candidates = [LOGO_FALLBACK, LOGO_ORIGINAL];
+                if (stage < candidates.length) {
+                  image.dataset.logoFallbackStage = String(stage + 1);
+                  image.src = candidates[stage];
+                } else {
+                  setLogoFailed(true);
                 }
               }}
-            />
+            />}
           </div>
         )}
 
@@ -362,7 +380,7 @@ export function JYCHeroWebGLEmblem() {
         </div>
 
         <div className="jyc-emblem-badge badge-bottom" style={{ transform: `translateZ(44px)` }}>
-          <span className="badge-icon">🦅</span>
+          <span className="badge-icon" aria-hidden="true">🦅</span>
           <span className="badge-text">READY TO SOAR · OFFICIAL MARK</span>
           <span className="badge-live-pulse" />
         </div>
@@ -375,6 +393,7 @@ export function JYCHeroWebGLEmblem() {
           className={`emblem-control-pill ${mode3D === 'spatial' ? 'active' : ''}`}
           onClick={() => setMode3D(m => m === 'hologram' ? 'spatial' : 'hologram')}
           title="Toggle 3D Spatial Model Mesh"
+          aria-pressed={mode3D === 'spatial'}
         >
           <span>{mode3D === 'spatial' ? '🌐 3D MESH ACTIVE' : '✨ 3D MESH'}</span>
         </button>
@@ -384,9 +403,11 @@ export function JYCHeroWebGLEmblem() {
           className={`emblem-control-pill ${isAudioActive ? 'active sound-on' : ''}`}
           onClick={toggleSound}
           title="Toggle Ambient Cosmic Audio Synthesizer"
-          aria-label="Toggle Cosmic Audio"
+          aria-label={isAudioActive ? 'AUDIO ON' : 'COSMIC SOUND'}
+          aria-pressed={isAudioActive}
         >
-          <span>{isAudioActive ? '🔊 AUDIO ON' : '🔈 COSMIC SOUND'}</span>
+          <span aria-hidden="true">{isAudioActive ? '🔊' : '🔈'}</span>
+          <span>{isAudioActive ? 'AUDIO ON' : 'COSMIC SOUND'}</span>
           {isAudioActive && <span className="audio-sound-wave" />}
         </button>
       </div>

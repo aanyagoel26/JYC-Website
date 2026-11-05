@@ -10,9 +10,9 @@ const html = fs.readFileSync('index.html', 'utf8');
 const bot = fs.readFileSync('src/jyc-bot.jsx', 'utf8');
 const readDesignSystem = fs.readFileSync('src/styles/jyc-design-system.css', 'utf8');
 const checks = [
-  [bootTheme.includes("let theme = 'dark';") && main.includes("return 'dark';") && bootTheme.includes("saved === 'dark' || saved === 'light'"), 'first visit defaults to the midnight theme while saved preferences are preserved'],
-  [main.includes("querySelectorAll('meta[name=\"theme-color\"]')") && bootTheme.includes("querySelectorAll('meta[name=\"theme-color\"]')") && html.includes('content="#050811"'), 'browser theme-color follows the selected site theme'],
-  [home.includes('inkColor="#0b1220"') && home.includes('paperColor="#e2e8f0"') && home.includes('rimColor="#38bdf8"'), 'hero DitherVeil uses the midnight/cyan palette'],
+  [bootTheme.includes("let theme = null;") && main.includes("return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';") && bootTheme.includes("window.matchMedia?.('(prefers-color-scheme: dark)').matches") && bootTheme.includes("saved === 'dark' || saved === 'light'"), 'first visit follows the operating-system theme preference while saved preferences are preserved'],
+  [main.includes("querySelectorAll('meta[name=\"theme-color\"]')") && bootTheme.includes("querySelectorAll('meta[name=\"theme-color\"]')") && html.includes('content="#080d1c"') && html.includes('content="#f5f1e8"'), 'browser theme-color follows the selected site theme'],
+  [home.includes('inkColor="#4b3e69"') && home.includes('paperColor="#f6f2e9"') && home.includes('rimColor="#b99b70"'), 'hero DitherVeil uses the midnight/cyan palette'],
 
   [bot.includes('window.setTimeout') && bot.includes('14000+Math.floor(Math.random()*9000)'), 'Falcon idle behavior uses bounded delayed scheduling rather than a perpetual interval'],
   [bot.includes("document.addEventListener('visibilitychange',onVisibilityChange)") && bot.includes("document.removeEventListener('visibilitychange',onVisibilityChange)"), 'Falcon idle scheduling pauses and cleans up on page visibility changes'],
@@ -21,7 +21,7 @@ const checks = [
   [bot.includes("{intent:'peek',weight:4}") && !bot.includes("const animPool=['wave','dance','bounce','tap','celebrate','peek','think']"), 'Falcon idle behavior uses restrained weighted choices and excludes surprise dance/celebration'],
   [home.includes("import './jyc-editorial-home.css';") && home.includes("import './styles/jyc-editorial-motion-system.css';") && home.indexOf("import './styles/jyc-editorial-motion-system.css';") > home.indexOf("import './jyc-editorial-home.css';"), 'motion layer is loaded after the editorial home stylesheet'],
   [home.includes('jh-hero-webgl-stage-wrap') && home.includes('<JYCHeroWebGLEmblem />'), 'interactive WebGL emblem hero is retained'],
-  [home.includes('<LazyDitherVeil') && home.includes('rimColor="#38bdf8"') && home.includes('inkColor="#0b1220"') && home.includes('paperColor="#e2e8f0"') && home.includes('jh-hero-dither-layer'), 'Dither Veil is mounted in the hero and uses the JYC accent rim'],
+  [home.includes('<LazyDitherVeil') && home.includes('rimColor="#b99b70"') && home.includes('inkColor="#4b3e69"') && home.includes('paperColor="#f6f2e9"') && home.includes('jh-hero-dither-layer'), 'Dither Veil is mounted in the hero and uses the JYC accent rim'],
   [layer.includes('@media(max-width:700px)'), 'single-column mobile hero is explicitly supported'],
   [layer.includes('@media(max-width:980px)'), 'tablet hero layout is explicitly supported'],
   [layer.includes('prefers-reduced-motion:reduce'), 'reduced-motion preferences are honored'],
@@ -37,7 +37,7 @@ const checks = [
   ['Jai Hack dark theme loads after the application stylesheet graph', main.indexOf("import './styles/jai-hack-dark-theme.css';") > main.indexOf("from './v15-functional.js';")],
   ['Jai Hack dark theme is scoped to explicit dark mode', fs.readFileSync('src/styles/jai-hack-dark-theme.css', 'utf8').includes('html[data-theme="dark"]')],
   ['Jai Hack dark theme preserves reduced-motion preferences', fs.readFileSync('src/styles/jai-hack-dark-theme.css', 'utf8').includes('prefers-reduced-motion: reduce')],
-  ['Jai Hack dark theme defines visible cyan keyboard focus', fs.readFileSync('src/styles/jai-hack-dark-theme.css', 'utf8').includes('outline: 2px solid #38bdf8')],
+  ['JYC night-sky compatibility maps legacy accents to the shared palette and exposes lavender focus', (() => { const theme = fs.readFileSync('src/styles/jai-hack-dark-theme.css', 'utf8'); return theme.includes('--jyc-cyan: var(--jyc-accent)') && theme.includes('--jyc-blue: var(--jyc-accent)') && theme.includes('--jh-gold: var(--jyc-gold)') && theme.includes('outline: 3px solid var(--jyc-focus)') && !theme.includes('#38bdf8') && !theme.includes('#60a5fa'); })()],
 ];
 for (const [ok, name] of checks) { console.log((ok ? 'PASS: ' : 'FAIL: ') + name); assert.ok(ok, name); }
 console.log('JYC editorial motion system contract: PASS');

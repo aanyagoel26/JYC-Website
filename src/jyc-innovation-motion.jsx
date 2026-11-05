@@ -2,22 +2,71 @@ import { useEffect, useRef } from 'react';
 import './jyc-innovation-motion.css';
 
 function setupReveal() {
-  const nodes = [...document.querySelectorAll('.public-app .reveal')];
-  if (!nodes.length) return () => {};
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    nodes.forEach(node => node.classList.add('jyc-motion-visible'));
-    return () => {};
-  }
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('jyc-motion-visible');
-        observer.unobserve(entry.target);
+  const selector = '.public-app .reveal';
+  const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let observer = null;
+  let observed = new WeakSet();
+
+  const show = node => node.classList.add('jyc-motion-visible');
+  const createObserver = () => {
+    if (typeof IntersectionObserver !== 'function') return null;
+    return new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        show(entry.target);
+        observer?.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
+  };
+
+  const observeNode = node => {
+    if (!(node instanceof Element)) return;
+    const candidates = [];
+    if (node.matches(selector)) candidates.push(node);
+    candidates.push(...node.querySelectorAll(selector));
+    candidates.forEach(candidate => {
+      if (motionQuery.matches || !observer) {
+        show(candidate);
+      } else if (!observed.has(candidate)) {
+        observed.add(candidate);
+        observer.observe(candidate);
       }
     });
-  }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
-  nodes.forEach(node => observer.observe(node));
-  return () => observer.disconnect();
+  };
+
+  observer = createObserver();
+  const root = document.querySelector('.public-app') || document.body;
+
+  // Only enable the hidden-before-reveal state after the route observer is
+  // installed. If this enhancement cannot initialize, CSS leaves all content
+  // visible instead of hiding text behind an animation that never runs.
+  const mutationObserver = typeof MutationObserver === 'function'
+    ? new MutationObserver(records => records.forEach(record => record.addedNodes.forEach(observeNode)))
+    : null;
+  if (mutationObserver) document.documentElement.classList.add('jyc-motion-ready');
+  observeNode(root);
+  mutationObserver?.observe(root, { childList: true, subtree: true });
+
+  const onMotionChange = () => {
+    observer?.disconnect();
+    observer = createObserver();
+    observed = new WeakSet();
+    document.querySelectorAll(selector).forEach(node => {
+      if (motionQuery.matches || !observer) show(node);
+      else {
+        observed.add(node);
+        observer.observe(node);
+      }
+    });
+  };
+  motionQuery.addEventListener?.('change', onMotionChange);
+
+  return () => {
+    mutationObserver?.disconnect();
+    observer?.disconnect();
+    document.documentElement.classList.remove('jyc-motion-ready');
+    motionQuery.removeEventListener?.('change', onMotionChange);
+  };
 }
 
 /**
@@ -29,9 +78,12 @@ function useAtmosphericCanvas(canvasRef) {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let reducedMotion = motionQuery.matches;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
+    const lowPower = (navigator.hardwareConcurrency || 4) < 4 || (navigator.deviceMemory || 4) < 2 || Boolean(navigator.connection?.saveData);
+    if (lowPower) { canvas.style.display = 'none'; return; } // CSS aurora/nebula remains as a static fallback on constrained devices.
 
     let width = 0;
     let height = 0;
@@ -41,9 +93,12 @@ function useAtmosphericCanvas(canvasRef) {
     let targetMouseX = 0;
     let targetMouseY = 0;
     let time = 0;
+    const isCoarsePointer = window.matchMedia?.('(pointer: coarse)').matches ?? false;
+    const targetFrameMs = isCoarsePointer ? 50 : 1000 / 30;
+    let lastFrameAt = -Infinity;
 
     const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      const dpr = Math.min(window.devicePixelRatio || 1, isCoarsePointer ? 1.1 : 1.5);
       width = canvas.width = Math.round(window.innerWidth * dpr);
       height = canvas.height = Math.round(window.innerHeight * dpr);
     };
@@ -54,10 +109,10 @@ function useAtmosphericCanvas(canvasRef) {
       targetMouseX = (e.clientX - window.innerWidth / 2) * 0.04;
       targetMouseY = (e.clientY - window.innerHeight / 2) * 0.04;
     };
-    window.addEventListener('mousemove', onMouseMove, { passive: true });
+    if (!isCoarsePointer) window.addEventListener('mousemove', onMouseMove, { passive: true });
 
     // Star pool for Dark Mode (small twinkling stars)
-    const starCount = Math.min(150, Math.floor(window.innerWidth / 10));
+    const starCount = Math.min(isCoarsePointer ? 24 : 64, Math.floor(window.innerWidth / (isCoarsePointer ? 16 : 20)));
     const stars = Array.from({ length: starCount }, () => ({
       x: Math.random(),
       y: Math.random(),
@@ -67,11 +122,11 @@ function useAtmosphericCanvas(canvasRef) {
       twinkleSpeed: Math.random() * 0.03 + 0.015,
       twinklePhase: Math.random() * Math.PI * 2,
       baseAlpha: Math.random() * 0.55 + 0.35,
-      color: Math.random() > 0.8 ? '#fcd34d' : (Math.random() > 0.5 ? '#93c5fd' : (Math.random() > 0.25 ? '#e0e7ff' : '#ffffff'))
+      color: Math.random() > 0.8 ? '#e7d19b' : (Math.random() > 0.5 ? '#aeb8e4' : (Math.random() > 0.25 ? '#c8bcff' : '#f7f5ff'))
     }));
 
     // Golden dust and luminous nodes for Light Mode
-    const goldDustCount = Math.min(65, Math.floor(window.innerWidth / 22));
+    const goldDustCount = Math.min(isCoarsePointer ? 12 : 32, Math.floor(window.innerWidth / (isCoarsePointer ? 32 : 42)));
     const goldDust = Array.from({ length: goldDustCount }, () => ({
       x: Math.random(),
       y: Math.random(),
@@ -79,7 +134,7 @@ function useAtmosphericCanvas(canvasRef) {
       vx: (Math.random() - 0.5) * 0.00035,
       vy: (Math.random() - 0.5) * 0.00035,
       phase: Math.random() * Math.PI * 2,
-      color: Math.random() > 0.5 ? 'rgba(212, 175, 55, ' : 'rgba(234, 179, 8, '
+      color: Math.random() > 0.5 ? 'rgba(140, 109, 54, ' : 'rgba(164, 123, 67, '
     }));
 
     // Shooting Stars Queue (realistic comet head with gradient tail)
@@ -104,16 +159,18 @@ function useAtmosphericCanvas(canvasRef) {
     let isHidden = document.hidden;
     const onVisibilityChange = () => {
       isHidden = document.hidden;
-      if (!isHidden && !animId) animId = requestAnimationFrame(loop);
+      if (!isHidden && !reducedMotion && !animId) animId = requestAnimationFrame(loop);
     };
     document.addEventListener('visibilitychange', onVisibilityChange);
 
     const loop = (timestamp) => {
-      if (isHidden) {
+      if (isHidden || reducedMotion) {
         animId = 0;
         return;
       }
-      time += 0.016;
+      if (timestamp - lastFrameAt < targetFrameMs) { animId = requestAnimationFrame(loop); return; }
+      lastFrameAt = timestamp;
+      time += targetFrameMs / 1000;
       ctx.clearRect(0, 0, width, height);
 
       mouseX += (targetMouseX - mouseX) * 0.05;
@@ -134,9 +191,9 @@ function useAtmosphericCanvas(canvasRef) {
           height * 0.28,
           width * 0.5
         );
-        nebula1.addColorStop(0, 'rgba(56, 189, 248, 0.048)');
-        nebula1.addColorStop(0.4, 'rgba(147, 51, 234, 0.028)');
-        nebula1.addColorStop(0.8, 'rgba(236, 72, 153, 0.012)');
+        nebula1.addColorStop(0, 'rgba(200, 188, 255, 0.052)');
+        nebula1.addColorStop(0.4, 'rgba(151, 169, 221, 0.032)');
+        nebula1.addColorStop(0.8, 'rgba(231, 209, 155, 0.012)');
         nebula1.addColorStop(1, 'rgba(0, 0, 0, 0)');
         ctx.fillStyle = nebula1;
         ctx.fillRect(0, 0, width, height);
@@ -149,8 +206,8 @@ function useAtmosphericCanvas(canvasRef) {
           height * 0.72,
           width * 0.45
         );
-        nebula2.addColorStop(0, 'rgba(212, 175, 55, 0.038)');
-        nebula2.addColorStop(0.5, 'rgba(59, 130, 246, 0.022)');
+        nebula2.addColorStop(0, 'rgba(231, 209, 155, 0.042)');
+        nebula2.addColorStop(0.5, 'rgba(98, 88, 137, 0.022)');
         nebula2.addColorStop(1, 'rgba(0, 0, 0, 0)');
         ctx.fillStyle = nebula2;
         ctx.fillRect(0, 0, width, height);
@@ -184,7 +241,7 @@ function useAtmosphericCanvas(canvasRef) {
             if (dist < connectDist) {
               const lineAlpha = (1 - dist / connectDist) * 0.18 * starCoords[i].alpha * starCoords[j].alpha;
               if (lineAlpha > 0.015) {
-                ctx.strokeStyle = `rgba(147, 197, 253, ${lineAlpha})`;
+                ctx.strokeStyle = `rgba(174, 184, 228, ${lineAlpha})`;
                 ctx.beginPath();
                 ctx.moveTo(starCoords[i].px, starCoords[i].py);
                 ctx.lineTo(starCoords[j].px, starCoords[j].py);
@@ -205,7 +262,7 @@ function useAtmosphericCanvas(canvasRef) {
         ctx.globalAlpha = 1.0;
 
         // 3. Dynamic Shooting Stars
-        if (timestamp - lastShootingStarTime > 3800 && Math.random() < 0.4) {
+        if (!isCoarsePointer && timestamp - lastShootingStarTime > 3800 && Math.random() < 0.4) {
           spawnShootingStar();
           lastShootingStarTime = timestamp;
         }
@@ -226,9 +283,9 @@ function useAtmosphericCanvas(canvasRef) {
 
           const streakGrad = ctx.createLinearGradient(s.x, s.y, tailX, tailY);
           streakGrad.addColorStop(0, `rgba(255, 255, 255, ${s.opacity})`);
-          streakGrad.addColorStop(0.25, `rgba(212, 175, 55, ${s.opacity * 0.85})`);
-          streakGrad.addColorStop(0.7, `rgba(56, 189, 248, ${s.opacity * 0.4})`);
-          streakGrad.addColorStop(1, 'rgba(56, 189, 248, 0)');
+          streakGrad.addColorStop(0.25, `rgba(231, 209, 155, ${s.opacity * 0.85})`);
+          streakGrad.addColorStop(0.7, `rgba(200, 188, 255, ${s.opacity * 0.4})`);
+          streakGrad.addColorStop(1, 'rgba(200, 188, 255, 0)');
 
           ctx.strokeStyle = streakGrad;
           ctx.lineWidth = s.width;
@@ -258,8 +315,8 @@ function useAtmosphericCanvas(canvasRef) {
           height * 0.15,
           width * 0.55
         );
-        aurora1.addColorStop(0, 'rgba(212, 175, 55, 0.08)');
-        aurora1.addColorStop(0.5, 'rgba(245, 158, 11, 0.035)');
+        aurora1.addColorStop(0, 'rgba(231, 209, 155, 0.09)');
+        aurora1.addColorStop(0.5, 'rgba(164, 123, 67, 0.035)');
         aurora1.addColorStop(1, 'rgba(255, 255, 255, 0)');
         ctx.fillStyle = aurora1;
         ctx.fillRect(0, 0, width, height);
@@ -272,8 +329,8 @@ function useAtmosphericCanvas(canvasRef) {
           height * 0.65,
           width * 0.48
         );
-        aurora2.addColorStop(0, 'rgba(251, 191, 36, 0.06)');
-        aurora2.addColorStop(0.6, 'rgba(217, 119, 6, 0.025)');
+        aurora2.addColorStop(0, 'rgba(200, 188, 255, 0.055)');
+        aurora2.addColorStop(0.6, 'rgba(129, 117, 168, 0.028)');
         aurora2.addColorStop(1, 'rgba(255, 255, 255, 0)');
         ctx.fillStyle = aurora2;
         ctx.fillRect(0, 0, width, height);
@@ -305,7 +362,7 @@ function useAtmosphericCanvas(canvasRef) {
             if (dist < dustDist) {
               const linkAlpha = (1 - dist / dustDist) * 0.12 * dustCoords[i].alpha * dustCoords[j].alpha;
               if (linkAlpha > 0.01) {
-                ctx.strokeStyle = `rgba(180, 130, 60, ${linkAlpha})`;
+                ctx.strokeStyle = `rgba(140, 109, 54, ${linkAlpha})`;
                 ctx.beginPath();
                 ctx.moveTo(dustCoords[i].px, dustCoords[i].py);
                 ctx.lineTo(dustCoords[j].px, dustCoords[j].py);
@@ -327,12 +384,24 @@ function useAtmosphericCanvas(canvasRef) {
       animId = requestAnimationFrame(loop);
     };
 
-    animId = requestAnimationFrame(loop);
+    const onMotionChange = () => {
+      reducedMotion = motionQuery.matches;
+      if (reducedMotion) {
+        if (animId) cancelAnimationFrame(animId);
+        animId = 0;
+        ctx.clearRect(0, 0, width, height);
+      } else if (!isHidden && !animId) {
+        animId = requestAnimationFrame(loop);
+      }
+    };
+    motionQuery.addEventListener?.('change', onMotionChange);
+    if (!reducedMotion && !isHidden) animId = requestAnimationFrame(loop);
 
     return () => {
       if (animId) cancelAnimationFrame(animId);
+      motionQuery.removeEventListener?.('change', onMotionChange);
       window.removeEventListener('resize', resize);
-      window.removeEventListener('mousemove', onMouseMove);
+      if (!isCoarsePointer) window.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('visibilitychange', onVisibilityChange);
     };
   }, [canvasRef]);
