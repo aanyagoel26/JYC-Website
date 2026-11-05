@@ -2,22 +2,68 @@ import { useEffect, useRef } from 'react';
 import './jyc-innovation-motion.css';
 
 function setupReveal() {
-  const nodes = [...document.querySelectorAll('.public-app .reveal')];
-  if (!nodes.length) return () => {};
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    nodes.forEach(node => node.classList.add('jyc-motion-visible'));
-    return () => {};
-  }
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('jyc-motion-visible');
-        observer.unobserve(entry.target);
+  const selector = '.public-app .reveal';
+  const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let observer = null;
+  let observed = new WeakSet();
+
+  const show = node => node.classList.add('jyc-motion-visible');
+  const createObserver = () => {
+    if (typeof IntersectionObserver !== 'function') return null;
+    return new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        show(entry.target);
+        observer?.unobserve(entry.target);
+      });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
+  };
+
+  const observeNode = node => {
+    if (!(node instanceof Element)) return;
+    const candidates = [];
+    if (node.matches(selector)) candidates.push(node);
+    candidates.push(...node.querySelectorAll(selector));
+    candidates.forEach(candidate => {
+      if (motionQuery.matches || !observer) {
+        show(candidate);
+      } else if (!observed.has(candidate)) {
+        observed.add(candidate);
+        observer.observe(candidate);
       }
     });
-  }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
-  nodes.forEach(node => observer.observe(node));
-  return () => observer.disconnect();
+  };
+
+  observer = createObserver();
+  observeNode(document.querySelector('.public-app') || document.body);
+
+  // The app is a client-side router: new route sections arrive after the
+  // initial mount. Observe them too, rather than leaving their reveal state
+  // permanently at opacity .001 after navigation.
+  const mutationObserver = typeof MutationObserver === 'function'
+    ? new MutationObserver(records => records.forEach(record => record.addedNodes.forEach(observeNode)))
+    : null;
+  mutationObserver?.observe(document.querySelector('.public-app') || document.body, { childList: true, subtree: true });
+
+  const onMotionChange = () => {
+    observer?.disconnect();
+    observer = createObserver();
+    observed = new WeakSet();
+    document.querySelectorAll(selector).forEach(node => {
+      if (motionQuery.matches || !observer) show(node);
+      else {
+        observed.add(node);
+        observer.observe(node);
+      }
+    });
+  };
+  motionQuery.addEventListener?.('change', onMotionChange);
+
+  return () => {
+    mutationObserver?.disconnect();
+    observer?.disconnect();
+    motionQuery.removeEventListener?.('change', onMotionChange);
+  };
 }
 
 /**
