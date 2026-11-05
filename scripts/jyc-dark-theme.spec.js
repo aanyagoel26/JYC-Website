@@ -20,7 +20,14 @@ async function themeSnapshot(page) {
     const heading = app?.querySelector('h1');
     const paragraph = app?.querySelector('.jh-lead, .about-hero-copy p, .section-head p, p');
     const parse = value => {
-      const match = String(value).match(/\d+(?:\.\d+)?/g);
+      const text = String(value).trim();
+      if (/^#[0-9a-f]{6}$/i.test(text)) {
+        return [1,3,5].map(index => parseInt(text.slice(index,index+2),16));
+      }
+      if (/^#[0-9a-f]{3}$/i.test(text)) {
+        return text.slice(1).split('').map(char => parseInt(char+char,16));
+      }
+      const match = text.match(/\d+(?:\.\d+)?/g);
       return match ? match.slice(0, 3).map(Number) : [0, 0, 0];
     };
     const luminance = value => {
