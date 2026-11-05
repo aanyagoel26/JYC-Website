@@ -1198,3 +1198,36 @@ html[data-theme="dark"] #main-content.public-app .route-stage > section.section 
 html[data-theme="dark"] #main-content.public-app .route-stage > section.section .about-next-v28 p {
   color: var(--jyc-muted, #c0bad5) !important;
 }
+
+
+/* V66 — bind the editorial homepage's legacy --jh variables to the canonical
+   day/night palette. The homepage stylesheet sets theme-local values on the
+   component itself, so root tokens alone cannot override those declarations. */
+html[data-theme="light"] .jyc-editorial-home.jyc-home {
+  --jh-bg: var(--jyc-canvas);
+  --jh-surface: var(--jyc-surface);
+  --jh-surface-elevated: var(--jyc-surface-strong);
+  --jh-surface-glass: color-mix(in srgb, var(--jyc-surface) 88%, transparent);
+  --jh-ink: var(--jyc-text-strong);
+  --jh-muted: var(--jyc-muted);
+  --jh-accent: var(--jyc-accent);
+  --jh-accent-glow: var(--jyc-accent-soft);
+  --jh-cyan: var(--jyc-accent);
+  --jh-cyan-glow: var(--jyc-accent-soft);
+  --jh-line: var(--jyc-line);
+  --jh-line-accent: var(--jyc-line-strong);
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home {
+  --jh-bg: var(--jyc-canvas);
+  --jh-surface: var(--jyc-surface);
+  --jh-surface-elevated: var(--jyc-surface-strong);
+  --jh-surface-glass: color-mix(in srgb, var(--jyc-surface) 88%, transparent);
+  --jh-ink: var(--jyc-text-strong);
+  --jh-muted: var(--jyc-muted);
+  --jh-accent: var(--jyc-accent);
+  --jh-accent-glow: var(--jyc-accent-soft);
+  --jh-cyan: var(--jyc-accent);
+  --jh-cyan-glow: var(--jyc-accent-soft);
+  --jh-line: var(--jyc-line);
+  --jh-line-accent: var(--jyc-line-strong);
+}
