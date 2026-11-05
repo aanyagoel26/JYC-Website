@@ -429,7 +429,7 @@ test('JAI event does not advertise an expired registration QR as open', async ({
   await expect(page.locator('#event-register').getByRole('button', { name: /REGISTRATION LINK UNAVAILABLE/i })).toBeDisabled();
 });
 
-test('first visit defaults to midnight theme and saved preferences remain respected', async ({ page }) => {
+test('first visit follows the operating-system theme preference and saved preferences remain respected', async ({ page }) => {
   await page.emulateMedia({ colorScheme: 'light' });
   await page.addInitScript(() => {
     if (!sessionStorage.getItem('jyc-theme-test-cleared')) {
