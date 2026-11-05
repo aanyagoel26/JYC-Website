@@ -95,6 +95,7 @@ import {readSiteCache,writeSiteCache,siteCacheAge,formatCacheAge,armStoredRemind
 
 /* Final global layer: keep after all application and component stylesheet imports. */
 import './styles/jai-hack-dark-theme.css';
+import './styles/jyc-cohesive-experience.css';
 
 const logo='/assets/jyc-logo.avif';
 const logoTiny='/assets/jyc-logo-48.avif';
@@ -240,7 +241,7 @@ function App(){const loc=useLocation();const [data,setData]=useState(()=>import.
 
  useEffect(()=>{const onToast=e=>notify(e.detail?.message||'',e.detail?.type||'success');const onConfirm=e=>setConfirm(e.detail||null);window.addEventListener('jyc-toast',onToast);window.addEventListener('jyc-confirm',onConfirm);return()=>{window.removeEventListener('jyc-toast',onToast);window.removeEventListener('jyc-confirm',onConfirm)}},[]);
  useEffect(()=>{const on=()=>setOnline(true),off=()=>setOnline(false);window.addEventListener('online',on);window.addEventListener('offline',off);return()=>{window.removeEventListener('online',on);window.removeEventListener('offline',off)}},[]);
- useEffect(()=>{document.documentElement.dataset.theme=theme;storageSet('jyc-theme',theme);document.querySelectorAll('meta[name="theme-color"]').forEach(meta=>meta.setAttribute('content',theme==='dark'?'#050811':'#f8fafc'));},[theme]);
+ useEffect(()=>{document.documentElement.dataset.theme=theme;storageSet('jyc-theme',theme);document.querySelectorAll('meta[name="theme-color"]').forEach(meta=>meta.setAttribute('content',theme==='dark'?'#080d1c':'#f5f1e8'));},[theme]);
  useEffect(()=>{const low=Boolean(navigator.connection?.saveData||((navigator.deviceMemory||8)<4)||((navigator.hardwareConcurrency||8)<4));document.documentElement.dataset.performance=low?'lite':'full';document.documentElement.dataset.reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches?'true':'false'},[]);
  useEffect(()=>{const id=setTimeout(()=>setBootStage(readSiteCache()?'SYNCING':'LOADING'),420);return()=>clearTimeout(id)},[]);
  useEffect(()=>{let alive=true;const cached=readSiteCache();if(cached){setData(stripLegacySeed(cached));setLoading(false);setBootStage('SYNCING')}const refresh=async()=>{try{const next=await Promise.race([loadData(),new Promise((_,reject)=>setTimeout(()=>reject(new Error('JYC data service is taking too long to respond.')),4500))]);if(alive){setData(next);writeSiteCache(next);setError('');setBootStage('READY');armStoredReminders(next.events||[])}}catch(e){if(alive){const reason=e?.message||'Could not load JYC content.';const fallback=readOnlySiteFallback(reason);setData(fallback);writeSiteCache(fallback);setError('');setBootStage('READY')}}finally{if(alive)setLoading(false)}};refresh();const retry=()=>refresh();window.addEventListener('jyc-refresh-data',retry);supabase.auth.getSession().then(({data:{session:s}})=>resolve(s)).catch(()=>{});const {data:l}=supabase.auth.onAuthStateChange((_,s)=>resolve(s));return()=>{alive=false;l.subscription.unsubscribe();window.removeEventListener('jyc-refresh-data',retry)}},[]);
@@ -1047,24 +1048,33 @@ function Theme({theme,setTheme}){
   const next=theme==='dark'?'light':'dark';
   const apply=()=>setTheme(next);
   document.documentElement.classList.add('theme-is-switching');
+  const finish=()=>window.setTimeout(()=>document.documentElement.classList.remove('theme-is-switching'),180);
   try{
-   if(document.startViewTransition){
+   if(document.startViewTransition&&!window.matchMedia('(prefers-reduced-motion: reduce)').matches){
     const transition=document.startViewTransition(apply);
-    transition.finished?.finally(()=>window.setTimeout(()=>document.documentElement.classList.remove('theme-is-switching'),180));
+    Promise.resolve(transition.finished).then(finish,finish);
    }else{
     apply();
-    window.setTimeout(()=>document.documentElement.classList.remove('theme-is-switching'),420);
+    finish();
    }
   }catch{
    apply();
-   window.setTimeout(()=>document.documentElement.classList.remove('theme-is-switching'),420);
+   finish();
   }
  };
- return <button type="button" className={`theme-toggle theme-toggle-rb ${theme==='dark'?'is-dark':'is-light'}`} onClick={switchMode} aria-label={`${theme==='dark'?'Dark':'Light'} Mode; switch to ${theme==='dark'?'light':'dark'} mode`} title={`Switch to ${theme==='dark'?'light':'dark'} mode`}>
+ const nextLabel=theme==='dark'?'day':'night';
+ return <button
+  type="button"
+  className={`theme-toggle theme-toggle-rb ${theme==='dark'?'is-dark':'is-light'}`}
+  onClick={switchMode}
+  aria-pressed={theme==='dark'}
+  aria-label={`Switch to ${nextLabel} theme`}
+  title={`Switch to ${nextLabel} theme`}
+ >
   <span className="theme-toggle-track" aria-hidden="true">
    <span className="theme-toggle-orb"><span>{theme==='dark'?'☾':'☀'}</span></span>
   </span>
-  <span className="theme-toggle-copy"><b>{theme==='dark'?'Dark':'Light'}</b><small>Mode</small></span>
+  <span className="theme-toggle-copy"><b>{theme==='dark'?'Night':'Day'}</b><small>Theme</small></span>
  </button>
 }
 function State({title,text,children,compact=false}){return <section className={`state ${compact?'compact':''}`}><span className="eyebrow">JYC</span><h1>{title}</h1><p>{text}</p>{children}</section>}
