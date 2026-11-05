@@ -49,7 +49,7 @@ test.describe('JYC text readability — all public routes, themes and device siz
               const x=luminance(a), y=luminance(b);
               return (Math.max(x,y)+.05)/(Math.min(x,y)+.05);
             };
-            const pageBg = parse(getComputedStyle(document.body).backgroundColor) || (document.documentElement.dataset.theme === 'dark' ? [21,16,25,1] : [246,242,233,1]);
+            const bodyBg = parse(getComputedStyle(document.body).backgroundColor);\n            const pageBg = bodyBg && bodyBg[3] > .95 ? bodyBg : (document.documentElement.dataset.theme === 'dark' ? [21,16,25,1] : [246,242,233,1]);
             const isVisible = el => {
               const s=getComputedStyle(el), r=el.getBoundingClientRect();
               return s.display!=='none' && s.visibility!=='hidden' && Number(s.opacity)>.05 && r.width>0 && r.height>0 && !el.closest('[aria-hidden="true"]');
