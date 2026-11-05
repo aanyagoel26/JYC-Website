@@ -1,0 +1,38 @@
+/* JYC DESKTOP EXPERIENCE
+   An intentionally desktop-authored composition. This file is loaded independently
+   from the mobile art direction; it is not a scaled version of the phone layout. */
+@media (min-width: 901px) {
+  :root { --jyc-experience-gutter: clamp(36px, 5vw, 88px); --jyc-experience-max: 1480px; }
+  .public-app { width: 100%; }
+  .public-app :where(.page,.section,.page-shell,.content-shell,.unified-public-page) {
+    width: min(var(--jyc-experience-max), calc(100% - 2 * var(--jyc-experience-gutter)));
+    max-width: var(--jyc-experience-max);
+    margin-inline: auto;
+  }
+  .public-app :where(.page,.section) { padding-block: clamp(64px, 6vw, 104px); }
+  .public-app :where(.page-heading,.section-head,.section-inline-head,.section-heading) {
+    display: flex; align-items: end; justify-content: space-between;
+    gap: clamp(24px, 4vw, 64px); margin-bottom: clamp(30px, 3.5vw, 52px);
+  }
+  .public-app :where(.page-heading h1,.section-head h1,.section-head h2,.section-inline-head h2) {
+    max-width: 16ch; font-size: clamp(42px, 4.2vw, 76px); line-height: .98;
+  }
+  .public-app :where(.page-intro,.page-lead,.section-intro,.lead) { max-width: 66ch; }
+  .public-app :where(.club-grid,.team-grid,.events-grid,.event-grid,.gallery-grid,.gallery-wall,.card-grid,.contact-grid) {
+    grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(18px, 1.8vw, 28px);
+  }
+  .public-app :where(.filter-row,.gallery-filters,.event-filters,.club-filters,.filter-chips) {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 10px;
+  }
+  .public-app :where(.feature-page,.featured,.about-hero-v28,.about-hero-editorial) {
+    grid-template-columns: minmax(0, 1.15fr) minmax(320px, .85fr);
+    gap: clamp(28px, 4vw, 64px);
+  }
+  .public-app :where(.mobile-dock,.fest-mobile-dock) { display: none !important; }
+  .public-app :where(.section-head > :last-child,.page-heading > :last-child) { flex: 0 0 auto; }
+}
+@media (min-width: 1440px) {
+  .public-app :where(.club-grid,.team-grid,.events-grid,.event-grid,.gallery-grid,.card-grid) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
