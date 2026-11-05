@@ -1186,3 +1186,15 @@ html[data-theme="light"] .jyc-editorial-home .emblem-control-pill.active{color:#
 .jyc-editorial-home.jyc-home::after{display:none!important}
 .jyc-editorial-home.jyc-home :where(.jh-team-list,.jh-featured-event,.jh-story-card,.jh-pillar-card){transition:none!important;transform:none!important}
 }
+
+/* Dark About closing CTA: override legacy paper-only foregrounds at the route layer.
+   Keep the heading, supporting copy and eyebrow readable against the midnight surface. */
+html[data-theme="dark"] #main-content.public-app .route-stage > section.section .about-next-v28 .eyebrow {
+  color: var(--jyc-gold, #e7d19b) !important;
+}
+html[data-theme="dark"] #main-content.public-app .route-stage > section.section .about-next-v28 h2 {
+  color: var(--jyc-text-strong, #f2efff) !important;
+}
+html[data-theme="dark"] #main-content.public-app .route-stage > section.section .about-next-v28 p {
+  color: var(--jyc-muted, #c0bad5) !important;
+}
