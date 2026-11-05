@@ -89,3 +89,25 @@ if (failed > 0) {
 } else {
   console.log('All responsive breakpoint and color harmony audits PASSED!');
 }
+
+
+// 9. Independent desktop/mobile experience contracts.
+const desktopExperience = read('src/styles/jyc-desktop-experience.css');
+const mobileExperience = read('src/styles/jyc-mobile-experience.css');
+const appEntry = read('src/main.jsx');
+add('Dedicated desktop experience stylesheet exists and is loaded',
+  desktopExperience.length > 500 && appEntry.includes("jyc-desktop-experience.css"));
+add('Dedicated mobile experience stylesheet exists and is loaded',
+  mobileExperience.length > 500 && appEntry.includes("jyc-mobile-experience.css"));
+add('Desktop composition has an explicit 901px+ breakpoint',
+  /@media\s*\(min-width:\s*901px\)/.test(desktopExperience));
+add('Desktop content uses spacious bounded canvas and multi-column grids',
+  desktopExperience.includes('--jyc-experience-max: 1480px') &&
+  /grid-template-columns:\s*repeat\(3,\s*minmax\(0,\s*1fr\)\)/.test(desktopExperience));
+add('Mobile composition has an explicit <=900px breakpoint',
+  /@media\s*\(max-width:\s*900px\)/.test(mobileExperience));
+add('Mobile content has a single-column grid and horizontal filter rails',
+  /grid-template-columns:\s*minmax\(0,\s*1fr\)/.test(mobileExperience) &&
+  mobileExperience.includes('overflow-x: auto'));
+add('Narrow phone layout has a dedicated <=390px breakpoint',
+  /@media\s*\(max-width:\s*390px\)/.test(mobileExperience));
