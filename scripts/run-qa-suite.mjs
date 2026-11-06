@@ -50,7 +50,8 @@ const scripts = [
   'qa-theme-contract.mjs',
   'qa-atmospheric-background.mjs',
   'qa-club-member-roster.mjs',
-  'qa-team-exclusions.mjs'
+  'qa-team-exclusions.mjs',
+  'qa-nsoc-editorial-effects.mjs'
 ];
 
 for (const script of scripts) {
