@@ -524,3 +524,17 @@ html[data-theme="dark"] .public-app :where(.jyc-route-card,.jyc-hub-signal-card,
 /* Canonical public palette takes precedence over legacy route declarations. */
 :root,html[data-theme="light"]{--jyc-canvas:#f5f1e8!important;--jyc-canvas-raised:#fbf8f1!important;--jyc-surface:#fffdf8!important;--jyc-text-strong:#191827!important;--jyc-muted:#5f5c6b!important;--jyc-accent:#625889!important;--jyc-gold:#76572b!important}
 html[data-theme="dark"]{--jyc-canvas:#080d1c!important;--jyc-canvas-raised:#0d1629!important;--jyc-surface:#111b31!important;--jyc-text-strong:#f7f5ff!important;--jyc-muted:#c0c4da!important;--jyc-accent:#c8bcff!important;--jyc-gold:#e7d19b!important}
+
+
+/* Route shells inherit the same semantic palette as the rest of the public portal. */
+html[data-theme] .public-app .jyc-history-page,
+html[data-theme] .public-app .team-page {
+  color: var(--jyc-text) !important;
+  background-color: var(--jyc-canvas);
+}
+html[data-theme] .public-app :is(.jyc-history-page,.team-page) :where(h1,h2,h3,h4,strong,b) {
+  color: var(--jyc-text-strong);
+}
+html[data-theme] .public-app :is(.jyc-history-page,.team-page) :where(p,li,small,.muted,.muted-note) {
+  color: var(--jyc-muted);
+}
