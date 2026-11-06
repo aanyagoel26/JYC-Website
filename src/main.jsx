@@ -98,6 +98,7 @@ import './styles/jyc-cohesive-experience.css';
 import './styles/jyc-hero-layout-fix.css';
 import './styles/jyc-team-experience.css';
 import './styles/jyc-theme-contract.css';
+import './styles/jyc-atmosphere.css';
 
 const logo='/assets/jyc-logo.avif';
 const logoTiny='/assets/jyc-logo-48.avif';
