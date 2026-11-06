@@ -8,7 +8,7 @@ const TRACK = [
 ];
 
 function Track({ reverse = false, label }) {
-  return <div className={\`jyc-campus-marquee__track \${reverse ? 'is-reverse' : ''}\`} aria-hidden="true">
+  return <div className={`jyc-campus-marquee__track ${reverse ? 'is-reverse' : ''}`} aria-hidden="true">
     {[0,1].map(copy => <div className="jyc-campus-marquee__group" key={copy}>
       {TRACK.map(([number, name]) => <span className="jyc-campus-marquee__item" key={number}>
         <small>{number}</small><strong>{name}</strong><i aria-hidden="true">✳</i>
