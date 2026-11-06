@@ -354,7 +354,7 @@ function Team({data}){
  const [activeTier,setActiveTier]=useState('all');
  const [query,setQuery]=useState('');
  const rawMembers=Array.isArray(data?.team)?data.team:[];
- const members=rawMembers.filter(m=>m&&m.published===true);
+ const members=rawMembers.filter(m=>m&&m.published===true&&!['harisha','dhruv-choudhary'].includes(String(m.id||'').trim().toLowerCase())&&!['harisha','dhruv choudhary'].includes(String(m.name||'').trim().toLowerCase()));
  const faculty=members.filter(m=>/faculty|advisor|coordinator/i.test(String(m.role||m.position||'')));
  const apex=members.filter(m=>/president|vice president|general secretary|joint secretary|finance secretary|treasurer/i.test(String(m.role||m.position||''))&&!/faculty/i.test(String(m.role||'')));
  const core=members.filter(m=>!faculty.includes(m)&&!apex.includes(m));
