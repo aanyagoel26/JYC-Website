@@ -23,6 +23,11 @@ check('light palette uses warm paper, violet and champagne tokens',contract.incl
 check('dark palette uses midnight, lavender and champagne tokens',contract.includes('--jyc-canvas: #080d1c;')&&contract.includes('--jyc-accent: #c8bcff;')&&contract.includes('--jyc-gold: #e7d19b;'));
 check('legacy red and cyan aliases resolve through the active JYC accent',contract.includes('--accent-red: var(--jyc-accent);')&&contract.includes('--tech-cyan: var(--jyc-accent);')&&contract.includes('--tech-crimson: var(--jyc-accent);'));
 check('legacy surfaces and text aliases resolve through canonical tokens',contract.includes('--bg-card: var(--jyc-surface);')&&contract.includes('--text-primary: var(--jyc-text-strong);')&&contract.includes('--text-muted: var(--jyc-muted);'));
+check('legacy cream and ivory aliases remain readable on dark surfaces',contract.includes('--cream: var(--jyc-text-strong);')&&contract.includes('--ivory: #f7f5ff;'));
+check('public text baseline uses readable body sizing and line height',contract.includes('font-size: 16px;')&&contract.includes('line-height: 1.68;'));
+check('homepage nested theme variables are reset to canonical palettes',contract.includes('html[data-theme="dark"] .jyc-editorial-home.jyc-home')&&contract.includes('--jh-bg: var(--jyc-canvas);')&&contract.includes('--jh-muted: var(--jyc-muted);'));
+check('JYC57 page headings and body copy use separate readable tokens',contract.includes('.jyc57-page :where(p,small,.jyc57-meta')&&contract.includes('.jyc57-page :where(h1,h2,h3,h4,strong,b)'));
+check('history and team route shells inherit canonical text tokens',contract.includes('.jyc-history-page')&&contract.includes('.team-page'));
 check('shared public surfaces inherit theme tokens',contract.includes('.public-app :where(.card,.featured,.contact-card,.search-modal'));
 check('portal-mounted navigation and search surfaces inherit theme tokens',contract.includes('html[data-theme="dark"] .nav')&&contract.includes('html[data-theme="dark"] .search-modal')&&contract.includes('html[data-theme="light"] .more-sheet'));
 check('reduced-motion is respected by final public contract',contract.includes('@media (prefers-reduced-motion: reduce)'));
