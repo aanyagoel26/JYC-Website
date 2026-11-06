@@ -1,34 +1,34 @@
 /* Portrait-backed student coordinators and advisors supplied for the 2026–27 club directory.
    This roster is intentionally separate from the JYC Team page and its leadership dataset. */
 export const JYC_CLUB_MEMBER_ROSTER = {
-  Aakriti: [{name:'Aaryag Garg',role:'Coordinator',photo:'/assets/club-members/member-01.webp'}],
-  'Neural Nexus': [{name:'Adarsh',role:'Advisor',photo:'/assets/club-members/member-02.webp'}],
+  Aakriti: [{name:'Aaryag Garg',role:'Coordinator'}],
+  'Neural Nexus': [{name:'Adarsh',role:'Advisor'}],
   Zencoders: [
-    {name:'Aditya Garg',role:'Advisor',photo:'/assets/club-members/member-03.webp'},
-    {name:'Chandrima',role:'Coordinator',photo:'/assets/club-members/member-11.webp'}
+    {name:'Aditya Garg',role:'Advisor'},
+    {name:'Chandrima',role:'Coordinator'}
   ],
-  Dronotics: [{name:'Aman Gandotra',role:'Coordinator',photo:'/assets/club-members/member-04.webp'}],
-  Eloquence: [{name:'Ananya',role:'Advisor',photo:'/assets/club-members/member-05.webp'}],
+  Dronotics: [{name:'Aman Gandotra',role:'Coordinator'}],
+  Eloquence: [{name:'Ananya',role:'Advisor'}],
   CypherX: [
-    {name:'Ankit Sharma',role:'Coordinator',photo:'/assets/club-members/member-06.webp'},
-    {name:'Chandrima',role:'Advisor',photo:'/assets/club-members/member-11.webp'}
+    {name:'Ankit Sharma',role:'Coordinator'},
+    {name:'Chandrima',role:'Advisor'}
   ],
-  JODC: [{name:'Anmol Bhatnagar',role:'Coordinator',photo:'/assets/club-members/member-07.webp'}],
-  CICR: [{name:'Aryan Varshney',role:'Coordinator',photo:'/assets/club-members/member-08.webp'}],
-  Fortissimo: [{name:'Bhoomi Aggarwal',role:'Advisor',photo:'/assets/club-members/member-09.webp'}],
+  JODC: [{name:'Anmol Bhatnagar',role:'Coordinator'}],
+  CICR: [{name:'Aryan Varshney',role:'Coordinator'}],
+  Fortissimo: [{name:'Bhoomi Aggarwal',role:'Advisor'}],
   Shorts: [
-    {name:'Deepanshu Khurana',role:'Advisor',photo:'/assets/club-members/member-12.webp'},
-    {name:'Divyanshi Chaudhary',role:'Coordinator',photo:'/assets/club-members/member-13.webp'}
+    {name:'Deepanshu Khurana',role:'Advisor'},
+    {name:'Divyanshi Chaudhary',role:'Coordinator'}
   ],
   Prismatic: [
-    {name:'Eishit Balyan',role:'Coordinator',photo:'/assets/club-members/member-14.webp'},
-    {name:'Krishnika Goel',role:'Advisor',photo:'/assets/club-members/member-20.webp'}
+    {name:'Eishit Balyan',role:'Coordinator'},
+    {name:'Krishnika Goel',role:'Advisor'}
   ],
-  Panache: [{name:'Hannah',role:'Senior Advisor',photo:'/assets/club-members/member-15.webp'}],
+  Panache: [{name:'Hannah',role:'Senior Advisor'}],
   BDS: [
-    {name:'Ishaan Srivastava',role:'Advisor',photo:'/assets/club-members/member-16.webp'},
-    {name:'Ishan Mehrotra',role:'Coordinator',photo:'/assets/club-members/member-17.webp'}
+    {name:'Ishaan Srivastava',role:'Advisor'},
+    {name:'Ishan Mehrotra',role:'Coordinator'}
   ],
-  Cinekala: [{name:'Ishanvi Johari',role:'Coordinator',photo:'/assets/club-members/member-18.webp'}],
-  Abhivyakti: [{name:'Kashvi Khanna',role:'Coordinator',photo:'/assets/club-members/member-19.webp'}]
+  Cinekala: [{name:'Ishanvi Johari',role:'Coordinator'}],
+  Abhivyakti: [{name:'Kashvi Khanna',role:'Coordinator'}]
 };
