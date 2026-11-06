@@ -24,7 +24,7 @@ const shaderChecks=[
  ['shader uses procedural FBM domain warping and topographic contour lines',shader.includes('float fbm(')&&shader.includes('float contour =')&&shader.includes('uPointer')],
  ['shader uses a defined monotonic fade function at the edge of the visual field',shader.includes('1.0 - smoothstep(0.18,0.98,length(p) * 0.52)')],
  ['shader adds layered twinkling star particles and a second drifting depth plane',shader.includes('float starLayer(')&&shader.includes('starLayer(p * 1.37')&&shader.includes('float stars =')],
- ['pointer interaction adds a damped concentric ripple and a flowing light sweep',shader.includes('float ripple =')&&shader.includes('float lightSweep =')&&shader.includes('pointerDistance')],
+ ['pointer interaction adds a damped concentric ripple without a light sweep',shader.includes('float ripple =')&&shader.includes('pointerDistance')&&!shader.includes('lightSweep')],
  ['GLSL source uses valid template literals without escaped delimiters',shader.includes('const vertex = `#version 300 es')&&shader.includes('const fragment = `#version 300 es')&&!shader.includes('const vertex = \\\\`')&&!shader.includes('const fragment = \\\\`')],
  ['shader adapts its palette to the current light and dark theme',shader.includes('uTheme.value = document.documentElement.dataset.theme')&&shader.includes('vec3 violet')&&shader.includes('vec3 gold')],
  ['WebGL context uses bounded pixel ratio and a reduced workload on constrained devices',shader.includes('Math.min(window.devicePixelRatio')&&shader.includes('lowPower || coarse ? 1 : 1.35')&&shader.includes('uIntensity')],

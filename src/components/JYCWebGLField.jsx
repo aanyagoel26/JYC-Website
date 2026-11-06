@@ -58,7 +58,6 @@ void main() {
   float pointerDistance = length(p - pointer * 0.22);
   float ripplePhase = abs(fract(pointerDistance * 3.4 - time * 0.28) - 0.5);
   float ripple = (1.0 - smoothstep(0.018, 0.055, ripplePhase)) * exp(-pointerDistance * 1.7) * 0.12;
-  float lightSweep = exp(-pow((p.y - sin(p.x * 1.25 + time * 0.7) * 0.17) * 17.0, 2.0)) * 0.045;
   float ribbons = smoothstep(0.42, 0.88, ridge + halo * 0.12) * (0.24 + 0.76 * field);
   vec3 violet = uTheme > 0.5 ? vec3(0.53,0.48,0.88) : vec3(0.34,0.29,0.55);
   vec3 blue = uTheme > 0.5 ? vec3(0.30,0.42,0.68) : vec3(0.47,0.48,0.66);
@@ -67,9 +66,9 @@ void main() {
   color = mix(color, gold, smoothstep(0.68,0.96,aurora) * 0.58);
   float line = contour * smoothstep(0.56,0.9,field) * 0.12;
   color += gold * line;
-  color += mix(blue, gold, 0.62) * (ripple + lightSweep);
+  color += mix(blue, gold, 0.62) * ripple;
   color += vec3(0.78, 0.82, 1.0) * stars * 0.8;
-  float alpha = (ribbons * 0.20 + radial * 0.045 + line + ripple + lightSweep + stars * 0.52) * uIntensity;
+  float alpha = (ribbons * 0.20 + radial * 0.045 + line + ripple + stars * 0.52) * uIntensity;
   alpha *= (1.0 - smoothstep(0.18,0.98,length(p) * 0.52));
   alpha += halo * 0.035 * uIntensity;
   fragColor = vec4(color, clamp(alpha, 0.0, 0.34));
