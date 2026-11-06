@@ -150,7 +150,7 @@ html[data-theme="light"] .public-app :where(.card,.featured,.contact-card,.join-
   background: radial-gradient(circle, var(--jyc-accent-soft) 0%, var(--jyc-gold-soft) 42%, transparent 74%) !important;
 }
 .jyc-emblem-badge {
-  box-shadow: 0 14px 36px var(--jyc-shadow-soft), 0 0 26px var(--jyc-accent-soft);
+  box-shadow: 0 14px 36px rgba(0,0,0,.18), 0 0 26px var(--jyc-accent-soft);
   border-color: var(--jyc-line-strong) !important;
 }
 html[data-theme="light"] .jyc-emblem-badge {
