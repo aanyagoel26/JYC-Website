@@ -58,7 +58,7 @@ html[data-theme="light"] {
   --dark: #191827;
   --dark-surface: #252331;
   --paper: var(--jyc-canvas);
-  --cream: var(--jyc-canvas);
+  --cream: var(--jyc-text-strong);
   --ivory: #fffdf8;
   --accent: var(--jyc-accent);
   --red: var(--jyc-accent);
@@ -162,7 +162,7 @@ html[data-theme="dark"] {
   --dark: #080d1c;
   --dark-surface: #111b31;
   --paper: var(--jyc-canvas);
-  --cream: var(--jyc-canvas);
+  --cream: var(--jyc-text-strong);
   --ivory: #f7f5ff;
   --accent: var(--jyc-accent);
   --red: var(--jyc-accent);
@@ -376,4 +376,147 @@ html[data-theme="dark"] .search-modal .search-input-wrap {
   background: var(--jyc-canvas-raised) !important;
   color: var(--jyc-text-strong) !important;
   border-color: var(--jyc-line) !important;
+}
+
+
+/* Readability baseline across every public route. */
+.public-app {
+  color: var(--jyc-text-strong);
+  font-size: 16px;
+  line-height: 1.6;
+}
+.public-app :where(p,li,dd,figcaption) {
+  color: var(--jyc-muted);
+  line-height: 1.68;
+}
+.public-app :where(h1,h2,h3,h4,h5,h6,strong,b,label,legend) {
+  color: var(--jyc-text-strong);
+}
+.public-app :where(small,.eyebrow,.kicker,.meta,.caption,.helper-text,.form-hint,.event-meta,.club-meta,.team-meta) {
+  color: var(--jyc-muted);
+}
+.public-app :where(a:not(.btn),button:not(.btn),[role="button"]) {
+  text-underline-offset: .18em;
+}
+.public-app :where(input,textarea,select) {
+  color: var(--jyc-text-strong);
+  background: var(--jyc-surface);
+  border-color: var(--jyc-line-strong);
+}
+.public-app :where(input,textarea,select)::placeholder {
+  color: var(--jyc-muted);
+  opacity: 1;
+}
+.public-app :where(.eyebrow,.kicker,.section-kicker,.section-label,.meta-label) {
+  color: var(--jyc-gold);
+}
+.public-app :where(.card,.event-card,.club-card,.team-card,.announcement-card,.hub-card,.jyc57-event-card,.jyc57-feature,.jyc57-archive-card) {
+  color: var(--jyc-text-strong);
+}
+.public-app :where(.card p,.event-card p,.club-card p,.team-card p,.announcement-card p,.hub-card p,.jyc57-event-card p) {
+  color: var(--jyc-muted);
+}
+
+/* Homepage had an older black/bronze theme nested inside the site theme. */
+html[data-theme="light"] .jyc-editorial-home.jyc-home {
+  --jh-bg: var(--jyc-canvas);
+  --jh-surface: var(--jyc-surface);
+  --jh-surface-elevated: var(--jyc-surface-strong);
+  --jh-surface-glass: rgba(255,253,248,.92);
+  --jh-ink: var(--jyc-text-strong);
+  --jh-muted: var(--jyc-muted);
+  --jh-accent: var(--jyc-accent);
+  --jh-gold: var(--jyc-gold);
+  --jh-cyan: var(--jyc-accent);
+  --jh-line: var(--jyc-line);
+  --jh-line-accent: var(--jyc-line-strong);
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home {
+  --jh-bg: var(--jyc-canvas);
+  --jh-surface: var(--jyc-surface);
+  --jh-surface-elevated: var(--jyc-surface-strong);
+  --jh-surface-glass: rgba(13,22,41,.92);
+  --jh-ink: var(--jyc-text-strong);
+  --jh-muted: var(--jyc-muted);
+  --jh-accent: var(--jyc-accent);
+  --jh-gold: var(--jyc-gold);
+  --jh-cyan: var(--jyc-accent);
+  --jh-line: var(--jyc-line);
+  --jh-line-accent: var(--jyc-line-strong);
+}
+.jyc-editorial-home.jyc-home :where(p,li,small,.jh-muted,.jh-meta,.jh-kicker,.jh-eyebrow) {
+  color: var(--jh-muted);
+}
+.jyc-editorial-home.jyc-home :where(h1,h2,h3,h4,strong,b) {
+  color: var(--jh-ink);
+}
+.jyc-editorial-home.jyc-home :where(.jh-btn-primary,.jh-cta-primary) {
+  background: var(--jyc-gold);
+  color: #101a2d;
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home :where(.jh-btn-primary,.jh-cta-primary) {
+  background: var(--jyc-gold);
+  color: #080d1c;
+}
+.jyc-editorial-home.jyc-home :where(.jh-btn-glass,.jh-btn-secondary) {
+  border-color: var(--jyc-line-strong);
+  color: var(--jh-ink);
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-hero-dither-layer {
+  opacity: .16;
+}
+
+/* Legacy page families now inherit the same high-contrast readable palette. */
+html[data-theme="light"] .jyc57-page,
+html[data-theme="light"] .jyc-history-page,
+html[data-theme="light"] .jyc-team-page,
+html[data-theme="light"] .jyc-archive-page {
+  color: var(--jyc-text-strong);
+}
+html[data-theme="dark"] .jyc57-page,
+html[data-theme="dark"] .jyc-history-page,
+html[data-theme="dark"] .jyc-team-page,
+html[data-theme="dark"] .jyc-archive-page {
+  color: var(--jyc-text-strong);
+}
+.jyc57-page :where(p,small,.jyc57-meta,.jyc57-list-head,.jyc57-event-date span) {
+  color: var(--jyc-muted);
+}
+.jyc57-page :where(h1,h2,h3,h4,strong,b) { color: var(--jyc-text-strong); }
+.jyc57-page :where(.jyc57-feature,.jyc57-event-card,.jyc57-event-date,.jyc57-search) {
+  background-color: var(--jyc-surface);
+  color: var(--jyc-text-strong);
+  border-color: var(--jyc-line);
+}
+.jyc57-page .jyc57-feature :where(strong,p,small) { color: var(--jyc-text-strong); }
+.jyc57-page .jyc57-feature span:last-child { color: var(--jyc-gold); }
+.jyc57-page :where(.jyc57-segment button,.jyc57-category-row button,.jyc57-year-switch button) {
+  color: var(--jyc-text-strong);
+  background: var(--jyc-surface);
+  border-color: var(--jyc-line);
+}
+.jyc57-page :where(.jyc57-segment button.active,.jyc57-category-row button.active,.jyc57-year-switch button.active) {
+  color: #fff;
+  background: var(--jyc-accent);
+  border-color: var(--jyc-accent);
+}
+.jyc57-page .jyc57-pill.live {
+  color: #fff;
+  background: #246b4b;
+  border-color: #246b4b;
+}
+
+/* Keep editorial feature surfaces readable in both themes. */
+html[data-theme="light"] .public-app :where(.jyc-route-card,.jyc-hub-signal-card,.jyc-photo-story-rail button) {
+  color: var(--jyc-text-strong);
+  background-color: var(--jyc-surface);
+  border-color: var(--jyc-line);
+}
+html[data-theme="dark"] .public-app :where(.jyc-route-card,.jyc-hub-signal-card,.jyc-photo-story-rail button) {
+  color: var(--jyc-text-strong);
+  background-color: var(--jyc-surface);
+  border-color: var(--jyc-line);
+}
+.public-app :where(.jyc-route-card p,.jyc-hub-signal-card em,.jyc-route-note p,.jyc-photo-story-rail small) {
+  color: var(--jyc-muted);
 }
