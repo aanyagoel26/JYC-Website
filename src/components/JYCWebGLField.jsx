@@ -89,15 +89,51 @@ void main() {
   dayColor = mix(dayColor, vec3(0.97,0.91,0.79), cloudLight * 0.38);
   dayColor += dayGold * (sunDisc * 0.72 + dayRays + dayDust * 0.35);
   float dayLine = contour * smoothstep(0.56,0.9,field) * 0.035 * (1.0 - uTheme);
+
+  // Depth plane 1: distant atmospheric haze and soft horizon falloff.
+  float horizon = exp(-pow((p.y + 0.24 + sin(p.x * 0.8 + time * 0.15) * 0.035) * 3.2, 2.0));
+  float aerialPerspective = smoothstep(-0.65, 0.65, p.y) * 0.16;
+  vec3 dayHaze = mix(vec3(0.76,0.79,0.82), vec3(0.88,0.73,0.58), smoothstep(-0.45,0.35,p.y));
+  vec3 nightHaze = mix(vec3(0.10,0.16,0.30), vec3(0.24,0.20,0.39), smoothstep(-0.5,0.45,p.y));
+  dayColor = mix(dayColor, dayHaze, horizon * 0.42 + aerialPerspective * 0.18);
+  nightColor = mix(nightColor, nightHaze, horizon * 0.25 + aerialPerspective * 0.12);
+
+  // Depth plane 2: broad, low-frequency cloud banks drift independently.
+  float distantCloud = fbm(p * 1.05 + vec2(-time * 0.035, time * 0.012));
+  float cloudShadow = smoothstep(0.48,0.78,distantCloud + sin(p.x * 2.0 + time * 0.1) * 0.07);
+  float cloudEdge = smoothstep(0.56,0.84,distantCloud);
+  float dayCloudShade = cloudShadow * (1.0-cloudLight) * (1.0-uTheme) * 0.10;
+  float nightNebula = smoothstep(0.53,0.82,fbm(p * 1.7 + vec2(time * 0.018, -time * 0.014))) * uTheme;
+  dayColor = mix(dayColor, vec3(0.72,0.70,0.70), dayCloudShade);
+  nightColor = mix(nightColor, vec3(0.30,0.25,0.48), nightNebula * 0.24);
+
+  // Depth plane 3: nearer floating dust / firefly bokeh, intentionally sparse.
+  vec2 nearP = p * 18.0 + vec2(-time * 0.11, time * 0.07);
+  vec2 nearCell = floor(nearP);
+  vec2 nearLocal = fract(nearP) - 0.5;
+  float nearSeed = hash21(nearCell + 71.3);
+  vec2 nearOffset = vec2(hash21(nearCell + 17.1), hash21(nearCell + 29.4)) * 0.68 - 0.34;
+  float nearDot = 1.0 - smoothstep(0.018,0.055,length(nearLocal-nearOffset));
+  float nearMotes = nearDot * step(0.982,nearSeed) * (0.65 + 0.35*sin(time*2.2+nearSeed*60.0));
+  float dayMotes = nearMotes * (1.0-uTheme);
+  float nightMotes = nearMotes * uTheme;
+
+  // Separate soft optical halos add depth without a sweeping flare.
+  float vignette = smoothstep(1.12,0.18,length(p * vec2(0.78,1.05)));
+  float edgeAtmosphere = (1.0-vignette) * 0.12;
   vec3 color = mix(dayColor, nightColor, uTheme);
   color += mix(dayGold * dayLine, nightGold * nightLine, uTheme);
-  color += mix(dayGold * dayDust * 0.4, nightGold * stars * 0.12, uTheme);
+  color += mix(dayGold * dayDust * 0.4 + vec3(0.98,0.78,0.48)*dayMotes*0.55,
+               nightGold * stars * 0.12 + vec3(0.62,0.72,1.0)*nightMotes*0.62, uTheme);
   color += mix(daySky, nightBlue, uTheme) * ripple;
+  color = mix(color, mix(dayHaze,nightHaze,uTheme), edgeAtmosphere);
+  float depthAlpha = (cloudEdge * 0.045 + dayMotes * 0.10) * (1.0-uTheme)
+                   + (nightNebula * 0.045 + nightMotes * 0.12) * uTheme;
   float alpha = ((cloudLight * 0.10 + sunHalo * 0.09 + sunDisc * 0.12 + dayRays + dayLine + dayDust * 0.35) * (1.0-uTheme)
-              + (ribbons * 0.20 + radial * 0.045 + nightLine + stars * 0.52 + moon * 0.12) * uTheme + ripple) * uIntensity;
+              + (ribbons * 0.20 + radial * 0.045 + nightLine + stars * 0.52 + moon * 0.12) * uTheme + ripple + depthAlpha) * uIntensity;
   alpha *= (1.0 - smoothstep(0.18,0.98,length(p) * 0.52));
   alpha += halo * 0.035 * uIntensity;
-  fragColor = vec4(color, clamp(alpha, 0.0, 0.34));
+  fragColor = vec4(color, clamp(alpha, 0.0, 0.38));
 }`;
 
 const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;

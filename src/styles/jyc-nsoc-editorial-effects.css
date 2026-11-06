@@ -168,3 +168,36 @@ html[data-theme="dark"] .public-app .jyc-webgl-field {
 html[data-theme="dark"] .public-app .jyc-webgl-field-fallback {
   background:radial-gradient(ellipse at 50% 40%,rgba(132,145,221,.24),transparent 58%),radial-gradient(ellipse at 76% 68%,rgba(210,183,125,.13),transparent 60%);
 }
+
+/* Additional atmospheric depth: layered parallax-like gradients stay independent
+   from content and remain subtle enough to preserve legibility. */
+.public-app .jyc-editorial-home.jyc-home {
+  background-image:radial-gradient(ellipse at 14% 16%,var(--jyc-editorial-glow),transparent 34rem),radial-gradient(ellipse at 88% 42%,var(--jyc-editorial-gold),transparent 30rem);
+  background-attachment:scroll;
+}
+html[data-theme="light"] .public-app .jyc-editorial-home.jyc-home::before {
+  opacity:.34;background-size:84px 84px;
+  mask-image:linear-gradient(180deg,rgba(0,0,0,.8),transparent 68%);
+}
+html[data-theme="light"] .public-app .jyc-editorial-home.jyc-home::after {
+  background:radial-gradient(ellipse at 18% 12%,rgba(246,211,158,.28),transparent 34rem),radial-gradient(ellipse at 82% 48%,rgba(174,190,209,.20),transparent 38rem),radial-gradient(ellipse at 50% 92%,rgba(225,204,166,.16),transparent 32rem);
+}
+html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home::before {
+  opacity:.52;background-size:68px 68px;
+  mask-image:linear-gradient(180deg,rgba(0,0,0,.9),transparent 78%);
+}
+html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home::after {
+  background:radial-gradient(ellipse at 16% 12%,rgba(83,103,178,.20),transparent 38rem),radial-gradient(ellipse at 84% 48%,rgba(122,91,173,.16),transparent 34rem),radial-gradient(ellipse at 48% 94%,rgba(56,86,142,.13),transparent 40rem);
+}
+.public-app .jyc-webgl-field {filter:saturate(1.06);}
+html[data-theme="light"] .public-app .jyc-webgl-field {filter:saturate(.88) contrast(.96);}
+html[data-theme="dark"] .public-app .jyc-webgl-field {filter:saturate(1.12) contrast(1.04);}
+.public-app .jh-hero-visual::after {
+  content:"";position:absolute;inset:8% 4%;z-index:1;pointer-events:none;border-radius:50%;
+  background:radial-gradient(ellipse at 50% 48%,transparent 44%,color-mix(in srgb,var(--jyc-canvas,#080d1c) 16%,transparent) 100%);
+  opacity:.48;filter:blur(16px);
+}
+html[data-theme="light"] .public-app .jh-hero-visual::after {opacity:.28;}
+@media(prefers-reduced-motion:reduce) {
+  .public-app .jyc-webgl-field {filter:none;}
+}
