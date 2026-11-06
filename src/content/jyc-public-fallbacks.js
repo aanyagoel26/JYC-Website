@@ -15,8 +15,6 @@ const PUBLIC_TEAM_FALLBACK=[
  {id:'shriya-singh',name:'Shriya Singh',role:'Digital Head',published:true,bio:'From turning ideas into engaging content to shaping the club’s online presence, she brings creativity, consistency, and strategy to every post, reel, and campaign. With an eye for trends and a mind wired for digital storytelling, Shriya ensures JYC stays active, relevant, and impossible to scroll past. Behind every aesthetic feed, bold concept, and late-night upload is someone making sure the digital side of JYC never misses a beat. 📲',photo:'/assets/team/shriya-singh.webp'},
  {id:'faculty-vinay-anand-tikkiwal',name:'Dr. Vinay Anand Tikkiwal',role:'Faculty Advisor',published:true,bio:'Listed in the supplied JYC orientation material as a Faculty Advisor.',photo:''},
  {id:'faculty-pankaj-kumar-srivastava',name:'Dr. Pankaj Kumar Srivastava',role:'Faculty Advisor',published:true,bio:'Faculty advisor supporting the JYC student ecosystem.',photo:''},
- {id:'harisha',name:'Harisha',role:'Creative Head',published:true,bio:'Listed in the supplied 2026–27 orientation material as Creative Head of the JYC core committees.',photo:''},
- {id:'dhruv-choudhary',name:'Dhruv Choudhary',role:'Management Head',published:true,bio:'Listed in the supplied 2026–27 orientation material as Management Head of the JYC core committees.',photo:''}
 ];
 
 const JAI_OFFICIAL_MEDIA=[
