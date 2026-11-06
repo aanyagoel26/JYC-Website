@@ -1,4 +1,4 @@
-/* Portrait-backed student coordinators and advisors supplied for the 2026–27 club directory.
+/* Student coordinators and advisors supplied for the 2026–27 club directory.
    This roster is intentionally separate from the JYC Team page and its leadership dataset. */
 export const JYC_CLUB_MEMBER_ROSTER = {
   Aakriti: [{name:'Aaryag Garg',role:'Coordinator'}],
