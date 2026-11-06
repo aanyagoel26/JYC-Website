@@ -53,22 +53,48 @@ void main() {
   float contour = 1.0 - smoothstep(0.0, 0.035, abs(fract(aurora * 12.0) - 0.5));
   float halo = exp(-length(p - pointer * 0.22) * 2.5);
   float radial = exp(-length(p) * 2.3);
-  float stars = starLayer(p + vec2(time * 0.035, -time * 0.018), 34.0, 0.72)
-              + starLayer(p * 1.37 - vec2(time * 0.02, time * 0.03), 57.0, 0.42);
+  float stars = (starLayer(p + vec2(time * 0.035, -time * 0.018), 34.0, 0.72)
+              + starLayer(p * 1.37 - vec2(time * 0.02, time * 0.03), 57.0, 0.42)) * uTheme;
   float pointerDistance = length(p - pointer * 0.22);
   float ripplePhase = abs(fract(pointerDistance * 3.4 - time * 0.28) - 0.5);
   float ripple = (1.0 - smoothstep(0.018, 0.055, ripplePhase)) * exp(-pointerDistance * 1.7) * 0.12;
-  float ribbons = smoothstep(0.42, 0.88, ridge + halo * 0.12) * (0.24 + 0.76 * field);
-  vec3 violet = uTheme > 0.5 ? vec3(0.53,0.48,0.88) : vec3(0.34,0.29,0.55);
-  vec3 blue = uTheme > 0.5 ? vec3(0.30,0.42,0.68) : vec3(0.47,0.48,0.66);
-  vec3 gold = uTheme > 0.5 ? vec3(0.91,0.79,0.53) : vec3(0.61,0.45,0.22);
-  vec3 color = mix(violet, blue, smoothstep(0.2,0.9,field));
-  color = mix(color, gold, smoothstep(0.68,0.96,aurora) * 0.58);
-  float line = contour * smoothstep(0.56,0.9,field) * 0.12;
-  color += gold * line;
-  color += mix(blue, gold, 0.62) * ripple;
-  color += vec3(0.78, 0.82, 1.0) * stars * 0.8;
-  float alpha = (ribbons * 0.20 + radial * 0.045 + line + ripple + stars * 0.52) * uIntensity;
+  float ribbons = smoothstep(0.42, 0.88, ridge + halo * 0.12) * (0.24 + 0.76 * field) * uTheme;
+  vec2 moonPoint = p - vec2(0.48, 0.22);
+  float moonDisc = 1.0 - smoothstep(0.105, 0.12, length(moonPoint));
+  float moonShadow = 1.0 - smoothstep(0.095, 0.11, length(moonPoint - vec2(0.055, 0.025)));
+  float moon = max(0.0, moonDisc - moonShadow) * uTheme;
+  vec3 nightViolet = vec3(0.53,0.48,0.88);
+  vec3 nightBlue = vec3(0.30,0.42,0.68);
+  vec3 nightGold = vec3(0.91,0.79,0.53);
+  vec3 nightColor = mix(nightViolet, nightBlue, smoothstep(0.2,0.9,field));
+  nightColor = mix(nightColor, nightGold, smoothstep(0.68,0.96,aurora) * 0.58);
+  float nightLine = contour * smoothstep(0.56,0.9,field) * 0.12 * uTheme;
+  nightColor += nightGold * nightLine + vec3(0.78,0.82,1.0) * stars * 0.8 + nightGold * moon * 0.9;
+
+  // Day identity: warm sunrise, soft cloud banks and drifting pollen-like motes.
+  vec2 sunPoint = p - vec2(-0.43, 0.16);
+  float sunDistance = length(sunPoint);
+  float sunDisc = 1.0 - smoothstep(0.19, 0.205, sunDistance);
+  float sunHalo = exp(-sunDistance * 3.4) * 0.32;
+  float dayCloudNoise = fbm(p * 2.25 + vec2(time * 0.10, -time * 0.035) + vec2(field));
+  float cloudBand = smoothstep(0.48, 0.76, dayCloudNoise + sin(p.y * 4.0 + p.x * 1.7) * 0.10);
+  float cloudLight = cloudBand * (0.48 + 0.52 * fbm(p * 5.2 - time * 0.06));
+  float dayDust = starLayer(p + vec2(time * 0.025, time * 0.018), 23.0, 0.35) * (1.0 - uTheme);
+  float dayRays = pow(max(0.0, dot(normalize(sunPoint + vec2(0.0001)), normalize(vec2(sin(time * 0.12), cos(time * 0.12))))), 18.0) * exp(-sunDistance * 1.25) * (1.0 - uTheme) * 0.10;
+  vec3 dayLavender = vec3(0.56,0.53,0.70);
+  vec3 daySky = vec3(0.63,0.76,0.83);
+  vec3 dayGold = vec3(0.91,0.69,0.39);
+  vec3 dayColor = mix(dayLavender, daySky, smoothstep(-0.35,0.65,p.y));
+  dayColor = mix(dayColor, vec3(0.96,0.82,0.64), sunHalo * 0.72);
+  dayColor = mix(dayColor, vec3(0.97,0.91,0.79), cloudLight * 0.38);
+  dayColor += dayGold * (sunDisc * 0.72 + dayRays + dayDust * 0.35);
+  float dayLine = contour * smoothstep(0.56,0.9,field) * 0.035 * (1.0 - uTheme);
+  vec3 color = mix(dayColor, nightColor, uTheme);
+  color += mix(dayGold * dayLine, nightGold * nightLine, uTheme);
+  color += mix(dayGold * dayDust * 0.4, nightGold * stars * 0.12, uTheme);
+  color += mix(daySky, nightBlue, uTheme) * ripple;
+  float alpha = ((cloudLight * 0.10 + sunHalo * 0.09 + sunDisc * 0.12 + dayRays + dayLine + dayDust * 0.35) * (1.0-uTheme)
+              + (ribbons * 0.20 + radial * 0.045 + nightLine + stars * 0.52 + moon * 0.12) * uTheme + ripple) * uIntensity;
   alpha *= (1.0 - smoothstep(0.18,0.98,length(p) * 0.52));
   alpha += halo * 0.035 * uIntensity;
   fragColor = vec4(color, clamp(alpha, 0.0, 0.34));

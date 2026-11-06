@@ -145,3 +145,26 @@ html[data-theme="light"] .public-app .jyc-webgl-field-fallback {
   .public-app .jyc-webgl-field {opacity:.34}
   .public-app .jyc-webgl-field-canvas {animation:none!important}
 }
+
+/* Separate visual identities: daylight is a warm paper-and-sunrise atmosphere;
+   night is a deep observatory sky. The shader follows the same theme switch. */
+html[data-theme="light"] .public-app .jh-hero-visual {
+  background:radial-gradient(ellipse at 26% 30%,rgba(248,220,169,.36),transparent 42%),radial-gradient(ellipse at 76% 72%,rgba(174,187,205,.24),transparent 48%);
+}
+html[data-theme="light"] .public-app .jyc-webgl-field {
+  opacity:.72;mix-blend-mode:multiply;
+  mask-image:radial-gradient(ellipse at 42% 44%,#000 0%,rgba(0,0,0,.86) 48%,transparent 82%);
+}
+html[data-theme="light"] .public-app .jyc-webgl-field-fallback {
+  background:radial-gradient(ellipse at 28% 36%,rgba(247,203,133,.28),transparent 44%),radial-gradient(ellipse at 68% 64%,rgba(128,151,183,.18),transparent 58%);
+}
+html[data-theme="dark"] .public-app .jh-hero-visual {
+  background:radial-gradient(ellipse at 50% 32%,rgba(75,89,158,.18),transparent 48%),radial-gradient(ellipse at 82% 70%,rgba(117,92,174,.13),transparent 44%);
+}
+html[data-theme="dark"] .public-app .jyc-webgl-field {
+  opacity:.88;mix-blend-mode:screen;
+  mask-image:radial-gradient(ellipse at 50% 46%,#000 0%,rgba(0,0,0,.9) 54%,transparent 84%);
+}
+html[data-theme="dark"] .public-app .jyc-webgl-field-fallback {
+  background:radial-gradient(ellipse at 50% 40%,rgba(132,145,221,.24),transparent 58%),radial-gradient(ellipse at 76% 68%,rgba(210,183,125,.13),transparent 60%);
+}
