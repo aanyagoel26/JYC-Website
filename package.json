@@ -51,7 +51,8 @@
     "qa:glb": "node scripts/qa-glb-integrity.mjs",
     "qa:atmosphere": "node scripts/qa-atmospheric-background.mjs",
     "qa:club-roster": "node scripts/qa-club-member-roster.mjs",
-    "qa:team-exclusions": "node scripts/qa-team-exclusions.mjs"
+    "qa:team-exclusions": "node scripts/qa-team-exclusions.mjs",
+    "qa:nsoc-effects": "node scripts/qa-nsoc-editorial-effects.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.118.0",

@@ -14,6 +14,7 @@ import './styles/innovation-inspired-3d.css';
 import './styles/jyc-design-system.css';
 import './styles/jyc-v203-restoration.css';
 import './styles/jyc-depth-motion.css';
+import './styles/jyc-nsoc-editorial-effects.css';
 import {JYCEditorialSystem} from './jyc-editorial-system.jsx';
 import {JYC_HUB_CONTENT, JYC_HUB_FAMILIES, hubProfile} from './v21-hub-content.js';
 import {JYC_HUB_SOURCE_REGISTRY,JYC_HUB_SOURCE_ONLY} from './jyc-hub-registry.js';
