@@ -26,6 +26,19 @@ export default function FlipCard({ front, back, children, className = '', label 
     requestAnimationFrame(() => frontTriggerRef.current?.focus({ preventScroll: true }));
   };
 
+  const handlePointerEnter = event => {
+    // Hover is a progressive enhancement for mouse/pen; touch continues to use tap.
+    if (event.pointerType === 'mouse' || event.pointerType === 'pen') {
+      setFlipped(true);
+    }
+  };
+
+  const handlePointerLeave = event => {
+    if (event.pointerType === 'mouse' || event.pointerType === 'pen') {
+      setFlipped(false);
+    }
+  };
+
   const handleKeyDown = event => {
     if (event.key === 'Escape' && flipped) {
       event.preventDefault();
@@ -40,6 +53,8 @@ export default function FlipCard({ front, back, children, className = '', label 
       aria-label={label}
       data-flipped={flipped ? 'true' : 'false'}
       onKeyDown={handleKeyDown}
+      onPointerEnter={handlePointerEnter}
+      onPointerLeave={handlePointerLeave}
     >
       <div className="flip-card__inner">
         <div
