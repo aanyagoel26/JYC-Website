@@ -2228,3 +2228,9 @@ footer a:hover{
 .public-app .section-head p{max-width:62ch;line-height:1.7}
 @media(max-width:620px){.public-app .section-head{margin-bottom:26px}.public-app .section-head :where(h1,h2){max-width:16ch;letter-spacing:-.03em}}
 @media(prefers-reduced-motion:reduce){.public-app :where(a,button,[role="button"]){scroll-behavior:auto}}
+
+/* Honest read-only fallback state when the live content service is unavailable. */
+.connection-notice.fallback{width:min(760px,calc(100vw - 24px));max-width:calc(100vw - 24px);justify-content:space-between;align-items:center;white-space:normal;line-height:1.45;border-radius:16px;background:color-mix(in srgb,var(--bg-card) 96%,#f5e7c6);border-color:color-mix(in srgb,var(--accent-red) 24%,var(--border-tech));color:var(--text-main)}
+.connection-notice.fallback span{flex:1;min-width:0}
+html[data-theme="dark"] .connection-notice.fallback{background:rgba(7,13,24,.96);border-color:rgba(56,189,248,.34);color:#dbeafe}
+@media(max-width:640px){.connection-notice.fallback{top:10px;align-items:flex-start;padding:10px 12px;gap:8px;font-size:11px}.connection-notice.fallback button{flex-shrink:0}}

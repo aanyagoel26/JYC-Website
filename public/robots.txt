@@ -10,4 +10,3 @@ Disallow: /projects/submit
 Disallow: /download
 Disallow: /qr/
 
-Sitemap: https://jyc-website-eight.vercel.app/sitemap.xml

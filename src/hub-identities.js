@@ -4,6 +4,7 @@
    Accent colours are deliberately muted and source-led; they are not replacement brands.
 */
 const BASE={
+  Shorts:{accent:'#8B5CF6',motif:'CAPTURE / CREATE',signature:'Short-form video and visual storytelling',traits:['Short-form Video','Storytelling','Creative Editing'],glyph:'▶',surface:'warm',shape:'film',display:'SHORT-FORM VIDEO'},
   Fortissimo:{accent:'#F59E0B',motif:'SOUND / PERFORMANCE',signature:'Music, ensemble and stage presence',traits:['Music','Performance','Ensemble'],glyph:'♫',surface:'warm',shape:'wave',display:'ACOUSTIC & BANDS'},
   BDS:{accent:'#F97316',motif:'RHYTHM / CULTURE',signature:'Bhangra, energy and group performance',traits:['Bhangra','Dance','Culture'],glyph:'✦',surface:'warm',shape:'pulse',display:'FOLK BHANGRA'},
   VamUnique:{accent:'#EC4899',motif:'MOVEMENT / EXPRESSION',signature:'Dance across contemporary and classical styles',traits:['Hip Hop','Contemporary','Bollywood'],glyph:'↗',surface:'warm',shape:'motion',display:'CHOREOGRAPHY'},

@@ -3,7 +3,7 @@ import {useNavigate} from 'react-router-dom';
 import {supabase} from './lib/supabase';
 import {uploadJycMedia} from './lib/media.js';
 import {jycToast,jycConfirm} from './lib/ui';
-import {CREATOR,CREATORS} from './lib/site-config.js';
+import {CREATOR} from './lib/site-config.js';
 import {AdminSystem,AdminReviews,AdminVerification,AdminVersions,AdminApprovals,AdminRegistrations,AdminAlbums,AdminMediaHealth,AdminProjectSubmissions} from './admin-extra.jsx';
 import {AdminTrustDashboard} from './admin-trust-dashboard.jsx';
 

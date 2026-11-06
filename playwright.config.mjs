@@ -7,6 +7,13 @@ const tabletCore = /homepage accessibility and responsive guardrails|brand text 
 const desktop1440 = /homepage accessibility and responsive guardrails|team accent and gallery album titles stay readable on the paper theme|brand text contrast stays readable in both light and dark themes|sitewide routes have no overflow, clipping, off-screen content or fixed-control overlap|sitewide routes load every visible image successfully and expose alt text|gallery archive uses deterministic responsive image frames|homepage records Core Web Vitals under the browser harness|featured event announcement never blocks mobile navigation/i;
 const mobile320 = /320px viewport keeps public routes and gallery cards inside the page|mobile homepage logo and primary actions stay clear of the fixed navigation dock/i;
 const desktopCore = /homepage accessibility and responsive guardrails|brand text contrast stays readable in both light and dark themes|sitewide routes have no overflow, clipping, off-screen content or fixed-control overlap|sitewide routes load every visible image successfully and expose alt text|gallery archive uses deterministic responsive image frames|homepage records Core Web Vitals under the browser harness|featured event announcement never blocks mobile navigation|production PWA manifest points to a real 512px WebP icon|editorial gallery uses tile-specific responsive image sizes|failed gallery photos use the neutral unavailable-photo asset, not a logo placeholder/i;
+const darkTheme = /JYC shared day\/night theme contract|JYC shared warm-paper day theme|theme toggle switches day\/night|homepage hero crest|About page remains structured/i;
+const searchMore = /JYC Search and More interaction contract/i;
+const teamDirectory = /JYC team directory interactions/i;
+const aboutInteractions = /About family cards open the matching filtered clubs directory/i;
+const crossBrowser = /browser-compat:/i;
+const textReadability = /JYC text readability/i;
+const motionAccessibility = /JYC motion system/i;
 
 export default defineConfig({
   testDir: './scripts',
@@ -32,6 +39,15 @@ export default defineConfig({
     { name: 'desktop-1280', grep: desktopCore, use: { viewport: { width: 1280, height: 900 } } },
     { name: 'desktop-1440', use: { viewport: { width: 1440, height: 900 } }, grep: desktop1440 },
     { name: 'desktop-1920', use: { viewport: { width: 1920, height: 1080 } }, grep: desktopCore },
+    { name: 'dark-theme', use: { viewport: { width: 390, height: 844 } }, grep: darkTheme },
+    { name: 'search-more', use: { viewport: { width: 390, height: 844 }, isMobile: true }, grep: searchMore },
+    { name: 'team-directory', use: { viewport: { width: 390, height: 844 }, isMobile: true }, grep: teamDirectory },
+    { name: 'about-interactions', use: { viewport: { width: 390, height: 844 }, isMobile: true }, grep: aboutInteractions },
+    { name: 'text-readability', use: { viewport: { width: 1440, height: 960 } }, grep: textReadability },
+    { name: 'motion-accessibility', use: { viewport: { width: 1280, height: 900 } }, grep: motionAccessibility },
+    { name: 'compat-chromium', use: { browserName: 'chromium', viewport: { width: 1280, height: 900 } }, grep: crossBrowser },
+    { name: 'compat-firefox', use: { browserName: 'firefox', viewport: { width: 1280, height: 900 } }, grep: crossBrowser },
+    { name: 'compat-webkit', use: { browserName: 'webkit', viewport: { width: 1280, height: 900 } }, grep: crossBrowser },
     { name: 'visual-matrix', use: { viewport: { width: 1440, height: 900 } }, grep: /capture route matrix/ }
   ],
   webServer: {

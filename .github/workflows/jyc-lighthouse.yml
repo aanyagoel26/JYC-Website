@@ -2,7 +2,7 @@ name: JYC Lighthouse CI
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, 'design/home-night-sky-mobile-about']
   push:
     branches: [main, 'fix/**']
   workflow_dispatch:
@@ -29,6 +29,8 @@ jobs:
       - run: npm ci
       - name: Build production bundle
         run: npm run build
+        env:
+          VITE_CANONICAL_ORIGIN: https://www.jiityouthclub128.in
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
       - name: Validate Lighthouse server readiness matcher

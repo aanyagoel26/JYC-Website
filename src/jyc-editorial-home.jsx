@@ -18,7 +18,6 @@ import './styles/jyc-editorial-motion-system.css';
 const ORIGINAL_LOGO = '/JYC%20Logo(4).png';
 const FALLBACK = import.meta.env.PROD ? '/assets/jyc-logo.webp' : ORIGINAL_LOGO;
 const DITHER_SOURCE = import.meta.env.PROD ? '/assets/jyc-logo-medium.avif' : FALLBACK;
-const DITHER_SRCSET = import.meta.env.PROD ? '/assets/jyc-logo-medium.avif 1x, /assets/jyc-logo.avif 2x' : undefined;
 const handleHeroLogoFallback = event => {
   const image = event.currentTarget;
   image.srcset = '';
@@ -226,8 +225,37 @@ export function JYCEditorialHome({ data }) {
 
         </div>
 
-        {/* MODERN 3D WEBGL HERO EMBLEM STAGE */}
+        {/* WebGL Dither Veil is a real mounted hero layer; the emblem remains the foreground focal point. */}
         <div className="jh-hero-visual jh-hero-webgl-stage-wrap">
+          <div className="jh-hero-dither-backdrop" aria-hidden="true" />
+          <div className="jh-hero-dither-layer jh-dither-mark" aria-hidden="true">
+            <Suspense fallback={<div className="jh-hero-dither-loading" />}>
+              <LazyDitherVeil
+                src={DITHER_SOURCE}
+                fallbackSrc={FALLBACK}
+                originalFallbackSrc={ORIGINAL_LOGO}
+                globalPointer
+                fit="contain"
+                pattern="floyd"
+                pixelSize={2}
+                levels={3}
+                palette="duotone"
+                inkColor="#4b3e69"
+                paperColor="#f6f2e9"
+                contrast={1.18}
+                brightness={0.02}
+                revealRadius={190}
+                softness={0.7}
+                linger={1.25}
+                rimColor="#b99b70"
+                rim={0.22}
+                wander={true}
+                clickBurst={false}
+                className="jh-hero-dither-veil"
+                style={{width:'100%',height:'100%'}}
+              />
+            </Suspense>
+          </div>
           <JYCHeroWebGLEmblem />
         </div>
       </section>
@@ -274,7 +302,7 @@ export function JYCEditorialHome({ data }) {
                 key={story.id || story.url}
                 onClick={() => nav('/gallery?q=' + encodeURIComponent(story.association || story.caption || ''))}
                 onMouseMove={handleSpotlight}
-                aria-label={`Explore ${story.association} photography in the JYC gallery`}
+                aria-label={`${story.year || 'JYC ARCHIVE'} ${story.association} ${story.caption || story.association} Explore album`}
               >
                 <ResponsivePhoto
                   className="jh-story-photo"
@@ -416,7 +444,7 @@ export function JYCEditorialHome({ data }) {
             </div>
             {team.length ? (
               team.map((m, i) => (
-                <button type="button" key={m.id || i} onClick={() => nav('/team')} aria-label={`Meet ${m.name || 'JYC team member'}, ${m.role || m.position || 'JYC Apex'}`}>
+                <button type="button" key={m.id || i} onClick={() => nav('/team')} aria-label={`Meet ${m.role || m.position || 'JYC Apex'} ${m.name || 'JYC team member'}`}>
                   <span className="jh-team-monogram" aria-hidden="true">
                     {teamPhotoFor(m)
                       ? <ResponsivePhoto className="jh-team-thumb" src={teamPhotoFor(m)} alt="" loading="lazy" decoding="async" sizes="48px" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Portrait unavailable" />
@@ -426,7 +454,7 @@ export function JYCEditorialHome({ data }) {
                     <small>{m.role || m.position || 'JYC Apex'}</small>
                     <strong>{m.name || 'Team Member'}</strong>
                   </span>
-                  <b>↗</b>
+                  <b aria-hidden="true">↗</b>
                 </button>
               ))
             ) : (

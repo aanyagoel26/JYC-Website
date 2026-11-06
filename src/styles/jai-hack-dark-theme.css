@@ -1,0 +1,71 @@
+/* JYC night-sky compatibility bridge.
+   The canonical palette and component styling live in jyc-cohesive-experience.css.
+   Legacy Jai Hack token names intentionally resolve to the same lavender/champagne system. */
+html[data-theme="dark"] {
+  color-scheme: dark;
+  --bg-main: var(--jyc-canvas);
+  --bg-card: var(--jyc-surface);
+  --text-primary: var(--jyc-text-strong);
+  --text-muted: var(--jyc-muted);
+  --accent-red: var(--jyc-accent);
+  --accent-gold: var(--jyc-gold);
+  --border-tech: var(--jyc-line);
+  --jyc-bg: var(--jyc-canvas);
+  --jyc-red: var(--jyc-accent);
+  --jyc-red-strong: var(--jyc-accent-strong);
+  --jyc-cyan: var(--jyc-accent);
+  --jyc-blue: var(--jyc-accent);
+  --jyc-indigo: var(--jyc-accent);
+  --jyc-green: var(--jyc-gold);
+  --jyc-violet: var(--jyc-accent);
+  --jyc-amber: var(--jyc-gold);
+  --jyc-paper: var(--jyc-canvas);
+  --jyc-paper-raised: var(--jyc-canvas-raised);
+  --jyc-ink: var(--jyc-text-strong);
+  --jyc-muted-ink: var(--jyc-muted);
+  --jyc-oxblood: var(--jyc-accent);
+  --jyc-champagne: var(--jyc-gold);
+  --jyc-hairline: var(--jyc-line);
+  --jh-bg: var(--jyc-canvas);
+  --jh-gold: var(--jyc-gold);
+  --jh-surface: var(--jyc-surface);
+  --jh-surface-elevated: var(--jyc-surface-strong);
+  --jh-surface-glass: color-mix(in srgb, var(--jyc-surface) 90%, transparent);
+  --jh-ink: var(--jyc-text-strong);
+  --jh-muted: var(--jyc-muted);
+  --jh-accent: var(--jyc-accent);
+  --jh-accent-glow: var(--jyc-accent-soft);
+  --jh-cyan: var(--jyc-accent);
+  --jh-cyan-glow: var(--jyc-accent-soft);
+  --jh-line: var(--jyc-line);
+  --jh-line-accent: var(--jyc-line-strong);
+  --jyc-brand-paper: var(--jyc-canvas);
+  --jyc-brand-paper-raised: var(--jyc-canvas-raised);
+  --jyc-brand-ink: var(--jyc-text-strong);
+  --jyc-brand-muted: var(--jyc-muted);
+  --jyc-brand-oxblood: var(--jyc-accent);
+  --jyc-brand-oxblood-hover: var(--jyc-accent-strong);
+  --jyc-brand-champagne: var(--jyc-gold);
+  --jyc-brand-line: var(--jyc-line);
+  --jyc-brand-line-strong: var(--jyc-line-strong);
+  --jyc-panel: var(--jyc-surface);
+  --jyc-panel-raised: var(--jyc-surface-strong);
+  --jyc-glass-border: var(--jyc-line);
+}
+
+html[data-theme="dark"] :where(a, button, input, textarea, select, [role="button"]):focus-visible {
+  outline: 3px solid var(--jyc-focus) !important;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px var(--jyc-accent-soft);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme="dark"] *,
+  html[data-theme="dark"] *::before,
+  html[data-theme="dark"] *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+  }
+}
