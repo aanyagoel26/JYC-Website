@@ -684,3 +684,14 @@ html[data-theme="light"] .jyc-editorial-home.jyc-home .jh-hero-logo-plaque {
   border-color: rgba(98,88,137,.22) !important;
   box-shadow: 0 24px 72px rgba(98,88,137,.10),0 0 36px rgba(231,209,155,.14),inset 0 1px 0 rgba(255,255,255,.72) !important;
 }
+
+/* Club-only people directory — intentionally isolated from the JYC Team roster. */
+.hub-community-team{margin:clamp(28px,5vw,64px) 0;padding:clamp(22px,3vw,38px);border:1px solid var(--jyc-line,rgba(32,27,28,.14));border-radius:24px;background:color-mix(in srgb,var(--jyc-surface,#fffdf8) 84%,transparent);}
+.hub-community-team-heading{max-width:680px;margin-bottom:24px}.hub-community-team-heading h3{margin:8px 0;font-size:clamp(24px,3vw,36px);letter-spacing:-.04em}.hub-community-team-heading p{color:var(--jyc-muted,#696575);margin:0}
+.hub-community-team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px}
+.hub-community-member{min-width:0;overflow:hidden;border:1px solid var(--jyc-line,rgba(32,27,28,.12));border-radius:17px;background:var(--jyc-surface,#fffdf8);box-shadow:0 10px 28px rgba(20,18,34,.07);}
+.hub-community-member-photo{aspect-ratio:3/4;overflow:hidden;background:var(--jyc-canvas,#f5f1e8)}.hub-community-member-photo img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .55s cubic-bezier(.2,.75,.25,1)}.hub-community-member:hover .hub-community-member-photo img{transform:scale(1.045)}
+.hub-community-member-copy{padding:12px 13px 15px;display:grid;gap:5px}.hub-community-member-copy span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--jyc-accent,#625889);font-weight:750}.hub-community-member-copy strong{font-size:14px;line-height:1.3;color:var(--jyc-text-strong,#191827)}
+[data-theme="dark"] .hub-community-team{background:color-mix(in srgb,var(--jyc-surface,#111b31) 88%,transparent)}
+@media(max-width:520px){.hub-community-team{padding:17px;border-radius:19px}.hub-community-team-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.hub-community-member-copy{padding:10px}.hub-community-member-copy strong{font-size:13px}}
+@media(prefers-reduced-motion:reduce){.hub-community-member-photo img{transition:none!important}}

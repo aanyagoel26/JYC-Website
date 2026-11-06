@@ -112,21 +112,21 @@ function useAtmosphericCanvas(canvasRef) {
     if (!isCoarsePointer) window.addEventListener('mousemove', onMouseMove, { passive: true });
 
     // Star pool for Dark Mode (small twinkling stars)
-    const starCount = Math.min(isCoarsePointer ? 24 : 64, Math.floor(window.innerWidth / (isCoarsePointer ? 16 : 20)));
+    const starCount = Math.min(isCoarsePointer ? 38 : 112, Math.floor(window.innerWidth / (isCoarsePointer ? 12 : 13)));
     const stars = Array.from({ length: starCount }, () => ({
       x: Math.random(),
       y: Math.random(),
       vx: (Math.random() - 0.5) * 0.0002,
       vy: (Math.random() - 0.5) * 0.0002,
-      radius: Math.random() * 0.9 + 0.6,
+      radius: Math.random() * 1.15 + 0.55,
       twinkleSpeed: Math.random() * 0.03 + 0.015,
       twinklePhase: Math.random() * Math.PI * 2,
-      baseAlpha: Math.random() * 0.55 + 0.35,
+      baseAlpha: Math.random() * 0.48 + 0.38,
       color: Math.random() > 0.8 ? '#e7d19b' : (Math.random() > 0.5 ? '#aeb8e4' : (Math.random() > 0.25 ? '#c8bcff' : '#f7f5ff'))
     }));
 
     // Golden dust and luminous nodes for Light Mode
-    const goldDustCount = Math.min(isCoarsePointer ? 12 : 32, Math.floor(window.innerWidth / (isCoarsePointer ? 32 : 42)));
+    const goldDustCount = Math.min(isCoarsePointer ? 18 : 54, Math.floor(window.innerWidth / (isCoarsePointer ? 22 : 26)));
     const goldDust = Array.from({ length: goldDustCount }, () => ({
       x: Math.random(),
       y: Math.random(),
@@ -231,7 +231,7 @@ function useAtmosphericCanvas(canvasRef) {
         });
 
         // Constellation webs between nearby stars (distance threshold ~85px)
-        const connectDist = Math.min(width * 0.075, 85);
+        const connectDist = Math.min(width * 0.09, 112);
         ctx.lineWidth = 0.55;
         for (let i = 0; i < starCoords.length; i++) {
           for (let j = i + 1; j < starCoords.length; j++) {
@@ -262,7 +262,7 @@ function useAtmosphericCanvas(canvasRef) {
         ctx.globalAlpha = 1.0;
 
         // 3. Dynamic Shooting Stars
-        if (!isCoarsePointer && timestamp - lastShootingStarTime > 3800 && Math.random() < 0.4) {
+        if (!isCoarsePointer && timestamp - lastShootingStarTime > 3000 && Math.random() < 0.48) {
           spawnShootingStar();
           lastShootingStarTime = timestamp;
         }
@@ -352,7 +352,7 @@ function useAtmosphericCanvas(canvasRef) {
         });
 
         // Golden geometric links between drifting champagne dust
-        const dustDist = Math.min(width * 0.065, 75);
+        const dustDist = Math.min(width * 0.085, 96);
         ctx.lineWidth = 0.5;
         for (let i = 0; i < dustCoords.length; i++) {
           for (let j = i + 1; j < dustCoords.length; j++) {
