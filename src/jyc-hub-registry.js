@@ -12,6 +12,7 @@ export const JYC_HUB_SOURCE_REGISTRY = [
   {name:'JSA',family:'Sports',status:'orientation-verified',publicationStatus:'published',verifiedOn:'2026-10-06',source:'Supplied JYC Orientation Program 2026–2027 / All Hubs material'},
   {name:'Panache',family:'Cultural',status:'orientation-verified',publicationStatus:'published',verifiedOn:'2026-10-06',source:'Supplied JYC Orientation Program 2026–2027 / All Hubs material'},
   {name:'Prismatic',family:'Creative',status:'orientation-verified',publicationStatus:'published',verifiedOn:'2026-10-06',source:'Supplied JYC Orientation Program 2026–2027 / All Hubs material'},
+  {name:'Shorts',family:'Creative',status:'source-material',publicationStatus:'published',verifiedOn:'2026-11-06',source:'Club and role association supplied by JYC'},
   {name:'RPH',family:'Technical',status:'orientation-verified',publicationStatus:'published',verifiedOn:'2026-10-06',source:'Supplied JYC Orientation Program 2026–2027 / All Hubs material'},
   {name:'VamUnique',family:'Cultural',status:'orientation-verified',publicationStatus:'published',verifiedOn:'2026-10-06',source:'Supplied JYC Orientation Program 2026–2027 / All Hubs material',website:'',linkedin:'https://www.linkedin.com/company/vamunique-the-dance-society-jiit-noida'},
   {name:'Arcadia',family:'Technical',status:'orientation-verified',publicationStatus:'draft',verifiedOn:'2026-10-06',source:'Supplied JYC Orientation Program 2026–2027 / All Hubs material'},

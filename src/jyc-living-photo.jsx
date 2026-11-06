@@ -96,6 +96,8 @@ export function LivingPhoto({items=[],seed=0,interval=6000,className='',altFallb
   const [reduced,setReduced]=useState(()=>supportsReducedMotion());
   const [error,setError]=useState(false);
   const [outgoing,setOutgoing]=useState(null);
+  const [isInView,setIsInView]=useState(false);
+  const stageRef=useRef(null);
   const historyRef=useRef([]);
   const mountedRef=useRef(true);
   const timerRef=useRef(null);
@@ -123,11 +125,20 @@ export function LivingPhoto({items=[],seed=0,interval=6000,className='',altFallb
   },[current,index,sequence,pool]);
 
   useEffect(()=>{
-    if(!nextCandidate?.url)return;
+    const node=stageRef.current;
+    if(!node)return;
+    if(!('IntersectionObserver' in window)){setIsInView(true);return}
+    const observer=new IntersectionObserver(entries=>setIsInView(entries.some(entry=>entry.isIntersecting)),{rootMargin:'240px 0px',threshold:0.01});
+    observer.observe(node);
+    return()=>observer.disconnect();
+  },[]);
+
+  useEffect(()=>{
+    if(!isInView||!nextCandidate?.url)return;
     let cancelled=false;
     preloadAndDecode(nextCandidate.url,preloadCacheRef.current).catch(()=>{if(!cancelled)setError(true)});
     return()=>{cancelled=true};
-  },[nextCandidate?.url]);
+  },[isInView,nextCandidate?.url]);
 
   const advance=async(direction=1)=>{
     if(!current||pool.length<2)return;
@@ -151,10 +162,10 @@ export function LivingPhoto({items=[],seed=0,interval=6000,className='',altFallb
   };
 
   useEffect(()=>{
-    if(paused||reduced||pool.length<2||document.visibilityState==='hidden')return;
+    if(!isInView||paused||reduced||pool.length<2||document.visibilityState==='hidden')return;
     timerRef.current=window.setTimeout(()=>advance(1),interval);
     return()=>{if(timerRef.current)clearTimeout(timerRef.current)};
-  },[paused,reduced,current?.url,nextCandidate?.url,interval,pool.length]);
+  },[isInView,paused,reduced,current?.url,nextCandidate?.url,interval,pool.length]);
 
   useEffect(()=>{
     const onVisibility=()=>setPaused(document.visibilityState==='hidden');
@@ -165,9 +176,9 @@ export function LivingPhoto({items=[],seed=0,interval=6000,className='',altFallb
   if(!current)return null;
   const label=current.caption||current.title||current.association||altFallback;
   return <div className={`jyc-living-photo ${className}`} onMouseEnter={()=>setPaused(true)} onMouseLeave={()=>setPaused(false)} onFocusCapture={()=>setPaused(true)} onBlurCapture={()=>setPaused(false)}>
-    <div className="jyc-living-photo-stage" aria-live="polite">
-      {outgoing?.url&&<img className="jyc-living-photo-image is-outgoing" src={outgoing.url} alt="" aria-hidden="true" loading="eager" decoding="async" sizes="(max-width: 700px) calc(100vw - 24px), min(1180px, calc(100vw - 32px))" onError={event=>{const image=event.currentTarget;image.style.opacity="0";image.alt="";image.setAttribute("aria-hidden","true")}}/>}
-      <img className={`jyc-living-photo-image is-current ${ready?'is-ready':''}`} data-source={current.url} src={current.url} alt={current.alt||label} loading="eager" decoding="async" fetchPriority="high" sizes="(max-width: 700px) calc(100vw - 24px), min(1180px, calc(100vw - 32px))" onError={event=>{const image=event.currentTarget;const source=image.dataset.source||current.url;if(image.dataset.fallbackSource!==source){image.dataset.fallbackSource=source;image.dataset.fallback="1";image.src="/assets/jyc-logo.avif";image.alt="Official JYC logo placeholder; archive photo unavailable";image.style.objectFit="contain";image.style.padding="18px";image.style.background="#f8f1e5";setError(true);return}if(image.dataset.fallback==="1"){image.dataset.fallback="2";image.src="/JYC%20Logo(4).png";image.alt="Official JYC logo placeholder; archive photo unavailable";image.style.objectFit="contain";image.style.padding="18px";image.style.background="#f8f1e5";return}image.style.opacity="0";image.alt="";image.setAttribute("aria-hidden","true");setError(true)}}/>
+    <div ref={stageRef} className="jyc-living-photo-stage" aria-live="polite">
+      {outgoing?.url&&<img className="jyc-living-photo-image is-outgoing" src={outgoing.url} alt="" aria-hidden="true" loading="lazy" decoding="async" sizes="(max-width: 700px) calc(100vw - 24px), min(1180px, calc(100vw - 32px))" onError={event=>{const image=event.currentTarget;image.style.opacity="0";image.alt="";image.setAttribute("aria-hidden","true")}}/>}
+      <img className={`jyc-living-photo-image is-current ${ready?'is-ready':''}`} data-source={current.url} src={current.url} alt={current.alt||label} loading="lazy" decoding="async" fetchPriority="low" sizes="(max-width: 700px) calc(100vw - 24px), min(1180px, calc(100vw - 32px))" onError={event=>{const image=event.currentTarget;const source=image.dataset.source||current.url;if(image.dataset.fallbackSource!==source){image.dataset.fallbackSource=source;image.dataset.fallback="1";image.src="/assets/jyc-logo.avif";image.alt="Official JYC logo placeholder; archive photo unavailable";image.style.objectFit="contain";image.style.padding="18px";image.style.background="#f8f1e5";setError(true);return}if(image.dataset.fallback==="1"){image.dataset.fallback="2";image.src="/JYC%20Logo(4).png";image.alt="Official JYC logo placeholder; archive photo unavailable";image.style.objectFit="contain";image.style.padding="18px";image.style.background="#f8f1e5";return}image.style.opacity="0";image.alt="";image.setAttribute("aria-hidden","true");setError(true)}}/>
       <div className="jyc-living-photo-scrim" aria-hidden="true"/>
       <div className="jyc-living-photo-meta"><span>{current.association||current.sourceLabel||'JYC Archive'}{current.year?' · '+current.year:''}</span><strong>{label}</strong></div>
       <div className="jyc-living-photo-controls">

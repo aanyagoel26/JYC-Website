@@ -12,7 +12,7 @@ const flip=read('src/components/react-bits/FlipCard.jsx');
 const flipCss=read('src/components/react-bits/FlipCard.css');
 const teamCss=read('src/styles/jyc-team-experience.css');
 const checks=[
-  ['public UX refinement stylesheet is loaded by the application entry',main.includes("import './styles/public-entry.css';")&&publicEntry.includes("@import '../jyc-design-upgrades.css';")],
+  ['public UX refinement stylesheet is loaded by the application entry',main.includes("import './styles/public-entry.css';")&&publicEntry.includes("@import './public-system.css';")&&read('src/styles/public-system.css').includes("@import '../jyc-design-upgrades.css';")],
   ['refinement layer preserves responsive gallery filter grouping',css.includes('.jyc57-filterbar')&&css.includes('@media (max-width: 620px)')],
   ['gallery lightbox has narrow viewport and safe-area treatment',css.includes('.jyc57-lightbox-inner')&&css.includes('100dvh')&&css.includes('env(safe-area-inset-top)')],
   ['gallery controls have explicit keyboard focus styling',css.includes('.jyc57-photo:focus-visible')&&css.includes('outline: 3px solid var(--jyc-ux-focus)')],

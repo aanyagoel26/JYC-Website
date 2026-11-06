@@ -132,15 +132,15 @@ test('theme toggle switches day/night, persists the preference and exposes its s
   await page.setViewportSize({ width: 1280, height: 900 });
   await page.addInitScript(() => localStorage.setItem('jyc-theme', 'dark'));
   await waitForJyc(page, '/');
-  const toDay = page.getByRole('button', { name: 'Switch to day theme' });
+  const toDay = page.getByRole('button', { name: /switch to day theme/i });
   await expect(toDay).toHaveAttribute('aria-pressed', 'true');
   await toDay.click();
-  const toNight = page.getByRole('button', { name: 'Switch to night theme' });
+  const toNight = page.getByRole('button', { name: /switch to night theme/i });
   await expect(toNight).toHaveAttribute('aria-pressed', 'false');
   await expect.poll(() => page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--jyc-canvas').trim())).toBe('#f5f1e8');
   await expect.poll(() => page.evaluate(() => localStorage.getItem('jyc-theme'))).toBe('light');
   await toNight.click();
-  await expect(page.getByRole('button', { name: 'Switch to day theme' })).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByRole('button', { name: /switch to day theme/i })).toHaveAttribute('aria-pressed', 'true');
   await expect.poll(() => page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--jyc-canvas').trim())).toBe('#080d1c');
   await expect.poll(() => page.evaluate(() => localStorage.getItem('jyc-theme'))).toBe('dark');
 });

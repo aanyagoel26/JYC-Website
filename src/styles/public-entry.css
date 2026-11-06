@@ -389,3 +389,67 @@ html[data-theme="dark"] #main-content.public-app .route-stage > section.section 
   background: var(--jyc-surface,#111b31) !important;
 }
 html[data-theme="dark"] .jh-cyber-badge b { color: #17142a !important; }
+
+/* Club-only people directory — intentionally separate from the JYC Team page. */
+.hub-community-team{margin:clamp(28px,5vw,64px) 0;padding:clamp(22px,3vw,38px);border:1px solid var(--jyc-line,rgba(32,27,28,.14));border-radius:24px;background:color-mix(in srgb,var(--jyc-surface,#fffdf8) 84%,transparent)}
+.hub-community-team-heading{max-width:680px;margin-bottom:24px}.hub-community-team-heading h3{margin:8px 0;font-size:clamp(24px,3vw,36px);letter-spacing:-.04em}.hub-community-team-heading p{color:var(--jyc-muted,#696575);margin:0}
+.hub-community-team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px}
+.hub-community-member{min-width:0;overflow:hidden;border:1px solid var(--jyc-line,rgba(32,27,28,.12));border-radius:17px;background:var(--jyc-surface,#fffdf8);box-shadow:0 10px 28px rgba(20,18,34,.07)}
+.hub-community-member-photo{position:relative;aspect-ratio:3/4;display:grid;place-items:center;overflow:hidden;background:radial-gradient(circle at 30% 20%,color-mix(in srgb,var(--jyc-accent,#625889) 22%,transparent),transparent 55%),var(--jyc-canvas,#f5f1e8)}
+.hub-community-member-photo span{position:relative;z-index:1;display:grid;place-items:center;width:76px;aspect-ratio:1;border-radius:50%;border:1px solid color-mix(in srgb,var(--jyc-accent,#625889) 40%,transparent);background:color-mix(in srgb,var(--jyc-accent,#625889) 12%,transparent);color:var(--jyc-text-strong,#191827);font-size:24px;font-weight:750;letter-spacing:-.05em}
+.hub-community-member-copy{padding:12px 13px 15px;display:grid;gap:5px}.hub-community-member-copy span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--jyc-accent,#625889);font-weight:750}.hub-community-member-copy strong{font-size:14px;line-height:1.3;color:var(--jyc-text-strong,#191827)}
+[data-theme="dark"] .hub-community-team{background:color-mix(in srgb,var(--jyc-surface,#111b31) 88%,transparent)}
+@media(max-width:520px){.hub-community-team{padding:17px;border-radius:19px}.hub-community-team-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.hub-community-member-copy{padding:10px}.hub-community-member-copy strong{font-size:13px}}
+
+.hub-community-member-photo img{position:absolute;inset:0;z-index:2;display:block;width:100%;height:100%;object-fit:cover;object-position:center;transition:transform .55s cubic-bezier(.2,.75,.25,1)}
+.hub-community-member-photo img[hidden]{display:none}
+.hub-community-member:hover .hub-community-member-photo img{transform:scale(1.035)}
+@media(prefers-reduced-motion:reduce){.hub-community-member-photo img{transition:none!important}.hub-community-member:hover .hub-community-member-photo img{transform:none}}
+
+
+/* Mobile navigation and layout hardening. */
+@media (max-width: 760px) {
+  html { scroll-padding-bottom: calc(88px + env(safe-area-inset-bottom)); }
+  body { padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
+  .mobile-dock {
+    box-sizing: border-box !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    padding: 8px max(10px, env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left)) !important;
+    border-radius: 18px 18px 0 0 !important;
+    background: color-mix(in srgb, var(--jyc-surface, #fffdf8) 94%, transparent) !important;
+    border: 1px solid var(--jyc-line, rgba(32,27,28,.14)) !important;
+    border-bottom: 0 !important;
+    box-shadow: 0 -10px 32px rgba(15,12,25,.12) !important;
+    backdrop-filter: blur(18px) saturate(1.25);
+    -webkit-backdrop-filter: blur(18px) saturate(1.25);
+  }
+  .mobile-dock > button {
+    min-width: 0 !important;
+    min-height: 52px !important;
+    padding: 5px 2px !important;
+    gap: 3px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 12px !important;
+    font-size: 11px !important;
+    line-height: 1.15 !important;
+  }
+  .mobile-dock > button > span { display: grid; place-items: center; min-width: 24px; min-height: 24px; }
+  .mobile-dock > button > b { font-size: 10px !important; font-weight: 650; }
+  .public-app, .route-stage, .route-stage > section { min-width: 0; }
+  .public-app :where(img,video,canvas,svg) { max-width: 100%; }
+  .public-app :where(.card,.event-card,.hub-card,.team-card,.gallery-item,.feature-card) { min-width: 0; }
+}
+@media (max-width: 380px) {
+  .mobile-dock { grid-template-columns: repeat(5,minmax(0,1fr)) !important; gap: 2px !important; }
+  .mobile-dock > button { min-height: 50px !important; }
+  .mobile-dock > button > b { font-size: 9px !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mobile-dock { scroll-behavior: auto !important; transition: none !important; }
+}
