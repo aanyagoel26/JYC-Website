@@ -43,6 +43,12 @@ const checks=[
  ['public gallery supports mobile swipe and zoom',read('src/jyc57-experience.jsx').includes('onTouchStart')&&read('src/jyc57-experience.jsx').includes('setZoom')],
  ['public gallery uses metadata filters and progressive rendering',read('src/jyc57-experience.jsx').includes('visibleCount')&&read('src/jyc57-experience.jsx').includes('setVisibleCount(n => n + 36)')&&read('src/jyc57-experience.jsx').includes('g.association')&&read('src/jyc57-experience.jsx').includes('g.year')&&read('src/jyc57-experience.jsx').includes('eventCategory')],
  ['archive route is code-split into a dedicated lazy-loaded module',main.includes("const LazyJYC57Archive=lazy(()=>import('./jyc57-archive.jsx')")&&!main.includes("JYC57Archive} from './jyc57-experience.jsx'")&&read('src/jyc57-archive.jsx').includes('export function JYC57Archive')],
+
+ ['responsive photo defaults to native lazy loading and async decode',read('src/jyc-responsive-photo.jsx').includes("loading='lazy'")&&read('src/jyc-responsive-photo.jsx').includes("decoding='async'")],
+ ['gallery image defaults to native lazy loading',gallery.includes("loading='lazy'")&&gallery.includes('decoding={decoding}')],
+ ['living archive defers offscreen media and only preloads while near viewport',read('src/jyc-living-photo.jsx').includes("loading=\"lazy\"")&&read('src/jyc-living-photo.jsx').includes("fetchPriority=\"low\"")&&read('src/jyc-living-photo.jsx').includes("rootMargin:'240px 0px'")&&read('src/jyc-living-photo.jsx').includes('if(!isInView||!nextCandidate?.url)return;')&&!read('src/jyc-living-photo.jsx').includes('loading="eager"')],
+ ['history emblem uses native lazy loading',read('src/jyc-history-page.jsx').includes('alt="JIIT Youth Club official emblem" loading="lazy" decoding="async"')],
+ ['public logo variants default to lazy loading unless explicitly high priority',main.includes("loading={props.loading??(props.fetchPriority==='high'?'eager':'lazy')}")],
 ];
 let failed=0; for(const [name,ok] of checks){console.log((ok?'PASS':'FAIL')+': '+name);if(!ok)failed++}
 if(failed)process.exit(1);
