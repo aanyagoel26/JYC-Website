@@ -7,6 +7,7 @@ import { rankDiverseJycPhotos } from './jyc-photo-intelligence.js';
 import { ResponsivePhoto } from './jyc-responsive-photo.jsx';
 import { JYCSpotlight } from './jyc-spotlight.jsx';
 import { JYCNowStrip } from './jyc-now.jsx';
+import { JYCCampusMarquee } from './components/JYCCampusMarquee.jsx';
 const LazyDitherVeil = lazy(() => import('./react-bits/DitherVeil.jsx'));
 const LazyMagicBento = lazy(() => import('./components/react-bits/MagicBento.jsx'));
 import { JYCHeroWebGLEmblem } from './components/JYCHeroWebGLEmblem.jsx';
@@ -259,6 +260,8 @@ export function JYCEditorialHome({ data }) {
           <JYCHeroWebGLEmblem />
         </div>
       </section>
+
+      <JYCCampusMarquee />
 
       {/* V1 EDITORIAL INTRO: context before the discovery content. */}
       <section className="jh-about-editorial jh-container" aria-labelledby="jh-about-title">
