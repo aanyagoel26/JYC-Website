@@ -2263,3 +2263,21 @@ html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-hero-dither-layer {
   .jyc-editorial-home.jyc-home .jh-hero-copy > h1 { font-size: clamp(38px,5.8vw,58px); }
   .jyc-editorial-home.jyc-home .jh-featured-event { grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
 }
+
+/* Phone hero: keep the crest beside the copy and reserve vertical space for the fixed dock. */
+@media(max-width:680px){
+.jyc-editorial-home.jyc-home .jh-hero{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(104px,.58fr)!important;align-items:center!important;gap:10px!important;padding:12px 0 22px!important}
+.jyc-editorial-home.jyc-home .jh-hero-copy{min-width:0!important}
+.jyc-editorial-home.jyc-home .jh-hero-copy>.jh-overline{font-size:12px!important;line-height:1.35!important}
+.jyc-editorial-home.jyc-home .jh-hero-copy>h1{font-size:clamp(30px,8vw,38px)!important;line-height:1!important}
+.jyc-editorial-home.jyc-home .jh-hero-copy>.jh-lead{font-size:14px!important;line-height:1.45!important}
+.jyc-editorial-home.jyc-home .jh-hero-visual{min-width:0!important;width:100%!important;min-height:0!important;height:auto!important;align-self:center!important}
+.jyc-editorial-home.jyc-home .jh-hero-logo-plaque{width:100%!important;max-width:148px!important;padding:5px!important}
+.jyc-editorial-home.jyc-home .jh-dither-mark,.jyc-editorial-home.jyc-home .jh-dither-mark .dither-veil{width:min(100%,112px)!important;max-width:112px!important;height:auto!important;min-height:0!important;aspect-ratio:1}
+.jyc-editorial-home.jyc-home .jh-logo-caption,.jyc-editorial-home.jyc-home .jh-status-live-tag{font-size:9px!important}
+.jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions{grid-template-columns:minmax(0,1fr)!important;gap:7px!important;margin-top:10px!important}
+.jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn{min-height:44px!important;font-size:12px!important;padding:8px!important}
+.jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn:nth-child(3){grid-column:auto!important}
+.jyc-editorial-home.jyc-home .jh-community-bottom-note p{font-size:12px!important}
+}
+@media(max-width:360px){.jyc-editorial-home.jyc-home .jh-hero{grid-template-columns:minmax(0,1fr) 92px!important;gap:7px!important}.jyc-editorial-home.jyc-home .jh-hero-copy>h1{font-size:30px!important}.jyc-editorial-home.jyc-home .jh-hero-logo-plaque{padding:3px!important}}

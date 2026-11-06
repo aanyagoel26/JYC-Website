@@ -520,3 +520,7 @@ html[data-theme="dark"] .public-app :where(.jyc-route-card,.jyc-hub-signal-card,
 .public-app :where(.jyc-route-card p,.jyc-hub-signal-card em,.jyc-route-note p,.jyc-photo-story-rail small) {
   color: var(--jyc-muted);
 }
+
+/* Canonical public palette takes precedence over legacy route declarations. */
+:root,html[data-theme="light"]{--jyc-canvas:#f5f1e8!important;--jyc-canvas-raised:#fbf8f1!important;--jyc-surface:#fffdf8!important;--jyc-text-strong:#191827!important;--jyc-muted:#5f5c6b!important;--jyc-accent:#625889!important;--jyc-gold:#76572b!important}
+html[data-theme="dark"]{--jyc-canvas:#080d1c!important;--jyc-canvas-raised:#0d1629!important;--jyc-surface:#111b31!important;--jyc-text-strong:#f7f5ff!important;--jyc-muted:#c0c4da!important;--jyc-accent:#c8bcff!important;--jyc-gold:#e7d19b!important}
