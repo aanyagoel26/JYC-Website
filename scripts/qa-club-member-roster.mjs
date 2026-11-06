@@ -13,6 +13,7 @@ const checks=[
  ['club roster has no duplicate club keys', (roster.match(/^  [^ ].*?: \[/gm)||[]).length===(new Set((roster.match(/^  ([^:]+): \[/gm)||[]).map(x=>x.trim().slice(0,-2)))).size],
  ['club roster is rendered only inside club detail flow, not the JYC Team component', main.indexOf('JYC_CLUB_MEMBER_ROSTER[c.name]')<main.indexOf('function Team({data})')],
  ['club roster uses accessible initials when no approved portrait asset is available', main.includes('member.name.trim().split(/' + String.fromCharCode(92) + 's+/)')],
+ ['missing portrait files fall back to visible initials rather than broken-image UI', main.includes('onError={event=>{event.currentTarget.hidden=true}}')],
  ['club member cards are styled by the loaded public entry stylesheet', css.includes('.hub-community-team-grid')&&css.includes('.hub-community-member-photo span')],
  ['club member layout supports mobile and reduced-motion preferences', css.includes('@media(max-width:520px)')&&css.includes('hub-community-member-copy strong')],
 ];
