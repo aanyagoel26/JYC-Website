@@ -22,6 +22,7 @@ const packageJson=JSON.parse(fs.readFileSync('package.json','utf8'));
 const shaderChecks=[
  ['homepage mounts a dedicated OGL WebGL field behind its existing emblem',home.includes("import { JYCWebGLField } from './components/JYCWebGLField.jsx'")&&home.includes('<JYCWebGLField />')&&shader.includes("from 'ogl'")],
  ['shader uses procedural FBM domain warping and topographic contour lines',shader.includes('float fbm(')&&shader.includes('float contour =')&&shader.includes('uPointer')],
+ ['shader uses a defined monotonic fade function at the edge of the visual field',shader.includes('1.0 - smoothstep(0.18,0.98,length(p) * 0.52)')],
  ['shader adapts its palette to the current light and dark theme',shader.includes('uTheme.value = document.documentElement.dataset.theme')&&shader.includes('vec3 violet')&&shader.includes('vec3 gold')],
  ['WebGL context uses bounded pixel ratio and a reduced workload on constrained devices',shader.includes('Math.min(window.devicePixelRatio')&&shader.includes('lowPower || coarse ? 1 : 1.35')&&shader.includes('uIntensity')],
  ['render loop pauses outside viewport and when the document is hidden',shader.includes('IntersectionObserver')&&shader.includes('visibilitychange')&&shader.includes('cancelAnimationFrame')],

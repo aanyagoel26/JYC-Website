@@ -51,7 +51,7 @@ void main() {
   float line = contour * smoothstep(0.56,0.9,field) * 0.12;
   color += gold * line;
   float alpha = (ribbons * 0.20 + radial * 0.045 + line) * uIntensity;
-  alpha *= smoothstep(0.98,0.18,length(p) * 0.52);
+  alpha *= (1.0 - smoothstep(0.18,0.98,length(p) * 0.52));
   alpha += halo * 0.035 * uIntensity;
   fragColor = vec4(color, clamp(alpha, 0.0, 0.34));
 }\`;
