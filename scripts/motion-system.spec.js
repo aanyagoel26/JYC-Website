@@ -134,5 +134,40 @@ test.describe('JYC motion system', () => {
     const resumedFrame = await canvas.evaluate(node => node.toDataURL());
     expect(resumedFrame).not.toBe(pausedFrame);
   });
+  test('day and night surfaces use their own theme palette and atmospheric depth', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await ready(page, '/');
+    for (const theme of ['light', 'dark']) {
+      await page.evaluate(value => {
+        document.documentElement.dataset.theme = value;
+        localStorage.setItem('jyc-theme', value);
+      }, theme);
+      const surface = await page.locator('.public-app').evaluate(node => {
+        const style = getComputedStyle(node);
+        const root = getComputedStyle(document.documentElement);
+        return { backgroundImage: style.backgroundImage, accent: root.getPropertyValue('--jyc-accent').trim(), canvas: root.getPropertyValue('--jyc-canvas').trim(), surface: root.getPropertyValue('--jyc-surface').trim() };
+      });
+      expect(surface.backgroundImage).toContain('radial-gradient');
+      expect(surface.canvas).toBe(theme === 'dark' ? '#080d1c' : '#f5f1e8');
+      expect(surface.accent).toBe(theme === 'dark' ? '#c8bcff' : '#625889');
+      expect(surface.surface).toBe(theme === 'dark' ? '#111b31' : '#fffdf8');
+    }
+  });
+
+  test('homepage depth animations run when motion is allowed and stop for reduced motion', async ({ page }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.emulateMedia({ reducedMotion: 'no-preference' });
+    await ready(page, '/');
+    const plaque = page.locator('.jh-hero-logo-plaque');
+    const visual = page.locator('.jh-hero-dither-visual');
+    await expect(plaque).toBeVisible();
+    await expect(visual).toBeVisible();
+    await expect.poll(() => plaque.evaluate(node => getComputedStyle(node).animationName)).toBe('jycPlaqueBreathe');
+    await expect.poll(() => visual.evaluate(node => getComputedStyle(node).animationName)).toBe('jycVisualFloat');
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await expect.poll(() => plaque.evaluate(node => getComputedStyle(node).animationName)).toBe('none');
+    await expect.poll(() => visual.evaluate(node => getComputedStyle(node).animationName)).toBe('none');
+  });
+
 
 });
