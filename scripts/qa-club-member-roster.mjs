@@ -10,6 +10,7 @@ const checks=[
  ['club roster includes the full 40-person club roster', (roster.match(/role:'/g)||[]).length===40],
  ['Chandrima is listed separately as CyberX advisor and ZenCoders coordinator', roster.includes("CypherX: [")&&roster.includes("{name:'Chandrima',role:'Advisor'}")&&roster.includes("{name:'Chandrima',role:'Coordinator'}")],
  ['Shorts is a separate club page, not merged into Cinekala', roster.includes("Shorts: [")&&main.includes("JYC_CLUB_MEMBER_ROSTER[c.name]")],
+ ['club roster has no duplicate club keys', (roster.match(/^  [^ ].*?: \[/gm)||[]).length===(new Set((roster.match(/^  ([^:]+): \[/gm)||[]).map(x=>x.trim().slice(0,-2)))).size],
  ['club roster is rendered only inside club detail flow, not the JYC Team component', main.indexOf('JYC_CLUB_MEMBER_ROSTER[c.name]')<main.indexOf('function Team({data})')],
  ['club roster uses accessible initials when no approved portrait asset is available', main.includes('member.name.trim().split(/\\s+/)')],
  ['club member cards are styled by the loaded public entry stylesheet', css.includes('.hub-community-team-grid')&&css.includes('.hub-community-member-photo span')],
