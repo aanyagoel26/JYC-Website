@@ -71,3 +71,20 @@ export function rankSearchResults(results,query){
 export function matchSearchResults(results,query){
   return rankSearchResults(results,query).filter(item=>item._score>0);
 }
+
+
+/**
+ * Public search must follow the publication fields used by both the CMS and
+ * imported hub registry. Older records may use status/publicationStatus instead
+ * of the boolean published field. Draft/private/source-material records never
+ * enter the public index.
+ */
+export function isPublicSearchRecord(record) {
+  if (!record || typeof record !== 'object') return false;
+  const status = String(record.status ?? '').trim().toLowerCase();
+  const publicationStatus = String(record.publicationStatus ?? '').trim().toLowerCase();
+  if (record.published === false || record.archived === true || record.isArchived === true || record.private === true) return false;
+  if (['draft', 'archived', 'private', 'unpublished', 'source-material'].includes(status)) return false;
+  if (['draft', 'archived', 'private', 'unpublished', 'source-material'].includes(publicationStatus)) return false;
+  return record.published === true || status === 'published' || publicationStatus === 'published';
+}
