@@ -139,8 +139,10 @@ html[data-theme="light"] .jyc-ambient-canvas {
   mix-blend-mode: multiply;
 }
 @keyframes jyc-atmosphere-drift {
-  0% { background-position: 0% 0%, 100% 0%, 50% 100%, 0 0; }
-  100% { background-position: 14% 9%, 86% 12%, 42% 88%, 0 0; }
+  /* Five positions cover the five dark-mode layers; extra values are ignored
+     by the four-layer daylight/base stacks. */
+  0% { background-position: 0% 0%, 100% 0%, 50% 100%, 45% 40%, 0 0; }
+  100% { background-position: 14% 9%, 86% 12%, 42% 88%, 55% 60%, 0 0; }
 }
 @media (max-width: 760px) {
   .app-frame {
@@ -154,4 +156,16 @@ html[data-theme="light"] .jyc-ambient-canvas {
 @media (prefers-reduced-motion: reduce) {
   .app-frame { animation: none !important; }
   .jyc-ambient-canvas { display: none !important; }
+}
+
+
+/* Light homepage used to paint an opaque paper layer over the shared atmosphere.
+   Keep its own radial tint, but let the sitewide canvas and particle field show
+   through in both themes. */
+html[data-theme="light"] .public-app .jyc-editorial-home.jyc-home {
+  background: radial-gradient(
+    ellipse at 82% 8%,
+    color-mix(in srgb, var(--jh-accent, var(--jyc-accent, #625889)) 7%, transparent),
+    transparent 35%
+  ), transparent !important;
 }

@@ -48,7 +48,8 @@
     "qa:experience-system": "node scripts/qa-experience-system.mjs",
     "qa:dynamic-route-shells": "node scripts/qa-dynamic-route-shells.mjs",
     "qa:visual-redesign": "node scripts/qa-visual-redesign.mjs",
-    "qa:glb": "node scripts/qa-glb-integrity.mjs"
+    "qa:glb": "node scripts/qa-glb-integrity.mjs",
+    "qa:atmosphere": "node scripts/qa-atmospheric-background.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.118.0",
