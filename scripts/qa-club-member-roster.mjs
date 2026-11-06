@@ -4,7 +4,10 @@ const roster=fs.readFileSync('src/jyc-club-member-roster.js','utf8');
 const main=fs.readFileSync('src/main.jsx','utf8');
 const css=fs.readFileSync('src/styles/public-entry.css','utf8');
 const checks=[
- ['club roster includes all 20 supplied role assignments', (roster.match(/role:'/g)||[]).length===20],
+ ['all 20 supplied portraits are referenced exactly once', (roster.match(/photo:'/g)||[]).length===20],
+ ['new JSA sports coordinator is attached to the existing JSA hub', roster.includes("JSA: [{name:'Tanish Choudhary'")],
+ ['Aura has both supplied coordinator and member records', roster.includes("Lakshya Saxena")&&roster.includes("Shaurya Raholan")],
+ ['club roster includes the full 40-person club roster', (roster.match(/role:'/g)||[]).length===40],
  ['Chandrima is listed separately as CyberX advisor and ZenCoders coordinator', roster.includes("CypherX: [")&&roster.includes("{name:'Chandrima',role:'Advisor'}")&&roster.includes("{name:'Chandrima',role:'Coordinator'}")],
  ['Shorts is a separate club page, not merged into Cinekala', roster.includes("Shorts: [")&&main.includes("JYC_CLUB_MEMBER_ROSTER[c.name]")],
  ['club roster is rendered only inside club detail flow, not the JYC Team component', main.indexOf('JYC_CLUB_MEMBER_ROSTER[c.name]')<main.indexOf('function Team({data})')],
