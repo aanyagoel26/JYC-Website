@@ -1,5 +1,46 @@
 # Changelog
 
+## V64.5.16 — Publish only verified routes in sitemap and static shells
+
+- Remove hard-coded event route lists from sitemap and static route-shell generation. Both now derive static event routes from published, non-archived event records; dynamic CMS routes remain source-gated at build time.
+- Restrict static hub sitemap routes to source-registry entries with `publicationStatus: published`, matching the club directory and route-shell publication gates.
+- Add missing public `/archive` and `/recruitment` core routes to the sitemap.
+- Hide the unverified Arcadia Esports Winter Cup fallback while Arcadia itself remains a publication-gated draft.
+- Give DRONO-O-WAR its canonical `drono-o-war-2026` slug so event cards, detail links, sitemap and static route shell resolve to one URL.
+- Expand sitemap and route-shell QA to assert published-only routes and exclude unverified/archived fallback records.
+- Rotate the service-worker cache namespace to `jyc-cache-v64-5-16`.
+
+
+## V64.5.15 — Restore the homepage WebGL Dither Veil
+
+- Mount the lazy-loaded React Bits DitherVeil in the homepage hero; the previous bundle imported the component but never rendered it, so the requested visual effect could not appear.
+- Use the JYC logo asset, Floyd–Steinberg dither, three-level duotone palette and restrained oxblood reveal rim, layered behind the foreground hero emblem.
+- Keep the effect lazy, intersection-aware, capped-DPR and static-fallback safe on reduced-motion or constrained hardware; disable click bursts and use the bounded wander reveal.
+- Add responsive/dark-mode composition rules and make the homepage editorial-truth, React Bits, animation-performance and visual-redesign gates assert that the component is actually mounted.
+- Rotate the service-worker cache namespace to `jyc-cache-v64-5-15`.
+
+
+## V64.5.14 — Public event trust and photo-type integrity
+
+- Remove unverified and editorial-review future events from public fallback publication; they remain in supplied programme material until an official event-level source confirms dates, organiser, venue and registration.
+- Keep RIDE Hack unpublished until its conflicting registration/publication evidence is resolved by the organiser.
+- Correct the stale RPH Code Clash fallback date: the current source trail records the 2026 contest as completed, not a future 20 November event. Keep the record unpublished until the exact event date and official event record are confirmed.
+- Let current live CMS event records override same-ID static fallback records, so a later approved publication can supersede a hidden fallback safely.
+- Type JAI campus photography separately from summit artwork, poster graphics, QR codes and logos; exclude non-photo assets from photo archive/Best-of presentation.
+- Remove the completed JAI event from featured/pinned priority while retaining its historical event record and closed-registration state.
+- Rotate the service-worker cache namespace to `jyc-cache-v64-5-14`.
+
+
+## V64.5.13 — Canonical-origin and deployment identity hardening
+
+- Remove the retired, non-existent `jyc-website-eight.vercel.app` hostname from source defaults and stop publishing it in canonical tags, Open Graph metadata, structured data or sitemap output.
+- Resolve one validated site origin consistently across runtime metadata, static route shells and sitemap generation: explicit verified JYC origin first, then Vercel's production URL, then the deployment URL. Local builds use localhost only.
+- Fail closed on Vercel builds that cannot resolve an HTTPS deployment/production origin rather than emitting broken or unrelated canonical URLs.
+- Add a shared origin resolver and regression cases covering precedence, normalization, local builds and unsafe/missing origins.
+- Keep the JAI event microsite domain separate; do not redirect JYC SEO identity to an unrelated summit microsite.
+- Rotate the service-worker cache namespace to `jyc-cache-v64-5-13`.
+
+
 ## V64.5.9 — Semantic image fallback and release-source correction
 
 - Render the terminal JYC image placeholder with valid `<picture>` semantics using CSS pseudo-elements and an accessible label; avoid injecting a `span` into the picture content model.

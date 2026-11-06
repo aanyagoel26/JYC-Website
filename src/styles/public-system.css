@@ -19,19 +19,20 @@
 @import '../jyc-design-upgrades.css';
 @import './jyc-pro-redesign.css';
 @import './jyc-visual-wow.css';
+@import './jyc-complete-identity.css';
 
 html{color-scheme:light dark;}
 
 :root {
   color-scheme: light;
-  --jyc-bg: #F5F1E6;
-  --jyc-surface: #FFFFFF;
-  --jyc-ink: #1A191D;
-  --jyc-muted: #6E6A75;
-  --jyc-line: rgba(26, 25, 29, 0.12);
-  --jyc-accent: #A82420;
-  --jyc-gold: #BF9C6F;
-  --jyc-focus: #A82420;
+  --jyc-bg: #f5f1e8;
+  --jyc-surface: #fffdf8;
+  --jyc-ink: #191827;
+  --jyc-muted: #5f5c6b;
+  --jyc-line: rgba(98,88,137,.18);
+  --jyc-accent: #625889;
+  --jyc-gold: #8c6d36;
+  --jyc-focus: #625889;
 }
 
 html[data-theme="light"] {
@@ -41,21 +42,21 @@ html[data-theme="light"] {
   --jyc-ink: #1A191D;
   --jyc-muted: #6E6A75;
   --jyc-line: rgba(26, 25, 29, 0.12);
-  --jyc-accent: #A82420;
-  --jyc-gold: #BF9C6F;
-  --jyc-focus: #A82420;
+  --jyc-accent: #625889;
+  --jyc-gold: #76572b;
+  --jyc-focus: #514675;
 }
 
 html[data-theme="dark"] {
   color-scheme: dark;
-  --jyc-bg: #0F0E11;
-  --jyc-surface: #18161D;
-  --jyc-ink: #FFF8E1;
-  --jyc-muted: #A8A3B0;
-  --jyc-line: rgba(255, 248, 225, 0.12);
-  --jyc-accent: #C92A2A;
-  --jyc-gold: #D2B48C;
-  --jyc-focus: #D2B48C;
+  --jyc-bg: #080d1c;
+  --jyc-surface: #111b31;
+  --jyc-ink: #f7f5ff;
+  --jyc-muted: #c0c4da;
+  --jyc-line: rgba(200,188,255,.18);
+  --jyc-accent: #c8bcff;
+  --jyc-gold: #e7d19b;
+  --jyc-focus: #c8bcff;
 }
 
 html { scroll-behavior: smooth; }
@@ -100,22 +101,22 @@ html[data-theme="dark"] { color-scheme: dark; }
 
 /* Keep the final system readable in dark mode without introducing a second palette. */
 html[data-theme="dark"] .public-app {
-  --jyc-final-bg: #0F0E11;
-  --jyc-final-surface: #18161D;
-  --jyc-final-ink: #FFF8E1;
-  --jyc-final-muted: #A8A3B0;
-  --jyc-final-line: rgba(255, 248, 225, 0.12);
-  --jyc-final-gold: #D2B48C;
-  --jyc-final-red: #C92A2A;
+  --jyc-final-bg: var(--jyc-bg);
+  --jyc-final-surface: var(--jyc-surface);
+  --jyc-final-ink: var(--jyc-ink);
+  --jyc-final-muted: var(--jyc-muted);
+  --jyc-final-line: var(--jyc-line);
+  --jyc-final-gold: var(--jyc-gold);
+  --jyc-final-red: var(--jyc-accent);
 }
 html[data-theme="light"] .public-app {
-  --jyc-final-bg: #F5F1E6;
-  --jyc-final-surface: #FFFFFF;
-  --jyc-final-ink: #1A191D;
-  --jyc-final-muted: #6E6A75;
-  --jyc-final-line: rgba(26, 25, 29, 0.12);
-  --jyc-final-gold: #BF9C6F;
-  --jyc-final-red: #A82420;
+  --jyc-final-bg: var(--jyc-bg);
+  --jyc-final-surface: var(--jyc-surface);
+  --jyc-final-ink: var(--jyc-ink);
+  --jyc-final-muted: var(--jyc-muted);
+  --jyc-final-line: var(--jyc-line);
+  --jyc-final-gold: var(--jyc-gold);
+  --jyc-final-red: var(--jyc-accent);
 }
 html[data-theme="dark"] .public-app :where(.jyc-source-archive-ledger,.jyc-photo-story-scrubber) {
   background: rgba(11, 19, 41, 0.96);
@@ -192,14 +193,14 @@ html[data-theme="dark"] .public-app textarea::placeholder { color: #94a3b8; }
    ───────────────────────────────────────────────────────────── */
 :root{
  --surface:#fff;--bg:#f5f1e6;--ink:#1a191d;--muted:#6e6a75;
- --red:#a82420;--gold:#bf9c6f;--line:rgba(191,156,111,.34);
+ --red:var(--jyc-accent);--gold:var(--jyc-gold);--line:var(--jyc-line);
  --dark:#0f0e11;--dark-surface:#18161d;--cream:#FFFFFF;
  --page:min(1320px,calc(100% - 64px));--r:14px;--r-lg:20px;
  --shadow:0 20px 60px rgba(26,25,29,.08);--ease:cubic-bezier(.2,.75,.2,1);
 }
 html[data-theme="dark"]{
  --surface:#18161d;--bg:#0f0e11;--ink:#FFFFFF;--muted:#a8a3b0;
- --red:#c92a2a;--gold:#d2b48c;--line:rgba(210,180,140,.27);
+ --red:var(--jyc-accent);--gold:var(--jyc-gold);--line:var(--jyc-line);
  --shadow:0 24px 70px rgba(0,0,0,.28);
 }
 body{background:var(--bg)!important;color:var(--ink)!important}
@@ -210,7 +211,7 @@ h1,h2,h3,h4,.brand span,.section-head h2,.page h1,.page h2{font-family:"Space Gr
 .eyebrow,.tag{color:var(--red)!important;letter-spacing:.18em;font-weight:800}
 .btn{border-radius:10px!important;border-color:var(--red)!important;background:var(--red)!important;color:#fff!important;box-shadow:none}
 .btn.secondary{background:transparent!important;color:var(--ink)!important;border-color:var(--line)!important}
-.btn:hover{transform:translateY(-2px);box-shadow:0 14px 34px rgba(168,36,32,.14)}
+.btn:hover{transform:translateY(-2px);box-shadow:0 14px 34px color-mix(in srgb,var(--jyc-accent) 14%,transparent)}
 .card{border-radius:var(--r)!important;border:1px solid var(--line)!important;background:var(--surface)!important;box-shadow:none!important}
 .card:hover{border-color:var(--gold)!important;box-shadow:var(--shadow)!important}
 .page h1{font-size:clamp(48px,7vw,92px);line-height:.94;letter-spacing:-.06em}
@@ -322,9 +323,7 @@ h1,h2,h3,h4,.brand span,.section-head h2,.page h1,.page h2{font-family:"Space Gr
  body{padding-bottom:78px}
 }
 
-:root{--navy:#0F0E11;--ivory:#f8fafc;--champagne:#A82420;--accent:#ef4444;--jyc-bg:#0F0E11;--jyc-surface:#18161D;--jyc-ink:#f8fafc;--jyc-muted:#94a3b8;--jyc-line:rgba(255,255,255,.1)}
-html[data-theme="dark"]{--navy:#0F0E11;--ivory:#f8fafc;--champagne:#A82420;--accent:#ef4444;--jyc-bg:#0F0E11;--jyc-surface:#18161D;--jyc-ink:#f8fafc;--jyc-muted:#94a3b8;--jyc-line:rgba(255,255,255,.1)}
-html[data-theme="light"]{--navy:#f8fafc;--ivory:#0f172a;--champagne:#A82420;--accent:#dc2626;--jyc-bg:#f8fafc;--jyc-surface:#ffffff;--jyc-ink:#0f172a;--jyc-muted:#475569;--jyc-line:rgba(203,213,225,.7)}
+/* Legacy palette override removed: src/styles/jyc-theme-contract.css is the final theme-token authority. */
 :where(a,button,input,textarea,select,[tabindex]):focus-visible{outline:2px solid var(--red);outline-offset:3px}
 img{max-width:100%}svg{max-width:100%}.page a,.section a{text-decoration-thickness:1px;text-underline-offset:3px}.page button,.section button{font-family:inherit}
 
@@ -515,8 +514,8 @@ img{max-width:100%}svg{max-width:100%}.page a,.section a{text-decoration-thickne
   --red:var(--jyc-red);
   --jyc-red:#A82420;
   --jyc-red-2:var(--jyc-red);
-  --jyc-glow:rgba(168,36,32,.22);
-  --jyc-soft:rgba(168,36,32,.08);
+  --jyc-glow:color-mix(in srgb,var(--jyc-accent) 22%,transparent);
+  --jyc-soft:color-mix(in srgb,var(--jyc-accent) 8%,transparent);
 
   /* Canonical JYC tokens used by the newer system. */
   --jyc-bg:var(--jyc-soft-champagne);
@@ -1068,7 +1067,7 @@ body{background:var(--bg)!important;color:var(--ink)!important}
 
 /* WCAG 2.2 AA contrast repairs found by Lighthouse. */
 .jh-cyber-badge b{color:#FFF8E1!important}
-.about-principles-v33 article>span,.about-history-badge{color:#A82420!important}
+.about-principles-v33 article>span,.about-history-badge{color:var(--jyc-accent)!important}
 .public-app .visible-breadcrumbs a,.public-app .search-topic-links a{color:#825F2B!important}
 .jyc-featured-event-note{color:#625A52!important}
 .jyc-footer-v6 .footer-v6-brand strong,

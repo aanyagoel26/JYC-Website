@@ -8,6 +8,7 @@ import {JYC_OFFICIAL_HUB_DESCRIPTIONS} from './jyc-official-hub-descriptions.js'
  No fabricated leadership or claims are included; all entries are drawn from source materials.
 */
 export const JYC_HUB_DETAILS = {
+  Shorts:{label:'Short-form video and visual storytelling',activities:['Short-form video','Campus storytelling','Creative editing','Social video production'],experience:'Shorts is included in the JYC club directory from the club and role information supplied for this roster. The club can add its approved projects, channels and current programme through the usual publishing workflow.',signature:['Short-form campus stories','Creative video projects','Editing and production']},
   Fortissimo:{
     label:'Music and acoustic performance community',
     activities:['Vocal and instrumental performance','Battle of the Bands','Acoustic jams','Converge stage headliners','Open mic sessions','Western and Indian classical fusion'],

@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 const routes=[
   '/','/about','/history','/clubs','/events','/gallery','/team',
   '/best-of-jyc','/achievements','/archive','/recruitment','/announcements','/updates',
-  '/calendar','/fests','/contact','/join-jyc'
+  '/calendar','/fests','/contact','/join-jyc', '/leadership', '/event-calendar', '/converge-live', '/clubs/dronotics', '/events/jai-2026-jaypee-agentic-ai-hackathon', '/events/jai-2026-jaypee-agentic-ai-hackathon/register', '/gallery/dronotics'
 ];
 
 const routesForProject = projectName => ['desktop-1280','desktop-1440'].includes(projectName)

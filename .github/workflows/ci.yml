@@ -18,6 +18,8 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      VITE_CANONICAL_ORIGIN: https://www.jiityouthclub128.in
     steps:
       - uses: actions/checkout@v7
         with:
@@ -40,7 +42,8 @@ jobs:
       - name: Verify responsive breakpoint contracts
         run: npm run qa:responsive
 
-      - run: npm run qa
+      - name: Run static QA with the same canonical origin used by the build
+        run: npm run qa
       - run: npm run qa:seo
       - name: Verify photo integrity
         run: npm run qa:photos

@@ -16,7 +16,7 @@ check(details.includes('Photo Walk 2025/26'),'Aura source programme missing');
 check(details.includes('Kshitij 4.0'),'JSA source programme missing');
 check(details.includes('Grand Conclave 2026'),'Eloquence source programme missing');
 check(team.includes('Dr. Vinay Anand Tikkiwal')&&team.includes('Dr. Pankaj Kumar Srivastava'),'faculty advisors missing');
-check(team.includes('Harisha')&&team.includes('Dhruv Choudhary'),'core heads missing');
+check(main.includes("const excludedTeamNames=new Set(['harisha','dhruv choudhary']);")&&!fallback.toLowerCase().includes('harisha')&&!fallback.toLowerCase().includes('dhruv choudhary'),'removed team profiles must be filtered from live records and absent from public fallback content');
 check(next.includes('23 COMMUNITIES'),'community count/source label missing');
 const editorialHome=read('src/jyc-editorial-home.jsx');
 check(!editorialHome.includes('<PhotoChapters/>')&&editorialHome.includes('JYCHeroWebGLEmblem')&&editorialHome.includes('jh-hero-webgl-stage-wrap')&&editorialHome.includes('JYCSpotlight'),'homepage should use the current WebGL emblem hero and JYC Spotlight surface');

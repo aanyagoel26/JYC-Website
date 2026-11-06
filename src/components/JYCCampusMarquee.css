@@ -1,0 +1,57 @@
+/* JYC campus ribbon — a Magic UI-style marquee, adapted to the JYC palette. */
+.jyc-campus-marquee {
+  --marquee-line:var(--jyc-line,var(--jyc-hairline,rgba(32,27,28,.14)));
+  position:relative;isolation:isolate;overflow:hidden;
+  margin:clamp(8px,1.8vw,22px) 0 clamp(34px,5vw,68px);
+  padding:13px 0 16px;
+  border-top:1px solid var(--marquee-line);
+  border-bottom:1px solid var(--marquee-line);
+  background:linear-gradient(90deg,color-mix(in srgb,var(--jyc-surface,#fffdf8) 72%,transparent),color-mix(in srgb,var(--jyc-accent,#625889) 4%,transparent),color-mix(in srgb,var(--jyc-surface,#fffdf8) 72%,transparent));
+}
+.jyc-campus-marquee::before,.jyc-campus-marquee::after {
+  content:"";position:absolute;z-index:2;top:0;bottom:0;width:clamp(28px,7vw,100px);pointer-events:none;
+}
+.jyc-campus-marquee::before{left:0;background:linear-gradient(90deg,var(--jyc-canvas,#f5f1e8),transparent)}
+.jyc-campus-marquee::after{right:0;background:linear-gradient(270deg,var(--jyc-canvas,#f5f1e8),transparent)}
+.jyc-campus-marquee__meta {
+  display:flex;justify-content:space-between;gap:16px;
+  max-width:1380px;margin:0 auto 9px;padding:0 clamp(20px,6vw,80px);
+  color:var(--jyc-muted,var(--jyc-muted-ink,#5f5c6b));
+  font-size:9px;font-weight:800;letter-spacing:.17em;
+}
+.jyc-campus-marquee__track{display:flex;width:max-content;overflow:hidden}
+.jyc-campus-marquee__group{display:flex;align-items:center;flex-shrink:0;min-width:max-content;animation:jycMarqueeForward 42s linear infinite}
+.jyc-campus-marquee__track.is-reverse .jyc-campus-marquee__group{animation-name:jycMarqueeReverse;animation-duration:50s}
+.jyc-campus-marquee__item{display:inline-flex;align-items:center;gap:12px;padding:5px clamp(16px,2.3vw,32px);white-space:nowrap;color:var(--jyc-text-strong,#191827)}
+.jyc-campus-marquee__item small{color:var(--jyc-gold,#8c6d36);font-size:9px;font-weight:800;letter-spacing:.12em}
+.jyc-campus-marquee__item strong{font-size:clamp(13px,1.3vw,17px);font-weight:800;letter-spacing:.13em}
+.jyc-campus-marquee__item i{font-size:13px;font-style:normal;color:var(--jyc-accent,#625889);opacity:.7}
+@keyframes jycMarqueeForward{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes jycMarqueeReverse{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){.jyc-campus-marquee:hover .jyc-campus-marquee__group{animation-play-state:paused}}
+@media(max-width:680px){
+ .jyc-campus-marquee{margin:8px 0 34px;padding:10px 0 12px}
+ .jyc-campus-marquee__meta{font-size:8px;letter-spacing:.11em;padding-inline:18px}
+ .jyc-campus-marquee__item{gap:8px;padding-inline:15px}
+ .jyc-campus-marquee__item strong{font-size:12px}
+ .jyc-campus-marquee__group{animation-duration:54s}
+}
+@media(prefers-reduced-motion:reduce){
+ .jyc-campus-marquee__track{overflow-x:auto;width:100%;scrollbar-width:none}
+ .jyc-campus-marquee__track::-webkit-scrollbar{display:none}
+ .jyc-campus-marquee__group{animation:none!important}
+ .jyc-campus-marquee__group[aria-hidden="true"]{display:none}
+}
+/* Fest-inspired cursor light and fine beam on the feature surfaces. */
+.public-app .jh-featured-event::after,.public-app .jh-story-card::before{
+ content:"";position:absolute;inset:0;z-index:3;pointer-events:none;border-radius:inherit;
+ background:radial-gradient(360px circle at var(--mouse-x,50%) var(--mouse-y,50%),color-mix(in srgb,var(--jyc-gold,#8c6d36) 17%,transparent),transparent 72%);
+ opacity:0;transition:opacity 360ms ease;
+}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+ .public-app .jh-featured-event:hover::after,.public-app .jh-story-card:hover::before{opacity:1}
+}
+@media(prefers-reduced-motion:reduce){
+ .jyc-campus-marquee::before,.jyc-campus-marquee::after{animation:none!important}
+ .public-app .jh-featured-event::after,.public-app .jh-story-card::before{display:none}
+}
