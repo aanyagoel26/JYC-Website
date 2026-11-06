@@ -15,3 +15,22 @@ const checks=[
 let failed=0;for(const [name,ok] of checks){console.log((ok?'PASS':'FAIL')+': '+name);if(!ok)failed++}
 if(failed)process.exit(1);
 console.log('NSoC-inspired editorial effects QA: '+checks.length+'/'+checks.length+' checks passed.');
+
+const shader=fs.readFileSync('src/components/JYCWebGLField.jsx','utf8');
+const home=fs.readFileSync('src/jyc-editorial-home.jsx','utf8');
+const packageJson=JSON.parse(fs.readFileSync('package.json','utf8'));
+const shaderChecks=[
+ ['homepage mounts a dedicated OGL WebGL field behind its existing emblem',home.includes("import { JYCWebGLField } from './components/JYCWebGLField.jsx'")&&home.includes('<JYCWebGLField />')&&shader.includes("from 'ogl'")],
+ ['shader uses procedural FBM domain warping and topographic contour lines',shader.includes('float fbm(')&&shader.includes('float contour =')&&shader.includes('uPointer')],
+ ['shader adapts its palette to the current light and dark theme',shader.includes('uTheme.value = document.documentElement.dataset.theme')&&shader.includes('vec3 violet')&&shader.includes('vec3 gold')],
+ ['WebGL context uses bounded pixel ratio and a reduced workload on constrained devices',shader.includes('Math.min(window.devicePixelRatio')&&shader.includes('lowPower || coarse ? 1 : 1.35')&&shader.includes('uIntensity')],
+ ['render loop pauses outside viewport and when the document is hidden',shader.includes('IntersectionObserver')&&shader.includes('visibilitychange')&&shader.includes('cancelAnimationFrame')],
+ ['reduced motion renders a static frame rather than animating continuously',shader.includes('prefers-reduced-motion: reduce')&&shader.includes('reduced ? 0 : requestAnimationFrame(draw)')],
+ ['GPU resources and observers are cleaned up on unmount',shader.includes('observer?.disconnect()')&&shader.includes('resizeObserver?.disconnect()')&&shader.includes('program?.remove()')&&shader.includes('loseContext')],
+ ['CSS provides a non-WebGL fallback and mobile/reduced-motion treatment',css.includes('.jyc-webgl-field-fallback')&&shader.includes('data-webgl = \'fallback\'')&&css.includes('@media(prefers-reduced-motion:reduce)')],
+ ['existing OGL dependency is reused without adding another renderer',packageJson.dependencies.ogl==='1.0.11'&&!packageJson.dependencies['three']&&!packageJson.dependencies['@react-three/fiber']]
+];
+let shaderFailed=0;
+for(const [name,ok] of shaderChecks){console.log((ok?'PASS':'FAIL')+': '+name);if(!ok)shaderFailed++}
+if(shaderFailed)process.exit(1);
+console.log('JYC WebGL field QA: '+shaderChecks.length+'/'+shaderChecks.length+' checks passed.');

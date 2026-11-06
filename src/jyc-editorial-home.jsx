@@ -11,6 +11,7 @@ import { JYCCampusMarquee } from './components/JYCCampusMarquee.jsx';
 const LazyDitherVeil = lazy(() => import('./react-bits/DitherVeil.jsx'));
 const LazyMagicBento = lazy(() => import('./components/react-bits/MagicBento.jsx'));
 import { JYCHeroWebGLEmblem } from './components/JYCHeroWebGLEmblem.jsx';
+import { JYCWebGLField } from './components/JYCWebGLField.jsx';
 import './components/JYCHeroWebGLEmblem.css';
 import { JYC3DInteractiveExplorer } from './components/JYC3DInteractiveExplorer.jsx';
 import './jyc-editorial-home.css';
@@ -229,6 +230,7 @@ export function JYCEditorialHome({ data }) {
         {/* WebGL Dither Veil is a real mounted hero layer; the emblem remains the foreground focal point. */}
         <div className="jh-hero-visual jh-hero-webgl-stage-wrap">
           <div className="jh-hero-dither-backdrop" aria-hidden="true" />
+          <JYCWebGLField />
           <div className="jh-hero-dither-layer jh-dither-mark" aria-hidden="true">
             <Suspense fallback={<div className="jh-hero-dither-loading" />}>
               <LazyDitherVeil
