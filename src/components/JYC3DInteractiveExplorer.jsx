@@ -6,11 +6,11 @@ import './JYC3DInteractiveExplorer.css';
 
 const slugHub = value => String(value || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const FAMILY_STYLE = {
-  Technical: { color: '#aeb8e4', icon: '⚡' },
-  Cultural: { color: '#e7d19b', icon: '🎭' },
-  Creative: { color: '#c8bcff', icon: '🎨' },
-  Literary: { color: '#97a9dd', icon: '🖋️' },
-  Sports: { color: '#b7c7a8', icon: '🏆' }
+  Technical: { color: '#0EA5E9', icon: '⚡' },
+  Cultural: { color: '#D97706', icon: '🎭' },
+  Creative: { color: '#8B5CF6', icon: '🎨' },
+  Literary: { color: '#0D9488', icon: '🖋️' },
+  Sports: { color: '#DC2626', icon: '🏆' }
 };
 
 // Positions/icons are visual layout only. Names, families, labels and descriptions
@@ -164,8 +164,8 @@ export function JYC3DInteractiveExplorer() {
       // 1. Draw 3D Space Background Aura & Radial Depth Grid
       const bgGrad = ctx.createRadialGradient(cx, cy, 20 * dpr, cx, cy, Math.max(width, height) * 0.55);
       if (isDark) {
-        bgGrad.addColorStop(0, 'rgba(56, 189, 248, 0.07)');
-        bgGrad.addColorStop(0.5, 'rgba(147, 51, 234, 0.035)');
+        bgGrad.addColorStop(0, 'rgba(173, 151, 226, 0.13)');
+        bgGrad.addColorStop(0.5, 'rgba(100, 112, 170, 0.075)');
         bgGrad.addColorStop(1, 'rgba(0, 0, 0, 0)');
       } else {
         bgGrad.addColorStop(0, 'rgba(212, 175, 55, 0.12)');
@@ -201,7 +201,7 @@ export function JYC3DInteractiveExplorer() {
           else ctx.lineTo(px, py);
         }
         ctx.strokeStyle = isDark
-          ? `rgba(56, 189, 248, ${0.08 - idx * 0.02})`
+          ? `rgba(201, 184, 242, ${0.09 - idx * 0.02})`
           : `rgba(184, 134, 11, ${0.14 - idx * 0.03})`;
         ctx.lineWidth = 1 * dpr;
         ctx.setLineDash([4 * dpr, 6 * dpr]);
@@ -211,6 +211,7 @@ export function JYC3DInteractiveExplorer() {
 
       // 3. Project only published JYC communities
       const projected = filteredHubs.map((hub, idx) => {
+        const darkFamilyColors = {Technical:'#c9b8f2',Cultural:'#e6d4a8',Creative:'#b6a7e8',Literary:'#d9d0f2',Sports:'#bdaedb'};
         const x1 = hub.x * cosY - hub.z * sinY;
         const z1 = hub.z * cosY + hub.x * sinY;
         const y2 = hub.y * cosX - z1 * sinX;
@@ -219,6 +220,7 @@ export function JYC3DInteractiveExplorer() {
         const scale = fov / Math.max(80, depth);
         return {
           ...hub,
+          color: isDark ? (darkFamilyColors[hub.family] || '#c9b8f2') : hub.color,
           idx,
           px: cx + x1 * scale * 0.95,
           py: cy + y2 * scale * 0.95,
@@ -254,8 +256,8 @@ export function JYC3DInteractiveExplorer() {
       const sunPulse = Math.sin(time * 3) * 3 * dpr;
       const sunRadius = (10 * dpr) + sunPulse;
       const sunGlow = ctx.createRadialGradient(cx, cy, 2 * dpr, cx, cy, sunRadius * 3);
-      sunGlow.addColorStop(0, isDark ? '#ffd700' : '#b8860b');
-      sunGlow.addColorStop(0.4, isDark ? 'rgba(212, 175, 55, 0.5)' : 'rgba(184, 134, 11, 0.4)');
+      sunGlow.addColorStop(0, isDark ? '#e6d4a8' : '#b8860b');
+      sunGlow.addColorStop(0.4, isDark ? 'rgba(230, 212, 168, 0.42)' : 'rgba(184, 134, 11, 0.4)');
       sunGlow.addColorStop(1, 'rgba(0, 0, 0, 0)');
       ctx.fillStyle = sunGlow;
       ctx.beginPath();
@@ -265,7 +267,7 @@ export function JYC3DInteractiveExplorer() {
       ctx.beginPath();
       ctx.arc(cx, cy, sunRadius * 0.75, 0, Math.PI * 2);
       ctx.fill();
-      ctx.fillStyle = isDark ? 'rgba(255, 215, 0, 0.9)' : 'rgba(153, 101, 21, 0.95)';
+      ctx.fillStyle = isDark ? 'rgba(230, 212, 168, 0.92)' : 'rgba(153, 101, 21, 0.95)';
       ctx.font = `700 ${Math.max(9, 10 * dpr)}px 'Space Grotesk', sans-serif`;
       ctx.textAlign = 'center';
       ctx.fillText('JYC · 128', cx, cy + sunRadius * 2.8);
@@ -327,7 +329,7 @@ export function JYC3DInteractiveExplorer() {
         ctx.roundRect(node.px - textWidth / 2 - 8 * dpr, badgeY - fontSize * 0.85, textWidth + 16 * dpr, fontSize + 8 * dpr, 6 * dpr);
         ctx.fill();
         ctx.stroke();
-        ctx.fillStyle = isDark ? (node.isSelected ? '#ffffff' : '#cbd5e1') : (node.isSelected ? '#0f172a' : '#334155');
+        ctx.fillStyle = isDark ? (node.isSelected ? '#f2efff' : '#d2cce6') : (node.isSelected ? '#0f172a' : '#334155');
         ctx.fillText(node.name, node.px, badgeY);
       });
 

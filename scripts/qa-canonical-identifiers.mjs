@@ -13,11 +13,13 @@ for(const file of files){const text=fs.readFileSync(file,'utf8');if(text.include
 const allowed=new Set(['src/main.jsx']);
 const failures=hits.filter(file=>!allowed.has(file));
 const main=fs.readFileSync(path.join(root,'src/main.jsx'),'utf8');
+const fallback=fs.readFileSync(path.join(root,'src/content/jyc-public-fallbacks.js'),'utf8');
+const sitemap=fs.readFileSync(path.join(root,'scripts/generate-sitemap.mjs'),'utf8');
 const checks=[
  ['canonical JAI slug is present in the runtime',main.includes(canonical)],
  ['event canonicalization prefers stored event slugs',main.includes("slug(event.slug||event.title)")&&main.includes("slug(e.slug||e.title)")],
  ['legacy JAI redirect is explicit',main.includes(`legacyEventSlugMap={'${legacy}':'${canonical}'}`)],
- ['sitemap generator uses canonical stored event slugs and excludes unpublished/archived records',(()=>{const generator=fs.readFileSync(path.join(root,'scripts','generate-sitemap.mjs'),'utf8');return generator.includes('slug(event.slug||event.title)')&&generator.includes('event?.published&&event?.archived!==true')})()],
+ ['sitemap generator derives canonical JAI route from the published fallback event slug',fallback.includes(`slug:'${canonical}'`)&&sitemap.includes('PUBLIC_EVENT_FALLBACK.filter(event=>event?.published&&event?.archived!==true)')&&sitemap.includes('slug(event.slug||event.title)')],
  ['no stale JAI slug remains in runtime/sitemap generator',failures.length===0,failures.join(', ')],
 ];
 let failed=0;for(const [name,ok,detail] of checks){console.log((ok?'PASS':'FAIL')+': '+name+(detail&&!ok?' — '+detail:''));if(!ok)failed++}

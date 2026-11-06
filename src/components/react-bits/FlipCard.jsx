@@ -1,71 +1,74 @@
-import React, { Children, useId, useRef, useState } from 'react';
+import React, { Children, useRef, useState } from 'react';
 import './FlipCard.css';
 
 /**
- * Accessible two-face profile card.
- * The photo face is a real button; the details face contains its own links and close button.
- * This avoids nesting interactive links inside a button-like card container.
+ * React Bits 3D FlipCard Component
+ * Ref: https://reactbits.dev/components/flip-card
+ * Provides smooth 3D flip animation between front and back faces with full keyboard & accessibility support.
  */
-export default function FlipCard({ front, back, children, className = '', label = 'Open profile' }) {
+export default function FlipCard({ front, back, children, className = '', label = 'Flip card' }) {
   const [flipped, setFlipped] = useState(false);
+  const frontRef = useRef(null);
   const backRef = useRef(null);
-  const frontTriggerRef = useRef(null);
-  const backId = useId();
+  const focusFace = next => requestAnimationFrame(() => (next ? backRef.current : frontRef.current)?.focus({ preventScroll: true }));
   const faces = Children.toArray(children);
   const frontContent = front ?? faces[0] ?? null;
   const backContent = back ?? faces[1] ?? null;
 
-  const openProfile = () => {
-    setFlipped(true);
-    requestAnimationFrame(() => backRef.current?.focus({ preventScroll: true }));
+  const handleCardClick = (e) => {
+    // If clicking an interactive child (e.g. LinkedIn link, button, input), do not flip
+    if (e.target.closest('a, button, input, textarea, select, [data-flip-ignore]')) {
+      return;
+    }
+    setFlipped(prev => { const next = !prev; focusFace(next); return next; });
   };
 
-  const closeProfile = event => {
-    event.stopPropagation();
+  const handleFlipBack = (e) => {
+    e.stopPropagation();
     setFlipped(false);
-    requestAnimationFrame(() => frontTriggerRef.current?.focus({ preventScroll: true }));
+    requestAnimationFrame(() => frontRef.current?.focus({ preventScroll: true }));
   };
 
-  const handleKeyDown = event => {
-    if (event.key === 'Escape' && flipped) {
-      event.preventDefault();
-      closeProfile(event);
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      // Don't intercept if target is a link or inner button
+      if (e.target.closest('a, button, input')) return;
+      e.preventDefault();
+      setFlipped(prev => { const next = !prev; focusFace(next); return next; });
+    }
+    if (e.key === 'Escape' && flipped) {
+      e.preventDefault();
+      setFlipped(false);
+      requestAnimationFrame(() => frontRef.current?.focus({ preventScroll: true }));
     }
   };
 
   return (
     <div
       className={`flip-card ${flipped ? 'is-flipped' : ''} ${className}`.trim()}
-      role="group"
+      role="region"
       aria-label={label}
-      data-flipped={flipped ? 'true' : 'false'}
+      aria-expanded={flipped}
+      onClick={handleCardClick}
       onKeyDown={handleKeyDown}
+      tabIndex={0}
     >
       <div className="flip-card__inner">
+        {/* Front Face */}
         <div
+          ref={frontRef}
+          tabIndex={-1}
           className="flip-card__face flip-card__front"
           aria-hidden={flipped}
           inert={flipped}
         >
-          <button
-            ref={frontTriggerRef}
-            type="button"
-            className="flip-card__front-trigger"
-            aria-label={label}
-            aria-expanded={flipped}
-            aria-controls={backId}
-            onClick={openProfile}
-          >
-            {frontContent}
-          </button>
+          {frontContent}
         </div>
 
+        {/* Back Face */}
         <div
-          id={backId}
           ref={backRef}
           tabIndex={-1}
-          role="group"
-          aria-label="Profile details"
           className="flip-card__face flip-card__back"
           aria-hidden={!flipped}
           inert={!flipped}
@@ -74,7 +77,7 @@ export default function FlipCard({ front, back, children, className = '', label 
           <button
             type="button"
             className="flip-card__back-trigger"
-            onClick={closeProfile}
+            onClick={handleFlipBack}
           >
             ← Back to photo
           </button>

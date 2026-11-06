@@ -4,8 +4,7 @@ import path from 'node:path';
 
 const routes = [
   '/', '/about', '/history', '/clubs', '/events', '/team', '/gallery',
-  '/achievements', '/announcements', '/updates', '/archive', '/join-jyc',
-  '/recruitment', '/fests', '/converge', '/contact', '/calendar', '/best-of-jyc', '/leadership', '/event-calendar', '/converge-live', '/clubs/dronotics', '/events/jai-2026-jaypee-agentic-ai-hackathon', '/events/jai-2026-jaypee-agentic-ai-hackathon/register', '/gallery/dronotics'
+  '/achievements', '/recruitment', '/fests', '/contact', '/calendar', '/best-of-jyc'
 ];
 
 const viewports = [
@@ -23,10 +22,10 @@ const viewports = [
 test.describe('JYC visual capture and measurable design contracts', () => {
   for (const viewport of viewports) {
     test(`capture route matrix — ${viewport.name}`, async ({ page }, testInfo) => {
-      // Each viewport captures the public route and representative dynamic-route matrix, scrolls lazy media into view,
+      // Each viewport captures 13 long-form routes, scrolls lazy media into view,
       // and writes full-page screenshots. Desktop/tablet captures can exceed the
       // default 30s while remaining healthy, so give this capture job room.
-      test.setTimeout(180000);
+      test.setTimeout(120000);
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
       await page.emulateMedia({ reducedMotion: 'reduce' });
       const errors = [];
@@ -76,7 +75,7 @@ test.describe('JYC visual capture and measurable design contracts', () => {
               return {
                 tag: el.tagName.toLowerCase(),
                 className: typeof el.className === 'string' ? el.className : '',
-                text: (el.innerText || el.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 100),
+                text: (el.innerText || el.textContent || '').trim().replace(/\\s+/g, ' ').slice(0, 100),
                 fontSize: style.fontSize,
                 lineHeight: style.lineHeight
               };

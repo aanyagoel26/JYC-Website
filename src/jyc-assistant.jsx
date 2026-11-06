@@ -3,8 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { normalizeSearch, rankSearchResults } from './lib/search.js';
 import { hubDetails } from './v23.6-hub-details.js';
 
-const JYC_LOGO = import.meta.env.PROD ? '/assets/jyc-logo-48.avif' : '/JYC%20Logo(4).png';
-const handleLogoError = event => { const image=event.currentTarget; if(image.dataset.logoFallback==='1')return; image.dataset.logoFallback='1'; image.src='/JYC%20Logo(4).png'; };
+const JYC_LOGO = import.meta.env.PROD ? '/assets/jyc-logo.webp' : '/JYC%20Logo(4).png';
 
 const published = data => ({
   clubs: (data?.clubs || []).filter(c => c?.published && c?.status !== 'archived'),
@@ -119,7 +118,6 @@ export function JYCAssistant({ data, onClose }) {
   const nav = useNavigate();
   const inputRef = useRef(null);
   const dialogRef = useRef(null);
-  const returnFocusRef = useRef(null);
   const [activeTab, setActiveTab] = useState('chat'); // 'chat' or 'search'
   const [query, setQuery] = useState('');
   const [messages, setMessages] = useState([
@@ -136,40 +134,17 @@ export function JYCAssistant({ data, onClose }) {
   const { clubs, events, team, gallery } = useMemo(() => published(data), [data]);
 
   useEffect(() => {
-    const active = document.activeElement;
-    returnFocusRef.current = active instanceof HTMLElement ? active : document.querySelector('.jyc-bot-orb');
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
     const focusTimer = setTimeout(() => inputRef.current?.focus(), 40);
     const onKey = e => {
       if (e.key === 'Escape') {
         e.preventDefault();
         onClose?.();
-        return;
-      }
-      if (e.key !== 'Tab') return;
-      const root = dialogRef.current;
-      if (!root) return;
-      const focusable = [...root.querySelectorAll('button,input,textarea,select,a[href],[tabindex]:not([tabindex="-1"])')]
-        .filter(element => !element.disabled && element.offsetParent !== null);
-      if (!focusable.length) return;
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (e.shiftKey && (document.activeElement === first || !root.contains(document.activeElement))) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && (document.activeElement === last || !root.contains(document.activeElement))) {
-        e.preventDefault();
-        first.focus();
       }
     };
     document.addEventListener('keydown', onKey);
     return () => {
       clearTimeout(focusTimer);
-      document.body.style.overflow = previousOverflow;
       document.removeEventListener('keydown', onKey);
-      const target = returnFocusRef.current?.isConnected ? returnFocusRef.current : document.querySelector('.jyc-bot-orb');
-      if (target instanceof HTMLElement) requestAnimationFrame(() => target.focus({ preventScroll: true }));
     };
   }, [onClose]);
 
@@ -219,20 +194,20 @@ export function JYCAssistant({ data, onClose }) {
   }, [rawSearch, query]);
 
   return (
-    <div className="jyc-assistant-overlay" role="dialog" aria-modal="true" aria-labelledby="jyc-assistant-title" onMouseDown={e => e.target === e.currentTarget && onClose?.()}>
+    <div className="jyc-assistant-overlay" role="dialog" aria-modal="true" onMouseDown={e => e.target === e.currentTarget && onClose?.()}>
       <section ref={dialogRef} className="jyc-assistant-panel">
         {/* Holographic Header */}
         <div className="jyc-assistant-head">
           <div className="jyc-assistant-brand">
             <span className="jyc-assistant-mark">
-              <img src={JYC_LOGO} alt="" loading="lazy" decoding="async" onError={handleLogoError} />
+              <img src={JYC_LOGO} alt="" loading="lazy" decoding="async" onError={e => { e.currentTarget.src = "/assets/jyc-logo.avif"; }} />
             </span>
             <div>
               <div className="jyc-assistant-status-tag">
                 <span className="assistant-dot" />
                 <span>JYC INTEL 2.0 · VERIFIED CAMPUS AI</span>
               </div>
-              <h2 id="jyc-assistant-title">Ask JYC. Instant Campus Knowledge.</h2>
+              <h2>Ask JYC. Instant Campus Knowledge.</h2>
             </div>
           </div>
           <button type="button" className="jyc-assistant-close" onClick={onClose} aria-label="Close Assistant">×</button>
@@ -264,7 +239,7 @@ export function JYCAssistant({ data, onClose }) {
                 <div key={m.id} className={`chat-bubble-wrap ${m.sender}`}>
                   {m.sender === 'bot' && (
                     <div className="bot-avatar">
-                      <img src={JYC_LOGO} alt="" loading="lazy" decoding="async" onError={handleLogoError} />
+                      <img src={JYC_LOGO} alt="" loading="lazy" decoding="async" />
                     </div>
                   )}
                   <div className="chat-bubble">
@@ -287,7 +262,7 @@ export function JYCAssistant({ data, onClose }) {
               ))}
               {isTyping && (
                 <div className="chat-bubble-wrap bot">
-                  <div className="bot-avatar"><img src={JYC_LOGO} alt="" loading="lazy" decoding="async" onError={handleLogoError} /></div>
+                  <div className="bot-avatar"><img src={JYC_LOGO} alt="" loading="lazy" decoding="async" /></div>
                   <div className="chat-bubble typing">
                     <span /><span /><span />
                   </div>
@@ -341,10 +316,9 @@ export function JYCAssistant({ data, onClose }) {
                 value={query}
                 onChange={e => setQuery(e.target.value)}
                 placeholder="Search societies, events, or people..."
-                aria-label="Search JYC directory"
                 autoFocus
               />
-              {query && <button type="button" aria-label="Clear directory search" onClick={() => setQuery('')}>×</button>}
+              {query && <button type="button" onClick={() => setQuery('')}>×</button>}
             </div>
 
             <div className="search-results-list">

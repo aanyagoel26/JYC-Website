@@ -162,7 +162,7 @@ async function loadDynamicRoutes(){
 }
 
 function shellFor(meta,route){
-  let out=html.replaceAll('__JYC_CANONICAL_ORIGIN__',siteOrigin);
+  let out=html.replaceAll('__JYC_CANONICAL_ORIGIN__',siteOrigin).replaceAll('https://jyc-website-eight.vercel.app',siteOrigin);
   const tags=[
     ['title',meta.title],
     ['meta[name="description"]',meta.description],

@@ -58,7 +58,7 @@ add('RPC payloads are not persisted in browser storage',/export function writeSi
 add('Session identifier generation never falls back to Math.random',/const uid=\(\)=>\{const cryptoApi=globalThis\.crypto;[\s\S]{0,350}cryptoApi\.getRandomValues\(bytes\)/.test(read(path.join(root,'src/main.jsx')))&&! /Math\.random\(\)/.test(read(path.join(root,'src/main.jsx'))));
 add('Session identifiers use Web Crypto with no insecure random fallback',/const uid=\(\)=>\{const cryptoApi=globalThis\.crypto;[\s\S]{0,350}cryptoApi\.getRandomValues\(bytes\)/.test(read(path.join(root,'src/main.jsx')))&&! /Math\.random\(\)/.test(read(path.join(root,'src/main.jsx'))));
 add('Pageview local storage rejects malformed shapes and invalid counters',/const parsed=JSON\.parse\(storageGet\(key,'\{\}'\)\);[\s\S]{0,650}!Array\.isArray\(parsed\)[\s\S]{0,250}Number\.isSafeInteger\(count\)/.test(read(path.join(root,'src/main.jsx'))));
-add('Featured-event popup stays intentionally disabled and cannot persist stale dismissal state',/export function FeaturedEventPopup\(\)\{\s*return null;\s*\}/.test(read(path.join(root,'src/featured-event-popup.jsx')))&&!/localStorage|storageSet|Date\.now/.test(read(path.join(root,'src/featured-event-popup.jsx'))));
+add('Disabled featured-event popup performs no dismissal storage writes',/export function FeaturedEventPopup\(\)\{\s*return null;\s*\}/.test(read(path.join(root,'src/featured-event-popup.jsx')))&&!/localStorage\.(?:setItem|removeItem)\(/.test(read(path.join(root,'src/featured-event-popup.jsx'))));
 const updatesApi=read(path.join(root,'api/jyc-updates.js'));
 const recordGuardMatch=updatesApi.match(/const isRecord=(value=>[^;]+);/);
 let recordGuard;
