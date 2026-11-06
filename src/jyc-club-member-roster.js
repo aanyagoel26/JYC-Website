@@ -57,5 +57,4 @@ export const JYC_CLUB_MEMBER_ROSTER = {
     {name:'Ishan Mehrotra',role:'Coordinator'}
   ],
   Cinekala: [{name:'Ishanvi Johari',role:'Coordinator'}],
-  Abhivyakti: [{name:'Kashvi Khanna',role:'Coordinator'}]
 };
