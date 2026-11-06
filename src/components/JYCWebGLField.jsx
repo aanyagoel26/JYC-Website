@@ -1,13 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import { Mesh, Program, Renderer, Triangle } from 'ogl';
 
-const vertex = \`#version 300 es
+const vertex = `#version 300 es
 in vec2 position;
 in vec2 uv;
 out vec2 vUv;
-void main() { vUv = uv; gl_Position = vec4(position, 0.0, 1.0); }\`;
+void main() { vUv = uv; gl_Position = vec4(position, 0.0, 1.0); }`;
 
-const fragment = \`#version 300 es
+const fragment = `#version 300 es
 precision highp float;
 uniform vec2 uResolution;
 uniform vec2 uPointer;
@@ -31,6 +31,17 @@ float fbm(vec2 p) {
   for (int i=0; i<5; i++) { value += amplitude * noise(p); p = turn * p * 2.03 + 17.1; amplitude *= 0.5; }
   return value;
 }
+float starLayer(vec2 p, float scale, float drift) {
+  vec2 grid = p * scale;
+  vec2 cell = floor(grid);
+  vec2 local = fract(grid) - 0.5;
+  float seed = hash21(cell);
+  vec2 offset = vec2(hash21(cell + 3.7), hash21(cell + 9.2)) * 0.72 - 0.36;
+  float distanceToStar = length(local - offset);
+  float star = (1.0 - smoothstep(0.012, 0.045, distanceToStar)) * step(0.965, seed);
+  float twinkle = 0.58 + 0.42 * sin(uTime * (1.1 + seed * 2.4) + seed * 45.0);
+  return star * twinkle * drift;
+}
 void main() {
   vec2 p = (vUv - 0.5) * vec2(uResolution.x / max(uResolution.y, 1.0), 1.0);
   vec2 pointer = (uPointer - 0.5) * vec2(uResolution.x / max(uResolution.y, 1.0), 1.0);
@@ -42,6 +53,12 @@ void main() {
   float contour = 1.0 - smoothstep(0.0, 0.035, abs(fract(aurora * 12.0) - 0.5));
   float halo = exp(-length(p - pointer * 0.22) * 2.5);
   float radial = exp(-length(p) * 2.3);
+  float stars = starLayer(p + vec2(time * 0.035, -time * 0.018), 34.0, 0.72)
+              + starLayer(p * 1.37 - vec2(time * 0.02, time * 0.03), 57.0, 0.42);
+  float pointerDistance = length(p - pointer * 0.22);
+  float ripplePhase = abs(fract(pointerDistance * 3.4 - time * 0.28) - 0.5);
+  float ripple = (1.0 - smoothstep(0.018, 0.055, ripplePhase)) * exp(-pointerDistance * 1.7) * 0.12;
+  float lightSweep = exp(-pow((p.y - sin(p.x * 1.25 + time * 0.7) * 0.17) * 17.0, 2.0)) * 0.045;
   float ribbons = smoothstep(0.42, 0.88, ridge + halo * 0.12) * (0.24 + 0.76 * field);
   vec3 violet = uTheme > 0.5 ? vec3(0.53,0.48,0.88) : vec3(0.34,0.29,0.55);
   vec3 blue = uTheme > 0.5 ? vec3(0.30,0.42,0.68) : vec3(0.47,0.48,0.66);
@@ -50,11 +67,13 @@ void main() {
   color = mix(color, gold, smoothstep(0.68,0.96,aurora) * 0.58);
   float line = contour * smoothstep(0.56,0.9,field) * 0.12;
   color += gold * line;
-  float alpha = (ribbons * 0.20 + radial * 0.045 + line) * uIntensity;
+  color += mix(blue, gold, 0.62) * (ripple + lightSweep);
+  color += vec3(0.78, 0.82, 1.0) * stars * 0.8;
+  float alpha = (ribbons * 0.20 + radial * 0.045 + line + ripple + lightSweep + stars * 0.52) * uIntensity;
   alpha *= (1.0 - smoothstep(0.18,0.98,length(p) * 0.52));
   alpha += halo * 0.035 * uIntensity;
   fragColor = vec4(color, clamp(alpha, 0.0, 0.34));
-}\`;
+}`;
 
 const prefersReducedMotion = () => window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 export function JYCWebGLField() {
