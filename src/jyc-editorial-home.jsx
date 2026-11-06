@@ -17,6 +17,7 @@ import './styles/jyc-editorial-motion-system.css';
 
 const ORIGINAL_LOGO = '/JYC%20Logo(4).png';
 const FALLBACK = import.meta.env.PROD ? '/assets/jyc-logo.webp' : ORIGINAL_LOGO;
+const DITHER_SOURCE = import.meta.env.PROD ? '/assets/jyc-logo-medium.avif' : FALLBACK;
 const handleHeroLogoFallback = event => {
   const image = event.currentTarget;
   image.srcset = '';
@@ -197,50 +198,49 @@ export function JYCEditorialHome({ data }) {
         <div className="jh-hero-copy">
           <div className="jh-cyber-badge">
             <span className="jh-live-pulse-dot" />
-            <span>THE JIIT 128 STUDENT ECOSYSTEM</span>
+            <span>THE JIIT 128 COMMUNITY</span>
             <b>AY 2026–27</b>
           </div>
-          <p className="jh-overline">STUDENT LIFE, BUILT TOGETHER <i aria-hidden="true">/</i> SECTOR 128, NOIDA</p>
+          <p className="jh-overline">JAYPEE INSTITUTE OF INFORMATION TECHNOLOGY · WISH TOWN</p>
           <h1 id="jh-title">
             <span>Find your people.</span>
             <span>Make your mark.</span>
             <em className="jh-title-gradient">At JIIT 128.</em>
           </h1>
           <p className="jh-lead">
-            A campus is more than classrooms. Discover the communities, creative spaces, competitions and shared experiences that make JIIT feel like your own.
+            From clubs and competitions to performances, projects and campus traditions, JYC helps you find the people and experiences that make JIIT feel like yours.
           </p>
           <div className="jh-actions jh-hero-actions">
-            <button type="button" className="jh-btn jh-btn-primary" onClick={() => nav('/clubs')}>
-              Explore communities <span>↗</span>
+            <button type="button" className="jh-btn jh-btn-primary" onClick={() => nav('/events')}>
+              ⚡ Explore Events <span>↗</span>
             </button>
-            <button type="button" className="jh-btn jh-btn-glass" onClick={() => nav('/events')}>
-              Discover events <span>↗</span>
+            <button type="button" className="jh-btn jh-btn-glass" onClick={() => nav('/clubs')}>
+              Explore Clubs <span>→</span>
             </button>
-            <button type="button" className="jh-btn jh-btn-outline" onClick={() => nav('/team')}>
-              Meet the people <span>↗</span>
+            <button type="button" className="jh-btn jh-btn-outline" onClick={() => nav('/join-jyc')}>
+              Join JYC <span>→</span>
             </button>
           </div>
-          <div className="jh-hero-domain-rail" aria-label="JYC community areas">
-            <span>TECHNOLOGY</span><i/><span>CULTURE</span><i/><span>CREATIVITY</span><i/><span>LITERATURE</span><i/><span>SPORT</span>
-          </div>
+
+
         </div>
 
         {/* WebGL Dither Veil is a real mounted hero layer; the emblem remains the foreground focal point. */}
         <div className="jh-hero-visual jh-hero-webgl-stage-wrap">
           <div className="jh-hero-dither-backdrop" aria-hidden="true" />
-          <div className="jh-hero-dither-layer" aria-hidden="true">
+          <div className="jh-hero-dither-layer jh-dither-mark" aria-hidden="true">
             <Suspense fallback={<div className="jh-hero-dither-loading" />}>
               <LazyDitherVeil
-                src="/assets/jyc-logo.avif"
-                fallbackSrc="/assets/jyc-logo.webp"
-                originalFallbackSrc="/JYC%20Logo(4).png"
+                src={DITHER_SOURCE}
+                fallbackSrc={FALLBACK}
+                originalFallbackSrc={ORIGINAL_LOGO}
                 globalPointer
                 fit="contain"
                 pattern="floyd"
                 pixelSize={2}
                 levels={3}
                 palette="duotone"
-                inkColor="#4b1f25"
+                inkColor="#4b3e69"
                 paperColor="#f6f2e9"
                 contrast={1.18}
                 brightness={0.02}
@@ -302,7 +302,7 @@ export function JYCEditorialHome({ data }) {
                 key={story.id || story.url}
                 onClick={() => nav('/gallery?q=' + encodeURIComponent(story.association || story.caption || ''))}
                 onMouseMove={handleSpotlight}
-                aria-label={`Explore ${story.association} photography in the JYC gallery`}
+                aria-label={`${story.year || 'JYC ARCHIVE'} ${story.association} ${story.caption || story.association} Explore album`}
               >
                 <ResponsivePhoto
                   className="jh-story-photo"
@@ -444,7 +444,7 @@ export function JYCEditorialHome({ data }) {
             </div>
             {team.length ? (
               team.map((m, i) => (
-                <button type="button" key={m.id || i} onClick={() => nav('/team')} aria-label={`Meet ${m.name || 'JYC team member'}, ${m.role || m.position || 'JYC Apex'}`}>
+                <button type="button" key={m.id || i} onClick={() => nav('/team')} aria-label={`Meet ${m.role || m.position || 'JYC Apex'} ${m.name || 'JYC team member'}`}>
                   <span className="jh-team-monogram" aria-hidden="true">
                     {teamPhotoFor(m)
                       ? <ResponsivePhoto className="jh-team-thumb" src={teamPhotoFor(m)} alt="" loading="lazy" decoding="async" sizes="48px" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Portrait unavailable" />
@@ -454,7 +454,7 @@ export function JYCEditorialHome({ data }) {
                     <small>{m.role || m.position || 'JYC Apex'}</small>
                     <strong>{m.name || 'Team Member'}</strong>
                   </span>
-                  <b>↗</b>
+                  <b aria-hidden="true">↗</b>
                 </button>
               ))
             ) : (
