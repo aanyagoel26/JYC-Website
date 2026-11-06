@@ -38,7 +38,7 @@ check('inactive team profile face is hidden and inert, and the active face is ke
 check('Escape closes the team profile and restores focus to the front trigger',flip.includes("event.key === 'Escape'")&&flip.includes('frontTriggerRef.current?.focus')&&teamTest.includes("await expect(frontTrigger).toBeFocused()"));
 check('team profile trigger has a visible theme-aware focus indicator',flipCss.includes('.flip-card__front-trigger:focus-visible')&&flipCss.includes('outline: 3px solid'));
 check('team profile cards use the shared lavender/champagne palette without legacy red accents',flipCss.includes('var(--jyc-accent')&&flipCss.includes('var(--jyc-gold')&&!flipCss.includes('#A82420'));
-check('theme switch has a concise action-oriented accessible name',main.includes('aria-label={`Switch to ${nextLabel} theme`}'));
+check('theme switch accessible name includes its visible label and action',main.includes("aria-label={`${theme==='dark'?'Night':'Day'} Theme — switch to ${nextLabel} theme`}"));
 check('Search trigger accessible name includes its visible label and keyboard shortcut',main.includes('aria-label="Search, Ctrl K"'));
 check('About dark closing CTA overrides the paper-only legacy foregrounds',read('src/styles/jyc-cohesive-experience.css').includes('Dark About closing CTA')&&read('src/styles/jyc-cohesive-experience.css').includes('about-next-v28 h2'));
 check('legacy restoration red aliases resolve through the shared theme accent instead of hard-coded red',read('src/styles/jyc-cohesive-experience.css').includes('--jyc-restoration-red: var(--jyc-accent)')&&read('src/styles/jyc-cohesive-experience.css').includes('--jyc-restoration-red-bright: var(--jyc-accent-strong)'));
