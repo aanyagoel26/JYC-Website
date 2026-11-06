@@ -385,7 +385,7 @@ function Team({data}){
       <div className="team-front-overlay">
        <span className="team-role-tag">{role}</span>
        <h3 className="team-name-front">{name}</h3>
-       <span className="team-flip-indicator"><span aria-hidden="true">↻</span> Tap to view profile</span>
+       <span className="team-flip-indicator"><span aria-hidden="true">↻</span> Hover or tap to view profile</span>
       </div>
      </div>
      <div className="team-back-content">
