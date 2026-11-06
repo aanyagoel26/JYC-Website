@@ -5,7 +5,7 @@ on:
   push:
     branches: [main, master, 'fix/**']
   pull_request:
-    branches: [main, master]
+    branches: [main, master, 'design/home-night-sky-mobile-about']
 
 permissions:
   contents: read

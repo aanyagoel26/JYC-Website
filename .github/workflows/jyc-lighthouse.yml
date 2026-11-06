@@ -2,7 +2,7 @@ name: JYC Lighthouse CI
 
 on:
   pull_request:
-    branches: [main]
+    branches: [main, 'design/home-night-sky-mobile-about']
   push:
     branches: [main, 'fix/**']
   workflow_dispatch:
