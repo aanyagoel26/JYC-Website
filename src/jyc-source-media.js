@@ -170,6 +170,8 @@ const AUTHENTIC_HUB_LOGOS = {
   prismatic: '/assets/logos/prismatic.webp',
   prismatichub: '/assets/logos/prismatic.webp',
   bds: '/assets/logos/bds.webp',
+  cinekala: '/assets/logos/cinekala.webp',
+  innovation: '/assets/logos/innovation.webp',
   bhangradancesociety: '/assets/logos/bds.webp',
   fortissimo: '/assets/logos/fortissimo.webp',
   fortissimomusicsociety: '/assets/logos/fortissimo.webp',
