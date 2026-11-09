@@ -199,9 +199,9 @@ test('homepage accessibility and responsive guardrails', async ({ page }) => {
       const text = (button.innerText || '').trim();
       const aria = button.getAttribute('aria-label') || button.getAttribute('aria-labelledby');
       return !text && !aria;
-    }).length
+    }).map(button => ({className:String(button.className||''),title:button.getAttribute('title'),html:button.outerHTML.slice(0,240)}))
   );
-  expect(unnamedButtons).toBe(0);
+  expect(unnamedButtons, `buttons need visible text or an accessible name: ${JSON.stringify(unnamedButtons)}`).toHaveLength(0);
 
   const overflow = await page.evaluate(() =>
     document.documentElement.scrollWidth > document.documentElement.clientWidth + 1
