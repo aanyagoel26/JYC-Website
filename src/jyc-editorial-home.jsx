@@ -239,7 +239,7 @@ export function JYCEditorialHome({ data }) {
                 originalFallbackSrc={ORIGINAL_LOGO}
                 globalPointer
                 fit="contain"
-                pattern="floyd"
+                pattern="bayer"
                 pixelSize={2}
                 levels={3}
                 palette="duotone"
