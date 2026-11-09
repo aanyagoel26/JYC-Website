@@ -2090,6 +2090,8 @@ test('More navigation and Search modal work with keyboard, empty states and focu
   await expect(page.locator('#jyc-search-result-1')).toHaveAttribute('aria-selected', 'true');
   await input.press('ArrowUp');
   await expect(page.locator('#jyc-search-result-0')).toHaveAttribute('aria-selected', 'true');
+  await input.press('ArrowUp');
+  await expect(page.locator('#jyc-search-result-0')).toHaveAttribute('aria-selected', 'true');
   await input.press('Enter');
   await expect(page).toHaveURL(/\/clubs(?:\/)?$/);
   await expect(page.locator('.search-overlay')).toHaveCount(0);
