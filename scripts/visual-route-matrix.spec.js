@@ -40,6 +40,7 @@ test.describe('JYC visual capture and measurable design contracts', () => {
         await page.locator('.public-app').waitFor({ state: 'visible', timeout: 25000 });
         await page.waitForFunction(() => document.documentElement.dataset.jycContentReady === 'true', { timeout: 20000 });
         await page.evaluate(() => document.fonts.ready);
+        await expect(page.locator('.public-app h1').first()).toBeVisible({timeout:15000});
         await page.addStyleTag({content:'*,*::before,*::after{animation:none!important;animation-duration:0s!important;transition:none!important;transition-duration:0s!important;scroll-behavior:auto!important;caret-color:transparent!important}.fest-countdown{visibility:hidden!important}.jyc-featured-event-overlay{display:none!important}'});
         await page.mouse.move(-1, -1);
         // Walk the full document so lazy images load before visual capture; otherwise fullPage screenshots can falsely show empty image placeholders below the fold.
