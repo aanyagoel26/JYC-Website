@@ -39,6 +39,10 @@ html[data-theme="dark"] .public-app :where(.card,.event-card,.club-card,.team-ca
 @media(max-width:760px){.route-stage>section{animation-duration:.32s}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}.route-stage>section{animation:none!important;transform:none!important}}
 
+/* Keep the new search surface above legacy search theme contracts. */
+html[data-theme="light"] .search-overlay.jyc-search-backdrop,html[data-theme="dark"] .search-overlay.jyc-search-backdrop{background:rgba(8,13,28,.62)!important}
+.search-modal .jyc-search-filters button[aria-pressed="true"]{background:var(--jyc-gold)!important;border-color:var(--jyc-gold)!important;color:#fffaf0!important;box-shadow:none!important}
+
 /* Fresh search command surface. */
 .jyc-search-backdrop{position:fixed;inset:0;z-index:10050;display:grid;place-items:start center;padding:clamp(14px,5vh,56px) 16px 20px;background:rgba(12,15,26,.52);backdrop-filter:blur(16px) saturate(125%);-webkit-backdrop-filter:blur(16px) saturate(125%);overflow:auto}
 .jyc-search-dialog{width:min(760px,100%);max-height:min(790px,calc(100dvh - 72px));display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--jyc-line-strong);border-radius:26px;background:var(--jyc-surface);color:var(--jyc-text-strong);box-shadow:0 34px 110px rgba(14,17,30,.3)}
