@@ -7,6 +7,7 @@ const experience = fs.readFileSync('src/jyc57-experience.jsx', 'utf8');
 const home = fs.readFileSync('src/jyc-editorial-home.css', 'utf8');
 const homeComponent = fs.readFileSync('src/jyc-editorial-home.jsx', 'utf8');
 const main = fs.readFileSync('src/main.jsx', 'utf8');
+const search = fs.readFileSync('src/search/jyc-search.jsx', 'utf8');
 
 const importIndex = entry.indexOf("@import './jyc-visual-quality.css';");
 const firstRuleIndex = entry.indexOf('.public-app :where');
@@ -35,9 +36,9 @@ assert.ok(entry.includes('.fests-page .compact-page-head') && entry.includes('.f
 assert.ok(main.includes("['/best-of-jyc','Best of JYC','A curated visual selection of published JYC moments']") &&
   main.includes("['/achievements','Achievements','Source-backed milestones and community outcomes']"),
   'More sheet must surface editorial routes');
-assert.ok(main.includes("['Best of JYC','Curated published JYC photography and memories.','PAGE','/best-of-jyc']") &&
-  main.includes("['Achievements','Source-backed JYC milestones and community outcomes.','PAGE','/achievements']"),
-  'Global search must surface editorial routes');
+assert.ok(search.includes("['Best of JYC','Curated JYC photography and standout campus moments.','PAGE','/best-of-jyc'") &&
+  search.includes("['Achievements','Source-backed JYC awards, recognition and milestones.','PAGE','/achievements'"),
+  'Global search must surface editorial routes in its dedicated public index');
 assert.ok(home.includes('.jh-photo-story-grid.has-three') &&
   home.includes('.jh-story-card-1') && home.includes('@media (max-width: 680px)'),
   'homepage editorial photo collage must retain responsive art direction');
