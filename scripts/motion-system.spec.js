@@ -15,9 +15,9 @@ test.describe('JYC motion system', () => {
     await target.scrollIntoViewIfNeeded();
     await expect(target.locator('h1')).toBeVisible();
     await expect.poll(() => target.evaluate(el => Number(getComputedStyle(el).opacity))).toBeGreaterThan(0.98);
+    await expect.poll(() => target.evaluate(el => getComputedStyle(el).transform)).toBe('none');
     const state = await target.evaluate(el => ({ opacity:Number(getComputedStyle(el).opacity), transform:getComputedStyle(el).transform }));
     expect(state.opacity).toBeGreaterThan(0.98);
-    expect(state.transform).toBe('none');
   });
 
   test('new SPA route content is observed after navigation without a full reload', async ({ page }) => {
@@ -147,7 +147,7 @@ test.describe('JYC motion system', () => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     await ready(page, '/');
-    const emblem = page.locator('.jyc-emblem-card-3d');
+    const emblem = page.locator('.jyc-emblem-glow-backing');
     const ambient = page.locator('.jyc-ambient-canvas');
     await expect(emblem).toBeVisible();
     await expect(ambient).toBeVisible();
