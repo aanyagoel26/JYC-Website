@@ -53,6 +53,15 @@ export function relevanceScore({title='',meta='',text='',type='',query=''}){
   score+=exactMetaTokens*650;
   if(m.includes(q))score+=1000;
   if(x.includes(q))score+=700;
+  // Multi-word queries should reward coverage, not just one lucky token.
+  // This follows token-search principles while keeping the index dependency-free.
+  if(qt.length>1){
+    const searchableTokens=[...tt,...mt];
+    const matched=qt.filter(token=>searchableTokens.some(field=>fuzzyTokenScore(token,field)>0)).length;
+    const coverage=matched/qt.length;
+    if(coverage<.6)return 0;
+    score=score*(.35+.65*coverage)+(coverage===1?1200*qt.length:0);
+  }
   if(type==='ADMIN')score+=5;
   return Math.round(score);
 }
