@@ -378,3 +378,18 @@ html[data-theme] .jyc-hero-model-viewer {
   min-width: 1.1em;
   overflow: visible;
 }
+
+
+/* Readable emblem labels and accessible motion fallback. */
+.jyc-emblem-badge .badge-text,
+.jyc-emblem-badge .badge-accent,
+.jyc-emblem-stage .emblem-control-pill,
+.emblem-control-pill { font-size:11px!important; }
+html:not([data-theme="dark"]) .jyc-emblem-badge .badge-accent { color:#594629!important; }
+html[data-theme="dark"] .jyc-emblem-badge .badge-accent { color:#e7d19b!important; }
+@media (prefers-reduced-motion: reduce) {
+  .jyc-hero-emblem-stage *, .jyc-emblem-badge, .emblem-control-pill {
+    animation:none!important;
+    transition:none!important;
+  }
+}

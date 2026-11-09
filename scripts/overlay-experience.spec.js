@@ -25,7 +25,7 @@ test.describe('JYC Search and More interaction contract', () => {
       const searchTrigger = page.locator('[data-jyc-search-trigger]');
       await expect(searchTrigger).toBeVisible();
       await searchTrigger.click();
-      const search = page.getByRole('dialog', { name:'JYC search' });
+      const search = page.getByRole('dialog', { name:'Find your place.' });
       await expect(search).toBeVisible();
       const input = search.getByRole('textbox', { name:'Search JYC' });
       await expect(input).toBeFocused();
@@ -70,9 +70,9 @@ test.describe('JYC Search and More interaction contract', () => {
       expect(moreWidth.scroll).toBeLessThanOrEqual(moreWidth.client+1);
 
       await more.getByRole('button', { name:'Search JYC' }).click();
-      await expect(page.getByRole('dialog', { name:'JYC search' })).toBeVisible();
+      await expect(page.getByRole('dialog', { name:'Find your place.' })).toBeVisible();
       await page.keyboard.press('Escape');
-      await expect(page.getByRole('dialog', { name:'JYC search' })).toHaveCount(0);
+      await expect(page.getByRole('dialog', { name:'Find your place.' })).toHaveCount(0);
       });
     }
   }

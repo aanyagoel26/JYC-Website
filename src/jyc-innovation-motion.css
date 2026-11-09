@@ -162,3 +162,11 @@ html[data-theme="light"] .public-app .jyc-editorial-home.jyc-home {
     transparent 35%
   ), transparent !important;
 }
+
+
+/* If the enhancement never initializes, reveal content remains visible and stationary. */
+html:not(.jyc-motion-ready) .public-app .reveal {
+  opacity:1!important;
+  transform:none!important;
+  transition:none!important;
+}

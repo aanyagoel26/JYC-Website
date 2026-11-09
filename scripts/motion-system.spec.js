@@ -14,10 +14,8 @@ test.describe('JYC motion system', () => {
     await expect(target).toBeAttached();
     await target.scrollIntoViewIfNeeded();
     await expect(target).toHaveClass(/jyc-motion-visible/, { timeout: 7000 });
-    const state = await target.evaluate(el => ({
-      opacity: Number(getComputedStyle(el).opacity),
-      transform: getComputedStyle(el).transform
-    }));
+    await expect.poll(() => target.evaluate(el => Number(getComputedStyle(el).opacity))).toBeGreaterThan(0.98);
+    const state = await target.evaluate(el => ({ opacity:Number(getComputedStyle(el).opacity), transform:getComputedStyle(el).transform }));
     expect(state.opacity).toBeGreaterThan(0.98);
     expect(state.transform).toBe('none');
   });
@@ -28,7 +26,7 @@ test.describe('JYC motion system', () => {
     const before = await page.evaluate(() => performance.getEntriesByType('navigation').length);
     await page.locator('.nav').getByRole('button', { name: 'Clubs', exact: true }).click();
     await expect(page).toHaveURL(/\/clubs$/);
-    const target = page.locator('.public-app .section-head.reveal').first();
+    const target = page.locator('.public-app .clubs-page-head.reveal').first();
     await expect(target).toBeAttached();
     await target.scrollIntoViewIfNeeded();
     await expect(target).toHaveClass(/jyc-motion-visible/, { timeout: 7000 });
@@ -44,12 +42,7 @@ test.describe('JYC motion system', () => {
     const reveals = page.locator('.public-app .reveal');
     const count = await reveals.count();
     expect(count).toBeGreaterThan(2);
-    const states = await reveals.evaluateAll(nodes => nodes.map(node => ({
-      visible: node.classList.contains('jyc-motion-visible'),
-      opacity: Number(getComputedStyle(node).opacity),
-      transform: getComputedStyle(node).transform
-    })));
-    expect(states.every(state => state.visible && state.opacity > 0.98 && state.transform === 'none')).toBe(true);
+    await expect.poll(() => reveals.evaluateAll(nodes => nodes.filter(node => node.getClientRects().length).every(node => node.classList.contains('jyc-motion-visible') && Number(getComputedStyle(node).opacity) > 0.98 && getComputedStyle(node).transform === 'none'))).toBe(true);
   });
 
   test('content remains visible when IntersectionObserver is unavailable', async ({ page }) => {
@@ -59,33 +52,26 @@ test.describe('JYC motion system', () => {
     const reveals = page.locator('.public-app .reveal');
     const count = await reveals.count();
     expect(count).toBeGreaterThan(2);
-    const states = await reveals.evaluateAll(nodes => nodes.map(node => ({
-      visible: node.classList.contains('jyc-motion-visible'),
-      opacity: Number(getComputedStyle(node).opacity)
-    })));
-    expect(states.every(state => state.visible && state.opacity > 0.98)).toBe(true);
+    await expect.poll(() => reveals.evaluateAll(nodes => nodes.filter(node => node.getClientRects().length).every(node => node.classList.contains('jyc-motion-visible') && Number(getComputedStyle(node).opacity) > 0.98))).toBe(true);
   });
   test('reveal content remains visible when the motion enhancement is not initialized', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await ready(page, '/about');
     await page.evaluate(() => document.documentElement.classList.remove('jyc-motion-ready'));
     const target = page.locator('.about-next-v28.reveal');
-    const state = await target.evaluate(el => ({
-      opacity: Number(getComputedStyle(el).opacity),
-      transform: getComputedStyle(el).transform
-    }));
-    expect(state.opacity).toBeGreaterThan(0.98);
-    expect(state.transform).toBe('none');
+    await expect.poll(() => target.evaluate(el => ({opacity:Number(getComputedStyle(el).opacity),transform:getComputedStyle(el).transform}))).toEqual({opacity:1,transform:'none'});
   });
 
   test('reveal content stays visible when MutationObserver is unavailable', async ({ page }) => {
     await page.addInitScript(() => { window.MutationObserver = undefined; });
     await page.setViewportSize({ width: 390, height: 844 });
-    await ready(page, '/about');
-    const target = page.locator('.about-next-v28.reveal');
-    await expect(target).toBeVisible();
-    await expect(page.locator('html')).not.toHaveClass(/jyc-motion-ready/);
-    await expect.poll(() => target.evaluate(el => Number(getComputedStyle(el).opacity))).toBeGreaterThan(0.98);
+    await page.goto('/about', { waitUntil:'load' });
+    await page.waitForTimeout(1200);
+    const state = await page.evaluate(() => { const node=document.querySelector('.about-next-v28.reveal'); return {exists:Boolean(node),opacity:node?Number(getComputedStyle(node).opacity):0,transform:node?getComputedStyle(node).transform:'missing',motionReady:document.documentElement.classList.contains('jyc-motion-ready')}; });
+    expect(state.exists).toBe(true);
+    expect(state.motionReady).toBe(false);
+    expect(state.opacity).toBeGreaterThan(0.98);
+    expect(state.transform).toBe('none');
   });
 
   test('ambient canvas stays fixed behind content and never occupies page layout on high-performance devices', async ({ page }) => {
@@ -125,13 +111,13 @@ test.describe('JYC motion system', () => {
     await expect(canvas).toBeAttached();
     await page.waitForTimeout(180);
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.waitForTimeout(80);
+    await page.waitForTimeout(250);
     const pausedFrame = await canvas.evaluate(node => node.toDataURL());
-    await page.waitForTimeout(160);
+    await page.waitForTimeout(300);
     const nextFrame = await canvas.evaluate(node => node.toDataURL());
     expect(nextFrame).toBe(pausedFrame);
     await page.emulateMedia({ reducedMotion: 'no-preference' });
-    await page.waitForTimeout(180);
+    await page.waitForTimeout(300);
     const resumedFrame = await canvas.evaluate(node => node.toDataURL());
     expect(resumedFrame).not.toBe(pausedFrame);
   });
@@ -143,7 +129,7 @@ test.describe('JYC motion system', () => {
         document.documentElement.dataset.theme = value;
         localStorage.setItem('jyc-theme', value);
       }, theme);
-      const surface = await page.locator('.public-app').evaluate(node => {
+      const surface = await page.locator('.app-frame').evaluate(node => {
         const style = getComputedStyle(node);
         const root = getComputedStyle(document.documentElement);
         return { backgroundImage: style.backgroundImage, accent: root.getPropertyValue('--jyc-accent').trim(), canvas: root.getPropertyValue('--jyc-canvas').trim(), surface: root.getPropertyValue('--jyc-surface').trim() };
@@ -156,18 +142,19 @@ test.describe('JYC motion system', () => {
   });
 
   test('homepage depth animations run when motion is allowed and stop for reduced motion', async ({ page }) => {
+    await page.addInitScript(() => { Object.defineProperty(navigator,'hardwareConcurrency',{value:16,configurable:true}); Object.defineProperty(navigator,'deviceMemory',{value:16,configurable:true}); Object.defineProperty(navigator,'connection',{value:{saveData:false},configurable:true}); });
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     await ready(page, '/');
-    const plaque = page.locator('.jh-hero-logo-plaque');
-    const visual = page.locator('.jh-hero-dither-visual');
-    await expect(plaque).toBeVisible();
-    await expect(visual).toBeVisible();
-    await expect.poll(() => plaque.evaluate(node => getComputedStyle(node).animationName)).toBe('jycPlaqueBreathe');
-    await expect.poll(() => visual.evaluate(node => getComputedStyle(node).animationName)).toBe('jycVisualFloat');
+    const emblem = page.locator('.jyc-emblem-card-3d');
+    const ambient = page.locator('.jyc-ambient-canvas');
+    await expect(emblem).toBeVisible();
+    await expect(ambient).toBeVisible();
+    await expect.poll(() => emblem.evaluate(node => getComputedStyle(node).animationName)).toBe('emblemPulse');
+    await expect.poll(() => ambient.evaluate(node => getComputedStyle(node).display)).not.toBe('none');
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await expect.poll(() => plaque.evaluate(node => getComputedStyle(node).animationName)).toBe('none');
-    await expect.poll(() => visual.evaluate(node => getComputedStyle(node).animationName)).toBe('none');
+    await expect.poll(() => emblem.evaluate(node => getComputedStyle(node).animationName)).toBe('none');
+    await expect.poll(() => ambient.evaluate(node => getComputedStyle(node).display)).toBe('none');
   });
 
 

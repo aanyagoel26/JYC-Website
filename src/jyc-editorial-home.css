@@ -2309,3 +2309,21 @@ html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy >
 html[data-theme="dark"] .public-app .nav a {
   color: #f0e9e7 !important;
 }
+
+
+/* Contrast-safe day/night editorial actions and section markers. */
+.jyc-editorial-home.jyc-home .jh-about-kicker { font-size:11px!important; color:#594629!important; }
+.jyc-editorial-home.jyc-home .jh-section-number { font-size:11px!important; }
+.jyc-editorial-home.jyc-home .jh-cyber-badge span,
+.jyc-editorial-home.jyc-home .jh-cyber-badge b,
+.jyc-editorial-home.jyc-home .jh-logo-caption,
+.jyc-editorial-home.jyc-home .jh-status-live-tag,
+.jyc-editorial-home.jyc-home .jh-event-meta small,
+.jyc-editorial-home.jyc-home .jh-event-meta i { font-size:11px!important; }
+html:not([data-theme="dark"]) .jyc-editorial-home.jyc-home .jh-btn-primary {
+  background-color:#765f36!important; background-image:none!important; color:#fffaf0!important; border-color:#765f36!important;
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-btn-primary {
+  background-color:#e7d19b!important; background-image:none!important; color:#17142a!important; border-color:#e7d19b!important;
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-about-kicker { color:#f0e9e7!important; }

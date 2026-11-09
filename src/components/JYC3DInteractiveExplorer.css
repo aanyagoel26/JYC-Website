@@ -261,3 +261,14 @@ html[data-theme="light"] .jyc-community-explorer {
     transition-duration: .01ms !important; scroll-behavior: auto !important;
   }
 }
+
+
+/* Community directory labels meet the 11px readable-text floor. */
+.jyc-community-explorer :where(.jyc-community-eyebrow,.jyc-community-proof span,.jyc-community-filter,.jyc-community-filter small,.jyc-community-index,.jyc-community-family,.jyc-community-focus,.jyc-community-result-count) { font-size:11px!important; }
+html:not([data-theme="dark"]) .jyc-community-explorer .jyc-community-heading h2 em,
+html:not([data-theme="dark"]) .jyc-community-explorer .jyc-community-family,
+html:not([data-theme="dark"]) .jyc-community-explorer .jyc-community-filter small { color:#594629!important; -webkit-text-fill-color:#594629!important; opacity:1!important; }
+html[data-theme="dark"] .jyc-community-explorer .jyc-community-heading h2 em,
+html[data-theme="dark"] .jyc-community-explorer .jyc-community-family,
+html[data-theme="dark"] .jyc-community-explorer .jyc-community-filter small { color:#e7d19b!important; -webkit-text-fill-color:#e7d19b!important; opacity:1!important; }
+.jyc-community-explorer .jyc-community-heading h2 em { background:none!important; }
