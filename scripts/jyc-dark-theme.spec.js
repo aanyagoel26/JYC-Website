@@ -81,7 +81,7 @@ test.describe('JYC shared day/night theme contract', () => {
         await waitForJyc(page, route);
         const dark = await themeSnapshot(page);
         expect(dark.canvas).toBe('#080d1c');
-        expect(dark.accent).toBe('#c8bcff');
+        expect(dark.accent).toBe('#8fbaff');
         expect(dark.homeBackground === '' || dark.homeBackground === '#080d1c').toBe(true);
         if (route === '/') {
           expect(dark.homeSurface).toBe('#111b31');
@@ -109,7 +109,7 @@ test.describe('JYC shared warm-paper day theme', () => {
         await waitForJyc(page, route);
         const light = await themeSnapshot(page);
         expect(light.canvas).toBe('#f5f1e8');
-        expect(light.accent).toBe('#625889');
+        expect(light.accent).toBe('#315f9c');
         if (route === '/') {
           expect(light.homeBackground).toBe('#f5f1e8');
           expect(light.homeSurface).toBe('#fffdf8');
