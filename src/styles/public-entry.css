@@ -99,7 +99,7 @@
   text-wrap: pretty;
 }
 .public-app .fests-page .compact-page-head .eyebrow {
-  color: #e9c994;
+  color: var(--jyc-gold, #765f36) !important;
 }
 .public-app .fests-page .compact-page-head .page-stat-row {
   position: relative;

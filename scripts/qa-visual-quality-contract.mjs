@@ -67,7 +67,7 @@ assert.ok(main.includes('deadlineMs>Date.now()') &&
 
 assert.ok(!atmosphere.includes('animation: jyc-atmosphere-drift') && !/@keyframes jyc-atmosphere-drift/.test(atmosphere),
   'full-page atmosphere must not animate background-position and repaint the document');
-assert.ok(celestial.includes('--jyc-champagne-gold:#765f36 !important') && celestial.includes('--jyc-champagne-gold:#e7d19b !important'),
+assert.ok(celestial.includes('--jyc-champagne:#765f36 !important') && celestial.includes('--jyc-champagne:#e7d19b !important') && entry.includes('.public-app .fests-page .compact-page-head .eyebrow') && entry.includes('color: var(--jyc-gold, #765f36) !important;'),
   'legacy champagne aliases must retain WCAG AA contrast in both themes');
 assert.ok(webglField.includes("if (lowPower || coarse) { host.dataset.webgl = 'fallback'; return; }") &&
   dither.includes('(navigator.hardwareConcurrency || 8) <= 8') && dither.includes('(navigator.deviceMemory || 8) < 8') &&
