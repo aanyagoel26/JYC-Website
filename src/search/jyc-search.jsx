@@ -88,12 +88,12 @@ export function JYCSearch({data,close}){
    if(!focusable.length)return;const first=focusable[0],last=focusable[focusable.length-1];
    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}
   };
-  document.addEventListener('keydown',trap,true);
+  document.addEventListener('keydown',trap);
   return()=>{
    window.clearTimeout(timer);
    window.clearTimeout(closeTimerRef.current);
    document.body.style.overflow=previousOverflow;
-   document.removeEventListener('keydown',trap,true);
+   document.removeEventListener('keydown',trap);
    const original=returnFocusRef.current;
    const target=original instanceof HTMLElement && original.isConnected && original.getClientRects().length
     ? original
