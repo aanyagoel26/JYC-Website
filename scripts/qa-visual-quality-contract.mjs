@@ -71,7 +71,7 @@ assert.ok(celestial.includes('--jyc-champagne:#765f36 !important') && celestial.
   'legacy champagne aliases must retain WCAG AA contrast in both themes');
 assert.ok(webglField.includes("if (lowPower || coarse) { host.dataset.webgl = 'fallback'; return; }") &&
   dither.includes('(navigator.hardwareConcurrency || 4) < 4') && dither.includes('(navigator.deviceMemory || 4) < 2') &&
-  ambientMotion.includes('(navigator.hardwareConcurrency || 4) < 4') && ambientMotion.includes('(navigator.deviceMemory || 4) < 2') &&
+  ambientMotion.includes('(navigator.hardwareConcurrency || 8) <= 8') && ambientMotion.includes('(navigator.deviceMemory || 8) < 8') &&
   webglField.includes('(navigator.hardwareConcurrency || 8) <= 8') && webglField.includes('(navigator.deviceMemory || 8) < 8'),
-  'WebGL effects must retain a conservative fallback for the full-page field and a low-memory fallback for the hero/ambient layers');
+  'The full-page field and ambient canvas must use conservative hardware fallbacks while the hero Dither keeps its low-memory fallback');
 console.log('Visual quality contract: PASS (type, collage, reduced motion, image fallback, live counts, motion budget, theme contrast)');
