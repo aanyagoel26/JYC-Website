@@ -70,7 +70,7 @@ assert.ok(!atmosphere.includes('animation: jyc-atmosphere-drift') && !/@keyframe
 assert.ok(celestial.includes('--jyc-champagne-gold:#765f36 !important') && celestial.includes('--jyc-champagne-gold:#e7d19b !important'),
   'legacy champagne aliases must retain WCAG AA contrast in both themes');
 assert.ok(webglField.includes("if (lowPower || coarse) { host.dataset.webgl = 'fallback'; return; }") &&
-  dither.includes('(navigator.hardwareConcurrency || 4) < 4') && dither.includes('(navigator.deviceMemory || 4) < 2') &&
-  ambientMotion.includes('(navigator.hardwareConcurrency || 4) < 4') && ambientMotion.includes('(navigator.deviceMemory || 4) < 2'),
+  dither.includes('(navigator.hardwareConcurrency || 8) <= 8') && dither.includes('(navigator.deviceMemory || 8) < 8') &&
+  ambientMotion.includes('(navigator.hardwareConcurrency || 8) <= 8') && ambientMotion.includes('(navigator.deviceMemory || 8) < 8') && webglField.includes('(navigator.hardwareConcurrency || 8) <= 8'),
   'heavy WebGL and ambient canvas effects must fall back on constrained hardware');
 console.log('Visual quality contract: PASS (type, collage, reduced motion, image fallback, live counts, motion budget, theme contrast)');

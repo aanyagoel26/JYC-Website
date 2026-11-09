@@ -88,7 +88,8 @@ test.describe('JYC motion system', () => {
     await expect.poll(() => target.evaluate(el => Number(getComputedStyle(el).opacity))).toBeGreaterThan(0.98);
   });
 
-  test('ambient canvas stays fixed behind content and never occupies page layout', async ({ page }) => {
+  test('ambient canvas stays fixed behind content and never occupies page layout on high-performance devices', async ({ page }) => {
+    await page.addInitScript(() => { Object.defineProperty(navigator, 'hardwareConcurrency', { value: 16, configurable: true }); Object.defineProperty(navigator, 'deviceMemory', { value: 16, configurable: true }); Object.defineProperty(navigator, 'connection', { value: { saveData: false }, configurable: true }); });
     await page.setViewportSize({ width: 390, height: 844 });
     await ready(page, '/');
     const metrics = await page.locator('.jyc-ambient-canvas').evaluate(canvas => {
@@ -116,7 +117,7 @@ test.describe('JYC motion system', () => {
   });
 
   test('ambient canvas pauses and clears when reduced motion is enabled at runtime', async ({ page }) => {
-    await page.addInitScript(() => { Object.defineProperty(navigator, 'hardwareConcurrency', { value: 8, configurable: true }); Object.defineProperty(navigator, 'deviceMemory', { value: 8, configurable: true }); Object.defineProperty(navigator, 'connection', { value: { saveData: false }, configurable: true }); });
+    await page.addInitScript(() => { Object.defineProperty(navigator, 'hardwareConcurrency', { value: 16, configurable: true }); Object.defineProperty(navigator, 'deviceMemory', { value: 16, configurable: true }); Object.defineProperty(navigator, 'connection', { value: { saveData: false }, configurable: true }); });
     await page.emulateMedia({ reducedMotion: 'no-preference' });
     await page.setViewportSize({ width: 1280, height: 900 });
     await ready(page, '/');
@@ -148,9 +149,9 @@ test.describe('JYC motion system', () => {
         return { backgroundImage: style.backgroundImage, accent: root.getPropertyValue('--jyc-accent').trim(), canvas: root.getPropertyValue('--jyc-canvas').trim(), surface: root.getPropertyValue('--jyc-surface').trim() };
       });
       expect(surface.backgroundImage).toContain('radial-gradient');
-      expect(surface.canvas).toBe(theme === 'dark' ? '#080d1c' : '#f5f1e8');
-      expect(surface.accent).toBe(theme === 'dark' ? '#c8bcff' : '#625889');
-      expect(surface.surface).toBe(theme === 'dark' ? '#111b31' : '#fffdf8');
+      expect(surface.canvas).toBe(theme === 'dark' ? '#080d1c' : '#f1eadb');
+      expect(surface.accent).toBe(theme === 'dark' ? '#c8bcff' : '#705b3a');
+      expect(surface.surface).toBe(theme === 'dark' ? '#111b31' : '#fffaf0');
     }
   });
 

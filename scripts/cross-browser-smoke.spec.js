@@ -26,7 +26,7 @@ test('browser-compat: Search and More dialogs are named, dismissible and restore
   await ready(page);
   const searchTrigger = page.locator('[data-jyc-search-trigger]').first();
   await searchTrigger.click();
-  const search = page.getByRole('dialog', { name: 'JYC search' });
+  const search = page.getByRole('dialog', { name: 'Find your place.' });
   await expect(search).toBeVisible();
   await expect.poll(() => page.evaluate(() => document.body.style.overflow)).toBe('hidden');
   await page.keyboard.press('Escape');

@@ -15,7 +15,7 @@ const checks = [
   ['low-power devices retain the static CSS atmosphere', motion.includes('if (lowPower) { canvas.style.display = \'none\'; return; }')],
   ['animation pauses when the tab is hidden and resumes when visible', motion.includes("document.addEventListener('visibilitychange', onVisibilityChange)") && motion.includes('if (!isHidden && !reducedMotion && !animId) animId = requestAnimationFrame(loop)')],
   ['animation frame and all listeners are cleaned up on unmount', motion.includes('cancelAnimationFrame(animId)') && motion.includes("window.removeEventListener('resize', resize)") && motion.includes("window.removeEventListener('mousemove', onMouseMove)") && motion.includes("document.removeEventListener('visibilitychange', onVisibilityChange)")],
-  ['particle rendering is frame-limited and pointer tracking is disabled on touch', motion.includes('const targetFrameMs = isCoarsePointer ? 50 : 1000 / 30') && motion.includes('if (!isCoarsePointer) window.addEventListener(\'mousemove\', onMouseMove')],
+  ['particle rendering is frame-limited and pointer tracking is disabled on touch', motion.includes('const targetFrameMs = isCoarsePointer ? 80 : 1000 / 20') && motion.includes('if (!isCoarsePointer) window.addEventListener(\'mousemove\', onMouseMove')],
   ['homepage retains its theme-aware editorial color system', home.includes('var(--jh-bg,var(--jyc-paper))') && home.includes('var(--jh-ink,var(--jyc-ink))')],
   ['long document shell never animates background-position', !css.includes('animation: jyc-atmosphere-drift') && !css.includes('@keyframes jyc-atmosphere-drift')],
 ];
