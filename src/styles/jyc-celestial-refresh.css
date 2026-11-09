@@ -54,7 +54,7 @@ html[data-theme="light"] .search-overlay.jyc-search-backdrop,html[data-theme="da
 .jyc-search-kicker,.jyc-search-discover-head>span,.jyc-search-recent>span{font:750 10px/1.4 'JetBrains Mono',monospace;letter-spacing:.16em;color:var(--jyc-gold)}
 .jyc-search-header h2{margin:8px 0 4px;font:700 clamp(25px,4vw,36px)/1 'Space Grotesk',sans-serif;letter-spacing:-.05em;color:var(--jyc-text-strong)}
 .jyc-search-header p{margin:0;color:var(--jyc-muted);font-size:13px}
-.jyc-search-dismiss{display:flex;align-items:center;gap:9px;padding:8px 10px;border:1px solid var(--jyc-line);border-radius:12px;background:var(--jyc-canvas-raised);color:var(--jyc-text-strong);cursor:pointer}
+.jyc-search-dismiss{display:flex;align-items:center;justify-content:center;gap:9px;min-width:44px;min-height:44px;padding:8px 10px;border:1px solid var(--jyc-line);border-radius:12px;background:var(--jyc-canvas-raised);color:var(--jyc-text-strong);cursor:pointer}
 .jyc-search-dismiss span,.jyc-search-field kbd{font:700 9px 'JetBrains Mono',monospace;letter-spacing:.08em;color:var(--jyc-muted)}
 .jyc-search-dismiss b{font-size:20px;line-height:1}
 .jyc-search-field{display:flex;align-items:center;gap:12px;margin:18px 24px 12px;padding:0 14px;min-height:60px;border:1px solid var(--jyc-line-strong);border-radius:16px;background:var(--jyc-canvas-raised);box-shadow:0 6px 22px var(--jyc-gold-soft)}
@@ -62,12 +62,12 @@ html[data-theme="light"] .search-overlay.jyc-search-backdrop,html[data-theme="da
 .jyc-search-field svg{width:21px;height:21px;flex:0 0 auto;fill:none;stroke:var(--jyc-gold);stroke-width:1.8}
 .jyc-search-field input{width:100%;min-width:0;min-height:56px;border:0!important;outline:0!important;background:transparent!important;color:var(--jyc-text-strong)!important;font-size:16px;box-shadow:none!important}
 .jyc-search-field input::placeholder{color:var(--jyc-muted);opacity:.85}
-.jyc-search-field>button{flex:0 0 auto;border:0;background:transparent;color:var(--jyc-muted);font-size:22px;cursor:pointer}
+.jyc-search-field>button{flex:0 0 auto;min-width:44px;min-height:44px;border:0;background:transparent;color:var(--jyc-muted);font-size:22px;cursor:pointer}
 .jyc-search-field kbd,.jyc-search-meta kbd{padding:4px 6px;border:1px solid var(--jyc-line);border-radius:6px;background:var(--jyc-surface);white-space:nowrap}
 .jyc-search-meta{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:0 28px 12px;color:var(--jyc-muted);font:700 9px 'JetBrains Mono',monospace;letter-spacing:.1em}
 .jyc-search-meta>span:last-child{display:flex;gap:4px}
 .jyc-search-filters{display:flex;gap:7px;overflow-x:auto;padding:0 24px 12px;scrollbar-width:thin}
-.jyc-search-filters button{display:inline-flex;align-items:center;gap:7px;flex:0 0 auto;padding:7px 10px;border:1px solid var(--jyc-line);border-radius:999px;background:var(--jyc-canvas-raised);color:var(--jyc-muted);font-size:10px;font-weight:750;cursor:pointer}
+.jyc-search-filters button{display:inline-flex;align-items:center;justify-content:center;gap:7px;flex:0 0 auto;min-height:44px;padding:9px 12px;border:1px solid var(--jyc-line);border-radius:999px;background:var(--jyc-canvas-raised);color:var(--jyc-muted);font-size:10px;font-weight:750;cursor:pointer}
 .jyc-search-filters button.is-active{background:var(--jyc-gold);border-color:var(--jyc-gold);color:#fffaf0}
 .jyc-search-filters button span{opacity:.75}
 .jyc-search-results{min-height:150px;overflow:auto;padding:0 16px 12px;overscroll-behavior:contain}
@@ -84,17 +84,17 @@ html[data-theme="light"] .search-overlay.jyc-search-backdrop,html[data-theme="da
 .jyc-search-discover-head{display:flex;justify-content:space-between;align-items:center;padding:8px 10px 12px}
 .jyc-search-discover-head small{font-size:11px;color:var(--jyc-muted)}
 .jyc-search-discover>div:nth-child(2){display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
-.jyc-search-discover>div:nth-child(2)>button{display:flex;justify-content:space-between;align-items:center;gap:8px;min-width:0;padding:13px 12px;border:1px solid var(--jyc-line);border-radius:12px;background:var(--jyc-canvas-raised);color:var(--jyc-text-strong);font-size:12px;font-weight:700;cursor:pointer}
+.jyc-search-discover>div:nth-child(2)>button{display:flex;justify-content:space-between;align-items:center;gap:8px;min-width:0;min-height:48px;padding:13px 12px;border:1px solid var(--jyc-line);border-radius:12px;background:var(--jyc-canvas-raised);color:var(--jyc-text-strong);font-size:12px;font-weight:700;cursor:pointer}
 .jyc-search-discover>div:nth-child(2)>button b{color:var(--jyc-gold)}
 .jyc-search-recent{margin-top:22px;padding:16px 10px 0;border-top:1px solid var(--jyc-line)}
 .jyc-search-recent>div{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
-.jyc-search-recent button{padding:8px 11px;border:1px solid var(--jyc-line);border-radius:999px;background:var(--jyc-surface);color:var(--jyc-muted);font-size:11px;cursor:pointer}
+.jyc-search-recent button{min-height:44px;padding:8px 11px;border:1px solid var(--jyc-line);border-radius:999px;background:var(--jyc-surface);color:var(--jyc-muted);font-size:11px;cursor:pointer}
 .jyc-search-recent button b{margin-left:8px;color:var(--jyc-gold)}
 .jyc-search-empty{display:grid;justify-items:center;text-align:center;padding:42px 20px}
 .jyc-search-empty>span{font-size:34px;color:var(--jyc-gold)}
 .jyc-search-empty strong{margin-top:10px;color:var(--jyc-text-strong);font-size:17px}
 .jyc-search-empty p{max-width:42ch;color:var(--jyc-muted);font-size:13px}
-.jyc-search-empty button{padding:9px 14px;border:1px solid var(--jyc-line-strong);border-radius:10px;background:var(--jyc-canvas-raised);color:var(--jyc-text-strong);cursor:pointer}
+.jyc-search-empty button{min-height:44px;padding:9px 14px;border:1px solid var(--jyc-line-strong);border-radius:10px;background:var(--jyc-canvas-raised);color:var(--jyc-text-strong);cursor:pointer}
 .jyc-search-footer{display:flex;justify-content:space-between;gap:12px;padding:13px 22px;border-top:1px solid var(--jyc-line);color:var(--jyc-muted);font:700 9px 'JetBrains Mono',monospace;letter-spacing:.08em}
 .jyc-search-footer span:last-child{display:flex;align-items:center;gap:7px}
 .jyc-search-footer i{width:5px;height:5px;border-radius:50%;background:var(--jyc-gold);box-shadow:0 0 10px var(--jyc-gold)}
