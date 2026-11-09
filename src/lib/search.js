@@ -1,7 +1,7 @@
 // Lightweight, dependency-free relevance scoring inspired by open-source fuzzy search patterns.
 // The ranking intentionally prioritizes exact title matches above every other signal.
 export function normalizeSearch(value=''){
-  return String(value ?? '').toLocaleLowerCase().normalize('NFKD').replace(/(\p{Script=Latin})\p{M}+/gu,'$1').replace(/[^\p{L}\p{M}\p{N}]+/gu,' ').replace(/\s+/g,' ').trim();
+  return String(value ?? '').toLowerCase().normalize('NFKD').replace(/(\p{Script=Latin})\p{M}+/gu,'$1').replace(/[^\p{L}\p{M}\p{N}]+/gu,' ').replace(/\s+/g,' ').trim();
 }
 export function searchTokens(value=''){
   return normalizeSearch(value).split(/\s+/).filter(Boolean);
