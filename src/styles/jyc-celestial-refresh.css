@@ -107,3 +107,12 @@ html[data-theme="light"] .search-overlay.jyc-search-backdrop,html[data-theme="da
 
 /* Shared minimum for small metadata; component-specific text keeps its intended hierarchy. */
 html .public-app small { font-size:11px !important; }
+
+
+/* Contrast correction: champagne is decorative, not a small-text foreground on paper. */
+html[data-theme="light"] .public-app :where(.eyebrow,.kicker,.section-kicker,.section-label,.jh-kicker,.jyc57-gallery-meta) {
+  color: #594629 !important;
+}
+html[data-theme="light"] .public-app :where(.jyc57-gallery-meta span,.jyc57-gallery-meta small) {
+  color: #594629 !important;
+}
