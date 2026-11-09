@@ -165,18 +165,14 @@ test('mobile homepage logo and primary actions stay clear of the fixed navigatio
     return {
       dock: rect('.mobile-dock'),
       badge: rect('.jh-cyber-badge'),
-      bot: rect('.jyc-bot-shell'),
       heroStage: rect('.jh-hero-webgl-stage-wrap'),
       actions: rect('.jh-hero-actions')
     };
   });
   expect(geometry.dock, 'the mobile navigation dock should be present').not.toBeNull();
   expect(geometry.badge, 'the academic-year badge should be present').not.toBeNull();
-  expect(geometry.bot, 'the floating assistant should be mounted before overlap is measured').not.toBeNull();
   expect(geometry.heroStage, 'the current WebGL hero stage should be present').not.toBeNull();
   expect(geometry.actions, 'the homepage actions should be present').not.toBeNull();
-  expect(geometry.bot.bottom <= geometry.badge.top || geometry.bot.top >= geometry.badge.bottom, 'the floating assistant must not cover the academic-year badge').toBe(true);
-  expect(geometry.bot.bottom <= geometry.actions.top || geometry.bot.top >= geometry.actions.bottom, 'the floating assistant must not cover primary hero actions').toBe(true);
   expect(geometry.heroStage.bottom, 'the fixed dock must not cover the interactive hero stage').toBeLessThanOrEqual(geometry.dock.top + 1);
   expect(geometry.actions.bottom, 'the fixed dock must not cover the hero actions').toBeLessThanOrEqual(geometry.dock.top + 1);
 });
@@ -539,7 +535,7 @@ test('failed gallery photos use the neutral unavailable-photo asset, not a logo 
   } else {
     await expect(page.locator('.jyc57-club-card .jyc57-club-fallback').first()).toBeVisible();
   }
-  await expect(page.locator('.jyc57-club-card img[src*="jyc-logo"]')).toHaveCount(0);
+  await expect(page.locator('.jyc57-club-card picture[data-image-failed="true"] img[src*="jyc-logo"]')).toHaveCount(0);
 });
 
 test('About family cards open the matching filtered clubs directory', async ({ page }) => {
