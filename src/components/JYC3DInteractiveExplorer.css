@@ -130,7 +130,7 @@ html[data-theme="light"] .jyc-community-explorer {
 }
 .jyc-community-filter {
   display: inline-flex; align-items: center; gap: 10px; flex: 0 0 auto;
-  min-height: 42px; padding: 0 14px; border: 1px solid var(--community-border);
+  min-height: 44px; padding: 0 14px; border: 1px solid var(--community-border);
   border-radius: 999px; color: var(--community-muted); background: var(--community-surface);
   font: 650 11px/1 'Space Grotesk', system-ui, sans-serif; cursor: pointer;
   transition: color .18s ease, background .18s ease, border-color .18s ease, transform .18s ease;
@@ -192,7 +192,7 @@ html[data-theme="light"] .jyc-community-explorer {
   margin-top: auto; padding-top: 12px; border-top: 1px solid var(--community-border);
 }
 .jyc-community-profile-link {
-  display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0;
+  display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0;
   border: 0; color: var(--community-text); background: transparent;
   font: 700 11px 'Space Grotesk', system-ui, sans-serif; cursor: pointer;
 }
