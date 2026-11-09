@@ -2194,7 +2194,9 @@ test('More navigation and Search modal work with keyboard, empty states and focu
   await more.getByRole('button', { name: 'Search JYC' }).click();
   await expect(page.locator('.search-overlay')).toBeVisible();
   await expect(input).toBeFocused();
-  await expect(search).toHaveCSS('max-height', /86dvh|760px/);
+  const mobileSearchBounds = await search.boundingBox();
+  expect(mobileSearchBounds).not.toBeNull();
+  expect(mobileSearchBounds.height).toBeLessThan(760);
   await input.press('Escape');
   await expect(page.locator('.search-overlay')).toHaveCount(0);
   await expect(mobileMoreTrigger).toBeFocused();
