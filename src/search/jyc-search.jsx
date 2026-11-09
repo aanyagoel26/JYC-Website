@@ -94,8 +94,8 @@ export function JYCSearch({data,close}){
  const go=row=>{if(!row?.href)return;remember(query);requestClose(()=>navigate(row.href))};
  const onKeyDown=e=>{
   if(e.key==='Escape'){e.preventDefault();requestClose();return}
-  if(e.key==='ArrowDown'&&results.length){e.preventDefault();setActive(value=>(value+1)%results.length);return}
-  if(e.key==='ArrowUp'&&results.length){e.preventDefault();setActive(value=>(value-1+results.length)%results.length);return}
+  if(e.key==='ArrowDown'&&results.length){e.preventDefault();setActive(value=>Math.min(value+1,results.length-1));return}
+  if(e.key==='ArrowUp'&&results.length){e.preventDefault();setActive(value=>Math.max(value-1,0));return}
   if(e.key==='Enter'&&results[active]){e.preventDefault();go(results[active])}
  };
  const clear=()=>{setQuery('');setCategory('ALL');inputRef.current?.focus()};
