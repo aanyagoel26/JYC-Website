@@ -2077,8 +2077,8 @@ test('More navigation and Search modal work with keyboard, empty states and focu
   await expect(input).toBeFocused();
   const restoredHistory = page.locator('.jyc-search-recent>div:not(.jyc-search-recent-head) button');
   await expect(restoredHistory).toHaveCount(2);
-  expect((await restoredHistory.nth(0).innerText()).split('\n')[0].length).toBeLessThanOrEqual(120);
-  expect((await restoredHistory.nth(1).innerText()).split('\n')[0].length).toBeLessThanOrEqual(120);
+  expect(await restoredHistory.nth(0).evaluate(el => (el.firstChild?.textContent || '').trim().length)).toBeLessThanOrEqual(120);
+  expect(await restoredHistory.nth(1).evaluate(el => (el.firstChild?.textContent || '').trim().length)).toBeLessThanOrEqual(120);
   await input.fill('clubs');
   await expect(page.locator('.search-result-active')).toContainText('Clubs');
   await expect(page.locator('.search-category-filters')).toBeVisible();
