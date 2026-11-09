@@ -58,7 +58,8 @@ export function JYCSearch({data,close}){
  const [query,setQuery]=useState(()=>{try{return new URLSearchParams(window.location.search).get('q')||''}catch{return ''}});
  const [category,setCategory]=useState('ALL'),[active,setActive]=useState(0);
  const [recent,setRecent]=useState(()=>{try{const value=JSON.parse(safeRead('jyc-search-recent','[]'));return Array.isArray(value)?value.filter(x=>typeof x==='string'&&x.trim()).slice(0,6):[]}catch{return []}});
- const inputRef=useRef(null),dialogRef=useRef(null),returnFocusRef=useRef(null);
+ const inputRef=useRef(null),dialogRef=useRef(null),returnFocusRef=useRef(null),closeTimerRef=useRef(null);
+ const [visible,setVisible]=useState(true);
  const index=useMemo(()=>makeIndex(data),[data]),normalized=normalizeSearch(query);
  const ranked=useMemo(()=>{
   if(!normalized)return [];
@@ -69,9 +70,11 @@ export function JYCSearch({data,close}){
  },[index,normalized]);
  const categories=useMemo(()=>['ALL',...new Set(ranked.map(row=>row.type))],[ranked]);
  const filtered=useMemo(()=>category==='ALL'?ranked:ranked.filter(row=>row.type===category),[ranked,category]);
- const results=filtered.slice(0,30),activeId=results[active]?'jyc-search-option-'+active:undefined;
+ const results=filtered.slice(0,30),activeId=results[active]?'jyc-search-result-'+active:undefined;
  useEffect(()=>{
-  returnFocusRef.current=document.activeElement instanceof HTMLElement?document.activeElement:document.querySelector('[data-jyc-search-trigger]');
+  const activeElement=document.activeElement;
+  const fallbackFocus=()=>{const candidates=[document.querySelector('[data-jyc-search-trigger]'),document.querySelector('.mobile-dock button:last-child')];return candidates.find(node=>node instanceof HTMLElement&&node.getClientRects().length)||candidates.find(node=>node instanceof HTMLElement)||null};
+  returnFocusRef.current=activeElement instanceof HTMLElement&&activeElement!==document.body&&activeElement!==document.documentElement?activeElement:fallbackFocus();
   const previousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';
   const timer=window.setTimeout(()=>inputRef.current?.focus(),40);
   const trap=e=>{
@@ -81,15 +84,16 @@ export function JYCSearch({data,close}){
    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}
   };
   document.addEventListener('keydown',trap);
-  return()=>{window.clearTimeout(timer);document.body.style.overflow=previousOverflow;document.removeEventListener('keydown',trap);const target=returnFocusRef.current?.isConnected?returnFocusRef.current:document.querySelector('[data-jyc-search-trigger]');if(target instanceof HTMLElement)window.requestAnimationFrame(()=>target.focus())};
+  return()=>{window.clearTimeout(timer);window.clearTimeout(closeTimerRef.current);document.body.style.overflow=previousOverflow;document.removeEventListener('keydown',trap);const original=returnFocusRef.current;const target=original instanceof HTMLElement&&original.isConnected&&original.getClientRects().length?original:fallbackFocus();if(target instanceof HTMLElement)window.requestAnimationFrame(()=>target.focus())};
  },[]);
  useEffect(()=>{setActive(0);setCategory('ALL')},[normalized]);
  useEffect(()=>{if(active>=results.length)setActive(Math.max(0,results.length-1))},[active,results.length]);
  useEffect(()=>{if(activeId)document.getElementById(activeId)?.scrollIntoView({block:'nearest'})},[activeId]);
  const remember=value=>{const clean=String(value||'').trim();if(!clean)return;const next=[clean,...recent.filter(item=>item!==clean)].slice(0,6);setRecent(next);safeWrite('jyc-search-recent',JSON.stringify(next))};
- const go=row=>{if(!row?.href)return;remember(query);close();navigate(row.href)};
+ const requestClose=callback=>{setVisible(false);window.clearTimeout(closeTimerRef.current);closeTimerRef.current=window.setTimeout(()=>{callback?.();close()},reducedMotion?0:210)};
+ const go=row=>{if(!row?.href)return;remember(query);requestClose(()=>navigate(row.href))};
  const onKeyDown=e=>{
-  if(e.key==='Escape'){e.preventDefault();close();return}
+  if(e.key==='Escape'){e.preventDefault();requestClose();return}
   if(e.key==='ArrowDown'&&results.length){e.preventDefault();setActive(value=>(value+1)%results.length);return}
   if(e.key==='ArrowUp'&&results.length){e.preventDefault();setActive(value=>(value-1+results.length)%results.length);return}
   if(e.key==='Enter'&&results[active]){e.preventDefault();go(results[active])}
@@ -97,21 +101,21 @@ export function JYCSearch({data,close}){
  const clear=()=>{setQuery('');setCategory('ALL');inputRef.current?.focus()};
  const suggestions=[['Clubs','/clubs'],['Events','/events'],['People','/team'],['Gallery','/gallery'],['Calendar','/calendar']];
  const content=<AnimatePresence>
-  <motion.div className="search-overlay jyc-search-backdrop" role="presentation" initial={reducedMotion?false:{opacity:0}} animate={{opacity:1}} exit={reducedMotion?{opacity:1}:{opacity:0}} transition={{duration:.18}} onMouseDown={e=>{if(e.target===e.currentTarget)close()}}>
+  {visible&&<motion.div className="search-overlay jyc-search-backdrop" role="presentation" initial={reducedMotion?false:{opacity:0}} animate={{opacity:1}} exit={reducedMotion?{opacity:1}:{opacity:0}} transition={{duration:.18}} onMouseDown={e=>{if(e.target===e.currentTarget)requestClose()}}>
    <motion.section ref={dialogRef} className="search-modal jyc-search-dialog" role="dialog" aria-modal="true" aria-labelledby="jyc-search-title" initial={reducedMotion?false:{opacity:0,y:16,scale:.985}} animate={{opacity:1,y:0,scale:1}} exit={reducedMotion?{opacity:1}:{opacity:0,y:10,scale:.99}} transition={{duration:.24,ease:[.22,1,.36,1]}} onMouseDown={e=>e.stopPropagation()}>
-    <header className="jyc-search-header"><div><span className="jyc-search-kicker">JYC SEARCH · JIIT YOUTH CLUB · 128</span><h2 id="jyc-search-title">Find your place.</h2><p>Search communities, people, events and campus stories.</p></div><button type="button" className="search-close jyc-search-dismiss" onClick={close} aria-label="Close search"><span>ESC</span><b aria-hidden="true">×</b></button></header>
+    <header className="jyc-search-header"><div><span className="jyc-search-kicker">JYC SEARCH · JIIT YOUTH CLUB · 128</span><h2 id="jyc-search-title">Find your place.</h2><p>Search communities, people, events and campus stories.</p></div><button type="button" className="search-close jyc-search-dismiss" onClick={()=>requestClose()} aria-label="Close search"><span>ESC</span><b aria-hidden="true">×</b></button></header>
     <label className="jyc-search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.7"/><path d="m16 16 5 5"/></svg><input ref={inputRef} type="search" value={query} onChange={e=>setQuery(e.target.value)} onKeyDown={onKeyDown} placeholder="Try “Abhivyakti”, “hackathon” or a person…" aria-label="Search JYC" autoComplete="off" spellCheck="false" role="combobox" aria-autocomplete="list" aria-expanded={Boolean(normalized&&results.length)} aria-controls="jyc-search-results" aria-activedescendant={activeId}/>{query&&<button type="button" onClick={clear} aria-label="Clear search">×</button>}<kbd>CTRL K</kbd></label>
     <div className="jyc-search-meta"><span>{normalized?filtered.length+' matching result'+(filtered.length===1?'':'s'):'SEARCH THE JYC EXPERIENCE'}</span><span><kbd>↑</kbd><kbd>↓</kbd><kbd>ENTER</kbd><kbd>ESC</kbd></span></div>
     {normalized&&categories.length>1&&<div className="search-category-filters jyc-search-filters" role="group" aria-label="Filter results by type">{categories.map(type=><button key={type} type="button" aria-pressed={category===type} className={category===type?'is-active':''} onClick={()=>{setCategory(type);setActive(0)}}>{type==='ALL'?'All':type}<span>{type==='ALL'?ranked.length:ranked.filter(row=>row.type===type).length}</span></button>)}</div>}
-    <div className="jyc-search-results" id="jyc-search-results" role={normalized?"listbox":"region"} aria-label="Search results">
-     {!normalized&&<div className="jyc-search-discover"><div className="jyc-search-discover-head"><span>EXPLORE JYC</span><small>Start anywhere</small></div><div>{suggestions.map(([label,href])=><button type="button" key={href} onClick={()=>{close();navigate(href)}}><span>{label}</span><b>↗</b></button>)}</div>{recent.length>0&&<section className="jyc-search-recent"><span>RECENT SEARCHES</span><div>{recent.map(item=><button key={item} type="button" onClick={()=>{setQuery(item);inputRef.current?.focus()}}>{item}<b>↗</b></button>)}</div></section>}</div>}
+    <div className="jyc-search-results" id="jyc-search-results" role={normalized&&results.length?"listbox":"region"} aria-label="Search results">
+     {!normalized&&<div className="jyc-search-discover"><div className="jyc-search-discover-head"><span>EXPLORE JYC</span><small>Start anywhere</small></div><div>{suggestions.map(([label,href])=><button type="button" key={href} onClick={()=>requestClose(()=>navigate(href))}><span>{label}</span><b>↗</b></button>)}</div>{recent.length>0&&<section className="jyc-search-recent"><span>RECENT SEARCHES</span><div>{recent.map(item=><button key={item} type="button" onClick={()=>{setQuery(item);inputRef.current?.focus()}}>{item}<b>↗</b></button>)}</div></section>}</div>}
      {normalized&&results.map((row,i)=><button type="button" role="option" id={'jyc-search-result-'+i} aria-selected={active===i} className={active===i?'is-active search-result-active':''} key={row.key} onMouseEnter={()=>setActive(i)} onClick={()=>go(row)}><span className="jyc-search-result-icon" aria-hidden="true">{row.icon||'↗'}</span><span className="jyc-search-result-copy"><small>{i===0?'BEST MATCH · ':''}{row.type}</small><strong><Highlight value={row.title} query={query}/></strong><em><Highlight value={row.meta} query={query}/></em></span><b className="jyc-search-result-arrow" aria-hidden="true">↗</b></button>)}
      {normalized&&results.length===0&&<div className="search-no-results jyc-search-empty" role="status"><span>⌕</span><strong>No matches for “{query.trim()}”</strong><p>Try a club name, event, person, activity or a shorter spelling.</p><button type="button" onClick={clear}>Clear search</button></div>}
     </div>
     <footer className="jyc-search-footer"><span>JYC · SECTOR 128 · NOIDA</span><span>PUBLIC CONTENT ONLY <i/> RELEVANCE RANKED</span></footer>
     <p className="jyc-search-live" role="status" aria-live="polite">{normalized?filtered.length+' search results':'Search is ready'}</p>
    </motion.section>
-  </motion.div>
+  </motion.div>}
  </AnimatePresence>;
  return createPortal(content,document.body);
 }
