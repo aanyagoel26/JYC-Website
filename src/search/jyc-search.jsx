@@ -90,7 +90,7 @@ export function JYCSearch({data,close}){
  useEffect(()=>{if(active>=results.length)setActive(Math.max(0,results.length-1))},[active,results.length]);
  useEffect(()=>{if(activeId)document.getElementById(activeId)?.scrollIntoView({block:'nearest'})},[activeId]);
  const remember=value=>{const clean=String(value||'').trim().slice(0,120);if(!clean)return;const next=[clean,...recent.filter(item=>item!==clean)].slice(0,6);setRecent(next);safeWrite('jyc-search-recent',JSON.stringify(next))};
- const requestClose=callback=>{setVisible(false);window.clearTimeout(closeTimerRef.current);closeTimerRef.current=window.setTimeout(()=>{callback?.();close()},reducedMotion?0:210)};
+ const requestClose=callback=>{setVisible(false);window.clearTimeout(closeTimerRef.current);closeTimerRef.current=window.setTimeout(()=>{callback?.();close()},reducedMotion?0:260)};
  const go=row=>{if(!row?.href)return;remember(query);requestClose(()=>navigate(row.href))};
  const onKeyDown=e=>{
   if(e.key==='Escape'){e.preventDefault();requestClose();return}
