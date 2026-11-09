@@ -1,0 +1,16 @@
+name: Content request
+description: Request an official JYC club, event, team or gallery update
+title: "[Content] "
+labels: ["content"]
+body:
+  - type: dropdown
+    id: type
+    attributes:
+      label: Content type
+      options: [Club, Event, Team, Gallery, Homepage, Contact]
+    validations: {required: true}
+  - type: textarea
+    id: details
+    attributes:
+      label: Official content / source
+    validations: {required: true}
