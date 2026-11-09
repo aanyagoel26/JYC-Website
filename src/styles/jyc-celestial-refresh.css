@@ -51,7 +51,7 @@ html[data-theme="light"] .search-overlay.jyc-search-backdrop,html[data-theme="da
 .jyc-search-backdrop{position:fixed;inset:0;z-index:10050;display:grid;place-items:start center;padding:clamp(14px,5vh,56px) 16px 20px;background:rgba(12,15,26,.52);backdrop-filter:blur(16px) saturate(125%);-webkit-backdrop-filter:blur(16px) saturate(125%);overflow:auto}
 .jyc-search-dialog{width:min(760px,100%);max-height:min(790px,calc(100vh - 72px));max-height:min(790px,calc(100dvh - 72px));display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--jyc-line-strong);border-radius:26px;background:var(--jyc-surface);color:var(--jyc-text-strong);box-shadow:0 34px 110px rgba(14,17,30,.3)}
 .jyc-search-header{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:26px 28px 18px;border-bottom:1px solid var(--jyc-line)}
-.jyc-search-kicker,.jyc-search-discover-head>span,.jyc-search-recent>span{font:750 10px/1.4 'JetBrains Mono',monospace;letter-spacing:.16em;color:var(--jyc-gold)}
+.jyc-search-kicker,.jyc-search-discover-head>span,.jyc-search-recent-head>span{font:750 10px/1.4 'JetBrains Mono',monospace;letter-spacing:.16em;color:var(--jyc-gold)}
 .jyc-search-header h2{margin:8px 0 4px;font:700 clamp(25px,4vw,36px)/1 'Space Grotesk',sans-serif;letter-spacing:-.05em;color:var(--jyc-text-strong)}
 .jyc-search-header p{margin:0;color:var(--jyc-muted);font-size:13px}
 .jyc-search-dismiss{display:flex;align-items:center;justify-content:center;gap:9px;min-width:44px;min-height:44px;padding:8px 10px;border:1px solid var(--jyc-line);border-radius:12px;background:var(--jyc-canvas-raised);color:var(--jyc-text-strong);cursor:pointer}
