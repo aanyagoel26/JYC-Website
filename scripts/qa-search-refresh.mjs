@@ -27,6 +27,7 @@ check('day theme uses warm parchment and gold tokens',css.includes('--jyc-canvas
 check('day theme has a restrained constellation atmosphere',css.includes('html[data-theme="light"] body::after')&&css.includes('radial-gradient(1px 1px at'));
 check('night theme retains the midnight observatory palette',css.includes('--jyc-canvas:#080d1c')&&css.includes('--jyc-accent:#c8bcff')&&css.includes('--jyc-gold:#e7d19b'));
 check('mobile search becomes a bottom-sheet layout',css.includes('@media(max-width:620px)')&&css.includes('place-items:end center')&&css.includes('86dvh'));
+check('search modal controls meet the 44px touch-target floor',css.includes('min-width:44px;min-height:44px')&&css.includes('.jyc-search-field>button{flex:0 0 auto;min-width:44px;min-height:44px')&&css.includes('.jyc-search-filters button{')&&css.includes('min-height:44px;padding:9px 12px')&&css.includes('.jyc-search-recent button{min-height:44px')&&css.includes('.jyc-search-empty button{min-height:44px'));
 check('motion honours reduced-motion preferences',css.includes('prefers-reduced-motion:reduce')&&css.includes('transition-duration:.01ms'));
 check('global search shortcut remains wired in navigation',main.includes("(e.ctrlKey||e.metaKey)")&&main.includes("e.key?.toLowerCase()==='k'"));
 
