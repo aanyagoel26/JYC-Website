@@ -18,6 +18,7 @@ const scripts = [
   'qa-glb-integrity.mjs',
   'qa-resource-content-pass.mjs',
   'qa-search.mjs',
+  'qa-search-refresh.mjs',
   'qa-security.mjs',
   'qa-seo.mjs',
   'qa-build-preflight.mjs',
