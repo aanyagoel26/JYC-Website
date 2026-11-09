@@ -780,7 +780,7 @@ function Navbar({data,admin,theme,setTheme}){
      if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName))return;
      if(e.key.toLowerCase()==='g'){shortcutRef.current='g';window.clearTimeout(shortcutRef._timer);shortcutRef._timer=window.setTimeout(()=>shortcutRef.current='',700);return}
      if(shortcutRef.current==='g'){const routes={c:'/clubs',e:'/events',t:'/team',a:'/archive',m:'/gallery'};if(routes[e.key.toLowerCase()]){e.preventDefault();shortcutRef.current='';nav(routes[e.key.toLowerCase()]);return}}
-     if(e.key==='Escape'){setOpen(false);setSearch(false);setMoreOpen(false)}
+     if(e.key==='Escape'){setOpen(false);setMoreOpen(false)}
    };
    const openSearch=()=>setSearch(true);window.addEventListener('keydown',onKey,true);window.addEventListener('jyc-open-search',openSearch);
    return()=>{window.removeEventListener('keydown',onKey,true);window.removeEventListener('jyc-open-search',openSearch)}
