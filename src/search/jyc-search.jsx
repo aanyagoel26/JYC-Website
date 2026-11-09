@@ -57,7 +57,7 @@ export function JYCSearch({data,close}){
  const navigate=useNavigate(),reducedMotion=useReducedMotion();
  const [query,setQuery]=useState(()=>{try{return new URLSearchParams(window.location.search).get('q')||''}catch{return ''}});
  const [category,setCategory]=useState('ALL'),[active,setActive]=useState(0);
- const [recent,setRecent]=useState(()=>{try{const value=JSON.parse(safeRead('jyc-search-recent','[]'));return Array.isArray(value)?value.filter(x=>typeof x==='string'&&x.trim()).slice(0,6):[]}catch{return []}});
+ const [recent,setRecent]=useState(()=>{try{const value=JSON.parse(safeRead('jyc-search-recent','[]'));return Array.isArray(value)?[...new Set(value.filter(x=>typeof x==='string'&&x.trim()).map(x=>x.trim().slice(0,120)))].slice(0,6):[]}catch{return []}});
  const inputRef=useRef(null),dialogRef=useRef(null),returnFocusRef=useRef(null),closeTimerRef=useRef(null);
  const [visible,setVisible]=useState(true);
  const index=useMemo(()=>makeIndex(data),[data]),normalized=normalizeSearch(query);
@@ -73,18 +73,33 @@ export function JYCSearch({data,close}){
  const results=filtered.slice(0,30),activeId=results[active]?'jyc-search-result-'+active:undefined;
  useEffect(()=>{
   const activeElement=document.activeElement;
-  const fallbackFocus=()=>{const candidates=[document.querySelector('[data-jyc-search-trigger]'),document.querySelector('.mobile-dock button:last-child')];return candidates.find(node=>node instanceof HTMLElement&&node.getClientRects().length)||candidates.find(node=>node instanceof HTMLElement)||null};
-  returnFocusRef.current=activeElement instanceof HTMLElement&&activeElement!==document.body&&activeElement!==document.documentElement?activeElement:fallbackFocus();
+  const fallbackFocus=()=>{
+   const candidates=[document.querySelector('[data-jyc-search-trigger]'),document.querySelector('.mobile-dock button:last-child')];
+   return candidates.find(node=>node instanceof HTMLElement && node.getClientRects().length)
+    || candidates.find(node=>node instanceof HTMLElement)
+    || null;
+  };
+  returnFocusRef.current=activeElement instanceof HTMLElement && activeElement!==document.body && activeElement!==document.documentElement ? activeElement : fallbackFocus();
   const previousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';
   const timer=window.setTimeout(()=>inputRef.current?.focus(),40);
   const trap=e=>{
    if(e.key!=='Tab')return;const root=dialogRef.current;if(!root)return;
-   const focusable=[...root.querySelectorAll('button,input,[href],[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled&&el.tabIndex>=0&&el.offsetParent!==null);
+   const focusable=[...root.querySelectorAll('button,input,[href],[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled && el.tabIndex>=0 && el.getClientRects().length>0);
    if(!focusable.length)return;const first=focusable[0],last=focusable[focusable.length-1];
    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}
   };
   document.addEventListener('keydown',trap);
-  return()=>{window.clearTimeout(timer);window.clearTimeout(closeTimerRef.current);document.body.style.overflow=previousOverflow;document.removeEventListener('keydown',trap);const original=returnFocusRef.current;const target=original instanceof HTMLElement&&original.isConnected&&original.getClientRects().length?original:fallbackFocus();if(target instanceof HTMLElement)window.requestAnimationFrame(()=>target.focus())};
+  return()=>{
+   window.clearTimeout(timer);
+   window.clearTimeout(closeTimerRef.current);
+   document.body.style.overflow=previousOverflow;
+   document.removeEventListener('keydown',trap);
+   const original=returnFocusRef.current;
+   const target=original instanceof HTMLElement && original.isConnected && original.getClientRects().length
+    ? original
+    : fallbackFocus();
+   if(target instanceof HTMLElement)window.requestAnimationFrame(()=>target.focus());
+  };
  },[]);
  useEffect(()=>{setActive(0);setCategory('ALL')},[normalized]);
  useEffect(()=>{if(active>=results.length)setActive(Math.max(0,results.length-1))},[active,results.length]);
