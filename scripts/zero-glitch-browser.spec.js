@@ -40,7 +40,8 @@ async function inspectViewport(page){
     for(const el of document.querySelectorAll('.public-app *')){
       if(!visible(el))continue;
       const r=el.getBoundingClientRect();
-      if(r.left < -2 || r.right > vw+2) {
+      const intentionalMarqueeTrack=Boolean(el.closest('.jyc-campus-marquee__group'));
+      if(!intentionalMarqueeTrack && (r.left < -2 || r.right > vw+2)) {
         const overflowX=getComputedStyle(el).overflowX;
         if(overflowX!=='hidden'&&overflowX!=='clip')offscreen.push({tag:el.tagName,cls:String(el.className||'').slice(0,100),left:r.left,right:r.right});
       }
