@@ -2188,4 +2188,14 @@ test('More navigation and Search modal work with keyboard, empty states and focu
   await page.keyboard.press('Escape');
   await expect(page.locator('.more-sheet-overlay')).toHaveCount(0);
   await expect(mobileMoreTrigger).toBeFocused();
+
+  await mobileMoreTrigger.click();
+  await expect(more).toBeVisible();
+  await more.getByRole('button', { name: 'Search JYC' }).click();
+  await expect(page.locator('.search-overlay')).toBeVisible();
+  await expect(input).toBeFocused();
+  await expect(search).toHaveCSS('max-height', /86dvh|760px/);
+  await input.press('Escape');
+  await expect(page.locator('.search-overlay')).toHaveCount(0);
+  await expect(mobileMoreTrigger).toBeFocused();
 });
