@@ -215,7 +215,7 @@ html[data-theme="light"] .jyc-community-explorer {
   border-top: 1px solid var(--community-border);
 }
 .jyc-community-note-dot { width: 7px; height: 7px; flex: 0 0 auto; border-radius: 50%; background: #8dbb9b; box-shadow: 0 0 0 4px rgba(141,187,155,.12); }
-.jyc-community-bottom-note p { flex: 1; margin: 0; color: var(--community-muted); font-size: 10px; line-height: 1.5; }
+.jyc-community-bottom-note p { flex: 1; margin: 0; color: var(--community-muted); font-size: 14px; line-height: 1.5; }
 .jyc-community-bottom-note button {
   flex: 0 0 auto; min-height: 38px; padding: 0 13px; border: 1px solid var(--community-border);
   border-radius: 10px; color: var(--community-text); background: var(--community-surface);
@@ -252,7 +252,7 @@ html[data-theme="light"] .jyc-community-explorer {
   .jyc-community-card h3 { font-size: 20px; }
   .jyc-community-card > p { font-size: 12px; }
   .jyc-community-bottom-note { align-items: flex-start; flex-wrap: wrap; gap: 8px; }
-  .jyc-community-bottom-note p { flex-basis: calc(100% - 20px); }
+  .jyc-community-bottom-note p { flex-basis: calc(100% - 20px); font-size: 14px; line-height: 1.5; }
   .jyc-community-bottom-note button { margin-left: 17px; }
 }
 @media (prefers-reduced-motion: reduce) {

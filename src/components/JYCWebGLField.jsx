@@ -146,7 +146,7 @@ export function JYCWebGLField() {
     let width = 1, height = 1, time = 0, lastFrame = 0;
     let reduced = prefersReducedMotion();
     const coarse = window.matchMedia('(pointer: coarse)').matches;
-    const lowPower = Boolean(navigator.connection?.saveData) || (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) < 4;
+    const lowPower = Boolean(navigator.connection?.saveData) || (navigator.hardwareConcurrency || 8) <= 8 || (navigator.deviceMemory || 8) < 8;
     if (lowPower || coarse) { host.dataset.webgl = 'fallback'; return; }
     const pointer = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5 };
     const canvas = document.createElement('canvas');
