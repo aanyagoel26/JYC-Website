@@ -147,7 +147,7 @@ test('mobile homepage logo and primary actions stay clear of the fixed navigatio
   await waitForAppMount(page, 'mobile hero and dock geometry');
   // The bot is a lazy-loaded chunk behind Suspense; wait for actual layout, not just the app root.
   // Fonts and responsive CSS can still change bounding boxes after React mounts.
-  await expect(page.locator('.jyc-bot-shell')).toBeAttached({ timeout: 15000 });
+  // The assistant runtime is intentionally deferred until the user opens it; it is not part of hero layout.
   for (const selector of ['.mobile-dock', '.jh-cyber-badge', '.jh-hero-webgl-stage-wrap', '.jh-hero-actions']) {
     await expect(page.locator(selector), `required hero geometry element ${selector}`).toBeVisible({ timeout: 15000 });
   }
@@ -192,7 +192,7 @@ test('homepage accessibility and responsive guardrails', async ({ page }) => {
   await themeToggle.focus();
   await page.keyboard.press('Enter');
   await expect.poll(() => page.locator('html').getAttribute('data-theme')).not.toBe(startingTheme);
-  await expect(themeToggle).toContainText(startingTheme === 'dark' ? 'Light' : 'Dark');
+  await expect(themeToggle).toContainText(startingTheme === 'dark' ? 'Day' : 'Night');
 
 
   const missingAlt = await page.locator('img:not([alt])').count();
@@ -506,7 +506,7 @@ test('failed gallery photos use the neutral unavailable-photo asset, not a logo 
   // Upcoming can legitimately be empty when all source-backed event dates are past.
   // Open the full archive first; verify a neutral fallback when media exists, or
   // verify the truthful empty state instead of requiring invented event cards.
-  const emptyUpcoming = page.getByRole('heading', { name: 'No events match your current filter.' });
+  const emptyUpcoming = page.getByRole('heading', { name: 'No published experiences in this view.' });
   if (await emptyUpcoming.count()) {
     const viewAll = page.getByRole('button', { name: /View All Events/ });
     if (await viewAll.count()) await viewAll.click();

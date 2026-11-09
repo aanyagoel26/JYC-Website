@@ -2300,3 +2300,12 @@ html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-hero-dither-layer {
   .jyc-editorial-home.jyc-home .jh-hero-visual .jyc-emblem-canvas { display:none!important; }
 }
 @media (max-width:360px) { .jyc-editorial-home.jyc-home .jh-hero-copy>h1 { font-size:32px!important; } .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn { font-size:10.5px!important; } }
+
+
+/* High-contrast night-sky copy for the homepage and primary navigation. */
+html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy > .jh-lead,
+html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy > .jh-overline,
+html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy > .jh-cyber-badge,
+html[data-theme="dark"] .public-app .nav a {
+  color: #f0e9e7 !important;
+}

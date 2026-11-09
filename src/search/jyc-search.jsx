@@ -83,17 +83,17 @@ export function JYCSearch({data,close}){
   const previousOverflow=document.body.style.overflow;document.body.style.overflow='hidden';
   const timer=window.setTimeout(()=>inputRef.current?.focus(),40);
   const trap=e=>{
-   if(e.key!=='Tab')return;const root=dialogRef.current;if(!root)return;
+   if(e.key==='Escape'){e.preventDefault();e.stopPropagation();requestClose();return;}if(e.key!=='Tab')return;const root=dialogRef.current;if(!root)return;
    const focusable=[...root.querySelectorAll('button,input,[href],[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled && el.tabIndex>=0 && el.getClientRects().length>0);
    if(!focusable.length)return;const first=focusable[0],last=focusable[focusable.length-1];
    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}
   };
-  document.addEventListener('keydown',trap);
+  document.addEventListener('keydown',trap,true);
   return()=>{
    window.clearTimeout(timer);
    window.clearTimeout(closeTimerRef.current);
    document.body.style.overflow=previousOverflow;
-   document.removeEventListener('keydown',trap);
+   document.removeEventListener('keydown',trap,true);
    const original=returnFocusRef.current;
    const target=original instanceof HTMLElement && original.isConnected && original.getClientRects().length
     ? original
@@ -108,7 +108,6 @@ export function JYCSearch({data,close}){
  const requestClose=callback=>{setVisible(false);window.clearTimeout(closeTimerRef.current);closeTimerRef.current=window.setTimeout(()=>{callback?.();close()},reducedMotion?0:260)};
  const go=row=>{if(!row?.href)return;remember(query);requestClose(()=>navigate(row.href))};
  const onKeyDown=e=>{
-  if(e.key==='Escape'){e.preventDefault();requestClose();return}
   if(e.target!==inputRef.current)return;
   if(e.key==='ArrowDown'&&results.length){e.preventDefault();setActive(value=>Math.min(value+1,results.length-1));return}
   if(e.key==='ArrowUp'&&results.length){e.preventDefault();setActive(value=>Math.max(value-1,0));return}
