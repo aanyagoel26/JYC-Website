@@ -8,7 +8,7 @@
     theme = window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   }
   document.documentElement.dataset.theme = theme;
-  const themeColor = theme === 'dark' ? '#080d1c' : '#f5f1e8';
+  const themeColor = theme === 'dark' ? '#080d1c' : '#f1eadb';
   document.querySelectorAll('meta[name="theme-color"]').forEach(meta => {
     meta.content = themeColor;
   });
