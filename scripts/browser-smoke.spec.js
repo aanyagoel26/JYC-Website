@@ -440,7 +440,7 @@ test('first visit follows the operating-system theme preference and saved prefer
   await page.goto(base, { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'system light theme');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
-  await expect(page.locator('meta[name="theme-color"]').first()).toHaveAttribute('content', '#f5f1e8');
+  await expect(page.locator('meta[name="theme-color"]').first()).toHaveAttribute('content', '#f1eadb');
   await page.evaluate(() => localStorage.setItem('jyc-theme', 'light'));
   await page.reload({ waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'saved light theme');
@@ -1694,7 +1694,7 @@ test('static boot screen follows the operating-system theme before React mounts'
     await page.goto(base, { waitUntil: 'domcontentloaded' });
     await expect(page.locator('.boot-fallback')).toBeVisible();
     await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
-    await expect(page.locator('meta[name="theme-color"]').first()).toHaveAttribute('content', theme === 'dark' ? '#080d1c' : '#f5f1e8');
+    await expect(page.locator('meta[name="theme-color"]').first()).toHaveAttribute('content', theme === 'dark' ? '#080d1c' : '#f1eadb');
   }
 });
 
