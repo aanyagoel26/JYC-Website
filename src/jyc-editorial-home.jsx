@@ -307,7 +307,7 @@ export function JYCEditorialHome({ data }) {
                 key={story.id || story.url}
                 onClick={() => nav('/gallery?q=' + encodeURIComponent(story.association || story.caption || ''))}
                 onMouseMove={handleSpotlight}
-                aria-label={`${story.year || 'JYC ARCHIVE'} ${story.association} ${story.caption || story.association} Explore album`}
+                aria-label={`${story.year || 'JYC ARCHIVE'} · ${story.association} ${story.caption || story.association} Explore album ↗ ${String(index + 1).padStart(2, '0')}`}
               >
                 <ResponsivePhoto
                   className="jh-story-photo"
@@ -449,7 +449,7 @@ export function JYCEditorialHome({ data }) {
             </div>
             {team.length ? (
               team.map((m, i) => (
-                <button type="button" key={m.id || i} onClick={() => nav('/team')} aria-label={`Meet ${m.role || m.position || 'JYC Apex'} ${m.name || 'JYC team member'}`}>
+                <button type="button" key={m.id || i} onClick={() => nav('/team')}>
                   <span className="jh-team-monogram" aria-hidden="true">
                     {teamPhotoFor(m)
                       ? <ResponsivePhoto className="jh-team-thumb" src={teamPhotoFor(m)} alt="" loading="lazy" decoding="async" sizes="48px" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Portrait unavailable" />
