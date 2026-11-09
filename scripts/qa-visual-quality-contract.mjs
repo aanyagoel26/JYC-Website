@@ -8,6 +8,11 @@ const home = fs.readFileSync('src/jyc-editorial-home.css', 'utf8');
 const homeComponent = fs.readFileSync('src/jyc-editorial-home.jsx', 'utf8');
 const main = fs.readFileSync('src/main.jsx', 'utf8');
 const search = fs.readFileSync('src/search/jyc-search.jsx', 'utf8');
+const atmosphere = fs.readFileSync('src/jyc-innovation-motion.css', 'utf8');
+const celestial = fs.readFileSync('src/styles/jyc-celestial-refresh.css', 'utf8');
+const webglField = fs.readFileSync('src/components/JYCWebGLField.jsx', 'utf8');
+const dither = fs.readFileSync('src/react-bits/DitherVeil.jsx', 'utf8');
+const ambientMotion = fs.readFileSync('src/jyc-innovation-motion.jsx', 'utf8');
 
 const importIndex = entry.indexOf("@import './jyc-visual-quality.css';");
 const firstRuleIndex = entry.indexOf('.public-app :where');
@@ -60,4 +65,12 @@ assert.ok(main.includes('deadlineMs>Date.now()') &&
   main.includes("e.publicStatus==='planned'&&e.registrationVerified!==true"),
   'announcement registration notices must exclude expired or unverified planned events');
 
-console.log('Visual quality contract: PASS (type, collage, reduced motion, image fallback, live counts)');
+assert.ok(!atmosphere.includes('animation: jyc-atmosphere-drift') && !atmosphere.includes('background-position: 0% 0%, 100% 0%'),
+  'full-page atmosphere must not animate background-position and repaint the document');
+assert.ok(celestial.includes('--jyc-champagne-gold:#765f36 !important') && celestial.includes('--jyc-champagne-gold:#e7d19b !important'),
+  'legacy champagne aliases must retain WCAG AA contrast in both themes');
+assert.ok(webglField.includes("if (lowPower || coarse) { host.dataset.webgl = 'fallback'; return; }") &&
+  dither.includes('(navigator.hardwareConcurrency || 8) <= 4') &&
+  ambientMotion.includes('(navigator.hardwareConcurrency || 8) <= 4'),
+  'heavy WebGL and ambient canvas effects must fall back on constrained hardware');
+console.log('Visual quality contract: PASS (type, collage, reduced motion, image fallback, live counts, motion budget, theme contrast)');

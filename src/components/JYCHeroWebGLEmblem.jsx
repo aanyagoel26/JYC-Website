@@ -90,6 +90,8 @@ export function JYCHeroWebGLEmblem() {
     let renderDpr = 1;
     const isMobile = window.matchMedia('(max-width: 768px), (pointer: coarse)').matches;
     const saveData = Boolean(navigator.connection?.saveData);
+    const lowPower = saveData || (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) < 4;
+    if (lowPower) { canvas.style.display = 'none'; return; }
     const targetFrameMs = isMobile ? 1000 / 24 : 1000 / 30;
     let lastFrameAt = -Infinity;
 

@@ -6,6 +6,7 @@ const failures=[];
 let checksCount=0;
 const check=(name,ok)=>{checksCount++;console.log((ok?'PASS':'FAIL')+': '+name);if(!ok)failures.push(name)};
 const main=read('src/main.jsx');
+const home=read('src/jyc-editorial-home.jsx');
 const campus=read('src/v14-platform-plus.jsx');
 const extras=read('src/extra-features.jsx');
 const publicEntry=read('src/styles/public-entry.css');
@@ -39,7 +40,8 @@ check('Escape closes the team profile and restores focus to the front trigger',f
 check('team profile trigger has a visible theme-aware focus indicator',flipCss.includes('.flip-card__front-trigger:focus-visible')&&flipCss.includes('outline: 3px solid'));
 check('team profile cards use the shared lavender/champagne palette without legacy red accents',flipCss.includes('var(--jyc-accent')&&flipCss.includes('var(--jyc-gold')&&!flipCss.includes('#A82420'));
 check('theme switch accessible name includes its visible label and action',main.includes("aria-label={`${theme==='dark'?'Night':'Day'} Theme — switch to ${nextLabel} theme`}"));
-check('Search trigger accessible name includes its visible label and keyboard shortcut',main.includes('aria-label="Search, Ctrl K"'));
+check('Search trigger accessible name is derived from its visible label and keyboard shortcut',main.includes('className="search-label">Search</span>')&&main.includes('<kbd aria-hidden="true">Ctrl K</kbd>')&&!main.includes('aria-label="Search, Ctrl K"'));
+check('homepage story, event and team buttons do not override visible text in their accessible names',!home.includes('aria-label={`${story.year')&&!home.includes('aria-label={`View ')&&!home.includes('aria-label={`Meet '));
 check('About dark closing CTA overrides the paper-only legacy foregrounds',read('src/styles/jyc-cohesive-experience.css').includes('Dark About closing CTA')&&read('src/styles/jyc-cohesive-experience.css').includes('about-next-v28 h2'));
 check('legacy restoration red aliases resolve through the shared theme accent instead of hard-coded red',read('src/styles/jyc-cohesive-experience.css').includes('--jyc-restoration-red: var(--jyc-accent)')&&read('src/styles/jyc-cohesive-experience.css').includes('--jyc-restoration-red-bright: var(--jyc-accent-strong)'));
 check('active design and restoration layers contain no hard-coded red theme accents',!/#(?:8f211f|d45b55|b8322c|741b19|ed7770)|rgba\(\s*143\s*,\s*33\s*,\s*31/i.test(read('src/styles/jyc-design-system.css')+read('src/styles/jyc-v203-restoration.css')));
