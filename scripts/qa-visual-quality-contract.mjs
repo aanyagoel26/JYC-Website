@@ -65,7 +65,7 @@ assert.ok(main.includes('deadlineMs>Date.now()') &&
   main.includes("e.publicStatus==='planned'&&e.registrationVerified!==true"),
   'announcement registration notices must exclude expired or unverified planned events');
 
-assert.ok(!atmosphere.includes('animation: jyc-atmosphere-drift') && !atmosphere.includes('background-position: 0% 0%, 100% 0%'),
+assert.ok(!atmosphere.includes('animation: jyc-atmosphere-drift') && !/@keyframes jyc-atmosphere-drift/.test(atmosphere),
   'full-page atmosphere must not animate background-position and repaint the document');
 assert.ok(celestial.includes('--jyc-champagne-gold:#765f36 !important') && celestial.includes('--jyc-champagne-gold:#e7d19b !important'),
   'legacy champagne aliases must retain WCAG AA contrast in both themes');

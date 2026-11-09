@@ -94,7 +94,7 @@ html.jyc-motion-ready .public-app .reveal.jyc-motion-visible{opacity:1;transform
 }
 
 
-.app-frame background gradients remain static: the fixed ambient canvas supplies motion without repainting the full page.
+/* App-frame gradients remain static; the fixed ambient canvas supplies motion without repainting the full page. */
 /* V70 — layered atmosphere: depth comes from slow light fields, fine grain and
    restrained motion, while the canvas supplies the responsive particles. */
 .app-frame {
