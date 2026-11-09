@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { normalizeSearch, rankSearchResults } from './lib/search.js';
-import { hubDetails } from './v23.6-hub-details.js';
 
 const JYC_LOGO = import.meta.env.PROD ? '/assets/jyc-logo-48.avif' : '/JYC%20Logo(4).png';
 const handleLogoError = event => { const image=event.currentTarget; if(image.dataset.logoFallback==='1')return; image.dataset.logoFallback='1'; image.src='/JYC%20Logo(4).png'; };
@@ -10,8 +9,7 @@ const published = data => ({
   clubs: (data?.clubs || []).filter(c => c?.published && c?.status !== 'archived'),
   events: (data?.events || []).filter(e => e?.published && !e?.archived),
   team: (data?.team || []).filter(m => m?.published === true),
-  gallery: (data?.gallery || []).filter(g => g?.url && g?.published !== false)
-});
+  });
 
 const PROMPT_SUGGESTIONS = [
   'When is Converge 2026?',
@@ -133,7 +131,7 @@ export function JYCAssistant({ data, onClose }) {
   ]);
   const [isTyping, setIsTyping] = useState(false);
 
-  const { clubs, events, team, gallery } = useMemo(() => published(data), [data]);
+  const { clubs, events, team } = useMemo(() => published(data), [data]);
 
   useEffect(() => {
     const active = document.activeElement;
