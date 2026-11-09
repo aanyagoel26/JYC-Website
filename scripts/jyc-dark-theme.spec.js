@@ -17,6 +17,7 @@ async function waitForJyc(page, route) {
   await page.locator('.public-app').waitFor({ state: 'visible', timeout: 25000 });
   await page.waitForFunction(() => document.documentElement.dataset.jycContentReady === 'true', null, { timeout: 20000 });
   await page.evaluate(() => document.fonts?.ready.then(() => true));
+  await expect(page.locator('.public-app h1').first()).toBeVisible({timeout:15000});
 }
 
 async function themeSnapshot(page) {
