@@ -45,6 +45,7 @@ check('descriptive terms discover content beyond the title',matchSearchResults(r
 check('typo tolerance keeps a near-exact club name discoverable',matchSearchResults(rows,'Abhivyaktii').some(row=>row.key==='exact'));
 check('unrelated queries return an honest empty set',matchSearchResults(rows,'quantum banana').length===0);
 check('multi-word query matches across title and descriptive fields',matchSearchResults([{key:'multi',title:'Abhivyakti',meta:'Dramatics',searchText:'theatre stage acting',type:'CLUB'}],'Abhivyakti theatre')[0]?.key==='multi');
+check('multi-word query rejects candidates matching only one of two terms',matchSearchResults([{key:'partial',title:'Abhivyakti',meta:'Dramatics',searchText:'theatre stage acting',type:'CLUB'}],'Abhivyakti banana').length===0);
 check('Fests is present in the static destination catalogue',source.includes("['Fests','Flagship JYC fests and campus celebrations.'"));
 check('public index policy excludes draft, private and archived rows',!isPublicSearchRecord({published:true,status:'draft'})&&!isPublicSearchRecord({published:true,private:true})&&!isPublicSearchRecord({published:true,archived:true}));
 check('public index policy accepts published CMS and registry records',isPublicSearchRecord({published:true})&&isPublicSearchRecord({status:'published'})&&isPublicSearchRecord({publicationStatus:'published'}));
