@@ -2199,5 +2199,5 @@ test('More navigation and Search modal work with keyboard, empty states and focu
   expect(mobileSearchBounds.height).toBeLessThan(760);
   await input.press('Escape');
   await expect(page.locator('.search-overlay')).toHaveCount(0);
-  await expect(mobileMoreTrigger).toBeFocused();
+  await expect(page.locator('.search-trigger')).toBeFocused();
 });
