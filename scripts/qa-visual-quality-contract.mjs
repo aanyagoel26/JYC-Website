@@ -70,7 +70,8 @@ assert.ok(!atmosphere.includes('animation: jyc-atmosphere-drift') && !/@keyframe
 assert.ok(celestial.includes('--jyc-champagne:#765f36 !important') && celestial.includes('--jyc-champagne:#e7d19b !important') && entry.includes('.public-app .fests-page .compact-page-head .eyebrow') && entry.includes('color: var(--jyc-gold, #765f36) !important;'),
   'legacy champagne aliases must retain WCAG AA contrast in both themes');
 assert.ok(webglField.includes("if (lowPower || coarse) { host.dataset.webgl = 'fallback'; return; }") &&
-  dither.includes('(navigator.hardwareConcurrency || 8) <= 8') && dither.includes('(navigator.deviceMemory || 8) < 8') &&
-  ambientMotion.includes('(navigator.hardwareConcurrency || 8) <= 8') && ambientMotion.includes('(navigator.deviceMemory || 8) < 8') && webglField.includes('(navigator.hardwareConcurrency || 8) <= 8'),
-  'heavy WebGL and ambient canvas effects must fall back on constrained hardware');
+  dither.includes('(navigator.hardwareConcurrency || 4) < 4') && dither.includes('(navigator.deviceMemory || 4) < 2') &&
+  ambientMotion.includes('(navigator.hardwareConcurrency || 4) < 4') && ambientMotion.includes('(navigator.deviceMemory || 4) < 2') &&
+  webglField.includes('(navigator.hardwareConcurrency || 8) <= 8') && webglField.includes('(navigator.deviceMemory || 8) < 8'),
+  'WebGL effects must retain a conservative fallback for the full-page field and a low-memory fallback for the hero/ambient layers');
 console.log('Visual quality contract: PASS (type, collage, reduced motion, image fallback, live counts, motion budget, theme contrast)');
