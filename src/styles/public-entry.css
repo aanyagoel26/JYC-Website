@@ -453,3 +453,7 @@ html[data-theme="dark"] .jh-cyber-badge b { color: #17142a !important; }
 @media (prefers-reduced-motion: reduce) {
   .mobile-dock { scroll-behavior: auto !important; transition: none !important; }
 }
+
+
+/* Consistent readable eyebrow size across every public route. */
+html .public-app .eyebrow { font-size:11px!important; }

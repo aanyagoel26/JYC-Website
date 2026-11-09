@@ -105,8 +105,5 @@ html[data-theme="light"] .search-overlay.jyc-search-backdrop,html[data-theme="da
 @media(prefers-reduced-motion:reduce){.jyc-search-results [role="option"]{transition:none}}
 
 
-/* Public content type floor: preserve hierarchy while preventing unreadable micro-copy. */
-html .public-app :where(span,small,strong,b,i,em,a,label,li,figcaption,time,summary,dt,dd) {
-  font-size: max(11px, 1em) !important;
-}
-html .public-app :where(.jh-section-number,.jh-about-kicker) { font-size: 11px !important; }
+/* Shared minimum for small metadata; component-specific text keeps its intended hierarchy. */
+html .public-app small { font-size:11px !important; }
