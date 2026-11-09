@@ -2117,6 +2117,16 @@ test('More navigation and Search modal work with keyboard, empty states and focu
   await expect(page.locator('.search-overlay')).toHaveCount(0);
 
   await searchTrigger.click();
+  await input.fill('   ');
+  await expect(page.locator('.jyc-search-discover')).toBeVisible();
+  await expect(page.locator('.search-no-results')).toHaveCount(0);
+  await input.fill('Fests');
+  await expect(page.locator('#jyc-search-result-0')).toContainText('Fests');
+  await input.press('Enter');
+  await expect(page).toHaveURL(/\/fests(?:\/)?$/);
+  await expect(page.locator('.search-overlay')).toHaveCount(0);
+
+  await searchTrigger.click();
   await input.fill('Smart India Hackathon finalist');
   const achievementCategory = page.locator('.search-category-filters button').filter({ hasText: /^ACHIEVEMENT \(/ }).first();
   await expect(achievementCategory).toBeVisible();
