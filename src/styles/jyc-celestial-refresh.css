@@ -145,3 +145,10 @@ html[data-theme="dark"] .jyc-editorial-home :where(.jh-about-kicker,.jh-section-
 .jyc-editorial-home :where(.jh-community-copy h2,.jh-final h2,.jh-final strong) {color:var(--jyc-text-strong)!important;-webkit-text-fill-color:currentColor!important;}
 .jyc-editorial-home .jh-community :where(.eyebrow,.jh-community-eyebrow,.reference-view-all) {color:var(--jyc-accent-strong)!important;}
 .public-app :where(.jyc-filter-toggle-btn,.jyc-clear-filters-btn,.jyc-search-clear,.jyc57-year-switch button,.jyc57-filter-button,.jyc-dropdown-item) {min-height:44px;}
+
+/* Night observatory depth lives on the page canvas, not on the app content wrapper. */
+html[data-theme="dark"] body {
+  background-color:var(--jyc-canvas);
+  background-image:radial-gradient(ellipse at 14% 10%,rgba(82,72,142,.24),transparent 34rem),radial-gradient(ellipse at 88% 22%,rgba(148,132,219,.17),transparent 36rem),radial-gradient(ellipse at 55% 92%,rgba(65,82,130,.16),transparent 40rem);
+}
+.jyc-editorial-home .emblem-control-pill {min-height:44px!important;}
