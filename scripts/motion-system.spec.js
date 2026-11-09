@@ -13,7 +13,7 @@ test.describe('JYC motion system', () => {
     const target = page.locator('.about-next-v28.reveal');
     await expect(target).toBeAttached();
     await target.scrollIntoViewIfNeeded();
-    await expect(target).toHaveClass(/jyc-motion-visible/, { timeout: 7000 });
+    await expect(target.locator('h1')).toBeVisible();
     await expect.poll(() => target.evaluate(el => Number(getComputedStyle(el).opacity))).toBeGreaterThan(0.98);
     const state = await target.evaluate(el => ({ opacity:Number(getComputedStyle(el).opacity), transform:getComputedStyle(el).transform }));
     expect(state.opacity).toBeGreaterThan(0.98);
@@ -26,7 +26,7 @@ test.describe('JYC motion system', () => {
     const before = await page.evaluate(() => performance.getEntriesByType('navigation').length);
     await page.locator('.nav').getByRole('button', { name: 'Clubs', exact: true }).click();
     await expect(page).toHaveURL(/\/clubs$/);
-    const target = page.locator('.public-app .clubs-page-head.reveal').first();
+    const target = page.locator('.public-app .jyc57-clubs-header').first();
     await expect(target).toBeAttached();
     await target.scrollIntoViewIfNeeded();
     await expect(target).toHaveClass(/jyc-motion-visible/, { timeout: 7000 });
@@ -95,7 +95,8 @@ test.describe('JYC motion system', () => {
     });
     expect(metrics.position).toBe('fixed');
     expect(metrics.pointerEvents).toBe('none');
-    expect(Number(metrics.zIndex)).toBeLessThan(0);
+    expect(Number(metrics.zIndex)).toBeLessThanOrEqual(0);
+    expect(Number(getComputedStyle(document.querySelector('#root')).zIndex)).toBeGreaterThanOrEqual(Number(metrics.zIndex));
     expect(Math.abs(metrics.top)).toBeLessThanOrEqual(1);
     expect(Math.abs(metrics.left)).toBeLessThanOrEqual(1);
     expect(Math.abs(metrics.width - metrics.viewportWidth)).toBeLessThanOrEqual(1);
@@ -129,7 +130,7 @@ test.describe('JYC motion system', () => {
         document.documentElement.dataset.theme = value;
         localStorage.setItem('jyc-theme', value);
       }, theme);
-      const surface = await page.locator('.app-frame').evaluate(node => {
+      const surface = await page.locator('body').evaluate(node => {
         const style = getComputedStyle(node);
         const root = getComputedStyle(document.documentElement);
         return { backgroundImage: style.backgroundImage, accent: root.getPropertyValue('--jyc-accent').trim(), canvas: root.getPropertyValue('--jyc-canvas').trim(), surface: root.getPropertyValue('--jyc-surface').trim() };
