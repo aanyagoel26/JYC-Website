@@ -307,7 +307,6 @@ export function JYCEditorialHome({ data }) {
                 key={story.id || story.url}
                 onClick={() => nav('/gallery?q=' + encodeURIComponent(story.association || story.caption || ''))}
                 onMouseMove={handleSpotlight}
-                aria-label={`${story.year || 'JYC ARCHIVE'} · ${story.association} ${story.caption || story.association} Explore album ↗ ${String(index + 1).padStart(2, '0')}`}
               >
                 <ResponsivePhoto
                   className="jh-story-photo"
@@ -323,9 +322,8 @@ export function JYCEditorialHome({ data }) {
                 <span className="jh-story-copy">
                   <small>{story.year || 'JYC ARCHIVE'} <i>·</i> {story.association}</small>
                   <strong>{story.caption || story.association}</strong>
-                  <b>Explore album <span aria-hidden="true">↗</span></b>
+                  <b>Explore album</b>
                 </span>
-                <span className="jh-story-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
               </button>
             ))}
           </div>
