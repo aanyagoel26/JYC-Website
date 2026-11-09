@@ -21,6 +21,7 @@ html[data-theme="dark"] body{background-color:var(--jyc-canvas)}
 html[data-theme="light"] .public-app .jyc-editorial-home.jyc-home{background:color-mix(in srgb,var(--jyc-canvas) 8%,transparent)!important}
 html[data-performance="lite"] body::before,html[data-performance="lite"] body::after{animation:none!important}
 html[data-performance="lite"] .public-app :where(.card,.event-card,.club-card,.team-card,.contact-card,.jyc57-event-card){transition:none!important}
+html[data-performance="lite"] .route-stage>section{animation:none!important;transform:none!important}
 html[data-theme="light"] .public-app{background:transparent!important;color:var(--jyc-text-strong)}
 html[data-theme="light"] .public-app :where(.card,.event-card,.club-card,.team-card,.announcement-card,.hub-card,.jyc57-event-card,.jyc57-feature,.contact-card,.calendar-panel,.admin-card){background-color:var(--jyc-surface);border-color:var(--jyc-line);color:var(--jyc-text-strong)}
 html[data-theme="light"] .public-app :where(.card p,.event-card p,.club-card p,.team-card p,.announcement-card p,.hub-card p,.muted,.muted-note){color:var(--jyc-muted)}
