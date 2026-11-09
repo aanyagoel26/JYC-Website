@@ -35,7 +35,8 @@ assert.equal(normalizeSearch('Éloquence & JYC'),'eloquence jyc');
 assert.equal(normalizeSearch('नमस्ते'),'नमस्ते');
 assert.equal(normalizeSearch('हिन्दी JYC'),'हिन्दी jyc');
 assert.equal(normalizeSearch('café'),'cafe');
-check('Unicode normalization preserves Hindi vowel signs and virama while folding Latin accents',normalizeSearch('नमस्ते')==='नमस्ते'&&normalizeSearch('हिन्दी JYC')==='हिन्दी jyc'&&normalizeSearch('café')==='cafe');
+assert.equal(normalizeSearch('İstanbul JIIT'),'istanbul jiit');
+check('Unicode normalization preserves Hindi vowel signs and virama while folding Latin accents',normalizeSearch('नमस्ते')==='नमस्ते'&&normalizeSearch('हिन्दी JYC')==='हिन्दी jyc'&&normalizeSearch('café')==='cafe'&&normalizeSearch('İstanbul JIIT')==='istanbul jiit');
 const rows=[
  {key:'exact',title:'Abhivyakti',meta:'Dramatics',searchText:'theatre stage acting',type:'CLUB'},
  {key:'near',title:'Abhivyakti Theatre Workshop',meta:'Event',searchText:'drama performance',type:'EVENT'},
