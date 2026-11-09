@@ -538,3 +538,10 @@ html[data-theme] .public-app :is(.jyc-history-page,.team-page) :where(h1,h2,h3,h
 html[data-theme] .public-app :is(.jyc-history-page,.team-page) :where(p,li,small,.muted,.muted-note) {
   color: var(--jyc-muted);
 }
+
+
+/* V70 — meet WCAG AA contrast for small gold eyebrow labels on public pages. */
+html[data-theme="light"] .public-app .search-topic-band .eyebrow,
+html[data-theme="light"] .public-app .compact-page-head .eyebrow { color: #76572b !important; }
+html[data-theme="dark"] .public-app .search-topic-band .eyebrow,
+html[data-theme="dark"] .public-app .compact-page-head .eyebrow { color: #e7d19b !important; }
