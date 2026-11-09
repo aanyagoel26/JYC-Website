@@ -1006,7 +1006,7 @@ test('global search opens, accepts keyboard input, and closes cleanly', async ({
   await trigger.press(process.platform === 'darwin' ? 'Meta+K' : 'Control+K');
   const dialog = page.locator('[role="dialog"]').filter({ hasText: /JYC search/i }).first();
   await expect(dialog).toBeVisible();
-  const input = page.getByRole('textbox', { name: /Search JYC/i }).first();
+  const input = page.getByRole('combobox', { name: /Search JYC/i }).first();
   await expect(input).toBeVisible();
   await input.fill('CICR');
   await page.waitForTimeout(150);
@@ -2069,7 +2069,7 @@ test('More navigation and Search modal work with keyboard, empty states and focu
   await waitForAppMount(page, 'More and Search interaction regression');
   const searchTrigger = page.locator('.search-trigger');
   const search = page.locator('.search-modal');
-  const input = page.getByRole('textbox', { name: 'Search JYC' });
+  const input = page.getByRole('combobox', { name: 'Search JYC' });
 
   await searchTrigger.click();
   await expect(search).toBeVisible();
