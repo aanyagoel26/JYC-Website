@@ -21,6 +21,7 @@ const responsive=read('src/jyc-responsive-photo.jsx');
 const manifestLoader=read('src/jyc-image-manifest.js');
 const homeCss=read('src/jyc-editorial-home.css');
 const cohesive=read('src/styles/jyc-cohesive-experience.css');
+const contract=read('src/styles/jyc-theme-contract.css');
 const design=read('src/jyc-design-upgrades.css');
 const proRedesign=read('src/styles/jyc-pro-redesign.css');
 const editorialHome=read('src/jyc-editorial-home.jsx');
