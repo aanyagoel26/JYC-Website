@@ -243,7 +243,7 @@ export function JYCEditorialHome({ data }) {
                 pixelSize={2}
                 levels={3}
                 palette="duotone"
-                inkColor="#4b3e69"
+                inkColor="#294c7a"
                 paperColor="#f6f2e9"
                 contrast={1.18}
                 brightness={0.02}
