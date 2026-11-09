@@ -41,6 +41,8 @@ html[data-theme="dark"] .public-app :where(.card,.event-card,.club-card,.team-ca
 
 /* Keep the new search surface above legacy search theme contracts. */
 html[data-theme="light"] .search-overlay.jyc-search-backdrop,html[data-theme="dark"] .search-overlay.jyc-search-backdrop{background:rgba(8,13,28,.62)!important}
+.search-modal.jyc-search-dialog{padding:0!important}
+.search-modal .jyc-search-filters{display:flex;gap:7px;overflow-x:auto;padding:0 24px 12px;scrollbar-width:thin}
 .search-modal .jyc-search-filters button[aria-pressed="true"]{background:var(--jyc-gold)!important;border-color:var(--jyc-gold)!important;color:#fffaf0!important;box-shadow:none!important}
 
 /* Fresh search command surface. */
