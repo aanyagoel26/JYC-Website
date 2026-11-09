@@ -429,7 +429,7 @@ const DitherVeil = ({
 
     const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     const coarsePointer = window.matchMedia?.('(pointer: coarse)').matches || window.innerWidth < 800;
-    const constrainedHardware = (navigator.hardwareConcurrency || 4) < 4 || (navigator.deviceMemory || 4) < 2;
+    const constrainedHardware = Boolean(navigator.connection?.saveData) || (navigator.hardwareConcurrency || 8) <= 8 || (navigator.deviceMemory || 8) < 8;
     if (reducedMotion || constrainedHardware) {
       container.dataset.static = '1';
       return () => { delete container.dataset.static; };
