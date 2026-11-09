@@ -2065,6 +2065,7 @@ test('sparse faculty layout uses only populated tracks and mobile home actions s
 
 test('More navigation and Search modal work with keyboard, empty states and focus handoff', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
+  await page.addInitScript(() => localStorage.setItem('jyc-search-recent', JSON.stringify([' duplicate ', 'duplicate', 'x'.repeat(160), null, 42])));
   await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'More and Search interaction regression');
   const searchTrigger = page.locator('.search-trigger');
@@ -2074,6 +2075,10 @@ test('More navigation and Search modal work with keyboard, empty states and focu
   await searchTrigger.click();
   await expect(search).toBeVisible();
   await expect(input).toBeFocused();
+  const restoredHistory = page.locator('.jyc-search-recent>div:not(.jyc-search-recent-head) button');
+  await expect(restoredHistory).toHaveCount(2);
+  expect((await restoredHistory.nth(0).innerText()).length).toBeLessThanOrEqual(121);
+  expect((await restoredHistory.nth(1).innerText()).length).toBeLessThanOrEqual(120);
   await input.fill('clubs');
   await expect(page.locator('.search-result-active')).toContainText('Clubs');
   await expect(page.locator('.search-category-filters')).toBeVisible();
