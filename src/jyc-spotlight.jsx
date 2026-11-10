@@ -1,3 +1,4 @@
+import './styles/jyc-home-spotlight.css';
 import React,{useMemo} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {PDF_HUB_STORIES} from './pdf-hub-content.js';
