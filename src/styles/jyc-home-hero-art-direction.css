@@ -224,3 +224,26 @@ html[data-theme="light"] .public-app .jyc-editorial-home.jyc-home .jh-hero-visua
   }
   html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn{transition:none!important}
 }
+
+
+/* The identity stage is intentionally quieter than the surrounding editorial copy. */
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual {
+  min-height:clamp(410px,44vw,600px)!important;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage {
+  width:min(100%,560px)!important; max-width:560px!important;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-card-3d {
+  width:76%!important; height:76%!important;
+}
+html[data-theme="light"] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-context {
+  background:rgba(24,27,46,.9); color:#fffaf1;
+}
+@media(max-width:760px) {
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual {
+   min-height:clamp(340px,96vw,500px)!important;
+ }
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage {
+   width:min(100%,430px)!important;
+ }
+}

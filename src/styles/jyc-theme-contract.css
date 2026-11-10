@@ -538,3 +538,25 @@ html[data-theme] .public-app :is(.jyc-history-page,.team-page) :where(h1,h2,h3,h
 html[data-theme] .public-app :is(.jyc-history-page,.team-page) :where(p,li,small,.muted,.muted-note) {
   color: var(--jyc-muted);
 }
+
+
+/* Consistent page canvas: subtle paper grain by day, layered observatory depth by night. */
+html[data-theme="dark"] body {
+  background:
+    radial-gradient(ellipse at 12% 4%,rgba(91,77,154,.17),transparent 34rem),
+    radial-gradient(ellipse at 88% 22%,rgba(34,72,126,.14),transparent 38rem),
+    linear-gradient(180deg,#080d1c 0%,#0b1225 48%,#080d1c 100%) !important;
+}
+html[data-theme="light"] body {
+  background:
+    radial-gradient(ellipse at 8% 0%,rgba(133,112,170,.09),transparent 34rem),
+    radial-gradient(ellipse at 94% 18%,rgba(190,156,99,.09),transparent 38rem),
+    linear-gradient(180deg,#f5f1e8 0%,#f1ecdf 52%,#f5f1e8 100%) !important;
+}
+html[data-theme] body::before {
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.13;
+  background-image:radial-gradient(1px 1px at 17% 23%,currentColor 98%,transparent),
+    radial-gradient(1px 1px at 72% 68%,currentColor 98%,transparent),
+    radial-gradient(1px 1px at 91% 14%,currentColor 98%,transparent);
+  background-size:211px 197px,283px 251px,337px 313px;
+}

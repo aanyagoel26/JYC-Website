@@ -75,3 +75,58 @@
     will-change: auto !important;
   }
 }
+
+
+/* Observatory-inspired identity frame: rings support the crest, never compete with it. */
+.jyc-hero-emblem-stage { width:min(100%,560px); max-width:560px; }
+.jyc-emblem-card-3d { width:min(76%,430px); }
+.jyc-emblem-orbit {
+  position:absolute; inset:7%; z-index:0; border:1px solid rgba(231,209,155,.28);
+  border-radius:50%; pointer-events:none; transform:rotate(-18deg) scaleY(.94);
+}
+.jyc-emblem-orbit::before,.jyc-emblem-orbit::after {
+  content:""; position:absolute; border:1px solid rgba(200,188,255,.13); border-radius:50%;
+}
+.jyc-emblem-orbit::before { inset:7%; }
+.jyc-emblem-orbit::after { inset:-5%; border-style:dashed; opacity:.6; }
+.jyc-emblem-orbit.orbit-inner { inset:15%; border-color:rgba(200,188,255,.22); transform:rotate(34deg) scaleY(.9); }
+.jyc-emblem-orbit.orbit-equator { inset:1% 9%; border-color:rgba(231,209,155,.12); transform:rotate(58deg) scaleY(.72); }
+.jyc-emblem-context {
+  position:absolute; z-index:5; display:flex; align-items:center; justify-content:space-between;
+  gap:10px; border:1px solid rgba(231,209,155,.28); border-radius:999px;
+  background:rgba(9,16,35,.82); color:#f6f2ff; box-shadow:0 12px 34px rgba(2,5,16,.22);
+  backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  font:700 9px/1.2 Inter,system-ui,sans-serif; letter-spacing:.09em;
+}
+.emblem-context-top { top:9%; left:1%; right:1%; padding:10px 15px; }
+.emblem-context-top > span { display:inline-flex; align-items:center; gap:8px; white-space:nowrap; }
+.emblem-context-top i { width:3px; height:3px; flex:0 0 3px; border-radius:50%; background:#e7d19b; }
+.emblem-context-top b { color:#e7d19b; }
+.emblem-context-bottom {
+  bottom:7%; left:50%; transform:translateX(-50%); min-width:230px; padding:9px 14px;
+}
+.emblem-context-bottom > span:nth-child(2) { display:grid; gap:3px; text-align:center; }
+.emblem-context-bottom b { font-size:10px; letter-spacing:.14em; }
+.emblem-context-bottom small { color:#c8cce0; font-size:7px; letter-spacing:.12em; }
+.emblem-context-mark { color:#e7d19b; font-size:15px; }
+.emblem-context-index { color:#e7d19b; font:700 9px/1 ui-monospace,monospace; }
+@media(max-width:680px) {
+ .jyc-hero-emblem-stage { width:min(94vw,390px); }
+ .jyc-emblem-card-3d { width:72%; }
+ .emblem-context-top { top:8%; padding:8px 10px; gap:5px; font-size:7px; letter-spacing:.055em; }
+ .emblem-context-top > span { gap:5px; }
+ .emblem-context-bottom { bottom:8%; min-width:195px; padding:8px 10px; }
+ .emblem-context-bottom b { font-size:9px; }
+ .emblem-context-bottom small { font-size:6px; }
+ .jyc-emblem-orbit { inset:10% 5%; }
+ .jyc-emblem-orbit.orbit-inner { inset:18% 12%; }
+}
+@media(max-width:380px) {
+ .emblem-context-top { top:10%; left:0; right:0; font-size:6px; padding:7px 8px; }
+ .jyc-emblem-card-3d { width:68%; }
+ .emblem-context-bottom { bottom:10%; min-width:178px; }
+}
+@media(prefers-reduced-motion:reduce) {
+ .jyc-emblem-orbit { animation:none!important; }
+ .jyc-emblem-card-3d { will-change:auto; }
+}
