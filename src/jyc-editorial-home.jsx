@@ -172,6 +172,23 @@ function LazyActivityBento({ activities, nav }) {
 
 export function JYCEditorialHome({ data }) {
   const nav = useNavigate();
+  const [ditherReady, setDitherReady] = useState(false);
+  useEffect(() => {
+    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    const coarse = window.matchMedia?.('(pointer: coarse)').matches;
+    if (reduced || coarse) return;
+    let idleId = null;
+    let timerId = null;
+    if (typeof window.requestIdleCallback === 'function') {
+      idleId = window.requestIdleCallback(() => setDitherReady(true), { timeout: 1800 });
+    } else {
+      timerId = window.setTimeout(() => setDitherReady(true), 1400);
+    }
+    return () => {
+      if (idleId !== null) window.cancelIdleCallback?.(idleId);
+      if (timerId !== null) window.clearTimeout(timerId);
+    };
+  }, []);
   const activities = useMemo(() => {
     const photoHubs = { technical: 'CICR', cultural: 'VamUnique', literary: 'Eloquence', fests: 'Aakriti', sports: 'Sports', creative: 'Aura' };
     return PILLARS.map(p => {
@@ -253,34 +270,50 @@ export function JYCEditorialHome({ data }) {
           <div className="jh-hero-dither-backdrop" aria-hidden="true" />
           <JYCWebGLField />
           <div className="jh-hero-dither-layer jh-dither-mark" aria-hidden="true">
-            <Suspense fallback={<div className="jh-hero-dither-loading" />}>
-              <LazyDitherVeil
+            {!ditherReady ? (
+              <img
+                className="jh-hero-dither-static"
                 src={DITHER_SOURCE}
                 srcSet="/assets/jyc-logo-270.avif 270w, /assets/jyc-logo-320.avif 320w, /assets/jyc-logo.avif 480w"
                 sizes="(max-width: 680px) 80px, 320px"
-                fallbackSrc={FALLBACK}
-                originalFallbackSrc={ORIGINAL_LOGO}
-                globalPointer
-                fit="contain"
-                pattern="bayer"
-                pixelSize={2}
-                levels={3}
-                palette="duotone"
-                inkColor="#4b3e69"
-                paperColor="#f6f2e9"
-                contrast={1.18}
-                brightness={0.02}
-                revealRadius={190}
-                softness={0.7}
-                linger={1.25}
-                rimColor="#b99b70"
-                rim={0.22}
-                wander={false}
-                clickBurst={false}
-                className="jh-hero-dither-veil"
-                style={{width:'100%',height:'100%'}}
+                alt=""
+                aria-hidden="true"
+                width="320"
+                height="320"
+                loading="eager"
+                fetchPriority="high"
+                decoding="async"
               />
-            </Suspense>
+            ) : (
+              <Suspense fallback={<div className="jh-hero-dither-loading" />}>
+                <LazyDitherVeil
+                  src={DITHER_SOURCE}
+                  srcSet="/assets/jyc-logo-270.avif 270w, /assets/jyc-logo-320.avif 320w, /assets/jyc-logo.avif 480w"
+                  sizes="(max-width: 680px) 80px, 320px"
+                  fallbackSrc={FALLBACK}
+                  originalFallbackSrc={ORIGINAL_LOGO}
+                  globalPointer
+                  fit="contain"
+                  pattern="bayer"
+                  pixelSize={2}
+                  levels={3}
+                  palette="duotone"
+                  inkColor="#4b3e69"
+                  paperColor="#f6f2e9"
+                  contrast={1.18}
+                  brightness={0.02}
+                  revealRadius={190}
+                  softness={0.7}
+                  linger={1.25}
+                  rimColor="#b99b70"
+                  rim={0.22}
+                  wander={false}
+                  clickBurst={false}
+                  className="jh-hero-dither-veil"
+                  style={{width:'100%',height:'100%'}}
+                />
+              </Suspense>
+            )}
           </div>
           <JYCHeroWebGLEmblem />
         </div>
