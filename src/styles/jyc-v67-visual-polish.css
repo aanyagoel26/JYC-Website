@@ -329,3 +329,118 @@ html body #main-content .route-stage .jh-kicker,
 html body #main-content .route-stage .jh-kicker > b {
   color: #282333 !important;
 }
+
+
+/* Final homepage crest art direction. Keep metadata outside the seal and remove
+   the obsolete status/audio panel that competed with the official mark. */
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage {
+  display:grid!important;
+  place-items:center!important;
+  width:min(100%,590px)!important;
+  max-width:590px!important;
+  height:auto!important;
+  min-height:0!important;
+  aspect-ratio:1 / 1.04!important;
+  padding:54px 10px 42px!important;
+  margin-inline:auto!important;
+  isolation:isolate!important;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-card-3d {
+  width:min(80%,450px)!important;
+  height:auto!important;
+  aspect-ratio:1!important;
+  transform:perspective(1100px) rotateX(var(--crest-tilt-x,0deg)) rotateY(var(--crest-tilt-y,0deg))!important;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-seal-container {
+  width:100%!important;
+  height:100%!important;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-orbit {
+  display:block!important;
+  z-index:0!important;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-controls-bar,
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-badge,
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-label,
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-caption {
+  display:none!important;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage .jyc-hero-identity-rail,
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage .jyc-hero-emblem-caption {
+  display:flex!important;
+}
+@media(max-width:760px) {
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage {
+    width:min(100%,440px)!important;
+    max-width:440px!important;
+    aspect-ratio:1 / 1.08!important;
+    padding:52px 4px 42px!important;
+  }
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-card-3d {
+    width:min(82%,340px)!important;
+  }
+}
+@media(max-width:390px) {
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage {
+    width:100%!important;
+    padding-inline:0!important;
+  }
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-card-3d {
+    width:78%!important;
+  }
+}
+/* Navigation controls remain compact and consistent after the final theme layers. */
+html[data-theme] .public-app .nav .search-trigger {
+  min-height:44px!important;
+  min-width:112px;
+  padding:0 14px 0 38px!important;
+  border:1px solid var(--jyc-line-strong)!important;
+  border-radius:999px!important;
+  background:color-mix(in srgb,var(--jyc-surface) 88%,transparent)!important;
+  color:var(--jyc-text-strong)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.42),0 5px 18px rgba(20,18,30,.07)!important;
+}
+html[data-theme] .public-app .nav .search-trigger::before {
+  content:"";position:absolute;left:15px;width:11px;height:11px;
+  border:1.8px solid currentColor;border-radius:50%;opacity:.86;
+}
+html[data-theme] .public-app .nav .search-trigger::after {
+  content:"";position:absolute;left:27px;top:25px;width:5px;height:1.8px;
+  border-radius:2px;background:currentColor;transform:rotate(45deg);transform-origin:left center;
+}
+html[data-theme] .public-app .nav .search-trigger kbd {
+  padding:4px 6px;border:1px solid var(--jyc-line);border-radius:6px;
+  background:var(--jyc-canvas-raised);color:var(--jyc-muted);
+  font:600 9px/1 'JetBrains Mono',monospace;
+}
+html[data-theme] .public-app .nav .theme-toggle-rb {
+  min-height:44px!important;padding:5px 11px 5px 6px!important;
+  border:1px solid var(--jyc-line-strong)!important;border-radius:999px!important;
+  background:var(--jyc-surface)!important;color:var(--jyc-text-strong)!important;
+}
+html[data-theme] .public-app .nav .theme-toggle-track {
+  width:46px;height:28px;flex:0 0 46px;border:1px solid var(--jyc-line);
+  border-radius:999px;background:linear-gradient(110deg,#e9d4a5,#f7e9ca);
+}
+html[data-theme] .public-app .nav .theme-toggle-orb {
+  top:3px;left:3px;width:20px;height:20px;border-radius:50%;
+  background:#fffdf7;color:#8b632d;
+  transition:transform .24s cubic-bezier(.2,.8,.2,1);
+}
+html[data-theme="dark"] .public-app .nav .theme-toggle-track { background:linear-gradient(110deg,#17234a,#34305d); }
+html[data-theme="dark"] .public-app .nav .theme-toggle-orb { transform:translateX(18px);background:#e7d19b;color:#28233d; }
+html[data-theme] .public-app .nav :where(.search-trigger,.theme-toggle,.nav-more-trigger):focus-visible {
+  outline:3px solid var(--jyc-focus)!important;outline-offset:3px!important;
+}
+@media(max-width:900px) {
+  html[data-theme] .public-app .nav .search-trigger { width:44px;min-width:44px;padding:0!important; }
+  html[data-theme] .public-app .nav .search-trigger .search-label,
+  html[data-theme] .public-app .nav .search-trigger kbd { display:none; }
+}
+@media(max-width:760px) {
+  html[data-performance="lite"] body::before,
+  html[data-performance="lite"] body::after { animation:none!important;filter:none!important; }
+}
+@media(prefers-reduced-motion:reduce) {
+  html[data-theme] .public-app .nav :where(.search-trigger,.theme-toggle-rb,.theme-toggle-orb) { transition:none!important; }
+}
