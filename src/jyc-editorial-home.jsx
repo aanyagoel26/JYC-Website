@@ -18,18 +18,6 @@ import './styles/jyc-editorial-motion-system.css';
 import './styles/jyc-home-hero-finish.css';
 import './styles/jyc-home-hero-art-direction.css';
 
-const ORIGINAL_LOGO = '/JYC%20Logo(4).png';
-const FALLBACK = import.meta.env.PROD ? '/assets/jyc-logo.webp' : ORIGINAL_LOGO;
-const handleHeroLogoFallback = event => {
-  const image = event.currentTarget;
-  image.srcset = '';
-  const candidates = [FALLBACK, ORIGINAL_LOGO];
-  let next = Number(image.dataset.logoFallbackStage || 0);
-  while (next < candidates.length && new URL(candidates[next], window.location.href).href === image.src) next += 1;
-  if (next < candidates.length) { image.dataset.logoFallbackStage = String(next + 1); image.src = candidates[next]; }
-  else image.hidden = true;
-};
-
 function DeferredMount({ children, fallback, rootMargin = '720px 0px' }) {
   const hostRef = useRef(null);
   const [ready, setReady] = useState(false);
@@ -272,9 +260,6 @@ export function JYCEditorialHome({ data }) {
 
         {/* The original JYC crest, OGL field and interactive emblem remain the visual anchor. */}
         <div className="jh-hero-visual jh-hero-webgl-stage-wrap">
-          <span className="jh-hero-stage-label" aria-hidden="true">JIIT 128</span>
-          <span className="jh-hero-stage-caption" aria-hidden="true">A student community, made together.</span>
-          <span className="jh-hero-frame" aria-hidden="true" />
           <div className="jh-hero-dither-backdrop" aria-hidden="true" />
           {heroFieldReady && <Suspense fallback={null}><LazyJYCWebGLField /></Suspense>}
           <JYCHeroWebGLEmblem />
