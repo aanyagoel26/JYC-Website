@@ -62,14 +62,16 @@ function setupReveal() {
     });
   };
   const onUserMotionChange = () => onMotionChange();
-  motionQuery.addEventListener?.('change', onMotionChange);
+  if (typeof motionQuery.addEventListener === 'function') motionQuery.addEventListener('change', onMotionChange);
+  else motionQuery.addListener?.(onMotionChange);
   window.addEventListener('jyc-motion-preference-change', onUserMotionChange);
 
   return () => {
     mutationObserver?.disconnect();
     observer?.disconnect();
     document.documentElement.classList.remove('jyc-motion-ready');
-    motionQuery.removeEventListener?.('change', onMotionChange);
+    if (typeof motionQuery.removeEventListener === 'function') motionQuery.removeEventListener('change', onMotionChange);
+    else motionQuery.removeListener?.(onMotionChange);
     window.removeEventListener('jyc-motion-preference-change', onUserMotionChange);
   };
 }
