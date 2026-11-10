@@ -28,7 +28,6 @@ import {enrichSourceClubs,mergeSourceGallery,sourceHubMedia,sourceEventMedia} fr
 import {JYC_EVENT_CATEGORIES,JYC_COMMUNITY_DISCOVERY,JYC_PUBLIC_ACTIVITIES} from './public-v1/config.js';
 import {JYC_SOCIALS,festSocialProfile,socialProfile,is128SocialProfile} from './jyc-socials.js';
 import {JYCNowStrip,JYCNowPage,HubLatestUpdates} from './jyc-now.jsx';
-import {JYCEditorialHome} from './jyc-editorial-home.jsx';
 import {ResponsivePhoto} from './jyc-responsive-photo.jsx';
 import { teamPhotoFor } from './jyc-team-media.js';
 import {JYC_CLUB_MEMBER_ROSTER} from './jyc-club-member-roster.js';
@@ -39,6 +38,7 @@ import {JYC_EDITORIAL_ACHIEVEMENTS,JYC_TEAM_SOCIALS} from './jyc-editorial-conte
 
 
 
+const LazyJYCEditorialHome=lazy(()=>import('./jyc-editorial-home.jsx').then(m=>({default:m.JYCEditorialHome})));
 const LazyJYCInnovationMotion=lazy(()=>import('./jyc-innovation-motion.jsx').then(m=>({default:m.JYCInnovationMotion})));
 const LazyRubberSegment=lazy(()=>import('./react-bits/JYCMicro.jsx').then(m=>({default:m.RubberSegment})));
 const LazyBellToggle=lazy(()=>import('./react-bits/JYCMicro.jsx').then(m=>({default:m.BellToggle})));
@@ -1048,7 +1048,7 @@ function ArchivePage({data}){
 }
 
 function Home({data}){
- return <JYCEditorialHome data={data}/>;
+ return <Suspense fallback={<section className="jh-hero jh-hero-loading" aria-label="Loading JYC homepage" style={{minHeight:'min(760px,calc(100svh - 76px))'}}/>}><LazyJYCEditorialHome data={data}/></Suspense>;
 }
 function JoinJYC(){
  const nav=useNavigate();
