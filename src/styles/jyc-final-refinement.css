@@ -1,0 +1,169 @@
+/* JYC final refinement layer — loaded after legacy generations so shared controls and
+   route surfaces resolve through the canonical theme tokens. */
+:root {
+  --jyc-control-height:44px;
+  --jyc-control-radius:999px;
+  --jyc-motion-fast:160ms;
+  --jyc-motion-base:240ms;
+  --jyc-motion-ease:cubic-bezier(.2,.8,.2,1);
+}
+
+/* Day/night canvas: retain the existing static grain and layered atmosphere. */
+html[data-theme="light"] .app-frame {
+  background-color:var(--jyc-canvas)!important;
+  background-image:
+    url('/assets/jyc-grain.svg'),
+    radial-gradient(ellipse at 8% 2%,rgba(98,88,137,.105),transparent 36%),
+    radial-gradient(ellipse at 92% 14%,rgba(190,156,99,.15),transparent 38%),
+    radial-gradient(ellipse at 50% 78%,rgba(164,123,67,.055),transparent 48%),
+    linear-gradient(180deg,rgba(255,255,255,.28),transparent 48%,rgba(164,123,67,.025))!important;
+  background-size:128px 128px,155% 155%,145% 145%,160% 160%,100% 100%!important;
+  background-repeat:repeat,no-repeat,no-repeat,no-repeat,no-repeat!important;
+}
+html[data-theme="dark"] .app-frame {
+  background-color:var(--jyc-canvas)!important;
+  background-image:
+    url('/assets/jyc-grain.svg'),
+    radial-gradient(ellipse at 12% 7%,rgba(116,103,190,.2),transparent 38%),
+    radial-gradient(ellipse at 88% 20%,rgba(41,104,159,.15),transparent 36%),
+    radial-gradient(ellipse at 52% 82%,rgba(200,188,255,.085),transparent 46%),
+    radial-gradient(ellipse at 50% 48%,rgba(231,209,155,.03),transparent 65%),
+    linear-gradient(180deg,rgba(4,8,20,.02),rgba(4,8,20,.14))!important;
+  background-size:128px 128px,155% 155%,150% 150%,160% 160%,140% 140%,100% 100%!important;
+  background-repeat:repeat,no-repeat,no-repeat,no-repeat,no-repeat,no-repeat!important;
+}
+
+/* Navigation controls share a single hit-area, border and focus language. */
+.public-app .nav-search-trigger,
+.public-app .nav-more-trigger,
+.public-app .theme-toggle-rb {
+  min-height:var(--jyc-control-height)!important;
+  border-radius:var(--jyc-control-radius)!important;
+}
+.public-app .nav-search-trigger {
+  min-width:88px;display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  padding:0 14px!important;border:1px solid var(--jyc-line)!important;
+  background:color-mix(in srgb,var(--jyc-surface) 88%,transparent)!important;
+  color:var(--jyc-text-strong)!important;box-shadow:0 6px 20px rgba(4,8,20,.06);
+}
+.public-app .nav-search-trigger:hover {
+  border-color:var(--jyc-gold)!important;background:var(--jyc-surface)!important;
+}
+.public-app .nav-search-trigger .search-label {font-size:13px;font-weight:650}
+.public-app .nav-search-trigger kbd {
+  padding:4px 5px;border:1px solid var(--jyc-line);border-radius:5px;
+  background:var(--jyc-canvas-raised);color:var(--jyc-muted);
+  font:600 10px/1 ui-monospace,monospace;
+}
+.public-app .nav-more-trigger {min-height:44px!important;padding-inline:14px!important}
+.public-app .theme-toggle-rb {
+  min-width:92px!important;width:auto!important;height:44px!important;
+  display:inline-flex!important;align-items:center!important;justify-content:center!important;
+  gap:9px!important;padding:6px 12px!important;border:1px solid var(--jyc-line-strong)!important;
+  background:var(--jyc-surface)!important;color:var(--jyc-text-strong)!important;
+  box-shadow:0 8px 24px rgba(10,14,28,.09),inset 0 1px 0 rgba(255,255,255,.35)!important;
+}
+.public-app .theme-toggle-rb .theme-toggle-track {
+  width:38px!important;height:22px!important;display:flex!important;align-items:center!important;
+  padding:1px!important;flex:0 0 38px!important;border:1px solid rgba(120,102,142,.24)!important;
+  border-radius:999px!important;background:linear-gradient(100deg,#d8c7a0,#8879a9)!important;
+}
+.public-app .theme-toggle-rb .theme-toggle-orb {
+  width:18px!important;height:18px!important;display:grid!important;place-items:center!important;
+  border-radius:50%!important;background:#fffaf0!important;color:#40375d!important;
+  box-shadow:0 2px 6px rgba(10,14,28,.2)!important;transform:translateX(0)!important;
+  transition:transform .24s cubic-bezier(.2,.8,.2,1)!important;
+}
+.public-app .theme-toggle-rb.is-dark .theme-toggle-orb {transform:translateX(16px)!important}
+.public-app .theme-toggle-rb .theme-toggle-copy {display:grid!important;gap:1px!important;line-height:1.05!important}
+.public-app .theme-toggle-rb .theme-toggle-copy b {font-size:11px!important;font-weight:700!important;color:var(--jyc-text-strong)!important}
+.public-app .theme-toggle-rb .theme-toggle-copy small {font-size:9px!important;color:var(--jyc-muted)!important}
+.public-app .nav-search-trigger:focus-visible,
+.public-app .nav-more-trigger:focus-visible,
+.public-app .theme-toggle-rb:focus-visible {
+  outline:3px solid var(--jyc-focus)!important;outline-offset:3px!important;
+}
+
+/* Gold capsule labels use dark ink in both themes for readable contrast. */
+html[data-theme] .public-app .jh-kicker b,
+html[data-theme] .public-app .jh-kicker strong {color:#282333!important;text-shadow:none!important}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-overline {
+  display:block!important;font-size:clamp(11px,.85vw,13px)!important;
+  line-height:1.55!important;letter-spacing:.045em!important;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual {
+  isolation:isolate;contain:layout paint;overflow:hidden;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage {
+  width:min(100%,570px)!important;max-width:570px!important;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-card-3d {
+  width:min(78%,450px)!important;height:auto!important;aspect-ratio:1;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-seal-container {
+  width:100%!important;height:100%!important;
+}
+
+/* Search is a short-screen-friendly command surface, not a fixed desktop modal. */
+@media(max-width:760px) {
+  .public-app .nav-search-trigger {min-width:44px!important;width:44px!important;padding:0!important}
+  .public-app .nav-search-trigger kbd {display:none!important}
+  .public-app .nav-search-trigger .search-label {font-size:12px}
+  .public-app .theme-toggle-rb {min-width:44px!important;width:44px!important;padding:0!important}
+  .public-app .theme-toggle-rb .theme-toggle-copy {display:none!important}
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero {gap:clamp(18px,4vw,28px)!important}
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual {
+    width:min(100%,420px)!important;aspect-ratio:1!important;max-height:none!important;border-radius:28px!important;
+  }
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage {
+    width:min(96%,390px)!important;max-width:390px!important;
+  }
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-card-3d {width:74%!important}
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-controls-bar {display:none!important}
+  .jyc-search-backdrop {
+    padding:max(10px,env(safe-area-inset-top)) 10px max(10px,env(safe-area-inset-bottom))!important;
+  }
+  .jyc-search-dialog {
+    max-height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 20px)!important;
+    border-radius:20px!important;
+  }
+  .jyc-search-header {padding:20px 18px 14px!important;gap:12px!important}
+  .jyc-search-field {margin:14px 16px 10px!important;min-height:56px!important}
+  .jyc-search-meta {padding:0 18px 10px!important}
+  .jyc-search-filters {padding-inline:16px!important}
+  .jyc-search-results {padding:0 10px 10px!important}
+  .jyc-search-discover>div:nth-child(2) {grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .jyc-search-result-copy strong,.jyc-search-result-copy em {
+    display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;
+    white-space:normal;overflow:hidden;
+  }
+  .jyc-search-footer {padding-inline:16px!important}
+}
+@media(max-width:390px) {
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual {width:min(100%,360px)!important}
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage {width:100%!important}
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-card-3d {width:71%!important}
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions {gap:8px!important}
+}
+@media(max-height:560px) and (max-width:760px) {
+  .jyc-search-backdrop {place-items:start center!important}
+  .jyc-search-dialog {max-height:calc(100dvh - 16px)!important}
+  .jyc-search-header {padding-block:12px 10px!important}
+  .jyc-search-header h2 {font-size:25px!important}
+  .jyc-search-field {margin-block:10px!important;min-height:50px!important}
+  .jyc-search-field input {min-height:48px!important}
+}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference) {
+  .public-app .nav-search-trigger,.public-app .nav-more-trigger,.public-app .theme-toggle-rb {
+    transition:transform .18s var(--jyc-motion-ease),border-color .18s var(--jyc-motion-ease),background-color .18s var(--jyc-motion-ease),box-shadow .18s var(--jyc-motion-ease);
+  }
+  .public-app .nav-search-trigger:hover,.public-app .nav-more-trigger:hover,.public-app .theme-toggle-rb:hover {transform:translateY(-1px)}
+}
+@media(prefers-reduced-motion:reduce) {
+  .public-app .nav-search-trigger,.public-app .nav-more-trigger,.public-app .theme-toggle-rb,
+  .public-app .theme-toggle-rb .theme-toggle-orb {transition:none!important;animation:none!important}
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>*,
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual {
+    animation:none!important;transition:none!important;opacity:1!important;transform:none!important;
+  }
+}
