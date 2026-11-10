@@ -152,6 +152,9 @@ html[data-theme="light"] .jyc-ambient-canvas {
   .app-frame {
     background-size: 128px 128px, 180% 180%, 170% 170%, 180% 180%, 100% 100%;
   }
+  html[data-theme="dark"] .app-frame {
+    background-size: 128px 128px, 180% 180%, 170% 170%, 180% 180%, 160% 160%, 100% 100%;
+  }
   .jyc-ambient-canvas { opacity: .24; }
   html[data-theme="dark"] .jyc-ambient-canvas { opacity: .28; }
   html[data-theme="light"] .jyc-ambient-canvas { opacity: .20; }
