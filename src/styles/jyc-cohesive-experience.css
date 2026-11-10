@@ -1233,3 +1233,15 @@ html[data-theme="dark"] .jyc-editorial-home.jyc-home {
   --jh-line: var(--jyc-line);
   --jh-line-accent: var(--jyc-line-strong);
 }
+
+
+/* User-controlled motion preference: preserve controls and content while pausing decoration. */
+html[data-jyc-motion="paused"] { scroll-behavior: auto !important; }
+html[data-jyc-motion="paused"] *,
+html[data-jyc-motion="paused"] *::before,
+html[data-jyc-motion="paused"] *::after {
+  animation-play-state: paused !important;
+  transition-duration: .01ms !important;
+  scroll-behavior: auto !important;
+}
+html[data-jyc-motion="paused"] .jyc-ambient-canvas { display: none !important; }
