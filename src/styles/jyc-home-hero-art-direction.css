@@ -139,29 +139,13 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-webgl-field{
   position:absolute!important;z-index:0!important;inset:-8%!important;overflow:hidden;border-radius:50%;opacity:.94;
   mask-image:radial-gradient(ellipse at 50% 50%,#000 28%,rgba(0,0,0,.7) 58%,transparent 78%);
 }
-html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-dither-backdrop{inset:10%!important;filter:blur(64px)!important;opacity:.34!important}
-html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-dither-layer{
-  inset:15%!important;z-index:1!important;opacity:.035!important;mix-blend-mode:screen;filter:blur(2px);
-}
-html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-dither-static{object-fit:contain;opacity:.72;filter:grayscale(.15) contrast(1.05)}
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage{
   position:relative!important;z-index:3!important;width:min(100%,620px)!important;max-width:620px!important;
   aspect-ratio:1/1!important;margin:0 auto!important;
 }
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-card-3d{width:86%!important;height:86%!important}
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-seal-container{
-  width:72%!important;height:72%!important;filter:drop-shadow(0 18px 42px rgba(0,0,0,.24))!important;
-}
-html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-badge{display:none!important}
-html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-controls-bar{
-  position:absolute!important;z-index:8!important;left:50%!important;bottom:clamp(0px,1.2vw,14px)!important;
-  display:flex!important;align-items:center;justify-content:center;gap:8px!important;
-  width:max-content;max-width:calc(100% - 20px);flex-wrap:wrap;transform:translateX(-50%)!important;
-}
-html[data-theme] .public-app .jyc-editorial-home.jyc-home .emblem-control-pill{
-  box-sizing:border-box!important;width:auto!important;height:48px!important;min-height:48px!important;
-  padding:0 14px!important;border-radius:999px!important;font-size:10px!important;line-height:1!important;
-  box-shadow:0 8px 24px rgba(10,12,24,.12)!important;
+  width:82%!important;height:82%!important;filter:drop-shadow(0 18px 42px rgba(0,0,0,.24))!important;
 }
 html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-cyber-badge{
   border-color:rgba(231,209,155,.38)!important;background:rgba(13,19,39,.72)!important;color:#f5f1ff!important;
@@ -235,20 +219,12 @@ html[data-theme="light"] .public-app .jyc-editorial-home.jyc-home .jh-hero-visua
     font-size:12px!important;white-space:normal!important;
   }
   html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn:nth-child(3){grid-column:1/-1}
-  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-controls-bar{bottom:0!important;gap:6px!important;max-width:100%}
 }
 @media(max-width:390px){
   html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero{width:calc(100% - 28px)!important;padding-block:14px 12px!important}
   html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>h1{font-size:clamp(34px,10.2vw,40px)!important;margin:8px 0 8px!important}
   html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{height:clamp(220px,69vw,270px)!important}
   html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage{width:min(74%,280px)!important}
-  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-controls-bar{
-    transform:translateX(-50%)!important;left:50%!important;bottom:0!important;flex-wrap:nowrap!important;
-    gap:5px!important;max-width:calc(100% - 12px)!important;
-  }
-  html[data-theme] .public-app .jyc-editorial-home.jyc-home .emblem-control-pill{
-    height:48px!important;min-height:48px!important;padding-inline:10px!important;font-size:9px!important;
-  }
 }
 @media(prefers-reduced-motion:reduce){
   html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero::after{animation:none!important}
