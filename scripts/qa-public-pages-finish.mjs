@@ -5,6 +5,7 @@ const main = fs.readFileSync('src/main.jsx', 'utf8');
 const home = fs.readFileSync('src/jyc-editorial-home.jsx', 'utf8');
 const config = fs.readFileSync('src/lib/site-config.js', 'utf8');
 const css = fs.readFileSync('src/styles/jyc-public-pages-master-finish.css', 'utf8');
+const visualFinish = fs.readFileSync('src/styles/jyc-public-pages-visual-finish.css', 'utf8');
 const responsivePhoto = fs.readFileSync('src/jyc-responsive-photo.jsx', 'utf8');
 
 const checks = [
@@ -26,6 +27,10 @@ const checks = [
   ['Team profiles and community navigation are touch-friendly', css.includes('.team-member-flip .flip-card__back-trigger') && css.includes('.team-hub-directory button')],
   ['all four public journeys respect reduced-motion preferences', css.includes('@media (prefers-reduced-motion:reduce)') && css.includes('.jyc-editorial-home.jyc-home')],
   ['all public page layouts include phone and tablet breakpoints', css.includes('@media (max-width:760px)') && css.includes('@media (max-width:480px)')],
+  ['final visual layer is loaded after the page finish layer and uses the shared token system', main.indexOf("import './styles/jyc-public-pages-visual-finish.css';") > main.indexOf("import './styles/jyc-public-pages-master-finish.css';") && visualFinish.includes('--jyc-page-radius') && visualFinish.includes('var(--jyc-accent)') && visualFinish.includes('var(--jyc-gold)')],
+  ['Home, About, Contact and Team receive page-specific visual hierarchy and responsive art direction', ['.jh-featured-event','.about-page .about-hero-v28','.contact-page .contact-card','.team-page .team-hero-panel'].every(selector=>visualFinish.includes(selector)) && visualFinish.includes('@media (max-width:760px)') && visualFinish.includes('@media (max-width:480px)')],
+  ['public page motion is pointer-aware and reduced-motion safe', visualFinish.includes('@media (hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference)') && visualFinish.includes('@media (prefers-reduced-motion:reduce)')],
+  ['homepage 3D scenes mount nearer to viewport and the decorative field waits for idle', fs.readFileSync('src/jyc-editorial-home.jsx','utf8').includes('rootMargin="220px 0px"') && fs.readFileSync('src/jyc-editorial-home.jsx','utf8').includes('rootMargin="180px 0px"') && fs.readFileSync('src/jyc-editorial-home.jsx','utf8').includes('}, 6200);')],
   ['dark theme kicker badges retain readable contrast on warm gold surfaces', css.includes('html[data-theme="dark"] .jyc57-page .jh-kicker b') && css.includes('color: #080d1c !important')],
   ['generated image derivatives recover their original manifest source and emit responsive variants', responsivePhoto.includes('isGeneratedDerivative') && responsivePhoto.includes('variantSource:manifestSource') && responsivePhoto.includes('photoDerivativeUrls(variantSource,intrinsicWidth)')],
   ['About and Contact copy is visitor-first rather than internal editorial language', main.includes('Faculty guides support the apex student body') && main.includes('JYC communities span Cultural, Technical, Creative, Literary and Sports families') && main.includes('Start a conversation.') && !main.includes('supplied orientation material instead of inventing a parallel hierarchy')],
