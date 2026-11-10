@@ -59,9 +59,9 @@ check('MagicBento disables pointer-driven GSAP effects when the user pauses deco
 check('homepage OGL field returns to its static fallback when decorative motion is paused',home.includes('motionPaused')&&home.includes('setHeroFieldReady(false)')&&home.includes('jyc-motion-preference-change'));
 check('ambient canvas cancels its animation frame when decorative motion is paused',read('src/jyc-innovation-motion.jsx').includes('userPaused')&&read('src/jyc-innovation-motion.jsx').includes('window.addEventListener(\'jyc-motion-preference-change\''));
 check('main shell does not eagerly import Motion or command search; search is demand-loaded',!main.includes("from 'motion/react'")&&!main.includes('JYCSearch as Search')&&main.includes("const LazyJYCSearch=lazy(()=>import('./search/jyc-search.jsx')")&&main.includes('<LazyJYCSearch data={data}'));
-if(failures.length)process.exit(1);
-console.log('JYC animation/media performance contract: '+(totalChecks-failures.length)+'/'+totalChecks);
 
 const revealSetup=read('src/jyc-innovation-motion.jsx').slice(read('src/jyc-innovation-motion.jsx').indexOf('function setupReveal()'),read('src/jyc-innovation-motion.jsx').indexOf('function useAtmosphericCanvas'));
 check('reveal preference handler never references the separately scoped ambient canvas',!revealSetup.includes('canvas.style')&&!revealSetup.includes('canvasRef'));
 check('homepage uses one OGL WebGL field instead of a second crest renderer',!hero.includes('JYCWebGLIdentity')&&!read('src/main.jsx').includes('jyc-webgl-identity'));
+if(failures.length)process.exit(1);
+console.log('JYC animation/media performance contract: '+(totalChecks-failures.length)+'/'+totalChecks);
