@@ -32,10 +32,6 @@ export function JYCHeroWebGLEmblem() {
       <div className="jyc-emblem-orbit orbit-outer" aria-hidden="true" />
       <div className="jyc-emblem-orbit orbit-inner" aria-hidden="true" />
       <div className="jyc-emblem-orbit orbit-equator" aria-hidden="true" />
-      <div className="jyc-emblem-context emblem-context-top" aria-hidden="true">
-        <span>JIIT 128 <i /> SECTOR 128, NOIDA</span>
-        <span><b>EST. 2004</b><i /> STUDENT COMMUNITY</span>
-      </div>
       <div
         className="jyc-emblem-card-3d"
         style={{ transform: `perspective(1200px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)` }}
@@ -72,11 +68,6 @@ export function JYCHeroWebGLEmblem() {
             />
           )}
         </div>
-      </div>
-      <div className="jyc-emblem-context emblem-context-bottom" aria-hidden="true">
-        <span className="emblem-context-mark">✦</span>
-        <span><b>READY TO SOAR</b><small>JIIT YOUTH CLUB · OFFICIAL CREST</small></span>
-        <span className="emblem-context-index">128</span>
       </div>
     </div>
   );
