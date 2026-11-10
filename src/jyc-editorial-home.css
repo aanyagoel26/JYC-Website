@@ -1945,15 +1945,15 @@
   }
 }
 [data-theme="dark"] .jyc-editorial-home.jyc-home {
-  --jh-bg: #121113;
-  --jh-surface: #1c191c;
-  --jh-surface-elevated: #242024;
-  --jh-surface-glass: rgba(28,25,28,.88);
-  --jh-ink: #f8f2e8;
-  --jh-muted: #b9afb3;
+  --jh-bg: #080d1c;
+  --jh-surface: #111b31;
+  --jh-surface-elevated: #17233d;
+  --jh-surface-glass: rgba(13,20,39,.88);
+  --jh-ink: #f7f5ff;
+  --jh-muted: #c0c4da;
   --jh-accent: var(--jyc-accent,#625889);
   --jh-accent-glow: color-mix(in srgb,var(--jyc-accent,#625889) 12%,transparent);
-  --jh-line: rgba(248,242,232,.14);
+  --jh-line: rgba(205,211,244,.15);
   background: transparent !important;
 }
 [data-theme="dark"] .jyc-editorial-home.jyc-home .jh-hero-logo-plaque {
