@@ -41,7 +41,7 @@ export function JYCHeroWebGLEmblem() {
             <img
               src={LOGO_SRC}
               srcSet={import.meta.env.PROD ? "/assets/jyc-logo-270.avif 270w, /assets/jyc-logo-320.avif 320w, /assets/jyc-logo.avif 480w" : undefined}
-              sizes="(max-width: 680px) 220px, (max-width: 1024px) 360px, 480px"
+              sizes="(max-width: 680px) 220px, (max-width: 1024px) 280px, 320px"
               alt=""
               aria-hidden="true"
               className="jyc-emblem-logo-img"

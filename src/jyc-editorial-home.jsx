@@ -316,6 +316,7 @@ export function JYCEditorialHome({ data }) {
                   src={story.url}
                   alt={story.alt || story.caption || `${story.association} photography`}
                   loading="lazy"
+                  fetchPriority="low"
                   decoding="async"
                   sizes={index === 0 ? '(max-width: 760px) 100vw, 58vw' : '(max-width: 760px) 100vw, 34vw'}
                   fallbackSrc="/assets/photo-unavailable.svg"

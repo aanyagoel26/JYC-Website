@@ -282,3 +282,35 @@ html[data-theme="dark"] .public-app .footer-v6-bottom .jyc-creator-credit,
 html[data-theme="dark"] .public-app .footer-v6-bottom .jyc-creator-credit a {
   color: #c8cce0 !important;
 }
+
+
+/* Contrast and loading polish from the Lighthouse evidence. */
+html[data-theme] .public-app .jh-kicker,
+html[data-theme] .public-app .jh-kicker > b {
+  color: #282333 !important;
+}
+.app-frame > .connection-notice {
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: min(960px, calc(100% - 32px)) !important;
+  max-width: calc(100% - 32px) !important;
+  margin: 10px auto 12px !important;
+  padding: 10px 14px !important;
+  border-radius: 14px !important;
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+}
+.app-frame > .connection-notice > span { flex: 1 1 auto; min-width: 0; }
+.app-frame > .connection-notice > button { flex: 0 0 auto; min-height: 36px; }
+@media (max-width: 680px) {
+  .app-frame > .connection-notice {
+    width: calc(100% - 24px) !important;
+    max-width: calc(100% - 24px) !important;
+    align-items: flex-start;
+    padding: 10px 12px !important;
+    border-radius: 12px !important;
+  }
+}
