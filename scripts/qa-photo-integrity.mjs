@@ -19,6 +19,7 @@ assert('image manifest schema rejects encoded traversal, encoded separators, bac
  '/assets/%2e%2e/secret.webp','/assets/%2E%2E/secret.webp','/assets/%252e%252e/secret.webp','/assets/photo%2fsecret.webp','/assets/photo%5csecret.webp','/assets/photo\\secret.webp','/assets/photo.webp?width=100','/assets/photo.webp#preview','/assets/photo'+String.fromCharCode(10)+'.webp'
 ].every(url=>!isValidJycImageManifest({version:1,images:{[url]:validManifestFixture.images['/assets/hub-photos/example.webp']}})));
 const mediaSource=fs.readFileSync('src/jyc-source-media.js','utf8');
+const derivativeGeneratorSource=fs.readFileSync('scripts/generate-photo-derivatives.mjs','utf8');
 const hubPresentationSource=fs.readFileSync('src/pdf-hub-content.js','utf8');
 const mainSource=fs.readFileSync('src/main.jsx','utf8');
 const browserSource=fs.readFileSync('scripts/browser-smoke.spec.js','utf8');
@@ -39,6 +40,11 @@ const serviceWorkerSource=fs.readFileSync('public/sw.js','utf8');
 const indexHtmlSource=fs.readFileSync('index.html','utf8');
 const botSource=fs.readFileSync('src/jyc-bot.jsx','utf8');
 const imageManifestSource=fs.readFileSync('scripts/generate-image-manifest.mjs','utf8');
+const logoMapSource=mediaSource.slice(mediaSource.indexOf('const AUTHENTIC_HUB_LOGOS'),mediaSource.indexOf('const AUTHENTIC_HUB_BANNERS'));
+const validClubLogoPaths=['public/assets/logos/bds.png','public/assets/logos/eloquence.png','public/assets/logos/panache.png'];
+assert('BDS, Eloquence and Panache map to valid original PNG logo assets',validClubLogoPaths.every(file=>fs.existsSync(file)&&parseImageDimensions(fs.readFileSync(file))?.width>0)&&logoMapSource.includes("bds: '/assets/logos/bds.png'")&&logoMapSource.includes("eloquence: '/assets/logos/eloquence.png'")&&logoMapSource.includes("panache: '/assets/logos/panache.png'"));
+assert('corrupt VamUnique and legacy WebP logo variants are not advertised as official marks',!logoMapSource.includes('/assets/logos/vamunique.png')&&!logoMapSource.includes('/assets/logos/bds.webp')&&!logoMapSource.includes('/assets/logos/eloquence.webp')&&!logoMapSource.includes('/assets/logos/panache.webp'));
+assert('photo derivative build filters undecodable source files before invoking Sharp',derivativeGeneratorSource.includes('parseImageDimensions(fs.readFileSync(file))'));
 const auditedCategories=['clubs/abhivyakti','clubs/panache','clubs/cypherx','festivals/aakriti','gallery/campus-events'];
 const auditedExclusionIds=auditedCategories.flatMap(cat=>{
   const start=mediaSource.indexOf(`'${cat}':new Set([`);
