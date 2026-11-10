@@ -34,12 +34,12 @@ export function ResponsivePhoto({src,alt='',width,height,sizes='100vw',loading='
    if(!active||!manifest?.images)return;
    let manifestSource=source;
    if(isGeneratedDerivative){
-    const generatedBase=source.replace(/^\\/assets\\/photo-derivatives\\//,'/assets/').replace(/-\\d+\\.(?:avif|webp)$/i,'');
+    const generatedBase=source.replace(/^\/assets\/photo-derivatives\//,'/assets/').replace(/-\d+\.(?:avif|webp)$/i,'');
     const extension=generatedBase.match(/-(jpe?g|png|webp)$/i)?.[1]?.toLowerCase();
     const sourceBase=extension?generatedBase.slice(0,-extension.length-1):generatedBase;
     manifestSource=extension
      ? sourceBase+'.'+extension
-     : Object.keys(manifest.images).find(url=>url.replace(/\\.(?:jpe?g|png|webp)$/i,'')===generatedBase&&manifest.images[url]?.derivativesEligible===true)||'';
+     : Object.keys(manifest.images).find(url=>url.replace(/\.(?:jpe?g|png|webp)$/i,'')===generatedBase&&manifest.images[url]?.derivativesEligible===true)||'';
    }
    const entry=manifest.images[manifestSource];
    const measured=Number(entry?.width);
