@@ -5,19 +5,19 @@
    ========================================================================== */
 
 :root {
-  --jh-bg:#f5f1e6;
+  --jh-bg:#f1eadb;
   --jh-gold:#bf9c6f;
-  --jh-surface: #FFFFFF;
-  --jh-surface-elevated: #FFFDF8;
+  --jh-surface: #fffaf0;
+  --jh-surface-elevated: #fffdf7;
   --jh-surface-glass: rgba(255, 255, 255, 0.90);
-  --jh-ink: #1A191D;
-  --jh-muted: #6E6A75;
+  --jh-ink: #211d16;
+  --jh-muted: #695d4a;
   --jh-accent: var(--jyc-accent,#625889);
   --jh-accent-glow: color-mix(in srgb,var(--jyc-accent,#625889) 12%,transparent);
   --jh-cyan: var(--jyc-accent,#625889);
   --jh-cyan-glow: color-mix(in srgb,var(--jyc-accent,#625889) 8%,transparent);
-  --jh-line: rgba(26, 25, 29, 0.12);
-  --jh-line-accent: rgba(191, 156, 111, 0.42);
+  --jh-line: rgba(69, 55, 35, 0.16);
+  --jh-line-accent: rgba(153, 116, 60, 0.38);
   --jh-ease: cubic-bezier(0.2, 0.8, 0.2, 1);
   --jh-radius-sm: 8px;
   --jh-radius-md: 14px;
@@ -25,12 +25,12 @@
 }
 
 [data-theme="light"] {
-  --jh-bg: #F5F1E6;
-  --jh-surface: #FFFFFF;
-  --jh-surface-elevated: #FFFDF8;
+  --jh-bg: #f1eadb;
+  --jh-surface: #fffaf0;
+  --jh-surface-elevated: #fffdf7;
   --jh-surface-glass: rgba(255, 255, 255, 0.90);
-  --jh-ink: #1A191D;
-  --jh-muted: #6E6A75;
+  --jh-ink: #211d16;
+  --jh-muted: #695d4a;
   --jh-accent: var(--jyc-accent,#625889);
   --jh-accent-glow: color-mix(in srgb,var(--jyc-accent,#625889) 12%,transparent);
   --jh-cyan: var(--jyc-accent,#625889);
@@ -41,18 +41,18 @@
 
 [data-theme="dark"] .jyc-editorial-home.jyc-home,
 [data-theme=dark] .jyc-home {
-  --jh-bg: #0F0E11;
-  --jh-surface: #18161D;
-  --jh-surface-elevated: #211E26;
-  --jh-surface-glass: rgba(24, 22, 29, 0.92);
-  --jh-ink: #FFF8E1;
-  --jh-muted: #A8A3B0;
+  --jh-bg: #080d1c;
+  --jh-surface: #111b31;
+  --jh-surface-elevated: #17233d;
+  --jh-surface-glass: rgba(13, 20, 39, 0.88);
+  --jh-ink: #f7f5ff;
+  --jh-muted: #c0c4da;
   --jh-accent: var(--jyc-accent,#625889);
   --jh-accent-glow: color-mix(in srgb,var(--jyc-accent,#625889) 12%,transparent);
   --jh-cyan: var(--jyc-accent,#625889);
   --jh-cyan-glow: color-mix(in srgb,var(--jyc-accent,#625889) 8%,transparent);
-  --jh-line: rgba(255, 248, 225, 0.12);
-  --jh-line-accent: rgba(210, 180, 140, 0.35);
+  --jh-line: rgba(205, 211, 244, 0.15);
+  --jh-line-accent: rgba(231, 209, 155, 0.30);
 }
 
 .jyc-editorial-home.jyc-home {
