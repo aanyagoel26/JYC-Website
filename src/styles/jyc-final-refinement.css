@@ -167,3 +167,13 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-seal-conta
     animation:none!important;transition:none!important;opacity:1!important;transform:none!important;
   }
 }
+
+/* Decorative homepage orbs are desktop-only; mobile keeps their static colour field. */
+@media(hover:none),(pointer:coarse),(max-width:760px) {
+  .public-app .jh-ambient-orb {animation:none!important;filter:blur(72px);transform:none!important}
+}
+@media(prefers-reduced-motion:reduce) {
+  .public-app .jh-ambient-orb,.public-app .jh-ambient-grid {
+    animation:none!important;transition:none!important;transform:none!important;
+  }
+}
