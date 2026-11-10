@@ -16,18 +16,19 @@ assert.ok(firstRenderReturn > schemaDeclaration, 'No route may return before met
 assert.doesNotMatch(routesSource.slice(0, schemaDeclaration), /if\s*\([^\n]*\)\s*return\s*</, 'Route aliases must not return before hooks');
 
 const routes = [
-  { path: '/achievements', component: 'Achievements' },
-  { path: '/best-of-jyc', component: 'JYCBestOf' }
+  { path: '/achievements', component: 'Achievements', expected: `if(clean==='/achievements')return <>{schema}<Achievements data={data}/></>;` },
+  { path: '/best-of-jyc', component: 'LazyJYCBestOf', expected: `if(clean==='/best-of-jyc')return <>{schema}<Suspense` }
 ];
 
 for (const route of routes) {
-  // Assert the component actually wired to the current public route.
-  // Keep this contract aligned with the production router, not an assumed
-  // lazy-loading implementation that is not present in this release.
-  const expected = `if(clean==='${route.path}')return <>{schema}<${route.component} data={data}/></>;`;
-  assert.ok(main.includes(expected), `${route.path} must render its dedicated page component`);
+  // Assert the actual component wired to the public route. Best of JYC is
+  // intentionally lazy so the gallery experience does not inflate startup JS.
+  assert.ok(main.includes(route.expected), `${route.path} must render its dedicated page component`);
   assert.ok(shells.includes(`'${route.path}'`), `${route.path} must have a direct-entry SEO shell`);
 }
+assert.ok(main.includes('<LazyJYCBestOf data={data}/></Suspense></>;') &&
+  main.includes("const LazyJYCBestOf=lazy(()=>import('./jyc57-experience.jsx').then(m=>({default:m.JYCBestOf})))"),
+  'Best of JYC must load its dedicated experience component on demand');
 
 assert.ok(main.includes(`if(clean==='/history')return <Navigate to="/about#history" replace/>;`),
   'The legacy history URL must lead to the combined About JYC timeline');
