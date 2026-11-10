@@ -20,6 +20,9 @@ assert('image manifest schema rejects encoded traversal, encoded separators, bac
 ].every(url=>!isValidJycImageManifest({version:1,images:{[url]:validManifestFixture.images['/assets/hub-photos/example.webp']}})));
 const mediaSource=fs.readFileSync('src/jyc-source-media.js','utf8');
 const derivativeGeneratorSource=fs.readFileSync('scripts/generate-photo-derivatives.mjs','utf8');
+const productionMediaSource=fs.readFileSync('scripts/optimize-production-media.mjs','utf8');
+const emblemSource=fs.readFileSync('src/components/JYCHeroWebGLEmblem.jsx','utf8');
+const ditherSource=fs.readFileSync('src/react-bits/DitherVeil.jsx','utf8');
 const hubPresentationSource=fs.readFileSync('src/pdf-hub-content.js','utf8');
 const mainSource=fs.readFileSync('src/main.jsx','utf8');
 const browserSource=fs.readFileSync('scripts/browser-smoke.spec.js','utf8');
@@ -48,6 +51,8 @@ assert('every authoritative hub logo resolves to a decodable local image',author
 assert('corrupt VamUnique and legacy WebP logo variants are not advertised as official marks',!logoMapSource.includes('/assets/logos/vamunique.png')&&!logoMapSource.includes('/assets/logos/bds.webp')&&!logoMapSource.includes('/assets/logos/eloquence.webp')&&!logoMapSource.includes('/assets/logos/panache.webp'));
 assert('malformed legacy logo binaries are removed from the shipped public asset tree',['public/assets/logos/bds.webp','public/assets/logos/eloquence.webp','public/assets/logos/panache.webp','public/assets/logos/vamunique.png'].every(file=>!fs.existsSync(file)));
 assert('photo derivative build filters undecodable source files before invoking Sharp',derivativeGeneratorSource.includes('parseImageDimensions(fs.readFileSync(file))'));
+assert('post-build brand optimizer generates the 320px responsive crest candidate',productionMediaSource.includes("'jyc-logo-320.avif'")&&productionMediaSource.includes('width:320,withoutEnlargement:true'));
+assert('hero crest and Dither fallback consume the 320px responsive candidate',emblemSource.includes('jyc-logo-320.avif 320w')&&ditherSource.includes('sizes={sizes}'));
 const auditedCategories=['clubs/abhivyakti','clubs/panache','clubs/cypherx','festivals/aakriti','gallery/campus-events'];
 const auditedExclusionIds=auditedCategories.flatMap(cat=>{
   const start=mediaSource.indexOf(`'${cat}':new Set([`);
