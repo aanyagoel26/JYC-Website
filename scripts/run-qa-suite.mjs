@@ -9,6 +9,7 @@ import { spawnSync } from 'node:child_process';
  */
 const scripts = [
   'qa-homepage-editorial-truth.mjs',
+  'qa-homepage-hero-finish.mjs',
   'qa-site-origin.mjs',
   'qa-readonly-fallback.mjs',
   'qa-event-publication-trust.mjs',
