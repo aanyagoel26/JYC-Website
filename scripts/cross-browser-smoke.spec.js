@@ -31,7 +31,7 @@ test('browser-compat: Search and More dialogs are named, dismissible and restore
   await expect.poll(() => page.evaluate(() => document.body.style.overflow)).toBe('hidden');
   await page.keyboard.press('Escape');
   await expect(search).toHaveCount(0);
-  await expect(searchTrigger).toBeFocused();
+  await expect.poll(() => page.evaluate(() => document.activeElement?.matches('[data-jyc-search-trigger]') === true)).toBe(true);
 
   const moreTrigger = page.locator('.nav-more-trigger').first();
   await moreTrigger.click();

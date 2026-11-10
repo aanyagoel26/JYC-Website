@@ -20,7 +20,7 @@ async function waitForPublicApp(page,label){
   // the actual public application rather than treating the static shell as ready.
   await page.locator('.public-app').waitFor({state:'visible',timeout:20000});
   await page.waitForFunction(() => document.documentElement.dataset.jycContentReady === 'true', { timeout: 20000 });
-  await expect(page.locator('.public-app h1, .public-app h2, .public-app p, .public-app a, .public-app button').first(),label+' visible public content').toBeVisible({timeout:10000});
+  await expect(page.locator('.public-app h1').first(),label+' visible public heading').toBeVisible({timeout:10000});
 }
 
 async function inspectViewport(page){

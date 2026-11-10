@@ -42,7 +42,19 @@ check('DitherVeil keeps WebGL enabled on typical four-core mobile devices while 
 check('ambient canvas skips continuous rendering on constrained or data-saver devices',read('src/jyc-innovation-motion.jsx').includes('(navigator.hardwareConcurrency || 8) <= 8')&&read('src/jyc-innovation-motion.jsx').includes('(navigator.deviceMemory || 8) < 8')&&read('src/jyc-innovation-motion.jsx').includes('navigator.connection?.saveData'));
 check('ambient atmosphere canvas is fixed, non-interactive and hidden for reduced motion',read('src/jyc-innovation-motion.css').includes('.jyc-ambient-canvas')&&read('src/jyc-innovation-motion.css').includes('position:fixed')&&read('src/jyc-innovation-motion.css').includes('pointer-events:none')&&read('src/jyc-innovation-motion.css').includes('@media(prefers-reduced-motion:reduce)'));
 check('reveal content is visible before motion enhancement initializes and only hides after observer setup',read('src/jyc-innovation-motion.css').includes('.public-app .reveal{opacity:1;transform:none}')&&read('src/jyc-innovation-motion.css').includes('html.jyc-motion-ready .public-app .reveal')&&read('src/jyc-innovation-motion.jsx').includes("document.documentElement.classList.add('jyc-motion-ready')")&&read('src/jyc-innovation-motion.jsx').includes("document.documentElement.classList.remove('jyc-motion-ready')"));
-check('route reveal observes SPA-inserted content and gracefully reveals content without IntersectionObserver',read('src/jyc-innovation-motion.jsx').includes('new MutationObserver')&&read('src/jyc-innovation-motion.jsx').includes("typeof IntersectionObserver !== 'function'")&&read('src/jyc-innovation-motion.jsx').includes('jyc-motion-visible')&&read('src/jyc-innovation-motion.jsx').includes('motionQuery.addEventListener?.(\'change\', onMotionChange)')&&read('src/jyc-innovation-motion.jsx').includes('ctx.clearRect(0, 0, width, height)'));
+const motionSource = read('src/jyc-innovation-motion.jsx');
+const supportsMotionQueryChange = motionSource.includes('motionQuery.addEventListener?.') ||
+  (motionSource.includes("typeof motionQuery.addEventListener === 'function'") &&
+    motionSource.includes('motionQuery.addListener?.(onMotionChange)'));
+const supportsCanvasCleanup = motionSource.includes('ctx.clearRect(0, 0, width, height)');
+check(
+  'route reveal observes SPA-inserted content and gracefully reveals content without IntersectionObserver',
+  motionSource.includes('new MutationObserver') &&
+    motionSource.includes("typeof IntersectionObserver !== 'function'") &&
+    motionSource.includes('jyc-motion-visible') &&
+    supportsMotionQueryChange &&
+    supportsCanvasCleanup
+);
 check('MagicBento disables pointer-driven GSAP effects when the user pauses decorative motion',bento.includes('userPaused')&&bento.includes('jyc-motion-preference-change')&&bento.includes('||userPaused'));
 check('homepage OGL field returns to its static fallback when decorative motion is paused',home.includes('motionPaused')&&home.includes('setHeroFieldReady(false)')&&home.includes('jyc-motion-preference-change'));
 check('ambient canvas cancels its animation frame when decorative motion is paused',read('src/jyc-innovation-motion.jsx').includes('userPaused')&&read('src/jyc-innovation-motion.jsx').includes('window.addEventListener(\'jyc-motion-preference-change\''));
