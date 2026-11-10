@@ -212,3 +212,10 @@
     animation-duration:.01ms!important; animation-iteration-count:1!important; scroll-behavior:auto!important; transition-duration:.01ms!important;
   }
 }
+
+/* High-contrast badge text on the warm gold kicker surface in dark mode. */
+html[data-theme="dark"] .jyc57-page .jh-kicker b {
+  color: #080d1c !important;
+  -webkit-text-fill-color: #080d1c;
+  text-shadow: none;
+}
