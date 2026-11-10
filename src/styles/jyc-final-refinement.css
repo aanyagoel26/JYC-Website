@@ -1,5 +1,4 @@
-/* JYC final refinement layer — loaded after legacy generations so shared controls and
-   route surfaces resolve through the canonical theme tokens. */
+/* JYC final global refinement layer. Imported after the shared legacy style stack. */
 :root {
   --jyc-control-height:44px;
   --jyc-control-radius:999px;
@@ -8,11 +7,10 @@
   --jyc-motion-ease:cubic-bezier(.2,.8,.2,1);
 }
 
-/* Day/night canvas: retain the existing static grain and layered atmosphere. */
+/* Day/night canvas: retain static grain and layered atmosphere. */
 html[data-theme="light"] .app-frame {
   background-color:var(--jyc-canvas)!important;
-  background-image:
-    url('/assets/jyc-grain.svg'),
+  background-image:url('/assets/jyc-grain.svg'),
     radial-gradient(ellipse at 8% 2%,rgba(98,88,137,.105),transparent 36%),
     radial-gradient(ellipse at 92% 14%,rgba(190,156,99,.15),transparent 38%),
     radial-gradient(ellipse at 50% 78%,rgba(164,123,67,.055),transparent 48%),
@@ -22,8 +20,7 @@ html[data-theme="light"] .app-frame {
 }
 html[data-theme="dark"] .app-frame {
   background-color:var(--jyc-canvas)!important;
-  background-image:
-    url('/assets/jyc-grain.svg'),
+  background-image:url('/assets/jyc-grain.svg'),
     radial-gradient(ellipse at 12% 7%,rgba(116,103,190,.2),transparent 38%),
     radial-gradient(ellipse at 88% 20%,rgba(41,104,159,.15),transparent 36%),
     radial-gradient(ellipse at 52% 82%,rgba(200,188,255,.085),transparent 46%),
@@ -33,12 +30,9 @@ html[data-theme="dark"] .app-frame {
   background-repeat:repeat,no-repeat,no-repeat,no-repeat,no-repeat,no-repeat!important;
 }
 
-/* Navigation controls share a single hit-area, border and focus language. */
-.public-app .nav-search-trigger,
-.public-app .nav-more-trigger,
-.public-app .theme-toggle-rb {
-  min-height:var(--jyc-control-height)!important;
-  border-radius:var(--jyc-control-radius)!important;
+/* Navigation controls share one hit-area, border and focus language. */
+.public-app .nav-search-trigger,.public-app .nav-more-trigger,.public-app .theme-toggle-rb {
+  min-height:var(--jyc-control-height)!important;border-radius:var(--jyc-control-radius)!important;
 }
 .public-app .nav-search-trigger {
   min-width:88px;display:inline-flex;align-items:center;justify-content:center;gap:10px;
@@ -46,14 +40,11 @@ html[data-theme="dark"] .app-frame {
   background:color-mix(in srgb,var(--jyc-surface) 88%,transparent)!important;
   color:var(--jyc-text-strong)!important;box-shadow:0 6px 20px rgba(4,8,20,.06);
 }
-.public-app .nav-search-trigger:hover {
-  border-color:var(--jyc-gold)!important;background:var(--jyc-surface)!important;
-}
+.public-app .nav-search-trigger:hover {border-color:var(--jyc-gold)!important;background:var(--jyc-surface)!important}
 .public-app .nav-search-trigger .search-label {font-size:13px;font-weight:650}
 .public-app .nav-search-trigger kbd {
   padding:4px 5px;border:1px solid var(--jyc-line);border-radius:5px;
-  background:var(--jyc-canvas-raised);color:var(--jyc-muted);
-  font:600 10px/1 ui-monospace,monospace;
+  background:var(--jyc-canvas-raised);color:var(--jyc-muted);font:600 10px/1 ui-monospace,monospace;
 }
 .public-app .nav-more-trigger {min-height:44px!important;padding-inline:14px!important}
 .public-app .theme-toggle-rb {
@@ -78,30 +69,8 @@ html[data-theme="dark"] .app-frame {
 .public-app .theme-toggle-rb .theme-toggle-copy {display:grid!important;gap:1px!important;line-height:1.05!important}
 .public-app .theme-toggle-rb .theme-toggle-copy b {font-size:11px!important;font-weight:700!important;color:var(--jyc-text-strong)!important}
 .public-app .theme-toggle-rb .theme-toggle-copy small {font-size:9px!important;color:var(--jyc-muted)!important}
-.public-app .nav-search-trigger:focus-visible,
-.public-app .nav-more-trigger:focus-visible,
-.public-app .theme-toggle-rb:focus-visible {
+.public-app .nav-search-trigger:focus-visible,.public-app .nav-more-trigger:focus-visible,.public-app .theme-toggle-rb:focus-visible {
   outline:3px solid var(--jyc-focus)!important;outline-offset:3px!important;
-}
-
-/* Gold capsule labels use dark ink in both themes for readable contrast. */
-html[data-theme] .public-app .jh-kicker b,
-html[data-theme] .public-app .jh-kicker strong {color:#282333!important;text-shadow:none!important}
-html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-overline {
-  display:block!important;font-size:clamp(11px,.85vw,13px)!important;
-  line-height:1.55!important;letter-spacing:.045em!important;
-}
-html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual {
-  isolation:isolate;contain:layout paint;overflow:hidden;
-}
-html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage {
-  width:min(100%,570px)!important;max-width:570px!important;
-}
-html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-card-3d {
-  width:min(78%,450px)!important;height:auto!important;aspect-ratio:1;
-}
-html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-seal-container {
-  width:100%!important;height:100%!important;
 }
 
 /* Search is a short-screen-friendly command surface, not a fixed desktop modal. */
@@ -111,18 +80,7 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-seal-conta
   .public-app .nav-search-trigger .search-label {font-size:12px}
   .public-app .theme-toggle-rb {min-width:44px!important;width:44px!important;padding:0!important}
   .public-app .theme-toggle-rb .theme-toggle-copy {display:none!important}
-  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero {gap:clamp(18px,4vw,28px)!important}
-  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual {
-    width:min(100%,420px)!important;aspect-ratio:1!important;max-height:none!important;border-radius:28px!important;
-  }
-  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage {
-    width:min(96%,390px)!important;max-width:390px!important;
-  }
-  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-card-3d {width:74%!important}
-  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-controls-bar {display:none!important}
-  .jyc-search-backdrop {
-    padding:max(10px,env(safe-area-inset-top)) 10px max(10px,env(safe-area-inset-bottom))!important;
-  }
+  .jyc-search-backdrop {padding:max(10px,env(safe-area-inset-top)) 10px max(10px,env(safe-area-inset-bottom))!important}
   .jyc-search-dialog {
     max-height:calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 20px)!important;
     border-radius:20px!important;
@@ -138,12 +96,6 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-seal-conta
     white-space:normal;overflow:hidden;
   }
   .jyc-search-footer {padding-inline:16px!important}
-}
-@media(max-width:390px) {
-  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual {width:min(100%,360px)!important}
-  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage {width:100%!important}
-  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-card-3d {width:71%!important}
-  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions {gap:8px!important}
 }
 @media(max-height:560px) and (max-width:760px) {
   .jyc-search-backdrop {place-items:start center!important}
@@ -162,23 +114,9 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-seal-conta
 @media(prefers-reduced-motion:reduce) {
   .public-app .nav-search-trigger,.public-app .nav-more-trigger,.public-app .theme-toggle-rb,
   .public-app .theme-toggle-rb .theme-toggle-orb {transition:none!important;animation:none!important}
-  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>*,
-  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual {
-    animation:none!important;transition:none!important;opacity:1!important;transform:none!important;
-  }
 }
 
-/* Decorative homepage orbs are desktop-only; mobile keeps their static colour field. */
-@media(hover:none),(pointer:coarse),(max-width:760px) {
-  .public-app .jh-ambient-orb {animation:none!important;filter:blur(72px);transform:none!important}
-}
-@media(prefers-reduced-motion:reduce) {
-  .public-app .jh-ambient-orb,.public-app .jh-ambient-grid {
-    animation:none!important;transition:none!important;transform:none!important;
-  }
-}
-
-/* Keep full-page atmospheric background motion static on touch-first devices. */
+/* Keep full-page atmospheric drift static on touch-first devices. */
 @media(max-width:760px),(hover:none),(pointer:coarse) {
   html[data-theme] body::before,html[data-theme] body::after {animation:none!important}
 }
