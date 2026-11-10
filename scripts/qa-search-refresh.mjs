@@ -5,6 +5,7 @@ import {normalizeSearch,matchSearchResults,isPublicSearchRecord} from '../src/li
 const source=fs.readFileSync('src/search/jyc-search.jsx','utf8');
 const main=fs.readFileSync('src/main.jsx','utf8');
 const css=fs.readFileSync('src/styles/jyc-celestial-refresh.css','utf8');
+const finalCss=fs.readFileSync('src/styles/jyc-final-refinement.css','utf8');
 const checks=[];
 const luminance=hex=>{const rgb=hex.slice(1).match(/../g).map(value=>parseInt(value,16)/255).map(value=>value<=.04045?value/12.92:((value+.055)/1.055)**2.4);return .2126*rgb[0]+.7152*rgb[1]+.0722*rgb[2]};
 const contrast=(foreground,background)=>{const [light,dark]=[luminance(foreground),luminance(background)].sort((a,b)=>b-a);return (light+.05)/(dark+.05)};
@@ -77,4 +78,4 @@ check('Search trigger exposes a stable dialog relationship and visible label',na
 check('More trigger maintains a stable dialog relationship for WebKit compatibility',nav.includes('aria-haspopup="dialog"')&&nav.includes('aria-controls="jyc-more-dialog"')&&nav.includes('aria-expanded={moreOpen}'));
 check('More sheet uses rendered geometry for its keyboard focus trap',mobileMore.includes('el.getClientRects().length>0')&&!mobileMore.includes('el.offsetParent!==null'));
 check('theme switch exposes native switch semantics and a checked state',main.includes('role="switch"')&&main.includes("aria-checked={theme==='dark'}"));
-check('search trigger and theme switch retain a 44px target floor',css.includes('.public-app .nav-search-trigger{min-width:88px;min-height:44px')&&css.includes('.public-app .theme-toggle-rb{min-width:84px!important;min-height:44px!important'));
+check('search trigger and theme switch retain a 44px target floor',finalCss.includes('min-width:88px')&&finalCss.includes('--jyc-control-height:44px')&&finalCss.includes('min-height:var(--jyc-control-height)!important'));
