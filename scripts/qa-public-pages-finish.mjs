@@ -28,6 +28,7 @@ const checks = [
   ['all public page layouts include phone and tablet breakpoints', css.includes('@media (max-width:760px)') && css.includes('@media (max-width:480px)')],
   ['dark theme kicker badges retain readable contrast on warm gold surfaces', css.includes('html[data-theme="dark"] .jyc57-page .jh-kicker b') && css.includes('color: #080d1c !important')],
   ['generated image derivatives recover their original manifest source and emit responsive variants', responsivePhoto.includes('isGeneratedDerivative') && responsivePhoto.includes('variantSource:manifestSource') && responsivePhoto.includes('photoDerivativeUrls(variantSource,intrinsicWidth)')],
+  ['About and Contact copy is visitor-first rather than internal editorial language', main.includes('Faculty guides support the apex student body') && main.includes('JYC communities span Cultural, Technical, Creative, Literary and Sports families') && main.includes('Start a conversation.') && !main.includes('supplied orientation material instead of inventing a parallel hierarchy')],
 ];
 
 let failures = 0;
