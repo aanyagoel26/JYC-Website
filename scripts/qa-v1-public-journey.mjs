@@ -10,9 +10,11 @@ const registration=read('src/extra-features.jsx');
 const gallery=read('src/jyc57-experience.jsx');
 const motion=read('src/jyc-innovation-motion.jsx');
 const motionCss=read('src/styles/jyc-cohesive-experience.css');
+const icons=read('src/components/JYCIcon.jsx');
 
 const checks=[
   ['homepage hero action group is present',home.includes('className="jh-actions jh-hero-actions"')],
+  ['shared JYC line icons are used for navigation and dialog controls',icons.includes('export function JYCIcon')&&main.includes("import {JYCIcon} from './components/JYCIcon.jsx'")&&main.includes('function NavIcon({kind}){return <JYCIcon name={kind}/>;}')&&main.includes('<JYCIcon name="close" size={16}/>')],
   ['route transitions use transform/opacity and respect reduced or user-paused motion',main.includes('className="route-stage"')&&motionCss.includes('@keyframes jycRouteEnter')&&motionCss.includes('html[data-jyc-motion="paused"] .route-stage')&&motionCss.includes('@media (prefers-reduced-motion: reduce)')],
   ['users can pause and resume decorative motion from the More JYC sheet',main.includes('function MotionPreferenceControl')&&main.includes('aria-pressed={paused}')&&main.includes("storageSet('jyc-motion-preference'")&&main.includes('jyc-motion-preference-change')],
   ['ambient motion pauses across CSS and canvas effects without hiding page content',motion.includes('jyc-motion-preference-change')&&motion.includes('userPaused')&&motionCss.includes('html[data-jyc-motion="paused"]')&&motionCss.includes('animation-play-state: paused')],
