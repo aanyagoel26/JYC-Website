@@ -37,9 +37,9 @@ Do not mark an item complete from a source-code assertion alone. A visual item n
 
 ## 3. Texture, depth and atmosphere
 
-- [ ] 21. Add an extremely subtle film-grain texture to selected large surfaces.
+- [~] 21. Add an extremely subtle film-grain texture to selected large surfaces.
 - [~] 22. Use fine, restrained star particles in dark backgrounds.
-- [ ] 23. Add a restrained champagne paper/noise texture to selected light surfaces.
+- [~] 23. Add a restrained champagne paper/noise texture to selected light surfaces.
 - [~] 24. Layer foreground, middle-ground and distant atmosphere.
 - [~] 25. Place soft radial light sources behind important content.
 - [~] 26. Use glass treatment selectively for overlays and floating controls.
@@ -56,7 +56,7 @@ Do not mark an item complete from a source-code assertion alone. A visual item n
 - [~] 34. Use slow, organic nebula shader movement.
 - [~] 35. Add restrained star twinkling with varied timing and intensity.
 - [~] 36. Keep constellation connections sparse and intentional.
-- [ ] 37. Add a few depth-aware floating hero details without obscuring content.
+- [~] 37. Add a few depth-aware floating hero details without obscuring content.
 - [~] 38. Keep optional crest depth/interaction subtle and accessible.
 - [~] 39. Use a warm gold/light-field treatment in light mode, not a dark-sky recolour.
 - [~] 40. Preserve a high-quality static fallback when WebGL is unavailable, reduced or delayed.
@@ -124,7 +124,7 @@ Do not mark an item complete from a source-code assertion alone. A visual item n
 - [~] 87. Give interactive cards accessible names without nested-click traps.
 - [~] 88. Test narrow phone, phone, tablet, laptop and large desktop breakpoints.
 - [~] 89. Prevent horizontal overflow, clipped labels and awkward wrapping.
-- [ ] 90. Add a user-facing pause/reduced-intensity control for decorative motion.
+- [~] 90. Add a user-facing pause/reduced-intensity control for decorative motion.
 
 ## 10. Performance, testing and final design quality
 
@@ -149,5 +149,7 @@ The existing branch already contains a substantial hero, theme, atmosphere, card
 - Public routes now render cache/curated fallback content before asynchronous live refresh, reducing the large footer layout shifts seen on content-heavy routes.
 - The editorial homepage is route-lazy so non-home routes do not eagerly load the hero/WebGL module.
 - The responsive crest candidate is preloaded with matching `imagesrcset`/`imagesizes`; OGL and Dither initialization is deferred beyond the initial hero paint.
+- The More JYC sheet now includes a persistent Pause/Resume decorative motion control; the ambient canvas, hero WebGL/Dither and interactive Bento respond to the preference.
+- A small reusable grain texture now adds subtle film/paper texture with separate light/dark blending.
 
 **Release rule:** `[~]` is not a pass. Promote an item to `[x]` only after the relevant current-head CI/browser/Lighthouse checks and any required manual visual, keyboard, touch or real-device review pass. PR #12 must remain unmerged until the release gates are green.
