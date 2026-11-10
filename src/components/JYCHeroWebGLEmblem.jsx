@@ -296,6 +296,7 @@ export function JYCHeroWebGLEmblem() {
         jycAudio.playNodeHover();
       }}
       onPointerLeave={handlePointerLeave}
+      role="group"
       aria-label="JYC animated emblem with optional interactive 3D model"
     >
       {/* Canvas orbital system; the optional spatial mode uses the GLB WebGL viewer. */}
