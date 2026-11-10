@@ -61,13 +61,16 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{
     color-mix(in srgb,var(--jh-surface,var(--jyc-surface)) 46%,transparent);
   box-shadow:0 28px 90px rgba(22,19,34,.10),inset 0 1px 0 rgba(255,255,255,.36);
 }
-html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual::before{
-  content:"JYC  /  128";position:absolute;top:22px;left:24px;z-index:5;
-  color:var(--jh-muted,var(--jyc-muted));font:700 9px/1 'JetBrains Mono',monospace;letter-spacing:.2em;
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-label,
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-caption{
+  position:absolute;z-index:5;pointer-events:none;color:var(--jh-muted,var(--jyc-muted));
+  font-family:'JetBrains Mono',monospace;text-transform:uppercase;
 }
-html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual::after{
-  content:"ONE CAMPUS · MANY COMMUNITIES";position:absolute;right:24px;bottom:22px;z-index:5;
-  color:var(--jh-muted,var(--jyc-muted));font:600 8px/1 'JetBrains Mono',monospace;letter-spacing:.14em;
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-label{
+  top:22px;left:24px;font-size:9px;font-weight:700;letter-spacing:.2em;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-caption{
+  right:24px;bottom:22px;font-size:8px;font-weight:600;letter-spacing:.14em;
 }
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-webgl-field{position:absolute;inset:0;z-index:0;opacity:.94;overflow:hidden;border-radius:inherit}
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-dither-backdrop{inset:8%;filter:blur(52px);opacity:.7}
@@ -111,8 +114,8 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{animat
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-actions .jh-btn{min-width:0;min-height:50px;padding:10px 11px;font-size:12px}
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-actions .jh-btn:nth-child(3){grid-column:1/-1}
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{aspect-ratio:1;max-height:none;border-radius:26px}
- html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual::before{top:14px;left:15px;font-size:8px}
- html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual::after{right:15px;bottom:15px;font-size:7px}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-label{top:14px;left:15px;font-size:8px}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-caption{right:15px;bottom:15px;font-size:7px}
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage{width:min(86%,360px)}
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-badge{display:none}
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-dither-layer{inset:4%;opacity:.09}
