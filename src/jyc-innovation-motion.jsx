@@ -62,14 +62,16 @@ function setupReveal() {
     });
   };
   const onUserMotionChange = () => onMotionChange();
-  motionQuery.addEventListener?.('change', onMotionChange);
+  if (typeof motionQuery.addEventListener === 'function') motionQuery.addEventListener('change', onMotionChange);
+  else motionQuery.addListener?.(onMotionChange);
   window.addEventListener('jyc-motion-preference-change', onUserMotionChange);
 
   return () => {
     mutationObserver?.disconnect();
     observer?.disconnect();
     document.documentElement.classList.remove('jyc-motion-ready');
-    motionQuery.removeEventListener?.('change', onMotionChange);
+    if (typeof motionQuery.removeEventListener === 'function') motionQuery.removeEventListener('change', onMotionChange);
+    else motionQuery.removeListener?.(onMotionChange);
     window.removeEventListener('jyc-motion-preference-change', onUserMotionChange);
   };
 }
@@ -410,13 +412,15 @@ function useAtmosphericCanvas(canvasRef) {
         animId = requestAnimationFrame(loop);
       }
     };
-    motionQuery.addEventListener?.('change', onMotionChange);
+    if (typeof motionQuery.addEventListener === 'function') motionQuery.addEventListener('change', onMotionChange);
+    else motionQuery.addListener?.(onMotionChange);
     window.addEventListener('jyc-motion-preference-change', onUserMotionChange);
     if (!reducedMotion && !userPaused && !isHidden) animId = requestAnimationFrame(loop);
 
     return () => {
       if (animId) cancelAnimationFrame(animId);
-      motionQuery.removeEventListener?.('change', onMotionChange);
+      if (typeof motionQuery.removeEventListener === 'function') motionQuery.removeEventListener('change', onMotionChange);
+      else motionQuery.removeListener?.(onMotionChange);
       window.removeEventListener('jyc-motion-preference-change', onUserMotionChange);
       window.removeEventListener('resize', resize);
       if (!isCoarsePointer) window.removeEventListener('mousemove', onMouseMove);

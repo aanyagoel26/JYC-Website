@@ -464,3 +464,53 @@ html .public-app .eyebrow { font-size:11px!important; }
 .public-app .jyc57-club-brand-glyph{width:30px;height:30px;flex:0 0 30px;display:grid;place-items:center;overflow:hidden;border:1px solid rgba(255,255,255,.24);border-radius:50%;background:rgba(255,255,255,.12);backdrop-filter:blur(8px);}
 .public-app .jyc57-club-brand-glyph picture{display:block;width:100%;height:100%;}
 .public-app .jyc57-club-brand-glyph picture img{display:block;width:100%;height:100%;padding:3px;object-fit:contain;}
+
+
+/* Release hardening: lazy route shells reserve the first viewport so the
+   footer cannot jump into view while route chunks are downloading. */
+.public-app .route-stage > .jyc-route-loading{
+  box-sizing:border-box;
+  min-height:calc(100svh - 76px);
+  display:grid;
+  place-items:center;
+  margin:0;
+  padding:32px 20px;
+  text-align:center;
+}
+@media(max-width:680px){
+  .public-app .route-stage > .jyc-route-loading{min-height:calc(100svh - 72px);padding:24px 16px}
+}
+
+/* Dark-theme metadata must remain legible over the midnight surfaces. */
+html[data-theme="dark"] .public-app{
+  --text-muted:#c0c4da;
+  --muted:#c0c4da;
+  --directory-muted:#c0c4da;
+}
+html[data-theme="dark"] .public-app :is(
+  .jyc-gallery-hero .jh-kicker,
+  .jyc-gallery-hero .jh-kicker b,
+  .jyc-clubs-header .jh-kicker,
+  .jyc-clubs-header .jh-kicker b,
+  .jyc-section-head-bar>div>span,
+  .jyc57-media-filter+div>div>span,
+  #jyc-gallery-years>span,
+  .visible-breadcrumbs span[aria-current="page"],
+  .about-source-note,
+  .jyc-events-header .jh-kicker,
+  .jyc-events-header .jh-kicker b
+){color:#c0c4da!important}
+
+/* Lighthouse 11/10: dark-theme kicker text sits on champagne badges, while
+   the About source note uses a warm raised surface. Use dark ink on both. */
+html[data-theme="dark"] .public-app :is(
+  .jyc-gallery-hero .jh-kicker,
+  .jyc-gallery-hero .jh-kicker b,
+  .jyc-clubs-header .jh-kicker,
+  .jyc-clubs-header .jh-kicker b,
+  .jyc-events-header .jh-kicker,
+  .jyc-events-header .jh-kicker b
+) { color: #241d17 !important; }
+html[data-theme="dark"] .public-app .about-source-note {
+  color: #241d17 !important;
+}

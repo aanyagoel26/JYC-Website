@@ -40,7 +40,7 @@ check('Escape closes the team profile and restores focus to the front trigger',f
 check('team profile trigger has a visible theme-aware focus indicator',flipCss.includes('.flip-card__front-trigger:focus-visible')&&flipCss.includes('outline: 3px solid'));
 check('team profile cards use the shared lavender/champagne palette without legacy red accents',flipCss.includes('var(--jyc-accent')&&flipCss.includes('var(--jyc-gold')&&!flipCss.includes('#A82420'));
 check('theme switch accessible name includes its visible label and action',main.includes("aria-label={`${theme==='dark'?'Night':'Day'} Theme — switch to ${nextLabel} theme`}"));
-check('Search trigger accessible name is derived from its visible label and keyboard shortcut',main.includes('className="search-label">Search</span>')&&main.includes('<kbd aria-hidden="true">Ctrl K</kbd>')&&!main.includes('aria-label="Search, Ctrl K"'));
+check('Search trigger accessible name is derived from its visible label; decorative keyboard hint is excluded',main.includes('className="search-label">Search</span>')&&main.includes('<kbd aria-hidden="true">Ctrl K</kbd>')&&!main.includes('aria-label="Search Ctrl K"')&&!main.includes('aria-label="Search, Ctrl K"'));
 check('homepage story, event and team buttons do not override visible text in their accessible names',!home.includes('aria-label={`${story.year')&&!home.includes('aria-label={`View ')&&!home.includes('aria-label={`Meet '));
 check('About dark closing CTA overrides the paper-only legacy foregrounds',read('src/styles/jyc-cohesive-experience.css').includes('Dark About closing CTA')&&read('src/styles/jyc-cohesive-experience.css').includes('about-next-v28 h2'));
 check('legacy restoration red aliases resolve through the shared theme accent instead of hard-coded red',read('src/styles/jyc-cohesive-experience.css').includes('--jyc-restoration-red: var(--jyc-accent)')&&read('src/styles/jyc-cohesive-experience.css').includes('--jyc-restoration-red-bright: var(--jyc-accent-strong)'));
@@ -48,7 +48,7 @@ check('active design and restoration layers contain no hard-coded red theme acce
 const moreStart=main.indexOf('function MobileMoreSheet(');
 const searchSource=read('src/search/jyc-search.jsx');
 const moreSource=moreStart>=0?main.slice(moreStart):'';
-check('Search dialog restores focus to its original trigger or stable header trigger',searchSource.includes('returnFocusRef.current')&&searchSource.includes('fallbackFocus')&&searchSource.includes('target.focus()'));
+check('Search dialog restores focus to its original trigger or stable header trigger',searchSource.includes('returnFocusRef.current')&&searchSource.includes('fallbackFocus')&&searchSource.includes('target.focus({preventScroll:true})')&&searchSource.includes('window.requestAnimationFrame(()=>window.requestAnimationFrame('));
 check('More sheet restores focus to the element that opened it without stealing focus from Search handoff',moreSource.includes('const returnFocus=document.activeElement')&&moreSource.includes("if(!document.querySelector('.search-overlay'))returnFocus.focus()"));
 check('More sheet close control has an accessible name',moreSource.includes('aria-label="Close More JYC"'));
 check('Search intent shortcuts are included before ranking and are not appended after the result limit',searchSource.includes('matchSearchResults([...index,...intent],normalized)')&&searchSource.includes('const results=filtered.slice(0,30)'));

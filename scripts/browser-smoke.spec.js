@@ -548,7 +548,7 @@ test('About family cards open the matching filtered clubs directory', async ({ p
   await expect(page).toHaveURL(/\/clubs\?family=/);
   const selectedFamily = new URL(page.url()).searchParams.get('family');
   expect(['Technical','Cultural','Creative','Literary','Sports']).toContain(selectedFamily);
-  await expect(page.locator('.hub-spectrum-tags button.is-active')).toContainText(selectedFamily);
+  await expect(page.locator('.jyc-filter-toggle-btn').first()).toContainText('Family: '+selectedFamily);
   await expect(page.locator('.results-line')).toContainText(/communities found/);
 });
 

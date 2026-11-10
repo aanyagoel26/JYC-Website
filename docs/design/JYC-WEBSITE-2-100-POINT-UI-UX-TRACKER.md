@@ -11,6 +11,9 @@ Do not mark an item complete from a source-code assertion alone. A visual item n
 
 ## 1. Homepage and hero experience
 
+**Hero refinement pass (10 November 2026):** The follow-up visual pass strengthens the desktop headline scale and crest stage, restores the JIIT location line on phones, increases the mobile crest presentation, and visually demotes the tertiary Join action while preserving all three destinations. Decorative orbital rim/highlight layers remain behind the semantic crest and are disabled under reduced motion. These remain implementation-complete-but-unverified until current Browser QA, Lighthouse and real-device visual review pass.
+
+
 - [~] 01. Balance headline, supporting copy, CTA hierarchy and JYC crest in the hero.
 - [~] 02. Build a layered astronomical night sky with galaxies, Milky Way and nebula.
 - [~] 03. Establish distant, medium and foreground star depth.
@@ -157,4 +160,20 @@ The existing branch already contains a substantial hero, theme, atmosphere, card
 - The command palette is now loaded on demand; the public shell no longer eagerly imports Motion just for event-poster shared-element wrappers.
 - Lighthouse coverage now includes all seven public routes in both themes at desktop and mobile presets; the mobile run has its own report output directory.
 
-**Release rule:** `[~]` is not a pass. Promote an item to `[x]` only after the relevant current-head CI/browser/Lighthouse checks and any required manual visual, keyboard, touch or real-device review pass. PR #12 must remain unmerged until the release gates are green.
+## Release verification and follow-up
+
+PR #12 was merged at `3bbe53062928462ffded092b3594013b8da61210`. The merge itself is not a release sign-off: its exact-head Browser QA and Lighthouse runs failed, while JYC CI, Quality Gate, CodeQL and Datadog Synthetic passed.
+
+A follow-up branch, `fix/release-matrix-visual-accessibility`, addresses the observed browser contracts and visual regressions:
+- Reserve the first viewport for lazy route chunks to reduce layout shifts.
+- Improve dark-theme metadata contrast on public gallery, club and event surfaces.
+- Keep reveal content visible if IntersectionObserver is unavailable.
+- Support legacy MediaQueryList change listeners in the ambient animation engine.
+- Apply club-family deep links on initial route render.
+- Correct search/category, route-reveal, family-navigation and 320px gallery test contracts.
+- Keep emblem control targets at least 48px tall and improve featured-event metadata legibility.
+- Keep the champagne and cosmic homepage token sets distinct.
+
+These follow-up changes are **not yet merged or verified by a fresh CI run**. The current branch should be reviewed and tested before merge. Do not promote [~] items to [x] from source inspection alone. Real midrange Android and desktop review remains a manual release step.
+
+**Release rule:** [~] is not a pass. Promote an item to [x] only after the relevant current-head CI/browser/Lighthouse checks and any required manual visual, keyboard, touch or real-device review pass. Do not claim production readiness until the release matrix is green.

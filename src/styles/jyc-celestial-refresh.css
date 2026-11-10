@@ -152,3 +152,58 @@ html[data-theme="dark"] body {
   background-image:radial-gradient(ellipse at 14% 10%,rgba(82,72,142,.24),transparent 34rem),radial-gradient(ellipse at 88% 22%,rgba(148,132,219,.17),transparent 36rem),radial-gradient(ellipse at 55% 92%,rgba(65,82,130,.16),transparent 40rem);
 }
 .jyc-editorial-home .emblem-control-pill {min-height:44px!important;}
+
+/* Release QA polish: final theme tokens, readable metadata and touch-safe controls. */
+html[data-theme="dark"] .jyc-editorial-home.jyc-home { --jh-muted: #c0c4da !important; }
+html[data-theme="light"] .jyc-editorial-home.jyc-home { --jh-muted: #665f56 !important; }
+
+html[data-theme="light"] .jyc-editorial-home :where(
+  .jh-section-number,.jh-about-kicker,.jh-photo-label,.jh-photo-index,.jh-event-meta
+) { color: #70532b !important; }
+html[data-theme="dark"] .jyc-editorial-home :where(
+  .jh-section-number,.jh-about-kicker,.jh-photo-label,.jh-photo-index,.jh-event-meta
+) { color: #e7d19b !important; }
+html[data-theme="light"] .jyc-editorial-home .jyc-emblem-badge .badge-accent,
+html[data-theme="light"] .jyc-editorial-home .jh-featured-badge {
+  color: #5b4329 !important;
+}
+html[data-theme="dark"] .jyc-editorial-home .jyc-emblem-badge .badge-accent,
+html[data-theme="dark"] .jyc-editorial-home .jh-featured-badge {
+  color: #241d17 !important;
+}
+html[data-theme="light"] .jyc-now-card strong,
+html[data-theme="light"] .jyc-now-meta b,
+html[data-theme="light"] .jyc-spotlight-grid small,
+html[data-theme="light"] .jyc-now-principles article>b,
+html[data-theme="light"] .jyc-now-head .reference-view-all {
+  color: #5b4329 !important;
+}
+
+.public-app .jh-event-meta { font-size: 12px !important; line-height: 1.4 !important; }
+.public-app .jyc-campus-marquee__meta,
+.public-app .jyc-campus-marquee__item small { font-size: 11px !important; }
+.public-app .jyc-now-meta,
+.public-app .jyc-now-media>span,
+.public-app .jyc-now-hero-mark small,
+.public-app .jyc-spotlight-grid small { font-size: 11px !important; }
+.public-app .jyc-now-strip-section.is-compact .jyc-now-meta { font-size: 11px !important; }
+.public-app .jyc57-page small,
+.public-app .jyc57-page .jyc-event-card-meta span,
+.public-app .jyc57-page .jyc-event-card-meta small { font-size: 11px !important; }
+.public-app .jyc-creator-credit,
+.public-app .footer-v6-bottom .jyc-creator-credit,
+.public-app .search-trigger .search-label,
+.public-app .mobile-dock button b { font-size: 11px !important; line-height: 1.25 !important; }
+.public-app .jh-hero-actions .jh-btn,
+.public-app .jyc-emblem-controls-bar button,
+.public-app .jyc-emblem-controls-bar .jyc-emblem-control-pill {
+  min-height: 44px !important;
+}
+.public-app .search-trigger:hover,
+.public-app .search-trigger:focus-visible { transform: none !important; }
+.public-app .results-line { margin: 12px 0 16px; color: var(--jyc-muted,#5f5c6b); font-size: 13px; line-height: 1.4; }
+.public-app .search-trigger { transition: none !important; }
+.public-app .jyc-creator-credit a,
+.public-app .footer-v6-bottom .jyc-creator-credit a { font-size: inherit !important; }
+.public-app .jyc57-page .jyc57-pill { font-size: 11px !important; }
+.public-app .jyc-editorial-home :where(.jh-overline,.jh-hero-stage-label,.jh-hero-stage-caption) { font-size: 11px !important; }
