@@ -174,10 +174,19 @@ function LazyActivityBento({ activities, nav }) {
 export function JYCEditorialHome({ data }) {
   const nav = useNavigate();
   const [ditherReady, setDitherReady] = useState(false);
+  const [motionPaused, setMotionPaused] = useState(() => document.documentElement.dataset.jycMotion === 'paused');
+  useEffect(() => {
+    const onMotionPreference = () => setMotionPaused(document.documentElement.dataset.jycMotion === 'paused');
+    window.addEventListener('jyc-motion-preference-change', onMotionPreference);
+    return () => window.removeEventListener('jyc-motion-preference-change', onMotionPreference);
+  }, []);
   useEffect(() => {
     const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     const coarse = window.matchMedia?.('(pointer: coarse)').matches;
-    if (reduced || coarse) return;
+    if (reduced || coarse || motionPaused) {
+      setDitherReady(false);
+      return;
+    }
     let idleId = null;
     const delayId = window.setTimeout(() => {
       if (typeof window.requestIdleCallback === 'function') {
@@ -190,7 +199,7 @@ export function JYCEditorialHome({ data }) {
       window.clearTimeout(delayId);
       if (idleId !== null) window.cancelIdleCallback?.(idleId);
     };
-  }, []);
+  }, [motionPaused]);
   const activities = useMemo(() => {
     const photoHubs = { technical: 'CICR', cultural: 'VamUnique', literary: 'Eloquence', fests: 'Aakriti', sports: 'Sports', creative: 'Aura' };
     return PILLARS.map(p => {
