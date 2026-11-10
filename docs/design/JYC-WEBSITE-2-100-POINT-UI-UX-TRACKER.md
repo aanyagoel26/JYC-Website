@@ -151,6 +151,7 @@ The follow-up art-direction pass is intentionally focused on clarity and perform
 - Let ordinary 8-core / 8 GB desktop devices run the shader at a reduced quality tier rather than disabling it outright.
 - Keep both theme treatments distinct: deep midnight/indigo/violet/champagne for dark mode and warm ivory/champagne/brass for light mode.
 - Match the crest image `srcset`, `sizes` and preload to its rendered dimensions (220px mobile, 360px tablet, 480px desktop) so high-DPR screens receive a crisp asset without a misleading 80px hint.
+- Keep the hero dependency-free beyond the existing OGL field and Motion stack; the new crest itself is DOM/CSS and does not load a separate 3D viewer, audio engine or canvas loop.
 
 Source assertions are added to the homepage hero QA. Runtime screenshots, exact-head browser tests, Lighthouse and physical-device review remain required before promoting any hero item to [x].
 
