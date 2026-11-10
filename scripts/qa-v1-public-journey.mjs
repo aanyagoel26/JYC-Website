@@ -8,9 +8,14 @@ const main=read('src/main.jsx');
 const config=read('src/public-v1/config.js');
 const registration=read('src/extra-features.jsx');
 const gallery=read('src/jyc57-experience.jsx');
+const motion=read('src/jyc-innovation-motion.jsx');
+const motionCss=read('src/styles/jyc-cohesive-experience.css');
 
 const checks=[
   ['homepage hero action group is present',home.includes('className="jh-actions jh-hero-actions"')],
+  ['users can pause and resume decorative motion from the More JYC sheet',main.includes('function MotionPreferenceControl')&&main.includes('aria-pressed={paused}')&&main.includes("storageSet('jyc-motion-preference'")&&main.includes('jyc-motion-preference-change')],
+  ['ambient motion pauses across CSS and canvas effects without hiding page content',motion.includes('jyc-motion-preference-change')&&motion.includes('userPaused')&&motionCss.includes('html[data-jyc-motion="paused"]')&&motionCss.includes('animation-play-state: paused')],
+  ['homepage unmounts WebGL and Dither effects when the user pauses motion',main.includes('LazyJYCWebGLField')&&read('src/jyc-editorial-home.jsx').includes('motionPaused')&&read('src/jyc-editorial-home.jsx').includes('setDitherReady(false)')],
   ['homepage is route-lazy so OGL and the hero shader stay out of non-home startup',main.includes("const LazyJYCEditorialHome=lazy(()=>import('./jyc-editorial-home.jsx')")&&main.includes('<LazyJYCEditorialHome data={data}/>')],
   ['public routes paint curated/cache-backed content before asynchronous live refresh',main.includes('mergePublicFallback(norm(readSiteCache()||empty),{allowContentFallback:true,allowGalleryFallback:false,allowTeamFallback:true})')&&main.includes('const [loading,setLoading]=useState(false)')&&main.includes('const [bootReady,setBootReady]=useState(true)')],
   ['homepage exposes event, club and Join JYC routes',home.includes("nav('/events')")&&home.includes("nav('/clubs')")&&home.includes("nav('/join-jyc')")&&home.includes('Explore events')&&home.includes('Find a club')&&home.includes('Join JYC')],
