@@ -538,6 +538,30 @@ test('failed gallery photos use the neutral unavailable-photo asset, not a logo 
   await expect(page.locator('.jyc57-club-card picture[data-image-failed="true"] img[src*="jyc-logo"]')).toHaveCount(0);
 });
 
+test('About JYC in-page navigation reaches every story section on a narrow mobile viewport', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto(base + '/about', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'About JYC section navigation');
+  const nav = page.getByRole('navigation', { name: 'About JYC sections' });
+  await expect(nav).toBeVisible();
+  const sections = [
+    ['Why JYC', 'about-why'],
+    ['Communities', 'about-families'],
+    ['How it works', 'about-structure'],
+    ['Campus life', 'about-programmes'],
+    ['Our story', 'history']
+  ];
+  for (const [label, id] of sections) {
+    const link = nav.getByRole('link', { name: label });
+    await expect(link).toBeVisible();
+    await link.click();
+    await expect(page).toHaveURL(new RegExp('#' + id + '$'));
+    await expect(page.locator('#' + id)).toBeInViewport();
+  }
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
+  expect(overflow, 'About section navigation must not create document overflow on mobile').toBe(false);
+});
+
 test('About family cards open the matching filtered clubs directory', async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(base + '/about', { waitUntil: 'domcontentloaded' });
