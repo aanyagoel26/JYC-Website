@@ -24,6 +24,13 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero::after{
   mask-image:linear-gradient(90deg,transparent 4%,#000 48%,#000 100%);
 }
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy{position:relative;z-index:3;max-width:760px;padding-block:12px}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>*{position:relative}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions{display:flex;flex-wrap:wrap;align-items:center;gap:11px;margin-top:clamp(26px,3.1vw,38px)}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 22px;border-radius:999px;font-size:13px;font-weight:750;line-height:1.2;white-space:normal}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn-primary{background:var(--jh-accent,var(--jyc-accent));border:1px solid var(--jh-accent,var(--jyc-accent));color:var(--jh-bg,var(--jyc-canvas))!important}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn-glass{border:1px solid var(--jh-line-accent,var(--jyc-line));background:color-mix(in srgb,var(--jh-surface,var(--jyc-surface)) 84%,transparent);color:var(--jh-ink,var(--jyc-text-strong))}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn-outline{border:1px solid var(--jh-line,var(--jyc-line));background:transparent;color:var(--jh-ink,var(--jyc-text-strong))}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn>span{display:inline-block;margin-left:3px}
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-cyber-badge{
   min-height:38px;gap:11px;padding:8px 14px;border-radius:999px;
   border:1px solid var(--jh-line-accent,var(--jyc-line));background:var(--jh-surface,var(--jyc-surface));
@@ -111,9 +118,9 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{animat
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-overline{display:block!important;margin:22px 0 0!important;font-size:9px!important;letter-spacing:.11em!important}
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero h1{max-width:12ch!important;margin:14px 0 18px!important;font-size:clamp(44px,12vw,68px)!important;line-height:.96!important}
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-lead{display:block!important;max-width:48ch!important;margin:0!important;font-size:15px!important;line-height:1.68!important;-webkit-line-clamp:unset!important;overflow:visible!important}
- html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important;margin-top:22px!important}
- html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-actions .jh-btn{min-width:0!important;min-height:50px!important;padding:10px 11px!important;font-size:12px!important}
- html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-actions .jh-btn:nth-child(3){grid-column:1/-1!important}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important;margin-top:22px!important}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn{width:100%;min-width:0!important;min-height:50px!important;padding:10px 11px!important;font-size:12px!important}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn:nth-child(3){grid-column:1/-1!important}
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{position:relative!important;inset:auto!important;top:auto!important;right:auto!important;width:100%!important;height:auto!important;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;padding:0!important;aspect-ratio:1!important;overflow:visible!important;opacity:1!important;pointer-events:auto!important;border-radius:26px!important}
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-label{top:14px;left:15px;font-size:8px}
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-caption{right:15px;bottom:15px;font-size:7px}
@@ -125,8 +132,8 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{animat
 }
 @media(max-width:380px){
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero h1{font-size:clamp(38px,11.5vw,44px)!important}
- html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-actions{grid-template-columns:1fr}
- html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-actions .jh-btn:nth-child(3){grid-column:auto}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions{grid-template-columns:1fr}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn:nth-child(3){grid-column:auto}
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{border-radius:20px}
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-controls-bar{gap:5px}
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .emblem-control-pill{padding:7px 9px;font-size:9px}
