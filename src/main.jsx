@@ -108,6 +108,7 @@ import './styles/jyc-theme-contract.css';
 import './styles/jyc-atmosphere.css';
 import './styles/jyc-celestial-refresh.css';
 import './styles/jyc-v67-visual-polish.css';
+import './styles/jyc-final-refinement.css';
 
 const logo='/assets/jyc-logo.avif';
 const logoTiny='/assets/jyc-logo-48.avif';
