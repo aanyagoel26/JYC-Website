@@ -19,7 +19,7 @@ const checks = [
   ['reduced motion keeps the hero field static and CSS content readable', webgl.includes("'(prefers-reduced-motion: reduce)'") && webgl.includes('if (reduced) stop()') && atmosphere.includes('@media (prefers-reduced-motion: reduce)')],
   ['reveal observer remains available without a second animated canvas', motion.includes('function setupReveal()') && motion.includes('IntersectionObserver') && motion.includes('MutationObserver')],
   ['paper and night surfaces retain a reusable static grain texture', grain.includes('feTurbulence') && atmosphere.includes('background-image')],
-  ['homepage retains canonical theme-aware editorial color variables', home.includes('var(--jh-bg,var(--jyc-paper))') && home.includes('var(--jh-ink,var(--jyc-ink))')
+  ['homepage retains canonical theme-aware editorial color variables', home.includes('var(--jh-bg,var(--jyc-paper))') && home.includes('var(--jh-ink,var(--jyc-ink))')]
 ];
 let failed = 0;
 for (const [name, ok] of checks) {
