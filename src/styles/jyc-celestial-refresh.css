@@ -201,3 +201,5 @@ html[data-theme="light"] .jyc-now-head .reference-view-all {
 }
 .public-app .search-trigger:hover,
 .public-app .search-trigger:focus-visible { transform: none !important; }
+.public-app .results-line { margin: 12px 0 16px; color: var(--jyc-muted,#5f5c6b); font-size: 13px; line-height: 1.4; }
+.public-app .search-trigger { transition: none !important; }
