@@ -55,6 +55,23 @@ void main() {
   float radial = exp(-length(p) * 2.3);
   float stars = (starLayer(p + vec2(time * 0.035, -time * 0.018), 34.0, 0.72)
               + starLayer(p * 1.37 - vec2(time * 0.02, time * 0.03), 57.0, 0.42)) * uTheme;
+
+  // Galactic plane: a soft, tilted Milky Way with a broken dark dust rift.
+  // The low-frequency structure is deliberately broad so it reads as a sky,
+  // not as a synthetic neon ribbon or a distracting animated wallpaper.
+  vec2 galaxyP = vec2(p.x * 0.906 + p.y * 0.423, -p.x * 0.423 + p.y * 0.906);
+  galaxyP += (pointer - 0.5) * vec2(0.018, 0.012);
+  float galacticCurve = 0.075 * sin(galaxyP.x * 1.55 + time * 0.025);
+  float galacticDistance = abs(galaxyP.y - galacticCurve);
+  float galacticDust = fbm(galaxyP * 4.8 + vec2(8.4, -3.1));
+  float galacticCloud = fbm(galaxyP * 1.85 + vec2(time * 0.012, -time * 0.009));
+  float milkyWay = exp(-galacticDistance * galacticDistance * 7.2)
+                 * smoothstep(0.34, 0.78, galacticCloud) * uTheme;
+  float darkRift = exp(-pow((galaxyP.y - galacticCurve - 0.018) * 15.0, 2.0))
+                 * smoothstep(0.42, 0.78, galacticDust) * milkyWay;
+  float nebulaRed = smoothstep(0.58, 0.86, fbm(galaxyP * 3.2 + vec2(2.7, 8.1))) * milkyWay;
+  float nebulaBlue = smoothstep(0.54, 0.82, fbm(galaxyP * 2.7 + vec2(-6.2, 4.3))) * milkyWay;
+  float distantStars = starLayer(galaxyP + vec2(-time * 0.012, time * 0.008), 82.0, 0.38) * uTheme;
   float pointerDistance = length(p - pointer * 0.22);
   float ripplePhase = abs(fract(pointerDistance * 3.4 - time * 0.28) - 0.5);
   float ripple = (1.0 - smoothstep(0.018, 0.055, ripplePhase)) * exp(-pointerDistance * 1.7) * 0.12;
@@ -70,6 +87,11 @@ void main() {
   nightColor = mix(nightColor, nightGold, smoothstep(0.68,0.96,aurora) * 0.58);
   float nightLine = contour * smoothstep(0.56,0.9,field) * 0.12 * uTheme;
   nightColor += nightGold * nightLine + vec3(0.78,0.82,1.0) * stars * 0.8 + nightGold * moon * 0.9;
+  nightColor += vec3(0.48,0.39,0.76) * milkyWay * 0.18;
+  nightColor += vec3(0.31,0.56,0.76) * nebulaBlue * 0.11;
+  nightColor += vec3(0.72,0.30,0.38) * nebulaRed * 0.075;
+  nightColor += vec3(0.82,0.86,1.0) * distantStars * 0.72;
+  nightColor *= 1.0 - darkRift * 0.38;
 
   // Day identity: warm sunrise, soft cloud banks and drifting pollen-like motes.
   vec2 sunPoint = p - vec2(-0.43, 0.16);
@@ -130,7 +152,7 @@ void main() {
   float depthAlpha = (cloudEdge * 0.045 + dayMotes * 0.10) * (1.0-uTheme)
                    + (nightNebula * 0.045 + nightMotes * 0.12) * uTheme;
   float alpha = ((cloudLight * 0.10 + sunHalo * 0.09 + sunDisc * 0.12 + dayRays + dayLine + dayDust * 0.35) * (1.0-uTheme)
-              + (ribbons * 0.20 + radial * 0.045 + nightLine + stars * 0.52 + moon * 0.12) * uTheme + ripple + depthAlpha) * uIntensity;
+              + (ribbons * 0.20 + radial * 0.045 + nightLine + stars * 0.52 + distantStars * 0.36 + milkyWay * 0.11 + nebulaRed * 0.025 + nebulaBlue * 0.025 + moon * 0.12) * uTheme + ripple + depthAlpha) * uIntensity;
   alpha *= (1.0 - smoothstep(0.18,0.98,length(p) * 0.52));
   alpha += halo * 0.035 * uIntensity;
   fragColor = vec4(color, clamp(alpha, 0.0, 0.38));
