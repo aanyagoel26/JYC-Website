@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { JYCWebGLIdentity } from '../jyc-webgl-identity.jsx';
 import './JYCHeroWebGLEmblem.css';
 
 const LOGO_SRC = '/assets/jyc-logo.avif';
@@ -15,7 +16,7 @@ export function JYCHeroWebGLEmblem() {
     const rect = containerRef.current.getBoundingClientRect();
     const x = (event.clientX - rect.left) / rect.width - 0.5;
     const y = (event.clientY - rect.top) / rect.height - 0.5;
-    setTilt({ x: -y * 7, y: x * 9 });
+    setTilt({ x: -y * 4, y: x * 5 });
   };
 
   const resetTilt = () => setTilt({ x: 0, y: 0 });
@@ -29,6 +30,7 @@ export function JYCHeroWebGLEmblem() {
       role="img"
       aria-label="JIIT Youth Club crest"
     >
+      <JYCWebGLIdentity />
       <div className="jyc-emblem-orbit orbit-outer" aria-hidden="true" />
       <div className="jyc-emblem-orbit orbit-inner" aria-hidden="true" />
       <div className="jyc-emblem-orbit orbit-equator" aria-hidden="true" />
