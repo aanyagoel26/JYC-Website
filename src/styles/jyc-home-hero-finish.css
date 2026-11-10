@@ -56,7 +56,10 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-cyber-badge{
   background:var(--jh-surface,var(--jyc-surface));
   color:var(--jh-ink,var(--jyc-text-strong));
   box-shadow:0 8px 24px rgba(20,18,30,.055);
-  font:600 11px/1.2 inherit;
+  font-family:inherit;
+  font-size:11px;
+  font-weight:600;
+  line-height:1.2;
   letter-spacing:.015em;
 }
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-badge-mark{
@@ -79,7 +82,10 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-overline{
   max-width:55ch;
   margin:clamp(22px,2.8vw,34px) 0 0;
   color:var(--jh-muted,var(--jyc-muted));
-  font:500 12px/1.55 inherit;
+  font-family:inherit;
+  font-size:12px;
+  font-weight:500;
+  line-height:1.55;
   letter-spacing:.015em;
   text-transform:none;
 }
