@@ -462,3 +462,131 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-deferred-mount>sec
 @media(prefers-reduced-motion:reduce){
   html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-deferred-mount>section{animation:none!important}
 }
+
+/* -------------------------------------------------------------------------
+   JYC HERO — TWO DISTINCT WORLDS
+   Daylight: warm parchment, brass, champagne and an unmistakable gold badge.
+   Night: a photographic deep-sky treatment with a Milky Way band, dark rift,
+   scattered star colours and layered nebular light.
+   ------------------------------------------------------------------------- */
+html[data-theme="light"] .public-app .jyc-editorial-home.jyc-home .jh-hero{
+  --jh-accent:#80602f;
+  --jh-gold:#9a7138;
+}
+html[data-theme="light"] .public-app .jyc-editorial-home.jyc-home .jh-hero::before{
+  background:
+    radial-gradient(ellipse at 8% 18%,rgba(213,174,105,.24),transparent 34%),
+    radial-gradient(ellipse at 78% 16%,rgba(239,211,160,.34),transparent 32%),
+    radial-gradient(ellipse at 88% 78%,rgba(177,153,205,.16),transparent 35%),
+    radial-gradient(ellipse at 42% 100%,rgba(223,195,145,.2),transparent 42%);
+}
+html[data-theme="light"] .public-app .jyc-editorial-home.jyc-home .jh-cyber-badge{
+  border:1px solid rgba(151,108,48,.42);
+  background:linear-gradient(115deg,#f5e6c7 0%,#ead3a6 48%,#f8edda 100%);
+  color:#49351c;
+  box-shadow:0 8px 22px rgba(130,91,38,.13),0 0 0 4px rgba(197,151,76,.09),0 0 34px rgba(205,163,91,.24),inset 0 1px 0 rgba(255,255,255,.82);
+}
+html[data-theme="light"] .public-app .jyc-editorial-home.jyc-home .jh-badge-mark{
+  background:#9b6c2d;
+  box-shadow:0 0 0 4px rgba(155,108,45,.13),0 0 16px rgba(191,143,68,.48);
+}
+html[data-theme="light"] .public-app .jyc-editorial-home.jyc-home .jh-cyber-badge b{
+  color:#765020;
+  border-left-color:rgba(126,88,39,.28);
+}
+html[data-theme="light"] .public-app .jyc-editorial-home.jyc-home .jh-hero h1 .jh-title-gradient{
+  color:#986b32!important;
+  text-shadow:0 8px 28px rgba(190,145,76,.16);
+}
+html[data-theme="light"] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{
+  border-color:rgba(167,126,65,.34);
+  background:
+    radial-gradient(ellipse at 50% 46%,rgba(255,250,235,.98) 0%,rgba(247,232,199,.76) 35%,transparent 72%),
+    radial-gradient(ellipse at 16% 14%,rgba(216,179,112,.28),transparent 48%),
+    radial-gradient(ellipse at 88% 84%,rgba(177,153,205,.17),transparent 46%),
+    #f4ead7;
+  box-shadow:0 28px 84px rgba(116,83,42,.14),0 0 72px rgba(204,164,93,.22),inset 0 1px 0 rgba(255,255,255,.82);
+}
+html[data-theme="light"] .public-app .jyc-editorial-home.jyc-home .jh-hero-frame{
+  border-color:rgba(154,112,55,.3);
+}
+html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-hero{
+  --jh-accent:#c9baff;
+  --jh-gold:#f0d9a2;
+}
+html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-hero::before{
+  background:
+    radial-gradient(ellipse at 72% 34%,rgba(100,91,190,.19),transparent 38%),
+    radial-gradient(ellipse at 22% 72%,rgba(35,111,157,.13),transparent 38%),
+    radial-gradient(ellipse at 92% 88%,rgba(183,106,133,.09),transparent 34%),
+    radial-gradient(ellipse at 40% 6%,rgba(111,92,184,.11),transparent 34%);
+}
+html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-cyber-badge{
+  border-color:rgba(201,186,255,.32);
+  background:linear-gradient(112deg,rgba(28,31,67,.88),rgba(15,27,52,.84) 56%,rgba(39,30,65,.86));
+  color:#f4f0ff;
+  box-shadow:0 10px 30px rgba(0,0,0,.24),0 0 26px rgba(139,123,231,.17),inset 0 1px 0 rgba(255,255,255,.09);
+}
+html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-badge-mark{
+  background:#f0d9a2;
+  box-shadow:0 0 0 4px rgba(240,217,162,.12),0 0 18px rgba(240,217,162,.38);
+}
+html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-cyber-badge b{
+  color:#f0d9a2;
+  border-left-color:rgba(201,186,255,.25);
+}
+html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-hero h1 .jh-title-gradient{
+  color:#e8d7ff!important;
+  text-shadow:0 0 32px rgba(164,143,255,.22);
+}
+html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{
+  overflow:hidden;
+  isolation:isolate;
+  border-color:rgba(177,174,235,.26);
+  background-color:#050817;
+  background-image:
+    radial-gradient(1.2px 1.2px at 7% 18%,rgba(255,255,255,.96) 48%,transparent 100%),
+    radial-gradient(1.4px 1.4px at 17% 71%,rgba(214,224,255,.9) 48%,transparent 100%),
+    radial-gradient(1px 1px at 29% 27%,rgba(255,222,183,.92) 48%,transparent 100%),
+    radial-gradient(1.8px 1.8px at 42% 12%,rgba(255,255,255,.96) 48%,transparent 100%),
+    radial-gradient(1px 1px at 59% 82%,rgba(201,218,255,.88) 48%,transparent 100%),
+    radial-gradient(1.5px 1.5px at 76% 21%,rgba(255,231,194,.94) 48%,transparent 100%),
+    radial-gradient(1px 1px at 88% 67%,rgba(255,255,255,.9) 48%,transparent 100%),
+    radial-gradient(ellipse at 58% 44%,rgba(113,83,176,.28),transparent 47%),
+    radial-gradient(ellipse at 25% 72%,rgba(38,112,159,.2),transparent 42%),
+    radial-gradient(ellipse at 82% 78%,rgba(177,86,126,.13),transparent 34%),
+    linear-gradient(153deg,transparent 17%,rgba(91,91,164,.08) 28%,rgba(115,105,177,.24) 39%,rgba(155,129,183,.24) 47%,rgba(70,91,151,.17) 57%,transparent 72%),
+    linear-gradient(153deg,transparent 35%,rgba(3,7,20,.74) 43%,rgba(4,8,22,.55) 48%,transparent 57%),
+    radial-gradient(ellipse at 50% 50%,#10162e 0%,#080d1c 62%,#040711 100%);
+  background-size:180px 170px,230px 210px,260px 240px,310px 280px,220px 230px,290px 250px,250px 260px,100% 100%,100% 100%,100% 100%,100% 100%,100% 100%,100% 100%;
+  box-shadow:0 32px 100px rgba(0,0,0,.42),0 0 84px rgba(91,86,178,.18),inset 0 1px 0 rgba(231,226,255,.1);
+}
+html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-hero-frame{
+  border-color:rgba(205,199,255,.25);
+  box-shadow:inset 0 0 36px rgba(131,117,220,.07),0 0 24px rgba(113,97,203,.08);
+}
+html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-label,
+html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-caption{
+  color:rgba(230,228,255,.72);
+  text-shadow:0 1px 8px rgba(0,0,0,.8);
+}
+html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-hero-dither-backdrop{
+  opacity:.78;
+  filter:blur(54px) saturate(1.35);
+}
+html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-hero-dither-layer{
+  opacity:.14;
+  mix-blend-mode:screen;
+}
+@media(prefers-reduced-motion:no-preference){
+  html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{
+    animation:jycHeroNebulaBreathe 24s ease-in-out infinite alternate;
+  }
+  @keyframes jycHeroNebulaBreathe{
+    from{filter:saturate(.94) brightness(.96)}
+    to{filter:saturate(1.12) brightness(1.045)}
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{animation:none!important}
+}
