@@ -68,3 +68,13 @@ check('constellation texture sits above the canvas but below interactive app con
 const failed=checks.filter(item=>!item.condition);
 console.log('Search + celestial refresh QA: '+(checks.length-failed.length)+'/'+checks.length+' checks passed.');
 if(failed.length)process.exit(1);
+
+const nav=main.slice(main.indexOf('function Navbar('),main.indexOf('function MobileMoreSheet'));
+const mobileMore=main.slice(main.indexOf('function MobileMoreSheet'),main.indexOf('function MotionPreferenceControl'));
+check('Search shortcut ignores editable content including contenteditable regions',nav.includes('document.activeElement?.isContentEditable'));
+check('Search opens from one capture handler without duplicate bubbling listeners',nav.includes("e.stopImmediatePropagation?.()")&&nav.includes("window.addEventListener('keydown',onKey,true)"));
+check('Search trigger exposes a stable dialog relationship and visible label',nav.includes('data-jyc-search-trigger')&&nav.includes('aria-haspopup="dialog"')&&nav.includes('aria-expanded={search}')&&nav.includes("aria-controls={search?'jyc-search-dialog':undefined}")&&nav.includes('className="search-label"'));
+check('More trigger maintains a stable dialog relationship for WebKit compatibility',nav.includes('aria-haspopup="dialog"')&&nav.includes('aria-controls="jyc-more-dialog"')&&nav.includes('aria-expanded={moreOpen}'));
+check('More sheet uses rendered geometry for its keyboard focus trap',mobileMore.includes('el.getClientRects().length>0')&&!mobileMore.includes('el.offsetParent!==null'));
+check('theme switch exposes native switch semantics and a checked state',main.includes('role="switch"')&&main.includes("aria-checked={theme==='dark'}"));
+check('search trigger and theme switch retain a 44px target floor',css.includes('.public-app .nav-search-trigger{min-width:88px;min-height:44px')&&css.includes('.public-app .theme-toggle-rb{min-width:84px!important;min-height:44px!important'));
