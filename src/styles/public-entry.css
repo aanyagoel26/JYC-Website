@@ -99,7 +99,7 @@
   text-wrap: pretty;
 }
 .public-app .fests-page .compact-page-head .eyebrow {
-  color: #e9c994;
+  color: var(--jyc-gold, #765f36) !important;
 }
 .public-app .fests-page .compact-page-head .page-stat-row {
   position: relative;
@@ -453,3 +453,14 @@ html[data-theme="dark"] .jh-cyber-badge b { color: #17142a !important; }
 @media (prefers-reduced-motion: reduce) {
   .mobile-dock { scroll-behavior: auto !important; transition: none !important; }
 }
+
+
+/* Consistent readable eyebrow size across every public route. */
+html .public-app .eyebrow { font-size:11px!important; }
+
+
+/* Club identity marks stay compact and crisp after switching to responsive <picture> delivery. */
+.public-app .jyc57-club-top-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:30px;}
+.public-app .jyc57-club-brand-glyph{width:30px;height:30px;flex:0 0 30px;display:grid;place-items:center;overflow:hidden;border:1px solid rgba(255,255,255,.24);border-radius:50%;background:rgba(255,255,255,.12);backdrop-filter:blur(8px);}
+.public-app .jyc57-club-brand-glyph picture{display:block;width:100%;height:100%;}
+.public-app .jyc57-club-brand-glyph picture img{display:block;width:100%;height:100%;padding:3px;object-fit:contain;}

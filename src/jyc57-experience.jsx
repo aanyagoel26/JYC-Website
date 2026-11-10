@@ -411,12 +411,12 @@ export function JYC57Clubs({data}){
     const selected=active===i;
     const photo=clubCardPhoto(c);
     return <button type="button" key={c.id||c.name||i} className={`jyc57-club-card ${selected?'selected':''}`} style={{'--club-accent':identityAccent(c.name)}} onPointerMove={magneticMove} onPointerLeave={magneticReset} onMouseEnter={()=>setActive(i)} onFocus={()=>setActive(i)} onClick={()=>nav('/clubs/'+encodeURIComponent(slugify(c.name)))}>
-     {photo?<ResponsivePhoto src={photo} alt="" loading="lazy" decoding="async" sizes="(max-width: 760px) 50vw, (max-width: 1100px) 50vw, 33vw" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Club photograph unavailable"/>:<div className="jyc57-club-fallback"><span aria-hidden="true">{String(c.name||'JYC').slice(0,2).toUpperCase()}</span>{c.logo&&<ResponsivePhoto className="jyc57-club-fallback-logo" src={c.logo} alt={`${c.name||'JYC'} logo`} width={160} height={160} loading="lazy" decoding="async" sizes="160px"/>}</div>}
+     {photo?<ResponsivePhoto src={photo} alt="" loading="lazy" decoding="async" sizes="(max-width: 760px) 50vw, (max-width: 1100px) 25vw, 18vw" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Club photograph unavailable"/>:<div className="jyc57-club-fallback"><span aria-hidden="true">{String(c.name||'JYC').slice(0,2).toUpperCase()}</span>{c.logo&&<ResponsivePhoto className="jyc57-club-fallback-logo" src={c.logo} alt={`${c.name||'JYC'} logo`} width={160} height={160} loading="lazy" decoding="async" sizes="160px"/>}</div>}
      <span className="jyc57-club-shade"/>
      <div className="jyc57-club-content">
       <div className="jyc57-club-top-bar">
        <MetaPill>{c.type||c.category||'JYC'}</MetaPill>
-       {c.logo&&<div className="jyc57-club-brand-glyph" title={`${c.name} official emblem`}><img src={c.logo} alt="" loading="lazy"/></div>}
+       {c.logo&&<div className="jyc57-club-brand-glyph" title={`${c.name} official emblem`}><ResponsivePhoto className="jyc57-club-brand-logo" src={c.logo} alt={`${c.name} logo`} width={24} height={24} loading="lazy" decoding="async" sizes="24px" fallbackSrc="/assets/jyc-logo-48.avif" fallbackAlt="JIIT Youth Club mark"/></div>}
       </div>
       <h2>{c.name}</h2>
       <p>{c.description||c.about||'A published JYC community.'}</p>

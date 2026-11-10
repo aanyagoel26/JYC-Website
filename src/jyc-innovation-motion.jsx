@@ -82,7 +82,7 @@ function useAtmosphericCanvas(canvasRef) {
     let reducedMotion = motionQuery.matches;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    const lowPower = (navigator.hardwareConcurrency || 4) < 4 || (navigator.deviceMemory || 4) < 2 || Boolean(navigator.connection?.saveData);
+    const lowPower = (navigator.hardwareConcurrency || 8) <= 8 || (navigator.deviceMemory || 8) < 8 || Boolean(navigator.connection?.saveData);
     if (lowPower) { canvas.style.display = 'none'; return; } // CSS aurora/nebula remains as a static fallback on constrained devices.
 
     let width = 0;
@@ -94,7 +94,7 @@ function useAtmosphericCanvas(canvasRef) {
     let targetMouseY = 0;
     let time = 0;
     const isCoarsePointer = window.matchMedia?.('(pointer: coarse)').matches ?? false;
-    const targetFrameMs = isCoarsePointer ? 50 : 1000 / 30;
+    const targetFrameMs = isCoarsePointer ? 80 : 1000 / 20;
     let lastFrameAt = -Infinity;
 
     const resize = () => {
@@ -112,7 +112,7 @@ function useAtmosphericCanvas(canvasRef) {
     if (!isCoarsePointer) window.addEventListener('mousemove', onMouseMove, { passive: true });
 
     // Star pool for Dark Mode (small twinkling stars)
-    const starCount = Math.min(isCoarsePointer ? 24 : 64, Math.floor(window.innerWidth / (isCoarsePointer ? 16 : 20)));
+    const starCount = Math.min(isCoarsePointer ? 16 : 40, Math.floor(window.innerWidth / (isCoarsePointer ? 24 : 28)));
     const stars = Array.from({ length: starCount }, () => ({
       x: Math.random(),
       y: Math.random(),
@@ -126,7 +126,7 @@ function useAtmosphericCanvas(canvasRef) {
     }));
 
     // Golden dust and luminous nodes for Light Mode
-    const goldDustCount = Math.min(isCoarsePointer ? 12 : 32, Math.floor(window.innerWidth / (isCoarsePointer ? 32 : 42)));
+    const goldDustCount = Math.min(isCoarsePointer ? 8 : 20, Math.floor(window.innerWidth / (isCoarsePointer ? 44 : 56)));
     const goldDust = Array.from({ length: goldDustCount }, () => ({
       x: Math.random(),
       y: Math.random(),

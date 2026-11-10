@@ -90,7 +90,9 @@ export function JYCHeroWebGLEmblem() {
     let renderDpr = 1;
     const isMobile = window.matchMedia('(max-width: 768px), (pointer: coarse)').matches;
     const saveData = Boolean(navigator.connection?.saveData);
-    const targetFrameMs = isMobile ? 1000 / 24 : 1000 / 30;
+    const lowPower = saveData || (navigator.hardwareConcurrency || 8) <= 8 || (navigator.deviceMemory || 8) < 8;
+    if (lowPower) { canvas.style.display = 'none'; return; }
+    const targetFrameMs = isMobile ? 1000 / 20 : 1000 / 24;
     let lastFrameAt = -Infinity;
 
     const resize = () => {
@@ -347,14 +349,18 @@ export function JYCHeroWebGLEmblem() {
             <div className="jyc-emblem-glow-backing" aria-hidden="true" />
             {logoFailed ? <span className="jyc-emblem-logo-fallback" role="img" aria-label="JIIT Youth Club logo">JYC</span> : <img
               src={LOGO_SRC}
+              srcSet="/assets/jyc-logo-270.avif 270w, /assets/jyc-logo.avif 480w"
+              sizes="(max-width: 680px) 80px, (max-width: 1024px) 250px, 480px"
               alt="JIIT Youth Club Crest"
               className="jyc-emblem-logo-img"
               width="480"
               height="480"
               loading="eager"
+              fetchPriority="high"
               decoding="async"
               onError={e => {
                 const image = e.currentTarget;
+                image.removeAttribute('srcset');
                 const stage = Number(image.dataset.logoFallbackStage || 0);
                 const candidates = [LOGO_FALLBACK, LOGO_ORIGINAL];
                 if (stage < candidates.length) {

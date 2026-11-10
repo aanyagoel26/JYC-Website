@@ -1,7 +1,7 @@
 // Lightweight, dependency-free relevance scoring inspired by open-source fuzzy search patterns.
 // The ranking intentionally prioritizes exact title matches above every other signal.
 export function normalizeSearch(value=''){
-  return String(value ?? '').toLocaleLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g,'').replace(/[^\p{L}\p{N}]+/gu,' ').trim();
+  return String(value ?? '').toLowerCase().normalize('NFKD').replace(/(\p{Script=Latin})\p{M}+/gu,'$1').replace(/[^\p{L}\p{M}\p{N}]+/gu,' ').replace(/\s+/g,' ').trim();
 }
 export function searchTokens(value=''){
   return normalizeSearch(value).split(/\s+/).filter(Boolean);
@@ -53,6 +53,15 @@ export function relevanceScore({title='',meta='',text='',type='',query=''}){
   score+=exactMetaTokens*650;
   if(m.includes(q))score+=1000;
   if(x.includes(q))score+=700;
+  // Multi-word queries should reward coverage, not just one lucky token.
+  // This follows token-search principles while keeping the index dependency-free.
+  if(qt.length>1){
+    const searchableTokens=[...tt,...mt];
+    const matched=qt.filter(token=>searchableTokens.some(field=>fuzzyTokenScore(token,field)>0)).length;
+    const coverage=matched/qt.length;
+    if(coverage<.6)return 0;
+    score=score*(.35+.65*coverage)+(coverage===1?1200*qt.length:0);
+  }
   if(type==='ADMIN')score+=5;
   return Math.round(score);
 }

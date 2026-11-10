@@ -147,7 +147,7 @@ test('mobile homepage logo and primary actions stay clear of the fixed navigatio
   await waitForAppMount(page, 'mobile hero and dock geometry');
   // The bot is a lazy-loaded chunk behind Suspense; wait for actual layout, not just the app root.
   // Fonts and responsive CSS can still change bounding boxes after React mounts.
-  await expect(page.locator('.jyc-bot-shell')).toBeAttached({ timeout: 15000 });
+  // The assistant runtime is intentionally deferred until the user opens it; it is not part of hero layout.
   for (const selector of ['.mobile-dock', '.jh-cyber-badge', '.jh-hero-webgl-stage-wrap', '.jh-hero-actions']) {
     await expect(page.locator(selector), `required hero geometry element ${selector}`).toBeVisible({ timeout: 15000 });
   }
@@ -165,18 +165,14 @@ test('mobile homepage logo and primary actions stay clear of the fixed navigatio
     return {
       dock: rect('.mobile-dock'),
       badge: rect('.jh-cyber-badge'),
-      bot: rect('.jyc-bot-shell'),
       heroStage: rect('.jh-hero-webgl-stage-wrap'),
       actions: rect('.jh-hero-actions')
     };
   });
   expect(geometry.dock, 'the mobile navigation dock should be present').not.toBeNull();
   expect(geometry.badge, 'the academic-year badge should be present').not.toBeNull();
-  expect(geometry.bot, 'the floating assistant should be mounted before overlap is measured').not.toBeNull();
   expect(geometry.heroStage, 'the current WebGL hero stage should be present').not.toBeNull();
   expect(geometry.actions, 'the homepage actions should be present').not.toBeNull();
-  expect(geometry.bot.bottom <= geometry.badge.top || geometry.bot.top >= geometry.badge.bottom, 'the floating assistant must not cover the academic-year badge').toBe(true);
-  expect(geometry.bot.bottom <= geometry.actions.top || geometry.bot.top >= geometry.actions.bottom, 'the floating assistant must not cover primary hero actions').toBe(true);
   expect(geometry.heroStage.bottom, 'the fixed dock must not cover the interactive hero stage').toBeLessThanOrEqual(geometry.dock.top + 1);
   expect(geometry.actions.bottom, 'the fixed dock must not cover the hero actions').toBeLessThanOrEqual(geometry.dock.top + 1);
 });
@@ -192,7 +188,7 @@ test('homepage accessibility and responsive guardrails', async ({ page }) => {
   await themeToggle.focus();
   await page.keyboard.press('Enter');
   await expect.poll(() => page.locator('html').getAttribute('data-theme')).not.toBe(startingTheme);
-  await expect(themeToggle).toContainText(startingTheme === 'dark' ? 'Light' : 'Dark');
+  await expect(themeToggle).toContainText(startingTheme === 'dark' ? 'Day' : 'Night');
 
 
   const missingAlt = await page.locator('img:not([alt])').count();
@@ -203,9 +199,9 @@ test('homepage accessibility and responsive guardrails', async ({ page }) => {
       const text = (button.innerText || '').trim();
       const aria = button.getAttribute('aria-label') || button.getAttribute('aria-labelledby');
       return !text && !aria;
-    }).length
+    }).map(button => ({className:String(button.className||''),title:button.getAttribute('title'),html:button.outerHTML.slice(0,240)}))
   );
-  expect(unnamedButtons).toBe(0);
+  expect(unnamedButtons, `buttons need visible text or an accessible name: ${JSON.stringify(unnamedButtons)}`).toHaveLength(0);
 
   const overflow = await page.evaluate(() =>
     document.documentElement.scrollWidth > document.documentElement.clientWidth + 1
@@ -440,7 +436,7 @@ test('first visit follows the operating-system theme preference and saved prefer
   await page.goto(base, { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'system light theme');
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
-  await expect(page.locator('meta[name="theme-color"]').first()).toHaveAttribute('content', '#f5f1e8');
+  await expect(page.locator('meta[name="theme-color"]').first()).toHaveAttribute('content', '#f1eadb');
   await page.evaluate(() => localStorage.setItem('jyc-theme', 'light'));
   await page.reload({ waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'saved light theme');
@@ -506,7 +502,7 @@ test('failed gallery photos use the neutral unavailable-photo asset, not a logo 
   // Upcoming can legitimately be empty when all source-backed event dates are past.
   // Open the full archive first; verify a neutral fallback when media exists, or
   // verify the truthful empty state instead of requiring invented event cards.
-  const emptyUpcoming = page.getByRole('heading', { name: 'No events match your current filter.' });
+  const emptyUpcoming = page.getByRole('heading', { name: 'No published experiences in this view.' });
   if (await emptyUpcoming.count()) {
     const viewAll = page.getByRole('button', { name: /View All Events/ });
     if (await viewAll.count()) await viewAll.click();
@@ -539,7 +535,7 @@ test('failed gallery photos use the neutral unavailable-photo asset, not a logo 
   } else {
     await expect(page.locator('.jyc57-club-card .jyc57-club-fallback').first()).toBeVisible();
   }
-  await expect(page.locator('.jyc57-club-card img[src*="jyc-logo"]')).toHaveCount(0);
+  await expect(page.locator('.jyc57-club-card picture[data-image-failed="true"] img[src*="jyc-logo"]')).toHaveCount(0);
 });
 
 test('About family cards open the matching filtered clubs directory', async ({ page }) => {
@@ -1006,7 +1002,7 @@ test('global search opens, accepts keyboard input, and closes cleanly', async ({
   await trigger.press(process.platform === 'darwin' ? 'Meta+K' : 'Control+K');
   const dialog = page.locator('[role="dialog"]').filter({ hasText: /JYC search/i }).first();
   await expect(dialog).toBeVisible();
-  const input = page.getByRole('textbox', { name: /Search JYC/i }).first();
+  const input = page.getByRole('combobox', { name: /Search JYC/i }).first();
   await expect(input).toBeVisible();
   await input.fill('CICR');
   await page.waitForTimeout(150);
@@ -1694,7 +1690,7 @@ test('static boot screen follows the operating-system theme before React mounts'
     await page.goto(base, { waitUntil: 'domcontentloaded' });
     await expect(page.locator('.boot-fallback')).toBeVisible();
     await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
-    await expect(page.locator('meta[name="theme-color"]').first()).toHaveAttribute('content', theme === 'dark' ? '#080d1c' : '#f5f1e8');
+    await expect(page.locator('meta[name="theme-color"]').first()).toHaveAttribute('content', theme === 'dark' ? '#080d1c' : '#f1eadb');
   }
 });
 
@@ -2065,15 +2061,20 @@ test('sparse faculty layout uses only populated tracks and mobile home actions s
 
 test('More navigation and Search modal work with keyboard, empty states and focus handoff', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 900 });
+  await page.addInitScript(() => localStorage.setItem('jyc-search-recent', JSON.stringify([' duplicate ', 'duplicate', 'x'.repeat(160), null, 42])));
   await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'More and Search interaction regression');
   const searchTrigger = page.locator('.search-trigger');
   const search = page.locator('.search-modal');
-  const input = page.getByRole('textbox', { name: 'Search JYC' });
+  const input = page.getByRole('combobox', { name: 'Search JYC' });
 
   await searchTrigger.click();
   await expect(search).toBeVisible();
   await expect(input).toBeFocused();
+  const restoredHistory = page.locator('.jyc-search-recent>div:not(.jyc-search-recent-head) button');
+  await expect(restoredHistory).toHaveCount(2);
+  expect(await restoredHistory.nth(0).evaluate(el => (el.firstChild?.textContent || '').trim().length)).toBeLessThanOrEqual(120);
+  expect(await restoredHistory.nth(1).evaluate(el => (el.firstChild?.textContent || '').trim().length)).toBeLessThanOrEqual(120);
   await input.fill('clubs');
   await expect(page.locator('.search-result-active')).toContainText('Clubs');
   await expect(page.locator('.search-category-filters')).toBeVisible();
@@ -2088,6 +2089,8 @@ test('More navigation and Search modal work with keyboard, empty states and focu
 
   await input.press('ArrowDown');
   await expect(page.locator('#jyc-search-result-1')).toHaveAttribute('aria-selected', 'true');
+  await input.press('ArrowUp');
+  await expect(page.locator('#jyc-search-result-0')).toHaveAttribute('aria-selected', 'true');
   await input.press('ArrowUp');
   await expect(page.locator('#jyc-search-result-0')).toHaveAttribute('aria-selected', 'true');
   await input.press('Enter');
@@ -2117,6 +2120,16 @@ test('More navigation and Search modal work with keyboard, empty states and focu
   await expect(page.locator('.search-overlay')).toHaveCount(0);
 
   await searchTrigger.click();
+  await input.fill('   ');
+  await expect(page.locator('.jyc-search-discover')).toBeVisible();
+  await expect(page.locator('.search-no-results')).toHaveCount(0);
+  await input.fill('Fests');
+  await expect(page.locator('#jyc-search-result-0')).toContainText('Fests');
+  await input.press('Enter');
+  await expect(page).toHaveURL(/\/fests(?:\/)?$/);
+  await expect(page.locator('.search-overlay')).toHaveCount(0);
+
+  await searchTrigger.click();
   await input.fill('Smart India Hackathon finalist');
   const achievementCategory = page.locator('.search-category-filters button').filter({ hasText: /^ACHIEVEMENT \(/ }).first();
   await expect(achievementCategory).toBeVisible();
@@ -2134,6 +2147,13 @@ test('More navigation and Search modal work with keyboard, empty states and focu
   await expect(page.locator('#jyc-search-results [role="option"]').first()).toContainText('RIDE Hack');
   await input.press('Enter');
   await expect(page).toHaveURL(/\/updates(?:\/)?$/);
+  await expect(page.locator('.search-overlay')).toHaveCount(0);
+
+  await searchTrigger.click();
+  await expect(page.locator('.jyc-search-recent')).toBeVisible();
+  await page.locator('.jyc-search-recent-head button').click();
+  await expect(page.locator('.jyc-search-recent')).toHaveCount(0);
+  await input.press('Escape');
   await expect(page.locator('.search-overlay')).toHaveCount(0);
 
   const moreTrigger = page.locator('.nav-more-trigger');
@@ -2171,4 +2191,16 @@ test('More navigation and Search modal work with keyboard, empty states and focu
   await page.keyboard.press('Escape');
   await expect(page.locator('.more-sheet-overlay')).toHaveCount(0);
   await expect(mobileMoreTrigger).toBeFocused();
+
+  await mobileMoreTrigger.click();
+  await expect(more).toBeVisible();
+  await more.getByRole('button', { name: 'Search JYC' }).click();
+  await expect(page.locator('.search-overlay')).toBeVisible();
+  await expect(input).toBeFocused();
+  const mobileSearchBounds = await search.boundingBox();
+  expect(mobileSearchBounds).not.toBeNull();
+  expect(mobileSearchBounds.height).toBeLessThan(760);
+  await input.press('Escape');
+  await expect(page.locator('.search-overlay')).toHaveCount(0);
+  await expect(page.locator('.search-trigger')).toBeFocused();
 });

@@ -2281,3 +2281,49 @@ html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-hero-dither-layer {
 .jyc-editorial-home.jyc-home .jh-community-bottom-note p{font-size:12px!important}
 }
 @media(max-width:360px){.jyc-editorial-home.jyc-home .jh-hero{grid-template-columns:minmax(0,1fr) 92px!important;gap:7px!important}.jyc-editorial-home.jyc-home .jh-hero-copy>h1{font-size:30px!important}.jyc-editorial-home.jyc-home .jh-hero-logo-plaque{padding:3px!important}}
+
+
+/* Compact phone hero: keep the actions visible above the fixed mobile dock. */
+@media (max-width: 680px) {
+  .jyc-editorial-home.jyc-home .jh-hero { position:relative!important; display:block!important; min-height:0!important; padding:10px 0 20px!important; margin:0!important; }
+  .jyc-editorial-home.jyc-home .jh-hero-copy { position:relative!important; z-index:2!important; width:100%!important; max-width:none!important; min-width:0!important; }
+  .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-cyber-badge { max-width:calc(100% - 88px)!important; min-height:30px!important; padding:5px 8px!important; gap:5px!important; font-size:9px!important; }
+  .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-overline { display:none!important; }
+  .jyc-editorial-home.jyc-home .jh-hero-copy>h1 { max-width:13ch!important; margin:12px 0 10px!important; font-size:clamp(32px,9.2vw,40px)!important; line-height:.98!important; }
+  .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-lead { max-width:52ch!important; margin:0!important; font-size:14px!important; line-height:1.45!important; display:-webkit-box!important; -webkit-box-orient:vertical!important; -webkit-line-clamp:4!important; overflow:hidden!important; }
+  .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions { display:grid!important; grid-template-columns:repeat(2,minmax(0,1fr))!important; gap:8px!important; margin-top:12px!important; }
+  .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn { min-width:0!important; min-height:44px!important; padding:8px 7px!important; font-size:11px!important; line-height:1.25!important; white-space:normal!important; }
+  .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn:nth-child(3) { grid-column:1/-1!important; }
+  .jyc-editorial-home.jyc-home .jh-hero-visual { position:absolute!important; z-index:1!important; top:2px!important; right:0!important; width:80px!important; height:80px!important; min-width:0!important; min-height:0!important; max-width:80px!important; padding:0!important; overflow:hidden!important; opacity:.72!important; pointer-events:none!important; }
+  .jyc-editorial-home.jyc-home .jh-hero-dither-layer,.jyc-editorial-home.jyc-home .jh-hero-dither-backdrop,.jyc-editorial-home.jyc-home .jh-hero-visual .jyc-webgl-field { display:none!important; }
+  .jyc-editorial-home.jyc-home .jh-hero-visual .jyc-hero-emblem-stage { width:80px!important; height:80px!important; max-width:80px!important; margin:0!important; }
+  .jyc-editorial-home.jyc-home .jh-hero-visual .jyc-emblem-canvas { display:none!important; }
+}
+@media (max-width:360px) { .jyc-editorial-home.jyc-home .jh-hero-copy>h1 { font-size:32px!important; } .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn { font-size:10.5px!important; } }
+
+
+/* High-contrast night-sky copy for the homepage and primary navigation. */
+html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy > .jh-lead,
+html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy > .jh-overline,
+html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy > .jh-cyber-badge,
+html[data-theme="dark"] .public-app .nav a {
+  color: #f0e9e7 !important;
+}
+
+
+/* Contrast-safe day/night editorial actions and section markers. */
+.jyc-editorial-home.jyc-home .jh-about-kicker { font-size:11px!important; color:#594629!important; }
+.jyc-editorial-home.jyc-home .jh-section-number { font-size:11px!important; }
+.jyc-editorial-home.jyc-home .jh-cyber-badge span,
+.jyc-editorial-home.jyc-home .jh-cyber-badge b,
+.jyc-editorial-home.jyc-home .jh-logo-caption,
+.jyc-editorial-home.jyc-home .jh-status-live-tag,
+.jyc-editorial-home.jyc-home .jh-event-meta small,
+.jyc-editorial-home.jyc-home .jh-event-meta i { font-size:11px!important; }
+html:not([data-theme="dark"]) .jyc-editorial-home.jyc-home .jh-btn-primary {
+  background-color:#765f36!important; background-image:none!important; color:#fffaf0!important; border-color:#765f36!important;
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-btn-primary {
+  background-color:#e7d19b!important; background-image:none!important; color:#17142a!important; border-color:#e7d19b!important;
+}
+html[data-theme="dark"] .jyc-editorial-home.jyc-home .jh-about-kicker { color:#f0e9e7!important; }

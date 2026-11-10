@@ -429,7 +429,8 @@ const DitherVeil = ({
 
     const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     const coarsePointer = window.matchMedia?.('(pointer: coarse)').matches || window.innerWidth < 800;
-    const constrainedHardware = (navigator.hardwareConcurrency || 4) < 4 || (navigator.deviceMemory || 4) < 2;
+    const targetFrameMs = coarsePointer ? 1000 / 20 : 1000 / 24;
+    const constrainedHardware = (navigator.hardwareConcurrency || 4) < 4 || (navigator.deviceMemory || 4) < 2 || Boolean(navigator.connection?.saveData);
     if (reducedMotion || constrainedHardware) {
       container.dataset.static = '1';
       return () => { delete container.dataset.static; };
@@ -554,6 +555,7 @@ const DitherVeil = ({
     let visible = true;
     let raf = 0;
     let last = performance.now();
+    let lastFrameAt = -Infinity;
     let trailUntil = 0;
     let presence = 0;
     let drift = 0;
@@ -639,6 +641,11 @@ const DitherVeil = ({
 
     const frame = now => {
       raf = 0;
+      if (!reducedMotion && now - lastFrameAt < targetFrameMs) {
+        raf = requestAnimationFrame(frame);
+        return;
+      }
+      lastFrameAt = now;
       const s = settingsRef.current;
       if (!s) return;
       const dt = Math.min(0.05, Math.max(0, (now - last) / 1000));

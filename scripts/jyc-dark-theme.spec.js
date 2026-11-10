@@ -17,6 +17,7 @@ async function waitForJyc(page, route) {
   await page.locator('.public-app').waitFor({ state: 'visible', timeout: 25000 });
   await page.waitForFunction(() => document.documentElement.dataset.jycContentReady === 'true', null, { timeout: 20000 });
   await page.evaluate(() => document.fonts?.ready.then(() => true));
+  await expect(page.locator('.public-app h1').first()).toBeVisible({timeout:15000});
 }
 
 async function themeSnapshot(page) {
@@ -108,13 +109,13 @@ test.describe('JYC shared warm-paper day theme', () => {
         await page.addInitScript(() => localStorage.setItem('jyc-theme', 'light'));
         await waitForJyc(page, route);
         const light = await themeSnapshot(page);
-        expect(light.canvas).toBe('#f5f1e8');
-        expect(light.accent).toBe('#625889');
+        expect(light.canvas).toBe('#f1eadb');
+        expect(light.accent).toBe('#705b3a');
         if (route === '/') {
-          expect(light.homeBackground).toBe('#f5f1e8');
-          expect(light.homeSurface).toBe('#fffdf8');
-          expect(light.homeInk).toBe('#191827');
-          expect(light.homeMuted).toBe('#5f5c6b');
+          expect(light.homeBackground).toBe('#f1eadb');
+          expect(light.homeSurface).toBe('#fffaf0');
+          expect(light.homeInk).toBe('#211d16');
+          expect(light.homeMuted).toBe('#695d4a');
         }
         expect(light.bodyBackgroundImage).toContain('radial-gradient');
         expect(light.headingVisible, `${route} must expose a visible page heading in day mode`).toBe(true);
@@ -137,7 +138,7 @@ test('theme toggle switches day/night, persists the preference and exposes its s
   await toDay.click();
   const toNight = page.getByRole('button', { name: /switch to night theme/i });
   await expect(toNight).toHaveAttribute('aria-pressed', 'false');
-  await expect.poll(() => page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--jyc-canvas').trim())).toBe('#f5f1e8');
+  await expect.poll(() => page.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--jyc-canvas').trim())).toBe('#f1eadb');
   await expect.poll(() => page.evaluate(() => localStorage.getItem('jyc-theme'))).toBe('light');
   await toNight.click();
   await expect(page.getByRole('button', { name: /switch to day theme/i })).toHaveAttribute('aria-pressed', 'true');

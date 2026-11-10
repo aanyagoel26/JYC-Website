@@ -1,7 +1,7 @@
 {
   "name": "jyc-website",
   "private": true,
-  "version": "64.5.16",
+  "version": "64.5.17",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -53,7 +53,8 @@
     "qa:club-roster": "node scripts/qa-club-member-roster.mjs",
     "qa:team-exclusions": "node scripts/qa-team-exclusions.mjs",
     "qa:nsoc-effects": "node scripts/qa-nsoc-editorial-effects.mjs",
-    "qa:campus-marquee": "node scripts/qa-campus-marquee.mjs"
+    "qa:campus-marquee": "node scripts/qa-campus-marquee.mjs",
+    "qa:search-refresh": "node scripts/qa-search-refresh.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.118.0",

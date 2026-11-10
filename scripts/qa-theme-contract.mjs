@@ -8,6 +8,7 @@ const entry=read('src/styles/public-entry.css');
 const system=read('src/styles/public-system.css');
 const contract=read('src/styles/jyc-theme-contract.css');
 const atmosphere=read('src/styles/jyc-atmosphere.css');
+const celestial=read('src/styles/jyc-celestial-refresh.css');
 const checks=[];
 const check=(name,ok,detail='')=>{checks.push({name,ok,detail});console.log((ok?'PASS':'FAIL')+': '+name+(detail?' — '+detail:''));};
 
@@ -17,6 +18,8 @@ const atmosphereImport=main.indexOf("import './styles/jyc-atmosphere.css';");
 check('canonical theme contract is imported',contractImport>=0);
 check('theme contract loads after team and other global CSS',contractImport>teamImport&&contractImport>main.indexOf("import './styles/jyc-cohesive-experience.css';"));
 check('immersive atmosphere loads after the canonical theme contract',atmosphereImport>contractImport&&atmosphereImport>=0);
+const celestialImport=main.indexOf("import './styles/jyc-celestial-refresh.css';");
+check('Celestial Dawn final theme layer loads after the atmosphere layer',celestialImport>atmosphereImport&&celestialImport>=0);
 check('dark atmosphere has layered stars and nebula lighting',atmosphere.includes('html[data-theme="dark"] body::after')&&atmosphere.includes('jyc-star-drift')&&atmosphere.includes('rgba(104,91,176,.13)'));
 check('light atmosphere has pearl, champagne and violet glow layers',atmosphere.includes('html[data-theme="light"] body::after')&&atmosphere.includes('rgba(239,205,144,.22)')&&atmosphere.includes('rgba(171,151,207,.13)'));
 check('both modes add depth through glass, card lift and emblem bloom',atmosphere.includes('backdrop-filter: blur(22px)')&&atmosphere.includes('translateY(-5px)')&&atmosphere.includes('.jyc-emblem-seal-container'));
@@ -26,8 +29,9 @@ check('public entry does not re-import nested pro redesign',!entry.includes("@im
 check('public system remains the single historical layer aggregator',system.includes("@import '../jyc-design-upgrades.css';")&&system.includes("@import './jyc-pro-redesign.css';"));
 check('obsolete dark red palette override is removed from public system',!system.includes('--champagne:#A82420')&&!system.includes('--accent:#ef4444'));
 check('light public-system accent no longer defaults to red',system.includes('--jyc-accent: #625889;')&&!system.includes('--jyc-accent: #A82420;'));
-check('light palette uses warm paper, violet and champagne tokens',contract.includes('--jyc-canvas: #f5f1e8;')&&contract.includes('--jyc-accent: #625889;')&&contract.includes('--jyc-gold: #76572b;'));
-check('dark palette uses midnight, lavender and champagne tokens',contract.includes('--jyc-canvas: #080d1c;')&&contract.includes('--jyc-accent: #c8bcff;')&&contract.includes('--jyc-gold: #e7d19b;'));
+check('effective light palette uses parchment, ivory and accessible antique gold',celestial.includes('--jyc-canvas:#f1eadb !important')&&celestial.includes('--jyc-surface:#fffaf0 !important')&&celestial.includes('--jyc-gold:#765f36 !important'));
+check('effective light text and muted tokens preserve WCAG AA contrast',celestial.includes('--jyc-text:#29251c !important')&&celestial.includes('--jyc-muted:#695d4a !important')&&celestial.includes('--jyc-focus:#765f36 !important'));
+check('effective night palette retains midnight, lavender and champagne tokens',celestial.includes('--jyc-canvas:#080d1c !important')&&celestial.includes('--jyc-accent:#c8bcff !important')&&celestial.includes('--jyc-gold:#e7d19b !important'));
 check('legacy red and cyan aliases resolve through the active JYC accent',contract.includes('--accent-red: var(--jyc-accent);')&&contract.includes('--tech-cyan: var(--jyc-accent);')&&contract.includes('--tech-crimson: var(--jyc-accent);'));
 check('legacy surfaces and text aliases resolve through canonical tokens',contract.includes('--bg-card: var(--jyc-surface);')&&contract.includes('--text-primary: var(--jyc-text-strong);')&&contract.includes('--text-muted: var(--jyc-muted);'));
 check('legacy cream and ivory aliases remain readable on dark surfaces',contract.includes('--cream: var(--jyc-text-strong);')&&contract.includes('--ivory: #f7f5ff;'));
