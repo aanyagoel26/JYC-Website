@@ -404,7 +404,7 @@ export function JYCEditorialHome({ data }) {
 
       {/* 3D INTERACTIVE CAMPUS EXPLORER (CICR & INNOVATION INSPIRED) */}
       <div className="jh-container">
-        <DeferredMount fallback={<div aria-hidden="true" style={{ minHeight: 420 }} />}>
+        <DeferredMount fallback={<div className="jh-deferred-placeholder jh-deferred-spotlight-placeholder" aria-hidden="true" />}>
           <Suspense fallback={<div aria-hidden="true" style={{ minHeight: 420 }} />}>
             <LazyJYCSpotlight data={data} />
           </Suspense>
@@ -412,7 +412,7 @@ export function JYCEditorialHome({ data }) {
       </div>
 
       <div className="jh-container">
-        <DeferredMount fallback={<div aria-hidden="true" style={{ minHeight: 480 }} />}>
+        <DeferredMount fallback={<div className="jh-deferred-placeholder jh-deferred-explorer-placeholder" aria-hidden="true" />}>
           <Suspense fallback={<div aria-hidden="true" style={{ minHeight: 480 }} />}>
             <LazyJYC3DInteractiveExplorer />
           </Suspense>
