@@ -79,7 +79,8 @@ test.describe('JYC shared day/night theme contract', () => {
       test(`night-sky theme stays readable — ${viewport.name} — ${route}`, async ({ page }) => {
         await page.setViewportSize({ width: viewport.width, height: viewport.height });
         await page.addInitScript(() => localStorage.setItem('jyc-theme', 'dark'));
-        await waitForJyc(page, route);
+        await waitForJyc(page, route + (route.includes('?')?'&':'?') + 'jyc-theme=dark');
+        await expect(page.locator('html')).toHaveAttribute('data-theme','dark');
         const dark = await themeSnapshot(page);
         expect(dark.canvas).toBe('#080d1c');
         expect(dark.accent).toBe('#c8bcff');
@@ -107,7 +108,8 @@ test.describe('JYC shared warm-paper day theme', () => {
       test(`day theme stays readable — ${viewport.name} — ${route}`, async ({ page }) => {
         await page.setViewportSize({ width: viewport.width, height: viewport.height });
         await page.addInitScript(() => localStorage.setItem('jyc-theme', 'light'));
-        await waitForJyc(page, route);
+        await waitForJyc(page, route + (route.includes('?')?'&':'?') + 'jyc-theme=light');
+        await expect(page.locator('html')).toHaveAttribute('data-theme','light');
         const light = await themeSnapshot(page);
         expect(light.canvas).toBe('#f1eadb');
         expect(light.accent).toBe('#705b3a');
