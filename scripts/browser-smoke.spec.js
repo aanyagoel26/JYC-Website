@@ -565,7 +565,8 @@ test('homepage renders the official emblem and a magnetic activity Bento', async
   await page.goto(base, { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'homepage identity and activity design');
   await expect(page.locator('.jh-hero-webgl-stage-wrap .jyc-hero-emblem-stage')).toBeVisible();
-  const crest = page.getByRole('img', { name: 'JIIT Youth Club crest' });
+  await expect(page.getByRole('img', { name: 'JIIT Youth Club crest' })).toBeVisible();
+  const crest = page.locator('.jyc-emblem-logo-img');
   await expect(crest).toBeVisible();
   await expect.poll(() => crest.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
 
