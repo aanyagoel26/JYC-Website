@@ -44,4 +44,18 @@ assert.ok(!main.includes('HistoryTeaser'), 'The removed HistoryTeaser component 
 assert.ok(main.includes('JYCBestOf'));
 assert.ok(main.includes('function Achievements({data})'));
 
-console.log('Public route completeness contract: PASS (history, achievements, best-of-jyc)');
+
+const about = main.slice(main.indexOf('function About('), main.indexOf('function Clubs(', main.indexOf('function About(')));
+for (const [label, id] of [
+  ['Why JYC', 'about-why'],
+  ['Communities', 'about-families'],
+  ['How it works', 'about-structure'],
+  ['Campus life', 'about-programmes'],
+  ['Our story', 'history']
+]) {
+  assert.ok(about.includes(`href="#${id}"`), `About section navigation must link to ${label}`);
+  assert.ok(about.includes(`id="${id}"`), `About page must expose the ${label} section target`);
+}
+assert.ok(about.includes('aria-label="About JYC sections"'), 'About section navigation must have an accessible name');
+
+console.log('Public route completeness contract: PASS (history, achievements, best-of-jyc, About section navigation)');

@@ -71,3 +71,13 @@
 @media(prefers-reduced-motion:reduce){
  .archive-page .archive-story-photo img,.archive-page .archive-club,.archive-page .archive-event{transition:none}
 }
+
+
+/* About JYC: compact, accessible in-page navigation for the long-form story. */
+.about-page .about-contents-nav{position:relative;z-index:3;display:flex;align-items:center;gap:8px;max-width:100%;margin:14px 0 22px;padding:8px;overflow-x:auto;overscroll-behavior-inline:contain;border:1px solid var(--jyc-line,rgba(21,32,48,.14));border-radius:999px;background:color-mix(in srgb,var(--jyc-surface,#fff) 88%,transparent);scrollbar-width:thin;-webkit-overflow-scrolling:touch}
+.about-page .about-contents-nav a{display:inline-flex;flex:0 0 auto;align-items:center;min-height:40px;padding:0 15px;border-radius:999px;color:var(--jyc-text,var(--jyc-text-strong));font-size:12px;font-weight:700;text-decoration:none;transition:background-color .2s ease,color .2s ease,transform .2s ease}
+.about-page .about-contents-nav a:hover{background:color-mix(in srgb,var(--jyc-accent) 12%,transparent);transform:translateY(-1px)}
+.about-page .about-contents-nav a:focus-visible{outline:3px solid var(--jyc-gold,#bf9c6f);outline-offset:2px}
+.about-page :is(#about-why,#about-families,#about-structure,#about-programmes,#about-vision,#history){scroll-margin-top:104px}
+@media(max-width:680px){.about-page .about-contents-nav{margin:8px 0 16px;border-radius:18px}.about-page .about-contents-nav a{min-height:44px;padding-inline:13px;font-size:11px}}
+@media(prefers-reduced-motion:reduce){.about-page .about-contents-nav a{transition:none!important}}
