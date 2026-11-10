@@ -116,7 +116,7 @@ Do not mark an item complete from a source-code assertion alone. A visual item n
 ## 9. Micro-interactions, accessibility and responsive polish
 
 - [~] 81. Provide visible keyboard focus on all interactive elements.
-- [ ] 82. Verify WCAG AA contrast for text and interface controls across both themes.
+- [~] 82. Verify WCAG AA contrast for text and interface controls across both themes (the earlier seven-route Lighthouse run passed its colour-contrast audit; repeat across both themes and manual states).
 - [~] 83. Maintain comfortable mobile touch targets.
 - [~] 84. Give buttons tactile press feedback.
 - [~] 85. Confirm copy/share actions with clear feedback.
