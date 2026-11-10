@@ -10,8 +10,6 @@
 .jyc-emblem-orbit::before{inset:7%}.jyc-emblem-orbit::after{inset:-5%;border-style:dashed;opacity:.52}
 .jyc-emblem-orbit.orbit-inner{inset:15%;border-color:rgba(200,188,255,.18);transform:rotate(34deg) scaleY(.9)}
 .jyc-emblem-orbit.orbit-equator{inset:1% 9%;border-color:rgba(231,209,155,.11);transform:rotate(58deg) scaleY(.72)}
-@media(max-width:760px){.jyc-hero-emblem-stage{width:min(100%,min(82vw,400px))}.jyc-emblem-card-3d{width:74%}.emblem-context-top{top:10%;left:0;right:0;padding:9px 10px;gap:5px;font-size:8px}.emblem-context-top>span{gap:5px}.emblem-context-bottom{bottom:8%;min-width:208px;padding:9px 12px}.emblem-context-bottom b{font-size:10px}.emblem-context-bottom small{font-size:7px}.jyc-emblem-orbit{inset:8% 4%}.jyc-emblem-orbit.orbit-inner{inset:18% 11%}}
-@media(max-width:390px){.jyc-hero-emblem-stage{width:min(100%,360px)}.emblem-context-top{font-size:7px;padding:8px}.emblem-context-bottom{min-width:190px}.jyc-emblem-card-3d{width:71%}}
-@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){.jyc-emblem-orbit.orbit-outer{animation:jycOrbitDrift 46s linear infinite}.jyc-emblem-orbit.orbit-inner{animation:jycOrbitDrift 64s linear infinite reverse}}
+@media(max-width:760px){.jyc-hero-emblem-stage{width:min(100%,min(82vw,400px))}.jyc-emblem-card-3d{width:74%}@media(max-width:390px){.jyc-hero-emblem-stage{width:min(100%,360px)}@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){.jyc-emblem-orbit.orbit-outer{animation:jycOrbitDrift 46s linear infinite}.jyc-emblem-orbit.orbit-inner{animation:jycOrbitDrift 64s linear infinite reverse}}
 @keyframes jycOrbitDrift{to{transform:rotate(342deg) scaleY(.94)}}
 @media(prefers-reduced-motion:reduce){.jyc-emblem-orbit,.jyc-emblem-card-3d{animation:none!important;transition:none!important;transform:none!important}.jyc-emblem-glow-backing{filter:none!important}}
