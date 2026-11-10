@@ -138,7 +138,6 @@ assert('team portrait map is explicit, shared and non-empty',teamPhotoEntries.le
 assert('every mapped team portrait is a committed local WebP',invalidTeamPhotoPaths.length===0,invalidTeamPhotoPaths.map(x=>x.name+': '+x.url).join(', '));
 assert('team flip cards use lazy responsive portraits and safe public profile links',mainSource.includes('className="team-photo-editorial"')&&mainSource.includes('loading="lazy" decoding="async" sizes=')&&mainSource.includes('safeExternalUrl(m.linkedin||m.linkedinUrl||m.linkedin_url||m.socials?.linkedin)')&&mainSource.includes('team-back-content'));
 const responsivePhotoSource=fs.readFileSync('src/jyc-responsive-photo.jsx','utf8');
-const productionMediaSource=fs.readFileSync('scripts/optimize-production-media.mjs','utf8');
 
 const teamThemeSource=fs.readFileSync('src/jyc-logo-final-theme.css','utf8');
 const publicSystemSource=fs.readFileSync('src/styles/public-system.css','utf8');
