@@ -5,6 +5,7 @@ const main = fs.readFileSync('src/main.jsx', 'utf8');
 const home = fs.readFileSync('src/jyc-editorial-home.jsx', 'utf8');
 const config = fs.readFileSync('src/lib/site-config.js', 'utf8');
 const css = fs.readFileSync('src/styles/jyc-public-pages-master-finish.css', 'utf8');
+const responsivePhoto = fs.readFileSync('src/jyc-responsive-photo.jsx', 'utf8');
 
 const checks = [
   ['student coordinators are not automatically classified as faculty', main.includes('/faculty|faculty advisor|faculty coordinator|staff advisor|mentor/i') && !main.includes('/faculty|advisor|coordinator/i')],
@@ -25,6 +26,8 @@ const checks = [
   ['Team profiles and community navigation are touch-friendly', css.includes('.team-member-flip .flip-card__back-trigger') && css.includes('.team-hub-directory button')],
   ['all four public journeys respect reduced-motion preferences', css.includes('@media (prefers-reduced-motion:reduce)') && css.includes('.jyc-editorial-home.jyc-home')],
   ['all public page layouts include phone and tablet breakpoints', css.includes('@media (max-width:760px)') && css.includes('@media (max-width:480px)')],
+  ['dark theme kicker badges retain readable contrast on warm gold surfaces', css.includes('html[data-theme="dark"] .jyc57-page .jh-kicker b') && css.includes('color: #080d1c !important')],
+  ['generated image derivatives recover their original manifest source and emit responsive variants', responsivePhoto.includes('isGeneratedDerivative') && responsivePhoto.includes('variantSource:manifestSource') && responsivePhoto.includes('photoDerivativeUrls(variantSource,intrinsicWidth)')],
 ];
 
 let failures = 0;
