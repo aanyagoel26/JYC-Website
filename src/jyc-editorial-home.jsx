@@ -254,11 +254,10 @@ export function JYCEditorialHome({ data }) {
           <p className="jh-overline">Jaypee Institute of Information Technology, Wish Town</p>
           <h1 id="jh-title">
             <span>Find your people.</span>
-            <span>Make your mark.</span>
-            <span className="jh-title-gradient">Make campus yours.</span>
+            <span className="jh-title-gradient">Make your mark.</span>
           </h1>
           <p className="jh-lead">
-            Find a club to build with, an event to show up for, and a community that makes JIIT feel like yours.
+            Clubs, events and student communities to help you find your place at JIIT.
           </p>
           <div className="jh-actions jh-hero-actions">
             <button type="button" className="jh-btn jh-btn-primary" onClick={() => nav('/clubs')}>
