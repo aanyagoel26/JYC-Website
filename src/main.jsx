@@ -17,6 +17,7 @@ import './styles/jyc-depth-motion.css';
 import './styles/jyc-nsoc-editorial-effects.css';
 import {JYCEditorialSystem} from './jyc-editorial-system.jsx';
 import {JYC_HUB_CONTENT, JYC_HUB_FAMILIES, hubProfile} from './v21-hub-content.js';
+import {HISTORY} from './jyc-history-page.jsx';
 import {JYC_HUB_SOURCE_REGISTRY,JYC_HUB_SOURCE_ONLY} from './jyc-hub-registry.js';
 import {JYC_ORIENTATION_FAMILIES,JYC_ORIENTATION_LAYERS,JYC_ORIENTATION_EVENTS,JYC_ORIENTATION_AT_A_GLANCE} from './jyc-orientation-insights.js';
 import {hubDetails} from './v23.6-hub-details.js';
