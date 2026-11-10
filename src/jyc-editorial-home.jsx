@@ -230,6 +230,8 @@ export function JYCEditorialHome({ data }) {
 
         {/* WebGL Dither Veil is a real mounted hero layer; the emblem remains the foreground focal point. */}
         <div className="jh-hero-visual jh-hero-webgl-stage-wrap">
+          <span className="jh-hero-stage-label" aria-hidden="true">JYC / 128</span>
+          <span className="jh-hero-stage-caption" aria-hidden="true">ONE CAMPUS · MANY COMMUNITIES</span>
           <div className="jh-hero-dither-backdrop" aria-hidden="true" />
           <JYCWebGLField />
           <div className="jh-hero-dither-layer jh-dither-mark" aria-hidden="true">
