@@ -236,38 +236,37 @@ export function JYCEditorialHome({ data }) {
       <section className="jh-hero" aria-labelledby="jh-title">
         <div className="jh-hero-copy">
           <div className="jh-cyber-badge">
-            <span className="jh-live-pulse-dot" />
-            <span>THE JIIT 128 COMMUNITY</span>
-            <b>AY 2026–27</b>
+            <span className="jh-badge-mark" aria-hidden="true" />
+            <span>JIIT Youth Club</span>
+            <b>2026–27</b>
           </div>
-          <p className="jh-overline">JAYPEE INSTITUTE OF INFORMATION TECHNOLOGY · WISH TOWN</p>
+          <p className="jh-overline">Jaypee Institute of Information Technology, Wish Town</p>
           <h1 id="jh-title">
             <span>Find your people.</span>
             <span>Make your mark.</span>
-            <em className="jh-title-gradient">At JIIT 128.</em>
+            <span className="jh-title-gradient">At JIIT 128.</span>
           </h1>
           <p className="jh-lead">
-            From clubs and competitions to performances, projects and campus traditions, JYC helps you find the people and experiences that make JIIT feel like yours.
+            Find the clubs, events and people that turn campus life into your story.
           </p>
           <div className="jh-actions jh-hero-actions">
             <button type="button" className="jh-btn jh-btn-primary" onClick={() => nav('/events')}>
-              ⚡ Explore Events <span>↗</span>
+              Explore events <span aria-hidden="true">↗</span>
             </button>
             <button type="button" className="jh-btn jh-btn-glass" onClick={() => nav('/clubs')}>
-              Explore Clubs <span>→</span>
+              Find a club <span aria-hidden="true">↗</span>
             </button>
             <button type="button" className="jh-btn jh-btn-outline" onClick={() => nav('/join-jyc')}>
-              Join JYC <span>→</span>
+              Join JYC <span aria-hidden="true">↗</span>
             </button>
           </div>
-
-
         </div>
 
-        {/* WebGL Dither Veil is a real mounted hero layer; the emblem remains the foreground focal point. */}
+        {/* The original JYC crest, OGL field and interactive emblem remain the visual anchor. */}
         <div className="jh-hero-visual jh-hero-webgl-stage-wrap">
-          <span className="jh-hero-stage-label" aria-hidden="true">JYC / 128</span>
-          <span className="jh-hero-stage-caption" aria-hidden="true">ONE CAMPUS · MANY COMMUNITIES</span>
+          <span className="jh-hero-stage-label" aria-hidden="true">JIIT 128</span>
+          <span className="jh-hero-stage-caption" aria-hidden="true">A student community, made together.</span>
+          <span className="jh-hero-frame" aria-hidden="true" />
           <div className="jh-hero-dither-backdrop" aria-hidden="true" />
           <JYCWebGLField />
           <div className="jh-hero-dither-layer jh-dither-mark" aria-hidden="true">
