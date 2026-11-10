@@ -105,15 +105,16 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{animat
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage{width:min(76%,520px)}
 }
 @media(max-width:680px){
- html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero{width:calc(100% - 32px);padding:34px 0 42px;gap:24px}
- html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-cyber-badge{min-height:34px;font-size:9px;letter-spacing:.08em;gap:8px;padding:7px 10px}
- html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-overline{margin-top:22px;font-size:9px;letter-spacing:.11em}
- html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero h1{max-width:12ch;margin:14px 0 18px!important;font-size:clamp(44px,12vw,68px)!important;line-height:.96!important}
- html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-lead{font-size:15px;line-height:1.68}
- html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-top:22px}
- html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-actions .jh-btn{min-width:0;min-height:50px;padding:10px 11px;font-size:12px}
- html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-actions .jh-btn:nth-child(3){grid-column:1/-1}
- html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{aspect-ratio:1;max-height:none;border-radius:26px}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero{display:grid!important;grid-template-columns:minmax(0,1fr)!important;width:calc(100% - 32px)!important;min-height:0!important;padding:34px 0 42px!important;margin:0 auto!important;gap:24px!important}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy{display:block!important;position:relative!important;z-index:3!important;width:100%!important;max-width:760px!important;min-width:0!important}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-cyber-badge{max-width:none!important;min-height:34px!important;font-size:9px!important;letter-spacing:.08em!important;gap:8px!important;padding:7px 10px!important}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-overline{display:block!important;margin:22px 0 0!important;font-size:9px!important;letter-spacing:.11em!important}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero h1{max-width:12ch!important;margin:14px 0 18px!important;font-size:clamp(44px,12vw,68px)!important;line-height:.96!important}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-lead{display:block!important;max-width:48ch!important;margin:0!important;font-size:15px!important;line-height:1.68!important;-webkit-line-clamp:unset!important;overflow:visible!important}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important;margin-top:22px!important}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-actions .jh-btn{min-width:0!important;min-height:50px!important;padding:10px 11px!important;font-size:12px!important}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-actions .jh-btn:nth-child(3){grid-column:1/-1!important}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{position:relative!important;inset:auto!important;top:auto!important;right:auto!important;width:100%!important;height:auto!important;min-width:0!important;min-height:0!important;max-width:none!important;max-height:none!important;padding:0!important;aspect-ratio:1!important;overflow:visible!important;opacity:1!important;pointer-events:auto!important;border-radius:26px!important}
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-label{top:14px;left:15px;font-size:8px}
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-caption{right:15px;bottom:15px;font-size:7px}
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage{width:min(86%,360px)}
@@ -123,7 +124,7 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{animat
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual .jyc-emblem-controls-bar{bottom:12px}
 }
 @media(max-width:380px){
- html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero h1{font-size:clamp(40px,11.5vw,48px)!important}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero h1{font-size:clamp(38px,11.5vw,44px)!important}
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-actions{grid-template-columns:1fr}
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-actions .jh-btn:nth-child(3){grid-column:auto}
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{border-radius:20px}
