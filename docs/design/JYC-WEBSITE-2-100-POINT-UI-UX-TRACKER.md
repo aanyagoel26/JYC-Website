@@ -71,7 +71,7 @@ Do not mark an item complete from a source-code assertion alone. A visual item n
 - [~] 46. Use a refined animated navigation underline/active treatment.
 - [~] 47. Apply gentle image zoom only to selected photo cards.
 - [~] 48. Reserve shimmer for selected featured-event states.
-- [ ] 49. Provide consistent, non-disruptive route transitions.
+- [~] 49. Provide consistent, non-disruptive route transitions (a transform/opacity route-stage transition is now implemented; browser verification remains).
 - [~] 50. Respect reduced-motion preferences with usable static alternatives.
 
 ## 6. Cards, clubs, events and campus content
@@ -151,5 +151,6 @@ The existing branch already contains a substantial hero, theme, atmosphere, card
 - The responsive crest candidate is preloaded with matching `imagesrcset`/`imagesizes`; OGL and Dither initialization is deferred beyond the initial hero paint.
 - The More JYC sheet now includes a persistent Pause/Resume decorative motion control; the ambient canvas, hero WebGL/Dither and interactive Bento respond to the preference.
 - A small reusable grain texture now adds subtle film/paper texture with separate light/dark blending.
+- Route changes now use a short transform/opacity entrance transition, disabled for OS reduced-motion and the user pause setting.
 
 **Release rule:** `[~]` is not a pass. Promote an item to `[x]` only after the relevant current-head CI/browser/Lighthouse checks and any required manual visual, keyboard, touch or real-device review pass. PR #12 must remain unmerged until the release gates are green.
