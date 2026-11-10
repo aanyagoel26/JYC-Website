@@ -72,6 +72,7 @@ assert.ok(celestial.includes('--jyc-champagne:#765f36 !important') && celestial.
 assert.ok(webglField.includes("if (lowPower || coarse) { host.dataset.webgl = 'fallback'; return; }") &&
   dither.includes('(navigator.hardwareConcurrency || 4) < 4') && dither.includes('(navigator.deviceMemory || 4) < 2') &&
   ambientMotion.includes('(navigator.hardwareConcurrency || 8) <= 8') && ambientMotion.includes('(navigator.deviceMemory || 8) < 8') &&
-  webglField.includes('(navigator.hardwareConcurrency || 8) <= 8') && webglField.includes('(navigator.deviceMemory || 8) < 8'),
-  'The full-page field and ambient canvas must use conservative hardware fallbacks while the hero Dither keeps its low-memory fallback');
+  webglField.includes('cores <= 4') && webglField.includes('memory < 4') && webglField.includes('const reducedQuality') &&
+  webglField.includes('reducedQuality || coarse ? 1.1 : 1.35'),
+  'The full-page field and ambient canvas use conservative fallbacks; the hero OGL shader uses a separate reduced-quality tier and static fallback');
 console.log('Visual quality contract: PASS (type, collage, reduced motion, image fallback, live counts, motion budget, theme contrast)');

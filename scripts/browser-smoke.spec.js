@@ -552,13 +552,12 @@ test('About family cards open the matching filtered clubs directory', async ({ p
   await expect(page.locator('.results-line')).toContainText(/communities found/);
 });
 
-test('Dither Veil falls back from the compact AVIF to the official WebP logo', async ({ page }) => {
-  await page.route('**/assets/jyc-logo-medium.avif', route => route.abort());
+test('homepage hero uses one accessible crest and does not mount duplicate visual demos', async ({ page }) => {
   await page.goto(base, { waitUntil: 'domcontentloaded' });
-  await waitForAppMount(page, 'Dither Veil logo fallback');
-  const logo = page.locator('.jh-hero-dither-layer img.dither-veil__fallback');
-  await expect(logo).toHaveAttribute('src', '/assets/jyc-logo.webp');
-  await expect.poll(() => logo.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+  await waitForAppMount(page, 'single crest hero');
+  await expect(page.getByRole('img', { name: 'JIIT Youth Club crest' })).toBeVisible();
+  await expect(page.locator('.jh-hero-dither-layer, .jyc-emblem-canvas, .jyc-emblem-controls-bar, model-viewer')).toHaveCount(0);
+  await expect(page.locator('script[data-jyc-model-viewer]')).toHaveCount(0);
 });
 
 test('homepage renders the official emblem and a magnetic activity Bento', async ({ page }) => {
@@ -566,11 +565,8 @@ test('homepage renders the official emblem and a magnetic activity Bento', async
   await page.goto(base, { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'homepage identity and activity design');
   await expect(page.locator('.jh-hero-webgl-stage-wrap .jyc-hero-emblem-stage')).toBeVisible();
-  await expect(page.locator('.jh-hero-webgl-stage-wrap canvas.jyc-emblem-canvas')).toHaveCount(1);
-  const ditherLogo = page.locator('.jh-hero-dither-layer img.dither-veil__fallback');
-  await expect(ditherLogo).toHaveAttribute('src', '/assets/jyc-logo-medium.avif');
-  await expect.poll(() => ditherLogo.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
-  const crest = page.getByRole('img', { name: 'JIIT Youth Club Crest' });
+  await expect(page.getByRole('img', { name: 'JIIT Youth Club crest' })).toBeVisible();
+  const crest = page.locator('.jyc-emblem-logo-img');
   await expect(crest).toBeVisible();
   await expect.poll(() => crest.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
 
@@ -619,29 +615,16 @@ test('homepage renders the official emblem and a magnetic activity Bento', async
   expect(result.storyTiles).toBeLessThanOrEqual(3);
 });
 
-test('hero spatial GLB is lazy-loaded and preserves mobile page scrolling', async ({ page }) => {
-  await page.route('https://ajax.googleapis.com/ajax/libs/model-viewer/4.4.0/model-viewer.min.js', route => route.fulfill({
-    status: 200,
-    contentType: 'text/javascript',
-    body: "if (!customElements.get('model-viewer')) customElements.define('model-viewer', class extends HTMLElement {});"
-  }));
+test('hero crest stays self-contained and preserves mobile page scrolling', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
   await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
-  await waitForAppMount(page, 'spatial hero model');
+  await waitForAppMount(page, 'self-contained hero crest');
   const stage = page.locator('.jh-hero-webgl-stage-wrap .jyc-hero-emblem-stage');
   await expect(stage).toBeVisible();
   await expect(stage).toHaveCSS('touch-action', 'pan-y');
-  await expect(page.locator('model-viewer.jyc-hero-model-viewer')).toHaveCount(0);
-
-  await page.getByRole('button', { name: /3D MESH/ }).click();
-  const viewer = page.locator('model-viewer.jyc-hero-model-viewer');
-  await expect(viewer).toBeVisible();
-  await expect(viewer).toHaveAttribute('src', '/models/jyc-spatial.glb');
-  await expect(viewer).toHaveAttribute('touch-action', 'pan-y');
-  await expect.poll(() => page.locator('script[data-jyc-model-viewer]').getAttribute('src')).toContain('/4.4.0/');
-  const modelResponse = await page.request.get(base + '/models/jyc-spatial.glb');
-  expect(modelResponse.ok(), 'the validated spatial GLB is served by the application').toBe(true);
-  const modelBytes = await modelResponse.body();
-  expect(modelBytes.subarray(0, 4).toString(), 'the served model has a GLB signature').toBe('glTF');
+  await expect(page.locator('model-viewer, script[data-jyc-model-viewer], .jyc-emblem-controls-bar')).toHaveCount(0);
+  const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
+  expect(overflow, 'the crest stage must not introduce horizontal overflow').toBe(false);
 });
 
 test('gallery archive uses deterministic responsive image frames', async ({ page }) => {
@@ -1216,21 +1199,20 @@ test('homepage hero uses the official JYC emblem without a continuous photo wall
   await waitForAppMount(page, 'JYC hero identity');
   await expect(page.locator('.jh-hero-copy h1')).toBeVisible();
   await expect(page.locator('.jh-hero-webgl-stage-wrap .jyc-hero-emblem-stage')).toBeVisible();
-  await expect(page.locator('.jh-hero-webgl-stage-wrap canvas.jyc-emblem-canvas')).toHaveCount(1);
-  await expect(page.getByRole('img', { name: 'JIIT Youth Club Crest' })).toBeVisible();
+  await expect(page.getByRole('img', { name: 'JIIT Youth Club crest' })).toBeVisible();
   await expect(page.locator('.jh-hero-drift-wall')).toHaveCount(0);
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1);
   expect(overflow).toBe(false);
 });
 
 
-test('hero keeps the official logo visible when the original image is unavailable', async ({ page }) => {
-  await page.route('**/JYC%20Logo(4).png', route => route.abort('failed'));
+test('hero crest falls back to the optimized WebP when its AVIF source is unavailable', async ({ page }) => {
+  await page.route('**/assets/jyc-logo*.avif', route => route.abort('failed'));
   await page.goto(base + '/', { waitUntil: 'domcontentloaded' });
-  await waitForAppMount(page, 'official emblem logo fallback');
-  const fallback = page.getByRole('img', { name: 'JIIT Youth Club Crest' });
-  await expect(fallback).toHaveAttribute('src', '/assets/jyc-logo.avif');
-  await expect.poll(() => fallback.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
+  await waitForAppMount(page, 'optimized emblem logo fallback');
+  const logo = page.locator('.jyc-emblem-logo-img');
+  await expect.poll(() => logo.getAttribute('src')).toBe('/assets/jyc-logo.webp');
+  await expect.poll(() => logo.evaluate(img => img.complete && img.naturalWidth > 0)).toBe(true);
 });
 
 

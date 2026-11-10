@@ -8,8 +8,6 @@ const models = [
 const errors = [];
 const list = value => Array.isArray(value) ? value : [];
 const fail = (file, message) => errors.push(`${file}: ${message}`);
-const heroSource = fs.readFileSync('src/components/JYCHeroWebGLEmblem.jsx', 'utf8');
-const heroCss = fs.readFileSync('src/components/JYCHeroWebGLEmblem.css', 'utf8');
 const botSource = fs.readFileSync('src/jyc-bot.jsx', 'utf8');
 const vercelConfig = JSON.parse(fs.readFileSync('vercel.json', 'utf8'));
 const csp = (vercelConfig.headers || []).flatMap(entry => entry.headers || []).find(header => header.key === 'Content-Security-Policy')?.value || '';
@@ -190,10 +188,9 @@ function inspectModel(model) {
   }
 }
 
-if (!heroSource.includes("https://ajax.googleapis.com/ajax/libs/model-viewer/4.4.0/model-viewer.min.js") || !heroSource.includes("window.customElements.whenDefined('model-viewer')")) fail('model-viewer', 'The spatial GLB viewer must lazy-load the pinned Google model-viewer web component.');
-if (!heroSource.includes('src={MODEL_URL}') || !heroSource.includes('poster="/assets/jyc-logo.avif"')) fail('model-viewer', 'The viewer must point to the validated GLB and an existing poster asset.');
-if (!heroSource.includes('touch-action="pan-y"') || !/\.jyc-hero-emblem-stage\s*\{[^}]*touch-action:\s*pan-y\s*;/s.test(heroCss)) fail('model-viewer', 'The model viewer and its parent stage must preserve vertical page scrolling while allowing horizontal orbit gestures.');
-if (!botSource.includes('https://ajax.googleapis.com/ajax/libs/model-viewer/4.4.0/model-viewer.min.js')) fail('model-viewer', 'The assistant and hero must share the same pinned model-viewer version.');
+if (!botSource.includes("https://ajax.googleapis.com/ajax/libs/model-viewer/4.4.0/model-viewer.min.js")) fail('model-viewer', 'The assistant must lazy-load the pinned Google model-viewer web component.');
+if (!botSource.includes('src="/models/jyc-spatial.glb"') || !botSource.includes('poster="/assets/jyc-logo-48.avif"')) fail('model-viewer', 'The assistant viewer must point to the validated GLB and its existing poster asset.');
+if (!botSource.includes('disable-zoom disable-pan') || !botSource.includes("'(pointer: coarse)'") || !botSource.includes("'(prefers-reduced-motion: reduce)'") || !botSource.includes('navigator.connection?.saveData')) fail('model-viewer', 'The assistant viewer must avoid touch/reduced-motion/save-data devices and preserve page navigation.');
 if (!csp.includes('https://ajax.googleapis.com') || !csp.includes('https://www.gstatic.com') || !csp.includes("'wasm-unsafe-eval'")) fail('model-viewer', 'CSP must permit the pinned viewer, Draco decoder resources and WebAssembly compilation.');
 
 for (const model of models) inspectModel(model);

@@ -143,7 +143,7 @@ test.describe('JYC motion system', () => {
     }
   });
 
-  test('homepage depth animations run when motion is allowed and stop for reduced motion', async ({ page }) => {
+  test('homepage keeps the crest calm while ambient motion respects reduced motion', async ({ page }) => {
     await page.addInitScript(() => { Object.defineProperty(navigator,'hardwareConcurrency',{value:16,configurable:true}); Object.defineProperty(navigator,'deviceMemory',{value:16,configurable:true}); Object.defineProperty(navigator,'connection',{value:{saveData:false},configurable:true}); });
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.emulateMedia({ reducedMotion: 'no-preference' });
@@ -152,7 +152,7 @@ test.describe('JYC motion system', () => {
     const ambient = page.locator('.jyc-ambient-canvas');
     await expect(emblem).toBeVisible();
     await expect(ambient).toBeVisible();
-    await expect.poll(() => emblem.evaluate(node => getComputedStyle(node).animationName)).toBe('emblemPulse');
+    await expect.poll(() => emblem.evaluate(node => getComputedStyle(node).animationName)).toBe('none');
     await expect.poll(() => ambient.evaluate(node => getComputedStyle(node).display)).not.toBe('none');
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await expect.poll(() => emblem.evaluate(node => getComputedStyle(node).animationName)).toBe('none');

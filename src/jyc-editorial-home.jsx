@@ -7,7 +7,6 @@ import { rankDiverseJycPhotos } from './jyc-photo-intelligence.js';
 import { ResponsivePhoto } from './jyc-responsive-photo.jsx';
 import { JYCNowStrip } from './jyc-now.jsx';
 import { JYCCampusMarquee } from './components/JYCCampusMarquee.jsx';
-const LazyDitherVeil = lazy(() => import('./react-bits/DitherVeil.jsx'));
 const LazyJYCWebGLField = lazy(() => import('./components/JYCWebGLField.jsx').then(m => ({ default: m.JYCWebGLField })));
 const LazyMagicBento = lazy(() => import('./components/react-bits/MagicBento.jsx'));
 const LazyJYC3DInteractiveExplorer = lazy(() => import('./components/JYC3DInteractiveExplorer.jsx').then(m => ({ default: m.JYC3DInteractiveExplorer })));
@@ -17,19 +16,7 @@ import './components/JYCHeroWebGLEmblem.css';
 import './jyc-editorial-home.css';
 import './styles/jyc-editorial-motion-system.css';
 import './styles/jyc-home-hero-finish.css';
-
-const ORIGINAL_LOGO = '/JYC%20Logo(4).png';
-const FALLBACK = import.meta.env.PROD ? '/assets/jyc-logo.webp' : ORIGINAL_LOGO;
-const DITHER_SOURCE = import.meta.env.PROD ? '/assets/jyc-logo-medium.avif' : FALLBACK;
-const handleHeroLogoFallback = event => {
-  const image = event.currentTarget;
-  image.srcset = '';
-  const candidates = [FALLBACK, ORIGINAL_LOGO];
-  let next = Number(image.dataset.logoFallbackStage || 0);
-  while (next < candidates.length && new URL(candidates[next], window.location.href).href === image.src) next += 1;
-  if (next < candidates.length) { image.dataset.logoFallbackStage = String(next + 1); image.src = candidates[next]; }
-  else image.hidden = true;
-};
+import './styles/jyc-home-hero-art-direction.css';
 
 function DeferredMount({ children, fallback, rootMargin = '720px 0px' }) {
   const hostRef = useRef(null);
@@ -173,7 +160,7 @@ function LazyActivityBento({ activities, nav }) {
 
 export function JYCEditorialHome({ data }) {
   const nav = useNavigate();
-  const [ditherReady, setDitherReady] = useState(false);
+  const [heroFieldReady, setHeroFieldReady] = useState(false);
   const [motionPaused, setMotionPaused] = useState(() => document.documentElement.dataset.jycMotion === 'paused');
   useEffect(() => {
     const onMotionPreference = () => setMotionPaused(document.documentElement.dataset.jycMotion === 'paused');
@@ -184,15 +171,15 @@ export function JYCEditorialHome({ data }) {
     const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
     const coarse = window.matchMedia?.('(pointer: coarse)').matches;
     if (reduced || coarse || motionPaused) {
-      setDitherReady(false);
+      setHeroFieldReady(false);
       return;
     }
     let idleId = null;
     const delayId = window.setTimeout(() => {
       if (typeof window.requestIdleCallback === 'function') {
-        idleId = window.requestIdleCallback(() => setDitherReady(true), { timeout: 1200 });
+        idleId = window.requestIdleCallback(() => setHeroFieldReady(true), { timeout: 1200 });
       } else {
-        setDitherReady(true);
+        setHeroFieldReady(true);
       }
     }, 3200);
     return () => {
@@ -253,18 +240,17 @@ export function JYCEditorialHome({ data }) {
           <p className="jh-overline">Jaypee Institute of Information Technology, Wish Town</p>
           <h1 id="jh-title">
             <span>Find your people.</span>
-            <span>Make your mark.</span>
-            <span className="jh-title-gradient">At JIIT 128.</span>
+            <span className="jh-title-gradient">Make your mark.</span>
           </h1>
           <p className="jh-lead">
-            Find the clubs, events and people that turn campus life into your story.
+            Clubs, events and student communities to help you find your place at JIIT.
           </p>
           <div className="jh-actions jh-hero-actions">
-            <button type="button" className="jh-btn jh-btn-primary" onClick={() => nav('/events')}>
-              Explore events <span aria-hidden="true">↗</span>
+            <button type="button" className="jh-btn jh-btn-primary" onClick={() => nav('/clubs')}>
+              Explore communities <span aria-hidden="true">↗</span>
             </button>
-            <button type="button" className="jh-btn jh-btn-glass" onClick={() => nav('/clubs')}>
-              Find a club <span aria-hidden="true">↗</span>
+            <button type="button" className="jh-btn jh-btn-glass" onClick={() => nav('/events')}>
+              See what’s on <span aria-hidden="true">↗</span>
             </button>
             <button type="button" className="jh-btn jh-btn-outline" onClick={() => nav('/join-jyc')}>
               Join JYC <span aria-hidden="true">↗</span>
@@ -274,57 +260,8 @@ export function JYCEditorialHome({ data }) {
 
         {/* The original JYC crest, OGL field and interactive emblem remain the visual anchor. */}
         <div className="jh-hero-visual jh-hero-webgl-stage-wrap">
-          <span className="jh-hero-stage-label" aria-hidden="true">JIIT 128</span>
-          <span className="jh-hero-stage-caption" aria-hidden="true">A student community, made together.</span>
-          <span className="jh-hero-frame" aria-hidden="true" />
           <div className="jh-hero-dither-backdrop" aria-hidden="true" />
-          {ditherReady && <Suspense fallback={null}><LazyJYCWebGLField /></Suspense>}
-          <div className="jh-hero-dither-layer jh-dither-mark" aria-hidden="true">
-            {!ditherReady ? (
-              <img
-                className="jh-hero-dither-static"
-                src={DITHER_SOURCE}
-                srcSet={import.meta.env.PROD ? "/assets/jyc-logo-270.avif 270w, /assets/jyc-logo-320.avif 320w, /assets/jyc-logo.avif 480w" : undefined}
-                sizes="(max-width: 680px) 80px, 320px"
-                alt=""
-                aria-hidden="true"
-                width="320"
-                height="320"
-                loading="eager"
-                fetchPriority="high"
-                decoding="async"
-              />
-            ) : (
-              <Suspense fallback={<div className="jh-hero-dither-loading" />}>
-                <LazyDitherVeil
-                  src={DITHER_SOURCE}
-                  srcSet={import.meta.env.PROD ? "/assets/jyc-logo-270.avif 270w, /assets/jyc-logo-320.avif 320w, /assets/jyc-logo.avif 480w" : undefined}
-                  sizes="(max-width: 680px) 80px, 320px"
-                  fallbackSrc={FALLBACK}
-                  originalFallbackSrc={ORIGINAL_LOGO}
-                  globalPointer
-                  fit="contain"
-                  pattern="bayer"
-                  pixelSize={2}
-                  levels={3}
-                  palette="duotone"
-                  inkColor="#4b3e69"
-                  paperColor="#f6f2e9"
-                  contrast={1.18}
-                  brightness={0.02}
-                  revealRadius={190}
-                  softness={0.7}
-                  linger={1.25}
-                  rimColor="#b99b70"
-                  rim={0.22}
-                  wander={false}
-                  clickBurst={false}
-                  className="jh-hero-dither-veil"
-                  style={{width:'100%',height:'100%'}}
-                />
-              </Suspense>
-            )}
-          </div>
+          {heroFieldReady && <Suspense fallback={null}><LazyJYCWebGLField /></Suspense>}
           <JYCHeroWebGLEmblem />
         </div>
       </section>
