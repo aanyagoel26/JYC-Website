@@ -149,3 +149,15 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{animat
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{animation:none!important;opacity:1!important;transform:none!important}
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-actions .jh-btn{transition:none!important}
 }
+/* Deferred home sections reserve their final footprint and reveal on mount. */
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-deferred-spotlight-placeholder{min-height:680px}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-deferred-explorer-placeholder{min-height:560px}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-deferred-mount>section{animation:jycDeferredSectionIn .58s cubic-bezier(.2,.75,.25,1) both}
+@keyframes jycDeferredSectionIn{from{opacity:0;transform:translate3d(0,14px,0)}to{opacity:1;transform:translate3d(0,0,0)}}
+@media(max-width:680px){
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-deferred-spotlight-placeholder{min-height:1120px}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-deferred-explorer-placeholder{min-height:720px}
+}
+@media(prefers-reduced-motion:reduce){
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-deferred-mount>section{animation:none}
+}
