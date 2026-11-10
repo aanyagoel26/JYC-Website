@@ -11,6 +11,7 @@ const gallery=read('src/jyc57-experience.jsx');
 const motion=read('src/jyc-innovation-motion.jsx');
 const motionCss=read('src/styles/jyc-cohesive-experience.css');
 const icons=read('src/components/JYCIcon.jsx');
+const emblem=read('src/components/JYCHeroWebGLEmblem.jsx');
 
 const checks=[
   ['homepage hero action group is present',home.includes('className="jh-actions jh-hero-actions"')],
@@ -18,7 +19,7 @@ const checks=[
   ['route transitions use transform/opacity and respect reduced or user-paused motion',main.includes('className="route-stage"')&&motionCss.includes('@keyframes jycRouteEnter')&&motionCss.includes('html[data-jyc-motion="paused"] .route-stage')&&motionCss.includes('@media (prefers-reduced-motion: reduce)')],
   ['users can pause and resume decorative motion from the More JYC sheet',main.includes('function MotionPreferenceControl')&&main.includes('aria-pressed={paused}')&&main.includes("storageSet('jyc-motion-preference'")&&main.includes('jyc-motion-preference-change')],
   ['ambient motion pauses across CSS and canvas effects without hiding page content',motion.includes('jyc-motion-preference-change')&&motion.includes('userPaused')&&motionCss.includes('html[data-jyc-motion="paused"]')&&motionCss.includes('animation-play-state: paused')],
-  ['homepage unmounts WebGL and Dither effects when the user pauses motion',home.includes('LazyJYCWebGLField')&&home.includes('motionPaused')&&home.includes('setDitherReady(false)')],
+  ['homepage pauses its OGL, Dither and crest canvas effects when the user pauses motion',home.includes('LazyJYCWebGLField')&&home.includes('motionPaused')&&home.includes('setDitherReady(false)')&&emblem.includes('jyc-motion-preference-change')&&emblem.includes('userPaused')],
   ['homepage is route-lazy so OGL and the hero shader stay out of non-home startup',main.includes("const LazyJYCEditorialHome=lazy(()=>import('./jyc-editorial-home.jsx')")&&main.includes('<LazyJYCEditorialHome data={data}/>')],
   ['command search is loaded only when opened, not in the initial public shell',main.includes("const LazyJYCSearch=lazy(()=>import('./search/jyc-search.jsx')")&&main.includes('<LazyJYCSearch data={data}')&&!main.includes("JYCSearch as Search")],
   ['public routes paint curated/cache-backed content before asynchronous live refresh',main.includes('mergePublicFallback(norm(readSiteCache()||empty),{allowContentFallback:true,allowGalleryFallback:false,allowTeamFallback:true})')&&main.includes('const [loading,setLoading]=useState(false)')&&main.includes('const [bootReady,setBootReady]=useState(true)')],
