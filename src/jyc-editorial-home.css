@@ -263,7 +263,7 @@
   letter-spacing: 0.05em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.25s var(--jh-ease);
+  transition: transform 0.25s var(--jh-ease), border-color 0.25s var(--jh-ease), background-color 0.25s var(--jh-ease), color 0.25s var(--jh-ease), box-shadow 0.25s var(--jh-ease);
   border: 1px solid var(--jh-line);
   background: var(--jh-surface-glass);
   color: var(--jh-ink);
@@ -319,7 +319,7 @@
   padding: 12px 14px;
   border-radius: var(--jh-radius-md);
   border: 1px solid transparent;
-  transition: all 0.25s var(--jh-ease);
+  transition: border-color 0.25s var(--jh-ease), background-color 0.25s var(--jh-ease), box-shadow 0.25s var(--jh-ease), transform 0.25s var(--jh-ease);
   overflow: hidden;
 }
 
@@ -462,7 +462,7 @@
   font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .jh-countdown-cta:hover {
@@ -545,7 +545,7 @@
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.65), 0 0 40px -10px var(--jh-accent-glow);
-  transition: all 0.3s var(--jh-ease);
+  transition: border-color 0.3s var(--jh-ease), box-shadow 0.3s var(--jh-ease), transform 0.3s var(--jh-ease);
 }
 
 .jh-hero-logo-plaque:hover {
@@ -690,7 +690,7 @@
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  transition: all 0.3s var(--jh-ease);
+  transition: border-color 0.3s var(--jh-ease), box-shadow 0.3s var(--jh-ease), background-color 0.3s var(--jh-ease), transform 0.3s var(--jh-ease);
   overflow: hidden;
 }
 
@@ -714,7 +714,7 @@
   font: 700 12px/1 'JetBrains Mono', monospace;
   color: var(--jh-accent);
   opacity: 0.3;
-  transition: all 0.25s ease;
+  transition: opacity 0.25s ease, color 0.25s ease, transform 0.25s ease;
 }
 
 .jh-pillar-card:hover {
@@ -812,7 +812,7 @@
   border: 1px solid var(--jh-line);
   border-radius: var(--jh-radius-lg);
   overflow: hidden;
-  transition: all 0.3s var(--jh-ease);
+  transition: border-color 0.3s var(--jh-ease), box-shadow 0.3s var(--jh-ease), background-color 0.3s var(--jh-ease);
 }
 
 .jh-featured-event::before {
@@ -947,7 +947,7 @@
   flex-direction: column;
   gap: 8px;
   color: var(--jh-ink);
-  transition: all 0.25s ease;
+  transition: transform 0.25s ease, border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .jh-event-list button:hover {
@@ -1171,7 +1171,7 @@
   border-radius: var(--jh-radius-sm);
   cursor: pointer;
   color: var(--jh-ink);
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .jh-team-list button:hover {
@@ -1327,7 +1327,7 @@
   padding: 10px 16px;
   border-radius: var(--jh-radius-sm);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
   display: inline-flex;
   align-items: center;
   gap: 8px;
