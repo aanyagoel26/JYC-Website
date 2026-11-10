@@ -1,5 +1,4 @@
 import React, { useRef, useState } from 'react';
-import { JYCWebGLIdentity } from '../jyc-webgl-identity.jsx';
 import './JYCHeroWebGLEmblem.css';
 
 const LOGO_SRC = '/assets/jyc-logo.avif';
@@ -30,7 +29,6 @@ export function JYCHeroWebGLEmblem() {
       role="img"
       aria-label="JIIT Youth Club crest"
     >
-      <JYCWebGLIdentity />
       <div className="jyc-emblem-orbit orbit-outer" aria-hidden="true" />
       <div className="jyc-emblem-orbit orbit-inner" aria-hidden="true" />
       <div className="jyc-emblem-orbit orbit-equator" aria-hidden="true" />
