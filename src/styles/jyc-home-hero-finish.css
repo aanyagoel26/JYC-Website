@@ -619,8 +619,8 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{width:min(100%,340px);min-height:0;aspect-ratio:1/1;margin-inline:auto;border-radius:28px}
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage{width:90%;max-width:280px;margin-top:0}
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-seal-container{width:64%;height:64%}
-html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-controls-bar{bottom:8px;gap:6px;transform:translateX(-50%) scale(.88);transform-origin:center bottom}
-html[data-theme] .public-app .jyc-editorial-home.jyc-home .emblem-control-pill{min-height:42px;height:42px;padding:7px 10px;font-size:9px}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-controls-bar{bottom:8px;gap:6px;transform:translateX(-50%)}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .emblem-control-pill{box-sizing:border-box;min-height:48px;height:48px;padding:7px 10px;font-size:9px}
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-label{top:18px;left:20px}
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-caption{right:20px;bottom:18px;max-width:58%;font-size:8px}
 }
