@@ -16,7 +16,7 @@ const ALLOWED=['source-archive','hub-photos','hub-photos-extra','events','home',
 const derivativeBaseForRel=rel=>{
  const extension=path.extname(rel).slice(1).toLowerCase();
  const stem=rel.slice(0,-extension.length-1);
- return rel.startsWith('logos/')?`${stem}-${extension}`:stem;
+ return rel.startsWith('logos/')||rel.startsWith('banners/')?`${stem}-${extension}`:stem;
 };
 const inputFiles=[];
 const walk=dir=>{for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())walk(file);else if(/\.(jpe?g|png|webp)$/i.test(file))inputFiles.push(file)}};
@@ -28,8 +28,8 @@ for(const file of sourceFiles){
  const rel=path.relative(root,file).replaceAll(path.sep,'/');
  const base=derivativeBaseForRel(rel);
  const previous=derivativeBaseOwners.get(base);
- if(previous)duplicateDerivativeBases.push({base:rel,files:[previous,path.relative(root,file).replaceAll(path.sep,'/') ]});
- else derivativeBaseOwners.set(rel,path.relative(root,file).replaceAll(path.sep,'/'));
+ if(previous)duplicateDerivativeBases.push({base,files:[previous,path.relative(root,file).replaceAll(path.sep,'/') ]});
+ else derivativeBaseOwners.set(base,path.relative(root,file).replaceAll(path.sep,'/'));
 }
 if(duplicateDerivativeBases.length){
  console.error('Photo derivative output-name collisions: '+JSON.stringify(duplicateDerivativeBases.slice(0,12)));
