@@ -252,7 +252,7 @@ export function JYCEditorialHome({ data }) {
                 linger={1.25}
                 rimColor="#b99b70"
                 rim={0.22}
-                wander={true}
+                wander={false}
                 clickBurst={false}
                 className="jh-hero-dither-veil"
                 style={{width:'100%',height:'100%'}}
