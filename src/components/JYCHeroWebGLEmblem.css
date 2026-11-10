@@ -10,16 +10,6 @@
 .jyc-emblem-orbit::before{inset:7%}.jyc-emblem-orbit::after{inset:-5%;border-style:dashed;opacity:.52}
 .jyc-emblem-orbit.orbit-inner{inset:15%;border-color:rgba(200,188,255,.18);transform:rotate(34deg) scaleY(.9)}
 .jyc-emblem-orbit.orbit-equator{inset:1% 9%;border-color:rgba(231,209,155,.11);transform:rotate(58deg) scaleY(.72)}
-.jyc-emblem-context{position:absolute;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid color-mix(in srgb,var(--jyc-gold,#e7d19b) 34%,transparent);border-radius:999px;background:color-mix(in srgb,var(--jyc-canvas,#080d1c) 88%,transparent);color:var(--jyc-text-strong,#f6f2ff);box-shadow:0 16px 38px rgba(2,5,16,.24);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font:650 10px/1.25 Inter,system-ui,sans-serif;letter-spacing:.045em}
-.emblem-context-top{top:10%;left:2%;right:2%;padding:12px 16px}
-.emblem-context-top>span{display:inline-flex;align-items:center;gap:8px;white-space:nowrap}
-.emblem-context-top i{width:3px;height:3px;flex:0 0 3px;border-radius:50%;background:var(--jyc-gold,#e7d19b)}
-.emblem-context-top b{color:var(--jyc-gold,#e7d19b)}
-.emblem-context-bottom{bottom:9%;left:50%;transform:translateX(-50%);min-width:240px;padding:10px 15px}
-.emblem-context-bottom>span:nth-child(2){display:grid;gap:4px;text-align:center}
-.emblem-context-bottom b{font-size:11px;letter-spacing:.13em}
-.emblem-context-bottom small{color:var(--jyc-muted,#c8cce0);font-size:8px;letter-spacing:.09em}
-.emblem-context-mark{color:var(--jyc-gold,#e7d19b);font-size:15px}.emblem-context-index{color:var(--jyc-gold,#e7d19b);font:700 9px/1 ui-monospace,monospace}
 @media(max-width:760px){.jyc-hero-emblem-stage{width:min(100%,min(82vw,400px))}.jyc-emblem-card-3d{width:74%}.emblem-context-top{top:10%;left:0;right:0;padding:9px 10px;gap:5px;font-size:8px}.emblem-context-top>span{gap:5px}.emblem-context-bottom{bottom:8%;min-width:208px;padding:9px 12px}.emblem-context-bottom b{font-size:10px}.emblem-context-bottom small{font-size:7px}.jyc-emblem-orbit{inset:8% 4%}.jyc-emblem-orbit.orbit-inner{inset:18% 11%}}
 @media(max-width:390px){.jyc-hero-emblem-stage{width:min(100%,360px)}.emblem-context-top{font-size:7px;padding:8px}.emblem-context-bottom{min-width:190px}.jyc-emblem-card-3d{width:71%}}
 @media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){.jyc-emblem-orbit.orbit-outer{animation:jycOrbitDrift 46s linear infinite}.jyc-emblem-orbit.orbit-inner{animation:jycOrbitDrift 64s linear infinite reverse}}
