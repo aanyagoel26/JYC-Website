@@ -20,7 +20,7 @@ const shader=fs.readFileSync('src/components/JYCWebGLField.jsx','utf8');
 const home=fs.readFileSync('src/jyc-editorial-home.jsx','utf8');
 const packageJson=JSON.parse(fs.readFileSync('package.json','utf8'));
 const shaderChecks=[
- ['homepage mounts a dedicated OGL WebGL field behind its existing emblem',home.includes("import { JYCWebGLField } from './components/JYCWebGLField.jsx'")&&home.includes('<JYCWebGLField />')&&shader.includes("from 'ogl'")],
+ ['homepage lazy-loads a dedicated OGL WebGL field behind its existing emblem',home.includes("const LazyJYCWebGLField = lazy(() => import('./components/JYCWebGLField.jsx').then(m => ({ default: m.JYCWebGLField })))")&&home.includes('<LazyJYCWebGLField />')&&home.includes('<JYCHeroWebGLEmblem />')&&shader.includes("from 'ogl'")],
  ['shader uses procedural FBM domain warping and topographic contour lines',shader.includes('float fbm(')&&shader.includes('float contour =')&&shader.includes('uPointer')],
  ['shader uses a defined monotonic fade function at the edge of the visual field',shader.includes('1.0 - smoothstep(0.18,0.98,length(p) * 0.52)')],
  ['shader adds layered twinkling star particles and a second drifting depth plane',shader.includes('float starLayer(')&&shader.includes('starLayer(p * 1.37')&&shader.includes('float stars =')],
