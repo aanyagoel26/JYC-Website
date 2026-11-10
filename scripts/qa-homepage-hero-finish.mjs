@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import assert from 'node:assert/strict';
 
 const home = fs.readFileSync('src/jyc-editorial-home.jsx', 'utf8');
+const index = fs.readFileSync('index.html', 'utf8');
 const app = fs.readFileSync('src/main.jsx', 'utf8');
 const spotlight = fs.readFileSync('src/jyc-spotlight.jsx', 'utf8');
 const explorer = fs.readFileSync('src/components/JYC3DInteractiveExplorer.jsx', 'utf8');
@@ -12,6 +13,7 @@ const emblem = fs.readFileSync('src/components/JYCHeroWebGLEmblem.jsx', 'utf8');
 const checks = [
   ['homepage loads the final hero art-direction layer after the shared motion system', home.indexOf("import './styles/jyc-home-hero-finish.css';") > home.indexOf("import './styles/jyc-editorial-motion-system.css';")],
   ['hero paints its responsive static fallback before idle-loading the WebGL Dither layer', home.includes('jh-hero-dither-static') && home.includes('requestIdleCallback') && home.includes('setTimeout') && home.includes('}, 3200)') && home.includes('prefers-reduced-motion: reduce')],
+  ['responsive crest LCP candidate is preloaded with matching srcset and sizes', index.includes('href="/assets/jyc-logo-320.avif"') && index.includes('imagesrcset="/assets/jyc-logo-270.avif 270w, /assets/jyc-logo-320.avif 320w, /assets/jyc-logo.avif 480w"') && index.includes('imagesizes="(max-width: 680px) 80px, 320px"')],
   ['hero retains the source-backed student benefit and all three primary destinations', /Find your people\.[\s\S]*?Make your mark\./.test(home) && home.includes("nav('/events')") && home.includes("nav('/clubs')") && home.includes("nav('/join-jyc')")],
   ['hero keeps the official crest, shader field and emblem controls', home.includes('<LazyJYCWebGLField />') && home.includes('const LazyJYCWebGLField = lazy(') && home.includes('<JYCHeroWebGLEmblem />') && emblem.includes('jyc-emblem-controls-bar') && emblem.includes('role="group"')],
   ['below-fold Spotlight and explorer are lazy-loaded and viewport-deferred', home.includes('LazyJYCSpotlight') && home.includes('LazyJYC3DInteractiveExplorer') && home.includes('function DeferredMount') && home.includes('rootMargin = \'720px 0px\'')],
