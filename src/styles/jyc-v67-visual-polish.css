@@ -314,3 +314,11 @@ html[data-theme] .public-app .jh-kicker > b {
     border-radius: 12px !important;
   }
 }
+
+
+/* Page-specific kicker rules carry higher specificity; override them at the route root. */
+#main-content.public-app .route-stage .jh-kicker,
+#main-content.public-app .route-stage .jh-kicker > b {
+  color: #282333 !important;
+  text-shadow: none !important;
+}
