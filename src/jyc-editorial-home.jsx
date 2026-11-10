@@ -274,7 +274,7 @@ export function JYCEditorialHome({ data }) {
               <img
                 className="jh-hero-dither-static"
                 src={DITHER_SOURCE}
-                srcSet="/assets/jyc-logo-270.avif 270w, /assets/jyc-logo-320.avif 320w, /assets/jyc-logo.avif 480w"
+                srcSet={import.meta.env.PROD ? "/assets/jyc-logo-270.avif 270w, /assets/jyc-logo-320.avif 320w, /assets/jyc-logo.avif 480w" : undefined}
                 sizes="(max-width: 680px) 80px, 320px"
                 alt=""
                 aria-hidden="true"
