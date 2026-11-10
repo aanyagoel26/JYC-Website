@@ -144,8 +144,8 @@ Do not mark an item complete from a source-code assertion alone. A visual item n
 The follow-up art-direction pass is intentionally focused on clarity and performance rather than adding more effects:
 
 - Recompose the hero as an open, cinematic crest stage instead of a bordered dashboard-like panel.
-- Keep the existing OGL shader as the single atmospheric sky layer; keep the original JYC crest as the focal point.
-- Reduce duplicate Dither/crest treatment and remove unnecessary floating badge clutter through the final scoped art-direction layer.
+- Keep the existing OGL shader as the single atmospheric sky layer; keep the original JYC crest as the focal point, with only a restrained CSS orbital halo.
+- Remove the duplicate Dither crest, telemetry labels, animated ring canvas, audio toggle and external model-viewer; keep one accessible responsive crest as the visual anchor.
 - Strengthen the headline and make community discovery the primary action, with events and joining as clear secondary paths.
 - On mobile, reorder the hero as identity → headline → supporting copy → crest → actions, with full-size touch targets and no transform scaling.
 - Let ordinary 8-core / 8 GB desktop devices run the shader at a reduced quality tier rather than disabling it outright.
