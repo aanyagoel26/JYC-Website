@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import assert from 'node:assert/strict';
 
 const home = fs.readFileSync('src/jyc-editorial-home.jsx', 'utf8');
+const app = fs.readFileSync('src/main.jsx', 'utf8');
 const hero = fs.readFileSync('src/styles/jyc-home-hero-finish.css', 'utf8');
 const emblem = fs.readFileSync('src/components/JYCHeroWebGLEmblem.jsx', 'utf8');
 
@@ -10,6 +11,9 @@ const checks = [
   ['hero retains the source-backed student benefit and all three primary destinations', /Find your people\.[\s\S]*?Make your mark\./.test(home) && home.includes("nav('/events')") && home.includes("nav('/clubs')") && home.includes("nav('/join-jyc')")],
   ['hero keeps the official crest, shader field and emblem controls', home.includes('<JYCWebGLField />') && home.includes('<JYCHeroWebGLEmblem />') && emblem.includes('jyc-emblem-controls-bar') && emblem.includes('role="group"')],
   ['below-fold community explorer is lazy-loaded and viewport-deferred', home.includes('LazyJYC3DInteractiveExplorer') && home.includes('function DeferredMount') && home.includes('rootMargin = \'720px 0px\'')],
+  ['non-home directory pages are split into route-level chunks', ['LazyJYC57Events','LazyJYC57Clubs','LazyJYC57Gallery','LazyJYCBestOf'].every(name=>app.includes(name))],
+  ['search trigger accessible name matches its visible Search label', app.includes('aria-label=\"Search\"') && !app.includes('aria-label=\"Search Ctrl K\"')],
+  ['hero crest and Dither fallback offer a 320px responsive image candidate', emblem.includes('jyc-logo-320.avif 320w') && home.includes('jyc-logo-320.avif 320w')],
   ['dither reveal is enabled and uses the JYC paper, violet and champagne palette', home.includes('wander={false}') && home.includes('inkColor="#4b3e69"') && home.includes('paperColor="#f6f2e9"') && home.includes('rimColor="#b99b70"')],
   ['hero art direction uses responsive editorial typography and layered surfaces', hero.includes('html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero{') && hero.includes('.jh-hero h1') && hero.includes('.jh-hero h1 .jh-title-gradient') && hero.includes('-webkit-background-clip:text!important') && hero.includes('Space Grotesk') && hero.includes('.jh-hero-stage-label') && home.includes('jh-hero-stage-caption') && hero.includes('radial-gradient')],
   ['desktop and tablet/mobile layouts have explicit responsive rules', hero.includes('@media(max-width:1024px)') && hero.includes('@media(max-width:680px)') && hero.includes('@media(max-width:380px)') && hero.includes('width:100%!important') && hero.includes('aspect-ratio:1!important') && hero.includes('display:grid!important')],
