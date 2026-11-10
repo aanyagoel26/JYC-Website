@@ -64,7 +64,7 @@ export function JYCSpotlight({data}){
 
   if(!spotlight.event&&!spotlight.community&&!spotlight.archive)return null;
 
-  return <section className="section jyc-living-spotlight reveal" aria-labelledby="jyc-living-spotlight-title">
+  return <section className="section jyc-living-spotlight" aria-labelledby="jyc-living-spotlight-title">
     <div className="jyc-living-spotlight-head">
       <div>
         <span className="eyebrow">JYC SPOTLIGHT · LIVE ECOSYSTEM</span>
