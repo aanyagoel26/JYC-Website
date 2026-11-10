@@ -47,5 +47,6 @@ check('route reveal observes SPA-inserted content and gracefully reveals content
 check('MagicBento disables pointer-driven GSAP effects when the user pauses decorative motion',bento.includes('userPaused')&&bento.includes('jyc-motion-preference-change')&&bento.includes('||userPaused'));
 check('homepage WebGL and Dither unmount when decorative motion is paused',home.includes('motionPaused')&&home.includes('setDitherReady(false)')&&home.includes('jyc-motion-preference-change'));
 check('ambient canvas cancels its animation frame when decorative motion is paused',read('src/jyc-innovation-motion.jsx').includes('userPaused')&&read('src/jyc-innovation-motion.jsx').includes('window.addEventListener(\'jyc-motion-preference-change\''));
+check('main shell does not eagerly import Motion or command search; search is demand-loaded',!main.includes("from 'motion/react'")&&!main.includes('JYCSearch as Search')&&main.includes("const LazyJYCSearch=lazy(()=>import('./search/jyc-search.jsx')")&&main.includes('<LazyJYCSearch data={data}'));
 if(failures.length)process.exit(1);
 console.log('JYC animation/media performance contract: '+(totalChecks-failures.length)+'/'+totalChecks);
