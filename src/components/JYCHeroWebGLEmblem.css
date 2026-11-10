@@ -1,1 +1,73 @@
-
+/* JYC hero emblem — lightweight CSS presentation around the preloaded crest. */
+.jyc-hero-emblem-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(100%, 620px);
+  max-width: 620px;
+  aspect-ratio: 1 / 1;
+  margin-inline: auto;
+  isolation: isolate;
+}
+.jyc-emblem-card-3d {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: min(78%, 480px);
+  aspect-ratio: 1 / 1;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.jyc-emblem-glow-backing {
+  position: absolute;
+  inset: 4%;
+  z-index: -1;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at 50% 45%, rgba(200,188,255,.22), transparent 58%),
+    radial-gradient(ellipse at 50% 58%, rgba(231,209,155,.13), transparent 72%);
+  filter: blur(22px);
+  pointer-events: none;
+}
+.jyc-emblem-seal-container {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  overflow: visible;
+}
+.jyc-emblem-logo-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 34px rgba(4,7,20,.22));
+}
+.jyc-emblem-logo-fallback {
+  display: grid;
+  place-items: center;
+  width: 72%;
+  aspect-ratio: 1;
+  border: 1px solid var(--jyc-line-strong, rgba(200,188,255,.42));
+  border-radius: 50%;
+  background: var(--jyc-surface, #111b31);
+  color: var(--jyc-text-strong, #f7f5ff);
+  font: 800 clamp(28px, 5vw, 56px)/1 Inter, system-ui, sans-serif;
+  letter-spacing: -.08em;
+}
+@media(max-width:680px) {
+  .jyc-hero-emblem-stage { width: min(88vw, 360px); }
+  .jyc-emblem-card-3d { width: min(84%, 320px); }
+}
+@media(prefers-reduced-motion:reduce) {
+  .jyc-hero-emblem-stage *,
+  .jyc-emblem-card-3d {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    will-change: auto !important;
+  }
+}
