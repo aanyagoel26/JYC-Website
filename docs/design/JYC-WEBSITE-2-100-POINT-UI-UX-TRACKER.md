@@ -139,6 +139,20 @@ Do not mark an item complete from a source-code assertion alone. A visual item n
 - [~] 99. Combine automated accessibility checks with manual keyboard/screen-reader review.
 - [ ] 100. Complete a final review on real midrange Android devices and desktop browsers.
 
+## Cinematic homepage hero refresh — PR #14
+
+The follow-up art-direction pass is intentionally focused on clarity and performance rather than adding more effects:
+
+- Recompose the hero as an open, cinematic crest stage instead of a bordered dashboard-like panel.
+- Keep the existing OGL shader as the single atmospheric sky layer; keep the original JYC crest as the focal point.
+- Reduce duplicate Dither/crest treatment and remove unnecessary floating badge clutter through the final scoped art-direction layer.
+- Strengthen the headline and make community discovery the primary action, with events and joining as clear secondary paths.
+- On mobile, reorder the hero as identity → headline → supporting copy → crest → actions, with full-size touch targets and no transform scaling.
+- Let ordinary 8-core / 8 GB desktop devices run the shader at a reduced quality tier rather than disabling it outright.
+- Keep both theme treatments distinct: deep midnight/indigo/violet/champagne for dark mode and warm ivory/champagne/brass for light mode.
+
+Source assertions are added to the homepage hero QA. Runtime screenshots, exact-head browser tests, Lighthouse and physical-device review remain required before promoting any hero item to [x].
+
 ## Current PR #12 implementation notes
 
 The existing branch already contains a substantial hero, theme, atmosphere, card, directory, search, calendar, gallery, accessibility and performance foundation. The following new release fixes are part of this work:

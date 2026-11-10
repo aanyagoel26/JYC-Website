@@ -17,6 +17,7 @@ import './components/JYCHeroWebGLEmblem.css';
 import './jyc-editorial-home.css';
 import './styles/jyc-editorial-motion-system.css';
 import './styles/jyc-home-hero-finish.css';
+import './styles/jyc-home-hero-art-direction.css';
 
 const ORIGINAL_LOGO = '/JYC%20Logo(4).png';
 const FALLBACK = import.meta.env.PROD ? '/assets/jyc-logo.webp' : ORIGINAL_LOGO;
@@ -254,17 +255,17 @@ export function JYCEditorialHome({ data }) {
           <h1 id="jh-title">
             <span>Find your people.</span>
             <span>Make your mark.</span>
-            <span className="jh-title-gradient">At JIIT 128.</span>
+            <span className="jh-title-gradient">Make campus yours.</span>
           </h1>
           <p className="jh-lead">
-            Find the clubs, events and people that turn campus life into your story.
+            Find a club to build with, an event to show up for, and a community that makes JIIT feel like yours.
           </p>
           <div className="jh-actions jh-hero-actions">
-            <button type="button" className="jh-btn jh-btn-primary" onClick={() => nav('/events')}>
-              Explore events <span aria-hidden="true">↗</span>
+            <button type="button" className="jh-btn jh-btn-primary" onClick={() => nav('/clubs')}>
+              Explore communities <span aria-hidden="true">↗</span>
             </button>
-            <button type="button" className="jh-btn jh-btn-glass" onClick={() => nav('/clubs')}>
-              Find a club <span aria-hidden="true">↗</span>
+            <button type="button" className="jh-btn jh-btn-glass" onClick={() => nav('/events')}>
+              See what’s on <span aria-hidden="true">↗</span>
             </button>
             <button type="button" className="jh-btn jh-btn-outline" onClick={() => nav('/join-jyc')}>
               Join JYC <span aria-hidden="true">↗</span>

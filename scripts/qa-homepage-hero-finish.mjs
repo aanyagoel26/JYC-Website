@@ -8,10 +8,12 @@ const spotlight = fs.readFileSync('src/jyc-spotlight.jsx', 'utf8');
 const explorer = fs.readFileSync('src/components/JYC3DInteractiveExplorer.jsx', 'utf8');
 const spotlightCss = fs.readFileSync('src/styles/jyc-home-spotlight.css', 'utf8');
 const hero = fs.readFileSync('src/styles/jyc-home-hero-finish.css', 'utf8');
+const heroDirection = fs.readFileSync('src/styles/jyc-home-hero-art-direction.css', 'utf8');
+const webglField = fs.readFileSync('src/components/JYCWebGLField.jsx', 'utf8');
 const emblem = fs.readFileSync('src/components/JYCHeroWebGLEmblem.jsx', 'utf8');
 
 const checks = [
-  ['homepage loads the final hero art-direction layer after the shared motion system', home.indexOf("import './styles/jyc-home-hero-finish.css';") > home.indexOf("import './styles/jyc-editorial-motion-system.css';")],
+  ['homepage loads the original finish layer and the new cinematic art direction last', home.indexOf("import './styles/jyc-home-hero-finish.css';") > home.indexOf("import './styles/jyc-editorial-motion-system.css';") && home.indexOf("import './styles/jyc-home-hero-art-direction.css';") > home.indexOf("import './styles/jyc-home-hero-finish.css';")],
   ['hero paints its responsive static fallback before idle-loading the WebGL Dither layer', home.includes('jh-hero-dither-static') && home.includes('requestIdleCallback') && home.includes('setTimeout') && home.includes('}, 3200)') && home.includes('prefers-reduced-motion: reduce')],
   ['responsive crest LCP candidate is preloaded with matching srcset and sizes', index.includes('href="/assets/jyc-logo-320.avif"') && index.includes('imagesrcset="/assets/jyc-logo-270.avif 270w, /assets/jyc-logo-320.avif 320w, /assets/jyc-logo.avif 480w"') && index.includes('imagesizes="(max-width: 680px) 80px, 320px"')],
   ['hero retains the source-backed student benefit and all three primary destinations', /Find your people\.[\s\S]*?Make your mark\./.test(home) && home.includes("nav('/events')") && home.includes("nav('/clubs')") && home.includes("nav('/join-jyc')")],
@@ -32,6 +34,11 @@ const checks = [
   ['light hero has a distinct champagne-gold badge, warm glow and brass accent hierarchy', hero.includes('html[data-theme="light"]') && hero.includes('linear-gradient(115deg,#f5e6c7') && hero.includes('0 0 34px rgba(205,163,91,.24)') && hero.includes('color:#986b32!important')],
   ['dark hero has a separate midnight palette and layered astrophotography-inspired sky', hero.includes('html[data-theme="dark"]') && hero.includes('radial-gradient(ellipse at 58% 44%,rgba(113,83,176,.28)') && hero.includes('linear-gradient(153deg,transparent 35%,rgba(3,7,20,.74)') && hero.includes('jycHeroNebulaBreathe')],
   ['both hero themes retain reduced-motion-safe visual treatment', hero.includes('@media(prefers-reduced-motion:no-preference)') && hero.includes('@media(prefers-reduced-motion:reduce)') && hero.includes('animation:none!important')],
+  ['cinematic hero stylesheet overrides the boxed legacy treatment with an open crest stage', heroDirection.includes('.jh-hero-visual{') && heroDirection.includes('background:transparent!important') && heroDirection.includes('border:0!important') && heroDirection.includes('.jyc-hero-emblem-stage') && heroDirection.includes('.jh-hero-visual::before')],
+  ['dark cosmic and light champagne themes have independent hero art direction', heroDirection.includes('html[data-theme="dark"]') && heroDirection.includes('html[data-theme="light"]') && heroDirection.includes('rgba(113,91,190') && heroDirection.includes('#f7f1e6') && heroDirection.includes('#9a7138')],
+  ['mobile hero keeps identity, headline, crest and actions in an intentional reading order', heroDirection.includes('grid-template-areas:"badge" "overline" "title" "lead" "visual" "actions"') && heroDirection.includes('.jh-hero-visual{grid-area:visual') && heroDirection.includes('.jh-hero-copy>.jh-hero-actions{grid-area:actions')],
+  ['emblem controls retain real 48px touch targets without narrow-screen scaling', heroDirection.includes('height:48px!important') && heroDirection.includes('min-height:48px!important') && heroDirection.includes('transform:translateX(-50%)!important') && !heroDirection.includes('scale(.78)')],
+  ['OGL shader uses a capability-aware quality tier rather than disabling on ordinary 8-core laptops', webglField.includes('cores <= 4') && webglField.includes('memory < 4') && webglField.includes('const reducedQuality') && webglField.includes('reducedQuality ? 1000 / 24 : 1000 / 30') && webglField.includes('reducedQuality || coarse ? 1.1 : 1.35')],
 
 ];
 
