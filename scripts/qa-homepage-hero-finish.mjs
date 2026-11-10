@@ -3,6 +3,8 @@ import assert from 'node:assert/strict';
 
 const home = fs.readFileSync('src/jyc-editorial-home.jsx', 'utf8');
 const app = fs.readFileSync('src/main.jsx', 'utf8');
+const spotlight = fs.readFileSync('src/jyc-spotlight.jsx', 'utf8');
+const explorer = fs.readFileSync('src/components/JYC3DInteractiveExplorer.jsx', 'utf8');
 const hero = fs.readFileSync('src/styles/jyc-home-hero-finish.css', 'utf8');
 const emblem = fs.readFileSync('src/components/JYCHeroWebGLEmblem.jsx', 'utf8');
 
@@ -11,7 +13,8 @@ const checks = [
   ['hero paints its responsive static fallback before idle-loading the WebGL Dither layer', home.includes('jh-hero-dither-static') && home.includes('requestIdleCallback') && home.includes('prefers-reduced-motion: reduce')],
   ['hero retains the source-backed student benefit and all three primary destinations', /Find your people\.[\s\S]*?Make your mark\./.test(home) && home.includes("nav('/events')") && home.includes("nav('/clubs')") && home.includes("nav('/join-jyc')")],
   ['hero keeps the official crest, shader field and emblem controls', home.includes('<JYCWebGLField />') && home.includes('<JYCHeroWebGLEmblem />') && emblem.includes('jyc-emblem-controls-bar') && emblem.includes('role="group"')],
-  ['below-fold community explorer is lazy-loaded and viewport-deferred', home.includes('LazyJYC3DInteractiveExplorer') && home.includes('function DeferredMount') && home.includes('rootMargin = \'720px 0px\'')],
+  ['below-fold Spotlight and explorer are lazy-loaded and viewport-deferred', home.includes('LazyJYCSpotlight') && home.includes('LazyJYC3DInteractiveExplorer') && home.includes('function DeferredMount') && home.includes('rootMargin = \'720px 0px\'')],
+  ['deferred home sections retain visible state and reserve responsive space', !spotlight.includes('jyc-living-spotlight reveal') && !explorer.includes('jyc-community-explorer reveal') && hero.includes('jh-deferred-mount>section') && hero.includes('jh-deferred-spotlight-placeholder')],
   ['non-home directory pages are split into route-level chunks', ['LazyJYC57Events','LazyJYC57Clubs','LazyJYC57Gallery','LazyJYCBestOf'].every(name=>app.includes(name))],
   ['search trigger accessible name matches its visible Search label', app.includes('aria-label=\"Search\"') && !app.includes('aria-label=\"Search Ctrl K\"')],
   ['hero crest and Dither fallback offer a 320px responsive image candidate', emblem.includes('jyc-logo-320.avif 320w') && home.includes('jyc-logo-320.avif 320w') && emblem.includes('import.meta.env.PROD ?') && home.split('srcSet={import.meta.env.PROD ?').length === 3],
