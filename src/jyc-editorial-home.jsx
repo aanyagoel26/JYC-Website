@@ -256,6 +256,8 @@ export function JYCEditorialHome({ data }) {
             <Suspense fallback={<div className="jh-hero-dither-loading" />}>
               <LazyDitherVeil
                 src={DITHER_SOURCE}
+                srcSet="/assets/jyc-logo-270.avif 270w, /assets/jyc-logo-320.avif 320w, /assets/jyc-logo.avif 480w"
+                sizes="(max-width: 680px) 80px, 320px"
                 fallbackSrc={FALLBACK}
                 originalFallbackSrc={ORIGINAL_LOGO}
                 globalPointer
