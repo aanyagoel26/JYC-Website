@@ -65,7 +65,7 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-overline{
   font:600 11px/1.7 'JetBrains Mono',monospace!important;letter-spacing:.12em!important;text-transform:uppercase!important;
 }
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero h1{
-  max-width:11.2ch!important;width:100%;margin:clamp(18px,2vw,26px) 0 clamp(20px,2.2vw,28px)!important;
+  max-width:100%!important;width:100%;margin:clamp(18px,2vw,26px) 0 clamp(20px,2.2vw,28px)!important;
   color:var(--jh-ink,var(--jyc-text-strong))!important;
   font:700 clamp(56px,5.4vw,84px)/.94 'Space Grotesk',sans-serif!important;
   letter-spacing:-.075em!important;text-wrap:balance;overflow-wrap:normal;
