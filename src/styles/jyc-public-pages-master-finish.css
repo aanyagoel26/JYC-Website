@@ -173,9 +173,14 @@
 .public-app .team-page .team-member-flip .flip-card__back-trigger { min-height:42px; color:var(--jyc-text-strong); }
 .public-app .team-page .team-linkedin-btn { min-height:42px; }
 .public-app .team-page .team-hub-directory button {
-  min-width:0; min-height:74px; text-align:left; color:var(--jyc-text-strong); cursor:pointer;
-  transition:transform .22s ease,border-color .22s ease,background .22s ease;
+  display:grid; grid-template-columns:minmax(0,1fr) auto; gap:6px 12px; align-items:center;
+  min-width:0; min-height:82px; padding:16px; border:1px solid var(--jyc-line); border-radius:15px;
+  background:var(--jyc-surface); text-align:left; color:var(--jyc-text-strong); cursor:pointer;
+  transition:transform .22s ease,border-color .22s ease,background .22s ease,box-shadow .22s ease;
 }
+.public-app .team-page .team-hub-directory button small { grid-column:1; color:var(--jyc-gold); font:800 9px/1.3 "JetBrains Mono",ui-monospace,monospace; letter-spacing:.08em; text-transform:uppercase; }
+.public-app .team-page .team-hub-directory button strong { grid-column:1; font-size:13px; line-height:1.35; }
+.public-app .team-page .team-hub-directory button>span { grid-column:2; grid-row:1 / span 2; color:var(--jyc-accent); font-size:20px; }
 .public-app .team-page .team-hub-directory button:hover { transform:translateY(-3px); border-color:var(--jyc-line-strong); background:var(--jyc-accent-soft); }
 .public-app .team-page .team-closeout { box-shadow:var(--public-shadow); }
 .public-app :is(.about-page,.contact-page,.team-page) .reveal { animation:jyc-public-page-enter .62s var(--public-ease) both; }
