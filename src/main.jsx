@@ -244,6 +244,8 @@ function SiteAtmosphere(){
 
 function EventReminderControl({event,notify}){if(!event?.date||eventState(event)==='past')return null;const[enabled,setEnabled]=useState(()=>hasLocalReminder(event?.id));useEffect(()=>{const on=e=>{if(e.detail?.eventId===event?.id)setEnabled(Boolean(e.detail.enabled))};window.addEventListener('jyc-reminder-changed',on);return()=>window.removeEventListener('jyc-reminder-changed',on)},[event?.id]);const change=async next=>{try{if(next){if('Notification' in window&&Notification.permission!=='granted'){const permission=await Notification.requestPermission();if(permission!=='granted')throw new Error('Browser notifications were not enabled.');}await scheduleEventReminder(event);setEnabled(true);notify?.('JYC will remind you one hour before this event.','success')}else{clearLocalReminder(event.id);setEnabled(false)}}catch(error){setEnabled(false);notify?.(error?.message||'Could not set the event reminder.','error')}};return <Suspense fallback={<button type="button" className="btn secondary" disabled>Notify me</button>}><LazyBellToggle pressed={enabled} offLabel="Notify me" onLabel="Reminder set" label="Set a one-hour JYC event reminder" onChange={change}/></Suspense>}
 function App(){const loc=useLocation();const [data,setData]=useState(()=>import.meta.env.DEV?publicDemoData():mergePublicFallback(norm(readSiteCache()||empty),{allowContentFallback:true,allowGalleryFallback:false,allowTeamFallback:true}));const [loading,setLoading]=useState(false);const [bootReady,setBootReady]=useState(true);const [bootStage,setBootStage]=useState('SYNCING');const [error,setError]=useState('');const [online,setOnline]=useState(()=>navigator.onLine!==false);const [theme,setTheme]=useState(()=>{
+  const requested=new URLSearchParams(window.location.search).get('jyc-theme');
+  if(requested==='dark'||requested==='light')return requested;
   const saved=storageGet('jyc-theme',null);
   if(saved==='dark'||saved==='light')return saved;
   // Follow the system theme on first visit; an explicit saved choice always wins.
@@ -995,7 +997,7 @@ function ScrollProgress(){const [progress,setProgress]=useState(0);useEffect(()=
 function Theme({theme,setTheme}){
  const switchMode=()=>{
   const next=theme==='dark'?'light':'dark';
-  const apply=()=>setTheme(next);
+  const apply=()=>{const url=new URL(window.location.href);if(url.searchParams.has('jyc-theme')){url.searchParams.delete('jyc-theme');window.history.replaceState(window.history.state,'',url.pathname+url.search+url.hash)}setTheme(next)};
   document.documentElement.classList.add('theme-is-switching');
   const finish=()=>window.setTimeout(()=>document.documentElement.classList.remove('theme-is-switching'),180);
   try{
