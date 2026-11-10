@@ -81,8 +81,8 @@ const PILLARS = [
     id: 'technical',
     family: 'Technical',
     title: 'Technical & Innovation',
-    tag: 'AI · ROBOTICS · CP · WEB · CYBERSEC',
-    desc: 'Hackathons, open-source dev-sprints, AI research, and combat robotics across OSDC, Knuth, CICR, GDG & uCR.',
+    tag: 'AI · ROBOTICS · CODING · WEB · CYBERSECURITY',
+    desc: 'Explore coding, AI, robotics, cybersecurity and open-source projects through student-led technical communities.',
     icon: '⚡'
   },
   {
@@ -90,15 +90,15 @@ const PILLARS = [
     family: 'Cultural',
     title: 'Cultural & Performing Arts',
     tag: 'DRAMATICS · DANCE · BANDS · CLASSICAL',
-    desc: 'Street play, stage dramatics, western & classical dance, and live acoustics with Abhivyakti, Jhankaar, Fortissmo & Crescendo.',
+    desc: 'Perform in street plays and theatre, explore western and classical dance, or enjoy live music with JYC cultural communities.',
     icon: '🎭'
   },
   {
     id: 'literary',
     family: 'Literary',
-    title: 'Literary, MUN & Speaking',
+    title: 'Literary, Model UN & Speaking',
     tag: 'DEBATES · QUIZZING · MUN · WRITING',
-    desc: 'Parliamentary debates, National Model United Nations, literary journals, and inter-college quiz championships.',
+    desc: 'Take part in debates, Model United Nations, writing, public speaking and inter-college quizzes.',
     icon: '🖋️'
   },
   {
@@ -114,7 +114,7 @@ const PILLARS = [
     family: 'Sports',
     title: 'Sports & Athletics',
     tag: 'CRICKET · FOOTBALL · BASKETBALL · CHESS',
-    desc: 'High-intensity athletic tournaments, intra-college leagues, table tennis, badminton, and outdoor sports championships.',
+    desc: 'Play and compete in cricket, football, basketball, chess, table tennis, badminton and other campus sports.',
     icon: '🏆'
   },
   {
@@ -122,7 +122,7 @@ const PILLARS = [
     family: 'Creative',
     title: 'Media, Design & Outreach',
     tag: 'UI/UX · GRAPHICS · PHOTO · SOCIAL',
-    desc: 'Visual arts, graphic design, photography, campus coverage, community service, and youth social outreach.',
+    desc: 'Create visual art, design, photography and campus media, or contribute to outreach and community initiatives.',
     icon: '🎨'
   }
 ];
