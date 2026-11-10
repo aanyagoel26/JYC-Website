@@ -26,8 +26,7 @@ const checks = [
   ['hero controls keep touch-sized targets and visible focus behavior is inherited from shared system', hero.includes('min-height:52px') && hero.includes('min-height:44px') && hero.includes('min-height:48px') && hero.includes('color:var(--jh-bg,var(--jyc-canvas))!important') && home.includes('jh-btn-primary')],
   ['entrance motion is limited to opacity/transform and reduced-motion disables it', hero.includes('@keyframes jycHeroRise') && hero.includes('translate3d') && hero.includes('@media(prefers-reduced-motion:reduce)') && hero.includes('animation:none!important') && hero.includes('transition:none!important;') && home.includes('prefers-reduced-motion: reduce')],
   ['mobile emblem labels are simplified to avoid visual crowding', hero.includes('.jyc-emblem-badge{display:none}') && hero.includes('.jyc-emblem-controls-bar')],
-  ['no unverified homepage reach or event counters are introduced', !/5,000\s*\+|50\s*\+|15\s*\+/.test(home)]
-
+  ['no unverified homepage reach or event counters are introduced', !/5,000\s*\+|50\s*\+|15\s*\+/.test(home)],
   ['light hero has a distinct champagne-gold badge, warm glow and brass accent hierarchy', hero.includes('html[data-theme="light"]') && hero.includes('linear-gradient(115deg,#f5e6c7') && hero.includes('0 0 34px rgba(205,163,91,.24)') && hero.includes('color:#986b32!important')],
   ['dark hero has a separate midnight palette and layered astrophotography-inspired sky', hero.includes('html[data-theme="dark"]') && hero.includes('radial-gradient(ellipse at 58% 44%,rgba(113,83,176,.28)') && hero.includes('linear-gradient(153deg,transparent 35%,rgba(3,7,20,.74)') && hero.includes('jycHeroNebulaBreathe')],
   ['both hero themes retain reduced-motion-safe visual treatment', hero.includes('@media(prefers-reduced-motion:no-preference)') && hero.includes('@media(prefers-reduced-motion:reduce)') && hero.includes('animation:none!important')],
