@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './JYCHeroWebGLEmblem.css';
 
 const LOGO_SRC = '/assets/jyc-logo.avif';
@@ -7,7 +7,9 @@ const LOGO_ORIGINAL = '/JYC%20Logo(4).png';
 
 export function JYCHeroWebGLEmblem() {
   const containerRef = useRef(null);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const cardRef = useRef(null);
+  const frameRef = useRef(0);
+  const tiltRef = useRef({ x: 0, y: 0 });
   const [logoFailed, setLogoFailed] = useState(false);
 
   const handlePointerMove = event => {
@@ -15,10 +17,20 @@ export function JYCHeroWebGLEmblem() {
     const rect = containerRef.current.getBoundingClientRect();
     const x = (event.clientX - rect.left) / rect.width - 0.5;
     const y = (event.clientY - rect.top) / rect.height - 0.5;
-    setTilt({ x: -y * 4, y: x * 5 });
+    tiltRef.current = { x: -y * 4, y: x * 5 };
+    if (!frameRef.current) frameRef.current = requestAnimationFrame(() => {
+      frameRef.current = 0;
+      if (cardRef.current) cardRef.current.style.transform = `perspective(1200px) rotateX(${tiltRef.current.x}deg) rotateY(${tiltRef.current.y}deg)`;
+    });
   };
 
-  const resetTilt = () => setTilt({ x: 0, y: 0 });
+  const resetTilt = () => {
+    tiltRef.current = { x: 0, y: 0 };
+    if (frameRef.current) cancelAnimationFrame(frameRef.current);
+    frameRef.current = 0;
+    if (cardRef.current) cardRef.current.style.transform = 'perspective(1200px) rotateX(0deg) rotateY(0deg)';
+  };
+  useEffect(() => () => { if (frameRef.current) cancelAnimationFrame(frameRef.current); }, []);
 
   return (
     <div
@@ -33,8 +45,8 @@ export function JYCHeroWebGLEmblem() {
       <div className="jyc-emblem-orbit orbit-inner" aria-hidden="true" />
       <div className="jyc-emblem-orbit orbit-equator" aria-hidden="true" />
       <div
+        ref={cardRef}
         className="jyc-emblem-card-3d"
-        style={{ transform: `perspective(1200px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)` }}
       >
         <div className="jyc-emblem-glow-backing" aria-hidden="true" />
         <div className="jyc-emblem-seal-container">
