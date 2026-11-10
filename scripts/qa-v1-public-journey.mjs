@@ -13,6 +13,7 @@ const motionCss=read('src/styles/jyc-cohesive-experience.css');
 
 const checks=[
   ['homepage hero action group is present',home.includes('className="jh-actions jh-hero-actions"')],
+  ['route transitions use transform/opacity and respect reduced or user-paused motion',main.includes('className="route-stage"')&&motionCss.includes('@keyframes jycRouteEnter')&&motionCss.includes('html[data-jyc-motion="paused"] .route-stage')&&motionCss.includes('@media (prefers-reduced-motion: reduce)')],
   ['users can pause and resume decorative motion from the More JYC sheet',main.includes('function MotionPreferenceControl')&&main.includes('aria-pressed={paused}')&&main.includes("storageSet('jyc-motion-preference'")&&main.includes('jyc-motion-preference-change')],
   ['ambient motion pauses across CSS and canvas effects without hiding page content',motion.includes('jyc-motion-preference-change')&&motion.includes('userPaused')&&motionCss.includes('html[data-jyc-motion="paused"]')&&motionCss.includes('animation-play-state: paused')],
   ['homepage unmounts WebGL and Dither effects when the user pauses motion',main.includes('LazyJYCWebGLField')&&read('src/jyc-editorial-home.jsx').includes('motionPaused')&&read('src/jyc-editorial-home.jsx').includes('setDitherReady(false)')],
