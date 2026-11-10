@@ -24,6 +24,54 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero::after{
   mask-image:linear-gradient(90deg,transparent 4%,#000 48%,#000 100%);
 }
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy{position:relative;z-index:2;max-width:760px;padding-block:12px}
+
+/* Finish pass: layered campus editorial depth and deliberate interaction finish. */
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero{
+  display:grid!important;align-items:center;isolation:isolate;
+  background:
+    radial-gradient(ellipse at 16% 16%,color-mix(in srgb,var(--jh-gold,var(--jyc-gold)) 8%,transparent),transparent 34%),
+    radial-gradient(ellipse at 86% 55%,color-mix(in srgb,var(--jh-accent,var(--jyc-accent)) 7%,transparent),transparent 38%);
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero h1 .jh-title-gradient{
+  display:block;margin-top:.08em;color:var(--jh-accent,var(--jyc-accent));
+  background:linear-gradient(112deg,var(--jh-accent,var(--jyc-accent)) 0%,color-mix(in srgb,var(--jh-accent,var(--jyc-accent)) 68%,var(--jh-gold,var(--jyc-gold))) 72%,var(--jh-gold,var(--jyc-gold)) 100%);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{
+  overflow:hidden;isolation:isolate;contain:layout paint;border-radius:clamp(28px,4vw,52px);
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual::before{
+  content:"";position:absolute;inset:14px;z-index:4;pointer-events:none;
+  border:1px solid color-mix(in srgb,var(--jh-line-accent,var(--jyc-line)) 62%,transparent);
+  border-radius:inherit;opacity:.58;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual::after{
+  content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 48%,transparent 35%,color-mix(in srgb,var(--jh-bg,var(--jyc-canvas)) 30%,transparent) 100%);
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual .jyc-webgl-field{z-index:0}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-dither-layer{z-index:1}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage{z-index:2}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-actions .jh-btn:focus-visible{
+  outline:3px solid var(--jh-accent,var(--jyc-accent));outline-offset:4px;
+}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{transition:box-shadow .35s ease,border-color .35s ease}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual:hover{box-shadow:0 34px 110px rgba(22,19,34,.16),inset 0 1px 0 rgba(255,255,255,.4)}
+}
+@media(max-width:1024px){
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero{display:grid!important;grid-template-columns:minmax(0,1fr)!important}
+}
+@media(max-width:680px){
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero{gap:22px!important}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{overflow:hidden!important;contain:layout paint!important}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual::before{inset:9px}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual::after{display:block}
+}
+@media(prefers-reduced-motion:reduce){
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{transition:none!important}
+}
+
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>*{position:relative}
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions{display:flex;flex-wrap:wrap;align-items:center;gap:11px;margin-top:clamp(26px,3.1vw,38px)}
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:54px;padding:0 22px;border-radius:999px;font-size:13px;font-weight:750;line-height:1.2;white-space:normal}
