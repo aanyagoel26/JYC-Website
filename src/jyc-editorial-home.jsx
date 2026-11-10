@@ -8,11 +8,11 @@ import { ResponsivePhoto } from './jyc-responsive-photo.jsx';
 import { JYCNowStrip } from './jyc-now.jsx';
 import { JYCCampusMarquee } from './components/JYCCampusMarquee.jsx';
 const LazyDitherVeil = lazy(() => import('./react-bits/DitherVeil.jsx'));
+const LazyJYCWebGLField = lazy(() => import('./components/JYCWebGLField.jsx').then(m => ({ default: m.JYCWebGLField })));
 const LazyMagicBento = lazy(() => import('./components/react-bits/MagicBento.jsx'));
 const LazyJYC3DInteractiveExplorer = lazy(() => import('./components/JYC3DInteractiveExplorer.jsx').then(m => ({ default: m.JYC3DInteractiveExplorer })));
 const LazyJYCSpotlight = lazy(() => import('./jyc-spotlight.jsx').then(m => ({ default: m.JYCSpotlight })));
 import { JYCHeroWebGLEmblem } from './components/JYCHeroWebGLEmblem.jsx';
-import { JYCWebGLField } from './components/JYCWebGLField.jsx';
 import './components/JYCHeroWebGLEmblem.css';
 import './jyc-editorial-home.css';
 import './styles/jyc-editorial-motion-system.css';
@@ -179,15 +179,16 @@ export function JYCEditorialHome({ data }) {
     const coarse = window.matchMedia?.('(pointer: coarse)').matches;
     if (reduced || coarse) return;
     let idleId = null;
-    let timerId = null;
-    if (typeof window.requestIdleCallback === 'function') {
-      idleId = window.requestIdleCallback(() => setDitherReady(true), { timeout: 1800 });
-    } else {
-      timerId = window.setTimeout(() => setDitherReady(true), 1400);
-    }
+    const delayId = window.setTimeout(() => {
+      if (typeof window.requestIdleCallback === 'function') {
+        idleId = window.requestIdleCallback(() => setDitherReady(true), { timeout: 1200 });
+      } else {
+        setDitherReady(true);
+      }
+    }, 3200);
     return () => {
+      window.clearTimeout(delayId);
       if (idleId !== null) window.cancelIdleCallback?.(idleId);
-      if (timerId !== null) window.clearTimeout(timerId);
     };
   }, []);
   const activities = useMemo(() => {
@@ -268,7 +269,7 @@ export function JYCEditorialHome({ data }) {
           <span className="jh-hero-stage-caption" aria-hidden="true">A student community, made together.</span>
           <span className="jh-hero-frame" aria-hidden="true" />
           <div className="jh-hero-dither-backdrop" aria-hidden="true" />
-          <JYCWebGLField />
+          {ditherReady && <Suspense fallback={null}><LazyJYCWebGLField /></Suspense>}
           <div className="jh-hero-dither-layer jh-dither-mark" aria-hidden="true">
             {!ditherReady ? (
               <img
