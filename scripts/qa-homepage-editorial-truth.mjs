@@ -6,7 +6,7 @@ const css = fs.readFileSync('src/jyc-editorial-home.css', 'utf8');
 const cohesive = fs.readFileSync('src/styles/jyc-cohesive-experience.css', 'utf8');
 
 assert.match(home, /Find your people\.[\s\S]*?Make your mark\./i, 'homepage headline must have a clear student benefit');
-assert.match(home, /JYC helps you find the people and experiences/i, 'homepage lead must explain JYC in plain language');
+assert.match(home, /Find the clubs, events and people that turn campus life into your story/i, 'homepage lead must explain JYC in plain language');
 assert.doesNotMatch(home, /new Date\(['"]2026-11-15T09:00:00/, 'homepage must not hard-code an unverified countdown date');
 assert.doesNotMatch(home, /jh-flagship-countdown-strip|jh-countdown-timer/, 'homepage must not present an unverified flagship countdown');
 assert.doesNotMatch(home, /5,000<i>\+<\/i>|50<i>\+<\/i>|15<i>\+<\/i>/, 'homepage must not publish unverified reach, event or legacy counters');
