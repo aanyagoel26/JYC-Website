@@ -67,7 +67,7 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-overline{
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero h1{
   max-width:11.2ch!important;width:100%;margin:clamp(18px,2vw,26px) 0 clamp(20px,2.2vw,28px)!important;
   color:var(--jh-ink,var(--jyc-text-strong))!important;
-  font:700 clamp(60px,6.1vw,96px)/.94 'Space Grotesk',sans-serif!important;
+  font:700 clamp(56px,5.4vw,84px)/.94 'Space Grotesk',sans-serif!important;
   letter-spacing:-.075em!important;text-wrap:balance;overflow-wrap:normal;
 }
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero h1>span{display:block!important;margin:0 0 .035em}
