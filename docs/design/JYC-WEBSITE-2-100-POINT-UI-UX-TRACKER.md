@@ -152,6 +152,7 @@ The existing branch already contains a substantial hero, theme, atmosphere, card
 - The More JYC sheet now includes a persistent Pause/Resume decorative motion control; the ambient canvas, hero WebGL/Dither, crest canvas and interactive Bento respond to the preference.
 - A small reusable grain texture now adds subtle film/paper texture with separate light/dark blending.
 - Route changes now use a short transform/opacity entrance transition, disabled for OS reduced-motion and the user pause setting.
+- Event poster cards and their detail pages now share a native browser View Transition, with a route-stage fallback and reduced-motion/user-pause guards.
 - A reusable JYC line-icon component now powers the main navigation and dialog close control without adding an icon dependency.
 - The command palette is now loaded on demand; the public shell no longer eagerly imports Motion just for event-poster shared-element wrappers.
 - Lighthouse coverage now includes all seven public routes in both themes at desktop and mobile presets; the mobile run has its own report output directory.
