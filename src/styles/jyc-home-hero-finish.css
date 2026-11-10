@@ -634,3 +634,12 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage
 @media(prefers-reduced-motion:reduce){
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual::before,html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual::after{transition:none!important;animation:none!important}
 }
+
+
+/* Mobile typography never collapses below the public readability contract. */
+@media(max-width:760px) {
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-overline {
+   display:block!important; font-size:11px!important; line-height:1.55!important;
+   letter-spacing:.08em!important;
+ }
+}

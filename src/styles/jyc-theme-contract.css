@@ -560,3 +560,7 @@ html[data-theme] body::before {
     radial-gradient(1px 1px at 91% 14%,currentColor 98%,transparent);
   background-size:211px 197px,283px 251px,337px 313px;
 }
+
+
+/* Gold kicker badges use dark ink in both themes: 4.5:1 contrast on champagne. */
+html[data-theme] .public-app :where(.jh-kicker > b,.jh-kicker b) { color:#282333!important; }

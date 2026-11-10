@@ -69,6 +69,7 @@ function setupReveal() {
 
   const onMotionChange = () => {
     userPaused = document.documentElement.dataset.jycMotion === 'paused';
+    canvas.style.display = motionQuery.matches || userPaused ? 'none' : 'block';
     observer?.disconnect();
     observer = createObserver();
     observed = new WeakSet();
