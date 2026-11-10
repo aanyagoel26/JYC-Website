@@ -272,3 +272,14 @@ html[data-theme="dark"] .jyc-community-explorer .jyc-community-heading h2 em,
 html[data-theme="dark"] .jyc-community-explorer .jyc-community-family,
 html[data-theme="dark"] .jyc-community-explorer .jyc-community-filter small { color:#e7d19b!important; -webkit-text-fill-color:#e7d19b!important; opacity:1!important; }
 .jyc-community-explorer .jyc-community-heading h2 em { background:none!important; }
+
+
+/* Hover feedback is reserved for actual pointing devices; touch stays still. */
+@media(hover:none),(pointer:coarse){
+  .jyc-community-card:hover{transform:none;box-shadow:none}
+  .jyc-community-card:hover .jyc-community-card-arrow{transform:none}
+  .jyc-community-filter:hover{transform:none}
+}
+@media(prefers-reduced-motion:reduce){
+  .jyc-community-card:hover,.jyc-community-card:hover .jyc-community-card-arrow,.jyc-community-filter:hover{transform:none!important}
+}
