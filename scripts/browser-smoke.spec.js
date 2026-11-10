@@ -1445,6 +1445,29 @@ test('featured event poster uses the shared responsive image fallback contract',
 
 
 
+test('Team directory search, tier filters and clear-filters recovery stay interactive', async ({ page }) => {
+  await page.goto(base + '/team', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'team directory interactions');
+
+  const search = page.getByRole('searchbox', { name: 'Search JYC team members' });
+  await expect(search).toBeVisible();
+  await expect(page.locator('.team-filter-tab[aria-pressed="true"]')).toContainText('Everyone');
+
+  await search.fill('jyc-qa-no-published-profile-should-match');
+  await expect(page.locator('.team-empty-state')).toBeVisible();
+  await expect(page.locator('.team-results-count')).toContainText('Showing 0');
+
+  await page.getByRole('button', { name: 'Clear filters' }).click();
+  await expect(search).toHaveValue('');
+  await expect(page.locator('.team-empty-state')).toHaveCount(0);
+  await expect(page.locator('.team-filter-tab[aria-pressed="true"]')).toContainText('Everyone');
+
+  const faculty = page.locator('.team-filter-tab').filter({ hasText: 'Faculty guides' });
+  await faculty.click();
+  await expect(faculty).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('.team-results-count')).toBeVisible();
+});
+
 test('team flip-card biographies and LinkedIn links remain readable in both themes', async ({ page }) => {
   await page.goto(base + '/team', { waitUntil: 'domcontentloaded' });
   await waitForAppMount(page, 'team flip-card theme contrast');
