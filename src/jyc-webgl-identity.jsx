@@ -42,7 +42,7 @@ export function JYCWebGLIdentity(){
   const reduced=window.matchMedia?.('(prefers-reduced-motion: reduce)');
   const coarse=window.matchMedia?.('(hover: none), (pointer: coarse)');
   const saveData=navigator.connection?.saveData;
-  if(reduced?.matches||coarse?.matches||saveData)return;
+  if(reduced?.matches||coarse?.matches||saveData||(navigator.hardwareConcurrency||8)<=4||(navigator.deviceMemory||8)<4)return;
   const gl=canvas.getContext('webgl',{alpha:true,antialias:false,powerPreference:'low-power'});
   if(!gl)return;
   const program=makeProgram(gl);if(!program)return;
@@ -52,7 +52,7 @@ export function JYCWebGLIdentity(){
   const sizeLoc=gl.getAttribLocation(program,'a_size');
   const alphaLoc=gl.getAttribLocation(program,'a_alpha');
   const resolutionLoc=gl.getUniformLocation(program,'u_resolution');
-  const count=32;
+  const count=20;
   const points=Array.from({length:count},(_,i)=>{
    const a=(i/count)*Math.PI*2+(i%5)*0.17;
    const radius=58+(i%7)*18+(i%3)*9;
@@ -60,13 +60,13 @@ export function JYCWebGLIdentity(){
   });
   let width=1,height=1,raf=0,visible=true,last=0;
   const resize=()=>{
-   const dpr=Math.min(window.devicePixelRatio||1,1.5);
+   const dpr=Math.min(window.devicePixelRatio||1,1.25);
    const rect=canvas.getBoundingClientRect();width=Math.max(1,Math.round(rect.width*dpr));height=Math.max(1,Math.round(rect.height*dpr));
    canvas.width=width;canvas.height=height;gl.viewport(0,0,width,height);
   };
   const draw=(now)=>{
    if(!visible){raf=0;return;}
-   if(now-last<1000/24){raf=requestAnimationFrame(draw);return;}
+   if(now-last<1000/18){raf=requestAnimationFrame(draw);return;}
    const t=now*.00025;
    gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.useProgram(program);
    gl.uniform2f(resolutionLoc,width,height);
