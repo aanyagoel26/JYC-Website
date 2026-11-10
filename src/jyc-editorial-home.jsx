@@ -5,15 +5,14 @@ import { sourceEventMedia, sourceHubMedia } from './jyc-source-media.js';
 import { teamPhotoFor } from './jyc-team-media.js';
 import { rankDiverseJycPhotos } from './jyc-photo-intelligence.js';
 import { ResponsivePhoto } from './jyc-responsive-photo.jsx';
-import { JYCSpotlight } from './jyc-spotlight.jsx';
 import { JYCNowStrip } from './jyc-now.jsx';
 import { JYCCampusMarquee } from './components/JYCCampusMarquee.jsx';
 const LazyDitherVeil = lazy(() => import('./react-bits/DitherVeil.jsx'));
 const LazyMagicBento = lazy(() => import('./components/react-bits/MagicBento.jsx'));
+const LazyJYC3DInteractiveExplorer = lazy(() => import('./components/JYC3DInteractiveExplorer.jsx').then(m => ({ default: m.JYC3DInteractiveExplorer })));
 import { JYCHeroWebGLEmblem } from './components/JYCHeroWebGLEmblem.jsx';
 import { JYCWebGLField } from './components/JYCWebGLField.jsx';
 import './components/JYCHeroWebGLEmblem.css';
-import { JYC3DInteractiveExplorer } from './components/JYC3DInteractiveExplorer.jsx';
 import './jyc-editorial-home.css';
 import './styles/jyc-editorial-motion-system.css';
 import './styles/jyc-home-hero-finish.css';
@@ -30,6 +29,25 @@ const handleHeroLogoFallback = event => {
   if (next < candidates.length) { image.dataset.logoFallbackStage = String(next + 1); image.src = candidates[next]; }
   else image.hidden = true;
 };
+
+function DeferredMount({ children, fallback, rootMargin = '720px 0px' }) {
+  const hostRef = useRef(null);
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const host = hostRef.current;
+    if (!host) return;
+    if (!('IntersectionObserver' in window)) { setReady(true); return; }
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        setReady(true);
+        observer.disconnect();
+      }
+    }, { rootMargin });
+    observer.observe(host);
+    return () => observer.disconnect();
+  }, [rootMargin]);
+  return <div ref={hostRef} className="jh-deferred-mount">{ready ? children : fallback}</div>;
+}
 
 const slug = v => String(v || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const eventPath = e => `/events/${slug(e?.slug||e?.title)}`;
@@ -255,7 +273,7 @@ export function JYCEditorialHome({ data }) {
                 linger={1.25}
                 rimColor="#b99b70"
                 rim={0.22}
-                wander={true}
+                wander={false}
                 clickBurst={false}
                 className="jh-hero-dither-veil"
                 style={{width:'100%',height:'100%'}}
@@ -350,7 +368,11 @@ export function JYCEditorialHome({ data }) {
 
       {/* 3D INTERACTIVE CAMPUS EXPLORER (CICR & INNOVATION INSPIRED) */}
       <div className="jh-container">
-        <JYC3DInteractiveExplorer />
+        <DeferredMount fallback={<div aria-hidden="true" style={{ minHeight: 480 }} />}>
+          <Suspense fallback={<div aria-hidden="true" style={{ minHeight: 480 }} />}>
+            <LazyJYC3DInteractiveExplorer />
+          </Suspense>
+        </DeferredMount>
       </div>
 
       {/* FEATURED & UPCOMING EVENTS */}
