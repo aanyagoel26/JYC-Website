@@ -4,6 +4,7 @@ import path from 'node:path';
 const root=process.cwd();
 const read=p=>fs.readFileSync(path.join(root,p),'utf8');
 const main=read('src/main.jsx');
+const boot=read('public/boot-theme.js');
 const entry=read('src/styles/public-entry.css');
 const system=read('src/styles/public-system.css');
 const contract=read('src/styles/jyc-theme-contract.css');
@@ -20,6 +21,8 @@ check('theme contract loads after team and other global CSS',contractImport>team
 check('immersive atmosphere loads after the canonical theme contract',atmosphereImport>contractImport&&atmosphereImport>=0);
 const celestialImport=main.indexOf("import './styles/jyc-celestial-refresh.css';");
 check('Celestial Dawn final theme layer loads after the atmosphere layer',celestialImport>atmosphereImport&&celestialImport>=0);
+check('theme preview URLs select the requested theme before saved/system preferences',boot.includes("get('jyc-theme')")&&main.includes("get('jyc-theme')")&&main.includes("if(requested==='dark'||requested==='light')return requested"));
+check('manual theme changes clear the preview parameter so the user choice persists',main.includes("url.searchParams.delete('jyc-theme')")&&main.includes("storageSet('jyc-theme',theme)"));
 check('dark atmosphere has layered stars and nebula lighting',atmosphere.includes('html[data-theme="dark"] body::after')&&atmosphere.includes('jyc-star-drift')&&atmosphere.includes('rgba(104,91,176,.13)'));
 check('light atmosphere has pearl, champagne and violet glow layers',atmosphere.includes('html[data-theme="light"] body::after')&&atmosphere.includes('rgba(239,205,144,.22)')&&atmosphere.includes('rgba(171,151,207,.13)'));
 check('both modes add depth through glass, card lift and emblem bloom',atmosphere.includes('backdrop-filter: blur(22px)')&&atmosphere.includes('translateY(-5px)')&&atmosphere.includes('.jyc-emblem-seal-container'));
