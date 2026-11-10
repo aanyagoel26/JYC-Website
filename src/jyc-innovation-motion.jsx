@@ -111,7 +111,8 @@ function useAtmosphericCanvas(canvasRef) {
     if (!ctx) return;
     const lowPower = (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) < 4 || Boolean(navigator.connection?.saveData);
     const reducedCanvas = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (lowPower || reducedCanvas) { canvas.style.display = 'none'; return; } // CSS aurora and grain remain the static fallback on constrained devices.
+    const isCoarsePointer = window.matchMedia?.('(pointer: coarse)').matches ?? false;
+    if (lowPower || reducedCanvas || isCoarsePointer) { canvas.style.display = 'none'; return; } // CSS aurora and grain remain the static fallback on constrained devices.
 
     let width = 0;
     let height = 0;
@@ -121,7 +122,6 @@ function useAtmosphericCanvas(canvasRef) {
     let targetMouseX = 0;
     let targetMouseY = 0;
     let time = 0;
-    const isCoarsePointer = window.matchMedia?.('(pointer: coarse)').matches ?? false;
     const targetFrameMs = isCoarsePointer ? 1000 / 12 : 1000 / 24;
     let lastFrameAt = -Infinity;
 
