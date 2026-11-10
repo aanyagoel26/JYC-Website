@@ -4,6 +4,7 @@ import './jyc-innovation-motion.css';
 function setupReveal() {
   const selector = '.public-app .reveal';
   const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  let userPaused = document.documentElement.dataset.jycMotion === 'paused';
   let observer = null;
   let observed = new WeakSet();
 
@@ -25,7 +26,7 @@ function setupReveal() {
     if (node.matches(selector)) candidates.push(node);
     candidates.push(...node.querySelectorAll(selector));
     candidates.forEach(candidate => {
-      if (motionQuery.matches || !observer) {
+      if (motionQuery.matches || userPaused || !observer) {
         show(candidate);
       } else if (!observed.has(candidate)) {
         observed.add(candidate);
@@ -48,24 +49,28 @@ function setupReveal() {
   mutationObserver?.observe(root, { childList: true, subtree: true });
 
   const onMotionChange = () => {
+    userPaused = document.documentElement.dataset.jycMotion === 'paused';
     observer?.disconnect();
     observer = createObserver();
     observed = new WeakSet();
     document.querySelectorAll(selector).forEach(node => {
-      if (motionQuery.matches || !observer) show(node);
+      if (motionQuery.matches || userPaused || !observer) show(node);
       else {
         observed.add(node);
         observer.observe(node);
       }
     });
   };
+  const onUserMotionChange = () => onMotionChange();
   motionQuery.addEventListener?.('change', onMotionChange);
+  window.addEventListener('jyc-motion-preference-change', onUserMotionChange);
 
   return () => {
     mutationObserver?.disconnect();
     observer?.disconnect();
     document.documentElement.classList.remove('jyc-motion-ready');
     motionQuery.removeEventListener?.('change', onMotionChange);
+    window.removeEventListener('jyc-motion-preference-change', onUserMotionChange);
   };
 }
 
@@ -80,6 +85,7 @@ function useAtmosphericCanvas(canvasRef) {
     if (!canvas) return;
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     let reducedMotion = motionQuery.matches;
+    let userPaused = document.documentElement.dataset.jycMotion === 'paused';
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
     const lowPower = (navigator.hardwareConcurrency || 8) <= 8 || (navigator.deviceMemory || 8) < 8 || Boolean(navigator.connection?.saveData);
@@ -159,12 +165,12 @@ function useAtmosphericCanvas(canvasRef) {
     let isHidden = document.hidden;
     const onVisibilityChange = () => {
       isHidden = document.hidden;
-      if (!isHidden && !reducedMotion && !animId) animId = requestAnimationFrame(loop);
+      if (!isHidden && !reducedMotion && !userPaused && !animId) animId = requestAnimationFrame(loop);
     };
     document.addEventListener('visibilitychange', onVisibilityChange);
 
     const loop = (timestamp) => {
-      if (isHidden || reducedMotion) {
+      if (isHidden || reducedMotion || userPaused) {
         animId = 0;
         return;
       }
@@ -386,7 +392,7 @@ function useAtmosphericCanvas(canvasRef) {
 
     const onMotionChange = () => {
       reducedMotion = motionQuery.matches;
-      if (reducedMotion) {
+      if (reducedMotion || userPaused) {
         if (animId) cancelAnimationFrame(animId);
         animId = 0;
         ctx.clearRect(0, 0, width, height);
@@ -394,12 +400,24 @@ function useAtmosphericCanvas(canvasRef) {
         animId = requestAnimationFrame(loop);
       }
     };
+    const onUserMotionChange = () => {
+      userPaused = document.documentElement.dataset.jycMotion === 'paused';
+      if (userPaused) {
+        if (animId) cancelAnimationFrame(animId);
+        animId = 0;
+        ctx.clearRect(0, 0, width, height);
+      } else if (!reducedMotion && !isHidden && !animId) {
+        animId = requestAnimationFrame(loop);
+      }
+    };
     motionQuery.addEventListener?.('change', onMotionChange);
-    if (!reducedMotion && !isHidden) animId = requestAnimationFrame(loop);
+    window.addEventListener('jyc-motion-preference-change', onUserMotionChange);
+    if (!reducedMotion && !userPaused && !isHidden) animId = requestAnimationFrame(loop);
 
     return () => {
       if (animId) cancelAnimationFrame(animId);
       motionQuery.removeEventListener?.('change', onMotionChange);
+      window.removeEventListener('jyc-motion-preference-change', onUserMotionChange);
       window.removeEventListener('resize', resize);
       if (!isCoarsePointer) window.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('visibilitychange', onVisibilityChange);
