@@ -28,16 +28,12 @@ test('320px viewport keeps public routes and gallery cards inside the page', asy
         documentOverflow: document.documentElement.scrollWidth > viewport + 1,
         bodyOverflow: document.body.scrollWidth > viewport + 1,
         gridFound: Boolean(grid),
-        gridClientWidth: grid?.clientWidth ?? null,
-        gridScrollWidth: grid?.scrollWidth ?? null,
-        gridLeft: gridRect?.left ?? null,
-        gridRight: gridRect?.right ?? null,
-        cards,
         gridSelector: grid?.className || '',
         gridClientWidth: grid?.clientWidth ?? null,
         gridScrollWidth: grid?.scrollWidth ?? null,
         gridLeft: gridRect?.left ?? null,
-        gridRight: gridRect?.right ?? null
+        gridRight: gridRect?.right ?? null,
+        cards
       };
     });
     expect(result.documentOverflow, `${route} document overflow at 320px`).toBe(false);
