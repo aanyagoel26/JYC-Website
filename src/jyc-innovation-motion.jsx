@@ -110,8 +110,9 @@ function useAtmosphericCanvas(canvasRef) {
     let userPaused = document.documentElement.dataset.jycMotion === 'paused';
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    const lowPower = (navigator.hardwareConcurrency || 8) <= 8 || (navigator.deviceMemory || 8) < 8 || Boolean(navigator.connection?.saveData);
-    if (lowPower) { canvas.style.display = 'none'; return; } // CSS aurora/nebula remains as a static fallback on constrained devices.
+    const lowPower = (navigator.hardwareConcurrency || 8) <= 4 || (navigator.deviceMemory || 8) < 4 || Boolean(navigator.connection?.saveData);
+    const reducedCanvas = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (lowPower || reducedCanvas) { canvas.style.display = 'none'; return; } // CSS aurora and grain remain the static fallback on constrained devices.
 
     let width = 0;
     let height = 0;
@@ -122,7 +123,7 @@ function useAtmosphericCanvas(canvasRef) {
     let targetMouseY = 0;
     let time = 0;
     const isCoarsePointer = window.matchMedia?.('(pointer: coarse)').matches ?? false;
-    const targetFrameMs = isCoarsePointer ? 80 : 1000 / 20;
+    const targetFrameMs = isCoarsePointer ? 1000 / 12 : 1000 / 24;
     let lastFrameAt = -Infinity;
 
     const resize = () => {
@@ -140,7 +141,7 @@ function useAtmosphericCanvas(canvasRef) {
     if (!isCoarsePointer) window.addEventListener('mousemove', onMouseMove, { passive: true });
 
     // Star pool for Dark Mode (small twinkling stars)
-    const starCount = Math.min(isCoarsePointer ? 16 : 40, Math.floor(window.innerWidth / (isCoarsePointer ? 24 : 28)));
+    const starCount = Math.min(isCoarsePointer ? 8 : 24, Math.floor(window.innerWidth / (isCoarsePointer ? 46 : 44)));
     const stars = Array.from({ length: starCount }, () => ({
       x: Math.random(),
       y: Math.random(),
@@ -154,7 +155,7 @@ function useAtmosphericCanvas(canvasRef) {
     }));
 
     // Golden dust and luminous nodes for Light Mode
-    const goldDustCount = Math.min(isCoarsePointer ? 8 : 20, Math.floor(window.innerWidth / (isCoarsePointer ? 44 : 56)));
+    const goldDustCount = Math.min(isCoarsePointer ? 5 : 12, Math.floor(window.innerWidth / (isCoarsePointer ? 72 : 82)));
     const goldDust = Array.from({ length: goldDustCount }, () => ({
       x: Math.random(),
       y: Math.random(),
@@ -259,7 +260,7 @@ function useAtmosphericCanvas(canvasRef) {
         });
 
         // Constellation webs between nearby stars (distance threshold ~85px)
-        const connectDist = Math.min(width * 0.075, 85);
+        const connectDist = Math.min(width * 0.055, 68);
         ctx.lineWidth = 0.55;
         for (let i = 0; i < starCoords.length; i++) {
           for (let j = i + 1; j < starCoords.length; j++) {
