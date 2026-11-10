@@ -22,6 +22,22 @@ function setupReveal() {
 
   const observeNode = node => {
     if (!(node instanceof Element)) return;
+
+    // Route pages are authored with semantic sections rather than animation
+    // classes. Promote those sections into the shared reveal system so SPA
+    // navigation, reduced motion and observer fallbacks all use one contract.
+    const stages = node.matches('.route-stage')
+      ? [node]
+      : [...node.querySelectorAll('.route-stage')];
+    const containingStage = node.closest('.route-stage');
+    if (containingStage) stages.push(containingStage);
+    [...new Set(stages)].forEach(stage => {
+      const sections = [];
+      if (node.matches('section') && stage.contains(node)) sections.push(node);
+      sections.push(...node.querySelectorAll('section'));
+      sections.forEach(section => section.classList.add('reveal'));
+    });
+
     const candidates = [];
     if (node.matches(selector)) candidates.push(node);
     candidates.push(...node.querySelectorAll(selector));
