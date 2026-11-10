@@ -408,6 +408,8 @@ export function JYC57Clubs({data}){
    {(activeFilterCount>0||query)&&<button type="button" className="jyc-clear-filters-btn" onClick={clearAllFilters}>Reset Filters ↺</button>}
   </div>
 
+  <p className="results-line" role="status" aria-live="polite">{filtered.length} communities found</p>
+
   {/* Club Cards Wall */}
   <div className="jyc57-club-wall">
    {filtered.map((c,i)=>{
