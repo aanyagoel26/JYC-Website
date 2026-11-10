@@ -17,6 +17,7 @@ import './jyc-editorial-home.css';
 import './styles/jyc-editorial-motion-system.css';
 import './styles/jyc-home-hero-finish.css';
 import './styles/jyc-home-hero-art-direction.css';
+import './styles/jyc-home-final-refinement.css';
 
 function DeferredMount({ children, fallback, rootMargin = '720px 0px' }) {
   const hostRef = useRef(null);
