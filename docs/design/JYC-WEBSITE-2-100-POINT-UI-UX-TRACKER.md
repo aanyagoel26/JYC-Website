@@ -134,7 +134,7 @@ Do not mark an item complete from a source-code assertion alone. A visual item n
 - [~] 94. Pause WebGL, particle and scroll work when hidden or offscreen.
 - [~] 95. Prevent duplicate animation loops and clean up WebGL resources.
 - [~] 96. Enforce measurable JavaScript, image and rendering budgets.
-- [~] 97. Run Lighthouse across key routes, themes and viewport classes.
+- [~] 97. Run Lighthouse across key routes, themes and viewport classes (desktop and mobile configs now cover all seven routes in both light and dark modes; current run must pass).
 - [~] 98. Maintain Playwright route, interaction and visual-regression coverage.
 - [~] 99. Combine automated accessibility checks with manual keyboard/screen-reader review.
 - [ ] 100. Complete a final review on real midrange Android devices and desktop browsers.
@@ -153,5 +153,6 @@ The existing branch already contains a substantial hero, theme, atmosphere, card
 - A small reusable grain texture now adds subtle film/paper texture with separate light/dark blending.
 - Route changes now use a short transform/opacity entrance transition, disabled for OS reduced-motion and the user pause setting.
 - A reusable JYC line-icon component now powers the main navigation and dialog close control without adding an icon dependency.
+- Lighthouse coverage now includes all seven public routes in both themes at desktop and mobile presets; the mobile run has its own report output directory.
 
 **Release rule:** `[~]` is not a pass. Promote an item to `[x]` only after the relevant current-head CI/browser/Lighthouse checks and any required manual visual, keyboard, touch or real-device review pass. PR #12 must remain unmerged until the release gates are green.
