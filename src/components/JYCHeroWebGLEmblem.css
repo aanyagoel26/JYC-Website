@@ -21,7 +21,10 @@
 .jyc-emblem-glow-backing {
   position: absolute;
   inset: 4%;
-  z-index: -1;
+  z-index: 0;
+  display: block;
+  opacity: 1;
+  visibility: visible;
   border-radius: 50%;
   background:
     radial-gradient(ellipse at 50% 45%, rgba(200,188,255,.22), transparent 58%),
@@ -31,6 +34,7 @@
 }
 .jyc-emblem-seal-container {
   position: relative;
+  z-index: 1;
   display: grid;
   place-items: center;
   width: 100%;

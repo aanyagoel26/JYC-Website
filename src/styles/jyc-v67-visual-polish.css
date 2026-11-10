@@ -252,3 +252,33 @@ html[data-theme] .nav .nav-search-trigger {
 html[data-jyc-motion="paused"] .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage::before {
   animation-play-state: paused !important;
 }
+
+
+/* Final readable-text pass for unclassed editorial metadata. */
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-event-details > span,
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-event-details > span b,
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-years > span,
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-years > b {
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+  color: var(--jyc-muted) !important;
+}
+html[data-theme="light"] .public-app .jyc-editorial-home.jyc-home .jh-cyber-badge b {
+  color: #282333 !important;
+}
+html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-cyber-badge b {
+  color: #f6f2ff !important;
+}
+html[data-theme] .public-app .footer-v6-bottom .jyc-creator-credit,
+html[data-theme] .public-app .footer-v6-bottom .jyc-creator-credit a {
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+}
+html[data-theme="light"] .public-app .footer-v6-bottom .jyc-creator-credit,
+html[data-theme="light"] .public-app .footer-v6-bottom .jyc-creator-credit a {
+  color: #51483f !important;
+}
+html[data-theme="dark"] .public-app .footer-v6-bottom .jyc-creator-credit,
+html[data-theme="dark"] .public-app .footer-v6-bottom .jyc-creator-credit a {
+  color: #c8cce0 !important;
+}

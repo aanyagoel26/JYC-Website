@@ -32,10 +32,13 @@ function setupReveal() {
     const containingStage = node.closest('.route-stage');
     if (containingStage) stages.push(containingStage);
     [...new Set(stages)].forEach(stage => {
-      const sections = [];
-      if (node.matches('section') && stage.contains(node)) sections.push(node);
-      sections.push(...node.querySelectorAll('section'));
-      sections.forEach(section => section.classList.add('reveal'));
+      const targets = [];
+      // Include the page root and semantic sections. Some legacy routes use
+      // div-based page shells, so section-only discovery misses SPA updates.
+      if (node !== stage && node.parentElement === stage) targets.push(node);
+      if (node.matches('section, article, main') && stage.contains(node)) targets.push(node);
+      targets.push(...stage.querySelectorAll('section, article, main, [class*="page-section"], [class*="-section"], .section-card'));
+      targets.forEach(target => target.classList.add('reveal'));
     });
 
     const candidates = [];
