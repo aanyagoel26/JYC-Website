@@ -500,3 +500,17 @@ html[data-theme="dark"] .public-app :is(
   .jyc-events-header .jh-kicker,
   .jyc-events-header .jh-kicker b
 ){color:#c0c4da!important}
+
+/* Lighthouse 11/10: dark-theme kicker text sits on champagne badges, while
+   the About source note uses a warm raised surface. Use dark ink on both. */
+html[data-theme="dark"] .public-app :is(
+  .jyc-gallery-hero .jh-kicker,
+  .jyc-gallery-hero .jh-kicker b,
+  .jyc-clubs-header .jh-kicker,
+  .jyc-clubs-header .jh-kicker b,
+  .jyc-events-header .jh-kicker,
+  .jyc-events-header .jh-kicker b
+) { color: #241d17 !important; }
+html[data-theme="dark"] .public-app .about-source-note {
+  color: #241d17 !important;
+}
