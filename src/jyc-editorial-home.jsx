@@ -10,6 +10,7 @@ import { JYCCampusMarquee } from './components/JYCCampusMarquee.jsx';
 const LazyDitherVeil = lazy(() => import('./react-bits/DitherVeil.jsx'));
 const LazyMagicBento = lazy(() => import('./components/react-bits/MagicBento.jsx'));
 const LazyJYC3DInteractiveExplorer = lazy(() => import('./components/JYC3DInteractiveExplorer.jsx').then(m => ({ default: m.JYC3DInteractiveExplorer })));
+const LazyJYCSpotlight = lazy(() => import('./jyc-spotlight.jsx').then(m => ({ default: m.JYCSpotlight })));
 import { JYCHeroWebGLEmblem } from './components/JYCHeroWebGLEmblem.jsx';
 import { JYCWebGLField } from './components/JYCWebGLField.jsx';
 import './components/JYCHeroWebGLEmblem.css';
@@ -402,6 +403,14 @@ export function JYCEditorialHome({ data }) {
       </section>
 
       {/* 3D INTERACTIVE CAMPUS EXPLORER (CICR & INNOVATION INSPIRED) */}
+      <div className="jh-container">
+        <DeferredMount fallback={<div aria-hidden="true" style={{ minHeight: 420 }} />}>
+          <Suspense fallback={<div aria-hidden="true" style={{ minHeight: 420 }} />}>
+            <LazyJYCSpotlight data={data} />
+          </Suspense>
+        </DeferredMount>
+      </div>
+
       <div className="jh-container">
         <DeferredMount fallback={<div aria-hidden="true" style={{ minHeight: 480 }} />}>
           <Suspense fallback={<div aria-hidden="true" style={{ minHeight: 480 }} />}>
