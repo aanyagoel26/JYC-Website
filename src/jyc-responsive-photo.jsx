@@ -7,9 +7,10 @@ export function ResponsivePhoto({src,alt='',width,height,sizes='100vw',loading='
  // Empty/whitespace sources must never become a request for the current document.
  const normalizedFallbackSrc=typeof fallbackSrc==='string'&&fallbackSrc.trim()?fallbackSrc.trim():PHOTO_FALLBACK;
  const source=typeof src==='string'&&src.trim()?src.trim():normalizedFallbackSrc;
- const [sourceDimensions,setSourceDimensions]=useState(()=>({src:source,width:0,derivativesEligible:false}));
+ const [sourceDimensions,setSourceDimensions]=useState(()=>({src:source,width:0,derivativesEligible:false,variantSource:''}));
  const [fallbackState,setFallbackState]=useState(()=>({src:source,fallbackSrc:normalizedFallbackSrc,stage:0,preferOriginal:false}));
  const intrinsicWidth=sourceDimensions.src===source&&sourceDimensions.derivativesEligible?sourceDimensions.width:0;
+ const variantSource=sourceDimensions.src===source&&sourceDimensions.derivativesEligible?(sourceDimensions.variantSource||source):'';
  const derivativesEnabled=import.meta.env.PROD||import.meta.env.VITE_ENABLE_PHOTO_DERIVATIVES==='true';
  const fallbackStateMatches=fallbackState.src===source&&fallbackState.fallbackSrc===normalizedFallbackSrc;
  const stage=fallbackStateMatches?fallbackState.stage:0;
@@ -21,17 +22,28 @@ export function ResponsivePhoto({src,alt='',width,height,sizes='100vw',loading='
  const activeFallback=stage>0&&!failed&&!usingOriginalRetry;
  // Only emit srcset candidates after the generated manifest confirms intrinsic dimensions and derivative eligibility.
  // If the manifest is unavailable, keep the original source rather than guessing derivative URLs that may 404 or upscale.
- const variants=stage===0&&derivativesEnabled&&intrinsicWidth>0?photoDerivativeUrls(source,intrinsicWidth):null;
+ const variants=stage===0&&derivativesEnabled&&intrinsicWidth>0&&variantSource?photoDerivativeUrls(variantSource,intrinsicWidth):null;
  // Keep the original source in the img element as the final format-compatibility fallback;
  // supported browsers select the optimized AVIF/WebP sources above it.
  const resolvedSrc=stage===0?source:!failed?candidates[stage-1]:undefined;
  useEffect(()=>{
   let active=true;
-  if(!derivativesEnabled||!isDerivativeSource(source))return()=>{active=false};
+  const isGeneratedDerivative=source.startsWith('/assets/photo-derivatives/');
+  if(!derivativesEnabled||(!isDerivativeSource(source)&&!isGeneratedDerivative))return()=>{active=false};
   loadJycImageManifest().then(manifest=>{
-   const entry=manifest?.images?.[source];
+   if(!active||!manifest?.images)return;
+   let manifestSource=source;
+   if(isGeneratedDerivative){
+    const generatedBase=source.replace(/^\\/assets\\/photo-derivatives\\//,'/assets/').replace(/-\\d+\\.(?:avif|webp)$/i,'');
+    const extension=generatedBase.match(/-(jpe?g|png|webp)$/i)?.[1]?.toLowerCase();
+    const sourceBase=extension?generatedBase.slice(0,-extension.length-1):generatedBase;
+    manifestSource=extension
+     ? sourceBase+'.'+extension
+     : Object.keys(manifest.images).find(url=>url.replace(/\\.(?:jpe?g|png|webp)$/i,'')===generatedBase&&manifest.images[url]?.derivativesEligible===true)||'';
+   }
+   const entry=manifest.images[manifestSource];
    const measured=Number(entry?.width);
-   if(active&&entry?.derivativesEligible===true&&measured>0)setSourceDimensions({src:source,width:measured,derivativesEligible:true});
+   if(active&&entry?.derivativesEligible===true&&measured>0&&isDerivativeSource(manifestSource))setSourceDimensions({src:source,width:measured,derivativesEligible:true,variantSource:manifestSource});
   });
   return()=>{active=false};
  },[source,derivativesEnabled]);
