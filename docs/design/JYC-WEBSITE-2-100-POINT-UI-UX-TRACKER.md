@@ -149,7 +149,7 @@ The existing branch already contains a substantial hero, theme, atmosphere, card
 - Public routes now render cache/curated fallback content before asynchronous live refresh, reducing the large footer layout shifts seen on content-heavy routes.
 - The editorial homepage is route-lazy so non-home routes do not eagerly load the hero/WebGL module.
 - The responsive crest candidate is preloaded with matching `imagesrcset`/`imagesizes`; OGL and Dither initialization is deferred beyond the initial hero paint.
-- The More JYC sheet now includes a persistent Pause/Resume decorative motion control; the ambient canvas, hero WebGL/Dither and interactive Bento respond to the preference.
+- The More JYC sheet now includes a persistent Pause/Resume decorative motion control; the ambient canvas, hero WebGL/Dither, crest canvas and interactive Bento respond to the preference.
 - A small reusable grain texture now adds subtle film/paper texture with separate light/dark blending.
 - Route changes now use a short transform/opacity entrance transition, disabled for OS reduced-motion and the user pause setting.
 - A reusable JYC line-icon component now powers the main navigation and dialog close control without adding an icon dependency.
