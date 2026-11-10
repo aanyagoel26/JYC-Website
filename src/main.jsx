@@ -41,6 +41,7 @@ import {JYC_EDITORIAL_ACHIEVEMENTS,JYC_TEAM_SOCIALS} from './jyc-editorial-conte
 
 const LazyJYCEditorialHome=lazy(()=>import('./jyc-editorial-home.jsx').then(m=>({default:m.JYCEditorialHome})));
 const LazyJYCSearch=lazy(()=>import('./search/jyc-search.jsx').then(m=>({default:m.JYCSearch})));
+const preloadJYCSearch=()=>import('./search/jyc-search.jsx');
 const LazyJYCInnovationMotion=lazy(()=>import('./jyc-innovation-motion.jsx').then(m=>({default:m.JYCInnovationMotion})));
 const LazyRubberSegment=lazy(()=>import('./react-bits/JYCMicro.jsx').then(m=>({default:m.RubberSegment})));
 const LazyBellToggle=lazy(()=>import('./react-bits/JYCMicro.jsx').then(m=>({default:m.BellToggle})));
@@ -265,7 +266,7 @@ function App(){const loc=useLocation();const [data,setData]=useState(()=>import.
  useEffect(()=>{
    const nodes=[...document.querySelectorAll('.reveal,.editorial-reveal')];
    if(!nodes.length)return;
-   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches || typeof IntersectionObserver !== 'function'){
      nodes.forEach(n=>n.classList.add('is-visible'));
      return;
    }
@@ -833,7 +834,7 @@ function Navbar({data,admin,theme,setTheme}){
    <nav className={open?'open':''}>{navButtons}<button type="button" className={`nav-more-trigger ${moreOpen?'active':''}`} onClick={()=>{setOpen(false);setMoreOpen(v=>!v)}} aria-expanded={moreOpen} aria-controls={moreOpen?'jyc-more-dialog':undefined}>More <span aria-hidden="true">⌄</span></button></nav>
    <button type="button" className="nav-join-cta" onClick={()=>nav('/join-jyc')}>Join JYC <span>↗</span></button>
    <Theme theme={theme} setTheme={setTheme}/><button type="button" className={`hamb ${open?'open':''}`} onClick={()=>setOpen(v=>!v)} aria-label="Menu" aria-expanded={open}><i/><i/><i/></button>
-   {open&&<button type="button" className="mobile-nav-scrim" aria-label="Close navigation" onClick={()=>setOpen(false)}/>}<button type="button" className="search-trigger" data-jyc-search-trigger aria-expanded={search} aria-controls={search?'jyc-search-dialog':undefined} onClick={()=>setSearch(true)} title="Search JYC (Ctrl/Cmd + K)"><span className="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg></span><span className="search-label">Search</span><kbd aria-hidden="true">Ctrl K</kbd></button>
+
  </div></header>
  {createPortal(dock,document.body)}{createPortal(more,document.body)}{searchView}</>
 }

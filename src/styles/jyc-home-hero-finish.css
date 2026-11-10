@@ -590,3 +590,47 @@ html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-hero-dither
 @media(prefers-reduced-motion:reduce){
   html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{animation:none!important}
 }
+
+/* HERO POLISH — clearer hierarchy, richer crest stage, better small screens. */
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero{min-height:min(790px,calc(100svh - 72px))!important;gap:clamp(42px,6vw,96px)!important}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy{max-width:700px}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero h1{max-width:12ch!important;font-size:clamp(58px,5.65vw,86px)!important;line-height:.96!important;letter-spacing:-.075em!important}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-lead{max-width:43ch;font-size:clamp(16px,1.18vw,18px);line-height:1.7}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{min-height:0;aspect-ratio:.96/1;overflow:hidden;isolation:isolate;border-radius:clamp(30px,4vw,54px)}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual::before{content:"";position:absolute;z-index:2;inset:5.5%;border:1px solid color-mix(in srgb,var(--jh-gold,var(--jyc-gold)) 28%,transparent);border-radius:50%;pointer-events:none;opacity:.68;box-shadow:0 0 44px color-mix(in srgb,var(--jh-accent,var(--jyc-accent)) 12%,transparent),inset 0 0 44px color-mix(in srgb,var(--jh-accent,var(--jyc-accent)) 8%,transparent)}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual::after{content:"";position:absolute;z-index:2;inset:0;border-radius:inherit;pointer-events:none;background:linear-gradient(135deg,rgba(255,255,255,.10),transparent 22%,transparent 72%,rgba(255,255,255,.035)),radial-gradient(ellipse at 50% 50%,transparent 48%,rgba(4,7,18,.18) 100%)}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage{width:min(100%,570px);max-width:570px}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-seal-container{width:66%;height:66%}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-logo-img{filter:drop-shadow(0 12px 28px rgba(0,0,0,.34))}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn{min-height:54px!important;padding-inline:22px!important}
+@media(max-width:1024px){
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero{gap:30px!important;padding-block:42px 52px!important}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero h1{max-width:14ch!important;font-size:clamp(54px,7.6vw,76px)!important}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{width:min(100%,560px);margin-inline:auto;aspect-ratio:1.16/1}
+}
+@media(max-width:680px){
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero{width:calc(100% - 36px)!important;gap:22px!important;padding-block:28px 34px!important}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-overline{display:block!important;margin-top:12px;font-size:10px;line-height:1.45;letter-spacing:.035em}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero h1{max-width:11.5ch!important;margin:12px 0 13px!important;font-size:clamp(39px,10.2vw,58px)!important;line-height:.99!important;letter-spacing:-.07em!important}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-lead{max-width:38ch;font-size:14px;line-height:1.58}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions{margin-top:18px;gap:9px}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn{min-height:50px!important;font-size:12px!important}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn:nth-child(3){min-height:42px!important;border:0;background:transparent;box-shadow:none;color:var(--jh-accent,var(--jyc-accent));text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--jh-accent,var(--jyc-accent)) 45%,transparent);text-underline-offset:4px}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{width:min(100%,340px);min-height:0;aspect-ratio:1/1;margin-inline:auto;border-radius:28px}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage{width:90%;max-width:280px;margin-top:0}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-seal-container{width:64%;height:64%}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-controls-bar{bottom:8px;gap:6px;transform:translateX(-50%)}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .emblem-control-pill{box-sizing:border-box;min-height:48px;height:48px;padding:7px 10px;font-size:9px}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-label{top:18px;left:20px}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-caption{right:20px;bottom:18px;max-width:58%;font-size:8px}
+}
+@media(max-width:380px){
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero{width:calc(100% - 28px)!important}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-cyber-badge{gap:6px;padding-inline:8px;font-size:9px}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero h1{font-size:clamp(36px,9.8vw,42px)!important}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{width:min(100%,300px)}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage{max-width:245px}
+}
+@media(prefers-reduced-motion:reduce){
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual::before,html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual::after{transition:none!important;animation:none!important}
+}
