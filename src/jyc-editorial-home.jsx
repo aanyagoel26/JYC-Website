@@ -16,6 +16,7 @@ import './components/JYCHeroWebGLEmblem.css';
 import { JYC3DInteractiveExplorer } from './components/JYC3DInteractiveExplorer.jsx';
 import './jyc-editorial-home.css';
 import './styles/jyc-editorial-motion-system.css';
+import './styles/jyc-home-hero-finish.css';
 
 const ORIGINAL_LOGO = '/JYC%20Logo(4).png';
 const FALLBACK = import.meta.env.PROD ? '/assets/jyc-logo.webp' : ORIGINAL_LOGO;
@@ -252,7 +253,7 @@ export function JYCEditorialHome({ data }) {
                 linger={1.25}
                 rimColor="#b99b70"
                 rim={0.22}
-                wander={false}
+                wander={true}
                 clickBurst={false}
                 className="jh-hero-dither-veil"
                 style={{width:'100%',height:'100%'}}
