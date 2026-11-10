@@ -17,7 +17,6 @@ import './components/JYCHeroWebGLEmblem.css';
 import './jyc-editorial-home.css';
 import './styles/jyc-editorial-motion-system.css';
 import './styles/jyc-home-hero-finish.css';
-import './styles/jyc-home-spotlight.css';
 
 const ORIGINAL_LOGO = '/JYC%20Logo(4).png';
 const FALLBACK = import.meta.env.PROD ? '/assets/jyc-logo.webp' : ORIGINAL_LOGO;
