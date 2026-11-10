@@ -148,7 +148,6 @@ export function JYCHeroWebGLEmblem() {
       if (userPaused) {
         cancelAnimationFrame(animId);
         animId = 0;
-        ctx.clearRect(0, 0, width, height);
       } else if (!reducedMotion && isVisible && !animId) {
         animId = requestAnimationFrame(draw);
       }
