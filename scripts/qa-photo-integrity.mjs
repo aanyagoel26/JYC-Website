@@ -43,7 +43,7 @@ const imageManifestSource=fs.readFileSync('scripts/generate-image-manifest.mjs',
 const logoMapSource=mediaSource.slice(mediaSource.indexOf('const AUTHENTIC_HUB_LOGOS'),mediaSource.indexOf('const AUTHENTIC_HUB_BANNERS'));
 const validClubLogoPaths=['public/assets/logos/bds.png','public/assets/logos/eloquence.png','public/assets/logos/panache.png'];
 assert('BDS, Eloquence and Panache map to valid original PNG logo assets',validClubLogoPaths.every(file=>fs.existsSync(file)&&parseImageDimensions(fs.readFileSync(file))?.width>0)&&logoMapSource.includes("bds: '/assets/logos/bds.png'")&&logoMapSource.includes("eloquence: '/assets/logos/eloquence.png'")&&logoMapSource.includes("panache: '/assets/logos/panache.png'"));
-const authoritativeLogoPaths=[...logoMapSource.matchAll(/'([^']+\\.(?:png|webp|jpe?g))'/g)].map(match=>'public'+match[1]);
+const authoritativeLogoPaths=[...logoMapSource.matchAll(/'([^']+\.(?:png|webp|jpe?g))'/g)].map(match=>'public'+match[1]);
 assert('every authoritative hub logo resolves to a decodable local image',authoritativeLogoPaths.length>0&&authoritativeLogoPaths.every(file=>fs.existsSync(file)&&parseImageDimensions(fs.readFileSync(file))?.width>0));
 assert('corrupt VamUnique and legacy WebP logo variants are not advertised as official marks',!logoMapSource.includes('/assets/logos/vamunique.png')&&!logoMapSource.includes('/assets/logos/bds.webp')&&!logoMapSource.includes('/assets/logos/eloquence.webp')&&!logoMapSource.includes('/assets/logos/panache.webp'));
 assert('malformed legacy logo binaries are removed from the shipped public asset tree',['public/assets/logos/bds.webp','public/assets/logos/eloquence.webp','public/assets/logos/panache.webp','public/assets/logos/vamunique.png'].every(file=>!fs.existsSync(file)));
@@ -89,7 +89,7 @@ const inductionUrls=new Set(induction.items.map(x=>x.url));
 const archivePhotoUrls=new Set(JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.map(x=>x.url));
 const eventPhotoItems=event.photoItems||[];
 const auditedArchiveIds=new Set(auditedExclusionIds);
-const qualityOverrideUrls=[...(mediaSource.match(/'([^']+\\.webp)'/g)||[])].map(x=>x.slice(1,-1));
+const qualityOverrideUrls=[...(mediaSource.match(/'([^']+\.webp)'/g)||[])].map(x=>x.slice(1,-1));
 const qualityOverrideViolations=qualityOverrideUrls.filter(url=>[...auditedArchiveIds].some(id=>url.endsWith('/'+id+'.webp')));
 
 assert('curated archive photography pool is exposed',JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.length>350,`found ${JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.length}`);
@@ -189,7 +189,7 @@ assert('photo derivative generator skips unsuitable intrinsic dimensions before 
 
 const imageRoot=path.resolve('public/assets');
 const imageFiles=[];
-const walkImageFiles=dir=>{for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())walkImageFiles(file);else if(/\\.(?:png|jpe?g|webp)$/i.test(file))imageFiles.push(file)}};
+const walkImageFiles=dir=>{for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())walkImageFiles(file);else if(/\.(?:png|jpe?g|webp)$/i.test(file))imageFiles.push(file)}};
 walkImageFiles(imageRoot);
 const dimensionMismatches=[];
 let dimensionCursor=0;
