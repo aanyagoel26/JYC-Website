@@ -177,3 +177,8 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-seal-conta
     animation:none!important;transition:none!important;transform:none!important;
   }
 }
+
+/* Keep full-page atmospheric background motion static on touch-first devices. */
+@media(max-width:760px),(hover:none),(pointer:coarse) {
+  html[data-theme] body::before,html[data-theme] body::after {animation:none!important}
+}
