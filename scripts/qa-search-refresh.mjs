@@ -11,7 +11,7 @@ const contrast=(foreground,background)=>{const [light,dark]=[luminance(foregroun
 const token=name=>css.match(new RegExp(name+':(#[0-9a-f]{6})','i'))?.[1];
 const check=(name,condition)=>{checks.push({name,condition:Boolean(condition)});if(!condition)console.error('FAIL:',name);else console.log('PASS:',name)};
 
-check('global navigation mounts the new search module',main.includes("import { JYCSearch as Search } from './search/jyc-search.jsx'")&&main.includes('<Search data={data} admin={admin} close={()=>setSearch(false)}/>'));
+check('global navigation demand-loads the new search module only when opened',main.includes("const LazyJYCSearch=lazy(()=>import('./search/jyc-search.jsx').then(m=>({default:m.JYCSearch})))")&&main.includes('<LazyJYCSearch data={data} admin={admin} close={()=>setSearch(false)}/>')&&main.includes('<Suspense fallback={null}>'));
 check('legacy inline search implementation is removed',!main.includes('function SearchMatch(')&&!main.includes('function Search({data,admin,close})'));
 check('Fests remains discoverable in every homepage mode',source.includes('PAGES.forEach(([title,meta,type,href,keywords],i)=>')&&!source.includes("PAGES.filter(([title])=>title!=='Fests'"));
 check('index includes all public JYC content families',source.includes('source.clubs')&&source.includes('source.events')&&source.includes('source.team')&&source.includes('source.gallery')&&source.includes('source.announcements')&&source.includes('source.updates')&&source.includes('JYC_EDITORIAL_ACHIEVEMENTS'));

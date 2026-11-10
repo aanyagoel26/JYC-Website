@@ -1,9 +1,13 @@
 (() => {
   let theme = null;
-  try {
-    const saved = localStorage.getItem('jyc-theme');
-    if (saved === 'dark' || saved === 'light') theme = saved;
-  } catch {}
+  const requested = new URLSearchParams(window.location.search).get('jyc-theme');
+  if (requested === 'dark' || requested === 'light') theme = requested;
+  if (!theme) {
+    try {
+      const saved = localStorage.getItem('jyc-theme');
+      if (saved === 'dark' || saved === 'light') theme = saved;
+    } catch {}
+  }
   if (!theme) {
     theme = window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   }

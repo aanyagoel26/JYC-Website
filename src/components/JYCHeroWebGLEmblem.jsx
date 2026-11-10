@@ -128,25 +128,36 @@ export function JYCHeroWebGLEmblem() {
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     let reducedMotion = motionQuery.matches;
     let isVisible = !document.hidden;
+    let userPaused = document.documentElement.dataset.jycMotion === 'paused';
 
     const handleVisibility = () => {
       isVisible = !document.hidden;
-      if (isVisible && !reducedMotion && !animId) animId = requestAnimationFrame(draw);
+      if (isVisible && !reducedMotion && !userPaused && !animId) animId = requestAnimationFrame(draw);
     };
     const handleMotionPreference = () => {
       reducedMotion = motionQuery.matches;
-      if (reducedMotion) {
+      if (reducedMotion || userPaused) {
         cancelAnimationFrame(animId);
         animId = 0;
       } else if (isVisible && !animId) {
         animId = requestAnimationFrame(draw);
       }
     };
+    const handleUserMotionPreference = () => {
+      userPaused = document.documentElement.dataset.jycMotion === 'paused';
+      if (userPaused) {
+        cancelAnimationFrame(animId);
+        animId = 0;
+      } else if (!reducedMotion && isVisible && !animId) {
+        animId = requestAnimationFrame(draw);
+      }
+    };
     motionQuery.addEventListener('change', handleMotionPreference);
+    window.addEventListener('jyc-motion-preference-change', handleUserMotionPreference);
     document.addEventListener('visibilitychange', handleVisibility);
 
     const draw = (timestamp = 0) => {
-      if (!isVisible) {
+      if (!isVisible || reducedMotion || userPaused) {
         animId = 0;
         return;
       }
@@ -254,10 +265,10 @@ export function JYCHeroWebGLEmblem() {
         ctx.globalAlpha = 1.0;
       });
 
-      animId = reducedMotion ? 0 : requestAnimationFrame(draw);
+      animId = (reducedMotion || userPaused) ? 0 : requestAnimationFrame(draw);
     };
 
-    animId = requestAnimationFrame(draw);
+    if (!reducedMotion && !userPaused && isVisible) animId = requestAnimationFrame(draw);
 
     return () => {
       cancelAnimationFrame(animId);
@@ -265,12 +276,13 @@ export function JYCHeroWebGLEmblem() {
       if (!isMobile) window.removeEventListener('mousemove', handleMove);
       document.removeEventListener('visibilitychange', handleVisibility);
       motionQuery.removeEventListener('change', handleMotionPreference);
+      window.removeEventListener('jyc-motion-preference-change', handleUserMotionPreference);
     };
   }, []);
 
   // 3D Tilt calculation
   const handlePointerMove = e => {
-    if (!containerRef.current || !window.matchMedia?.('(hover:hover) and (pointer:fine)').matches || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
+    if (!containerRef.current || document.documentElement.dataset.jycMotion === 'paused' || !window.matchMedia?.('(hover:hover) and (pointer:fine)').matches || window.matchMedia?.('(prefers-reduced-motion: reduce)').matches) return;
     const rect = containerRef.current.getBoundingClientRect();
     const x = (e.clientX - rect.left) / rect.width - 0.5;
     const y = (e.clientY - rect.top) / rect.height - 0.5;
@@ -296,6 +308,7 @@ export function JYCHeroWebGLEmblem() {
         jycAudio.playNodeHover();
       }}
       onPointerLeave={handlePointerLeave}
+      role="group"
       aria-label="JYC animated emblem with optional interactive 3D model"
     >
       {/* Canvas orbital system; the optional spatial mode uses the GLB WebGL viewer. */}
@@ -349,8 +362,8 @@ export function JYCHeroWebGLEmblem() {
             <div className="jyc-emblem-glow-backing" aria-hidden="true" />
             {logoFailed ? <span className="jyc-emblem-logo-fallback" role="img" aria-label="JIIT Youth Club logo">JYC</span> : <img
               src={LOGO_SRC}
-              srcSet="/assets/jyc-logo-270.avif 270w, /assets/jyc-logo.avif 480w"
-              sizes="(max-width: 680px) 80px, (max-width: 1024px) 250px, 480px"
+              srcSet={import.meta.env.PROD ? "/assets/jyc-logo-270.avif 270w, /assets/jyc-logo-320.avif 320w, /assets/jyc-logo.avif 480w" : undefined}
+              sizes="(max-width: 680px) 80px, (max-width: 1024px) 250px, 320px"
               alt="JIIT Youth Club Crest"
               className="jyc-emblem-logo-img"
               width="480"

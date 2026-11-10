@@ -60,7 +60,7 @@ export function JYC3DInteractiveExplorer() {
   };
 
   return (
-    <section className="jyc-community-explorer reveal" aria-labelledby="jyc-community-title">
+    <section className="jyc-community-explorer" aria-labelledby="jyc-community-title">
       <div className="jyc-community-heading">
         <div className="jyc-community-heading-copy">
           <span className="jyc-community-eyebrow">

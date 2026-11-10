@@ -182,3 +182,58 @@ html[data-theme="dark"] .jyc-emblem-badge {
   body::before, body::after { inset: -5vmax; }
   .public-app :where(.card,.featured,.contact-card,.join-card,.leader-card,.team-layer-card):hover { transform: none; }
 }
+
+
+/* Photographic deep-sky atmosphere: a diagonal Milky Way, layered star fields
+   and a Great-Rift-like dust lane. The light theme stays warm and terrestrial. */
+html[data-theme="dark"] body::before{
+  opacity:1;
+  background:
+    radial-gradient(ellipse at 76% 18%,rgba(107,87,190,.19),transparent 32%),
+    radial-gradient(ellipse at 18% 58%,rgba(35,111,163,.14),transparent 34%),
+    radial-gradient(ellipse at 82% 76%,rgba(171,82,130,.09),transparent 30%),
+    radial-gradient(ellipse at 52% 48%,rgba(89,87,163,.1),transparent 48%);
+  filter:blur(34px);
+}
+html[data-theme="dark"] body::after{
+  opacity:.9;
+  background-image:
+    radial-gradient(1px 1px at 5% 17%,rgba(255,255,255,.96) 50%,transparent 100%),
+    radial-gradient(1.4px 1.4px at 14% 63%,rgba(221,226,255,.9) 50%,transparent 100%),
+    radial-gradient(1px 1px at 23% 28%,rgba(255,221,185,.9) 50%,transparent 100%),
+    radial-gradient(1.8px 1.8px at 34% 82%,rgba(255,255,255,.92) 50%,transparent 100%),
+    radial-gradient(1px 1px at 43% 11%,rgba(196,211,255,.92) 50%,transparent 100%),
+    radial-gradient(1.3px 1.3px at 56% 67%,rgba(255,236,210,.9) 50%,transparent 100%),
+    radial-gradient(1px 1px at 68% 31%,rgba(255,255,255,.96) 50%,transparent 100%),
+    radial-gradient(1.6px 1.6px at 79% 77%,rgba(211,216,255,.92) 50%,transparent 100%),
+    radial-gradient(1px 1px at 91% 14%,rgba(255,225,194,.9) 50%,transparent 100%),
+    radial-gradient(ellipse at 55% 46%,rgba(108,92,178,.2),transparent 48%),
+    radial-gradient(ellipse at 31% 72%,rgba(34,113,162,.13),transparent 38%),
+    linear-gradient(153deg,transparent 18%,rgba(75,78,139,.05) 28%,rgba(104,94,158,.13) 39%,rgba(143,119,170,.14) 48%,rgba(57,84,139,.1) 58%,transparent 72%),
+    linear-gradient(153deg,transparent 35%,rgba(2,5,17,.72) 43%,rgba(3,7,19,.5) 48%,transparent 57%);
+  background-size:190px 180px,240px 220px,270px 250px,320px 290px,220px 230px,300px 260px,250px 270px,310px 280px,280px 260px,100% 100%,100% 100%,100% 100%,100% 100%;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.78),#000 18%,#000 86%,rgba(0,0,0,.7));
+  animation:jyc-star-drift 130s linear infinite;
+}
+html[data-theme="light"] body::before{
+  opacity:1;
+  background:
+    radial-gradient(ellipse at 12% 12%,rgba(222,185,117,.24),transparent 30%),
+    radial-gradient(ellipse at 88% 18%,rgba(244,220,171,.28),transparent 30%),
+    radial-gradient(ellipse at 70% 76%,rgba(174,151,197,.14),transparent 34%),
+    radial-gradient(ellipse at 32% 92%,rgba(218,180,119,.16),transparent 36%);
+  filter:blur(28px);
+}
+html[data-theme="light"] body::after{
+  opacity:.64;
+  background:
+    radial-gradient(ellipse at 14% 18%,rgba(255,255,255,.95),transparent 28%),
+    radial-gradient(ellipse at 83% 12%,rgba(232,194,126,.24),transparent 26%),
+    radial-gradient(ellipse at 74% 78%,rgba(171,151,207,.16),transparent 32%),
+    radial-gradient(1px 1px at 7% 14%,rgba(139,103,48,.62) 50%,transparent 100%),
+    radial-gradient(1px 1px at 33% 28%,rgba(183,143,72,.58) 50%,transparent 100%),
+    linear-gradient(135deg,rgba(255,255,255,.22),transparent 48%);
+}
+@media(prefers-reduced-motion:reduce){
+  html[data-theme="dark"] body::after{animation:none!important}
+}

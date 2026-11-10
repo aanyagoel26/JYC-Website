@@ -100,31 +100,41 @@ html.jyc-motion-ready .public-app .reveal.jyc-motion-visible{opacity:1;transform
 .app-frame {
   background-color: var(--jyc-canvas, #f5f1e8);
   background-image:
+    url('/assets/jyc-grain.svg'),
     radial-gradient(ellipse at 8% 4%, rgba(126, 111, 174, .105), transparent 36%),
     radial-gradient(ellipse at 92% 16%, rgba(231, 209, 155, .13), transparent 34%),
     radial-gradient(ellipse at 48% 72%, rgba(126, 111, 174, .055), transparent 42%),
     linear-gradient(180deg, rgba(255,255,255,.10), transparent 44%, rgba(82,67,104,.025));
-  background-size: 150% 150%, 145% 145%, 160% 160%, 100% 100%;
-  background-position: 0% 0%, 100% 0%, 50% 100%, 0 0;
+  background-size: 128px 128px, 150% 150%, 145% 145%, 160% 160%, 100% 100%;
+  background-repeat: repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+  background-blend-mode: soft-light, normal, normal, normal, normal;
+  background-position: 0 0, 0% 0%, 100% 0%, 50% 100%, 0 0;
 }
 html[data-theme="dark"] .app-frame {
   background-color: var(--jyc-canvas, #080d1c);
   background-image:
+    url('/assets/jyc-grain.svg'),
     radial-gradient(ellipse at 12% 8%, rgba(116, 103, 190, .22), transparent 37%),
     radial-gradient(ellipse at 88% 22%, rgba(41, 104, 159, .16), transparent 35%),
     radial-gradient(ellipse at 52% 82%, rgba(200, 188, 255, .095), transparent 44%),
     radial-gradient(ellipse at 50% 48%, rgba(231, 209, 155, .035), transparent 65%),
     linear-gradient(180deg, rgba(4, 8, 20, .02), rgba(4, 8, 20, .14));
-  background-size: 155% 155%, 150% 150%, 160% 160%, 140% 140%, 100% 100%;
-  background-position: 0% 0%, 100% 0%, 50% 100%, 45% 40%, 0 0;
+  background-size: 128px 128px, 155% 155%, 150% 150%, 160% 160%, 140% 140%, 100% 100%;
+  background-repeat: repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+  background-blend-mode: soft-light, normal, normal, normal, normal, normal;
+  background-position: 0 0, 0% 0%, 100% 0%, 50% 100%, 45% 40%, 0 0;
 }
 html[data-theme="light"] .app-frame {
   background-color: var(--jyc-canvas, #f5f1e8);
   background-image:
+    url('/assets/jyc-grain.svg'),
     radial-gradient(ellipse at 10% 8%, rgba(98, 88, 137, .12), transparent 36%),
     radial-gradient(ellipse at 88% 16%, rgba(231, 209, 155, .22), transparent 36%),
     radial-gradient(ellipse at 50% 76%, rgba(164, 123, 67, .075), transparent 44%),
     linear-gradient(180deg, rgba(255,255,255,.36), transparent 48%, rgba(164,123,67,.025));
+  background-size: 128px 128px, 155% 155%, 145% 145%, 160% 160%, 100% 100%;
+  background-repeat: repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+  background-blend-mode: multiply, normal, normal, normal, normal;
 }
 .jyc-ambient-canvas {
   opacity: .48;
@@ -140,7 +150,10 @@ html[data-theme="light"] .jyc-ambient-canvas {
 }
 @media (max-width: 760px) {
   .app-frame {
-    background-size: 180% 180%, 170% 170%, 180% 180%, 100% 100%;
+    background-size: 128px 128px, 180% 180%, 170% 170%, 180% 180%, 100% 100%;
+  }
+  html[data-theme="dark"] .app-frame {
+    background-size: 128px 128px, 180% 180%, 170% 170%, 180% 180%, 160% 160%, 100% 100%;
   }
   .jyc-ambient-canvas { opacity: .24; }
   html[data-theme="dark"] .jyc-ambient-canvas { opacity: .28; }

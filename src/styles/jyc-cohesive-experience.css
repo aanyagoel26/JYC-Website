@@ -1233,3 +1233,30 @@ html[data-theme="dark"] .jyc-editorial-home.jyc-home {
   --jh-line: var(--jyc-line);
   --jh-line-accent: var(--jyc-line-strong);
 }
+
+
+/* User-controlled motion preference: preserve controls and content while pausing decoration. */
+html[data-jyc-motion="paused"] { scroll-behavior: auto !important; }
+html[data-jyc-motion="paused"] *,
+html[data-jyc-motion="paused"] *::before,
+html[data-jyc-motion="paused"] *::after {
+  animation-play-state: paused !important;
+  transition-duration: .01ms !important;
+  scroll-behavior: auto !important;
+}
+html[data-jyc-motion="paused"] .jyc-ambient-canvas { display: none !important; }
+
+
+/* Route transitions use only opacity/transform, and never run for reduced/paused motion. */
+.route-stage {
+  min-width: 0;
+  animation: jycRouteEnter 260ms cubic-bezier(.2,.75,.25,1) both;
+}
+@keyframes jycRouteEnter {
+  from { opacity: 0; transform: translate3d(0, 8px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .route-stage { animation: none !important; }
+}
+html[data-jyc-motion="paused"] .route-stage { animation: none !important; }

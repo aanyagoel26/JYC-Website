@@ -55,6 +55,23 @@ void main() {
   float radial = exp(-length(p) * 2.3);
   float stars = (starLayer(p + vec2(time * 0.035, -time * 0.018), 34.0, 0.72)
               + starLayer(p * 1.37 - vec2(time * 0.02, time * 0.03), 57.0, 0.42)) * uTheme;
+
+  // Galactic plane: a soft, tilted Milky Way with a broken dark dust rift.
+  // The low-frequency structure is deliberately broad so it reads as a sky,
+  // not as a synthetic neon ribbon or a distracting animated wallpaper.
+  vec2 galaxyP = vec2(p.x * 0.906 + p.y * 0.423, -p.x * 0.423 + p.y * 0.906);
+  galaxyP += (pointer - 0.5) * vec2(0.018, 0.012);
+  float galacticCurve = 0.075 * sin(galaxyP.x * 1.55 + time * 0.025);
+  float galacticDistance = abs(galaxyP.y - galacticCurve);
+  float galacticDust = fbm(galaxyP * 4.8 + vec2(8.4, -3.1));
+  float galacticCloud = fbm(galaxyP * 1.85 + vec2(time * 0.012, -time * 0.009));
+  float milkyWay = exp(-galacticDistance * galacticDistance * 7.2)
+                 * smoothstep(0.34, 0.78, galacticCloud) * uTheme;
+  float darkRift = exp(-pow((galaxyP.y - galacticCurve - 0.018) * 15.0, 2.0))
+                 * smoothstep(0.42, 0.78, galacticDust) * milkyWay;
+  float nebulaRed = smoothstep(0.58, 0.86, fbm(galaxyP * 3.2 + vec2(2.7, 8.1))) * milkyWay;
+  float nebulaBlue = smoothstep(0.54, 0.82, fbm(galaxyP * 2.7 + vec2(-6.2, 4.3))) * milkyWay;
+  float distantStars = starLayer(galaxyP + vec2(-time * 0.012, time * 0.008), 82.0, 0.38) * uTheme;
   float pointerDistance = length(p - pointer * 0.22);
   float ripplePhase = abs(fract(pointerDistance * 3.4 - time * 0.28) - 0.5);
   float ripple = (1.0 - smoothstep(0.018, 0.055, ripplePhase)) * exp(-pointerDistance * 1.7) * 0.12;
@@ -70,6 +87,11 @@ void main() {
   nightColor = mix(nightColor, nightGold, smoothstep(0.68,0.96,aurora) * 0.58);
   float nightLine = contour * smoothstep(0.56,0.9,field) * 0.12 * uTheme;
   nightColor += nightGold * nightLine + vec3(0.78,0.82,1.0) * stars * 0.8 + nightGold * moon * 0.9;
+  nightColor += vec3(0.48,0.39,0.76) * milkyWay * 0.18;
+  nightColor += vec3(0.31,0.56,0.76) * nebulaBlue * 0.11;
+  nightColor += vec3(0.72,0.30,0.38) * nebulaRed * 0.075;
+  nightColor += vec3(0.82,0.86,1.0) * distantStars * 0.72;
+  nightColor *= 1.0 - darkRift * 0.38;
 
   // Day identity: warm sunrise, soft cloud banks and drifting pollen-like motes.
   vec2 sunPoint = p - vec2(-0.43, 0.16);
@@ -81,9 +103,9 @@ void main() {
   float cloudLight = cloudBand * (0.48 + 0.52 * fbm(p * 5.2 - time * 0.06));
   float dayDust = starLayer(p + vec2(time * 0.025, time * 0.018), 23.0, 0.35) * (1.0 - uTheme);
   float dayRays = pow(max(0.0, dot(normalize(sunPoint + vec2(0.0001)), normalize(vec2(sin(time * 0.12), cos(time * 0.12))))), 18.0) * exp(-sunDistance * 1.25) * (1.0 - uTheme) * 0.10;
-  vec3 dayLavender = vec3(0.56,0.53,0.70);
-  vec3 daySky = vec3(0.63,0.76,0.83);
-  vec3 dayGold = vec3(0.91,0.69,0.39);
+  vec3 dayLavender = vec3(0.72,0.66,0.63);
+  vec3 daySky = vec3(0.91,0.84,0.72);
+  vec3 dayGold = vec3(0.91,0.68,0.35);
   vec3 dayColor = mix(dayLavender, daySky, smoothstep(-0.35,0.65,p.y));
   dayColor = mix(dayColor, vec3(0.96,0.82,0.64), sunHalo * 0.72);
   dayColor = mix(dayColor, vec3(0.97,0.91,0.79), cloudLight * 0.38);
@@ -93,7 +115,7 @@ void main() {
   // Depth plane 1: distant atmospheric haze and soft horizon falloff.
   float horizon = exp(-pow((p.y + 0.24 + sin(p.x * 0.8 + time * 0.15) * 0.035) * 3.2, 2.0));
   float aerialPerspective = smoothstep(-0.65, 0.65, p.y) * 0.16;
-  vec3 dayHaze = mix(vec3(0.76,0.79,0.82), vec3(0.88,0.73,0.58), smoothstep(-0.45,0.35,p.y));
+  vec3 dayHaze = mix(vec3(0.88,0.84,0.77), vec3(0.91,0.77,0.60), smoothstep(-0.45,0.35,p.y));
   vec3 nightHaze = mix(vec3(0.10,0.16,0.30), vec3(0.24,0.20,0.39), smoothstep(-0.5,0.45,p.y));
   dayColor = mix(dayColor, dayHaze, horizon * 0.42 + aerialPerspective * 0.18);
   nightColor = mix(nightColor, nightHaze, horizon * 0.25 + aerialPerspective * 0.12);
@@ -130,7 +152,7 @@ void main() {
   float depthAlpha = (cloudEdge * 0.045 + dayMotes * 0.10) * (1.0-uTheme)
                    + (nightNebula * 0.045 + nightMotes * 0.12) * uTheme;
   float alpha = ((cloudLight * 0.10 + sunHalo * 0.09 + sunDisc * 0.12 + dayRays + dayLine + dayDust * 0.35) * (1.0-uTheme)
-              + (ribbons * 0.20 + radial * 0.045 + nightLine + stars * 0.52 + moon * 0.12) * uTheme + ripple + depthAlpha) * uIntensity;
+              + (ribbons * 0.20 + radial * 0.045 + nightLine + stars * 0.52 + distantStars * 0.36 + milkyWay * 0.11 + nebulaRed * 0.025 + nebulaBlue * 0.025 + moon * 0.12) * uTheme + ripple + depthAlpha) * uIntensity;
   alpha *= (1.0 - smoothstep(0.18,0.98,length(p) * 0.52));
   alpha += halo * 0.035 * uIntensity;
   fragColor = vec4(color, clamp(alpha, 0.0, 0.38));
@@ -155,6 +177,7 @@ export function JYCWebGLField() {
     host.appendChild(canvas);
     const stop = () => { if (frame) cancelAnimationFrame(frame); frame = 0; };
     const fallback = () => { host.dataset.webgl = 'fallback'; canvas.remove(); };
+    const onContextLost = event => { event.preventDefault(); disposed = true; stop(); fallback(); };
     const resize = () => {
       const rect = host.getBoundingClientRect();
       width = Math.max(1, Math.round(rect.width)); height = Math.max(1, Math.round(rect.height));
@@ -186,6 +209,7 @@ export function JYCWebGLField() {
       if (reduced) stop();
       if (visible) { if (reduced) draw(performance.now()); else start(); }
     };
+    canvas.addEventListener('webglcontextlost', onContextLost, { passive: false });
     try {
       renderer = new Renderer({ canvas, alpha: true, antialias: false, dpr: Math.min(window.devicePixelRatio || 1, lowPower || coarse ? 1 : 1.35), webgl: 2 });
       renderer.setSize(width, height);
@@ -224,6 +248,7 @@ export function JYCWebGLField() {
     return () => {
       disposed = true; stop(); observer?.disconnect(); resizeObserver?.disconnect();
       motion.removeEventListener?.('change', onMotion);
+      canvas.removeEventListener('webglcontextlost', onContextLost);
       document.removeEventListener('visibilitychange', onVisibility);
       if (!coarse) host.removeEventListener('pointermove', onPointer);
       program?.remove(); mesh?.geometry?.remove();

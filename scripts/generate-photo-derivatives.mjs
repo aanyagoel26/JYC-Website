@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
-import {isDerivativeDimensionEligible,orientedImageDimensions} from '../src/jyc-photo-intelligence.js';
+import {isDerivativeDimensionEligible,orientedImageDimensions,parseImageDimensions} from '../src/jyc-photo-intelligence.js';
 const {JYC_SOURCE_ARCHIVE_PHOTO_ITEMS}=await import('../src/jyc-source-media.js');
 const allowedArchive=new Set(JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.map(item=>String(item?.url||'')));
 const root=path.resolve('public/assets');
@@ -21,7 +21,7 @@ const derivativeBaseForRel=rel=>{
 const inputFiles=[];
 const walk=dir=>{for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())walk(file);else if(/\.(jpe?g|png|webp)$/i.test(file))inputFiles.push(file)}};
 walk(root);
-const sourceFiles=inputFiles.filter(file=>{if(file.includes(path.join('photo-derivatives',path.sep)))return false;const url='/assets/'+path.relative(root,file).replaceAll(path.sep,'/');if(url.startsWith('/assets/source-archive/'))return allowedArchive.has(url);return ALLOWED.some(folder=>url.startsWith('/assets/'+folder+'/'));});
+const sourceFiles=inputFiles.filter(file=>{if(file.includes(path.join('photo-derivatives',path.sep)))return false;const url='/assets/'+path.relative(root,file).replaceAll(path.sep,'/');if(url.startsWith('/assets/source-archive/')&&!allowedArchive.has(url))return false;if(!ALLOWED.some(folder=>url.startsWith('/assets/'+folder+'/')))return false;try{return Boolean(parseImageDimensions(fs.readFileSync(file)));}catch{return false;}});
 const derivativeBaseOwners=new Map();
 const duplicateDerivativeBases=[];
 for(const file of sourceFiles){
