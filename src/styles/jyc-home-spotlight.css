@@ -9,7 +9,7 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-head>div{max-width:760px}
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight .eyebrow{
   display:inline-block;margin-bottom:14px;color:var(--jh-accent,var(--jyc-accent));
-  font:700 10px/1.4 'JetBrains Mono',monospace;letter-spacing:.16em;
+  font-family:inherit;font-size:12px;font-weight:650;line-height:1.4;letter-spacing:0;text-transform:none;
 }
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight h2{
   max-width:18ch;margin:0 0 12px;color:var(--jh-ink,var(--jyc-text-strong));
@@ -24,10 +24,10 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight 
   font-size:12px;font-weight:750;cursor:pointer;transition:transform .2s ease,border-color .2s ease;
 }
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-grid{
-  display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;align-items:stretch;
+  display:grid;grid-template-columns:minmax(0,1.12fr) repeat(2,minmax(0,.94fr));gap:16px;align-items:stretch;
 }
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-card{
-  display:flex;min-width:0;flex-direction:column;overflow:hidden;text-align:left;
+  position:relative;display:flex;min-width:0;flex-direction:column;overflow:hidden;text-align:left;
   padding:0;border:1px solid var(--jh-line,var(--jyc-line));border-radius:26px;
   background:var(--jh-surface,var(--jyc-surface));color:var(--jh-ink,var(--jyc-text-strong));
   box-shadow:0 16px 44px rgba(24,20,38,.07);cursor:pointer;
@@ -46,7 +46,7 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-
 }
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-media>span{
   position:absolute;z-index:2;top:16px;left:16px;padding:8px 11px;border:1px solid rgba(255,255,255,.26);
-  border-radius:999px;background:rgba(18,16,27,.58);color:#fff;font:700 9px/1 'JetBrains Mono',monospace;letter-spacing:.12em;
+  border-radius:999px;background:rgba(18,16,27,.64);color:#fff;font-family:inherit;font-size:11px;font-weight:650;line-height:1.2;letter-spacing:0;
   backdrop-filter:blur(12px);
 }
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-fallback{
@@ -57,7 +57,7 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-
   display:flex;flex:1;flex-direction:column;align-items:flex-start;padding:22px 22px 24px;
 }
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-copy small{
-  margin-bottom:10px;color:var(--jh-accent,var(--jyc-accent));font:700 9px/1.4 'JetBrains Mono',monospace;letter-spacing:.14em;text-transform:uppercase;
+  margin-bottom:10px;color:var(--jh-accent,var(--jyc-accent));font-family:inherit;font-size:11px;font-weight:700;line-height:1.4;letter-spacing:0;text-transform:none;
 }
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-copy h3{
   margin:0 0 10px;color:var(--jh-ink,var(--jyc-text-strong));font:700 clamp(20px,2vw,25px)/1.12 'Space Grotesk',sans-serif;letter-spacing:-.035em;
@@ -74,6 +74,7 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight 
   outline:3px solid var(--jh-accent,var(--jyc-accent));outline-offset:4px;
 }
 @media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-card.is-event:hover::before{animation:jycSpotlightBeam .9s ease-out both}
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-card:hover{transform:translateY(-5px);border-color:var(--jh-line-accent,var(--jyc-line));box-shadow:0 24px 58px rgba(24,20,38,.13)}
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-card:hover .jyc-living-spotlight-media img{transform:scale(1.045)}
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight .reference-view-all:hover{transform:translateY(-2px);border-color:var(--jh-accent,var(--jyc-accent))}
@@ -92,10 +93,35 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight 
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-grid{grid-template-columns:1fr;gap:12px}
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-card.is-photo{grid-column:auto}
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-card.is-photo .jyc-living-spotlight-media{aspect-ratio:16/10}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-card.is-event .jyc-living-spotlight-media{aspect-ratio:16/10}
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-copy{padding:18px}
 }
 @media(prefers-reduced-motion:reduce){
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-card,
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-media img,
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight .reference-view-all{transition:none}
+}
+/* Event-first hierarchy: one current experience leads, the other cards support it. */
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-card.is-event{
+  border-color:color-mix(in srgb,var(--jh-accent,var(--jyc-accent)) 28%,var(--jh-line,var(--jyc-line)));
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-card.is-event .jyc-living-spotlight-media{
+  aspect-ratio:16/11;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight .reference-view-all{
+  display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  font-size:13px;font-weight:650;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight .reference-view-all span{
+  color:var(--jh-accent,var(--jyc-accent));
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-card.is-event::before{
+  content:"";position:absolute;z-index:4;top:0;left:0;width:34%;height:1px;
+  pointer-events:none;opacity:0;
+  background:linear-gradient(90deg,transparent,var(--jh-gold,var(--jyc-gold)),transparent);
+}
+@keyframes jycSpotlightBeam{
+  0%{transform:translate3d(-110%,0,0);opacity:0}
+  18%{opacity:.9}
+  100%{transform:translate3d(410%,0,0);opacity:0}
 }
