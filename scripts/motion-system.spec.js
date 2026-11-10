@@ -10,10 +10,10 @@ test.describe('JYC motion system', () => {
   test('route reveal content becomes fully visible as it enters the viewport', async ({ page }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await ready(page, '/about');
-    const target = page.locator('.about-next-v28.reveal');
+    const target = page.locator('.public-app .reveal').last();
     await expect(target).toBeAttached();
     await target.scrollIntoViewIfNeeded();
-    await expect(target.locator('h1')).toBeVisible();
+    await expect(target).toHaveClass(/jyc-motion-visible/, { timeout: 7000 });
     await expect.poll(() => target.evaluate(el => Number(getComputedStyle(el).opacity))).toBeGreaterThan(0.98);
     await expect.poll(() => target.evaluate(el => getComputedStyle(el).transform)).toBe('none');
     const state = await target.evaluate(el => ({ opacity:Number(getComputedStyle(el).opacity), transform:getComputedStyle(el).transform }));
@@ -26,7 +26,7 @@ test.describe('JYC motion system', () => {
     const before = await page.evaluate(() => performance.getEntriesByType('navigation').length);
     await page.locator('.nav').getByRole('button', { name: 'Clubs', exact: true }).click();
     await expect(page).toHaveURL(/\/clubs$/);
-    const target = page.locator('.public-app .jyc57-clubs-header').first();
+    const target = page.locator('.public-app .jyc-clubs-header').first();
     await expect(target).toBeAttached();
     await target.scrollIntoViewIfNeeded();
     await expect(target).toHaveClass(/jyc-motion-visible/, { timeout: 7000 });
@@ -58,7 +58,7 @@ test.describe('JYC motion system', () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await ready(page, '/about');
     await page.evaluate(() => document.documentElement.classList.remove('jyc-motion-ready'));
-    const target = page.locator('.about-next-v28.reveal');
+    const target = page.locator('.public-app .reveal').last();
     await expect.poll(() => target.evaluate(el => ({opacity:Number(getComputedStyle(el).opacity),transform:getComputedStyle(el).transform}))).toEqual({opacity:1,transform:'none'});
   });
 
@@ -96,7 +96,8 @@ test.describe('JYC motion system', () => {
     expect(metrics.position).toBe('fixed');
     expect(metrics.pointerEvents).toBe('none');
     expect(Number(metrics.zIndex)).toBeLessThanOrEqual(0);
-    expect(Number(getComputedStyle(document.querySelector('#root')).zIndex)).toBeGreaterThanOrEqual(Number(metrics.zIndex));
+    const rootZIndex = await page.evaluate(() => Number(getComputedStyle(document.querySelector('#root')).zIndex));
+    expect(rootZIndex).toBeGreaterThanOrEqual(Number(metrics.zIndex));
     expect(Math.abs(metrics.top)).toBeLessThanOrEqual(1);
     expect(Math.abs(metrics.left)).toBeLessThanOrEqual(1);
     expect(Math.abs(metrics.width - metrics.viewportWidth)).toBeLessThanOrEqual(1);
