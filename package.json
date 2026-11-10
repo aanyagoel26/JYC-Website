@@ -54,7 +54,8 @@
     "qa:team-exclusions": "node scripts/qa-team-exclusions.mjs",
     "qa:nsoc-effects": "node scripts/qa-nsoc-editorial-effects.mjs",
     "qa:campus-marquee": "node scripts/qa-campus-marquee.mjs",
-    "qa:search-refresh": "node scripts/qa-search-refresh.mjs"
+    "qa:search-refresh": "node scripts/qa-search-refresh.mjs",
+    "qa:hero": "node scripts/qa-homepage-hero-finish.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.118.0",
