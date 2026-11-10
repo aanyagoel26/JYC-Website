@@ -67,7 +67,7 @@ test.describe('JYC motion system', () => {
     await page.setViewportSize({ width: 390, height: 844 });
     await page.goto('/about', { waitUntil:'load' });
     await page.waitForTimeout(1200);
-    const state = await page.evaluate(() => { const node=document.querySelector('.about-next-v28.reveal'); return {exists:Boolean(node),opacity:node?Number(getComputedStyle(node).opacity):0,transform:node?getComputedStyle(node).transform:'missing',motionReady:document.documentElement.classList.contains('jyc-motion-ready')}; });
+    const state = await page.evaluate(() => { const node=document.querySelector('.public-app .reveal:last-of-type') || document.querySelector('.public-app .reveal'); return {exists:Boolean(node),opacity:node?Number(getComputedStyle(node).opacity):0,transform:node?getComputedStyle(node).transform:'missing',motionReady:document.documentElement.classList.contains('jyc-motion-ready')}; });
     expect(state.exists).toBe(true);
     expect(state.motionReady).toBe(false);
     expect(state.opacity).toBeGreaterThan(0.98);
