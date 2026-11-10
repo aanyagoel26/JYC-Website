@@ -52,8 +52,7 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero h1 .jh-title-
   -webkit-background-clip:text!important;background-clip:text!important;
   color:var(--jh-accent,var(--jyc-accent))!important;-webkit-text-fill-color:transparent!important;
   font-family:Georgia,'Times New Roman',serif!important;font-style:italic!important;font-weight:500!important;
-}html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-lead{max-width:48ch;margin:0;color:var(--jh-muted,var(--jyc-muted));font-size:clamp(16px,1.2vw,19px);line-height:1.78;text-wrap:pretty}
-html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-actions{display:flex;flex-wrap:wrap;gap:11px;margin-top:clamp(26px,3.1vw,38px)}
+}html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-actions{display:flex;flex-wrap:wrap;gap:11px;margin-top:clamp(26px,3.1vw,38px)}
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-actions .jh-btn{min-height:54px;padding:0 22px;border-radius:999px;font-size:13px;font-weight:750;letter-spacing:.005em}
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-actions .jh-btn-primary{color:var(--jh-bg,var(--jyc-canvas))!important;box-shadow:0 12px 28px color-mix(in srgb,var(--jh-accent,var(--jyc-accent)) 22%,transparent)}
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-actions .jh-btn-glass{border:1px solid var(--jh-line-accent,var(--jyc-line));background:color-mix(in srgb,var(--jh-surface,var(--jyc-surface)) 84%,transparent);color:var(--jh-ink,var(--jyc-text-strong))}
