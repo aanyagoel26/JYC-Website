@@ -115,7 +115,7 @@ test.describe('JYC shared warm-paper day theme', () => {
           expect(light.homeBackground).toBe('#f1eadb');
           expect(light.homeSurface).toBe('#fffaf0');
           expect(light.homeInk).toBe('#211d16');
-          expect(light.homeMuted).toBe('#695d4a');
+          expect(light.homeMuted).toBe('#665f56');
         }
         expect(light.bodyBackgroundImage).toContain('radial-gradient');
         expect(light.headingVisible, `${route} must expose a visible page heading in day mode`).toBe(true);
