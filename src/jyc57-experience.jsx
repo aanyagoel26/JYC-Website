@@ -315,16 +315,19 @@ export function JYC57Events({data}){
 }
 
 export function JYC57Clubs({data}){
- const nav=useNavigate();
+ const nav=useNavigate(),loc=useLocation();
  const [query,setQuery]=useState('');
- const [family,setFamily]=useState('All');
+ const families=['All','Technical','Cultural','Creative','Literary','Sports'];
+ const requestedFamily=new URLSearchParams(loc.search||'').get('family');
+ const [family,setFamily]=useState(()=>families.includes(requestedFamily)?requestedFamily:'All');
  const [type,setType]=useState('All');
  const [domain,setDomain]=useState('All');
  const [filtersOpen,setFiltersOpen]=useState(false);
  const [active,setActive]=useState(null);
 
+ useEffect(()=>{setFamily(families.includes(requestedFamily)?requestedFamily:'All')},[requestedFamily]);
+
  const clubs=publishedClubs(data);
- const families=['All','Technical','Cultural','Creative','Literary','Sports'];
  const types=['All','Technical','Non-Technical'];
  const quickDomains=[
    'AI & Coding',
