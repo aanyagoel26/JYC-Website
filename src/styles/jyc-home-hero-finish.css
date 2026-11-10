@@ -399,10 +399,22 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{animat
   html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-controls-bar{
     bottom:7px;
     gap:4px;
-    transform:scale(.86);
-    transform-origin:center bottom;
+    left:50%;
+    transform:translateX(-50%);
+    max-width:calc(100% - 16px);
+    flex-wrap:nowrap;
   }
-  html[data-theme] .public-app .jyc-editorial-home.jyc-home .emblem-control-pill{min-height:40px;padding:7px 10px;font-size:9px}
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .emblem-control-pill{min-height:44px;padding:7px 9px;font-size:9px;gap:4px}
+}
+@media(hover:hover) and (pointer:fine) and (prefers-reduced-motion:no-preference){
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .emblem-control-pill:hover{transform:translateY(-1px)}
+}
+@media(hover:none),(pointer:coarse){
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .emblem-control-pill:hover{transform:none}
+}
+@media(prefers-reduced-motion:reduce){
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .emblem-control-pill{transition:none!important}
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .emblem-control-pill:hover{transform:none!important}
 }
 @media(max-width:380px){
   html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero{
