@@ -140,7 +140,7 @@ export function JYCHeroWebGLEmblem() {
         cancelAnimationFrame(animId);
         animId = 0;
       } else if (isVisible && !animId) {
-        if (!reducedMotion && !userPaused && isVisible) animId = requestAnimationFrame(draw);
+        animId = requestAnimationFrame(draw);
       }
     };
     const handleUserMotionPreference = () => {
@@ -269,7 +269,7 @@ export function JYCHeroWebGLEmblem() {
       animId = (reducedMotion || userPaused) ? 0 : requestAnimationFrame(draw);
     };
 
-    animId = requestAnimationFrame(draw);
+    if (!reducedMotion && !userPaused && isVisible) animId = requestAnimationFrame(draw);
 
     return () => {
       cancelAnimationFrame(animId);
