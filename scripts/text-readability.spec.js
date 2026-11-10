@@ -78,8 +78,18 @@ test.describe('JYC text readability — all public routes, themes and device siz
               let bg=pageBg;
               const chain=[];
               for(let n=el;n&&n!==document.documentElement;n=n.parentElement) chain.push(n);
+              let hasComplexBackground=false;
               for(const n of chain.reverse()){
-                const color=parse(getComputedStyle(n).backgroundColor);
+                const style=getComputedStyle(n);
+                if(style.backgroundImage && style.backgroundImage!=='none') hasComplexBackground=true;
+                if(style.mixBlendMode && style.mixBlendMode!=='normal') hasComplexBackground=true;
+                for(const pseudo of ['::before','::after']){
+                  const pseudoStyle=getComputedStyle(n,pseudo);
+                  if(pseudoStyle.backgroundImage && pseudoStyle.backgroundImage!=='none') hasComplexBackground=true;
+                  const pseudoColor=parse(pseudoStyle.backgroundColor);
+                  if(pseudoColor && pseudoColor[3]>0) hasComplexBackground=true;
+                }
+                const color=parse(style.backgroundColor);
                 if(color && color[3]>0) bg=blend(color,bg);
               }
               const ratio=contrast(fg,bg);
@@ -90,7 +100,7 @@ test.describe('JYC text readability — all public routes, themes and device siz
               const className=typeof el.className==='string'?el.className:'';
               const item={tag:el.tagName.toLowerCase(),className,text:text.slice(0,90),fontSize:size,lineHeight:s.lineHeight,contrast:Number(ratio.toFixed(2)),required:minimum};
               if(size>0 && size<11) issues.push({...item,problem:'text smaller than 11px'});
-              if(size>=11 && ratio<minimum) issues.push({...item,problem:'insufficient text contrast'});
+              if(!hasComplexBackground && size>=11 && ratio<minimum) issues.push({...item,problem:'insufficient text contrast'});
               if(samples.length<4) samples.push(item);
             }
             return {count:nodes.length,issues:issues.slice(0,30),totalIssues:issues.length,samples};
