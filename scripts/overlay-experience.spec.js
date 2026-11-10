@@ -27,7 +27,7 @@ test.describe('JYC Search and More interaction contract', () => {
       await searchTrigger.click();
       const search = page.getByRole('dialog', { name:'Find your place.' });
       await expect(search).toBeVisible();
-      const input = search.getByRole('textbox', { name:'Search JYC' });
+      const input = search.getByRole('combobox', { name:'Search JYC' });
       await expect(input).toBeFocused();
       await expect(page.locator('body')).toHaveCSS('overflow','hidden');
       await input.fill('JYC');
