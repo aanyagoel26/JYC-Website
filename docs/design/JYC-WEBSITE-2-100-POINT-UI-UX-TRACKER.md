@@ -11,6 +11,9 @@ Do not mark an item complete from a source-code assertion alone. A visual item n
 
 ## 1. Homepage and hero experience
 
+**Hero refinement pass (10 November 2026):** The follow-up visual pass strengthens the desktop headline scale and crest stage, restores the JIIT location line on phones, increases the mobile crest presentation, and visually demotes the tertiary Join action while preserving all three destinations. Decorative orbital rim/highlight layers remain behind the semantic crest and are disabled under reduced motion. These remain implementation-complete-but-unverified until current Browser QA, Lighthouse and real-device visual review pass.
+
+
 - [~] 01. Balance headline, supporting copy, CTA hierarchy and JYC crest in the hero.
 - [~] 02. Build a layered astronomical night sky with galaxies, Milky Way and nebula.
 - [~] 03. Establish distant, medium and foreground star depth.
