@@ -209,7 +209,7 @@ assert('image-header dimensions match Sharp metadata across all committed/genera
 
 
 const derivativeRoot=path.resolve('public/assets/photo-derivatives');
-const allowedDerivativeFolders=['hub-photos/','hub-photos-extra/','events/','home/','team/'];
+const allowedDerivativeFolders=['hub-photos/','hub-photos-extra/','events/','home/','team/','banners/','logos/'];
 const allowedArchiveSourceUrls=new Set(JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.map(item=>String(item?.url||'')));
 const derivativeBaseOwners=new Map(),duplicateDerivativeBases=[];
 for(const file of imageFiles){
@@ -217,7 +217,9 @@ for(const file of imageFiles){
  const rel=path.relative(imageRoot,file).replaceAll(path.sep,'/'),url='/assets/'+rel;
  const isAllowed=url.startsWith('/assets/source-archive/')?allowedArchiveSourceUrls.has(url):allowedDerivativeFolders.some(prefix=>rel.startsWith(prefix));
  if(!isAllowed)continue;
- const base=rel.replace(/\.(?:png|jpe?g|webp)$/i,'');
+ const extension=path.extname(rel).slice(1).toLowerCase();
+ const stem=rel.slice(0,-extension.length-1);
+ const base=rel.startsWith('logos/')||rel.startsWith('banners/')?`${stem}-${extension}`:stem;
  const previous=derivativeBaseOwners.get(base);
  if(previous)duplicateDerivativeBases.push({base,files:[previous,rel]});else derivativeBaseOwners.set(base,rel);
 }
@@ -236,7 +238,9 @@ const derivativeWorkers=Array.from({length:Math.min(6,derivativeFiles.length)},a
    const match=rel.match(/-(240|320|360|480|960|1600)\.(avif|webp)$/i);
    if(!match){derivativeMismatches.push({file:path.relative('public',file),error:'unexpected derivative filename'});continue}
    const requestedWidth=Number(match[1]),base=rel.replace(/-\d+\.(?:avif|webp)$/i,'');
-   const source=['.png','.jpg','.jpeg','.webp'].map(ext=>path.join(imageRoot,base+ext)).find(candidate=>fs.existsSync(candidate));
+   const extensionSuffix=(base.startsWith('banners/')||base.startsWith('logos/'))?base.match(/-(png|jpe?g|webp)$/i):null;
+   const sourceCandidates=extensionSuffix?[path.join(imageRoot,base.slice(0,-extensionSuffix[0].length)+'.'+extensionSuffix[1])]:['.png','.jpg','.jpeg','.webp'].map(ext=>path.join(imageRoot,base+ext));
+   const source=sourceCandidates.find(candidate=>fs.existsSync(candidate));
    if(!source){derivativeMismatches.push({file:path.relative('public',file),error:'orphan derivative has no source'});continue}
    const [sourceMeta,outputMeta]=await Promise.all([sharp(source).metadata(),sharp(file).metadata()]);
    const display=orientedImageDimensions(sourceMeta.width,sourceMeta.height,sourceMeta.orientation);
@@ -253,7 +257,7 @@ if(fs.existsSync(manifestPath)){
  const manifestMismatches=[];
  for(const [url,entry] of Object.entries(builtManifest.images||{})){
   const display=orientedImageDimensions(entry.rawWidth||entry.width,entry.rawHeight||entry.height,entry.exifOrientation);
-  const pathEligible=url.startsWith('/assets/source-archive/')?JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.some(item=>item.url===url):['/assets/hub-photos/','/assets/hub-photos-extra/','/assets/events/','/assets/home/','/assets/team/'].some(prefix=>url.startsWith(prefix));const expectedEligible=pathEligible&&isDerivativeDimensionEligible(display?.width,display?.height);if(!display||display.width!==entry.width||display.height!==entry.height||entry.derivativesEligible!==expectedEligible)manifestMismatches.push({url,entry,display,expectedEligible});
+  const pathEligible=url.startsWith('/assets/source-archive/')?JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.some(item=>item.url===url):['/assets/hub-photos/','/assets/hub-photos-extra/','/assets/events/','/assets/home/','/assets/team/','/assets/banners/','/assets/logos/'].some(prefix=>url.startsWith(prefix));const expectedEligible=pathEligible&&isDerivativeDimensionEligible(display?.width,display?.height);if(!display||display.width!==entry.width||display.height!==entry.height||entry.derivativesEligible!==expectedEligible)manifestMismatches.push({url,entry,display,expectedEligible});
  }
  assert('generated image manifest exposes correct EXIF-oriented display dimensions and eligibility',manifestMismatches.length===0,manifestMismatches.slice(0,8).map(item=>JSON.stringify(item)).join('; ')||Object.keys(builtManifest.images||{}).length+' records checked');
 }
