@@ -17,7 +17,7 @@ assert.ok(shader.includes('distantStars * 0.36 + milkyWay * 0.11'), 'galactic de
 assert.ok(shader.includes('prefersReducedMotion') && shader.includes('motion.addEventListener'), 'WebGL renderer observes reduced-motion preference changes');
 assert.ok(shader.includes('IntersectionObserver') && shader.includes('visibilitychange'), 'WebGL animation pauses when offscreen or document-hidden');
 assert.ok(shader.includes('WEBGL_lose_context') && shader.includes("host.dataset.webgl = 'fallback'"), 'WebGL cleanup and graceful fallback remain in place');
-assert.ok(home.includes('<JYCWebGLField />'), 'homepage uses the shared WebGL atmosphere layer');
+assert.ok(home.includes('<LazyJYCWebGLField />') && home.includes('const LazyJYCWebGLField = lazy('), 'homepage lazy-loads the shared WebGL atmosphere after its static first paint');
 assert.ok(hero.includes('jh-hero-visual') && hero.includes('prefers-reduced-motion:reduce'), 'hero composition has responsive reduced-motion styling');
 assert.ok(atmosphere.includes('html[data-theme="light"] body::before') && atmosphere.includes('html[data-theme="dark"] body::after'), 'daylight and night global atmospheres remain separate');
 assert.ok(!('@react-three/fiber' in pkg.dependencies), 'no second WebGL framework is added to the runtime');
