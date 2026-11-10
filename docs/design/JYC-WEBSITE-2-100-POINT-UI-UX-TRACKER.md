@@ -106,7 +106,7 @@ Do not mark an item complete from a source-code assertion alone. A visual item n
 - [~] 72. Pair an expressive display face with a readable body face.
 - [~] 73. Keep line height and paragraph width comfortable.
 - [~] 74. Standardise uppercase labels, tracking and metadata.
-- [~] 75. Consolidate the icon language so components do not mix unrelated icon treatments (the shared navigation already uses one SVG line-icon set; wider component migration remains).
+- [~] 75. Consolidate the icon language so components do not mix unrelated icon treatments (a reusable JYC line-icon set now powers navigation and dialog controls; wider component migration remains).
 - [~] 76. Replace emoji-as-icons where they weaken clarity or consistency.
 - [~] 77. Maintain readable text contrast over photography with controlled overlays.
 - [~] 78. Supply meaningful alt text or mark decorative imagery appropriately.
@@ -152,5 +152,6 @@ The existing branch already contains a substantial hero, theme, atmosphere, card
 - The More JYC sheet now includes a persistent Pause/Resume decorative motion control; the ambient canvas, hero WebGL/Dither and interactive Bento respond to the preference.
 - A small reusable grain texture now adds subtle film/paper texture with separate light/dark blending.
 - Route changes now use a short transform/opacity entrance transition, disabled for OS reduced-motion and the user pause setting.
+- A reusable JYC line-icon component now powers the main navigation and dialog close control without adding an icon dependency.
 
 **Release rule:** `[~]` is not a pass. Promote an item to `[x]` only after the relevant current-head CI/browser/Lighthouse checks and any required manual visual, keyboard, touch or real-device review pass. PR #12 must remain unmerged until the release gates are green.
