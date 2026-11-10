@@ -30,7 +30,7 @@ html{color-scheme:light dark;}
   --jyc-ink: #191827;
   --jyc-muted: #5f5c6b;
   --jyc-line: rgba(98,88,137,.18);
-  --jyc-accent: #625889;
+  --jyc-accent: #315f9c;
   --jyc-gold: #8c6d36;
   --jyc-focus: #625889;
 }
@@ -42,7 +42,7 @@ html[data-theme="light"] {
   --jyc-ink: #1A191D;
   --jyc-muted: #6E6A75;
   --jyc-line: rgba(26, 25, 29, 0.12);
-  --jyc-accent: #625889;
+  --jyc-accent: #315f9c;
   --jyc-gold: #76572b;
   --jyc-focus: #514675;
 }

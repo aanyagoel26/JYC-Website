@@ -15,16 +15,16 @@ html[data-theme="light"] {
   --jyc-text-strong: #191827;
   --jyc-muted: #5f5c6b;
   --jyc-subtle: #696676;
-  --jyc-accent: #625889;
-  --jyc-accent-strong: #514675;
-  --jyc-accent-soft: rgba(98,88,137,.10);
+  --jyc-accent: #315f9c;
+  --jyc-accent-strong: #244b80;
+  --jyc-accent-soft: rgba(49,95,156,.10);
   --jyc-gold: #76572b;
   --jyc-gold-soft: rgba(172,139,79,.16);
-  --jyc-line: rgba(54,48,73,.15);
-  --jyc-line-strong: rgba(92,78,126,.27);
-  --jyc-focus: #514675;
-  --jyc-shadow: 0 18px 48px rgba(56,45,72,.10);
-  --jyc-shadow-soft: 0 8px 24px rgba(56,45,72,.07);
+  --jyc-line: rgba(49,95,156,.15);
+  --jyc-line-strong: rgba(49,95,156,.27);
+  --jyc-focus: #244b80;
+  --jyc-shadow: 0 18px 48px rgba(38,68,108,.10);
+  --jyc-shadow-soft: 0 8px 24px rgba(38,68,108,.07);
   --jyc-glow: rgba(173,145,91,.20);
 
   /* Canonical component tokens. */
@@ -65,7 +65,7 @@ html[data-theme="light"] {
   --accent-red: var(--jyc-accent);
   --jyc-red: var(--jyc-accent);
   --jyc-red-2: var(--jyc-accent);
-  --jyc-accent: #625889;
+  --jyc-accent: #315f9c;
   --jyc-design-accent: var(--jyc-accent);
   --jyc-brand-oxblood: var(--jyc-accent);
   --jyc-restoration-red: var(--jyc-accent);
@@ -122,17 +122,17 @@ html[data-theme="dark"] {
   --jyc-text-strong: #f7f5ff;
   --jyc-muted: #c0c4da;
   --jyc-subtle: #a2a9c6;
-  --jyc-accent: #c8bcff;
-  --jyc-accent-strong: #e0d9ff;
-  --jyc-accent-soft: rgba(200,188,255,.13);
+  --jyc-accent: #8fbaff;
+  --jyc-accent-strong: #c6ddff;
+  --jyc-accent-soft: rgba(111,166,255,.14);
   --jyc-gold: #e7d19b;
   --jyc-gold-soft: rgba(231,209,155,.13);
-  --jyc-line: rgba(205,211,244,.15);
-  --jyc-line-strong: rgba(200,188,255,.29);
+  --jyc-line: rgba(143,186,255,.16);
+  --jyc-line-strong: rgba(143,186,255,.32);
   --jyc-focus: #e7d19b;
   --jyc-shadow: 0 24px 70px rgba(0,0,0,.38);
   --jyc-shadow-soft: 0 10px 32px rgba(0,0,0,.24);
-  --jyc-glow: rgba(148,132,219,.20);
+  --jyc-glow: rgba(65,125,220,.22);
 
   --jyc-bg: var(--jyc-canvas);
   --jyc-ink: var(--jyc-text-strong);
@@ -299,7 +299,7 @@ html[data-theme="light"] .public-app :where(.gallery-item:hover,.jyc57-photo:hov
   box-shadow: 0 20px 50px rgba(56,45,72,.12), 0 0 24px rgba(172,139,79,.10) !important;
 }
 html[data-theme="dark"] .public-app :where(.gallery-item:hover,.jyc57-photo:hover) {
-  box-shadow: 0 24px 60px rgba(0,0,0,.48), 0 0 28px rgba(200,188,255,.10) !important;
+  box-shadow: 0 24px 60px rgba(0,0,0,.48), 0 0 28px rgba(143,186,255,.10) !important;
 }
 .public-app :where(.jyc-filter-group-label,.jyc-clear-filters-btn,.jyc-filter-toggle-btn:hover) {
   color: var(--jyc-gold) !important;
@@ -522,8 +522,8 @@ html[data-theme="dark"] .public-app :where(.jyc-route-card,.jyc-hub-signal-card,
 }
 
 /* Canonical public palette takes precedence over legacy route declarations. */
-:root,html[data-theme="light"]{--jyc-canvas:#f5f1e8!important;--jyc-canvas-raised:#fbf8f1!important;--jyc-surface:#fffdf8!important;--jyc-text-strong:#191827!important;--jyc-muted:#5f5c6b!important;--jyc-accent:#625889!important;--jyc-gold:#76572b!important}
-html[data-theme="dark"]{--jyc-canvas:#080d1c!important;--jyc-canvas-raised:#0d1629!important;--jyc-surface:#111b31!important;--jyc-text-strong:#f7f5ff!important;--jyc-muted:#c0c4da!important;--jyc-accent:#c8bcff!important;--jyc-gold:#e7d19b!important}
+:root,html[data-theme="light"]{--jyc-canvas:#f5f1e8!important;--jyc-canvas-raised:#fbf8f1!important;--jyc-surface:#fffdf8!important;--jyc-text-strong:#191827!important;--jyc-muted:#5f5c6b!important;--jyc-accent:#315f9c!important;--jyc-gold:#76572b!important}
+html[data-theme="dark"]{--jyc-canvas:#080d1c!important;--jyc-canvas-raised:#0d1629!important;--jyc-surface:#111b31!important;--jyc-text-strong:#f7f5ff!important;--jyc-muted:#c0c4da!important;--jyc-accent:#8fbaff!important;--jyc-gold:#e7d19b!important}
 
 
 /* Route shells inherit the same semantic palette as the rest of the public portal. */
@@ -538,3 +538,10 @@ html[data-theme] .public-app :is(.jyc-history-page,.team-page) :where(h1,h2,h3,h
 html[data-theme] .public-app :is(.jyc-history-page,.team-page) :where(p,li,small,.muted,.muted-note) {
   color: var(--jyc-muted);
 }
+
+
+/* V70 — meet WCAG AA contrast for small gold eyebrow labels on public pages. */
+html[data-theme="light"] .public-app .search-topic-band .eyebrow,
+html[data-theme="light"] .public-app .compact-page-head .eyebrow { color: #76572b !important; }
+html[data-theme="dark"] .public-app .search-topic-band .eyebrow,
+html[data-theme="dark"] .public-app .compact-page-head .eyebrow { color: #e7d19b !important; }

@@ -4,7 +4,6 @@ import './jyc-innovation-motion.css';
 function setupReveal() {
   const selector = '.public-app .reveal';
   const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-  let userPaused = document.documentElement.dataset.jycMotion === 'paused';
   let observer = null;
   let observed = new WeakSet();
 
@@ -26,7 +25,7 @@ function setupReveal() {
     if (node.matches(selector)) candidates.push(node);
     candidates.push(...node.querySelectorAll(selector));
     candidates.forEach(candidate => {
-      if (motionQuery.matches || userPaused || !observer) {
+      if (motionQuery.matches || !observer) {
         show(candidate);
       } else if (!observed.has(candidate)) {
         observed.add(candidate);
@@ -49,30 +48,24 @@ function setupReveal() {
   mutationObserver?.observe(root, { childList: true, subtree: true });
 
   const onMotionChange = () => {
-    userPaused = document.documentElement.dataset.jycMotion === 'paused';
     observer?.disconnect();
     observer = createObserver();
     observed = new WeakSet();
     document.querySelectorAll(selector).forEach(node => {
-      if (motionQuery.matches || userPaused || !observer) show(node);
+      if (motionQuery.matches || !observer) show(node);
       else {
         observed.add(node);
         observer.observe(node);
       }
     });
   };
-  const onUserMotionChange = () => onMotionChange();
-  if (typeof motionQuery.addEventListener === 'function') motionQuery.addEventListener('change', onMotionChange);
-  else motionQuery.addListener?.(onMotionChange);
-  window.addEventListener('jyc-motion-preference-change', onUserMotionChange);
+  motionQuery.addEventListener?.('change', onMotionChange);
 
   return () => {
     mutationObserver?.disconnect();
     observer?.disconnect();
     document.documentElement.classList.remove('jyc-motion-ready');
-    if (typeof motionQuery.removeEventListener === 'function') motionQuery.removeEventListener('change', onMotionChange);
-    else motionQuery.removeListener?.(onMotionChange);
-    window.removeEventListener('jyc-motion-preference-change', onUserMotionChange);
+    motionQuery.removeEventListener?.('change', onMotionChange);
   };
 }
 
@@ -87,10 +80,9 @@ function useAtmosphericCanvas(canvasRef) {
     if (!canvas) return;
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     let reducedMotion = motionQuery.matches;
-    let userPaused = document.documentElement.dataset.jycMotion === 'paused';
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
-    const lowPower = (navigator.hardwareConcurrency || 8) <= 8 || (navigator.deviceMemory || 8) < 8 || Boolean(navigator.connection?.saveData);
+    const lowPower = (navigator.hardwareConcurrency || 4) < 4 || (navigator.deviceMemory || 4) < 2 || Boolean(navigator.connection?.saveData);
     if (lowPower) { canvas.style.display = 'none'; return; } // CSS aurora/nebula remains as a static fallback on constrained devices.
 
     let width = 0;
@@ -102,7 +94,7 @@ function useAtmosphericCanvas(canvasRef) {
     let targetMouseY = 0;
     let time = 0;
     const isCoarsePointer = window.matchMedia?.('(pointer: coarse)').matches ?? false;
-    const targetFrameMs = isCoarsePointer ? 80 : 1000 / 20;
+    const targetFrameMs = isCoarsePointer ? 50 : 1000 / 30;
     let lastFrameAt = -Infinity;
 
     const resize = () => {
@@ -120,7 +112,7 @@ function useAtmosphericCanvas(canvasRef) {
     if (!isCoarsePointer) window.addEventListener('mousemove', onMouseMove, { passive: true });
 
     // Star pool for Dark Mode (small twinkling stars)
-    const starCount = Math.min(isCoarsePointer ? 16 : 40, Math.floor(window.innerWidth / (isCoarsePointer ? 24 : 28)));
+    const starCount = Math.min(isCoarsePointer ? 24 : 64, Math.floor(window.innerWidth / (isCoarsePointer ? 16 : 20)));
     const stars = Array.from({ length: starCount }, () => ({
       x: Math.random(),
       y: Math.random(),
@@ -134,7 +126,7 @@ function useAtmosphericCanvas(canvasRef) {
     }));
 
     // Golden dust and luminous nodes for Light Mode
-    const goldDustCount = Math.min(isCoarsePointer ? 8 : 20, Math.floor(window.innerWidth / (isCoarsePointer ? 44 : 56)));
+    const goldDustCount = Math.min(isCoarsePointer ? 12 : 32, Math.floor(window.innerWidth / (isCoarsePointer ? 32 : 42)));
     const goldDust = Array.from({ length: goldDustCount }, () => ({
       x: Math.random(),
       y: Math.random(),
@@ -167,12 +159,12 @@ function useAtmosphericCanvas(canvasRef) {
     let isHidden = document.hidden;
     const onVisibilityChange = () => {
       isHidden = document.hidden;
-      if (!isHidden && !reducedMotion && !userPaused && !animId) animId = requestAnimationFrame(loop);
+      if (!isHidden && !reducedMotion && !animId) animId = requestAnimationFrame(loop);
     };
     document.addEventListener('visibilitychange', onVisibilityChange);
 
     const loop = (timestamp) => {
-      if (isHidden || reducedMotion || userPaused) {
+      if (isHidden || reducedMotion) {
         animId = 0;
         return;
       }
@@ -394,7 +386,7 @@ function useAtmosphericCanvas(canvasRef) {
 
     const onMotionChange = () => {
       reducedMotion = motionQuery.matches;
-      if (reducedMotion || userPaused) {
+      if (reducedMotion) {
         if (animId) cancelAnimationFrame(animId);
         animId = 0;
         ctx.clearRect(0, 0, width, height);
@@ -402,26 +394,12 @@ function useAtmosphericCanvas(canvasRef) {
         animId = requestAnimationFrame(loop);
       }
     };
-    const onUserMotionChange = () => {
-      userPaused = document.documentElement.dataset.jycMotion === 'paused';
-      if (userPaused) {
-        if (animId) cancelAnimationFrame(animId);
-        animId = 0;
-        ctx.clearRect(0, 0, width, height);
-      } else if (!reducedMotion && !isHidden && !animId) {
-        animId = requestAnimationFrame(loop);
-      }
-    };
-    if (typeof motionQuery.addEventListener === 'function') motionQuery.addEventListener('change', onMotionChange);
-    else motionQuery.addListener?.(onMotionChange);
-    window.addEventListener('jyc-motion-preference-change', onUserMotionChange);
-    if (!reducedMotion && !userPaused && !isHidden) animId = requestAnimationFrame(loop);
+    motionQuery.addEventListener?.('change', onMotionChange);
+    if (!reducedMotion && !isHidden) animId = requestAnimationFrame(loop);
 
     return () => {
       if (animId) cancelAnimationFrame(animId);
-      if (typeof motionQuery.removeEventListener === 'function') motionQuery.removeEventListener('change', onMotionChange);
-      else motionQuery.removeListener?.(onMotionChange);
-      window.removeEventListener('jyc-motion-preference-change', onUserMotionChange);
+      motionQuery.removeEventListener?.('change', onMotionChange);
       window.removeEventListener('resize', resize);
       if (!isCoarsePointer) window.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('visibilitychange', onVisibilityChange);

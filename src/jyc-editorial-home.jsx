@@ -5,37 +5,30 @@ import { sourceEventMedia, sourceHubMedia } from './jyc-source-media.js';
 import { teamPhotoFor } from './jyc-team-media.js';
 import { rankDiverseJycPhotos } from './jyc-photo-intelligence.js';
 import { ResponsivePhoto } from './jyc-responsive-photo.jsx';
+import { JYCSpotlight } from './jyc-spotlight.jsx';
 import { JYCNowStrip } from './jyc-now.jsx';
 import { JYCCampusMarquee } from './components/JYCCampusMarquee.jsx';
-const LazyJYCWebGLField = lazy(() => import('./components/JYCWebGLField.jsx').then(m => ({ default: m.JYCWebGLField })));
+const LazyDitherVeil = lazy(() => import('./react-bits/DitherVeil.jsx'));
 const LazyMagicBento = lazy(() => import('./components/react-bits/MagicBento.jsx'));
-const LazyJYC3DInteractiveExplorer = lazy(() => import('./components/JYC3DInteractiveExplorer.jsx').then(m => ({ default: m.JYC3DInteractiveExplorer })));
-const LazyJYCSpotlight = lazy(() => import('./jyc-spotlight.jsx').then(m => ({ default: m.JYCSpotlight })));
 import { JYCHeroWebGLEmblem } from './components/JYCHeroWebGLEmblem.jsx';
+import { JYCWebGLField } from './components/JYCWebGLField.jsx';
 import './components/JYCHeroWebGLEmblem.css';
+import { JYC3DInteractiveExplorer } from './components/JYC3DInteractiveExplorer.jsx';
 import './jyc-editorial-home.css';
 import './styles/jyc-editorial-motion-system.css';
-import './styles/jyc-home-hero-finish.css';
-import './styles/jyc-home-hero-art-direction.css';
 
-function DeferredMount({ children, fallback, rootMargin = '720px 0px' }) {
-  const hostRef = useRef(null);
-  const [ready, setReady] = useState(false);
-  useEffect(() => {
-    const host = hostRef.current;
-    if (!host) return;
-    if (!('IntersectionObserver' in window)) { setReady(true); return; }
-    const observer = new IntersectionObserver(entries => {
-      if (entries.some(entry => entry.isIntersecting)) {
-        setReady(true);
-        observer.disconnect();
-      }
-    }, { rootMargin });
-    observer.observe(host);
-    return () => observer.disconnect();
-  }, [rootMargin]);
-  return <div ref={hostRef} className="jh-deferred-mount">{ready ? children : fallback}</div>;
-}
+const ORIGINAL_LOGO = '/JYC%20Logo(4).png';
+const FALLBACK = import.meta.env.PROD ? '/assets/jyc-logo.webp' : ORIGINAL_LOGO;
+const DITHER_SOURCE = import.meta.env.PROD ? '/assets/jyc-logo-medium.avif' : FALLBACK;
+const handleHeroLogoFallback = event => {
+  const image = event.currentTarget;
+  image.srcset = '';
+  const candidates = [FALLBACK, ORIGINAL_LOGO];
+  let next = Number(image.dataset.logoFallbackStage || 0);
+  while (next < candidates.length && new URL(candidates[next], window.location.href).href === image.src) next += 1;
+  if (next < candidates.length) { image.dataset.logoFallbackStage = String(next + 1); image.src = candidates[next]; }
+  else image.hidden = true;
+};
 
 const slug = v => String(v || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const eventPath = e => `/events/${slug(e?.slug||e?.title)}`;
@@ -160,33 +153,6 @@ function LazyActivityBento({ activities, nav }) {
 
 export function JYCEditorialHome({ data }) {
   const nav = useNavigate();
-  const [heroFieldReady, setHeroFieldReady] = useState(false);
-  const [motionPaused, setMotionPaused] = useState(() => document.documentElement.dataset.jycMotion === 'paused');
-  useEffect(() => {
-    const onMotionPreference = () => setMotionPaused(document.documentElement.dataset.jycMotion === 'paused');
-    window.addEventListener('jyc-motion-preference-change', onMotionPreference);
-    return () => window.removeEventListener('jyc-motion-preference-change', onMotionPreference);
-  }, []);
-  useEffect(() => {
-    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
-    const coarse = window.matchMedia?.('(pointer: coarse)').matches;
-    if (reduced || coarse || motionPaused) {
-      setHeroFieldReady(false);
-      return;
-    }
-    let idleId = null;
-    const delayId = window.setTimeout(() => {
-      if (typeof window.requestIdleCallback === 'function') {
-        idleId = window.requestIdleCallback(() => setHeroFieldReady(true), { timeout: 1200 });
-      } else {
-        setHeroFieldReady(true);
-      }
-    }, 3200);
-    return () => {
-      window.clearTimeout(delayId);
-      if (idleId !== null) window.cancelIdleCallback?.(idleId);
-    };
-  }, [motionPaused]);
   const activities = useMemo(() => {
     const photoHubs = { technical: 'CICR', cultural: 'VamUnique', literary: 'Eloquence', fests: 'Aakriti', sports: 'Sports', creative: 'Aura' };
     return PILLARS.map(p => {
@@ -233,35 +199,66 @@ export function JYCEditorialHome({ data }) {
       <section className="jh-hero" aria-labelledby="jh-title">
         <div className="jh-hero-copy">
           <div className="jh-cyber-badge">
-            <span className="jh-badge-mark" aria-hidden="true" />
-            <span>JIIT Youth Club</span>
-            <b>2026–27</b>
+            <span className="jh-live-pulse-dot" />
+            <span>THE JIIT 128 COMMUNITY</span>
+            <b>AY 2026–27</b>
           </div>
-          <p className="jh-overline">Jaypee Institute of Information Technology, Wish Town</p>
+          <p className="jh-overline">JAYPEE INSTITUTE OF INFORMATION TECHNOLOGY · WISH TOWN</p>
           <h1 id="jh-title">
             <span>Find your people.</span>
-            <span className="jh-title-gradient">Make your mark.</span>
+            <span>Make your mark.</span>
+            <em className="jh-title-gradient">At JIIT 128.</em>
           </h1>
           <p className="jh-lead">
-            Clubs, events and student communities to help you find your place at JIIT.
+            From clubs and competitions to performances, projects and campus traditions, JYC helps you find the people and experiences that make JIIT feel like yours.
           </p>
           <div className="jh-actions jh-hero-actions">
-            <button type="button" className="jh-btn jh-btn-primary" onClick={() => nav('/clubs')}>
-              Explore communities <span aria-hidden="true">↗</span>
+            <button type="button" className="jh-btn jh-btn-primary" onClick={() => nav('/events')}>
+              ⚡ Explore Events <span>↗</span>
             </button>
-            <button type="button" className="jh-btn jh-btn-glass" onClick={() => nav('/events')}>
-              See what’s on <span aria-hidden="true">↗</span>
+            <button type="button" className="jh-btn jh-btn-glass" onClick={() => nav('/clubs')}>
+              Explore Clubs <span>→</span>
             </button>
             <button type="button" className="jh-btn jh-btn-outline" onClick={() => nav('/join-jyc')}>
-              Join JYC <span aria-hidden="true">↗</span>
+              Join JYC <span>→</span>
             </button>
           </div>
+
+
         </div>
 
-        {/* The original JYC crest, OGL field and interactive emblem remain the visual anchor. */}
+        {/* WebGL Dither Veil is a real mounted hero layer; the emblem remains the foreground focal point. */}
         <div className="jh-hero-visual jh-hero-webgl-stage-wrap">
           <div className="jh-hero-dither-backdrop" aria-hidden="true" />
-          {heroFieldReady && <Suspense fallback={null}><LazyJYCWebGLField /></Suspense>}
+          <JYCWebGLField />
+          <div className="jh-hero-dither-layer jh-dither-mark" aria-hidden="true">
+            <Suspense fallback={<div className="jh-hero-dither-loading" />}>
+              <LazyDitherVeil
+                src={DITHER_SOURCE}
+                fallbackSrc={FALLBACK}
+                originalFallbackSrc={ORIGINAL_LOGO}
+                globalPointer
+                fit="contain"
+                pattern="floyd"
+                pixelSize={2}
+                levels={3}
+                palette="duotone"
+                inkColor="#4b3e69"
+                paperColor="#f6f2e9"
+                contrast={1.18}
+                brightness={0.02}
+                revealRadius={190}
+                softness={0.7}
+                linger={1.25}
+                rimColor="#b99b70"
+                rim={0.22}
+                wander={true}
+                clickBurst={false}
+                className="jh-hero-dither-veil"
+                style={{width:'100%',height:'100%'}}
+              />
+            </Suspense>
+          </div>
           <JYCHeroWebGLEmblem />
         </div>
       </section>
@@ -325,9 +322,8 @@ export function JYCEditorialHome({ data }) {
                 <span className="jh-story-copy">
                   <small>{story.year || 'JYC ARCHIVE'} <i>·</i> {story.association}</small>
                   <strong>{story.caption || story.association}</strong>
-                  <b>Explore album <span aria-hidden="true">↗</span></b>
+                  <b>Explore album</b>
                 </span>
-                <span className="jh-story-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
               </button>
             ))}
           </div>
@@ -350,19 +346,7 @@ export function JYCEditorialHome({ data }) {
 
       {/* 3D INTERACTIVE CAMPUS EXPLORER (CICR & INNOVATION INSPIRED) */}
       <div className="jh-container">
-        <DeferredMount fallback={<div className="jh-deferred-placeholder jh-deferred-spotlight-placeholder" aria-hidden="true" />}>
-          <Suspense fallback={<div aria-hidden="true" style={{ minHeight: 420 }} />}>
-            <LazyJYCSpotlight data={data} />
-          </Suspense>
-        </DeferredMount>
-      </div>
-
-      <div className="jh-container">
-        <DeferredMount fallback={<div className="jh-deferred-placeholder jh-deferred-explorer-placeholder" aria-hidden="true" />}>
-          <Suspense fallback={<div aria-hidden="true" style={{ minHeight: 480 }} />}>
-            <LazyJYC3DInteractiveExplorer />
-          </Suspense>
-        </DeferredMount>
+        <JYC3DInteractiveExplorer />
       </div>
 
       {/* FEATURED & UPCOMING EVENTS */}
@@ -419,7 +403,7 @@ export function JYCEditorialHome({ data }) {
         {upcoming.slice(1).length > 0 && (
           <div className="jh-event-list">
             {upcoming.slice(1).map(e => (
-              <button type="button" key={e.id || e.title} onClick={() => nav(eventPath(e))}>
+              <button type="button" key={e.id || e.title} onClick={() => nav(eventPath(e))} aria-label={`View ${e.title}, ${dateLabel(e.date)}`}>
                 <span>{dateLabel(e.date)}</span>
                 <strong>{e.title}</strong>
                 <small>{e.club || 'JYC'} · {e.venue || 'JIIT 128'}</small>

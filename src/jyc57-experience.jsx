@@ -315,19 +315,16 @@ export function JYC57Events({data}){
 }
 
 export function JYC57Clubs({data}){
- const nav=useNavigate(),loc=useLocation();
+ const nav=useNavigate();
  const [query,setQuery]=useState('');
- const families=['All','Technical','Cultural','Creative','Literary','Sports'];
- const requestedFamily=new URLSearchParams(loc.search||'').get('family');
- const [family,setFamily]=useState(()=>families.includes(requestedFamily)?requestedFamily:'All');
+ const [family,setFamily]=useState('All');
  const [type,setType]=useState('All');
  const [domain,setDomain]=useState('All');
  const [filtersOpen,setFiltersOpen]=useState(false);
  const [active,setActive]=useState(null);
 
- useEffect(()=>{setFamily(families.includes(requestedFamily)?requestedFamily:'All')},[requestedFamily]);
-
  const clubs=publishedClubs(data);
+ const families=['All','Technical','Cultural','Creative','Literary','Sports'];
  const types=['All','Technical','Non-Technical'];
  const quickDomains=[
    'AI & Coding',
@@ -407,8 +404,6 @@ export function JYC57Clubs({data}){
 
    {(activeFilterCount>0||query)&&<button type="button" className="jyc-clear-filters-btn" onClick={clearAllFilters}>Reset Filters ↺</button>}
   </div>
-
-  <p className="results-line" role="status" aria-live="polite">{filtered.length} communities found</p>
 
   {/* Club Cards Wall */}
   <div className="jyc57-club-wall">
