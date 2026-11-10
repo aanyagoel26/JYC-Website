@@ -783,15 +783,15 @@ function Navbar({data,admin,theme,setTheme}){
  const homeLinks=[['Home','hero'],['About','about'],['Clubs','clubs'],['Events','events'],['Gallery','moments'],['Team','team'],['Contact','/contact']];
  useEffect(()=>{
    const onKey=e=>{
-     if((e.ctrlKey||e.metaKey)&&(e.key?.toLowerCase()==='k'||e.code==='KeyK')){e.preventDefault();e.stopPropagation();setMoreOpen(false);setSearch(true);return}
-     if(e.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)){e.preventDefault();setMoreOpen(false);setSearch(true);return}
-     if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName))return;
+     if((e.ctrlKey||e.metaKey)&&(e.key?.toLowerCase()==='k'||e.code==='KeyK')){e.preventDefault();e.stopImmediatePropagation?.();openSearch();return}
+     if(e.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)&&!document.activeElement?.isContentEditable){e.preventDefault();openSearch();return}
+     if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)||document.activeElement?.isContentEditable)return;
      if(e.key.toLowerCase()==='g'){shortcutRef.current='g';window.clearTimeout(shortcutRef._timer);shortcutRef._timer=window.setTimeout(()=>shortcutRef.current='',700);return}
      if(shortcutRef.current==='g'){const routes={c:'/clubs',e:'/events',t:'/team',a:'/archive',m:'/gallery'};if(routes[e.key.toLowerCase()]){e.preventDefault();shortcutRef.current='';nav(routes[e.key.toLowerCase()]);return}}
      if(e.key==='Escape'){setOpen(false);setMoreOpen(false)}
    };
-   const openSearch=()=>setSearch(true);window.addEventListener('keydown',onKey,true);window.addEventListener('jyc-open-search',openSearch);
-   return()=>{window.removeEventListener('keydown',onKey,true);window.removeEventListener('jyc-open-search',openSearch)}
+   const openSearchEvent=()=>openSearch();window.addEventListener('keydown',onKey,true);window.addEventListener('jyc-open-search',openSearchEvent);
+   return()=>{window.removeEventListener('keydown',onKey,true);window.removeEventListener('jyc-open-search',openSearchEvent)}
  },[]);
  useEffect(()=>{setOpen(false);setMoreOpen(false);const query=new URLSearchParams(loc.search||'').get('q');setSearch(Boolean(query));},[loc.pathname,loc.search]);
  useEffect(()=>{document.body.classList.toggle('menu-open',open);return()=>document.body.classList.remove('menu-open')},[open]);
@@ -810,7 +810,7 @@ function Navbar({data,admin,theme,setTheme}){
  const dockItems=[['Home','/','home'],['Clubs','/clubs','clubs'],['Events','/events','events'],['Gallery','/gallery','gallery'],['More','__more','more']];
  const dockActive=loc.pathname==='/'?0:loc.pathname.startsWith('/clubs')?1:loc.pathname.startsWith('/events')?2:loc.pathname.startsWith('/gallery')?3:4;
  const dock=<div className="mobile-dock" style={{'--dock-index':dockActive}} aria-label="Mobile navigation"><i className="dock-active-pill" aria-hidden="true"/>{dockItems.map(([n,p,icon],i)=>{const active=i===dockActive;return <button type="button" key={n} className={active?'active':''} onClick={()=>p==='__more'?setMoreOpen(v=>!v):nav(p)} aria-current={active?'page':undefined} aria-expanded={p==='__more'?moreOpen:undefined} aria-controls={p==='__more'&&moreOpen?'jyc-more-dialog':undefined}><span><NavIcon kind={icon}/></span><b>{n}</b></button>})}</div>;
- const more=moreOpen?<MobileMoreSheet data={data} admin={admin} close={()=>setMoreOpen(false)} openSearch={()=>{setMoreOpen(false);setSearch(true)}}/>:null;
+ const more=moreOpen?<MobileMoreSheet data={data} admin={admin} close={()=>setMoreOpen(false)} openSearch={openSearch}/>:null;
  const searchView=search?<Suspense fallback={null}><LazyJYCSearch data={data} admin={admin} close={()=>setSearch(false)}/></Suspense>:null;
  const navButtons = routeLinks.map(([n, p]) => {
     const active = loc.pathname === p || (p !== '/' && loc.pathname.startsWith(p + '/'));
@@ -832,7 +832,7 @@ function Navbar({data,admin,theme,setTheme}){
  return <>
  <header className="nav"><div className="nav-inner">
    <button type="button" className="brand" aria-label="JIIT Youth Club home" onClick={()=>{setOpen(false);nav('/')}}><span className="brand-mark"><LogoImage alt="JIIT Youth Club logo" loading="eager" fetchPriority="high" srcSet={`${logoTiny} 1x, ${logoSmall} 2x`}/></span><span>JIIT YOUTH CLUB</span></button>
-   <nav className={open?'open':''}>{navButtons}<button type="button" className={`nav-more-trigger ${moreOpen?'active':''}`} onClick={()=>{setOpen(false);setMoreOpen(true)}} aria-expanded={moreOpen} aria-controls={moreOpen?'jyc-more-dialog':undefined}>More <span aria-hidden="true">⌄</span></button></nav>
+   <nav className={open?'open':''}>{navButtons}<button type="button" className={`nav-more-trigger ${moreOpen?'active':''}`} onClick={openMore} aria-haspopup="dialog" aria-expanded={moreOpen} aria-controls="jyc-more-dialog">More <span aria-hidden="true">⌄</span></button></nav>
    <button
      type="button"
      className="search-trigger nav-search-trigger"
@@ -840,7 +840,7 @@ function Navbar({data,admin,theme,setTheme}){
      aria-haspopup="dialog"
      aria-expanded={search}
      aria-controls={search?'jyc-search-dialog':undefined}
-     onClick={()=>{setOpen(false);setMoreOpen(false);setSearch(true)}}
+     onClick={openSearch}
      onPointerEnter={preloadJYCSearch}
      onFocus={preloadJYCSearch}
    ><span className="search-label">Search</span><kbd aria-hidden="true">Ctrl K</kbd></button>
@@ -859,12 +859,12 @@ function MobileMoreSheet({data,admin,close,openSearch}){
   const returnFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
   const previous=document.body.style.overflow;
   document.body.style.overflow='hidden';
-  const timer=setTimeout(()=>sheetRef.current?.querySelector('button,a')?.focus(),30);
+  const timer=setTimeout(()=>sheetRef.current?.querySelector('button,a')?.focus(),60);
   const onKey=e=>{
    if(e.key==='Escape'){e.preventDefault();closeRef.current();return}
    if(e.key!=='Tab')return;
    const root=sheetRef.current;if(!root)return;
-   const focusable=[...root.querySelectorAll('button,a,input,[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled&&el.offsetParent!==null);
+   const focusable=[...root.querySelectorAll('button,a,input,[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled&&el.getClientRects().length>0);
    if(!focusable.length)return;
    const first=focusable[0],last=focusable[focusable.length-1];
    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}
@@ -1021,7 +1021,7 @@ function Theme({theme,setTheme}){
   }catch{apply();finish();}
  };
  const nextLabel=theme==='dark'?'day':'night';
- return <button type="button" className={`theme-toggle theme-toggle-rb ${theme==='dark'?'is-dark':'is-light'}`} onClick={switchMode} aria-pressed={theme==='dark'} aria-label={`${theme==='dark'?'Night':'Day'} Theme — switch to ${nextLabel} theme`} title={`Switch to ${nextLabel} theme`}>
+ return <button type="button" className={`theme-toggle theme-toggle-rb ${theme==='dark'?'is-dark':'is-light'}`} onClick={switchMode} role="switch" aria-checked={theme==='dark'} aria-label={`Switch to ${nextLabel} theme`} title={`Switch to ${nextLabel} theme`}>
   <span className="theme-toggle-track" aria-hidden="true"><span className="theme-toggle-orb"><span>{theme==='dark'?'☾':'☀'}</span></span></span>
   <span className="theme-toggle-copy"><b>{theme==='dark'?'Night':'Day'}</b><small>Theme</small></span>
  </button>
