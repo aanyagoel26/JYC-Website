@@ -9,7 +9,7 @@ const isSafeManifestAssetUrl=url=>{
  const segments=url.slice(1).split('/');
  return segments.every(segment=>Boolean(segment)&&segment!=='.'&&segment!=='..');
 };
-const isDerivativeManifestPath=url=>['/assets/source-archive/','/assets/hub-photos/','/assets/hub-photos-extra/','/assets/events/','/assets/home/','/assets/team/'].some(prefix=>url.startsWith(prefix));
+const isDerivativeManifestPath=url=>['/assets/source-archive/','/assets/hub-photos/','/assets/hub-photos-extra/','/assets/events/','/assets/home/','/assets/team/','/assets/banners/','/assets/logos/'].some(prefix=>url.startsWith(prefix));
 
 // Do not trust a non-empty `images` object alone: a stale/error page can still
 // return HTTP 200 JSON. Every advertised record must carry dimensions and the
