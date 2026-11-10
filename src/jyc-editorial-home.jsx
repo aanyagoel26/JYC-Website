@@ -199,8 +199,19 @@ export function JYCEditorialHome({ data }) {
   const events = useMemo(() => Array.isArray(data?.events) ? data.events.filter(e => e?.published && !e?.archived).slice().sort((a, b) => dateMs(a) - dateMs(b)) : [], [data?.events]);
   const today = useMemo(() => { const d = new Date(); d.setHours(0, 0, 0, 0); return d.getTime(); }, []);
   const upcoming = events.filter(e => { const t = dateMs(e); return Number.isFinite(t) && t >= today; }).slice(0, 4);
-  const team = (data?.team || []).filter(x => x?.published === true).slice(0, 4);
-  const featured = upcoming[0] || events[0];
+  const team = (data?.team || []).filter(x => x?.published === true).slice().sort((a, b) => {
+    const rank = member => {
+      const role = String(member?.role || member?.position || '').toLowerCase();
+      if (/president/.test(role) && !/vice/.test(role)) return 0;
+      if (/vice president/.test(role)) return 1;
+      if (/general secretary/.test(role)) return 2;
+      if (/joint secretary/.test(role)) return 3;
+      if (/finance secretary|treasurer/.test(role)) return 4;
+      return 5;
+    };
+    return rank(a) - rank(b) || String(a?.name || '').localeCompare(String(b?.name || ''));
+  }).slice(0, 4);
+  const featured = upcoming[0];
   const featuredRegistration = registrationState(featured);
 
   const photoStories = useMemo(() => {
@@ -508,6 +519,9 @@ export function JYCEditorialHome({ data }) {
               </button>
               <button type="button" className="jh-btn jh-btn-outline" onClick={() => nav('/join-jyc')}>
                 Join JYC <span>→</span>
+              </button>
+              <button type="button" className="jh-btn jh-btn-glass" onClick={() => nav('/contact')}>
+                Contact JYC <span>↗</span>
               </button>
             </div>
           </div>
