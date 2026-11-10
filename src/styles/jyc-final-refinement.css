@@ -44,7 +44,7 @@ html[data-theme="dark"] .app-frame {
 .public-app .nav-search-trigger .search-label {font-size:13px;font-weight:650}
 .public-app .nav-search-trigger kbd {
   padding:4px 5px;border:1px solid var(--jyc-line);border-radius:5px;
-  background:var(--jyc-canvas-raised);color:var(--jyc-muted);font:600 10px/1 ui-monospace,monospace;
+  background:var(--jyc-canvas-raised);color:var(--jyc-muted);font:600 11px/1.2 ui-monospace,monospace;
 }
 .public-app .nav-more-trigger {min-height:44px!important;padding-inline:14px!important}
 .public-app .theme-toggle-rb {
@@ -66,9 +66,9 @@ html[data-theme="dark"] .app-frame {
   transition:transform .24s cubic-bezier(.2,.8,.2,1)!important;
 }
 .public-app .theme-toggle-rb.is-dark .theme-toggle-orb {transform:translateX(16px)!important}
-.public-app .theme-toggle-rb .theme-toggle-copy {display:grid!important;gap:1px!important;line-height:1.05!important}
+.public-app .theme-toggle-rb .theme-toggle-copy {display:grid!important;gap:1px!important;line-height:1.15!important}
 .public-app .theme-toggle-rb .theme-toggle-copy b {font-size:11px!important;font-weight:700!important;color:var(--jyc-text-strong)!important}
-.public-app .theme-toggle-rb .theme-toggle-copy small {font-size:9px!important;color:var(--jyc-muted)!important}
+.public-app .theme-toggle-rb .theme-toggle-copy small {font-size:12px!important;color:var(--jyc-muted)!important}
 .public-app .nav-search-trigger:focus-visible,.public-app .nav-more-trigger:focus-visible,.public-app .theme-toggle-rb:focus-visible {
   outline:3px solid var(--jyc-focus)!important;outline-offset:3px!important;
 }
