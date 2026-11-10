@@ -322,3 +322,10 @@ html[data-theme] .public-app .jh-kicker > b {
   color: #282333 !important;
   text-shadow: none !important;
 }
+
+
+/* Fallback for route shells that do not carry the public-app class. */
+html body #main-content .route-stage .jh-kicker,
+html body #main-content .route-stage .jh-kicker > b {
+  color: #282333 !important;
+}
