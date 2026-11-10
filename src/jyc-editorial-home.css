@@ -5,7 +5,7 @@
    ========================================================================== */
 
 :root {
-  --jh-bg:#f1eadb;
+  --jh-bg:#F5F1E6;
   --jh-gold:#bf9c6f;
   --jh-surface: #fffaf0;
   --jh-surface-elevated: #fffdf7;
@@ -25,7 +25,7 @@
 }
 
 [data-theme="light"] {
-  --jh-bg: #f1eadb;
+  --jh-bg: #F5F1E6;
   --jh-surface: #fffaf0;
   --jh-surface-elevated: #fffdf7;
   --jh-surface-glass: rgba(255, 255, 255, 0.90);
