@@ -51,6 +51,7 @@ const logoAvifOutput=path.join(root,'assets','jyc-logo.avif');
 const logoTinyAvifOutput=path.join(root,'assets','jyc-logo-48.avif');
 const logoSmallAvifOutput=path.join(root,'assets','jyc-logo-small.avif');
 const logoMediumAvifOutput=path.join(root,'assets','jyc-logo-medium.avif');
+const logo320AvifOutput=path.join(root,'assets','jyc-logo-320.avif');
 const logoBrandAvifOutput=path.join(root,'assets','jyc-logo-270.avif');
 try{
   if(!fs.existsSync(logoSource))throw new Error('Official JYC logo source is missing: '+logoSource);
@@ -77,13 +78,17 @@ try{
   await sharp(logoSource).rotate().resize({width:192,withoutEnlargement:true}).avif({quality:80,effort:6}).toFile(mediumAvifTemp);
   const mediumAvifBytes=fs.statSync(mediumAvifTemp).size;
   fs.renameSync(mediumAvifTemp,logoMediumAvifOutput);
+  const logo320AvifTemp=logo320AvifOutput+'.jyc-opt';
+  await sharp(logoSource).rotate().resize({width:320,withoutEnlargement:true}).avif({quality:80,effort:6}).toFile(logo320AvifTemp);
+  const logo320Bytes=fs.statSync(logo320AvifTemp).size;
+  fs.renameSync(logo320AvifTemp,logo320AvifOutput);
   const brandAvifTemp=logoBrandAvifOutput+'.jyc-opt';
   await sharp(logoSource).rotate().resize({width:270,withoutEnlargement:true}).avif({quality:80,effort:6}).toFile(brandAvifTemp);
   const brandAvifBytes=fs.statSync(brandAvifTemp).size;
   fs.renameSync(brandAvifTemp,logoBrandAvifOutput);
-  console.log('Generated official JYC logo derivatives from '+before+' bytes: WebP '+webpBytes+' bytes; AVIF '+avifBytes+' bytes; 48px AVIF '+tinyAvifBytes+' bytes; 96px AVIF '+smallAvifBytes+' bytes; 192px AVIF '+mediumAvifBytes+' bytes; 270px AVIF '+brandAvifBytes+' bytes.');
+  console.log('Generated official JYC logo derivatives from '+before+' bytes: WebP '+webpBytes+' bytes; AVIF '+avifBytes+' bytes; 48px AVIF '+tinyAvifBytes+' bytes; 96px AVIF '+smallAvifBytes+' bytes; 192px AVIF '+mediumAvifBytes+' bytes; 270px AVIF '+brandAvifBytes+' bytes; 320px AVIF '+logo320Bytes+' bytes.');
 }catch(error){
-  for(const temp of [logoOutput+'.jyc-opt',logoAvifOutput+'.jyc-opt',logoTinyAvifOutput+'.jyc-opt',logoSmallAvifOutput+'.jyc-opt',logoMediumAvifOutput+'.jyc-opt',logoBrandAvifOutput+'.jyc-opt'])fs.rmSync(temp,{force:true});
+  for(const temp of [logoOutput+'.jyc-opt',logoAvifOutput+'.jyc-opt',logoTinyAvifOutput+'.jyc-opt',logoSmallAvifOutput+'.jyc-opt',logoMediumAvifOutput+'.jyc-opt',logo320AvifOutput+'.jyc-opt',logoBrandAvifOutput+'.jyc-opt'])fs.rmSync(temp,{force:true});
   failed++;
   console.warn('Official JYC logo derivative failed:',error?.message||error);
 }
