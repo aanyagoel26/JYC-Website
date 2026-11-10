@@ -8,10 +8,22 @@ const main=read('src/main.jsx');
 const config=read('src/public-v1/config.js');
 const registration=read('src/extra-features.jsx');
 const gallery=read('src/jyc57-experience.jsx');
+const motion=read('src/jyc-innovation-motion.jsx');
+const motionCss=read('src/styles/jyc-cohesive-experience.css');
+const icons=read('src/components/JYCIcon.jsx');
+const emblem=read('src/components/JYCHeroWebGLEmblem.jsx');
 
 const checks=[
   ['homepage hero action group is present',home.includes('className="jh-actions jh-hero-actions"')],
-  ['homepage exposes event, club and Join JYC routes',home.includes("nav('/events')")&&home.includes("nav('/clubs')")&&home.includes("nav('/join-jyc')")&&home.includes('Explore Events')&&home.includes('Explore Clubs')&&home.includes('Join JYC')],
+  ['shared JYC line icons are used for navigation and dialog controls',icons.includes('export function JYCIcon')&&main.includes("import {JYCIcon} from './components/JYCIcon.jsx'")&&main.includes('function NavIcon({kind}){return <JYCIcon name={kind}/>;}')&&main.includes('<JYCIcon name="close" size={16}/>')],
+  ['route transitions use transform/opacity and respect reduced or user-paused motion',main.includes('className="route-stage"')&&motionCss.includes('@keyframes jycRouteEnter')&&motionCss.includes('html[data-jyc-motion="paused"] .route-stage')&&motionCss.includes('@media (prefers-reduced-motion: reduce)')],
+  ['users can pause and resume decorative motion from the More JYC sheet',main.includes('function MotionPreferenceControl')&&main.includes('aria-pressed={paused}')&&main.includes("storageSet('jyc-motion-preference'")&&main.includes('jyc-motion-preference-change')],
+  ['ambient motion pauses across CSS and canvas effects without hiding page content',motion.includes('jyc-motion-preference-change')&&motion.includes('userPaused')&&motionCss.includes('html[data-jyc-motion="paused"]')&&motionCss.includes('animation-play-state: paused')],
+  ['homepage pauses the OGL field and keeps the static crest when the user pauses motion',home.includes('LazyJYCWebGLField')&&home.includes('motionPaused')&&home.includes('setHeroFieldReady(false)')&&!home.includes('LazyDitherVeil')&&!emblem.includes('requestAnimationFrame')],
+  ['homepage is route-lazy so OGL and the hero shader stay out of non-home startup',main.includes("const LazyJYCEditorialHome=lazy(()=>import('./jyc-editorial-home.jsx')")&&main.includes('<LazyJYCEditorialHome data={data}/>')],
+  ['command search is loaded only when opened, not in the initial public shell',main.includes("const LazyJYCSearch=lazy(()=>import('./search/jyc-search.jsx')")&&main.includes('<LazyJYCSearch data={data}')&&!main.includes("JYCSearch as Search")],
+  ['public routes paint curated/cache-backed content before asynchronous live refresh',main.includes('mergePublicFallback(norm(readSiteCache()||empty),{allowContentFallback:true,allowGalleryFallback:false,allowTeamFallback:true})')&&main.includes('const [loading,setLoading]=useState(false)')&&main.includes('const [bootReady,setBootReady]=useState(true)')],
+  ['homepage exposes community, event and Join JYC routes',home.includes("nav('/events')")&&home.includes("nav('/clubs')")&&home.includes("nav('/join-jyc')")&&home.includes('Explore communities')&&home.includes('See what’s on')&&home.includes('Join JYC')],
   ['homepage has an editorial introduction and lazy activity discovery',home.includes('jh-about-editorial')&&home.includes('LazyActivityBento activities={activities} nav={nav}')],
   ['homepage avoids unsupported hub and student-reach counters',!home.includes('23+ hubs')&&!home.includes('5,000+')&&!home.includes('thousands of students')],
   ['Join JYC route stays honest about recruitment state',main.includes("clean==='/join-jyc'")&&main.includes('function JoinJYC')&&main.includes('coming soon')],

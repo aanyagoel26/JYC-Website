@@ -23,7 +23,8 @@ const publicCss = read('src/styles/public-system.css');
 const designCss = read('src/jyc-design-upgrades.css');
 const flipCss = read('src/components/react-bits/FlipCard.css');
 const themeCss = read('src/jyc-logo-final-theme.css');
-const allCss = redesignCss + editorialCss + publicCss + designCss + flipCss + themeCss;
+const cohesiveCss = read('src/styles/jyc-cohesive-experience.css');
+const allCss = redesignCss + editorialCss + publicCss + designCss + flipCss + themeCss + cohesiveCss;
 
 const hasMobileBreakpoint = /@media[^{]*max-width:\s*(?:600px|680px|768px)/.test(allCss);
 add('Mobile breakpoint rules present (<600px - 768px)', hasMobileBreakpoint);
@@ -44,18 +45,17 @@ add('Fluid typography with clamp() used for responsive headline scaling', hasFlu
 const hasTouchTargetHandling = allCss.includes('min-height:') || allCss.includes('padding:');
 add('Interactive elements use touch-friendly spacing and padding', hasTouchTargetHandling);
 
-// 6. Approved JYC editorial palette and dark-mode tokens.
-const hasPaperCanvas = editorialCss.includes('--jh-bg: #F5F1E6') && redesignCss.includes('--tech-bg: #F5F1E6');
-const hasWarmGold = editorialCss.includes('--jh-line-accent: rgba(191, 156, 111, 0.42)') && redesignCss.includes('--tech-gold: #BF9C6F');
-const hasJycRed = editorialCss.includes('--jh-accent: #A82420') && redesignCss.includes('--tech-crimson: #A82420') && designCss.includes('--jyc-design-accent:#A82420');
-const hasDarkTokens = editorialCss.includes('--jh-bg: #0F0E11') && redesignCss.includes('--tech-bg: #0F0E11') && themeCss.includes('--jyc-bg:#0F0E11');
-const hasNoNeonAccents = !/#38bdf8|#00e5ff|#0284c7|#6366f1|#a855f7|#10b981|#00f0ff|#06b6d4/i.test(editorialCss + designCss + flipCss);
-
-add('JYC editorial theme: warm paper and ink light canvas', hasPaperCanvas);
-add('JYC editorial theme: warm gold secondary accent', hasWarmGold);
-add('JYC editorial theme: red primary accent', hasJycRed);
-add('JYC editorial theme: explicit dark palette', hasDarkTokens);
-add('JYC active visual layers avoid neon cyan, blue, purple and green accents', hasNoNeonAccents);
+// 6. Cohesive JYC day/night palette and mobile-first layout contracts.
+const hasPaperCanvas = cohesiveCss.includes('--jh-bg: #f5f1e8') && cohesiveCss.includes('--jyc-canvas: #f5f1e8');
+const hasWarmGold = cohesiveCss.includes('--jyc-gold: #76572b') && cohesiveCss.includes('--jyc-gold: #e7d19b');
+const hasNightSky = cohesiveCss.includes('--jh-bg: #080d1c') && cohesiveCss.includes('--jh-accent: #c8bcff') && cohesiveCss.includes('--jh-line-accent: rgba(231,209,155,.32)');
+const hasSharedLegacyAliases = cohesiveCss.includes('--jyc-brand-oxblood: var(--jyc-accent)') && cohesiveCss.includes('--accent-red: var(--jyc-accent)');
+const hasPhoneFirst = cohesiveCss.includes('@media (max-width: 360px)') && cohesiveCss.includes('grid-template-columns:1fr !important') && cohesiveCss.includes('env(safe-area-inset-bottom)');
+add('JYC day theme uses warm paper and restrained indigo', hasPaperCanvas);
+add('JYC day and night themes use the shared champagne/gold accent', hasWarmGold);
+add('JYC night theme uses midnight sky, lavender and muted gold without red accents', hasNightSky);
+add('Legacy brand variables resolve through the shared palette', hasSharedLegacyAliases);
+add('Phone-first layout has 360px fallbacks and safe-area dock clearance', hasPhoneFirst);
 
 // 7. Route Accessibility Verification
 const mainJsx = read('src/main.jsx');
@@ -72,7 +72,7 @@ for (const comp of requiredRoutes) {
 }
 
 // 7.5. Fixed mobile chrome clearance.
-add('mobile page content clears the fixed navigation dock', publicCss.includes('padding-bottom:calc(96px + env(safe-area-inset-bottom))'));
+add('mobile page content clears the fixed navigation dock', cohesiveCss.includes('padding-bottom:calc(88px + env(safe-area-inset-bottom))'));
 
 // 8. Output Results
 let failed = 0;

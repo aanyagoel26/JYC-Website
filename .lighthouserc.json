@@ -11,7 +11,14 @@
         "http://127.0.0.1:4173/events",
         "http://127.0.0.1:4173/gallery",
         "http://127.0.0.1:4173/best-of-jyc",
-        "http://127.0.0.1:4173/fests"
+        "http://127.0.0.1:4173/fests",
+        "http://127.0.0.1:4173/?jyc-theme=dark",
+        "http://127.0.0.1:4173/about?jyc-theme=dark",
+        "http://127.0.0.1:4173/clubs?jyc-theme=dark",
+        "http://127.0.0.1:4173/events?jyc-theme=dark",
+        "http://127.0.0.1:4173/gallery?jyc-theme=dark",
+        "http://127.0.0.1:4173/best-of-jyc?jyc-theme=dark",
+        "http://127.0.0.1:4173/fests?jyc-theme=dark"
       ],
       "numberOfRuns": 1,
       "settings": {

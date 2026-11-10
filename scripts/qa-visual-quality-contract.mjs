@@ -7,6 +7,12 @@ const experience = fs.readFileSync('src/jyc57-experience.jsx', 'utf8');
 const home = fs.readFileSync('src/jyc-editorial-home.css', 'utf8');
 const homeComponent = fs.readFileSync('src/jyc-editorial-home.jsx', 'utf8');
 const main = fs.readFileSync('src/main.jsx', 'utf8');
+const search = fs.readFileSync('src/search/jyc-search.jsx', 'utf8');
+const atmosphere = fs.readFileSync('src/jyc-innovation-motion.css', 'utf8');
+const celestial = fs.readFileSync('src/styles/jyc-celestial-refresh.css', 'utf8');
+const webglField = fs.readFileSync('src/components/JYCWebGLField.jsx', 'utf8');
+const dither = fs.readFileSync('src/react-bits/DitherVeil.jsx', 'utf8');
+const ambientMotion = fs.readFileSync('src/jyc-innovation-motion.jsx', 'utf8');
 
 const importIndex = entry.indexOf("@import './jyc-visual-quality.css';");
 const firstRuleIndex = entry.indexOf('.public-app :where');
@@ -35,9 +41,9 @@ assert.ok(entry.includes('.fests-page .compact-page-head') && entry.includes('.f
 assert.ok(main.includes("['/best-of-jyc','Best of JYC','A curated visual selection of published JYC moments']") &&
   main.includes("['/achievements','Achievements','Source-backed milestones and community outcomes']"),
   'More sheet must surface editorial routes');
-assert.ok(main.includes("['Best of JYC','Curated published JYC photography and memories.','PAGE','/best-of-jyc']") &&
-  main.includes("['Achievements','Source-backed JYC milestones and community outcomes.','PAGE','/achievements']"),
-  'Global search must surface editorial routes');
+assert.ok(search.includes("['Best of JYC','Curated JYC photography and standout campus moments.','PAGE','/best-of-jyc'") &&
+  search.includes("['Achievements','Source-backed JYC awards, recognition and milestones.','PAGE','/achievements'"),
+  'Global search must surface editorial routes in its dedicated public index');
 assert.ok(home.includes('.jh-photo-story-grid.has-three') &&
   home.includes('.jh-story-card-1') && home.includes('@media (max-width: 680px)'),
   'homepage editorial photo collage must retain responsive art direction');
@@ -59,4 +65,14 @@ assert.ok(main.includes('deadlineMs>Date.now()') &&
   main.includes("e.publicStatus==='planned'&&e.registrationVerified!==true"),
   'announcement registration notices must exclude expired or unverified planned events');
 
-console.log('Visual quality contract: PASS (type, collage, reduced motion, image fallback, live counts)');
+assert.ok(!atmosphere.includes('animation: jyc-atmosphere-drift') && !/@keyframes jyc-atmosphere-drift/.test(atmosphere),
+  'full-page atmosphere must not animate background-position and repaint the document');
+assert.ok(celestial.includes('--jyc-champagne:#765f36 !important') && celestial.includes('--jyc-champagne:#e7d19b !important') && entry.includes('.public-app .fests-page .compact-page-head .eyebrow') && entry.includes('color: var(--jyc-gold, #765f36) !important;'),
+  'legacy champagne aliases must retain WCAG AA contrast in both themes');
+assert.ok(webglField.includes("if (lowPower || coarse) { host.dataset.webgl = 'fallback'; return; }") &&
+  dither.includes('(navigator.hardwareConcurrency || 4) < 4') && dither.includes('(navigator.deviceMemory || 4) < 2') &&
+  ambientMotion.includes('(navigator.hardwareConcurrency || 8) <= 8') && ambientMotion.includes('(navigator.deviceMemory || 8) < 8') &&
+  webglField.includes('cores <= 4') && webglField.includes('memory < 4') && webglField.includes('const reducedQuality') &&
+  webglField.includes('reducedQuality || coarse ? 1.1 : 1.35'),
+  'The full-page field and ambient canvas use conservative fallbacks; the hero OGL shader uses a separate reduced-quality tier and static fallback');
+console.log('Visual quality contract: PASS (type, collage, reduced motion, image fallback, live counts, motion budget, theme contrast)');

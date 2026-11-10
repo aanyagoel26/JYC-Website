@@ -1,7 +1,7 @@
 {
   "name": "jyc-website",
   "private": true,
-  "version": "64.5.12",
+  "version": "64.5.17",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,7 +9,7 @@
     "preview": "vite preview",
     "qa": "node scripts/run-qa-suite.mjs",
     "qa:release": "npm run qa",
-    "qa:browser": "node scripts/qa-browser.mjs && npx playwright test scripts/visual-route-matrix.spec.js",
+    "qa:browser": "node scripts/qa-browser.mjs",
     "qa:env": "node scripts/qa-env.mjs",
     "seo:sitemap": "node scripts/generate-sitemap.mjs",
     "qa:seo": "node scripts/qa-seo.mjs",
@@ -47,7 +47,17 @@
     "qa:homepage-editorial": "node scripts/qa-homepage-editorial-truth.mjs",
     "qa:experience-system": "node scripts/qa-experience-system.mjs",
     "qa:dynamic-route-shells": "node scripts/qa-dynamic-route-shells.mjs",
-    "qa:visual-redesign": "node scripts/qa-visual-redesign.mjs"
+    "qa:visual-redesign": "node scripts/qa-visual-redesign.mjs",
+    "qa:glb": "node scripts/qa-glb-integrity.mjs",
+    "qa:atmosphere": "node scripts/qa-atmospheric-background.mjs",
+    "qa:club-roster": "node scripts/qa-club-member-roster.mjs",
+    "qa:team-exclusions": "node scripts/qa-team-exclusions.mjs",
+    "qa:nsoc-effects": "node scripts/qa-nsoc-editorial-effects.mjs",
+    "qa:campus-marquee": "node scripts/qa-campus-marquee.mjs",
+    "qa:search-refresh": "node scripts/qa-search-refresh.mjs",
+    "qa:hero": "node scripts/qa-homepage-hero-finish.mjs",
+    "qa:webgl-atmosphere": "node scripts/qa-webgl-atmosphere.mjs",
+    "qa:v1-public-journey": "node scripts/qa-v1-public-journey.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.118.0",

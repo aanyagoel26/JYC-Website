@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 const routes=[
   '/','/about','/history','/clubs','/events','/gallery','/team',
   '/best-of-jyc','/achievements','/archive','/recruitment','/announcements','/updates',
-  '/calendar','/fests','/contact','/join-jyc'
+  '/calendar','/fests','/contact','/join-jyc', '/leadership', '/event-calendar', '/converge-live', '/clubs/dronotics', '/events/jai-2026-jaypee-agentic-ai-hackathon', '/events/jai-2026-jaypee-agentic-ai-hackathon/register', '/gallery/dronotics'
 ];
 
 const routesForProject = projectName => ['desktop-1280','desktop-1440'].includes(projectName)
@@ -20,7 +20,7 @@ async function waitForPublicApp(page,label){
   // the actual public application rather than treating the static shell as ready.
   await page.locator('.public-app').waitFor({state:'visible',timeout:20000});
   await page.waitForFunction(() => document.documentElement.dataset.jycContentReady === 'true', { timeout: 20000 });
-  await expect(page.locator('.public-app h1, .public-app h2, .public-app p, .public-app a, .public-app button').first(),label+' visible public content').toBeVisible({timeout:10000});
+  await expect(page.locator('.public-app h1').first(),label+' visible public heading').toBeVisible({timeout:10000});
 }
 
 async function inspectViewport(page){
@@ -40,7 +40,8 @@ async function inspectViewport(page){
     for(const el of document.querySelectorAll('.public-app *')){
       if(!visible(el))continue;
       const r=el.getBoundingClientRect();
-      if(r.left < -2 || r.right > vw+2) {
+      const intentionalMarqueeTrack=Boolean(el.closest('.jyc-campus-marquee__group'));
+      if(!intentionalMarqueeTrack && (r.left < -2 || r.right > vw+2)) {
         const overflowX=getComputedStyle(el).overflowX;
         if(overflowX!=='hidden'&&overflowX!=='clip')offscreen.push({tag:el.tagName,cls:String(el.className||'').slice(0,100),left:r.left,right:r.right});
       }

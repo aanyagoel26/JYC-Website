@@ -9,6 +9,7 @@ const robots=read('public/robots.txt');
 const llms=read('public/llms.txt');
 const meta=read('src/extra-features.jsx');
 const sitemap=read('scripts/generate-sitemap.mjs');
+const routeShells=read('scripts/generate-route-shells.mjs');
 const main=read('src/main.jsx');
 const pkg=JSON.parse(read('package.json'));
 add('Homepage title targets JIIT Youth Club + clubs/events/fests',html.includes('JIIT Youth Club 128') && main.includes('Clubs, Events & Fests'));
@@ -22,7 +23,10 @@ add('Gallery collection structured data',meta.includes("'@type':'CollectionPage'
 add('Event schema uses source images and full campus address',meta.includes('sourceEventMedia(item)')&&meta.includes('streetAddress')&&meta.includes('Sector 128, Wish Town Campus'));
 add('Event structured data',meta.includes("'@type':'Event'") && meta.includes('startDate'));
 add('Breadcrumb structured data',meta.includes("'@type':'BreadcrumbList'") && meta.includes('itemListElement'));
-add('Dynamic canonical URLs use the explicit production origin',meta.includes('canonical') && meta.includes('VITE_CANONICAL_ORIGIN') && meta.includes('https://jyc-website-eight.vercel.app') && !meta.includes('const origin=(import.meta.env.VITE_SITE_URL||window.location.origin)'));
+add('Dynamic canonical URLs use the configured origin or the active browser origin, without a retired deployment fallback',meta.includes('canonical') && meta.includes('VITE_CANONICAL_ORIGIN') && meta.includes('window.location.origin') && !meta.includes('jyc-website-eight.vercel.app'));
+add('Static route shells replace the canonical-origin token throughout metadata and structured data',html.includes('__JYC_CANONICAL_ORIGIN__') && routeShells.includes("replaceAll('__JYC_CANONICAL_ORIGIN__',siteOrigin)"));
+add('SPA metadata retains the build-resolved production origin on preview deployments',html.includes('meta name="jyc-canonical-origin"') && routeShells.includes('canonicalOriginTag') && meta.includes('meta[name="jyc-canonical-origin"]'));
+add('Sitemap and route-shell generators share the validated Vercel-aware origin resolver',sitemap.includes('resolveSiteOrigin(process.env)') && routeShells.includes('resolveSiteOrigin(process.env)'));
 add('Open Graph image',meta.includes("og:image") && meta.includes("og:image:alt") && meta.includes('canonicalUrl') && meta.includes('imageType') && html.includes('og:image'));
 add('Private route noindex',main.includes("clean.startsWith('/qr/')") && meta.includes("noindex,nofollow"));
 add('Robots allows public crawling',robots.includes('Allow: /') && robots.includes('Disallow: /admin'));
@@ -32,7 +36,20 @@ add('Sitemap carries maintained hub photography',fs.readFileSync(path.join(root,
 add('LLMs discovery file',llms.includes('JIIT Youth Club') && llms.includes('/clubs') && llms.includes('/events'));
 add('Sitemap includes the public Join JYC coming-soon page',sitemap.includes('/join-jyc'));
 add('Sitemap does not fabricate build-date lastmod values',!sitemap.includes('fallbackDate')&&!sitemap.includes('dynamicDates.get(u)||fallbackDate'));
-add('Flagship event URLs use canonical current slugs',(()=>{const s=fs.readFileSync(path.join(root,'scripts/generate-sitemap.mjs'),'utf8');const expected=['/events/jai-2026-jaypee-agentic-ai-hackathon','/events/ride-hack-2026','/events/converge-2026','/events/drono-o-war-2026','/events/innovate-3-0-2026','/events/bitbox-6-0-2026'];const legacy=['/events/agentic-ai-2026','/events/codeai-hackathon'];return expected.every(x=>s.includes(x))&&legacy.every(x=>!s.includes(x));})());
+const { PUBLIC_EVENT_FALLBACK } = await import('../src/content/jyc-public-fallbacks.js');
+const eventSlug = value => String(value || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const publishedEventRoutes = PUBLIC_EVENT_FALLBACK
+  .filter(event => event?.published && event?.archived !== true)
+  .map(event => `/events/${eventSlug(event.slug || event.title)}`);
+add('Flagship event URLs use canonical published, non-archived slugs', (() => {
+  const source = fs.readFileSync(path.join(root, 'scripts/generate-sitemap.mjs'), 'utf8');
+  return source.includes('PUBLIC_EVENT_FALLBACK.filter(event=>event?.published&&event?.archived!==true)')
+    && source.includes('slug(event.slug||event.title)')
+    && publishedEventRoutes.includes('/events/jai-2026-jaypee-agentic-ai-hackathon')
+    && publishedEventRoutes.includes('/events/drono-o-war-2026')
+    && !publishedEventRoutes.includes('/events/ride-hack-2026')
+    && !publishedEventRoutes.includes('/events/converge-2026');
+})());
 add('Sitemap generator exists',fs.existsSync(path.join(root,'scripts/generate-sitemap.mjs')));
 add('SEO pages have useful route metadata',main.includes('JIIT Clubs & Student Communities') && main.includes('JIIT Events & Campus Activities') && main.includes('About JIIT Youth Club') && main.includes('JIIT Fests & Flagship Events'));
 add('Fest discovery route exists',main.includes("clean==='/fests'") && llms.includes('/fests'));

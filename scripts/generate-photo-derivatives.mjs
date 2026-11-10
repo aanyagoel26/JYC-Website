@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
-import {isDerivativeDimensionEligible,orientedImageDimensions} from '../src/jyc-photo-intelligence.js';
+import {isDerivativeDimensionEligible,orientedImageDimensions,parseImageDimensions} from '../src/jyc-photo-intelligence.js';
 const {JYC_SOURCE_ARCHIVE_PHOTO_ITEMS}=await import('../src/jyc-source-media.js');
 const allowedArchive=new Set(JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.map(item=>String(item?.url||'')));
 const root=path.resolve('public/assets');
@@ -12,30 +12,36 @@ const WIDTHS=[240,320,360,480,960,1600];
 // without oversubscribing a 2-core builder.
 sharp.concurrency(Math.min(2,Math.max(1,Number(process.env.JYC_SHARP_CONCURRENCY||2))));
 const CONCURRENCY=Math.min(2,Math.max(1,Number(process.env.JYC_DERIVATIVE_CONCURRENCY||2)));
-const ALLOWED=['source-archive','hub-photos','hub-photos-extra','events','home','team'];
+const ALLOWED=['source-archive','hub-photos','hub-photos-extra','events','home','team','banners','logos'];
+const derivativeBaseForRel=rel=>{
+ const extension=path.extname(rel).slice(1).toLowerCase();
+ const stem=rel.slice(0,-extension.length-1);
+ return rel.startsWith('logos/')||rel.startsWith('banners/')?`${stem}-${extension}`:stem;
+};
 const inputFiles=[];
 const walk=dir=>{for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())walk(file);else if(/\.(jpe?g|png|webp)$/i.test(file))inputFiles.push(file)}};
 walk(root);
-const sourceFiles=inputFiles.filter(file=>{if(file.includes(path.join('photo-derivatives',path.sep)))return false;const url='/assets/'+path.relative(root,file).replaceAll(path.sep,'/');if(url.startsWith('/assets/source-archive/'))return allowedArchive.has(url);return ALLOWED.some(folder=>url.startsWith('/assets/'+folder+'/'));});
+const sourceFiles=inputFiles.filter(file=>{if(file.includes(path.join('photo-derivatives',path.sep)))return false;const url='/assets/'+path.relative(root,file).replaceAll(path.sep,'/');if(url.startsWith('/assets/source-archive/')&&!allowedArchive.has(url))return false;if(!ALLOWED.some(folder=>url.startsWith('/assets/'+folder+'/')))return false;try{return Boolean(parseImageDimensions(fs.readFileSync(file)));}catch{return false;}});
 const derivativeBaseOwners=new Map();
 const duplicateDerivativeBases=[];
 for(const file of sourceFiles){
- const rel=path.relative(root,file).replaceAll(path.sep,'/').replace(/\.(jpe?g|png|webp)$/i,'');
- const previous=derivativeBaseOwners.get(rel);
- if(previous)duplicateDerivativeBases.push({base:rel,files:[previous,path.relative(root,file).replaceAll(path.sep,'/') ]});
- else derivativeBaseOwners.set(rel,path.relative(root,file).replaceAll(path.sep,'/'));
+ const rel=path.relative(root,file).replaceAll(path.sep,'/');
+ const base=derivativeBaseForRel(rel);
+ const previous=derivativeBaseOwners.get(base);
+ if(previous)duplicateDerivativeBases.push({base,files:[previous,path.relative(root,file).replaceAll(path.sep,'/') ]});
+ else derivativeBaseOwners.set(base,path.relative(root,file).replaceAll(path.sep,'/'));
 }
 if(duplicateDerivativeBases.length){
  console.error('Photo derivative output-name collisions: '+JSON.stringify(duplicateDerivativeBases.slice(0,12)));
  process.exit(1);
 }
 let generated=0,failed=0,skipped=0,completed=0,removed=0,reused=0;
-const expectedDerivativeBases=new Set(sourceFiles.map(file=>path.relative(root,file).replaceAll(path.sep,'/').replace(/\.(jpe?g|png|webp)$/i,'')));
+const expectedDerivativeBases=new Set(sourceFiles.map(file=>derivativeBaseForRel(path.relative(root,file).replaceAll(path.sep,'/'))));
 const pruneOrphanDerivatives=dir=>{if(!fs.existsSync(dir))return;for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory()){pruneOrphanDerivatives(file);continue}if(!/\.(?:avif|webp)$/i.test(entry.name))continue;const rel=path.relative(outputRoot,file).replaceAll(path.sep,'/');const match=rel.match(/-(\d+)\.(?:avif|webp)$/i);if(!match||!WIDTHS.includes(Number(match[1]))||!expectedDerivativeBases.has(rel.replace(/-\d+\.(?:avif|webp)$/i,''))){fs.rmSync(file,{force:true});removed++}}};
 pruneOrphanDerivatives(outputRoot);
 const processFile=async file=>{
  const rel=path.relative(root,file).replaceAll(path.sep,'/');
- const base=rel.replace(/\.(jpe?g|png|webp)$/i,'');
+ const base=derivativeBaseForRel(rel);
  const outDir=path.join(outputRoot,path.dirname(rel));
  const sourceStat=fs.statSync(file);
  fs.mkdirSync(outDir,{recursive:true});

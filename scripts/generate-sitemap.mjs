@@ -1,17 +1,20 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import {resolveSiteOrigin} from './site-origin.mjs';
 
 const root=process.cwd();
 const {JYC_HUB_SOURCE_REGISTRY}=await import('../src/jyc-hub-registry.js');
+const {PUBLIC_EVENT_FALLBACK}=await import('../src/content/jyc-public-fallbacks.js');
 const {sourceHubMedia}=await import('../src/jyc-source-media.js');
 const {JYC_SOURCE_ARCHIVE_PHOTO_ITEMS}=await import('../src/jyc-source-media.js');
-const site=new URL(process.env.VITE_CANONICAL_ORIGIN||process.env.JYC_CANONICAL_ORIGIN||process.env.VITE_SITE_URL||'https://jyc-website-eight.vercel.app').origin;
+const site=resolveSiteOrigin(process.env);
 const out=path.join(root,'public','sitemap.xml');
-const core=['/','/about','/clubs','/events','/fests','/gallery','/team','/contact','/calendar','/announcements','/updates','/achievements','/best-of-jyc','/join-jyc','/events/jai-2026-jaypee-agentic-ai-hackathon','/events/ride-hack-2026','/events/converge-2026','/events/drono-o-war-2026','/events/innovate-3-0-2026','/events/bitbox-6-0-2026','/events/sih-college-internals-26','/events/jyc-function-2026'];
+const core=['/','/about','/clubs','/events','/fests','/gallery','/archive','/team','/contact','/calendar','/announcements','/updates','/achievements','/best-of-jyc','/join-jyc','/recruitment'];
 const dynamicDates=new Map();
-const sourceHubNames=JYC_HUB_SOURCE_REGISTRY.map(item=>item.name);
+const sourceHubNames=JYC_HUB_SOURCE_REGISTRY.filter(item=>item.publicationStatus==='published').map(item=>item.name);
 const slug=value=>String(value||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-const urls=new Set([...core,...sourceHubNames.map(name=>`/clubs/${slug(name)}`)]);
+const staticEventRoutes=PUBLIC_EVENT_FALLBACK.filter(event=>event?.published&&event?.archived!==true).map(event=>`/events/${slug(event.slug||event.title)}`).filter(route=>route!=='/events/');
+const urls=new Set([...core,...sourceHubNames.map(name=>`/clubs/${slug(name)}`),...staticEventRoutes]);
 const imageUrls=new Set();
 const hubImages=new Map();
 for(const item of JYC_SOURCE_ARCHIVE_PHOTO_ITEMS) if(item?.url) imageUrls.add(item.url);

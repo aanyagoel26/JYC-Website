@@ -2,7 +2,7 @@ import React,{useEffect,useLayoutEffect,useState} from 'react';
 import {photoDerivativeUrls} from './jyc-photo-intelligence.js';
 import {loadJycImageManifest} from './jyc-image-manifest.js';
 const PHOTO_FALLBACK='/assets/photo-unavailable.svg';
-const isDerivativeSource=url=>/^\/assets\/(?:source-archive|hub-photos|hub-photos-extra|events|home|team)\//.test(String(url||''));
+const isDerivativeSource=url=>/^\/assets\/(?:source-archive|hub-photos|hub-photos-extra|events|home|team|banners|logos)\//.test(String(url||''));
 export function ResponsivePhoto({src,alt='',width,height,sizes='100vw',loading='lazy',fetchPriority,decoding='async',className='',style,onError,objectPosition,fallbackSrc=PHOTO_FALLBACK,fallbackAlt='Photograph unavailable'}){
  // Empty/whitespace sources must never become a request for the current document.
  const normalizedFallbackSrc=typeof fallbackSrc==='string'&&fallbackSrc.trim()?fallbackSrc.trim():PHOTO_FALLBACK;

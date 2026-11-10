@@ -2,14 +2,13 @@ export const JYC_SOCIALS = {
   JYC: {
     instagram: 'https://www.instagram.com/jiityouthclub128/',
     instagramHandle: '@jiityouthclub128',
-    official: 'https://linktr.ee/jiityouthclub',
     verifiedBy: 'https://in.linkedin.com/in/jyc128',
     verifiedOn: '2026-10-06',
     linkedin: 'https://in.linkedin.com/in/jyc128',
     label: 'JIIT Youth Club · Sector 128',
     campus: 'sector-128',
     sourcePriority: 'canonical-128',
-    sourceNote: 'Supplied 2026–27 orientation material explicitly directs students to @jiityouthclub128; use this 128 identity for public social/event sourcing.'
+    sourceNote: 'Use the campus-specific JYC 128 LinkedIn profile and @jiityouthclub128 Instagram for public social/event sourcing. Generic JIIT Youth Club link directories are not treated as Sector 128 sources without campus-specific verification.'
   },
   Fortissimo: {
     instagram: 'https://www.instagram.com/ffortissimo_j128/',
@@ -301,7 +300,6 @@ export const JYC_SOCIAL_SOURCE_POLICY = {
   ],
   approvedIdentities: [
     'https://in.linkedin.com/in/jyc128',
-    'https://linktr.ee/jiityouthclub',
     'https://www.instagram.com/jiityouthclub128/'
   ]
 };

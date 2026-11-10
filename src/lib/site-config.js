@@ -18,7 +18,6 @@ export const CREATORS=Object.freeze([
 export const CREATOR=CREATORS[0];
 export const JYC_CONTACTS=Object.freeze({
   instagram:'https://www.instagram.com/jiityouthclub128/',
-  official:'https://linktr.ee/jiityouthclub',
   whatsapp:'https://chat.whatsapp.com/BUvEqpevLr6Jp44904ysht?s=cl&p=a&mlu=4&ilr=4',
   linkedin:'https://in.linkedin.com/in/jyc128'
 });

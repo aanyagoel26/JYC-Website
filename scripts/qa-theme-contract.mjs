@@ -1,0 +1,53 @@
+import fs from 'node:fs';
+import path from 'node:path';
+
+const root=process.cwd();
+const read=p=>fs.readFileSync(path.join(root,p),'utf8');
+const main=read('src/main.jsx');
+const boot=read('public/boot-theme.js');
+const entry=read('src/styles/public-entry.css');
+const system=read('src/styles/public-system.css');
+const contract=read('src/styles/jyc-theme-contract.css');
+const atmosphere=read('src/styles/jyc-atmosphere.css');
+const celestial=read('src/styles/jyc-celestial-refresh.css');
+const checks=[];
+const check=(name,ok,detail='')=>{checks.push({name,ok,detail});console.log((ok?'PASS':'FAIL')+': '+name+(detail?' — '+detail:''));};
+
+const contractImport=main.indexOf("import './styles/jyc-theme-contract.css';");
+const teamImport=main.indexOf("import './styles/jyc-team-experience.css';");
+const atmosphereImport=main.indexOf("import './styles/jyc-atmosphere.css';");
+check('canonical theme contract is imported',contractImport>=0);
+check('theme contract loads after team and other global CSS',contractImport>teamImport&&contractImport>main.indexOf("import './styles/jyc-cohesive-experience.css';"));
+check('immersive atmosphere loads after the canonical theme contract',atmosphereImport>contractImport&&atmosphereImport>=0);
+const celestialImport=main.indexOf("import './styles/jyc-celestial-refresh.css';");
+check('Celestial Dawn final theme layer loads after the atmosphere layer',celestialImport>atmosphereImport&&celestialImport>=0);
+check('theme preview URLs select the requested theme before saved/system preferences',boot.includes("get('jyc-theme')")&&main.includes("get('jyc-theme')")&&main.includes("if(requested==='dark'||requested==='light')return requested"));
+check('manual theme changes clear the preview parameter so the user choice persists',main.includes("url.searchParams.delete('jyc-theme')")&&main.includes("storageSet('jyc-theme',theme)"));
+check('dark atmosphere has layered stars and nebula lighting',atmosphere.includes('html[data-theme="dark"] body::after')&&atmosphere.includes('jyc-star-drift')&&atmosphere.includes('rgba(104,91,176,.13)'));
+check('light atmosphere has pearl, champagne and violet glow layers',atmosphere.includes('html[data-theme="light"] body::after')&&atmosphere.includes('rgba(239,205,144,.22)')&&atmosphere.includes('rgba(171,151,207,.13)'));
+check('both modes add depth through glass, card lift and emblem bloom',atmosphere.includes('backdrop-filter: blur(22px)')&&atmosphere.includes('translateY(-5px)')&&atmosphere.includes('.jyc-emblem-seal-container'));
+check('atmosphere respects reduced motion and small screens',atmosphere.includes('@media (prefers-reduced-motion: reduce)')&&atmosphere.includes('@media (max-width: 700px)'));
+
+check('night atmosphere includes a diagonal Milky Way haze and dark dust-rift lane',atmosphere.includes('linear-gradient(153deg,transparent 18%')&&atmosphere.includes('rgba(2,5,17,.72)')&&atmosphere.includes('jyc-star-drift 130s'));
+check('light atmosphere has separate champagne and lavender glow fields',atmosphere.includes('rgba(222,185,117,.24)')&&atmosphere.includes('rgba(244,220,171,.28)')&&atmosphere.includes('rgba(174,151,197,.14)'));
+check('public entry does not re-import already nested design upgrades',!entry.includes("@import '../jyc-design-upgrades.css';"));
+check('public entry does not re-import nested pro redesign',!entry.includes("@import './jyc-pro-redesign.css';"));
+check('public system remains the single historical layer aggregator',system.includes("@import '../jyc-design-upgrades.css';")&&system.includes("@import './jyc-pro-redesign.css';"));
+check('obsolete dark red palette override is removed from public system',!system.includes('--champagne:#A82420')&&!system.includes('--accent:#ef4444'));
+check('light public-system accent no longer defaults to red',system.includes('--jyc-accent: #625889;')&&!system.includes('--jyc-accent: #A82420;'));
+check('effective light palette uses parchment, ivory and accessible antique gold',celestial.includes('--jyc-canvas:#f1eadb !important')&&celestial.includes('--jyc-surface:#fffaf0 !important')&&celestial.includes('--jyc-gold:#765f36 !important'));
+check('effective light text and muted tokens preserve WCAG AA contrast',celestial.includes('--jyc-text:#29251c !important')&&celestial.includes('--jyc-muted:#695d4a !important')&&celestial.includes('--jyc-focus:#765f36 !important'));
+check('effective night palette retains midnight, lavender and champagne tokens',celestial.includes('--jyc-canvas:#080d1c !important')&&celestial.includes('--jyc-accent:#c8bcff !important')&&celestial.includes('--jyc-gold:#e7d19b !important'));
+check('legacy red and cyan aliases resolve through the active JYC accent',contract.includes('--accent-red: var(--jyc-accent);')&&contract.includes('--tech-cyan: var(--jyc-accent);')&&contract.includes('--tech-crimson: var(--jyc-accent);'));
+check('legacy surfaces and text aliases resolve through canonical tokens',contract.includes('--bg-card: var(--jyc-surface);')&&contract.includes('--text-primary: var(--jyc-text-strong);')&&contract.includes('--text-muted: var(--jyc-muted);'));
+check('legacy cream and ivory aliases remain readable on dark surfaces',contract.includes('--cream: var(--jyc-text-strong);')&&contract.includes('--ivory: #f7f5ff;'));
+check('public text baseline uses readable body sizing and line height',contract.includes('font-size: 16px;')&&contract.includes('line-height: 1.68;'));
+check('homepage nested theme variables are reset to canonical palettes',contract.includes('html[data-theme="dark"] .jyc-editorial-home.jyc-home')&&contract.includes('--jh-bg: var(--jyc-canvas);')&&contract.includes('--jh-muted: var(--jyc-muted);'));
+check('JYC57 page headings and body copy use separate readable tokens',contract.includes('.jyc57-page :where(p,small,.jyc57-meta')&&contract.includes('.jyc57-page :where(h1,h2,h3,h4,strong,b)'));
+check('history and team route shells inherit canonical text tokens',contract.includes('.jyc-history-page')&&contract.includes('.team-page'));
+check('shared public surfaces inherit theme tokens',contract.includes('.public-app :where(.card,.featured,.contact-card,.search-modal'));
+check('portal-mounted navigation and search surfaces inherit theme tokens',contract.includes('html[data-theme="dark"] .nav')&&contract.includes('html[data-theme="dark"] .search-modal')&&contract.includes('html[data-theme="light"] .more-sheet'));
+check('reduced-motion is respected by final public contract',contract.includes('@media (prefers-reduced-motion: reduce)'));
+
+if(checks.some(x=>!x.ok)) process.exit(1);
+console.log('JYC THEME CONTRACT QA PASS ('+checks.length+' checks)');

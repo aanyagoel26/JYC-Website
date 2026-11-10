@@ -1,3 +1,20 @@
+/* Ambient canvas is a fixed atmosphere layer, never a layout block. */
+.app-frame{position:relative;isolation:isolate;min-height:100vh}
+.jyc-ambient-canvas{
+  position:fixed;inset:0;z-index:-1;display:block;
+  width:100vw;height:100vh;pointer-events:none;
+  opacity:.34;mix-blend-mode:screen;
+}
+html[data-theme="light"] .jyc-ambient-canvas{opacity:.28;mix-blend-mode:multiply}
+html[data-theme="dark"] .jyc-ambient-canvas{opacity:.38;mix-blend-mode:screen}
+@media(max-width:760px){
+  .jyc-ambient-canvas{opacity:.18}
+  html[data-theme="light"] .jyc-ambient-canvas{opacity:.16}
+}
+@media(prefers-reduced-motion:reduce){
+  .jyc-ambient-canvas{display:none!important}
+}
+
 /* V56.14 — Innovation-inspired interaction layer.
    Motion is editorial: reveal, depth, and feedback — never decorative overload. */
 .public-app .jyc-scroll-progress{
@@ -8,11 +25,12 @@
   display:block;width:100%;height:100%;transform-origin:left center;transform:scaleX(0);
   background:var(--jyc-champagne,var(--accent-gold,#bf9c6f));
 }
-.public-app .reveal{
+.public-app .reveal{opacity:1;transform:none}
+html.jyc-motion-ready .public-app .reveal{
   opacity:.001;transform:translateY(18px);
   transition:opacity 700ms cubic-bezier(.2,.7,.2,1),transform 700ms cubic-bezier(.2,.7,.2,1);
 }
-.public-app .reveal.jyc-motion-visible{opacity:1;transform:none}
+html.jyc-motion-ready .public-app .reveal.jyc-motion-visible{opacity:1;transform:none}
 .public-app .jyc-living-spotlight,
 .public-app .club-card-v41,
 .public-app .club-card-premium,
@@ -39,7 +57,7 @@
   box-shadow:0 24px 70px rgba(26,25,29,.12);
 }
 @media (max-width:760px){
-  .public-app .reveal{transform:translateY(10px);transition-duration:520ms}
+  html.jyc-motion-ready .public-app .reveal{transform:translateY(10px);transition-duration:520ms}
   .public-app .club-card-v41,
   .public-app .club-card-premium,
   .public-app .event-card-premium,
@@ -73,4 +91,95 @@
   .public-app .club-card-premium img,
   .public-app .event-card-premium img,
   .public-app .jyc-living-spotlight-media img{transition:none!important;transform:none!important}
+}
+
+
+/* App-frame gradients remain static; the fixed ambient canvas supplies motion without repainting the full page. */
+/* V70 — layered atmosphere: depth comes from slow light fields, fine grain and
+   restrained motion, while the canvas supplies the responsive particles. */
+.app-frame {
+  background-color: var(--jyc-canvas, #f5f1e8);
+  background-image:
+    url('/assets/jyc-grain.svg'),
+    radial-gradient(ellipse at 8% 4%, rgba(126, 111, 174, .105), transparent 36%),
+    radial-gradient(ellipse at 92% 16%, rgba(231, 209, 155, .13), transparent 34%),
+    radial-gradient(ellipse at 48% 72%, rgba(126, 111, 174, .055), transparent 42%),
+    linear-gradient(180deg, rgba(255,255,255,.10), transparent 44%, rgba(82,67,104,.025));
+  background-size: 128px 128px, 150% 150%, 145% 145%, 160% 160%, 100% 100%;
+  background-repeat: repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+  background-blend-mode: soft-light, normal, normal, normal, normal;
+  background-position: 0 0, 0% 0%, 100% 0%, 50% 100%, 0 0;
+}
+html[data-theme="dark"] .app-frame {
+  background-color: var(--jyc-canvas, #080d1c);
+  background-image:
+    url('/assets/jyc-grain.svg'),
+    radial-gradient(ellipse at 12% 8%, rgba(116, 103, 190, .22), transparent 37%),
+    radial-gradient(ellipse at 88% 22%, rgba(41, 104, 159, .16), transparent 35%),
+    radial-gradient(ellipse at 52% 82%, rgba(200, 188, 255, .095), transparent 44%),
+    radial-gradient(ellipse at 50% 48%, rgba(231, 209, 155, .035), transparent 65%),
+    linear-gradient(180deg, rgba(4, 8, 20, .02), rgba(4, 8, 20, .14));
+  background-size: 128px 128px, 155% 155%, 150% 150%, 160% 160%, 140% 140%, 100% 100%;
+  background-repeat: repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+  background-blend-mode: soft-light, normal, normal, normal, normal, normal;
+  background-position: 0 0, 0% 0%, 100% 0%, 50% 100%, 45% 40%, 0 0;
+}
+html[data-theme="light"] .app-frame {
+  background-color: var(--jyc-canvas, #f5f1e8);
+  background-image:
+    url('/assets/jyc-grain.svg'),
+    radial-gradient(ellipse at 10% 8%, rgba(98, 88, 137, .12), transparent 36%),
+    radial-gradient(ellipse at 88% 16%, rgba(231, 209, 155, .22), transparent 36%),
+    radial-gradient(ellipse at 50% 76%, rgba(164, 123, 67, .075), transparent 44%),
+    linear-gradient(180deg, rgba(255,255,255,.36), transparent 48%, rgba(164,123,67,.025));
+  background-size: 128px 128px, 155% 155%, 145% 145%, 160% 160%, 100% 100%;
+  background-repeat: repeat, no-repeat, no-repeat, no-repeat, no-repeat;
+  background-blend-mode: multiply, normal, normal, normal, normal;
+}
+.jyc-ambient-canvas {
+  opacity: .48;
+  filter: saturate(1.12);
+}
+html[data-theme="dark"] .jyc-ambient-canvas {
+  opacity: .52;
+  mix-blend-mode: screen;
+}
+html[data-theme="light"] .jyc-ambient-canvas {
+  opacity: .36;
+  mix-blend-mode: multiply;
+}
+@media (max-width: 760px) {
+  .app-frame {
+    background-size: 128px 128px, 180% 180%, 170% 170%, 180% 180%, 100% 100%;
+  }
+  html[data-theme="dark"] .app-frame {
+    background-size: 128px 128px, 180% 180%, 170% 170%, 180% 180%, 160% 160%, 100% 100%;
+  }
+  .jyc-ambient-canvas { opacity: .24; }
+  html[data-theme="dark"] .jyc-ambient-canvas { opacity: .28; }
+  html[data-theme="light"] .jyc-ambient-canvas { opacity: .20; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .app-frame { animation: none !important; }
+  .jyc-ambient-canvas { display: none !important; }
+}
+
+
+/* Light homepage used to paint an opaque paper layer over the shared atmosphere.
+   Keep its own radial tint, but let the sitewide canvas and particle field show
+   through in both themes. */
+html[data-theme="light"] .public-app .jyc-editorial-home.jyc-home {
+  background: radial-gradient(
+    ellipse at 82% 8%,
+    color-mix(in srgb, var(--jh-accent, var(--jyc-accent, #625889)) 7%, transparent),
+    transparent 35%
+  ), transparent !important;
+}
+
+
+/* If the enhancement never initializes, reveal content remains visible and stationary. */
+html:not(.jyc-motion-ready) .public-app .reveal {
+  opacity:1!important;
+  transform:none!important;
+  transition:none!important;
 }

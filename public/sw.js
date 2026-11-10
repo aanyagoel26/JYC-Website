@@ -1,6 +1,6 @@
-const CACHE_NAME = 'jyc-cache-v64-5-12';
+const CACHE_NAME = 'jyc-cache-v64-5-17';
 
-const APP_SHELL = ['/', '/offline.html', '/manifest.json', '/assets/jyc-logo.avif', '/assets/jyc-logo-48.avif', '/assets/jyc-logo-small.avif', '/assets/jyc-logo-medium.avif', '/assets/jyc-logo-270.avif'];
+const APP_SHELL = ['/', '/offline.html', '/manifest.json', '/assets/jyc-logo.avif', '/assets/jyc-logo-48.avif', '/assets/jyc-logo-small.avif', '/assets/jyc-logo-medium.avif', '/assets/jyc-logo-270.avif', '/assets/jyc-logo-320.avif'];
 
 const isRecord = (value) => Boolean(value) && typeof value === 'object' && !Array.isArray(value);
 const isSafeManifestAssetUrl = (url) => {
@@ -9,7 +9,7 @@ const isSafeManifestAssetUrl = (url) => {
   const segments = url.slice(1).split('/');
   return segments.every((segment) => Boolean(segment) && segment !== '.' && segment !== '..');
 };
-const isDerivativeManifestPath = (url) => ['/assets/source-archive/', '/assets/hub-photos/', '/assets/hub-photos-extra/', '/assets/events/', '/assets/home/', '/assets/team/'].some((prefix) => url.startsWith(prefix));
+const isDerivativeManifestPath = (url) => ['/assets/source-archive/', '/assets/hub-photos/', '/assets/hub-photos-extra/', '/assets/events/', '/assets/home/', '/assets/team/', '/assets/banners/', '/assets/logos/'].some((prefix) => url.startsWith(prefix));
 const isDerivativeDimensionEligible = (width, height) => {
   const w = Number(width), h = Number(height);
   if (!Number.isFinite(w) || !Number.isFinite(h) || w < 320 || h < 120) return false;

@@ -21,6 +21,7 @@ const ditherCss=read('src/react-bits/DitherVeil.css');
 const home=read('src/jyc-editorial-home.jsx');
 const hero=read('src/components/JYCHeroWebGLEmblem.jsx');
 const homeCss=read('src/jyc-editorial-home.css');
+const cohesive=read('src/styles/jyc-cohesive-experience.css');
 const extraFeaturesSafe=()=>{const f=read('src/extra-features.jsx');return f.includes('LazyDriftWall')&&f.includes('Drift wall')};
 
 const checks=[
@@ -33,7 +34,8 @@ const checks=[
  ['event reminders use BellToggle',main.includes('EventReminderControl')&&main.includes('scheduleEventReminder')],
  ['Agentic AI popup is isolated from the public shell',!main.includes('AgenticAIPopup')&&!main.includes('agentic-launcher')&&!main.includes('LazyBorderGlow')],
  ['DitherVeil is the current React Bits implementation',dither.includes('const KERNELS =')&&dither.includes('const getBlueNoise')&&dither.includes('const diffuse')&&dither.includes('RenderTarget')&&dither.includes('measureEdge')],
- ['current homepage uses the WebGL emblem and preserves the generated logo fallback',home.includes('JYCHeroWebGLEmblem')&&home.includes('jh-hero-webgl-stage-wrap')&&hero.includes("prefers-reduced-motion: reduce")&&hero.includes('motionQuery.addEventListener')&&home.includes("const FALLBACK = import.meta.env.PROD ? '/assets/jyc-logo.webp' : ORIGINAL_LOGO")&&home.includes("const DITHER_SOURCE = import.meta.env.PROD ? '/assets/jyc-logo-medium.avif' : FALLBACK")&&home.includes('LazyMagicBento')&&!home.includes('LazyDriftWall')],
+ ['Homepage uses one official crest and a separately lazy-loaded OGL sky, without a duplicate Dither layer',home.includes('<JYCHeroWebGLEmblem />')&&home.includes('heroFieldReady')&&home.includes('LazyJYCWebGLField')&&!home.includes('LazyDitherVeil')&&!home.includes('jh-hero-dither-layer')],
+ ['current homepage uses the semantic crest, optimized AVIF/WebP/original fallbacks and lazy OGL field',home.includes('JYCHeroWebGLEmblem')&&home.includes('jh-hero-webgl-stage-wrap')&&hero.includes('role="img"')&&hero.includes('LOGO_FALLBACK')&&hero.includes('LOGO_ORIGINAL')&&home.includes('heroFieldReady')&&home.includes('LazyJYCWebGLField')&&home.includes('LazyMagicBento')&&!home.includes('LazyDitherVeil')&&!home.includes('LazyDriftWall')],
  ['DitherVeil has reduced-motion/visibility lifecycle support',dither.includes("prefers-reduced-motion")&&dither.includes('IntersectionObserver')&&dither.includes('ResizeObserver')],
  ['MagicBento uses router navigation and disables motion for reduced-motion users',read('src/components/react-bits/MagicBento.jsx').includes('onNavigate?onNavigate(item.href)')&&read('src/components/react-bits/MagicBento.jsx').includes("prefers-reduced-motion: reduce")&&home.includes('LazyMagicBento')&&home.includes('enableMagnetism={true}')],
  ['DitherVeil CSS is minimal and scoped',ditherCss.includes('.dither-veil')&&!ditherCss.includes('body{')],
@@ -65,7 +67,9 @@ check('DriftWall is used for event and community visual rails',main.includes('ev
 check('MagicBento disables heavy effects on mobile/coarse pointers',read('src/components/react-bits/MagicBento.jsx').includes('(pointer:coarse)')&&read('src/components/react-bits/MagicBento.jsx').includes('max-width:768px'));
 
 check('Dither Veil renders on capable touch devices at capped device-pixel ratio',dither.includes("const coarsePointer = window.matchMedia?.('(pointer: coarse)').matches || window.innerWidth < 800;")&&dither.includes('if (reducedMotion || constrainedHardware)')&&dither.includes('dpr: coarsePointer ? 1 : Math.min(window.devicePixelRatio || 1, 2)'));
-check('homepage hero uses oxblood primary action and editorial depth without forced motion',read('src/styles/jyc-editorial-motion-system.css').includes('.jh-hero-actions .jh-btn-primary')&&read('src/styles/jyc-editorial-motion-system.css').includes('background: #A82420 !important')&&read('src/styles/jyc-editorial-motion-system.css').includes('@media (prefers-reduced-motion: reduce)'));
+check('homepage hero uses the shared day/night palette and reduced-motion safeguards',cohesive.includes('--jh-accent: #c8bcff')&&cohesive.includes('--jh-accent: #625889')&&cohesive.includes('.jh-hero-actions')&&cohesive.includes('@media (prefers-reduced-motion: reduce)'));
+check('hero emblem uses optimized AVIF, WebP and original PNG fallbacks',hero.includes("const LOGO_SRC = '/assets/jyc-logo.avif'")&&hero.includes("const LOGO_FALLBACK = '/assets/jyc-logo.webp'")&&hero.includes('LOGO_ORIGINAL')&&hero.includes('setLogoFailed(true)'));
+check('hero crest stays lightweight with no per-frame canvas, particle system or autoplay audio',!hero.includes('requestAnimationFrame')&&!hero.includes('particleCount')&&!hero.includes('jyc-emblem-canvas')&&!hero.includes('jycAudio')&&read('src/components/JYCHeroWebGLEmblem.css').includes('prefers-reduced-motion:reduce'));
 check('Dither Veil has shader/image failure fallback and WebGL teardown',dither.includes('img.onerror = () =>')&&dither.includes('container.dataset.static = \'1\'')&&dither.includes("getExtension('WEBGL_lose_context')")&&dither.includes('resizeObserver.disconnect()'));
 check('Dither Veil static fallback is visible and canvas hidden when static mode is selected',ditherCss.includes('.dither-veil[data-static=\"1\"] canvas{display:none}')&&ditherCss.includes('.dither-veil[data-static=\"1\"] .dither-veil__fallback{display:block}'));
 check('Dither Veil falls back instead of running GLSL ES 3 shaders without WebGL2',dither.includes('if (!gl || !renderer?.isWebgl2)')&&dither.includes('container.dataset.static = \'1\''));

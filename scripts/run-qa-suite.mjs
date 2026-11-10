@@ -8,11 +8,19 @@ import { spawnSync } from 'node:child_process';
  * assumptions. Current contracts below are the release source of truth.
  */
 const scripts = [
+  'qa-homepage-editorial-truth.mjs',
+  'qa-homepage-hero-finish.mjs',
+  'qa-webgl-atmosphere.mjs',
+  'qa-site-origin.mjs',
+  'qa-readonly-fallback.mjs',
+  'qa-event-publication-trust.mjs',
   'qa-source-media-completeness.mjs',
   'qa-source-integrity.mjs',
   'qa-hub-registry.mjs',
+  'qa-glb-integrity.mjs',
   'qa-resource-content-pass.mjs',
   'qa-search.mjs',
+  'qa-search-refresh.mjs',
   'qa-security.mjs',
   'qa-seo.mjs',
   'qa-build-preflight.mjs',
@@ -41,14 +49,24 @@ const scripts = [
   'qa-v20-reference-restoration.mjs',
   'qa-visual-quality-contract.mjs',
   'qa-visual-redesign.mjs',
-  'qa-experience-system.mjs'
+  'qa-experience-system.mjs',
+  'qa-theme-contract.mjs',
+  'qa-atmospheric-background.mjs',
+  'qa-club-member-roster.mjs',
+  'qa-team-exclusions.mjs',
+  'qa-nsoc-editorial-effects.mjs'
 ];
 
 for (const script of scripts) {
   console.log(`\n===== QA: ${script} =====`);
   const result = spawnSync(process.execPath, [`scripts/${script}`], {
     stdio: 'inherit',
-    env: process.env
+    // Static QA runs without a deployment provider. Carry the repository's
+    // configured canonical origin explicitly so hosting metadata is never required.
+    env: {
+      ...process.env,
+      VITE_CANONICAL_ORIGIN: process.env.VITE_CANONICAL_ORIGIN || 'https://www.jiityouthclub128.in'
+    }
   });
   if (result.status !== 0) {
     console.error(`::error file=scripts/${script}::QA script failed: ${script} (exit ${result.status ?? 'unknown'})`);

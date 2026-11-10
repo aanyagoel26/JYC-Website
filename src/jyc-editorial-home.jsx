@@ -5,29 +5,37 @@ import { sourceEventMedia, sourceHubMedia } from './jyc-source-media.js';
 import { teamPhotoFor } from './jyc-team-media.js';
 import { rankDiverseJycPhotos } from './jyc-photo-intelligence.js';
 import { ResponsivePhoto } from './jyc-responsive-photo.jsx';
-import { JYCSpotlight } from './jyc-spotlight.jsx';
 import { JYCNowStrip } from './jyc-now.jsx';
-const LazyDitherVeil = lazy(() => import('./react-bits/DitherVeil.jsx'));
+import { JYCCampusMarquee } from './components/JYCCampusMarquee.jsx';
+const LazyJYCWebGLField = lazy(() => import('./components/JYCWebGLField.jsx').then(m => ({ default: m.JYCWebGLField })));
 const LazyMagicBento = lazy(() => import('./components/react-bits/MagicBento.jsx'));
+const LazyJYC3DInteractiveExplorer = lazy(() => import('./components/JYC3DInteractiveExplorer.jsx').then(m => ({ default: m.JYC3DInteractiveExplorer })));
+const LazyJYCSpotlight = lazy(() => import('./jyc-spotlight.jsx').then(m => ({ default: m.JYCSpotlight })));
 import { JYCHeroWebGLEmblem } from './components/JYCHeroWebGLEmblem.jsx';
 import './components/JYCHeroWebGLEmblem.css';
-import { JYC3DInteractiveExplorer } from './components/JYC3DInteractiveExplorer.jsx';
 import './jyc-editorial-home.css';
 import './styles/jyc-editorial-motion-system.css';
+import './styles/jyc-home-hero-finish.css';
+import './styles/jyc-home-hero-art-direction.css';
 
-const ORIGINAL_LOGO = '/JYC%20Logo(4).png';
-const FALLBACK = import.meta.env.PROD ? '/assets/jyc-logo.webp' : ORIGINAL_LOGO;
-const DITHER_SOURCE = import.meta.env.PROD ? '/assets/jyc-logo-medium.avif' : FALLBACK;
-const DITHER_SRCSET = import.meta.env.PROD ? '/assets/jyc-logo-medium.avif 1x, /assets/jyc-logo.avif 2x' : undefined;
-const handleHeroLogoFallback = event => {
-  const image = event.currentTarget;
-  image.srcset = '';
-  const candidates = [FALLBACK, ORIGINAL_LOGO];
-  let next = Number(image.dataset.logoFallbackStage || 0);
-  while (next < candidates.length && new URL(candidates[next], window.location.href).href === image.src) next += 1;
-  if (next < candidates.length) { image.dataset.logoFallbackStage = String(next + 1); image.src = candidates[next]; }
-  else image.hidden = true;
-};
+function DeferredMount({ children, fallback, rootMargin = '720px 0px' }) {
+  const hostRef = useRef(null);
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const host = hostRef.current;
+    if (!host) return;
+    if (!('IntersectionObserver' in window)) { setReady(true); return; }
+    const observer = new IntersectionObserver(entries => {
+      if (entries.some(entry => entry.isIntersecting)) {
+        setReady(true);
+        observer.disconnect();
+      }
+    }, { rootMargin });
+    observer.observe(host);
+    return () => observer.disconnect();
+  }, [rootMargin]);
+  return <div ref={hostRef} className="jh-deferred-mount">{ready ? children : fallback}</div>;
+}
 
 const slug = v => String(v || '').toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 const eventPath = e => `/events/${slug(e?.slug||e?.title)}`;
@@ -152,6 +160,33 @@ function LazyActivityBento({ activities, nav }) {
 
 export function JYCEditorialHome({ data }) {
   const nav = useNavigate();
+  const [heroFieldReady, setHeroFieldReady] = useState(false);
+  const [motionPaused, setMotionPaused] = useState(() => document.documentElement.dataset.jycMotion === 'paused');
+  useEffect(() => {
+    const onMotionPreference = () => setMotionPaused(document.documentElement.dataset.jycMotion === 'paused');
+    window.addEventListener('jyc-motion-preference-change', onMotionPreference);
+    return () => window.removeEventListener('jyc-motion-preference-change', onMotionPreference);
+  }, []);
+  useEffect(() => {
+    const reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    const coarse = window.matchMedia?.('(pointer: coarse)').matches;
+    if (reduced || coarse || motionPaused) {
+      setHeroFieldReady(false);
+      return;
+    }
+    let idleId = null;
+    const delayId = window.setTimeout(() => {
+      if (typeof window.requestIdleCallback === 'function') {
+        idleId = window.requestIdleCallback(() => setHeroFieldReady(true), { timeout: 1200 });
+      } else {
+        setHeroFieldReady(true);
+      }
+    }, 3200);
+    return () => {
+      window.clearTimeout(delayId);
+      if (idleId !== null) window.cancelIdleCallback?.(idleId);
+    };
+  }, [motionPaused]);
   const activities = useMemo(() => {
     const photoHubs = { technical: 'CICR', cultural: 'VamUnique', literary: 'Eloquence', fests: 'Aakriti', sports: 'Sports', creative: 'Aura' };
     return PILLARS.map(p => {
@@ -198,39 +233,40 @@ export function JYCEditorialHome({ data }) {
       <section className="jh-hero" aria-labelledby="jh-title">
         <div className="jh-hero-copy">
           <div className="jh-cyber-badge">
-            <span className="jh-live-pulse-dot" />
-            <span>THE JIIT 128 COMMUNITY</span>
-            <b>AY 2026–27</b>
+            <span className="jh-badge-mark" aria-hidden="true" />
+            <span>JIIT Youth Club</span>
+            <b>2026–27</b>
           </div>
-          <p className="jh-overline">JAYPEE INSTITUTE OF INFORMATION TECHNOLOGY · WISH TOWN</p>
+          <p className="jh-overline">Jaypee Institute of Information Technology, Wish Town</p>
           <h1 id="jh-title">
             <span>Find your people.</span>
-            <span>Make your mark.</span>
-            <em className="jh-title-gradient">At JIIT 128.</em>
+            <span className="jh-title-gradient">Make your mark.</span>
           </h1>
           <p className="jh-lead">
-            From clubs and competitions to performances, projects and campus traditions, JYC helps you find the people and experiences that make JIIT feel like yours.
+            Clubs, events and student communities to help you find your place at JIIT.
           </p>
           <div className="jh-actions jh-hero-actions">
-            <button type="button" className="jh-btn jh-btn-primary" onClick={() => nav('/events')}>
-              ⚡ Explore Events <span>↗</span>
+            <button type="button" className="jh-btn jh-btn-primary" onClick={() => nav('/clubs')}>
+              Explore communities <span aria-hidden="true">↗</span>
             </button>
-            <button type="button" className="jh-btn jh-btn-glass" onClick={() => nav('/clubs')}>
-              Explore Clubs <span>→</span>
+            <button type="button" className="jh-btn jh-btn-glass" onClick={() => nav('/events')}>
+              See what’s on <span aria-hidden="true">↗</span>
             </button>
             <button type="button" className="jh-btn jh-btn-outline" onClick={() => nav('/join-jyc')}>
-              Join JYC <span>→</span>
+              Join JYC <span aria-hidden="true">↗</span>
             </button>
           </div>
-
-
         </div>
 
-        {/* MODERN 3D WEBGL HERO EMBLEM STAGE */}
+        {/* The original JYC crest, OGL field and interactive emblem remain the visual anchor. */}
         <div className="jh-hero-visual jh-hero-webgl-stage-wrap">
+          <div className="jh-hero-dither-backdrop" aria-hidden="true" />
+          {heroFieldReady && <Suspense fallback={null}><LazyJYCWebGLField /></Suspense>}
           <JYCHeroWebGLEmblem />
         </div>
       </section>
+
+      <JYCCampusMarquee />
 
       {/* V1 EDITORIAL INTRO: context before the discovery content. */}
       <section className="jh-about-editorial jh-container" aria-labelledby="jh-about-title">
@@ -274,7 +310,6 @@ export function JYCEditorialHome({ data }) {
                 key={story.id || story.url}
                 onClick={() => nav('/gallery?q=' + encodeURIComponent(story.association || story.caption || ''))}
                 onMouseMove={handleSpotlight}
-                aria-label={`Explore ${story.association} photography in the JYC gallery`}
               >
                 <ResponsivePhoto
                   className="jh-story-photo"
@@ -315,7 +350,19 @@ export function JYCEditorialHome({ data }) {
 
       {/* 3D INTERACTIVE CAMPUS EXPLORER (CICR & INNOVATION INSPIRED) */}
       <div className="jh-container">
-        <JYC3DInteractiveExplorer />
+        <DeferredMount fallback={<div className="jh-deferred-placeholder jh-deferred-spotlight-placeholder" aria-hidden="true" />}>
+          <Suspense fallback={<div aria-hidden="true" style={{ minHeight: 420 }} />}>
+            <LazyJYCSpotlight data={data} />
+          </Suspense>
+        </DeferredMount>
+      </div>
+
+      <div className="jh-container">
+        <DeferredMount fallback={<div className="jh-deferred-placeholder jh-deferred-explorer-placeholder" aria-hidden="true" />}>
+          <Suspense fallback={<div aria-hidden="true" style={{ minHeight: 480 }} />}>
+            <LazyJYC3DInteractiveExplorer />
+          </Suspense>
+        </DeferredMount>
       </div>
 
       {/* FEATURED & UPCOMING EVENTS */}
@@ -372,7 +419,7 @@ export function JYCEditorialHome({ data }) {
         {upcoming.slice(1).length > 0 && (
           <div className="jh-event-list">
             {upcoming.slice(1).map(e => (
-              <button type="button" key={e.id || e.title} onClick={() => nav(eventPath(e))} aria-label={`View ${e.title}, ${dateLabel(e.date)}`}>
+              <button type="button" key={e.id || e.title} onClick={() => nav(eventPath(e))}>
                 <span>{dateLabel(e.date)}</span>
                 <strong>{e.title}</strong>
                 <small>{e.club || 'JYC'} · {e.venue || 'JIIT 128'}</small>
@@ -416,7 +463,7 @@ export function JYCEditorialHome({ data }) {
             </div>
             {team.length ? (
               team.map((m, i) => (
-                <button type="button" key={m.id || i} onClick={() => nav('/team')} aria-label={`Meet ${m.name || 'JYC team member'}, ${m.role || m.position || 'JYC Apex'}`}>
+                <button type="button" key={m.id || i} onClick={() => nav('/team')}>
                   <span className="jh-team-monogram" aria-hidden="true">
                     {teamPhotoFor(m)
                       ? <ResponsivePhoto className="jh-team-thumb" src={teamPhotoFor(m)} alt="" loading="lazy" decoding="async" sizes="48px" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Portrait unavailable" />
@@ -426,7 +473,7 @@ export function JYCEditorialHome({ data }) {
                     <small>{m.role || m.position || 'JYC Apex'}</small>
                     <strong>{m.name || 'Team Member'}</strong>
                   </span>
-                  <b>↗</b>
+                  <b aria-hidden="true">↗</b>
                 </button>
               ))
             ) : (

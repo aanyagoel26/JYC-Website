@@ -7,8 +7,8 @@
   --jyc-brand-paper-raised: #fffdf8;
   --jyc-brand-ink: #211d22;
   --jyc-brand-muted: #5f5860;
-  --jyc-brand-oxblood: #8f211f;
-  --jyc-brand-oxblood-hover: #741b19;
+  --jyc-brand-oxblood: var(--jyc-accent, #625889);
+  --jyc-brand-oxblood-hover: var(--jyc-accent-strong, #514675);
   --jyc-brand-champagne: #b99b70;
   --jyc-brand-line: rgba(33, 29, 34, .14);
   --jyc-brand-line-strong: rgba(33, 29, 34, .24);
@@ -29,8 +29,8 @@ html[data-theme="dark"] {
   --jyc-brand-paper-raised: #1e1a20;
   --jyc-brand-ink: #f8f1e7;
   --jyc-brand-muted: #c1b8c1;
-  --jyc-brand-oxblood: #d45b55;
-  --jyc-brand-oxblood-hover: #ed7770;
+  --jyc-brand-oxblood: var(--jyc-accent, #c8bcff);
+  --jyc-brand-oxblood-hover: var(--jyc-accent-strong, #b5a8f2);
   --jyc-brand-champagne: #d2b48c;
   --jyc-brand-line: rgba(248, 241, 231, .14);
   --jyc-brand-line-strong: rgba(248, 241, 231, .24);

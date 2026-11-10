@@ -315,16 +315,19 @@ export function JYC57Events({data}){
 }
 
 export function JYC57Clubs({data}){
- const nav=useNavigate();
+ const nav=useNavigate(),loc=useLocation();
  const [query,setQuery]=useState('');
- const [family,setFamily]=useState('All');
+ const families=['All','Technical','Cultural','Creative','Literary','Sports'];
+ const requestedFamily=new URLSearchParams(loc.search||'').get('family');
+ const [family,setFamily]=useState(()=>families.includes(requestedFamily)?requestedFamily:'All');
  const [type,setType]=useState('All');
  const [domain,setDomain]=useState('All');
  const [filtersOpen,setFiltersOpen]=useState(false);
  const [active,setActive]=useState(null);
 
+ useEffect(()=>{setFamily(families.includes(requestedFamily)?requestedFamily:'All')},[requestedFamily]);
+
  const clubs=publishedClubs(data);
- const families=['All','Technical','Cultural','Creative','Literary','Sports'];
  const types=['All','Technical','Non-Technical'];
  const quickDomains=[
    'AI & Coding',
@@ -405,18 +408,20 @@ export function JYC57Clubs({data}){
    {(activeFilterCount>0||query)&&<button type="button" className="jyc-clear-filters-btn" onClick={clearAllFilters}>Reset Filters ↺</button>}
   </div>
 
+  <p className="results-line" role="status" aria-live="polite">{filtered.length} communities found</p>
+
   {/* Club Cards Wall */}
   <div className="jyc57-club-wall">
    {filtered.map((c,i)=>{
     const selected=active===i;
     const photo=clubCardPhoto(c);
     return <button type="button" key={c.id||c.name||i} className={`jyc57-club-card ${selected?'selected':''}`} style={{'--club-accent':identityAccent(c.name)}} onPointerMove={magneticMove} onPointerLeave={magneticReset} onMouseEnter={()=>setActive(i)} onFocus={()=>setActive(i)} onClick={()=>nav('/clubs/'+encodeURIComponent(slugify(c.name)))}>
-     {photo?<ResponsivePhoto src={photo} alt="" loading="lazy" decoding="async" sizes="(max-width: 760px) 50vw, (max-width: 1100px) 50vw, 33vw" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Club photograph unavailable"/>:<div className="jyc57-club-fallback"><span aria-hidden="true">{String(c.name||'JYC').slice(0,2).toUpperCase()}</span>{c.logo&&<ResponsivePhoto className="jyc57-club-fallback-logo" src={c.logo} alt={`${c.name||'JYC'} logo`} width={160} height={160} loading="lazy" decoding="async" sizes="160px"/>}</div>}
+     {photo?<ResponsivePhoto src={photo} alt="" loading="lazy" decoding="async" sizes="(max-width: 760px) 50vw, (max-width: 1100px) 25vw, 18vw" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Club photograph unavailable"/>:<div className="jyc57-club-fallback"><span aria-hidden="true">{String(c.name||'JYC').slice(0,2).toUpperCase()}</span>{c.logo&&<ResponsivePhoto className="jyc57-club-fallback-logo" src={c.logo} alt={`${c.name||'JYC'} logo`} width={160} height={160} loading="lazy" decoding="async" sizes="160px"/>}</div>}
      <span className="jyc57-club-shade"/>
      <div className="jyc57-club-content">
       <div className="jyc57-club-top-bar">
        <MetaPill>{c.type||c.category||'JYC'}</MetaPill>
-       {c.logo&&<div className="jyc57-club-brand-glyph" title={`${c.name} official emblem`}><img src={c.logo} alt="" loading="lazy"/></div>}
+       {c.logo&&<div className="jyc57-club-brand-glyph" title={`${c.name} official emblem`}><ResponsivePhoto className="jyc57-club-brand-logo" src={c.logo} alt={`${c.name} logo`} width={24} height={24} loading="lazy" decoding="async" sizes="24px" fallbackSrc="/assets/jyc-logo-48.avif" fallbackAlt="JIIT Youth Club mark"/></div>}
       </div>
       <h2>{c.name}</h2>
       <p>{c.description||c.about||'A published JYC community.'}</p>
@@ -825,7 +830,7 @@ export function JYCBestOf({data}){
 
 export function JYC57Archive({data}){
  const nav=useNavigate();const events=publishedEvents(data);const years=[...new Set(events.map(e=>String(e.date||'').slice(0,4)).filter(Boolean))].sort((a,b)=>Number(b)-Number(a));
- const [year,setYear]=useState(years[0]||'all');const selected=year==='all'?events:events.filter(e=>String(e.date||'').startsWith(year));const photos=(data.gallery||[]).filter(g=>g?.url||g?.src).slice(0,6);
+ const [year,setYear]=useState(years[0]||'all');const selected=year==='all'?events:events.filter(e=>String(e.date||'').startsWith(year));const photos=(data.gallery||[]).filter(g=>(g?.url||g?.src)&&(!g.mediaKind||g.mediaKind==='photo')).slice(0,6);
  return <section className="section page unified-public-page jyc57-page">
   <header className="jyc57-archive-head"><div><span className="eyebrow">JYC · 04 / HISTORY</span><h1>What happened stays.</h1><p>The public archive connects years, events and photographs so JYC feels like a living organisation rather than a list of current pages.</p></div><div className="jyc57-year-switch">{['all',...years].map(y=><button type="button" key={y} className={year===y?'active':''} onClick={()=>setYear(y)}>{y==='all'?'All':y}</button>)}</div></header>
   <div className="jyc57-archive-grid"><div><div className="jyc57-list-head"><span>{selected.length} archived/published events</span><small>Year: {year==='all'?'All':year}</small></div>{selected.sort((a,b)=>safeDate(b)-safeDate(a)).map(e=><button type="button" className="jyc57-archive-row" key={e.id||e.title} onClick={()=>nav(eventPath(e))}><span>{e.date||'TBA'}</span><div><strong>{e.title}</strong><small>{e.club||'JYC'} · {e.venue||'JIIT Sector 128'}</small></div><b>↗</b></button>)}{!selected.length&&<Empty eyebrow="ARCHIVE" title="No records for this year." text="Published records will appear here when available."/>}</div><aside className="jyc57-archive-story"><span className="eyebrow">VISUAL MEMORY</span><h2>People. Places. Participation.</h2><div className="jyc57-story-grid">{photos.map((g,i)=><ResponsivePhoto key={g.id||i} src={g.url||g.src} alt={g.caption||'JYC archive'} loading="lazy" sizes="(max-width: 700px) 50vw, 20vw" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Photograph unavailable"/>)}</div><button type="button" className="jyc57-text-link" onClick={()=>nav('/gallery')}>Open the full gallery →</button></aside></div>

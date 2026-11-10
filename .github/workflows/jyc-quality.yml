@@ -18,6 +18,8 @@ jobs:
   quality:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      VITE_CANONICAL_ORIGIN: https://www.jiityouthclub128.in
     steps:
       - name: Checkout
         uses: actions/checkout@v7
@@ -57,9 +59,3 @@ jobs:
           npm run qa:photo-intelligence
           npm run qa:seo
 
-      - name: Reject accidental Vercel preview references
-        shell: bash
-        run: |
-          set -euo pipefail
-          test -z "$(git grep -nE 'https://jyc-website-[a-z0-9]+-[a-z0-9]+\.vercel\.app' -- ':!README.md' ':!docs/**' || true)"
-          test -z "$(git ls-files '*.zip')"

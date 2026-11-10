@@ -19,6 +19,8 @@ const eventDetail=main.slice(main.indexOf('function EventDetail'),main.indexOf('
 const checks=[];
 const add=(name,ok,detail='')=>checks.push([name,Boolean(ok),detail]);
 add('release metadata is V64',/^64\.\d+\.\d+$/.test(pkg.version));
+add('public event fallbacks are source-gated and live CMS records can supersede them',main.includes('mergePublicEvents(liveEvents,fallbackEvents,allowContentFallback)')&&read('src/lib/public-content.js').includes('return [...live, ...fallback.filter')&&read('scripts/qa-event-publication-trust.mjs').includes('unverifiedFallbackIds'));
+add('sitemap and route shells expose only published event and club records',read('scripts/generate-sitemap.mjs').includes('PUBLIC_EVENT_FALLBACK.filter(event=>event?.published&&event?.archived!==true)')&&read('scripts/generate-route-shells.mjs').includes('PUBLIC_EVENT_FALLBACK.filter(item=>item?.published&&item?.archived!==true)')&&read('scripts/generate-sitemap.mjs').includes("filter(item=>item.publicationStatus==='published')"));
 const apiSyntax=spawnSync(process.execPath,['--check',path.join(root,'api/jyc-updates.js')],{encoding:'utf8'});
 add('updates API parses under the configured Node runtime',apiSyntax.status===0,(apiSyntax.stderr||apiSyntax.stdout||'').trim());
 add('YouTube updates parser returns its mapped list without syntax-breaking parentheses',updatesApi.includes("return ((await pr.json()).items||[]).map(x=>({")&&updatesApi.includes("verified:true}));"));

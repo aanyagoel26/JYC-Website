@@ -7,6 +7,8 @@ import {isValidJycImageManifest} from '../src/jyc-image-manifest.js';
 import {JYC_HUB_CONTENT} from '../src/v21-hub-content.js';
 
 const assert=(name,ok,detail='')=>{console.log((ok?'PASS: ':'FAIL: ')+name+(detail?' — '+detail:''));if(!ok)process.exitCode=1};
+const packageVersion=JSON.parse(fs.readFileSync('package.json','utf8')).version;
+const cacheNamespace='jyc-cache-v'+packageVersion.replace(/\./g,'-');
 const validManifestFixture={version:1,images:{'/assets/hub-photos/example.webp':{width:960,height:640,aspectRatio:1.5,orientation:'landscape',derivativesEligible:true}}};
 assert('image manifest schema accepts a valid intrinsic-dimension record',isValidJycImageManifest(validManifestFixture));
 assert('image manifest schema rejects missing version, empty lists and non-object images',!isValidJycImageManifest({images:validManifestFixture.images})&&!isValidJycImageManifest({version:1,images:{}})&&!isValidJycImageManifest({version:1,images:[]}));
@@ -17,6 +19,10 @@ assert('image manifest schema rejects encoded traversal, encoded separators, bac
  '/assets/%2e%2e/secret.webp','/assets/%2E%2E/secret.webp','/assets/%252e%252e/secret.webp','/assets/photo%2fsecret.webp','/assets/photo%5csecret.webp','/assets/photo\\secret.webp','/assets/photo.webp?width=100','/assets/photo.webp#preview','/assets/photo'+String.fromCharCode(10)+'.webp'
 ].every(url=>!isValidJycImageManifest({version:1,images:{[url]:validManifestFixture.images['/assets/hub-photos/example.webp']}})));
 const mediaSource=fs.readFileSync('src/jyc-source-media.js','utf8');
+const derivativeGeneratorSource=fs.readFileSync('scripts/generate-photo-derivatives.mjs','utf8');
+const productionMediaSource=fs.readFileSync('scripts/optimize-production-media.mjs','utf8');
+const emblemSource=fs.readFileSync('src/components/JYCHeroWebGLEmblem.jsx','utf8');
+const ditherSource=fs.readFileSync('src/react-bits/DitherVeil.jsx','utf8');
 const hubPresentationSource=fs.readFileSync('src/pdf-hub-content.js','utf8');
 const mainSource=fs.readFileSync('src/main.jsx','utf8');
 const browserSource=fs.readFileSync('scripts/browser-smoke.spec.js','utf8');
@@ -37,6 +43,16 @@ const serviceWorkerSource=fs.readFileSync('public/sw.js','utf8');
 const indexHtmlSource=fs.readFileSync('index.html','utf8');
 const botSource=fs.readFileSync('src/jyc-bot.jsx','utf8');
 const imageManifestSource=fs.readFileSync('scripts/generate-image-manifest.mjs','utf8');
+const logoMapSource=mediaSource.slice(mediaSource.indexOf('const AUTHENTIC_HUB_LOGOS'),mediaSource.indexOf('const AUTHENTIC_HUB_BANNERS'));
+const validClubLogoPaths=['public/assets/logos/bds.png','public/assets/logos/eloquence.png','public/assets/logos/panache.png'];
+assert('BDS, Eloquence and Panache map to valid original PNG logo assets',validClubLogoPaths.every(file=>fs.existsSync(file)&&parseImageDimensions(fs.readFileSync(file))?.width>0)&&logoMapSource.includes("bds: '/assets/logos/bds.png'")&&logoMapSource.includes("eloquence: '/assets/logos/eloquence.png'")&&logoMapSource.includes("panache: '/assets/logos/panache.png'"));
+const authoritativeLogoPaths=[...logoMapSource.matchAll(/'([^']+\.(?:png|webp|jpe?g))'/g)].map(match=>'public'+match[1]);
+assert('every authoritative hub logo resolves to a decodable local image',authoritativeLogoPaths.length>0&&authoritativeLogoPaths.every(file=>fs.existsSync(file)&&parseImageDimensions(fs.readFileSync(file))?.width>0));
+assert('corrupt VamUnique and legacy WebP logo variants are not advertised as official marks',!logoMapSource.includes('/assets/logos/vamunique.png')&&!logoMapSource.includes('/assets/logos/bds.webp')&&!logoMapSource.includes('/assets/logos/eloquence.webp')&&!logoMapSource.includes('/assets/logos/panache.webp'));
+assert('malformed legacy logo binaries are removed from the shipped public asset tree',['public/assets/logos/bds.webp','public/assets/logos/eloquence.webp','public/assets/logos/panache.webp','public/assets/logos/vamunique.png'].every(file=>!fs.existsSync(file)));
+assert('photo derivative build filters undecodable source files before invoking Sharp',derivativeGeneratorSource.includes('parseImageDimensions(fs.readFileSync(file))'));
+assert('post-build brand optimizer generates the 320px responsive crest candidate',productionMediaSource.includes("'jyc-logo-320.avif'")&&productionMediaSource.includes('width:320,withoutEnlargement:true'));
+assert('hero crest and Dither fallback consume the 320px responsive candidate',emblemSource.includes('jyc-logo-320.avif 320w')&&ditherSource.includes('sizes={sizes}'));
 const auditedCategories=['clubs/abhivyakti','clubs/panache','clubs/cypherx','festivals/aakriti','gallery/campus-events'];
 const auditedExclusionIds=auditedCategories.flatMap(cat=>{
   const start=mediaSource.indexOf(`'${cat}':new Set([`);
@@ -78,7 +94,7 @@ const inductionUrls=new Set(induction.items.map(x=>x.url));
 const archivePhotoUrls=new Set(JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.map(x=>x.url));
 const eventPhotoItems=event.photoItems||[];
 const auditedArchiveIds=new Set(auditedExclusionIds);
-const qualityOverrideUrls=[...(mediaSource.match(/'([^']+\\.webp)'/g)||[])].map(x=>x.slice(1,-1));
+const qualityOverrideUrls=[...(mediaSource.match(/'([^']+\.webp)'/g)||[])].map(x=>x.slice(1,-1));
 const qualityOverrideViolations=qualityOverrideUrls.filter(url=>[...auditedArchiveIds].some(id=>url.endsWith('/'+id+'.webp')));
 
 assert('curated archive photography pool is exposed',JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.length>350,`found ${JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.length}`);
@@ -122,7 +138,6 @@ assert('team portrait map is explicit, shared and non-empty',teamPhotoEntries.le
 assert('every mapped team portrait is a committed local WebP',invalidTeamPhotoPaths.length===0,invalidTeamPhotoPaths.map(x=>x.name+': '+x.url).join(', '));
 assert('team flip cards use lazy responsive portraits and safe public profile links',mainSource.includes('className="team-photo-editorial"')&&mainSource.includes('loading="lazy" decoding="async" sizes=')&&mainSource.includes('safeExternalUrl(m.linkedin||m.linkedinUrl||m.linkedin_url||m.socials?.linkedin)')&&mainSource.includes('team-back-content'));
 const responsivePhotoSource=fs.readFileSync('src/jyc-responsive-photo.jsx','utf8');
-const productionMediaSource=fs.readFileSync('scripts/optimize-production-media.mjs','utf8');
 
 const teamThemeSource=fs.readFileSync('src/jyc-logo-final-theme.css','utf8');
 const publicSystemSource=fs.readFileSync('src/styles/public-system.css','utf8');
@@ -154,10 +169,10 @@ assert('JAI registration QR is hidden after its verified deadline',mainSource.in
 assert('event poster failures use a neutral fallback and the directory prefers the event poster over unrelated photography',gallerySource.includes('const eventCardPhoto=event=>event?.poster||event?.banner||sourceEventMedia(event)?.photoItems?.find(item=>item?.url)?.url||\'\';')&&gallerySource.includes('fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Event poster unavailable"')&&gallerySource.includes('const photo=eventCardPhoto(e)'));
 assert('club photography uses a neutral fallback while the club logo remains a separate identity surface',mainSource.includes('fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Club photograph unavailable"')&&mainSource.includes('<div className="club-logo">')&&mainSource.includes('alt={`${c.name} logo`}'));
 assert('event cards use a neutral fallback instead of unrelated archive photography or the brand mark as a photo',mainSource.includes('fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt="Event image unavailable"')&&!mainSource.includes('fallbackSrc="/assets/hub-photos/jyc-06.webp"'));
-assert('homepage featured event uses shared responsive photo delivery and a neutral event-media fallback while Dither Veil retains the official logo',editorialHomeSource.includes("const ORIGINAL_LOGO = '/JYC%20Logo(4).png';")&&editorialHomeSource.includes("const FALLBACK = import.meta.env.PROD ? '/assets/jyc-logo.webp' : ORIGINAL_LOGO")&&editorialHomeSource.includes('<ResponsivePhoto')&&editorialHomeSource.includes('className="jh-featured-event-photo"')&&editorialHomeSource.includes('fallbackAlt="Event media unavailable"')&&editorialHomeSource.includes('fallbackSrc="/assets/photo-unavailable.svg"')&&homeCssSource.includes('.jh-featured-event-photo')&&homeCssSource.includes('@media (max-width: 760px)'));
+assert('homepage uses one accessible cinematic JYC crest and keeps featured event photography on the shared responsive fallback path',editorialHomeSource.includes("import { JYCHeroWebGLEmblem } from './components/JYCHeroWebGLEmblem.jsx';")&&editorialHomeSource.includes('<JYCHeroWebGLEmblem />')&&!editorialHomeSource.includes('jh-hero-dither-layer')&&!editorialHomeSource.includes('jh-hero-dither-static')&&editorialHomeSource.includes('<ResponsivePhoto')&&editorialHomeSource.includes('className="jh-featured-event-photo"')&&editorialHomeSource.includes('fallbackAlt="Event media unavailable"')&&editorialHomeSource.includes('fallbackSrc="/assets/photo-unavailable.svg"')&&homeCssSource.includes('.jh-featured-event-photo')&&homeCssSource.includes('@media (max-width: 760px)'));
 assert('production build generates WebP and compact AVIF derivatives from the original official logo',productionMediaSource.includes("const logoSource=path.resolve('public/JYC Logo(4).png')")&&productionMediaSource.includes("const logoOutput=path.join(root,'assets','jyc-logo.webp')")&&productionMediaSource.includes("const logoAvifOutput=path.join(root,'assets','jyc-logo.avif')")&&productionMediaSource.includes("webp({quality:92,effort:5,alphaQuality:100})")&&productionMediaSource.includes("avif({quality:80,effort:6})"));
-assert('offline app shell caches 48px, 96px, 192px and 270px logo variants under V64.5.12',serviceWorkerSource.includes("const CACHE_NAME = 'jyc-cache-v64-5-12'")&&serviceWorkerSource.includes("const APP_SHELL = ['/', '/offline.html', '/manifest.json', '/assets/jyc-logo.avif', '/assets/jyc-logo-48.avif', '/assets/jyc-logo-small.avif', '/assets/jyc-logo-medium.avif', '/assets/jyc-logo-270.avif'];")&&!serviceWorkerSource.includes("const APP_SHELL = ['/', '/offline.html', '/manifest.json', '/JYC%20Logo(4).png'];")&&productionMediaSource.includes("path.join(root,'assets','jyc-logo.webp')")&&productionMediaSource.includes("path.join(root,'assets','jyc-logo-48.avif')")&&productionMediaSource.includes("path.join(root,'assets','jyc-logo-small.avif')")&&productionMediaSource.includes("path.join(root,'assets','jyc-logo-medium.avif')")&&productionMediaSource.includes("path.join(root,'assets','jyc-logo-270.avif')"));
-assert('48px assistant logo is generated, consumed and precached offline',productionMediaSource.includes("const logoTinyAvifOutput=path.join(root,'assets','jyc-logo-48.avif')")&&productionMediaSource.includes("resize({width:48,withoutEnlargement:true})")&&botSource.includes('poster="/assets/jyc-logo-48.avif"')&&botSource.includes('<img src="/assets/jyc-logo-48.avif"')&&serviceWorkerSource.includes("'/assets/jyc-logo-48.avif'")&&serviceWorkerSource.includes("jyc-cache-v64-5-12"));
+assert(`offline app shell caches 48px, 96px, 192px, 270px and 320px logo variants under V${packageVersion}`,serviceWorkerSource.includes(`const CACHE_NAME = '${cacheNamespace}'`)&&serviceWorkerSource.includes("const APP_SHELL = ['/', '/offline.html', '/manifest.json', '/assets/jyc-logo.avif', '/assets/jyc-logo-48.avif', '/assets/jyc-logo-small.avif', '/assets/jyc-logo-medium.avif', '/assets/jyc-logo-270.avif', '/assets/jyc-logo-320.avif'];")&&!serviceWorkerSource.includes("const APP_SHELL = ['/', '/offline.html', '/manifest.json', '/JYC%20Logo(4).png'];")&&productionMediaSource.includes("path.join(root,'assets','jyc-logo.webp')")&&productionMediaSource.includes("path.join(root,'assets','jyc-logo-48.avif')")&&productionMediaSource.includes("path.join(root,'assets','jyc-logo-small.avif')")&&productionMediaSource.includes("path.join(root,'assets','jyc-logo-medium.avif')")&&productionMediaSource.includes("path.join(root,'assets','jyc-logo-270.avif')")&&productionMediaSource.includes("path.join(root,'assets','jyc-logo-320.avif')"));
+assert('48px assistant logo is generated, consumed and precached offline',productionMediaSource.includes("const logoTinyAvifOutput=path.join(root,'assets','jyc-logo-48.avif')")&&productionMediaSource.includes("resize({width:48,withoutEnlargement:true})")&&botSource.includes('poster="/assets/jyc-logo-48.avif"')&&botSource.includes('<img src="/assets/jyc-logo-48.avif"')&&serviceWorkerSource.includes("'/assets/jyc-logo-48.avif'")&&serviceWorkerSource.includes(cacheNamespace));
 assert('48px and 96px logo marks are selected by target size while portrait placeholders retain the full logo',mainSource.includes("const logoTiny='/assets/jyc-logo-48.avif'")&&mainSource.includes("const logoSmall='/assets/jyc-logo-small.avif'")&&mainSource.includes('requestedWidth<=48')&&mainSource.includes('requestedWidth<=96')&&mainSource.includes("includes('team-photo-missing-logo')"));
 assert('current homepage uses the accessible WebGL emblem and generated responsive brand assets remain available',productionMediaSource.includes("const logoMediumAvifOutput=path.join(root,'assets','jyc-logo-medium.avif')")&&productionMediaSource.includes("resize({width:192,withoutEnlargement:true})")&&serviceWorkerSource.includes("'/assets/jyc-logo-medium.avif'")&&editorialHomeSource.includes('JYCHeroWebGLEmblem')&&editorialHomeSource.includes('jh-hero-webgl-stage-wrap')&&indexHtmlSource.includes('jyc-logo-medium.avif'));
 assert('270px logo derivative is generated and responsive brand lockup uses it',productionMediaSource.includes("const logoBrandAvifOutput=path.join(root,'assets','jyc-logo-270.avif')")&&productionMediaSource.includes("resize({width:270,withoutEnlargement:true})")&&serviceWorkerSource.includes("'/assets/jyc-logo-270.avif'")&&brandExperienceSource.includes('jyc-logo-270.avif 270w')&&brandExperienceSource.includes('sizes="(max-width: 600px) 70vw, 270px"'));
@@ -178,7 +193,7 @@ assert('photo derivative generator skips unsuitable intrinsic dimensions before 
 
 const imageRoot=path.resolve('public/assets');
 const imageFiles=[];
-const walkImageFiles=dir=>{for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())walkImageFiles(file);else if(/\\.(?:png|jpe?g|webp)$/i.test(file))imageFiles.push(file)}};
+const walkImageFiles=dir=>{for(const entry of fs.readdirSync(dir,{withFileTypes:true})){const file=path.join(dir,entry.name);if(entry.isDirectory())walkImageFiles(file);else if(/\.(?:png|jpe?g|webp)$/i.test(file))imageFiles.push(file)}};
 walkImageFiles(imageRoot);
 const dimensionMismatches=[];
 let dimensionCursor=0;
@@ -198,7 +213,7 @@ assert('image-header dimensions match Sharp metadata across all committed/genera
 
 
 const derivativeRoot=path.resolve('public/assets/photo-derivatives');
-const allowedDerivativeFolders=['hub-photos/','hub-photos-extra/','events/','home/','team/'];
+const allowedDerivativeFolders=['hub-photos/','hub-photos-extra/','events/','home/','team/','banners/','logos/'];
 const allowedArchiveSourceUrls=new Set(JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.map(item=>String(item?.url||'')));
 const derivativeBaseOwners=new Map(),duplicateDerivativeBases=[];
 for(const file of imageFiles){
@@ -206,7 +221,9 @@ for(const file of imageFiles){
  const rel=path.relative(imageRoot,file).replaceAll(path.sep,'/'),url='/assets/'+rel;
  const isAllowed=url.startsWith('/assets/source-archive/')?allowedArchiveSourceUrls.has(url):allowedDerivativeFolders.some(prefix=>rel.startsWith(prefix));
  if(!isAllowed)continue;
- const base=rel.replace(/\.(?:png|jpe?g|webp)$/i,'');
+ const extension=path.extname(rel).slice(1).toLowerCase();
+ const stem=rel.slice(0,-extension.length-1);
+ const base=rel.startsWith('logos/')||rel.startsWith('banners/')?`${stem}-${extension}`:stem;
  const previous=derivativeBaseOwners.get(base);
  if(previous)duplicateDerivativeBases.push({base,files:[previous,rel]});else derivativeBaseOwners.set(base,rel);
 }
@@ -225,7 +242,9 @@ const derivativeWorkers=Array.from({length:Math.min(6,derivativeFiles.length)},a
    const match=rel.match(/-(240|320|360|480|960|1600)\.(avif|webp)$/i);
    if(!match){derivativeMismatches.push({file:path.relative('public',file),error:'unexpected derivative filename'});continue}
    const requestedWidth=Number(match[1]),base=rel.replace(/-\d+\.(?:avif|webp)$/i,'');
-   const source=['.png','.jpg','.jpeg','.webp'].map(ext=>path.join(imageRoot,base+ext)).find(candidate=>fs.existsSync(candidate));
+   const extensionSuffix=(base.startsWith('banners/')||base.startsWith('logos/'))?base.match(/-(png|jpe?g|webp)$/i):null;
+   const sourceCandidates=extensionSuffix?[path.join(imageRoot,base.slice(0,-extensionSuffix[0].length)+'.'+extensionSuffix[1])]:['.png','.jpg','.jpeg','.webp'].map(ext=>path.join(imageRoot,base+ext));
+   const source=sourceCandidates.find(candidate=>fs.existsSync(candidate));
    if(!source){derivativeMismatches.push({file:path.relative('public',file),error:'orphan derivative has no source'});continue}
    const [sourceMeta,outputMeta]=await Promise.all([sharp(source).metadata(),sharp(file).metadata()]);
    const display=orientedImageDimensions(sourceMeta.width,sourceMeta.height,sourceMeta.orientation);
@@ -242,7 +261,7 @@ if(fs.existsSync(manifestPath)){
  const manifestMismatches=[];
  for(const [url,entry] of Object.entries(builtManifest.images||{})){
   const display=orientedImageDimensions(entry.rawWidth||entry.width,entry.rawHeight||entry.height,entry.exifOrientation);
-  const pathEligible=url.startsWith('/assets/source-archive/')?JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.some(item=>item.url===url):['/assets/hub-photos/','/assets/hub-photos-extra/','/assets/events/','/assets/home/','/assets/team/'].some(prefix=>url.startsWith(prefix));const expectedEligible=pathEligible&&isDerivativeDimensionEligible(display?.width,display?.height);if(!display||display.width!==entry.width||display.height!==entry.height||entry.derivativesEligible!==expectedEligible)manifestMismatches.push({url,entry,display,expectedEligible});
+  const pathEligible=url.startsWith('/assets/source-archive/')?JYC_SOURCE_ARCHIVE_PHOTO_ITEMS.some(item=>item.url===url):['/assets/hub-photos/','/assets/hub-photos-extra/','/assets/events/','/assets/home/','/assets/team/','/assets/banners/','/assets/logos/'].some(prefix=>url.startsWith(prefix));const expectedEligible=pathEligible&&isDerivativeDimensionEligible(display?.width,display?.height);if(!display||display.width!==entry.width||display.height!==entry.height||entry.derivativesEligible!==expectedEligible)manifestMismatches.push({url,entry,display,expectedEligible});
  }
  assert('generated image manifest exposes correct EXIF-oriented display dimensions and eligibility',manifestMismatches.length===0,manifestMismatches.slice(0,8).map(item=>JSON.stringify(item)).join('; ')||Object.keys(builtManifest.images||{}).length+' records checked');
 }

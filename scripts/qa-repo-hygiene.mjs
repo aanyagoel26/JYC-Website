@@ -6,10 +6,11 @@ check('no tracked release archives remain',!rootFiles.some(x=>/\.zip$/i.test(x))
 const index=fs.readFileSync('index.html','utf8');
 check('no retired /map link remains in no-JS navigation',!index.includes('href="/map"'));
 const envExample=fs.readFileSync('.env.example','utf8');
-const canonicalOrigin=(envExample.match(/^VITE_CANONICAL_ORIGIN=(https?:\/\/[^\s#]+)/m)||[])[1]?.replace(/\/$/,'');
 const canonicalHref=(index.match(/<link\s+rel=["']canonical["']\s+href=["']([^"']+)["']/i)||[])[1]?.replace(/\/$/,'');
 const ogUrl=(index.match(/<meta\s+property=["']og:url["']\s+content=["']([^"']+)["']/i)||[])[1]?.replace(/\/$/,'');
-check('canonical production origin is consistent',Boolean(canonicalOrigin&&canonicalHref===canonicalOrigin&&ogUrl===canonicalOrigin),`expected ${canonicalOrigin||'a configured VITE_CANONICAL_ORIGIN'}, canonical=${canonicalHref||'missing'}, og:url=${ogUrl||'missing'}`);
+const routeShells=fs.readFileSync('scripts/generate-route-shells.mjs','utf8');
+const canonicalToken='__JYC_CANONICAL_ORIGIN__';
+check('canonical origin is resolved from verified deployment metadata at build time',canonicalHref===canonicalToken&&ogUrl===canonicalToken&&routeShells.includes("replaceAll('__JYC_CANONICAL_ORIGIN__',siteOrigin)")&&/^VITE_CANONICAL_ORIGIN=$/m.test(envExample)&&!index.includes('jyc-website-eight.vercel.app'),`canonical=${canonicalHref||'missing'}, og:url=${ogUrl||'missing'}`);
 const sourceFiles=[];
 const walk=dir=>fs.readdirSync(dir,{withFileTypes:true}).forEach(e=>{const p=dir+'/'+e.name;if(e.isDirectory()&&!['node_modules','.git','dist'].includes(e.name))walk(p);else if(e.isFile()&&/\.(js|jsx|ts|tsx|json|html|css|sql|mjs)$/i.test(e.name))sourceFiles.push(p)});
 walk('src');walk('scripts');walk('supabase');

@@ -1,7 +1,5 @@
 /* Single public CSS entry point. Keep order aligned with the former main.jsx imports. */
 @import './public-system.css';
-@import '../jyc-design-upgrades.css';
-@import './jyc-pro-redesign.css';
 @import './jyc-visual-quality.css';
 
 
@@ -101,7 +99,7 @@
   text-wrap: pretty;
 }
 .public-app .fests-page .compact-page-head .eyebrow {
-  color: #e9c994;
+  color: var(--jyc-gold, #765f36) !important;
 }
 .public-app .fests-page .compact-page-head .page-stat-row {
   position: relative;
@@ -126,7 +124,7 @@
   padding: 16px;
   border: 1px solid var(--line, rgba(21, 32, 48, .14));
   border-radius: 14px;
-  background: var(--surface, #fff);
+  background: var(--surface, var(--jyc-surface,#fffdf8));
   transition: border-color .18s ease, transform .18s ease, box-shadow .18s ease;
 }
 .public-app .fests-page .fests-social-rail a b,
@@ -173,9 +171,9 @@
 
 /* WCAG 2.2 AA contrast repairs from the Lighthouse route audit. */
 .jh-cyber-badge b{color:#FFF8E1!important}
-.about-principles-v33 article>span,.about-history-badge{color:#A82420!important}
-.public-app .visible-breadcrumbs a,.public-app .search-topic-links a{color:#825F2B!important}
-.jyc-featured-event-note{color:#625A52!important}
+.about-principles-v33 article>span,.about-history-badge{color:var(--jyc-accent,#625889)!important}
+.public-app .visible-breadcrumbs a,.public-app .search-topic-links a{color:var(--jyc-accent,#625889)!important}
+.jyc-featured-event-note{color:var(--jyc-muted,#5f5c6b)!important}
 .jyc-footer-v6 .footer-v6-brand strong,
 .jyc-footer-v6 .footer-v6-intro h2,
 .jyc-footer-v6 .footer-v6-links button,
@@ -188,7 +186,7 @@
 .jyc-footer-v6 .jyc-creator-credit{color:#A8A3B0!important}
 .jyc-footer-v6 .footer-v6-intro .eyebrow,
 .jyc-footer-v6 .footer-v6-links .eyebrow,
-.jyc-footer-v6 .footer-v6-connect .eyebrow{color:#FF7777!important}
+.jyc-footer-v6 .footer-v6-connect .eyebrow{color:var(--jyc-gold,#e7d19b)!important}
 .jyc-footer-v6 .footer-v6-bottom a,
 .jyc-footer-v6 .jyc-creator-credit a{color:#D2B48C!important}
 @media(max-width:620px){
@@ -201,17 +199,17 @@
 /* High-specificity WCAG contrast fixes verified against computed foreground/background pairs. */
 footer.jyc-footer.jyc-footer-v6 .footer-v6-inner .footer-bottom .jyc-creator-credit{color:#A8A3B0!important}
 footer.jyc-footer.jyc-footer-v6 .footer-v6-inner .footer-bottom .jyc-creator-credit a{color:#D2B48C!important}
-.about-history-node-card .about-history-cite>span,.about-source-note{color:#625A52!important}
-.about-history-node-card .about-history-cite a{color:#825F2B!important}
-.about-next-v28 .eyebrow{color:#A82420!important}
-.about-next-v28 h2{color:#1A191D!important}
-.about-next-v28 .btn{background:#A82420!important;color:#FFF8E1!important;border-color:#A82420!important}
-.about-next-v28 .btn.secondary{background:transparent!important;color:#1A191D!important;border-color:#A82420!important}
+.about-history-node-card .about-history-cite>span,.about-source-note{color:var(--jyc-muted,#5f5c6b)!important}
+.about-history-node-card .about-history-cite a{color:var(--jyc-accent,#625889)!important}
+.about-next-v28 .eyebrow{color:var(--jyc-accent,#625889)!important}
+.about-next-v28 h2{color:var(--jyc-text-strong,#191827)!important}
+.about-next-v28 .btn{background:var(--jyc-accent,#625889)!important;color:#FFF8E1!important;border-color:var(--jyc-accent,#625889)!important}
+.about-next-v28 .btn.secondary{background:transparent!important;color:var(--jyc-text-strong,#191827)!important;border-color:var(--jyc-accent,#625889)!important}
 .jyc-gallery-hero .jh-kicker,.jyc-gallery-hero .jh-kicker b,
-.jyc-clubs-header .jh-kicker,.jyc-clubs-header .jh-kicker b{color:#625A52!important}
-.jyc57-archive-nav>a{color:#825F2B!important}
-.jyc-section-head-bar>div>span{color:#625A52!important}
-.jyc57-media-filter+div>div>span,#jyc-gallery-years>span{color:#625A52!important}
+.jyc-clubs-header .jh-kicker,.jyc-clubs-header .jh-kicker b{color:var(--jyc-muted,#5f5c6b)!important}
+.jyc57-archive-nav>a{color:var(--jyc-accent,#625889)!important}
+.jyc-section-head-bar>div>span{color:var(--jyc-muted,#5f5c6b)!important}
+.jyc57-media-filter+div>div>span,#jyc-gallery-years>span{color:var(--jyc-muted,#5f5c6b)!important}
 
 
 /* Release QA: correct final-layer contrast and touch-target fixes. */
@@ -225,7 +223,7 @@ footer.jyc-footer .footer-v6-inner .footer-bottom .jyc-creator-credit a {
 }
 html[data-theme="light"] .public-app .jyc-gallery-hero .jh-kicker b,
 html[data-theme="light"] .public-app .jyc-clubs-header .jh-kicker b {
-  color: #3F3024 !important;
+  color: var(--jyc-text-strong,#191827) !important;
 }
 html[data-theme="light"] .public-app .jh-final p,
 html[data-theme="light"] .public-app .jh-final .jh-section-number {
@@ -261,16 +259,16 @@ html[data-theme="light"] .public-app .jh-final .jh-section-number {
   .jh-about-kicker,.jyc57-gallery-meta,.jyc57-gallery-eyebrow,
   .jyc57-filter-group>span,.jyc57-pill,.gallery-source-ledger>span
 ) {
-  color: #65451F !important;
+  color: var(--jyc-gold,#8c6d36) !important;
 }
 :root:not([data-theme="dark"]) .public-app :is(.text-link,.reference-view-all,.jh-overline,.jh-about-kicker) {
-  color: #76211D !important;
+  color: var(--jyc-accent,#625889) !important;
 }
 :root:not([data-theme="dark"]) .public-app :is(
   .jh-lead,.jh-assistant-info p,.jh-community-copy p,
   .jh-pillar-card p,.jh-event-copy>p,.muted,.muted-text,.jyc57-empty p
 ) {
-  color: #4B4650 !important;
+  color: var(--jyc-muted,#5f5c6b) !important;
 }
 
 
@@ -279,19 +277,19 @@ html[data-theme="light"] .public-app .jh-final .jh-section-number {
 .jyc-footer .jyc-creator-credit { color: #d6d2db !important; }
 .jyc-footer .jyc-creator-credit a { color: #e2c89f !important; }
 .public-app :is(.jyc-gallery-hero,.jyc-clubs-header) .jh-kicker b {
-  color: #3f2a12 !important;
+  color: var(--jyc-text-strong,#191827) !important;
 }
-.public-app .about-source-note { color: #4b4650 !important; }
+.public-app .about-source-note { color: var(--jyc-muted,#5f5c6b) !important; }
 .public-app .about-next-v28 .eyebrow { color: #65451f !important; }
 .public-app .about-next-v28 h2 { color: #28242a !important; }
 .public-app .about-next-v28 .btn:not(.secondary) {
-  background: #a82420 !important;
-  border-color: #a82420 !important;
+  background: var(--jyc-accent,#625889) !important;
+  border-color: var(--jyc-accent,#625889) !important;
   color: #fffaf0 !important;
 }
 .public-app .about-next-v28 .btn.secondary {
-  background: #fff !important;
-  border-color: #a82420 !important;
+  background: var(--jyc-surface,#fffdf8) !important;
+  border-color: var(--jyc-accent,#625889) !important;
   color: #28242a !important;
 }
 .public-app .jh-final :is(.jh-section-number,p) {
@@ -318,7 +316,7 @@ body:has(.jyc57-lightbox[aria-modal="true"]) :is(.jyc-bot-shell,.mobile-dock) {
    These selectors intentionally outrank legacy route/button rules that otherwise
    wash the editorial text and CTA into the paper background. */
 #main-content.public-app .route-stage > section.section .about-source-note {
-  color: #4b4650 !important;
+  color: var(--jyc-muted,#5f5c6b) !important;
   opacity: 1 !important;
 }
 #main-content.public-app .route-stage > section.section .about-next-v28 .eyebrow {
@@ -330,16 +328,16 @@ body:has(.jyc57-lightbox[aria-modal="true"]) :is(.jyc-bot-shell,.mobile-dock) {
   opacity: 1 !important;
 }
 #main-content.public-app .route-stage > section.section .about-next-v28 button.btn:not(.secondary) {
-  background-color: #a82420 !important;
+  background-color: var(--jyc-accent,#625889) !important;
   background-image: none !important;
-  border-color: #a82420 !important;
+  border-color: var(--jyc-accent,#625889) !important;
   color: #fffaf0 !important;
   opacity: 1 !important;
 }
 #main-content.public-app .route-stage > section.section .about-next-v28 button.btn.secondary {
-  background-color: #fff !important;
+  background-color: var(--jyc-surface,#fffdf8) !important;
   background-image: none !important;
-  border-color: #a82420 !important;
+  border-color: var(--jyc-accent,#625889) !important;
   color: #28242a !important;
   opacity: 1 !important;
 }
@@ -378,4 +376,141 @@ html[data-theme="light"] .public-app .feature-hero :is(p,li,small){color:#D7D1C7
     max-width:100%;
     gap:12px!important;
   }
+}
+
+/* About CTA foreground must switch with the accent's luminance. */
+html[data-theme="dark"] .public-app .about-next-v28 .btn:not(.secondary),
+html[data-theme="dark"] #main-content.public-app .route-stage > section.section .about-next-v28 button.btn:not(.secondary) {
+  color: #17142a !important;
+}
+html[data-theme="dark"] .public-app .about-next-v28 .btn.secondary,
+html[data-theme="dark"] #main-content.public-app .route-stage > section.section .about-next-v28 button.btn.secondary {
+  color: var(--jyc-text-strong,#f7f5ff) !important;
+  background: var(--jyc-surface,#111b31) !important;
+}
+html[data-theme="dark"] .jh-cyber-badge b { color: #17142a !important; }
+
+/* Club-only people directory — intentionally separate from the JYC Team page. */
+.hub-community-team{margin:clamp(28px,5vw,64px) 0;padding:clamp(22px,3vw,38px);border:1px solid var(--jyc-line,rgba(32,27,28,.14));border-radius:24px;background:color-mix(in srgb,var(--jyc-surface,#fffdf8) 84%,transparent)}
+.hub-community-team-heading{max-width:680px;margin-bottom:24px}.hub-community-team-heading h3{margin:8px 0;font-size:clamp(24px,3vw,36px);letter-spacing:-.04em}.hub-community-team-heading p{color:var(--jyc-muted,#696575);margin:0}
+.hub-community-team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:16px}
+.hub-community-member{min-width:0;overflow:hidden;border:1px solid var(--jyc-line,rgba(32,27,28,.12));border-radius:17px;background:var(--jyc-surface,#fffdf8);box-shadow:0 10px 28px rgba(20,18,34,.07)}
+.hub-community-member-photo{position:relative;aspect-ratio:3/4;display:grid;place-items:center;overflow:hidden;background:radial-gradient(circle at 30% 20%,color-mix(in srgb,var(--jyc-accent,#625889) 22%,transparent),transparent 55%),var(--jyc-canvas,#f5f1e8)}
+.hub-community-member-photo span{position:relative;z-index:1;display:grid;place-items:center;width:76px;aspect-ratio:1;border-radius:50%;border:1px solid color-mix(in srgb,var(--jyc-accent,#625889) 40%,transparent);background:color-mix(in srgb,var(--jyc-accent,#625889) 12%,transparent);color:var(--jyc-text-strong,#191827);font-size:24px;font-weight:750;letter-spacing:-.05em}
+.hub-community-member-copy{padding:12px 13px 15px;display:grid;gap:5px}.hub-community-member-copy span{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--jyc-accent,#625889);font-weight:750}.hub-community-member-copy strong{font-size:14px;line-height:1.3;color:var(--jyc-text-strong,#191827)}
+[data-theme="dark"] .hub-community-team{background:color-mix(in srgb,var(--jyc-surface,#111b31) 88%,transparent)}
+@media(max-width:520px){.hub-community-team{padding:17px;border-radius:19px}.hub-community-team-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.hub-community-member-copy{padding:10px}.hub-community-member-copy strong{font-size:13px}}
+
+.hub-community-member-photo img{position:absolute;inset:0;z-index:2;display:block;width:100%;height:100%;object-fit:cover;object-position:center;transition:transform .55s cubic-bezier(.2,.75,.25,1)}
+.hub-community-member-photo img[hidden]{display:none}
+.hub-community-member:hover .hub-community-member-photo img{transform:scale(1.035)}
+@media(prefers-reduced-motion:reduce){.hub-community-member-photo img{transition:none!important}.hub-community-member:hover .hub-community-member-photo img{transform:none}}
+
+
+/* Mobile navigation and layout hardening. */
+@media (max-width: 760px) {
+  html { scroll-padding-bottom: calc(88px + env(safe-area-inset-bottom)); }
+  body { padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
+  .mobile-dock {
+    box-sizing: border-box !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    padding: 8px max(10px, env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(10px, env(safe-area-inset-left)) !important;
+    border-radius: 18px 18px 0 0 !important;
+    background: color-mix(in srgb, var(--jyc-surface, #fffdf8) 94%, transparent) !important;
+    border: 1px solid var(--jyc-line, rgba(32,27,28,.14)) !important;
+    border-bottom: 0 !important;
+    box-shadow: 0 -10px 32px rgba(15,12,25,.12) !important;
+    backdrop-filter: blur(18px) saturate(1.25);
+    -webkit-backdrop-filter: blur(18px) saturate(1.25);
+  }
+  .mobile-dock > button {
+    min-width: 0 !important;
+    min-height: 52px !important;
+    padding: 5px 2px !important;
+    gap: 3px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 12px !important;
+    font-size: 11px !important;
+    line-height: 1.15 !important;
+  }
+  .mobile-dock > button > span { display: grid; place-items: center; min-width: 24px; min-height: 24px; }
+  .mobile-dock > button > b { font-size: 10px !important; font-weight: 650; }
+  .public-app, .route-stage, .route-stage > section { min-width: 0; }
+  .public-app :where(img,video,canvas,svg) { max-width: 100%; }
+  .public-app :where(.card,.event-card,.hub-card,.team-card,.gallery-item,.feature-card) { min-width: 0; }
+}
+@media (max-width: 380px) {
+  .mobile-dock { grid-template-columns: repeat(5,minmax(0,1fr)) !important; gap: 2px !important; }
+  .mobile-dock > button { min-height: 50px !important; }
+  .mobile-dock > button > b { font-size: 9px !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mobile-dock { scroll-behavior: auto !important; transition: none !important; }
+}
+
+
+/* Consistent readable eyebrow size across every public route. */
+html .public-app .eyebrow { font-size:11px!important; }
+
+
+/* Club identity marks stay compact and crisp after switching to responsive <picture> delivery. */
+.public-app .jyc57-club-top-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:30px;}
+.public-app .jyc57-club-brand-glyph{width:30px;height:30px;flex:0 0 30px;display:grid;place-items:center;overflow:hidden;border:1px solid rgba(255,255,255,.24);border-radius:50%;background:rgba(255,255,255,.12);backdrop-filter:blur(8px);}
+.public-app .jyc57-club-brand-glyph picture{display:block;width:100%;height:100%;}
+.public-app .jyc57-club-brand-glyph picture img{display:block;width:100%;height:100%;padding:3px;object-fit:contain;}
+
+
+/* Release hardening: lazy route shells reserve the first viewport so the
+   footer cannot jump into view while route chunks are downloading. */
+.public-app .route-stage > .jyc-route-loading{
+  box-sizing:border-box;
+  min-height:calc(100svh - 76px);
+  display:grid;
+  place-items:center;
+  margin:0;
+  padding:32px 20px;
+  text-align:center;
+}
+@media(max-width:680px){
+  .public-app .route-stage > .jyc-route-loading{min-height:calc(100svh - 72px);padding:24px 16px}
+}
+
+/* Dark-theme metadata must remain legible over the midnight surfaces. */
+html[data-theme="dark"] .public-app{
+  --text-muted:#c0c4da;
+  --muted:#c0c4da;
+  --directory-muted:#c0c4da;
+}
+html[data-theme="dark"] .public-app :is(
+  .jyc-gallery-hero .jh-kicker,
+  .jyc-gallery-hero .jh-kicker b,
+  .jyc-clubs-header .jh-kicker,
+  .jyc-clubs-header .jh-kicker b,
+  .jyc-section-head-bar>div>span,
+  .jyc57-media-filter+div>div>span,
+  #jyc-gallery-years>span,
+  .visible-breadcrumbs span[aria-current="page"],
+  .about-source-note,
+  .jyc-events-header .jh-kicker,
+  .jyc-events-header .jh-kicker b
+){color:#c0c4da!important}
+
+/* Lighthouse 11/10: dark-theme kicker text sits on champagne badges, while
+   the About source note uses a warm raised surface. Use dark ink on both. */
+html[data-theme="dark"] .public-app :is(
+  .jyc-gallery-hero .jh-kicker,
+  .jyc-gallery-hero .jh-kicker b,
+  .jyc-clubs-header .jh-kicker,
+  .jyc-clubs-header .jh-kicker b,
+  .jyc-events-header .jh-kicker,
+  .jyc-events-header .jh-kicker b
+) { color: #241d17 !important; }
+html[data-theme="dark"] .public-app .about-source-note {
+  color: #241d17 !important;
 }
