@@ -9,7 +9,7 @@ const isSafeManifestAssetUrl = (url) => {
   const segments = url.slice(1).split('/');
   return segments.every((segment) => Boolean(segment) && segment !== '.' && segment !== '..');
 };
-const isDerivativeManifestPath = (url) => ['/assets/source-archive/', '/assets/hub-photos/', '/assets/hub-photos-extra/', '/assets/events/', '/assets/home/', '/assets/team/'].some((prefix) => url.startsWith(prefix));
+const isDerivativeManifestPath = (url) => ['/assets/source-archive/', '/assets/hub-photos/', '/assets/hub-photos-extra/', '/assets/events/', '/assets/home/', '/assets/team/', '/assets/banners/', '/assets/logos/'].some((prefix) => url.startsWith(prefix));
 const isDerivativeDimensionEligible = (width, height) => {
   const w = Number(width), h = Number(height);
   if (!Number.isFinite(w) || !Number.isFinite(h) || w < 320 || h < 120) return false;
