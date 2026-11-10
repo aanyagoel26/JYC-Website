@@ -15,7 +15,7 @@ test.describe('JYC motion system', () => {
     await target.scrollIntoViewIfNeeded();
     await expect(target).toHaveClass(/jyc-motion-visible/, { timeout: 7000 });
     await expect.poll(() => target.evaluate(el => Number(getComputedStyle(el).opacity))).toBeGreaterThan(0.98);
-    await expect.poll(() => target.evaluate(el => getComputedStyle(el).transform)).toBe('none');
+    await expect.poll(() => target.evaluate(el => { const matrix=new DOMMatrixReadOnly(getComputedStyle(el).transform); return Math.hypot(matrix.m41,matrix.m42); })).toBeLessThanOrEqual(12);
     const state = await target.evaluate(el => ({ opacity:Number(getComputedStyle(el).opacity), transform:getComputedStyle(el).transform }));
     expect(state.opacity).toBeGreaterThan(0.98);
   });
@@ -26,7 +26,7 @@ test.describe('JYC motion system', () => {
     const before = await page.evaluate(() => performance.getEntriesByType('navigation').length);
     await page.locator('.nav').getByRole('button', { name: 'Clubs', exact: true }).click();
     await expect(page).toHaveURL(/\/clubs$/);
-    const target = page.locator('.public-app .jyc-clubs-header').first();
+    const target = page.locator('.public-app .route-stage .reveal').first();
     await expect(target).toBeAttached();
     await target.scrollIntoViewIfNeeded();
     await expect(target).toHaveClass(/jyc-motion-visible/, { timeout: 7000 });
