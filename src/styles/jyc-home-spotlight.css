@@ -100,6 +100,7 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight 
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-card,
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-media img,
  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight .reference-view-all{transition:none}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-card.is-event::before{animation:none!important}
 }
 /* Event-first hierarchy: one current experience leads, the other cards support it. */
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-living-spotlight-card.is-event{
