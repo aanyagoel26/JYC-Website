@@ -9,7 +9,6 @@ const explorer = fs.readFileSync('src/components/JYC3DInteractiveExplorer.jsx', 
 const spotlightCss = fs.readFileSync('src/styles/jyc-home-spotlight.css', 'utf8');
 const hero = fs.readFileSync('src/styles/jyc-home-hero-finish.css', 'utf8');
 const heroDirection = fs.readFileSync('src/styles/jyc-home-hero-art-direction.css', 'utf8');
-const heroDirection = fs.readFileSync('src/styles/jyc-home-hero-art-direction.css', 'utf8');
 const webglField = fs.readFileSync('src/components/JYCWebGLField.jsx', 'utf8');
 const emblem = fs.readFileSync('src/components/JYCHeroWebGLEmblem.jsx', 'utf8');
 
