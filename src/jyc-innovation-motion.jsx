@@ -32,7 +32,7 @@ function setupReveal() {
     const containingStage = node.closest('.route-stage');
     if (containingStage) stages.push(containingStage);
     [...new Set(stages)].forEach(stage => {
-      const targets = [];
+      const targets = [...stage.children];
       // Include the page root and semantic sections. Some legacy routes use
       // div-based page shells, so section-only discovery misses SPA updates.
       if (node !== stage && node.parentElement === stage) targets.push(node);
