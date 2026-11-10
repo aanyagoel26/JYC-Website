@@ -393,7 +393,7 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{animat
   }
   html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-frame{inset:9px}
   html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-label{top:16px;left:17px;font-size:8px}
-  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-caption{right:17px;bottom:16px;font-size:8px;max-width:60%}
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-caption{right:17px;top:16px;bottom:auto;font-size:8px;max-width:58%}
   html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage{width:min(86%,360px)}
   html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-badge{display:none}
   html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-dither-layer{inset:4%;opacity:.08}
