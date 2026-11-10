@@ -40,7 +40,8 @@ import {JYC_EDITORIAL_ACHIEVEMENTS,JYC_TEAM_SOCIALS} from './jyc-editorial-conte
 
 
 const LazyJYCEditorialHome=lazy(()=>import('./jyc-editorial-home.jsx').then(m=>({default:m.JYCEditorialHome})));
-import {JYCSearch} from './search/jyc-search.jsx';
+const LazyJYCSearch=lazy(()=>import('./search/jyc-search.jsx').then(m=>({default:m.JYCSearch})));
+const preloadJYCSearch=()=>import('./search/jyc-search.jsx');
 const LazyJYCInnovationMotion=lazy(()=>import('./jyc-innovation-motion.jsx').then(m=>({default:m.JYCInnovationMotion})));
 const LazyRubberSegment=lazy(()=>import('./react-bits/JYCMicro.jsx').then(m=>({default:m.RubberSegment})));
 const LazyBellToggle=lazy(()=>import('./react-bits/JYCMicro.jsx').then(m=>({default:m.BellToggle})));
@@ -809,7 +810,7 @@ function Navbar({data,admin,theme,setTheme}){
  const dockActive=loc.pathname==='/'?0:loc.pathname.startsWith('/clubs')?1:loc.pathname.startsWith('/events')?2:loc.pathname.startsWith('/gallery')?3:4;
  const dock=<div className="mobile-dock" style={{'--dock-index':dockActive}} aria-label="Mobile navigation"><i className="dock-active-pill" aria-hidden="true"/>{dockItems.map(([n,p,icon],i)=>{const active=i===dockActive;return <button type="button" key={n} className={active?'active':''} onClick={()=>p==='__more'?setMoreOpen(v=>!v):nav(p)} aria-current={active?'page':undefined} aria-expanded={p==='__more'?moreOpen:undefined} aria-controls={p==='__more'&&moreOpen?'jyc-more-dialog':undefined}><span><NavIcon kind={icon}/></span><b>{n}</b></button>})}</div>;
  const more=moreOpen?<MobileMoreSheet data={data} admin={admin} close={()=>setMoreOpen(false)} openSearch={()=>{setMoreOpen(false);setSearch(true)}}/>:null;
- const searchView=search?<JYCSearch data={data} admin={admin} close={()=>setSearch(false)}/>:null;
+ const searchView=search?<Suspense fallback={null}><LazyJYCSearch data={data} admin={admin} close={()=>setSearch(false)}/></Suspense>:null;
  const navButtons = routeLinks.map(([n, p]) => {
     const active = loc.pathname === p || (p !== '/' && loc.pathname.startsWith(p + '/'));
     return (
@@ -833,7 +834,7 @@ function Navbar({data,admin,theme,setTheme}){
    <nav className={open?'open':''}>{navButtons}<button type="button" className={`nav-more-trigger ${moreOpen?'active':''}`} onClick={()=>{setOpen(false);setMoreOpen(v=>!v)}} aria-expanded={moreOpen} aria-controls={moreOpen?'jyc-more-dialog':undefined}>More <span aria-hidden="true">⌄</span></button></nav>
    <button type="button" className="nav-join-cta" onClick={()=>nav('/join-jyc')}>Join JYC <span>↗</span></button>
    <Theme theme={theme} setTheme={setTheme}/><button type="button" className={`hamb ${open?'open':''}`} onClick={()=>setOpen(v=>!v)} aria-label="Menu" aria-expanded={open}><i/><i/><i/></button>
-   {open&&<button type="button" className="mobile-nav-scrim" aria-label="Close navigation" onClick={()=>setOpen(false)}/>}<button type="button" className="search-trigger" data-jyc-search-trigger aria-expanded={search} aria-controls={search?'jyc-search-dialog':undefined} onClick={()=>setSearch(true)} title="Search JYC (Ctrl/Cmd + K)"><span className="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg></span><span className="search-label">Search</span><kbd aria-hidden="true">Ctrl K</kbd></button>
+   {open&&<button type="button" className="mobile-nav-scrim" aria-label="Close navigation" onClick={()=>setOpen(false)}/>}<button type="button" className="search-trigger" data-jyc-search-trigger onPointerEnter={preloadJYCSearch} onFocus={preloadJYCSearch} aria-expanded={search} aria-controls={search?'jyc-search-dialog':undefined} onClick={()=>setSearch(true)} title="Search JYC (Ctrl/Cmd + K)"><span className="search-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg></span><span className="search-label">Search</span><kbd aria-hidden="true">Ctrl K</kbd></button>
  </div></header>
  {createPortal(dock,document.body)}{createPortal(more,document.body)}{searchView}</>
 }
