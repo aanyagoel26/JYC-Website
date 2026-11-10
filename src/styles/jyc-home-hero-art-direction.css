@@ -170,6 +170,8 @@ html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-cyber-badge
 html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-hero h1{color:#f6f3ff!important}
 html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-hero h1 .jh-title-gradient{color:#e7d19b!important}
 html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-lead{color:#c3c8dc!important}
+html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn-primary{color:#17142a!important}
+html[data-theme="light"] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn-primary{color:#fffaf3!important}
 html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual::before{
   border-color:rgba(231,209,155,.36);box-shadow:0 0 0 18px rgba(231,209,155,.045),0 0 0 42px rgba(126,103,205,.035)
 }
