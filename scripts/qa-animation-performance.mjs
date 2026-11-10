@@ -62,6 +62,7 @@ check('main shell does not eagerly import Motion or command search; search is de
 
 const revealSetup=read('src/jyc-innovation-motion.jsx').slice(read('src/jyc-innovation-motion.jsx').indexOf('function setupReveal()'),read('src/jyc-innovation-motion.jsx').indexOf('function useAtmosphericCanvas'));
 check('reveal preference handler never references the separately scoped ambient canvas',!revealSetup.includes('canvas.style')&&!revealSetup.includes('canvasRef'));
+check('crest pointer tilt is RAF-coalesced and does not re-render React on pointer movement',hero.includes('requestAnimationFrame')&&hero.includes('cardRef.current.style.transform')&&!hero.includes('setTilt'));
 check('homepage uses one OGL WebGL field instead of a second crest renderer',!hero.includes('JYCWebGLIdentity')&&!read('src/main.jsx').includes('jyc-webgl-identity'));
 if(failures.length)process.exit(1);
 console.log('JYC animation/media performance contract: '+(totalChecks-failures.length)+'/'+totalChecks);
