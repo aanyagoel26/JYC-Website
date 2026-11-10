@@ -11,6 +11,8 @@ const gallery=read('src/jyc57-experience.jsx');
 
 const checks=[
   ['homepage hero action group is present',home.includes('className="jh-actions jh-hero-actions"')],
+  ['homepage is route-lazy so OGL and the hero shader stay out of non-home startup',main.includes("const LazyJYCEditorialHome=lazy(()=>import('./jyc-editorial-home.jsx')")&&main.includes('<LazyJYCEditorialHome data={data}/>')],
+  ['public routes paint curated/cache-backed content before asynchronous live refresh',main.includes('mergePublicFallback(norm(readSiteCache()||empty),{allowContentFallback:true,allowGalleryFallback:false,allowTeamFallback:true})')&&main.includes('const [loading,setLoading]=useState(false)')&&main.includes('const [bootReady,setBootReady]=useState(true)')],
   ['homepage exposes event, club and Join JYC routes',home.includes("nav('/events')")&&home.includes("nav('/clubs')")&&home.includes("nav('/join-jyc')")&&home.includes('Explore events')&&home.includes('Find a club')&&home.includes('Join JYC')],
   ['homepage has an editorial introduction and lazy activity discovery',home.includes('jh-about-editorial')&&home.includes('LazyActivityBento activities={activities} nav={nav}')],
   ['homepage avoids unsupported hub and student-reach counters',!home.includes('23+ hubs')&&!home.includes('5,000+')&&!home.includes('thousands of students')],
