@@ -150,6 +150,7 @@ The follow-up art-direction pass is intentionally focused on clarity and perform
 - On mobile, reorder the hero as identity → headline → supporting copy → crest → actions, with full-size touch targets and no transform scaling.
 - Let ordinary 8-core / 8 GB desktop devices run the shader at a reduced quality tier rather than disabling it outright.
 - Keep both theme treatments distinct: deep midnight/indigo/violet/champagne for dark mode and warm ivory/champagne/brass for light mode.
+- Match the crest image `srcset`, `sizes` and preload to its rendered dimensions (220px mobile, 360px tablet, 480px desktop) so high-DPR screens receive a crisp asset without a misleading 80px hint.
 
 Source assertions are added to the homepage hero QA. Runtime screenshots, exact-head browser tests, Lighthouse and physical-device review remain required before promoting any hero item to [x].
 
