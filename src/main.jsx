@@ -110,6 +110,7 @@ import './styles/jyc-celestial-refresh.css';
 import './styles/jyc-v67-visual-polish.css';
 import './styles/jyc-about-contact-team-finish.css';
 import './styles/jyc-public-pages-master-finish.css';
+import './styles/jyc-public-pages-visual-finish.css';
 
 const logo='/assets/jyc-logo.avif';
 const logoTiny='/assets/jyc-logo-48.avif';
