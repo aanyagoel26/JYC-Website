@@ -48,7 +48,7 @@ test.describe('JYC Search and More interaction contract', () => {
         await expect(search.locator('.search-result-active')).toContainText('Devansh Tripathi');
       }
 
-      await input.fill('quantum banana no-match');
+      await input.fill('zzzxqv987');
       await expect(search.locator('.search-no-results')).toBeVisible();
       await search.locator('.search-input-wrap .search-clear').click();
       await expect(input).toHaveValue('');
