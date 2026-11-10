@@ -369,7 +369,7 @@ function Team({data}){
  const [query,setQuery]=useState('');
  const rawMembers=Array.isArray(data?.team)?data.team:[];
  const members=rawMembers.filter(m=>m&&m.published===true&&!['harisha','dhruv-choudhary'].includes(String(m.id||'').trim().toLowerCase())&&!['harisha','dhruv choudhary'].includes(String(m.name||'').trim().toLowerCase()));
- const faculty=members.filter(m=>/faculty|advisor|coordinator/i.test(String(m.role||m.position||'')));
+ const faculty=members.filter(m=>/faculty|faculty advisor|faculty coordinator|staff advisor|mentor/i.test(String(m.role||m.position||'')));
  const apex=members.filter(m=>/president|vice president|general secretary|joint secretary|finance secretary|treasurer/i.test(String(m.role||m.position||''))&&!/faculty/i.test(String(m.role||'')));
  const core=members.filter(m=>!faculty.includes(m)&&!apex.includes(m));
  const normalizedQuery=query.trim().toLocaleLowerCase();
@@ -452,8 +452,8 @@ function Team({data}){
   {renderSection('apex','02 · APEX LEADERSHIP','The people setting direction.','The apex team coordinates the wider JYC ecosystem and its campus-facing execution.',visibleApex)}
   {renderSection('core','03 · CORE TEAM','The people who make it happen.','From communications and creative to hospitality, finance and event operations, the core team turns plans into experiences.',visibleCore)}
   {activeCount===0&&<div className="team-empty-state" role="status"><span aria-hidden="true">⌕</span><h2>No matching profiles</h2><p>Try a different name or role, or clear the search to see the full published team.</p><Button secondary onClick={()=>{setQuery('');setActiveTier('all');}}>Clear filters</Button></div>}
-  <section className="team-layer team-hub-layer"><div className="team-layer-head"><span className="eyebrow">04 · CLUBS & HUBS</span><h2>One ecosystem. Many ways to belong.</h2><p>Explore JYC's named communities and find the spaces that match your interests.</p></div><div className="team-hub-directory">{Object.entries(JYC_HUB_CONTENT).map(([name,p])=><a href={'/clubs/'+slug(name)} key={name}><small>{p.family}</small><strong>{name}</strong><span aria-hidden="true">↗</span></a>)}</div></section>
-  <div className="team-closeout"><div className="team-closeout-mark"><LogoImage alt="JIIT Youth Club crest" width={96} height={96}/></div><div><span className="eyebrow">YOUR CAMPUS. YOUR COMMUNITY.</span><h2>There's a place for you here.</h2><p>Explore the communities, discover upcoming events and become part of the JYC experience.</p><div className="hero-actions"><Button onClick={()=>nav('/clubs')}>Find your community <span aria-hidden="true">↗</span></Button><Button secondary onClick={()=>nav('/events')}>Explore events</Button></div></div></div>
+  <section className="team-layer team-hub-layer"><div className="team-layer-head"><span className="eyebrow">04 · CLUBS & HUBS</span><h2>One ecosystem. Many ways to belong.</h2><p>Explore JYC's named communities and find the spaces that match your interests.</p></div><div className="team-hub-directory">{Object.entries(JYC_HUB_CONTENT).map(([name,p])=><button type="button" onClick={()=>nav('/clubs/'+slug(name))} key={name}><small>{p.family}</small><strong>{name}</strong><span aria-hidden="true">↗</span></button>)}</div></section>
+  <div className="team-closeout"><div className="team-closeout-mark"><LogoImage alt="JIIT Youth Club crest" width={96} height={96}/></div><div><span className="eyebrow">YOUR CAMPUS. YOUR COMMUNITY.</span><h2>There's a place for you here.</h2><p>Explore the communities, discover upcoming events and become part of the JYC experience.</p><div className="hero-actions"><Button onClick={()=>nav('/clubs')}>Find your community <span aria-hidden="true">↗</span></Button><Button secondary onClick={()=>nav('/events')}>Explore events</Button><Button secondary onClick={()=>nav('/contact')}>Contact JYC</Button></div></div></div>
  </section>;
 }
 
@@ -1172,7 +1172,7 @@ function About({data}){
     </div>
    </section>
    <div className="about-source-note reveal">Content scope: JYC 128 orientation material and published JYC milestones. Current events, recruitment and team records remain on their dedicated JYC pages.</div>
-  <section className="about-next-v28 reveal"><span className="eyebrow">YOUR NEXT STEP</span><h2>See the organisation in action.</h2><div><Button onClick={()=>nav('/clubs')}>Explore clubs ↗</Button><Button secondary onClick={()=>nav('/events')}>Explore events →</Button><Button secondary onClick={()=>nav('/team')}>Meet JYC →</Button></div></section>
+  <section className="about-next-v28 reveal"><span className="eyebrow">YOUR NEXT STEP</span><h2>See the organisation in action.</h2><div><Button onClick={()=>nav('/clubs')}>Explore clubs ↗</Button><Button secondary onClick={()=>nav('/events')}>Explore events →</Button><Button secondary onClick={()=>nav('/team')}>Meet JYC →</Button><Button secondary onClick={()=>nav('/contact')}>Contact JYC →</Button></div></section>
  </section>
 }
 function Clubs({data}){
