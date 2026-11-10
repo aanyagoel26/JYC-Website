@@ -48,7 +48,7 @@ check('active design and restoration layers contain no hard-coded red theme acce
 const moreStart=main.indexOf('function MobileMoreSheet(');
 const searchSource=read('src/search/jyc-search.jsx');
 const moreSource=moreStart>=0?main.slice(moreStart):'';
-check('Search dialog restores focus to its original trigger or stable header trigger',searchSource.includes('returnFocusRef.current')&&searchSource.includes('fallbackFocus')&&searchSource.includes('target.focus()'));
+check('Search dialog restores focus to its original trigger or stable header trigger',searchSource.includes('returnFocusRef.current')&&searchSource.includes('fallbackFocus')&&searchSource.includes('target.focus({preventScroll:true})')&&searchSource.includes('window.requestAnimationFrame(()=>window.requestAnimationFrame('));
 check('More sheet restores focus to the element that opened it without stealing focus from Search handoff',moreSource.includes('const returnFocus=document.activeElement')&&moreSource.includes("if(!document.querySelector('.search-overlay'))returnFocus.focus()"));
 check('More sheet close control has an accessible name',moreSource.includes('aria-label="Close More JYC"'));
 check('Search intent shortcuts are included before ranking and are not appended after the result limit',searchSource.includes('matchSearchResults([...index,...intent],normalized)')&&searchSource.includes('const results=filtered.slice(0,30)'));
