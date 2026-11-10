@@ -350,8 +350,8 @@ export function JYCHeroWebGLEmblem() {
             <div className="jyc-emblem-glow-backing" aria-hidden="true" />
             {logoFailed ? <span className="jyc-emblem-logo-fallback" role="img" aria-label="JIIT Youth Club logo">JYC</span> : <img
               src={LOGO_SRC}
-              srcSet="/assets/jyc-logo-270.avif 270w, /assets/jyc-logo.avif 480w"
-              sizes="(max-width: 680px) 80px, (max-width: 1024px) 250px, 480px"
+              srcSet="/assets/jyc-logo-270.avif 270w, /assets/jyc-logo-320.avif 320w, /assets/jyc-logo.avif 480w"
+              sizes="(max-width: 680px) 80px, (max-width: 1024px) 250px, 320px"
               alt="JIIT Youth Club Crest"
               className="jyc-emblem-logo-img"
               width="480"
