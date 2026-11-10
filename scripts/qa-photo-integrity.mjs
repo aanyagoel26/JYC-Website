@@ -44,6 +44,7 @@ const logoMapSource=mediaSource.slice(mediaSource.indexOf('const AUTHENTIC_HUB_L
 const validClubLogoPaths=['public/assets/logos/bds.png','public/assets/logos/eloquence.png','public/assets/logos/panache.png'];
 assert('BDS, Eloquence and Panache map to valid original PNG logo assets',validClubLogoPaths.every(file=>fs.existsSync(file)&&parseImageDimensions(fs.readFileSync(file))?.width>0)&&logoMapSource.includes("bds: '/assets/logos/bds.png'")&&logoMapSource.includes("eloquence: '/assets/logos/eloquence.png'")&&logoMapSource.includes("panache: '/assets/logos/panache.png'"));
 assert('corrupt VamUnique and legacy WebP logo variants are not advertised as official marks',!logoMapSource.includes('/assets/logos/vamunique.png')&&!logoMapSource.includes('/assets/logos/bds.webp')&&!logoMapSource.includes('/assets/logos/eloquence.webp')&&!logoMapSource.includes('/assets/logos/panache.webp'));
+assert('malformed legacy logo binaries are removed from the shipped public asset tree',['public/assets/logos/bds.webp','public/assets/logos/eloquence.webp','public/assets/logos/panache.webp','public/assets/logos/vamunique.png'].every(file=>!fs.existsSync(file)));
 assert('photo derivative build filters undecodable source files before invoking Sharp',derivativeGeneratorSource.includes('parseImageDimensions(fs.readFileSync(file))'));
 const auditedCategories=['clubs/abhivyakti','clubs/panache','clubs/cypherx','festivals/aakriti','gallery/campus-events'];
 const auditedExclusionIds=auditedCategories.flatMap(cat=>{
