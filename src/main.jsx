@@ -394,7 +394,7 @@ function Team({data}){
   const linkedin=safeExternalUrl(m.linkedin||m.linkedinUrl||m.linkedin_url||m.socials?.linkedin);
   return <article className="team-layer-card team-flip-member" key={m.id||name||index}>
    <Suspense fallback={<div className="team-flip-loading" aria-hidden="true"/>}>
-    <LazyFlipCard label={`Open profile for ${name}`} className="team-member-flip">
+    <LazyFlipCard label={`${role} ${name} — Hover or tap to view profile`} className="team-member-flip">
      <div className="team-member-face-content" style={{position:'absolute',inset:0,width:'100%',height:'100%',minHeight:'100%',overflow:'hidden',padding:0}}>
       <div className="team-photo-editorial">
        {photo?<ResponsivePhoto src={photo} alt={`Portrait of ${name}`} width={600} height={720} loading="lazy" decoding="async" sizes="(max-width: 420px) 90vw, (max-width: 760px) 45vw, 25vw" fallbackSrc="/assets/photo-unavailable.svg" fallbackAlt={`Portrait unavailable for ${name}`}/>:<span className="jyc-logo-fallback team-photo-missing-logo" role="img" aria-label={`Portrait unavailable for ${name}`}>{String(name).trim().split(/\s+/).map(x=>x[0]).slice(0,2).join('').toUpperCase()}</span>}
@@ -839,6 +839,7 @@ function Navbar({data,admin,theme,setTheme}){
    <button
      type="button"
      className="search-trigger nav-search-trigger"
+     aria-label="Search JYC website"
      data-jyc-search-trigger
      aria-haspopup="dialog"
      aria-expanded={search}
