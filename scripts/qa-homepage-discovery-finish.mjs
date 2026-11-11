@@ -17,4 +17,4 @@ assert.ok(css.includes('var(--jyc-surface)') && css.includes('var(--jyc-text-str
 assert.ok(css.includes('@media (max-width: 620px)') && css.includes('@media (prefers-reduced-motion: reduce)'), 'empty state must support mobile and reduced-motion preferences');
 assert.equal(pkg.scripts['qa:homepage-discovery'], 'node scripts/qa-homepage-discovery-finish.mjs', 'homepage discovery QA must be runnable from npm');
 
-console.log('JYC homepage discovery finish: PASS (10 checks)');
+console.log('JYC homepage discovery finish: PASS (11 checks)');
