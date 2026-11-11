@@ -523,3 +523,27 @@
     transform:none!important;
   }
 }
+
+
+/* Release follow-up: preserve readable microcopy and accessible contrast at every breakpoint. */
+.public-app .jyc-editorial-home .jh-overline { font-size: 11px; line-height: 1.5; }
+.public-app .jyc-editorial-home .jh-cyber-badge b { font-size: 11px; line-height: 1.4; }
+.public-app .mobile-dock button b { font-size: 11px; line-height: 1.2; }
+.public-app .jyc-footer-v6 .jyc-creator-credit,
+.public-app footer.jyc-footer .jyc-creator-credit { font-size: 11px; line-height: 1.5; }
+:root[data-theme="dark"] .public-app .contact-page .contact-sla-banner :is(strong,span:not(.sla-dot)),
+:root[data-theme="dark"] .public-app .contact-page .contact-card > span:first-child {
+  color: #f5ead7 !important;
+}
+:root[data-theme="dark"] .public-app .team-page .team-filter-tab,
+:root[data-theme="dark"] .public-app .team-page .team-filter-tab :is(span,b) {
+  color: #f5ead7;
+}
+@media (prefers-reduced-motion: reduce) {
+  .public-app .jyc-editorial-home .jh-cyber-badge,
+  .public-app .jyc-editorial-home .jh-cyber-badge *,
+  .public-app .jyc-editorial-home .jh-hero :is(.jyc-emblem,.jyc-emblem-stage,.jyc-hero-emblem) {
+    animation: none !important;
+    transition: none !important;
+  }
+}
