@@ -26,7 +26,8 @@ function fuzzyTokenScore(queryToken, fieldToken){
   const distance=levenshtein(queryToken,fieldToken);
   const scale=Math.max(queryToken.length,fieldToken.length);
   const similarity=1-(distance/scale);
-  return similarity>=.72?similarity:0;
+  const minimum=queryToken.length>=8?.84:.72;
+  return similarity>=minimum?similarity:0;
 }
 export function relevanceScore({title='',meta='',text='',type='',query=''}){
   const q=normalizeSearch(query), t=normalizeSearch(title), m=normalizeSearch(meta), x=normalizeSearch(text);

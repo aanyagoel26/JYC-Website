@@ -52,7 +52,7 @@ export function JYCWebGLIdentity(){
   const sizeLoc=gl.getAttribLocation(program,'a_size');
   const alphaLoc=gl.getAttribLocation(program,'a_alpha');
   const resolutionLoc=gl.getUniformLocation(program,'u_resolution');
-  const count=56;
+  const count=32;
   const points=Array.from({length:count},(_,i)=>{
    const a=(i/count)*Math.PI*2+(i%5)*0.17;
    const radius=58+(i%7)*18+(i%3)*9;
@@ -66,6 +66,7 @@ export function JYCWebGLIdentity(){
   };
   const draw=(now)=>{
    if(!visible){raf=0;return;}
+   if(now-last<1000/24){raf=requestAnimationFrame(draw);return;}
    const t=now*.00025;
    gl.clearColor(0,0,0,0);gl.clear(gl.COLOR_BUFFER_BIT);gl.useProgram(program);
    gl.uniform2f(resolutionLoc,width,height);

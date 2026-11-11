@@ -94,5 +94,3 @@ html[data-theme="light"] .jyc-hero-emblem-caption small { color: #5f5860; }
   .jyc-hero-identity-rail > span { font-size: 7px; padding: 6px 7px; gap: 5px; }
   .jyc-emblem-card-3d { width: 78%; }
 }
-@media(prefers-reduced-motion:reduce) { .jyc-emblem-card-3d { transition: none !important; transform: none !important; } }
-@media(hover:none),(pointer:coarse) { .jyc-emblem-card-3d { transition: none; } }

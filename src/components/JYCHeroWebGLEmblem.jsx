@@ -25,21 +25,7 @@ export function JYCHeroWebGLEmblem() {
     stage.style.setProperty('--crest-tilt-y', '0deg');
   };
   return (
-    <div className="jyc-hero-emblem-stage" ref={containerRef}
-      onPointerMove={handlePointerMove} onPointerLeave={resetTilt}
-      role="group" aria-label="JIIT Youth Club identity">
-      <div className="jyc-hero-identity-rail" aria-label="JIIT Youth Club details">
-        <span className="jyc-hero-identity-location"><i aria-hidden="true" />JIIT 128 <b>·</b> Sector 128, Noida</span>
-        <span className="jyc-hero-identity-founded"><b>EST. 2004</b><i aria-hidden="true" />Student community</span>
-      </div>
-      <div className="jyc-emblem-orbit" aria-hidden="true">
-        <span className="jyc-emblem-orbit-track jyc-emblem-orbit-track-a" />
-        <span className="jyc-emblem-orbit-track jyc-emblem-orbit-track-b" />
-        <span className="jyc-emblem-orbit-track jyc-emblem-orbit-track-c" />
-        <span className="jyc-emblem-orbit-star jyc-emblem-orbit-star-a" />
-        <span className="jyc-emblem-orbit-star jyc-emblem-orbit-star-b" />
-      </div>
-      <div className="jyc-emblem-card-3d">
+
         <div className="jyc-emblem-glow-backing" aria-hidden="true" />
         <div className="jyc-emblem-seal-container">
           <img src={LOGO_SRC}
@@ -64,9 +50,7 @@ export function JYCHeroWebGLEmblem() {
             }} />
         </div>
       </div>
-      <div className="jyc-hero-emblem-caption">
-        <span className="jyc-hero-emblem-caption-mark" aria-hidden="true">✦</span>
-        <span><b>READY TO SOAR</b><small>JIIT YOUTH CLUB · OFFICIAL MARK</small></span>
+
       </div>
     </div>
   );

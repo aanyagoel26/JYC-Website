@@ -833,7 +833,7 @@ function Navbar({data,admin,theme,setTheme}){
  return <>
  <header className="nav"><div className="nav-inner">
    <button type="button" className="brand" aria-label="JIIT Youth Club home" onClick={()=>{setOpen(false);nav('/')}}><span className="brand-mark"><LogoImage alt="JIIT Youth Club logo" loading="eager" fetchPriority="high" srcSet={`${logoTiny} 1x, ${logoSmall} 2x`}/></span><span>JIIT YOUTH CLUB</span></button>
-   <nav className={open?'open':''}>{navButtons}<button type="button" className={`nav-more-trigger ${moreOpen?'active':''}`} onClick={()=>{setOpen(false);setMoreOpen(v=>!v)}} aria-expanded={moreOpen} aria-controls={moreOpen?'jyc-more-dialog':undefined}>More <span aria-hidden="true">⌄</span></button></nav>
+   <nav className={open?'open':''}>{navButtons}<button type="button" className={`nav-more-trigger ${moreOpen?'active':''}`} onClick={()=>{setOpen(false);setMoreOpen(true)}} aria-expanded={moreOpen} aria-controls={moreOpen?'jyc-more-dialog':undefined}>More <span aria-hidden="true">⌄</span></button></nav>
    <button
      type="button"
      className="search-trigger nav-search-trigger"
