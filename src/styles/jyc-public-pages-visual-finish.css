@@ -600,3 +600,24 @@
 :root[data-theme="dark"] .public-app .team-page .team-structure-flow > div > span {
   color: #f5ead7 !important;
 }
+
+
+/* Final measured readability corrections from the 2026-11-11 browser matrix. */
+.public-app .jyc-editorial-home .jh-overline,
+.public-app .jyc-editorial-home p.jh-overline {
+  font-size: 11px !important;
+  line-height: 1.5 !important;
+}
+.public-app .mobile-dock button b {
+  font-size: 11px !important;
+  line-height: 1.3 !important;
+}
+.public-app :is(.jyc-footer-v6, footer.jyc-footer) .jyc-creator-credit {
+  font-size: 11px !important;
+  line-height: 1.5 !important;
+}
+.public-app .about-page .ecosystem-context-label,
+.public-app .about-page .about-history-badge {
+  font-size: 11px !important;
+  line-height: 1.5 !important;
+}
