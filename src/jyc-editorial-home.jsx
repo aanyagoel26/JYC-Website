@@ -270,6 +270,32 @@ export function JYCEditorialHome({ data }) {
 
       <JYCCampusMarquee />
 
+      {/* START HERE: high-intent routes surfaced immediately after the hero. */}
+      <nav className="jh-start-here jh-container" aria-label="Start exploring JYC">
+        <div className="jh-start-here-heading">
+          <span>START EXPLORING</span>
+          <p>Find the part of campus life you came for.</p>
+        </div>
+        <div className="jh-start-here-grid">
+          <button type="button" className="jh-start-link" onClick={() => nav('/clubs')}>
+            <span className="jh-start-icon" aria-hidden="true">✳</span>
+            <span className="jh-start-copy"><strong>Communities</strong><small>Find a club that fits you</small></span><b aria-hidden="true">↗</b>
+          </button>
+          <button type="button" className="jh-start-link" onClick={() => nav('/events')}>
+            <span className="jh-start-icon" aria-hidden="true">◷</span>
+            <span className="jh-start-copy"><strong>Events</strong><small>See what’s happening</small></span><b aria-hidden="true">↗</b>
+          </button>
+          <button type="button" className="jh-start-link" onClick={() => nav('/gallery')}>
+            <span className="jh-start-icon" aria-hidden="true">▧</span>
+            <span className="jh-start-copy"><strong>Gallery</strong><small>Real moments from JIIT</small></span><b aria-hidden="true">↗</b>
+          </button>
+          <button type="button" className="jh-start-link" onClick={() => nav('/team')}>
+            <span className="jh-start-icon" aria-hidden="true">◎</span>
+            <span className="jh-start-copy"><strong>People</strong><small>Meet the team behind JYC</small></span><b aria-hidden="true">↗</b>
+          </button>
+        </div>
+      </nav>
+
       {/* V1 EDITORIAL INTRO: context before the discovery content. */}
       <section className="jh-about-editorial jh-container" aria-labelledby="jh-about-title">
         <div className="jh-about-kicker">01 / MORE THAN A CLUB DIRECTORY</div>
