@@ -200,7 +200,8 @@ export function JYCEditorialHome({ data }) {
   const today = useMemo(() => { const d = new Date(); d.setHours(0, 0, 0, 0); return d.getTime(); }, []);
   const upcoming = events.filter(e => { const t = dateMs(e); return Number.isFinite(t) && t >= today; }).slice(0, 4);
   const team = (data?.team || []).filter(x => x?.published === true).slice(0, 4);
-  const featured = upcoming[0] || events[0];
+  // Only feature a genuinely upcoming, published event. Past events belong in the archive, not in the 'Next up' slot.
+  const featured = upcoming[0] || null;
   const featuredRegistration = registrationState(featured);
 
   const photoStories = useMemo(() => {
@@ -367,11 +368,11 @@ export function JYCEditorialHome({ data }) {
       </div>
 
       {/* FEATURED & UPCOMING EVENTS */}
-      <section className="jh-container jh-events">
+      <section className="jh-container jh-events" aria-labelledby="jh-events-title">
         <div className="jh-section-head">
           <div>
             <div className="jh-section-number">04 / WHAT’S HAPPENING</div>
-            <h2>Next up at<br /><em className="jh-title-gradient">JIIT 128.</em></h2>
+            <h2 id="jh-events-title">Next up at<br /><em className="jh-title-gradient">JIIT 128.</em></h2>
           </div>
           <button type="button" className="jh-text-link" onClick={() => nav('/events')}>
             View event directory <span>↗</span>
@@ -414,7 +415,15 @@ export function JYCEditorialHome({ data }) {
             </div>
           </article>
         ) : (
-          <div className="jh-empty">No published upcoming events are currently available.</div>
+          <div className="jh-events-empty" role="status">
+            <span className="jh-events-empty-kicker">A LITTLE SPACE FOR WHAT’S NEXT</span>
+            <h3>Nothing announced just yet.</h3>
+            <p>There are no published upcoming events to feature right now. Check the event directory for the latest listings, or explore a community while the calendar takes shape.</p>
+            <div className="jh-actions">
+              <button type="button" className="jh-btn jh-btn-primary" onClick={() => nav('/events')}>Browse all events <span aria-hidden="true">↗</span></button>
+              <button type="button" className="jh-btn jh-btn-glass" onClick={() => nav('/clubs')}>Explore communities <span aria-hidden="true">→</span></button>
+            </div>
+          </div>
         )}
 
         {upcoming.slice(1).length > 0 && (
