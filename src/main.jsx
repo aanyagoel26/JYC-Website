@@ -1134,11 +1134,14 @@ function About({data}){
  const h=data.homepage||{};
  const principles=h.principles||[];
  return <section className="section page unified-public-page about-page">
-  <Breadcrumbs items={[{label:'About JYC'}]}/><EcosystemContextRail/><SearchTopicBand eyebrow="ABOUT JYC · JIIT NOIDA" title="What is JIIT Youth Club?" text="JIIT Youth Club (JYC) brings student clubs, societies, events and campus activities together at JIIT Wish Town Campus, Sector 128, Noida. It helps students discover interests, meet people and get involved beyond the classroom." links={[["JYC clubs","/clubs"],["JYC events","/events"],["JYC leadership","/team"]]}/>
-  <nav className="about-contents-nav reveal" aria-label="About JYC sections"><a href="#about-why">Why JYC</a><a href="#about-families">Communities</a><a href="#about-structure">How it works</a><a href="#about-programmes">Campus life</a><a href="#history">Our story</a></nav>
+
   <div className="about-hero-v28 v40-about-hero reveal">
-   <div className="about-hero-copy"><span className="eyebrow">ABOUT JYC · JIIT 128</span><h1>JYC brings student communities together.</h1><p>{h.aboutText||'JIIT Youth Club connects students, communities, leadership and campus experiences across JIIT Sector 128.'}</p><div className="about-hero-actions"><Button onClick={()=>nav('/clubs')}>Find your community ↗</Button><Button secondary onClick={()=>nav('/events')}>See what is happening →</Button></div></div>
-   <div className="about-hero-mark"><div><LogoImage alt="JIIT Youth Club"/></div><span>VOICE · TALENT · SPIRIT</span></div>
+   <div className="about-hero-copy"><span className="eyebrow">JIIT YOUTH CLUB · SECTOR 128</span><h1>A campus comes alive when students build it together.</h1><p>{h.aboutText||'JIIT Youth Club brings student-led communities, campus experiences and student leadership into one connected ecosystem at JIIT Wish Town Campus, Sector 128, Noida.'}</p><div className="about-hero-actions"><Button onClick={()=>nav('/clubs')}>Find your community ↗</Button><Button secondary onClick={()=>nav('/events')}>Explore campus events →</Button></div><span className="about-hero-caption">A place to discover an interest, find your people and make something happen.</span></div>
+   <div className="about-hero-visual" aria-label="Moments from JYC campus life">
+    <figure className="about-hero-photo about-hero-photo-main"><ResponsivePhoto src={PDF_HUB_GALLERY[0].url} alt="Students performing on stage at Converge" loading="eager" sizes="(max-width: 760px) 88vw, 42vw"/><figcaption>01 <span>CONVERGE · ON STAGE</span></figcaption></figure>
+    <figure className="about-hero-photo about-hero-photo-side"><ResponsivePhoto src={PDF_HUB_GALLERY[1].url} alt="Students and campus crowd at Converge" loading="lazy" sizes="(max-width: 760px) 42vw, 18vw"/><figcaption>02 <span>COMMUNITY · TOGETHER</span></figcaption></figure>
+    <div className="about-hero-seal"><LogoImage alt="JIIT Youth Club emblem"/><span>VOICE · TALENT · SPIRIT</span></div>
+   </div>
   </div>
   
   <section className="v40-about-snapshot reveal" aria-label="JYC at a glance">
