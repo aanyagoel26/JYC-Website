@@ -547,3 +547,35 @@
     transition: none !important;
   }
 }
+
+
+/* Browser-QA follow-up: measured clipping, touch target and motion regressions. */
+.public-app .nav .nav-join-cta { min-height: 44px !important; }
+.public-app .mobile-dock button { min-width: 44px; min-height: 44px; }
+.public-app .mobile-dock button b { font-size: 11px !important; line-height: 1.25 !important; }
+.public-app .jyc-editorial-home .jh-overline,
+.public-app .jyc-editorial-home .jh-cyber-badge b { font-size: 11px !important; line-height: 1.5 !important; }
+.public-app footer.jyc-footer .jyc-creator-credit,
+.public-app .jyc-footer-v6 .jyc-creator-credit { font-size: 11px !important; line-height: 1.5 !important; }
+.public-app .jyc-emblem-glow-backing { animation: none !important; }
+.public-app .about-page .about-family-grid-v28 > button {
+  min-width: 0;
+  overflow: hidden;
+  text-align: left;
+}
+.public-app .about-page .about-family-grid-v28 > button > :is(span,strong,p,small) {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: normal;
+}
+.public-app .about-page .about-family-grid-v28 > button > small { line-height: 1.5; }
+@media (prefers-reduced-motion: reduce) {
+  .public-app .jyc-emblem-glow-backing,
+  .public-app .jyc-editorial-home .jh-hero-logo-plaque {
+    animation: none !important;
+    transition: none !important;
+  }
+}
