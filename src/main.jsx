@@ -467,13 +467,6 @@ function Contact({data}){
   setFieldErrors(current=>({...current,[field]:''}));
   setSubmitError('');
  };
- const copyEmail=(text,label)=>{
-  if(navigator?.clipboard?.writeText){
-   navigator.clipboard.writeText(text).then(()=>jycToast(label+' copied to clipboard!')).catch(()=>jycToast(text));
-  }else{
-   jycToast(text);
-  }
- };
  const submit=async e=>{
   e.preventDefault();
   setSubmitError('');
@@ -488,88 +481,88 @@ function Contact({data}){
    requestAnimationFrame(()=>document.querySelector('.contact-form [aria-invalid="true"]')?.focus());
    return;
   }
-  setSending(true);try{
+  setSending(true);
+  try{
    if(!supabase.__configured){
-     setSubmitError('The live contact inbox is not configured yet. Please use Instagram, LinkedIn or WhatsApp below.');
-     return;
+    setSubmitError('The live contact inbox is not configured yet. Please use Instagram, LinkedIn or WhatsApp above.');
+    return;
    }
-   const {data:result,error}=await supabase.functions.invoke('public-submission',{body:{type:'contact',name:form.name.trim(),email:form.email.trim(),message:form.message.trim(),website:''}});if(error||!result?.ok)throw error||new Error(result?.error||'Could not submit your message.');
+   const {data:result,error}=await supabase.functions.invoke('public-submission',{body:{type:'contact',name:form.name.trim(),email:form.email.trim(),message:form.message.trim(),website:''}});
+   if(error||!result?.ok)throw error||new Error(result?.error||'Could not submit your message.');
    setSent(true);
- }catch(err){
+  }catch(err){
    console.warn('JYC contact submission unavailable:',err);
    setSubmitError('We could not send your message right now. Please try again or use one of the official JYC channels above.');
- }finally{setSending(false)}};
+  }finally{setSending(false)}
+ };
  return <section className="section page contact-page">
   <Back label="Back to home" to="/"/>
-  <SectionHead level={1} eyebrow="COMMUNICATION HUB" title="Stay connected with JYC." text="Campus-specific social channels, community contact routes, and campus assistance."/>
+  <div className="contact-hero reveal">
+   <div className="contact-hero-copy">
+    <span className="eyebrow">CONTACT · JIIT SECTOR 128</span>
+    <h1>Good things start with a conversation.</h1>
+    <p>Questions about JYC, a club, an event or getting involved? Choose the channel that fits, or send the student team a note.</p>
+    <div className="contact-hero-actions">
+     <a className="btn primary" href="#contact-channels">Find the right channel ↘</a>
+     <a className="btn secondary" href="#contact-message">Write to JYC →</a>
+    </div>
+   </div>
+   <div className="contact-hero-stamp" aria-label="JIIT Youth Club, voice, talent and spirit">
+    <span>JIIT YOUTH CLUB</span><strong>128</strong><b>VOICE · TALENT · SPIRIT</b><i>STUDENT COMMUNITY</i>
+   </div>
+  </div>
   <div className="contact-sla-banner reveal">
    <span className="sla-dot"/>
    <strong>OFFICIAL JYC 128 CHANNELS</strong>
    <span>Use the campus-specific Instagram and LinkedIn profiles for current announcements and contact routes.</span>
   </div>
-  <div className="contact-grid">
-   <a className="contact-card" href={JYC_CONTACTS.instagram} target="_blank" rel="noreferrer">
-    <span>01</span>
-    <h3>Official Instagram</h3>
-    <p>@jiityouthclub128 · Live story broadcasts, reels & recaps.</p>
-    <span className="contact-arrow">↗</span>
-   </a>
-   <a className="contact-card" href={JYC_CONTACTS.linkedin} target="_blank" rel="noreferrer">
-    <span>02</span>
-    <h3>LinkedIn Page</h3>
-    <p>Professional updates, hackathons & achievements.</p>
-    <span className="contact-arrow">↗</span>
-   </a>
-   <a className="contact-card" href={JYC_CONTACTS.whatsapp} target="_blank" rel="noreferrer">
-    <span>03</span>
-    <h3>WhatsApp Community</h3>
-    <p>Open the community invite and review the group description for current membership and announcements.</p>
-    <span className="contact-arrow">↗</span>
-   </a>
-   <div className="contact-card contact-creator-card">
-    <span>04</span>
-    <h3>Website Creators</h3>
-    <p>Website made by Aanya Goel and Kaustubh Dua</p>
-    <div style={{display:'flex',flexDirection:'column',gap:'12px',marginTop:'12px'}}>
-     {CREATORS.map(c=>(
-      <div key={c.name}>
-       <strong style={{color:'var(--gold,#bf9c6f)'}}>{c.name==='Kaustubh Dua'?<a className="contact-creator-portfolio" href="https://kaustubhdua.vercel.app/" target="_blank" rel="noopener noreferrer">Kaustubh Dua <span aria-hidden="true">↗</span></a>:c.name}</strong> · <span style={{fontSize:'12px',opacity:.8}}>{c.role}</span>
-       <div className="social-row" style={{marginTop:'6px'}}>
-        {c.linkedin&&<a href={c.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>}
-        {c.github&&<a href={c.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>}
-        {c.email&&<a href={'mailto:'+c.email}>Email ↗</a>}
-       </div>
-      </div>
-     ))}
-    </div>
+  <section className="contact-channels-section reveal" id="contact-channels" aria-labelledby="contact-channels-title">
+   <div className="contact-section-head">
+    <div><span className="eyebrow">START HERE</span><h2 id="contact-channels-title">Choose the right channel.</h2></div>
+    <p>For current updates and community information, use JYC's official campus channels. Each link opens the relevant external destination.</p>
    </div>
-  </div>
+   <div className="contact-grid">
+    <a className="contact-card contact-channel-card" href={JYC_CONTACTS.instagram} target="_blank" rel="noopener noreferrer" aria-label="Open the official JIIT Youth Club Instagram profile">
+     <span className="contact-card-index">01 · SOCIAL</span><span className="contact-card-icon" aria-hidden="true">◎</span>
+     <h3>Instagram</h3><p>@jiityouthclub128 · Stories, event moments, announcements and recaps.</p><span className="contact-card-action">Visit official profile <b aria-hidden="true">↗</b></span>
+    </a>
+    <a className="contact-card contact-channel-card" href={JYC_CONTACTS.linkedin} target="_blank" rel="noopener noreferrer" aria-label="Open the official JIIT Youth Club LinkedIn page">
+     <span className="contact-card-index">02 · PROFESSIONAL</span><span className="contact-card-icon" aria-hidden="true">in</span>
+     <h3>LinkedIn</h3><p>Professional updates, student achievements, opportunities and event highlights.</p><span className="contact-card-action">Visit JYC on LinkedIn <b aria-hidden="true">↗</b></span>
+    </a>
+    <a className="contact-card contact-channel-card" href={JYC_CONTACTS.whatsapp} target="_blank" rel="noopener noreferrer" aria-label="Open the JYC WhatsApp community invite">
+     <span className="contact-card-index">03 · COMMUNITY</span><span className="contact-card-icon" aria-hidden="true">↗</span>
+     <h3>WhatsApp community</h3><p>Open the invite and review the group description for current membership and announcements.</p><span className="contact-card-action">Open community invite <b aria-hidden="true">↗</b></span>
+    </a>
+   </div>
+  </section>
   <div className="contact-location reveal">
-   <span className="eyebrow">JYC 128 · OFFICIAL CAMPUS</span>
-   <h3>Jaypee Institute of Information Technology, Sector 128</h3>
-   <p>Jaypee Wish Town Village, Sultanpur, Noida–201304, Uttar Pradesh, India.</p>
-   <a className="text-link" href="https://www.jiit.ac.in/contact-us" target="_blank" rel="noopener noreferrer">Verify campus contact details on JIIT ↗</a>
+   <div className="contact-location-mark" aria-hidden="true">JIIT<br/>128</div>
+   <div><span className="eyebrow">CAMPUS INFORMATION</span><h3>Jaypee Institute of Information Technology, Sector 128</h3><p>Jaypee Wish Town Village, Sultanpur, Noida–201304, Uttar Pradesh, India.</p><a className="text-link" href="https://www.jiit.ac.in/contact-us" target="_blank" rel="noopener noreferrer">Visit the official JIIT contact page ↗</a></div>
   </div>
-  <div className="contact-form-container reveal">
+  <section className="contact-message-layout reveal" id="contact-message" aria-labelledby="contact-message-title">
+   <aside className="contact-message-aside">
+    <span className="eyebrow">HAVE A QUESTION?</span><h2>Tell us what you're looking for.</h2>
+    <p>Use this form for general JYC enquiries. For time-sensitive updates, event announcements or community access, the official channels above may be more direct.</p>
+    <div className="contact-message-guide"><b>To help us understand your message</b><ul><li>Share the club, event or topic you're asking about.</li><li>Include useful context and any relevant dates.</li><li>Do not include passwords or sensitive personal information.</li></ul></div>
+    <span className="contact-message-footnote">A message is submitted only when the configured contact service confirms receipt.</span>
+   </aside>
    <div className="contact-form-card">
-    <div className="contact-form-head">
-     <span className="eyebrow">LET’S CONNECT</span>
-     <h3>Start a conversation.</h3>
-     <p>Have a question, idea or collaboration in mind? Send a message to the JYC team. You can also reach us through the official channels above.</p>
-    </div>
-    {sent?<div className="contact-form-success" role="status">
-     <b>Thanks, {form.name.split(' ')[0]||'friend'}!</b>
-     <p>Your message is on its way. For time-sensitive questions, use one of our official channels above.</p>
+
      <button type="button" className="btn" onClick={()=>{setSent(false);setForm({name:'',email:'',message:''});setFieldErrors({});setSubmitError('')}}>Send another message</button>
     </div>:<form className="contact-form" onSubmit={submit} noValidate>
-     <label><span>Name</span><input name="name" maxLength={80} value={form.name} onChange={e=>updateContactField('name',e.target.value)} placeholder="Your full name" required autoComplete="name" aria-invalid={fieldErrors.name?'true':undefined} aria-describedby={fieldErrors.name?'contact-name-error':undefined}/>{fieldErrors.name&&<span id="contact-name-error" className="contact-field-error" aria-live="polite">{fieldErrors.name}</span>}</label>
-     <label><span>Email</span><input name="email" type="email" maxLength={254} value={form.email} onChange={e=>updateContactField('email',e.target.value)} placeholder="you@email.com" required autoComplete="email" aria-invalid={fieldErrors.email?'true':undefined} aria-describedby={fieldErrors.email?'contact-email-error':undefined}/>{fieldErrors.email&&<span id="contact-email-error" className="contact-field-error" aria-live="polite">{fieldErrors.email}</span>}</label>
-     <label><span>Message</span><textarea name="message" rows="5" maxLength={2000} value={form.message} onChange={e=>updateContactField('message',e.target.value)} placeholder="How can JYC help you?" required aria-invalid={fieldErrors.message?'true':undefined} aria-describedby={fieldErrors.message?'contact-message-error':undefined}/>{fieldErrors.message&&<span id="contact-message-error" className="contact-field-error" aria-live="polite">{fieldErrors.message}</span>}<span className="contact-message-count" aria-live="polite">{form.message.length}/2000 characters</span></label>
+     <label><span>Name <i>Required</i></span><input name="name" maxLength={80} value={form.name} onChange={e=>updateContactField('name',e.target.value)} placeholder="Your full name" required autoComplete="name" aria-invalid={fieldErrors.name?'true':undefined} aria-describedby={fieldErrors.name?'contact-name-error':undefined}/>{fieldErrors.name&&<span id="contact-name-error" className="contact-field-error" aria-live="polite">{fieldErrors.name}</span>}</label>
+     <label><span>Email <i>Required</i></span><input name="email" type="email" maxLength={254} value={form.email} onChange={e=>updateContactField('email',e.target.value)} placeholder="you@example.com" required autoComplete="email" aria-invalid={fieldErrors.email?'true':undefined} aria-describedby={fieldErrors.email?'contact-email-error':undefined}/>{fieldErrors.email&&<span id="contact-email-error" className="contact-field-error" aria-live="polite">{fieldErrors.email}</span>}</label>
+     <label className="contact-message-field"><span>Message <i>Required</i></span><textarea name="message" rows="6" maxLength={2000} value={form.message} onChange={e=>updateContactField('message',e.target.value)} placeholder="Tell us how we can help…" required aria-invalid={fieldErrors.message?'true':undefined} aria-describedby={fieldErrors.message?'contact-message-error':'contact-message-count'}/>{fieldErrors.message&&<span id="contact-message-error" className="contact-field-error" aria-live="polite">{fieldErrors.message}</span>}<span id="contact-message-count" className="contact-message-count" aria-live="polite">{form.message.length}/2000 characters</span></label>
      {submitError&&<p className="contact-form-error" role="alert">{submitError}</p>}
      <button className="btn primary" type="submit" disabled={sending}>{sending?'Sending…':'Send message →'}</button>
     </form>}
    </div>
-  </div>
+  </section>
+  <section className="contact-credits reveal" aria-labelledby="contact-credits-title">
+   <div><span className="eyebrow">MADE BY STUDENTS</span><h2 id="contact-credits-title">The people behind this website.</h2><p>Meet the student creators and find their professional profiles.</p></div>
+   <div className="contact-creator-list">{CREATORS.map(c=><article key={c.name}><div><b>{c.name==='Kaustubh Dua'?<a className="contact-creator-portfolio" href="https://kaustubhdua.vercel.app/" target="_blank" rel="noopener noreferrer">Kaustubh Dua ↗</a>:c.name}</b><span>{c.role}</span></div><nav className="social-row" aria-label={c.name+' links'}>{c.linkedin&&<a href={c.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>}{c.github&&<a href={c.github} target="_blank" rel="noopener noreferrer">GitHub ↗</a>}{c.email&&<a href={'mailto:'+c.email}>Email ↗</a>}</nav></article>)}</div>
+  </section>
  </section>
 }
 function FestsPage({data}){
@@ -1269,7 +1262,7 @@ function eventVisualFor(e,index=0){
  if(source?.url)return source.url;
  const hay=`${e?.title||''} ${e?.club||''}`.toLowerCase();
  const candidates=[...PDF_HUB_GALLERY,...PDF_HUB_EXTRA_GALLERY,...PUBLIC_GALLERY_FALLBACK];
- const matched=candidates.find(g=>{const a=String(g.association||'').toLowerCase();const cap=String(g.caption||'').toLowerCase();return (a&&hay.includes(a.split(' · ')[0]))||(cap&&hay.split(/\\s+/).some(w=>w.length>4&&cap.includes(w)));});
+ const matched=candidates.find(g=>{const a=String(g.association||'').toLowerCase();const cap=String(g.caption||'').toLowerCase();return (a&&hay.includes(a.split(' · ')[0]))||(cap&&hay.split(/\s+/).some(w=>w.length>4&&cap.includes(w)));});
  if(matched?.url)return matched.url;
  return candidates.length?candidates[Math.abs(String(e?.id||e?.title||index).split('').reduce((n,ch)=>n+ch.charCodeAt(0),0))%candidates.length]?.url:'';
 }
