@@ -475,7 +475,7 @@ function Contact({data}){
   if(!form.name.trim())errors.name='Enter your name.';
   const email=form.email.trim();
   if(!email)errors.email='Enter your email address.';
-  else if(!/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email))errors.email='Enter a valid email address.';
+  else if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))errors.email='Enter a valid email address.';
   if(!form.message.trim())errors.message='Enter a message.';
   setFieldErrors(errors);
   if(Object.keys(errors).length){
@@ -1265,7 +1265,7 @@ function eventVisualFor(e,index=0){
  if(source?.url)return source.url;
  const hay=`${e?.title||''} ${e?.club||''}`.toLowerCase();
  const candidates=[...PDF_HUB_GALLERY,...PDF_HUB_EXTRA_GALLERY,...PUBLIC_GALLERY_FALLBACK];
- const matched=candidates.find(g=>{const a=String(g.association||'').toLowerCase();const cap=String(g.caption||'').toLowerCase();return (a&&hay.includes(a.split(' · ')[0]))||(cap&&hay.split(/\\s+/).some(w=>w.length>4&&cap.includes(w)));});
+ const matched=candidates.find(g=>{const a=String(g.association||'').toLowerCase();const cap=String(g.caption||'').toLowerCase();return (a&&hay.includes(a.split(' · ')[0]))||(cap&&hay.split(/\s+/).some(w=>w.length>4&&cap.includes(w)));});
  if(matched?.url)return matched.url;
  return candidates.length?candidates[Math.abs(String(e?.id||e?.title||index).split('').reduce((n,ch)=>n+ch.charCodeAt(0),0))%candidates.length]?.url:'';
 }
