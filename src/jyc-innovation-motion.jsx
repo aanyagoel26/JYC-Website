@@ -69,7 +69,6 @@ function setupReveal() {
 
   const onMotionChange = () => {
     userPaused = document.documentElement.dataset.jycMotion === 'paused';
-    canvas.style.display = motionQuery.matches || userPaused ? 'none' : 'block';
     observer?.disconnect();
     observer = createObserver();
     observed = new WeakSet();
@@ -101,6 +100,7 @@ function setupReveal() {
  * - Dark Mode: Deep night sky, micro twinkling stars, galaxy nebula & small shooting stars
  * - Light Mode: Warm luxury gold-beige champagne atmospheric field & golden dust
  */
+
 export function JYCInnovationMotion() {
   // The shared CSS atmosphere is the low-cost sitewide backdrop. The dedicated
   // OGL field remains on the homepage hero, avoiding a second full-screen canvas.

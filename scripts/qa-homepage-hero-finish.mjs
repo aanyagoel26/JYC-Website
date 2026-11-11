@@ -9,12 +9,13 @@ const explorer = fs.readFileSync('src/components/JYC3DInteractiveExplorer.jsx', 
 const spotlightCss = fs.readFileSync('src/styles/jyc-home-spotlight.css', 'utf8');
 const hero = fs.readFileSync('src/styles/jyc-home-hero-finish.css', 'utf8');
 const heroDirection = fs.readFileSync('src/styles/jyc-home-hero-art-direction.css', 'utf8');
+const finalHome = fs.readFileSync('src/styles/jyc-home-final-refinement.css', 'utf8');
 const webglField = fs.readFileSync('src/components/JYCWebGLField.jsx', 'utf8');
 const emblem = fs.readFileSync('src/components/JYCHeroWebGLEmblem.jsx', 'utf8');
 const audio = fs.readFileSync('src/lib/jyc-audio.js', 'utf8');
 
 const checks = [
-  ['homepage loads the original finish layer and the new cinematic art direction last', home.indexOf("import './styles/jyc-home-hero-finish.css';") > home.indexOf("import './styles/jyc-editorial-motion-system.css';") && home.indexOf("import './styles/jyc-home-hero-art-direction.css';") > home.indexOf("import './styles/jyc-home-hero-finish.css';")],
+  ['homepage loads its final refinement after all cinematic hero layers', home.indexOf("import './styles/jyc-home-hero-finish.css';") > home.indexOf("import './styles/jyc-editorial-motion-system.css';") && home.indexOf("import './styles/jyc-home-hero-art-direction.css';") > home.indexOf("import './styles/jyc-home-hero-finish.css';") && home.indexOf("import './styles/jyc-home-final-refinement.css';") > home.indexOf("import './styles/jyc-home-hero-art-direction.css';") && finalHome.includes('.jh-hero-visual')],
   ['single OGL sky layer is idle-loaded with reduced-motion and coarse-pointer fallbacks', home.includes('heroFieldReady') && home.includes('requestIdleCallback') && home.includes('setTimeout') && home.includes('}, 3200)') && home.includes('prefers-reduced-motion: reduce') && !home.includes('LazyDitherVeil') && !home.includes('jh-hero-dither-layer')],
   ['responsive crest LCP candidate is preloaded with matching srcset and sizes', index.includes('href="/assets/jyc-logo.avif"') && index.includes('imagesrcset="/assets/jyc-logo-270.avif 270w, /assets/jyc-logo-320.avif 320w, /assets/jyc-logo.avif 480w"') && index.includes('imagesizes="(max-width: 680px) 250px, (max-width: 1024px) 340px, 430px"') && emblem.includes('sizes="(max-width: 680px) 250px, (max-width: 1024px) 340px, 430px"')],
   ['hero retains the source-backed student benefit and all three primary destinations', /Find your people\.[\s\S]*?Make your mark\./.test(home) && home.includes("nav('/events')") && home.includes("nav('/clubs')") && home.includes("nav('/join-jyc')")],

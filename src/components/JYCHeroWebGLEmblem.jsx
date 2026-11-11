@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+
 import './JYCHeroWebGLEmblem.css';
 
 const LOGO_SRC = '/assets/jyc-logo.avif';
@@ -7,6 +7,7 @@ const LOGO_ORIGINAL = '/JYC%20Logo(4).png';
 
 export function JYCHeroWebGLEmblem() {
   const containerRef = useRef(null);
+
   const handlePointerMove = event => {
     const stage = containerRef.current;
     if (!stage || !window.matchMedia?.('(hover:hover) and (pointer:fine)').matches
@@ -15,16 +16,6 @@ export function JYCHeroWebGLEmblem() {
     const rect = stage.getBoundingClientRect();
     const x = (event.clientX - rect.left) / rect.width - 0.5;
     const y = (event.clientY - rect.top) / rect.height - 0.5;
-    stage.style.setProperty('--crest-tilt-x', (-y * 5) + 'deg');
-    stage.style.setProperty('--crest-tilt-y', (x * 6) + 'deg');
-  };
-  const resetTilt = () => {
-    const stage = containerRef.current;
-    if (!stage) return;
-    stage.style.setProperty('--crest-tilt-x', '0deg');
-    stage.style.setProperty('--crest-tilt-y', '0deg');
-  };
-  return (
 
         <div className="jyc-emblem-glow-backing" aria-hidden="true" />
         <div className="jyc-emblem-seal-container">
@@ -51,7 +42,6 @@ export function JYCHeroWebGLEmblem() {
         </div>
       </div>
 
-      </div>
     </div>
   );
 }
