@@ -1,0 +1,58 @@
+/* Homepage discovery finish: calm, useful event empty state in both themes. */
+.jyc-editorial-home .jh-events-empty {
+  display: grid;
+  justify-items: start;
+  gap: 12px;
+  width: 100%;
+  padding: clamp(24px, 4vw, 42px);
+  border: 1px solid var(--jyc-line-strong);
+  border-radius: 24px;
+  background:
+    radial-gradient(ellipse at 92% 8%, var(--jyc-accent-soft), transparent 42%),
+    var(--jyc-surface);
+  color: var(--jyc-text-strong);
+  box-shadow: var(--jyc-shadow-soft);
+}
+.jyc-editorial-home .jh-events-empty-kicker {
+  color: var(--jyc-gold);
+  font: 750 10px/1.5 'JetBrains Mono', monospace;
+  letter-spacing: .14em;
+}
+.jyc-editorial-home .jh-events-empty h3 {
+  margin: 0;
+  color: var(--jyc-text-strong);
+  font: 700 clamp(22px, 3vw, 32px)/1.12 'Space Grotesk', sans-serif;
+  letter-spacing: -.035em;
+}
+.jyc-editorial-home .jh-events-empty p {
+  max-width: 62ch;
+  margin: 0;
+  color: var(--jyc-muted);
+  font-size: 14px;
+  line-height: 1.7;
+}
+.jyc-editorial-home .jh-events-empty .jh-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 5px;
+}
+.jyc-editorial-home .jh-events-empty .jh-btn {
+  min-height: 46px;
+}
+@media (max-width: 620px) {
+  .jyc-editorial-home .jh-events-empty {
+    padding: 22px 18px;
+    border-radius: 18px;
+  }
+  .jyc-editorial-home .jh-events-empty .jh-actions {
+    width: 100%;
+  }
+  .jyc-editorial-home .jh-events-empty .jh-btn {
+    flex: 1 1 100%;
+    justify-content: center;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .jyc-editorial-home .jh-events-empty { scroll-behavior: auto; }
+}
