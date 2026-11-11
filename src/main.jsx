@@ -369,13 +369,14 @@ function Team({data}){
  const [query,setQuery]=useState('');
  const rawMembers=Array.isArray(data?.team)?data.team:[];
  const members=rawMembers.filter(m=>m&&m.published===true&&!['harisha','dhruv-choudhary'].includes(String(m.id||'').trim().toLowerCase())&&!['harisha','dhruv choudhary'].includes(String(m.name||'').trim().toLowerCase()));
- const faculty=members.filter(m=>/faculty|advisor|coordinator/i.test(String(m.role||m.position||'')));
- const apex=members.filter(m=>/president|vice president|general secretary|joint secretary|finance secretary|treasurer/i.test(String(m.role||m.position||''))&&!/faculty/i.test(String(m.role||'')));
+ const roleOf=m=>[m.role,m.position,m.title].filter(Boolean).join(' ').trim();
+ const faculty=members.filter(m=>/faculty|advisor|coordinator/i.test(roleOf(m)));
+ const apex=members.filter(m=>/president|vice president|general secretary|joint secretary|finance secretary|treasurer/i.test(roleOf(m))&&!/faculty|advisor/i.test(roleOf(m)));
  const core=members.filter(m=>!faculty.includes(m)&&!apex.includes(m));
  const normalizedQuery=query.trim().toLocaleLowerCase();
  const matchesQuery=m=>{
   if(!normalizedQuery)return true;
-  return [m.name,m.role,m.position,m.bio,m.about,m.description,m.linkedinHeadline,m.linkedin_headline,m.headline,m.tagline,m.department,m.family,m.focus]
+  return [m.name,m.role,m.position,m.title,m.department,m.family,m.focus,m.bio,m.about,m.description,m.linkedinHeadline,m.linkedin_headline,m.headline,m.tagline,m.id]
    .filter(Boolean).join(' ').toLocaleLowerCase().includes(normalizedQuery);
  };
  const visibleFaculty=faculty.filter(matchesQuery);
@@ -434,7 +435,7 @@ function Team({data}){
   <div className="team-command-strip" aria-label="Published team overview">
    <article aria-label={faculty.length?`${faculty.length} published faculty guides`:'Faculty profiles awaiting publication' }><b>{faculty.length || '—'}</b><span>Faculty guides</span></article><article aria-label={apex.length?`${apex.length} published Apex leaders`:'Apex profiles awaiting publication' }><b>{apex.length || '—'}</b><span>Apex leaders</span></article><article aria-label={core.length?`${core.length} published core team members`:'Core profiles awaiting publication' }><b>{core.length || '—'}</b><span>Core team members</span></article><article><b>{JYC_HUB_FAMILIES.length}</b><span>Community families</span></article>
   </div>
-  <section className="team-discovery" aria-label="Find a team member">
+  <section id="team-directory" className="team-discovery" aria-label="Find a team member">
    <div className="team-discovery-copy"><span className="eyebrow">THE PEOPLE DIRECTORY</span><h2>Find your people.</h2><p>Search by name, role or area of responsibility.</p></div>
    <label className="team-search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 5 5"/></svg><input type="search" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Search names, roles and teams…" aria-label="Search JYC team members"/>{query&&<button type="button" onClick={()=>setQuery('')} aria-label="Clear team search">×</button>}</label>
   </section>
@@ -452,7 +453,7 @@ function Team({data}){
   {renderSection('apex','02 · APEX LEADERSHIP','The people setting direction.','The apex team coordinates the wider JYC ecosystem and its campus-facing execution.',visibleApex)}
   {renderSection('core','03 · CORE TEAM','The people who make it happen.','From communications and creative to hospitality, finance and event operations, the core team turns plans into experiences.',visibleCore)}
   {activeCount===0&&<div className="team-empty-state" role="status"><span aria-hidden="true">⌕</span><h2>No matching profiles</h2><p>Try a different name or role, or clear the search to see the full published team.</p><Button secondary onClick={()=>{setQuery('');setActiveTier('all');}}>Clear filters</Button></div>}
-  <section className="team-layer team-hub-layer"><div className="team-layer-head"><span className="eyebrow">04 · CLUBS & HUBS</span><h2>One ecosystem. Many ways to belong.</h2><p>Explore JYC's named communities and find the spaces that match your interests.</p></div><div className="team-hub-directory">{Object.entries(JYC_HUB_CONTENT).map(([name,p])=><a href={'/clubs/'+slug(name)} key={name}><small>{p.family}</small><strong>{name}</strong><span aria-hidden="true">↗</span></a>)}</div></section>
+  <section className="team-layer team-hub-layer"><div className="team-layer-head"><span className="eyebrow">04 · CLUBS & HUBS</span><h2>One ecosystem. Many ways to belong.</h2><p>Explore JYC's named communities and find the spaces that match your interests.</p></div><div className="team-hub-directory">{Object.entries(JYC_HUB_CONTENT).filter(([name])=>JYC_HUB_SOURCE_REGISTRY.some(meta=>meta.name===name&&meta.publicationStatus==='published')).map(([name,p])=><a href={'/clubs/'+slug(name)} key={name}><small>{p.family}</small><strong>{name}</strong><span aria-hidden="true">↗</span></a>)}</div></section>
   <div className="team-closeout"><div className="team-closeout-mark"><LogoImage alt="JIIT Youth Club crest" width={96} height={96}/></div><div><span className="eyebrow">YOUR CAMPUS. YOUR COMMUNITY.</span><h2>There's a place for you here.</h2><p>Explore the communities, discover upcoming events and become part of the JYC experience.</p><div className="hero-actions"><Button onClick={()=>nav('/clubs')}>Find your community <span aria-hidden="true">↗</span></Button><Button secondary onClick={()=>nav('/events')}>Explore events</Button></div></div></div>
  </section>;
 }
