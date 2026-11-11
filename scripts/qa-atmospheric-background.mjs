@@ -1,28 +1,26 @@
 import fs from 'node:fs';
 import assert from 'node:assert/strict';
 
-const css = fs.readFileSync('src/jyc-innovation-motion.css', 'utf8');
 const atmosphere = fs.readFileSync('src/styles/jyc-atmosphere.css', 'utf8');
 const motion = fs.readFileSync('src/jyc-innovation-motion.jsx', 'utf8');
+const webgl = fs.readFileSync('src/components/JYCWebGLField.jsx', 'utf8');
 const home = fs.readFileSync('src/styles/jyc-editorial-motion-system.css', 'utf8');
 const grain = fs.readFileSync('public/assets/jyc-grain.svg', 'utf8');
 const checks = [
-  ['ambient canvas stays fixed, non-interactive and viewport-sized', /position:fixed;inset:0;z-index:-1/.test(css) && /pointer-events:none/.test(css) && /width:100vw;height:100vh/.test(css)],
-  ['daylight background remains visible through the homepage shell', /html\[data-theme="light"\] \.public-app \.jyc-editorial-home\.jyc-home\s*\{[\s\S]*?background:[\s\S]*?transparent !important/.test(css)],
-  ['night sky keeps six explicit static background positions, including grain, while atmosphere motion stays compositor-friendly', css.includes('background-position: 0 0, 0% 0%, 100% 0%, 50% 100%, 45% 40%, 0 0;') && !css.includes('animation: jyc-atmosphere-drift') && atmosphere.includes('animation: jyc-atmosphere-drift') && atmosphere.includes('transform: translate3d(-1.5%, -1%, 0) scale(1)')],
-  ['dark and light palettes remain explicitly separated', /html\[data-theme="dark"\] \.app-frame/.test(css) && /html\[data-theme="light"\] \.app-frame/.test(css)],
-  ['mobile atmosphere motion is slower and ambient particle opacity is reduced', atmosphere.includes('--jyc-atmosphere-speed: 48s') && css.includes('.jyc-ambient-canvas { opacity: .24; }') && css.includes('html[data-theme="dark"] .jyc-ambient-canvas { opacity: .28; }')],
-  ['reduced-motion disables both CSS atmosphere drift and canvas animation', css.includes('.app-frame { animation: none !important; }') && atmosphere.includes('body::before, body::after { animation: none !important; }') && css.includes('.jyc-ambient-canvas { display: none !important; }') && motion.includes("'(prefers-reduced-motion: reduce)'")],
-  ['low-power devices retain the static CSS atmosphere', motion.includes('if (lowPower) { canvas.style.display = \'none\'; return; }')],
-  ['animation pauses when the tab is hidden and resumes when visible', motion.includes("document.addEventListener('visibilitychange', onVisibilityChange)") && motion.includes('if (!isHidden && !reducedMotion && !userPaused && !animId) animId = requestAnimationFrame(loop)')],
-  ['animation frame and all listeners are cleaned up on unmount', motion.includes('cancelAnimationFrame(animId)') && motion.includes("window.removeEventListener('resize', resize)") && motion.includes("window.removeEventListener('mousemove', onMouseMove)") && motion.includes("document.removeEventListener('visibilitychange', onVisibilityChange)")],
-  ['particle rendering is frame-limited and pointer tracking is disabled on touch', motion.includes('const targetFrameMs = isCoarsePointer ? 80 : 1000 / 20') && motion.includes('if (!isCoarsePointer) window.addEventListener(\'mousemove\', onMouseMove')],
-  ['homepage retains its theme-aware editorial color system', home.includes('var(--jh-bg,var(--jyc-paper))') && home.includes('var(--jh-ink,var(--jyc-ink))')],
-  ['long document shell never animates background-position', !css.includes('animation: jyc-atmosphere-drift') && !css.includes('@keyframes jyc-atmosphere-drift')],
-  ['paper and night surfaces use a small reusable static grain texture with theme-specific blending', grain.includes('feTurbulence') && css.includes("url('/assets/jyc-grain.svg')") && css.includes('background-blend-mode: soft-light') && css.includes('background-blend-mode: multiply')],
-  ['mobile dark atmosphere retains the complete layered background sizing', css.includes('html[data-theme="dark"] .app-frame {') && css.includes('128px 128px, 180% 180%, 170% 170%, 180% 180%, 160% 160%, 100% 100%')],
+  ['sitewide atmosphere is CSS-based, fixed, decorative and non-interactive', atmosphere.includes('body::before') && atmosphere.includes('body::after') && atmosphere.includes('pointer-events: none') && atmosphere.includes('position: fixed')],
+  ['night mode keeps layered stars, nebula and Milky Way dust-rift depth', atmosphere.includes('html[data-theme="dark"] body::after') && atmosphere.includes('jyc-star-drift') && atmosphere.includes('linear-gradient(153deg') && atmosphere.includes('rgba(2,5,17,.72)')],
+  ['day mode uses separate champagne, parchment and lavender atmosphere layers', atmosphere.includes('html[data-theme="light"] body::after') && atmosphere.includes('rgba(239,205,144,.22)') && atmosphere.includes('rgba(171,151,207,.13)')],
+  ['both themes retain separate palette tokens and glass surfaces', atmosphere.includes('html[data-theme="dark"]') && atmosphere.includes('html[data-theme="light"]') && atmosphere.includes('backdrop-filter: blur(22px)')],
+  ['background motion uses transform-only drift and respects reduced motion', atmosphere.includes('transform: translate3d(-1.5%, -1%, 0) scale(1)') && atmosphere.includes('@media (prefers-reduced-motion: reduce)') && atmosphere.includes('body::before, body::after { animation: none !important; }')],
+  ['duplicate full-screen 2D ambient canvas has been removed in favour of CSS atmosphere', !motion.includes('useAtmosphericCanvas') && !motion.includes('<canvas') && motion.includes('return null;') && motion.includes('setupReveal')],
+  ['homepage keeps one progressive-enhancement OGL field for the 3D hero', webgl.includes("from 'ogl'") && webgl.includes('new Renderer') && webgl.includes('new Program') && webgl.includes('new Mesh')],
+  ['OGL field pauses offscreen and falls back on low-power or constrained devices', webgl.includes('IntersectionObserver') && webgl.includes('if (lowPower || coarse)') && webgl.includes("dataset.performance === 'lite'") && webgl.includes('webglcontextlost')],
+  ['OGL rendering is frame-limited with capped device pixel ratio', webgl.includes('reducedQuality ? 1000 / 20 : 1000 / 24') && webgl.includes('reducedQuality || coarse ? 1.0 : 1.2')],
+  ['reduced motion keeps the hero field static and CSS content readable', webgl.includes("'(prefers-reduced-motion: reduce)'") && webgl.includes('if (reduced) stop()') && atmosphere.includes('@media (prefers-reduced-motion: reduce)')],
+  ['reveal observer remains available without a second animated canvas', motion.includes('function setupReveal()') && motion.includes('IntersectionObserver') && motion.includes('MutationObserver')],
+  ['paper and night surfaces retain a reusable static grain texture', grain.includes('feTurbulence') && atmosphere.includes('background-image')],
+  ['homepage retains canonical theme-aware editorial color variables', home.includes('var(--jh-bg,var(--jyc-paper))') && home.includes('var(--jh-ink,var(--jyc-ink))')]
 ];
-
 let failed = 0;
 for (const [name, ok] of checks) {
   console.log((ok ? 'PASS' : 'FAIL') + ': ' + name);
