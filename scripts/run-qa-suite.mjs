@@ -54,7 +54,8 @@ const scripts = [
   'qa-atmospheric-background.mjs',
   'qa-club-member-roster.mjs',
   'qa-team-exclusions.mjs',
-  'qa-nsoc-editorial-effects.mjs'
+  'qa-nsoc-editorial-effects.mjs',
+  'qa-public-pages-finish.mjs'
 ];
 
 for (const script of scripts) {

@@ -7,6 +7,8 @@
       "url": [
         "http://127.0.0.1:4173/",
         "http://127.0.0.1:4173/about",
+        "http://127.0.0.1:4173/contact",
+        "http://127.0.0.1:4173/team",
         "http://127.0.0.1:4173/clubs",
         "http://127.0.0.1:4173/events",
         "http://127.0.0.1:4173/gallery",
@@ -14,6 +16,8 @@
         "http://127.0.0.1:4173/fests",
         "http://127.0.0.1:4173/?jyc-theme=dark",
         "http://127.0.0.1:4173/about?jyc-theme=dark",
+        "http://127.0.0.1:4173/contact?jyc-theme=dark",
+        "http://127.0.0.1:4173/team?jyc-theme=dark",
         "http://127.0.0.1:4173/clubs?jyc-theme=dark",
         "http://127.0.0.1:4173/events?jyc-theme=dark",
         "http://127.0.0.1:4173/gallery?jyc-theme=dark",
