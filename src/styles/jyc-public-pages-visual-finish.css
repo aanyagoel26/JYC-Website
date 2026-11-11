@@ -579,3 +579,24 @@
     transition: none !important;
   }
 }
+
+
+/* Exact Lighthouse node fixes: contact metadata, creator roles and team structure labels. */
+.public-app .contact-page .contact-card > span:first-child { color: #5b4727 !important; }
+.public-app .contact-page .contact-creator-card strong { color: #65312c !important; }
+.public-app .contact-page .contact-creator-card div > div > span {
+  color: #65312c !important;
+  opacity: 1 !important;
+}
+.public-app .contact-page .contact-message-count { color: #4f463b !important; }
+:root[data-theme="dark"] .public-app .contact-page .contact-card > span:first-child,
+:root[data-theme="dark"] .public-app .contact-page .contact-creator-card strong,
+:root[data-theme="dark"] .public-app .contact-page .contact-creator-card div > div > span,
+:root[data-theme="dark"] .public-app .contact-page .contact-message-count {
+  color: #f5ead7 !important;
+  opacity: 1 !important;
+}
+.public-app .team-page .team-filter-tab b { color: #30250b !important; }
+:root[data-theme="dark"] .public-app .team-page .team-structure-flow > div > span {
+  color: #f5ead7 !important;
+}
