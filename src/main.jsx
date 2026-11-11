@@ -1022,7 +1022,7 @@ function Theme({theme,setTheme}){
   }catch{apply();finish();}
  };
  const nextLabel=theme==='dark'?'day':'night';
- return <button type="button" className={`theme-toggle theme-toggle-rb ${theme==='dark'?'is-dark':'is-light'}`} onClick={switchMode} aria-pressed={theme==='dark'} aria-label={`${theme==='dark'?'Night':'Day'} Theme — switch to ${nextLabel} theme`} title={`Switch to ${nextLabel} theme`}>
+ return <button type="button" className={`theme-toggle theme-toggle-rb ${theme==='dark'?'is-dark':'is-light'}`} onClick={switchMode} aria-pressed={theme==='dark'} aria-label={`Switch to ${nextLabel} mode`} title={`Switch to ${nextLabel} mode`}>
   <span className="theme-toggle-track" aria-hidden="true"><span className="theme-toggle-orb"><span>{theme==='dark'?'☾':'☀'}</span></span></span>
   <span className="theme-toggle-copy"><b>{theme==='dark'?'Night':'Day'}</b><small>Theme</small></span>
  </button>
