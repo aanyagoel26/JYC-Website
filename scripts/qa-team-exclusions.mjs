@@ -12,5 +12,7 @@ assert.ok(media.includes("'divye bajaj': '/assets/team/divye-bajaj.webp'"), 'Div
 assert.ok(app.includes('id="team-directory"'), 'Team directory must have a stable in-page navigation target');
 assert.ok(app.includes("meta.publicationStatus==='published'"), 'Team hub directory must exclude unpublished source entries');
 assert.ok(app.includes("const roleOf=m=>[m.role,m.position,m.title].filter(Boolean).join"), 'Team grouping must consider all available role fields');
+assert.ok(app.includes("const faculty=members.filter(m=>/faculty|advisor/i.test(roleOf(m)))"), 'Student coordinators must not be misclassified as faculty guides');
+assert.ok(app.includes("Browse profiles <span aria-hidden=\"true\">↓</span>"), 'Team hero must link directly to the people directory');
 
-console.log('Team exclusion, publication boundary, directory navigation and portrait mapping QA passed (6 checks)');
+console.log('Team exclusion, publication boundary, directory navigation and portrait mapping QA passed (8 checks)');
