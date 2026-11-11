@@ -108,9 +108,6 @@ import './styles/jyc-theme-contract.css';
 import './styles/jyc-atmosphere.css';
 import './styles/jyc-celestial-refresh.css';
 import './styles/jyc-v67-visual-polish.css';
-import './styles/jyc-about-contact-team-finish.css';
-import './styles/jyc-public-pages-master-finish.css';
-import './styles/jyc-public-pages-visual-finish.css';
 
 const logo='/assets/jyc-logo.avif';
 const logoTiny='/assets/jyc-logo-48.avif';
@@ -138,7 +135,7 @@ const storageSet=(key,value)=>{try{localStorage.setItem(key,String(value));retur
 const storageRemove=(key)=>{try{localStorage.removeItem(key);return true}catch{return false}};
 // Apply the saved decorative-motion preference before React mounts any animated surface.
 document.documentElement.dataset.jycMotion=storageGet('jyc-motion-preference','full')==='paused'?'paused':'full';
-const empty={clubs:[],events:[],gallery:[],team:[],categories:{Technical:[], 'Non-Technical':[]},announcement:{on:false,text:'',link:''},maintenance:{on:false,title:'JYC is getting ready.',message:'We’re making a few improvements. Please check back shortly.'},flags:{recruitmentHub:true,pwaInstall:true,eventQr:true,advancedSearch:true,analytics:true},academicCalendar:{public:true,showInCalendar:true,showInSearch:true},mode:'events',fest:null,homepage:{heroEyebrow:'JIIT · SECTOR 128 · NOIDA',heroTitle:'THE VOICE. THE TALENT. THE SPIRIT.',heroSubtitle:'JIIT YOUTH CLUB · JIIT 128',heroLead:'JYC is the student-governed organisation that brings JIIT communities, events, creativity, technology, sport and campus spirit together.',heroPrimaryCta:'Explore Clubs ↗',heroSecondaryCta:"What's Next →",quick1Title:'About JYC',quick1Text:'Know the community →',quick2Title:'Clubs',quick2Text:'Find your community →',quick3Title:'Connect',quick3Text:'Find JYC online →',aboutTitle:'The JYC story belongs here.',aboutText:'JIIT Youth Club (JYC) is the student-led coordinating body for co-curricular life at JIIT Sector 128. It connects the apex student body, hubs and societies, coordinators, volunteers and festival committees so students can discover communities, build skills and create campus experiences together.',principles:[{title:'Student-led, faculty-advised',text:'JYC combines faculty guidance with an apex student body, hub coordinators, volunteers and festival committees.'},{title:'Five community families',text:'The maintained JYC index spans Cultural, Technical, Creative, Literary and Sports families; source status is kept visible where records differ.'},{title:'A year-round campus rhythm',text:'Induction, Ebullience, hackathons, Ethnic Day, Converge, Dron-O-War and Farewell sit alongside recurring hub activities.'}],eventsEyebrow:"WHAT'S NEXT",eventsTitle:'What happens next.',eventsText:'Upcoming experiences stay chronological. Live events surface automatically.',clubsEyebrow:'JYC CLUBS',clubsTitle:'Official JYC clubs.',clubsText:'Technical, non-technical, creative, cultural and everything between.',galleryEyebrow:'GALLERY',galleryTitle:'A visual archive in the making.',galleryText:'Official JYC images will appear here as they are published.',activitiesEyebrow:'WHAT WE DO',activitiesTitle:'Make space for participation.',activitiesText:'See how JYC connects communities, events, creativity and participation.',activities:[],ctaEyebrow:'READY TO SOAR',ctaTitle:'One campus. Many ways to belong.',ctaText:'Explore the public JYC experience and find your next community.',ctaButton:'Explore JYC ↗',jtvUrl:'',compactHome:true,layout:['intro','brandEditorial','ecosystem','routes','hubSignal','updates','events','activities','clubs','moments','photoStory','photoChapters','journal','hubPhotoWall','hubStories','team','cta'],showClubs:true,showEvents:true,showGallery:true},creator:CREATOR,certificates:[],campusMap:{mapUrl:'',locations:[]}};
+const empty={clubs:[],events:[],gallery:[],team:[],categories:{Technical:[], 'Non-Technical':[]},announcement:{on:false,text:'',link:''},maintenance:{on:false,title:'JYC is getting ready.',message:'We’re making a few improvements. Please check back shortly.'},flags:{recruitmentHub:true,pwaInstall:true,eventQr:true,advancedSearch:true,analytics:true},academicCalendar:{public:true,showInCalendar:true,showInSearch:true},mode:'events',fest:null,homepage:{heroEyebrow:'JIIT · SECTOR 128 · NOIDA',heroTitle:'THE VOICE. THE TALENT. THE SPIRIT.',heroSubtitle:'JIIT YOUTH CLUB · JIIT 128',heroLead:'JIIT Youth Club brings student clubs, events, creativity, technology and sport together, making it easier to take part in campus life.',heroPrimaryCta:'Explore Clubs ↗',heroSecondaryCta:"What's Next →",quick1Title:'About JYC',quick1Text:'Know the community →',quick2Title:'Clubs',quick2Text:'Find your community →',quick3Title:'Connect',quick3Text:'Find JYC online →',aboutTitle:'The JYC story belongs here.',aboutText:'JIIT Youth Club (JYC) brings student-led clubs, societies and events together at JIIT Sector 128. It helps students explore interests, build skills, share their talents and take an active part in campus life.',principles:[{title:'Student-led, faculty-advised',text:'JYC combines faculty guidance with an apex student body, hub coordinators, volunteers and festival committees.'},{title:'Five community families',text:'The maintained JYC index spans Cultural, Technical, Creative, Literary and Sports families; source status is kept visible where records differ.'},{title:'A year-round campus rhythm',text:'Induction, Ebullience, hackathons, Ethnic Day, Converge, Dron-O-War and Farewell sit alongside recurring hub activities.'}],eventsEyebrow:"WHAT'S NEXT",eventsTitle:'What happens next.',eventsText:'Upcoming experiences stay chronological. Live events surface automatically.',clubsEyebrow:'JYC CLUBS',clubsTitle:'Official JYC clubs.',clubsText:'Technical, non-technical, creative, cultural and everything between.',galleryEyebrow:'GALLERY',galleryTitle:'A visual archive in the making.',galleryText:'Official JYC images will appear here as they are published.',activitiesEyebrow:'WHAT WE DO',activitiesTitle:'Make space for participation.',activitiesText:'See how JYC connects communities, events, creativity and participation.',activities:[],ctaEyebrow:'READY TO SOAR',ctaTitle:'One campus. Many ways to belong.',ctaText:'Explore the public JYC experience and find your next community.',ctaButton:'Explore JYC ↗',jtvUrl:'',compactHome:true,layout:['intro','brandEditorial','ecosystem','routes','hubSignal','updates','events','activities','clubs','moments','photoStory','photoChapters','journal','hubPhotoWall','hubStories','team','cta'],showClubs:true,showEvents:true,showGallery:true},creator:CREATOR,certificates:[],campusMap:{mapUrl:'',locations:[]}};
 const clubTemplate={name:'',type:'Technical',category:'',description:'',logo:'',banner:'',about:'',interests:[],instagram:'',whatsapp:'',website:'',linkedin:'',youtube:'',president:'',vicePresident:'',secretary:'',heads:[],recruitment:{on:false,title:'Recruitment Open',link:'',deadline:''},achievements:[],projects:[],customSections:[],theme:'jyc',pinned:false,published:false,status:'draft'};
 const eventTemplate={title:'',clubId:'',club:'',eventType:'',poster:'',description:'',date:'',start:'',end:'',venue:'',registrationMode:'external',registrationUrl:'',registrationDeadline:'',map_url:'',contactName:'',contactPhone:'',contactEmail:'',speaker:'',guest:'',highlights:[],rules:[],eligibility:'',prizes:[],faqs:[],galleryIds:[],featured:false,pinned:false,published:false,archived:false};
 const isSector128Venue=venue=>/sector\s*128|jiit[-\s]*128|wish\s*town/i.test(String(venue||''));
@@ -782,19 +779,21 @@ function Navbar({data,admin,theme,setTheme}){
  const nav=useNavigate();const loc=useLocation();
  const [open,setOpen]=useState(false),[moreOpen,setMoreOpen]=useState(false),[search,setSearch]=useState(false),[homeSection,setHomeSection]=useState('hero');
  const shortcutRef=React.useRef('');
+ const openSearch = () => { setOpen(false); setMoreOpen(false); setSearch(true); };
+ const openMore = () => { setOpen(false); setMoreOpen(true); };
  const routeLinks=[['Home','/'],['About','/about'],['Clubs','/clubs'],['Events','/events'],['Gallery','/gallery'],['Leadership','/team'],['Contact','/contact']];
  const homeLinks=[['Home','hero'],['About','about'],['Clubs','clubs'],['Events','events'],['Gallery','moments'],['Team','team'],['Contact','/contact']];
  useEffect(()=>{
    const onKey=e=>{
-     if((e.ctrlKey||e.metaKey)&&(e.key?.toLowerCase()==='k'||e.code==='KeyK')){e.preventDefault();e.stopPropagation();setMoreOpen(false);setSearch(true);return}
-     if(e.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)){e.preventDefault();setMoreOpen(false);setSearch(true);return}
-     if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName))return;
+     if((e.ctrlKey||e.metaKey)&&(e.key?.toLowerCase()==='k'||e.code==='KeyK')){e.preventDefault();e.stopImmediatePropagation?.();openSearch();return}
+     if(e.key==='/'&&!['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)&&!document.activeElement?.isContentEditable){e.preventDefault();openSearch();return}
+     if(['INPUT','TEXTAREA','SELECT'].includes(document.activeElement?.tagName)||document.activeElement?.isContentEditable)return;
      if(e.key.toLowerCase()==='g'){shortcutRef.current='g';window.clearTimeout(shortcutRef._timer);shortcutRef._timer=window.setTimeout(()=>shortcutRef.current='',700);return}
      if(shortcutRef.current==='g'){const routes={c:'/clubs',e:'/events',t:'/team',a:'/archive',m:'/gallery'};if(routes[e.key.toLowerCase()]){e.preventDefault();shortcutRef.current='';nav(routes[e.key.toLowerCase()]);return}}
      if(e.key==='Escape'){setOpen(false);setMoreOpen(false)}
    };
-   const openSearch=()=>setSearch(true);window.addEventListener('keydown',onKey,true);window.addEventListener('jyc-open-search',openSearch);
-   return()=>{window.removeEventListener('keydown',onKey,true);window.removeEventListener('jyc-open-search',openSearch)}
+   const openSearchEvent=()=>openSearch();window.addEventListener('keydown',onKey,true);window.addEventListener('jyc-open-search',openSearchEvent);
+   return()=>{window.removeEventListener('keydown',onKey,true);window.removeEventListener('jyc-open-search',openSearchEvent)}
  },[]);
  useEffect(()=>{setOpen(false);setMoreOpen(false);const query=new URLSearchParams(loc.search||'').get('q');setSearch(Boolean(query));},[loc.pathname,loc.search]);
  useEffect(()=>{document.body.classList.toggle('menu-open',open);return()=>document.body.classList.remove('menu-open')},[open]);
@@ -813,7 +812,7 @@ function Navbar({data,admin,theme,setTheme}){
  const dockItems=[['Home','/','home'],['Clubs','/clubs','clubs'],['Events','/events','events'],['Gallery','/gallery','gallery'],['More','__more','more']];
  const dockActive=loc.pathname==='/'?0:loc.pathname.startsWith('/clubs')?1:loc.pathname.startsWith('/events')?2:loc.pathname.startsWith('/gallery')?3:4;
  const dock=<div className="mobile-dock" style={{'--dock-index':dockActive}} aria-label="Mobile navigation"><i className="dock-active-pill" aria-hidden="true"/>{dockItems.map(([n,p,icon],i)=>{const active=i===dockActive;return <button type="button" key={n} className={active?'active':''} onClick={()=>p==='__more'?setMoreOpen(v=>!v):nav(p)} aria-current={active?'page':undefined} aria-expanded={p==='__more'?moreOpen:undefined} aria-controls={p==='__more'&&moreOpen?'jyc-more-dialog':undefined}><span><NavIcon kind={icon}/></span><b>{n}</b></button>})}</div>;
- const more=moreOpen?<MobileMoreSheet data={data} admin={admin} close={()=>setMoreOpen(false)} openSearch={()=>{setMoreOpen(false);setSearch(true)}}/>:null;
+ const more=moreOpen?<MobileMoreSheet data={data} admin={admin} close={()=>setMoreOpen(false)} openSearch={openSearch}/>:null;
  const searchView=search?<Suspense fallback={null}><LazyJYCSearch data={data} admin={admin} close={()=>setSearch(false)}/></Suspense>:null;
  const navButtons = routeLinks.map(([n, p]) => {
     const active = loc.pathname === p || (p !== '/' && loc.pathname.startsWith(p + '/'));
@@ -835,7 +834,7 @@ function Navbar({data,admin,theme,setTheme}){
  return <>
  <header className="nav"><div className="nav-inner">
    <button type="button" className="brand" aria-label="JIIT Youth Club home" onClick={()=>{setOpen(false);nav('/')}}><span className="brand-mark"><LogoImage alt="JIIT Youth Club logo" loading="eager" fetchPriority="high" srcSet={`${logoTiny} 1x, ${logoSmall} 2x`}/></span><span>JIIT YOUTH CLUB</span></button>
-   <nav className={open?'open':''}>{navButtons}<button type="button" className={`nav-more-trigger ${moreOpen?'active':''}`} onClick={()=>{setOpen(false);setMoreOpen(v=>!v)}} aria-expanded={moreOpen} aria-controls={moreOpen?'jyc-more-dialog':undefined}>More <span aria-hidden="true">⌄</span></button></nav>
+   <nav className={open?'open':''}>{navButtons}<button type="button" className={`nav-more-trigger ${moreOpen?'active':''}`} onClick={openMore} aria-haspopup="dialog" aria-expanded={moreOpen} aria-controls={moreOpen?'jyc-more-dialog':undefined}>More <span aria-hidden="true">⌄</span></button></nav>
    <button
      type="button"
      className="search-trigger nav-search-trigger"
@@ -844,7 +843,7 @@ function Navbar({data,admin,theme,setTheme}){
      aria-haspopup="dialog"
      aria-expanded={search}
      aria-controls={search?'jyc-search-dialog':undefined}
-     onClick={()=>{setOpen(false);setMoreOpen(false);setSearch(true)}}
+     onClick={openSearch}
      onPointerEnter={preloadJYCSearch}
      onFocus={preloadJYCSearch}
    ><span className="search-label">Search</span><kbd aria-hidden="true">Ctrl K</kbd></button>
@@ -863,12 +862,12 @@ function MobileMoreSheet({data,admin,close,openSearch}){
   const returnFocus=document.activeElement instanceof HTMLElement?document.activeElement:null;
   const previous=document.body.style.overflow;
   document.body.style.overflow='hidden';
-  const timer=setTimeout(()=>sheetRef.current?.querySelector('button,a')?.focus(),30);
+  const timer=setTimeout(()=>sheetRef.current?.querySelector('button,a')?.focus(),60);
   const onKey=e=>{
    if(e.key==='Escape'){e.preventDefault();closeRef.current();return}
    if(e.key!=='Tab')return;
    const root=sheetRef.current;if(!root)return;
-   const focusable=[...root.querySelectorAll('button,a,input,[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled&&el.offsetParent!==null);
+   const focusable=[...root.querySelectorAll('button,a,input,[tabindex]:not([tabindex="-1"])')].filter(el=>!el.disabled&&el.getClientRects().length>0);
    if(!focusable.length)return;
    const first=focusable[0],last=focusable[focusable.length-1];
    if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}
@@ -1025,7 +1024,7 @@ function Theme({theme,setTheme}){
   }catch{apply();finish();}
  };
  const nextLabel=theme==='dark'?'day':'night';
- return <button type="button" className={`theme-toggle theme-toggle-rb ${theme==='dark'?'is-dark':'is-light'}`} onClick={switchMode} aria-pressed={theme==='dark'} aria-label={`${theme==='dark'?'Night':'Day'} Theme — switch to ${nextLabel} theme`} title={`Switch to ${nextLabel} theme`}>
+
   <span className="theme-toggle-track" aria-hidden="true"><span className="theme-toggle-orb"><span>{theme==='dark'?'☾':'☀'}</span></span></span>
   <span className="theme-toggle-copy"><b>{theme==='dark'?'Night':'Day'}</b><small>Theme</small></span>
  </button>
@@ -1135,7 +1134,7 @@ function About({data}){
  const h=data.homepage||{};
  const principles=h.principles||[];
  return <section className="section page unified-public-page about-page">
-  <Breadcrumbs items={[{label:'About JYC'}]}/><EcosystemContextRail/><SearchTopicBand eyebrow="ABOUT JYC · JIIT NOIDA" title="What is JIIT Youth Club?" text="JIIT Youth Club (JYC) is the student-led community ecosystem at JIIT Wish Town Campus, Sector 128, Noida, connecting clubs, hubs, events, leadership and campus experiences beyond academics." links={[["JYC clubs","/clubs"],["JYC events","/events"],["JYC leadership","/team"]]}/>
+  <Breadcrumbs items={[{label:'About JYC'}]}/><EcosystemContextRail/><SearchTopicBand eyebrow="ABOUT JYC · JIIT NOIDA" title="What is JIIT Youth Club?" text="JIIT Youth Club (JYC) brings student clubs, societies, events and campus activities together at JIIT Wish Town Campus, Sector 128, Noida. It helps students discover interests, meet people and get involved beyond the classroom." links={[["JYC clubs","/clubs"],["JYC events","/events"],["JYC leadership","/team"]]}/>
   <nav className="about-contents-nav reveal" aria-label="About JYC sections"><a href="#about-why">Why JYC</a><a href="#about-families">Communities</a><a href="#about-structure">How it works</a><a href="#about-programmes">Campus life</a><a href="#history">Our story</a></nav>
   <div className="about-hero-v28 v40-about-hero reveal">
    <div className="about-hero-copy"><span className="eyebrow">ABOUT JYC · JIIT 128</span><h1>JYC brings student communities together.</h1><p>{h.aboutText||'JIIT Youth Club connects students, communities, leadership and campus experiences across JIIT Sector 128.'}</p><div className="about-hero-actions"><Button onClick={()=>nav('/clubs')}>Find your community ↗</Button><Button secondary onClick={()=>nav('/events')}>See what is happening →</Button></div></div>
@@ -1145,18 +1144,14 @@ function About({data}){
   <section className="v40-about-snapshot reveal" aria-label="JYC at a glance">
    <div className="v40-about-snapshot-intro"><span className="eyebrow">JYC AT A GLANCE</span><h2>One coordinating body. A whole campus ecosystem.</h2><p>JYC connects faculty guidance, student leadership, communities, volunteers and experiences so students can move from discovering an interest to actually participating.</p></div>
    <div className="v40-about-metrics"><article><strong>{JYC_HUB_FAMILIES.length}</strong><span>community families</span></article><article><strong>{Object.keys(JYC_HUB_CONTENT).length}</strong><span>named communities</span></article><article><strong>{PDF_HUB_PROGRAMME.length}</strong><span>programme strands</span></article><article><strong>{data.team.filter(m=>m.published===true).length}</strong><span>published people</span></article></div>
-   <div className="v40-about-leadership"><div><span className="eyebrow">LEADERSHIP LAYERS</span><strong>Faculty → Apex → Core → Communities</strong><p>Faculty guides support the apex student body, core team and community coordinators throughout the year.</p></div><button type="button" className="reference-view-all" onClick={()=>nav('/team')}>Meet the team →</button></div>
-  </section>
-  <section className="about-intro-v28 reveal" id="about-why"><span className="eyebrow">WHY JYC EXISTS</span><h2>A place to participate, create, lead and belong.</h2><p>JYC is a student-governed organisation that gives students a platform to display their talents, organises inter- and intra-institutional activities and helps first-year students acclimate to campus life.</p><div className="about-principles-v28">{(principles.length?principles:[{title:'Student-led, faculty-advised',text:'Student leadership works with faculty guidance and institutional support.'},{title:'Communities with purpose',text:'Clubs and hubs give students focused spaces to learn, create, compete and perform.'},{title:'Experiences that connect',text:'Events turn those communities into shared campus moments.'}]).map((p,i)=><article key={i}><b>{String(i+1).padStart(2,'0')}</b><h3>{p.title}</h3><p>{p.text}</p></article>)}</div></section>
-  <section className="about-families-v28 reveal" id="about-families"><div className="about-section-title-v28"><span className="eyebrow">THE JYC ECOSYSTEM</span><h2>Five families. Many ways to belong.</h2><p>JYC communities span Cultural, Technical, Creative, Literary and Sports families. Explore each family to discover its communities, interests and ways to get involved.</p></div><div className="about-family-grid-v28">{JYC_HUB_FAMILIES.map((family,i)=>{const profile=JYC_ORIENTATION_FAMILIES.find(item=>item.name===family);const count=Object.values(JYC_HUB_CONTENT).filter(item=>item.family===family).length;return <button type="button" key={family} style={{'--family-accent':['var(--jyc-accent)','var(--jyc-gold)','var(--jyc-accent)','var(--jyc-gold)','var(--jyc-accent)'][i%5]}} onClick={()=>nav('/clubs?family='+encodeURIComponent(family))}><span>{String(i+1).padStart(2,'0')} / {String(count).padStart(2,'0')}</span><strong>{profile?.label||family}</strong><p>{profile?.description||`Explore the ${family.toLowerCase()} communities in JYC.`}</p><small>{(profile?.examples||[]).slice(0,4).join(' · ')||`${count} communities`} →</small></button>})}</div></section>
-  <section className="about-flow-v28 reveal" id="about-structure"><div className="about-section-title-v28"><span className="eyebrow">HOW JYC WORKS</span><h2>Guidance → leadership → communities → experiences.</h2></div><div className="about-flow-grid-v28">{[['01','Faculty guidance','Institutional support and direction'],['02','Apex Body','Student leadership and coordination'],['03','Hubs & Societies','Communities built around interests and talent'],['04','Coordinators & Volunteers','People who turn plans into execution'],['05','Events & Experiences','The campus moments students actually join']].map(x=><article key={x[0]}><span>{x[0]}</span><strong>{x[1]}</strong><p>{x[2]}</p></article>)}</div></section>
+
   <section className="about-programmes-v28 reveal" id="about-programmes"><div className="about-section-title-v28"><span className="eyebrow">THE CAMPUS RHYTHM</span><h2>From welcome to farewell.</h2><p>The supplied JYC programme material highlights recurring major experiences. Current dates and registrations remain controlled by published event records.</p></div><div className="about-programme-grid-v28">{PDF_HUB_PROGRAMME.map((p,i)=><article key={p.name}><div className="about-programme-image"><ResponsivePhoto src={p.image} alt={p.name+' · JYC programme'} loading="lazy" sizes="(max-width: 760px) 100vw, 30vw"/><span>{String(i+1).padStart(2,'0')}</span></div><div><small>{p.type}</small><h3>{p.name}</h3><p>{p.text}</p><button type="button" onClick={()=>nav('/events')}>Open events →</button></div></article>)}</div></section>
   <section className="about-vision-v28 reveal" id="about-vision"><article><span className="eyebrow">VISION</span><h2>A campus where every student can find a place to participate, create, lead and belong.</h2></article><article><span className="eyebrow">MISSION</span><p>Connect students with clubs and communities, create meaningful experiences, develop leadership and teamwork, and make campus life more participatory.</p><div className="about-inline-links"><button type="button" onClick={()=>nav('/team')}>Meet the people →</button><button type="button" onClick={()=>nav('/gallery')}>See the archive →</button></div></article></section>
   <section className="about-history-section reveal" id="history" aria-labelledby="about-history-heading">
     <div className="about-section-title-v28">
      <span className="eyebrow">THE JYC STORY · 2019–2026</span>
      <h2 id="about-history-heading">JYC, built by generations of students.</h2>
-     <p>From student orientations to flagship campus experiences, these published milestones trace how JYC has grown through successive student teams.</p>
+
     </div>
     <div className="about-history-timeline-v2">
      {HISTORY.map((item,index)=><article key={item.year} id={item.year.replace('–','-')} className="about-history-node">
@@ -1174,8 +1169,7 @@ function About({data}){
      </article>)}
     </div>
    </section>
-   <div className="about-source-note reveal">Explore published JYC milestones and the people behind them. For current opportunities, visit the Events, Clubs and Team pages.</div>
-  <section className="about-next-v28 reveal"><span className="eyebrow">YOUR NEXT STEP</span><h2>See the organisation in action.</h2><div><Button onClick={()=>nav('/clubs')}>Explore clubs ↗</Button><Button secondary onClick={()=>nav('/events')}>Explore events →</Button><Button secondary onClick={()=>nav('/team')}>Meet JYC →</Button><Button secondary onClick={()=>nav('/contact')}>Contact JYC →</Button></div></section>
+
  </section>
 }
 function Clubs({data}){

@@ -15,7 +15,7 @@ assert.ok(home.includes('<JYCHeroWebGLEmblem />') && home.includes('heroFieldRea
 assert.ok(!home.includes('LazyDitherVeil') && !home.includes('jh-hero-dither-layer') && !home.includes('jh-hero-dither-static'), 'homepage must not stack a duplicate Dither crest over the official emblem');
 const emblem = fs.readFileSync('src/components/JYCHeroWebGLEmblem.jsx','utf8');
 assert.ok(emblem.includes('role="img"') && emblem.includes('aria-label="JIIT Youth Club crest"') && emblem.includes('LOGO_FALLBACK') && emblem.includes('LOGO_ORIGINAL'), 'official crest must have semantic image labeling and optimized fallbacks');
-assert.ok(!emblem.includes('requestAnimationFrame') && !emblem.includes('jycAudio') && !emblem.includes('model-viewer'), 'hero crest must not run a duplicate orbital canvas, autoplay audio or external model viewer');
+assert.ok(emblem.includes('frameRef.current') && emblem.includes('requestAnimationFrame') && !emblem.includes('requestAnimationFrame(loop)') && !emblem.includes('jyc-emblem-canvas') && !emblem.includes('jycAudio') && !emblem.includes('model-viewer'), 'hero crest may coalesce pointer tilt to one frame but must not run a duplicate orbital canvas, autoplay audio or external model viewer');
 assert.match(css, /--jh-bg:\s*#F5F1E6/i, 'homepage background token must use the editorial paper palette');
 assert.ok(cohesive.includes('--jh-accent: #c8bcff') && cohesive.includes('--jh-gold:') && cohesive.includes('--jh-bg: #080d1c'), 'homepage night theme must use midnight, lavender and gold');
 assert.ok(cohesive.includes('--jh-accent: #625889') && cohesive.includes('--jh-bg: #f5f1e8'), 'homepage day theme must use warm paper and indigo accents');
