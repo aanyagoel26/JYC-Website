@@ -634,3 +634,35 @@ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage
 @media(prefers-reduced-motion:reduce){
 html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual::before,html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual::after{transition:none!important;animation:none!important}
 }
+
+
+/* Mobile typography never collapses below the public readability contract. */
+@media(max-width:760px) {
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-overline {
+   display:block!important; font-size:11px!important; line-height:1.55!important;
+   letter-spacing:.08em!important;
+ }
+}
+
+/* Open-source-inspired hero finish: one quiet focal point, supporting labels and mobile-safe geometry. */
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{isolation:isolate;contain:layout paint;overflow:hidden}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage{width:min(100%,570px)!important;max-width:570px!important}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-card-3d{width:min(78%,450px)!important;height:auto!important;aspect-ratio:1}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-seal-container{width:100%!important;height:100%!important}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-overline{display:block!important;font-size:clamp(11px,.85vw,13px)!important;line-height:1.55!important;letter-spacing:.045em!important}
+@media(max-width:760px){
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero{gap:clamp(18px,4vw,28px)!important}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-overline{display:block!important;font-size:11px!important;line-height:1.55!important;letter-spacing:.04em!important}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{width:min(100%,420px)!important;aspect-ratio:1!important;max-height:none!important;border-radius:28px!important}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage{width:min(96%,390px)!important;max-width:390px!important}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-card-3d{width:74%!important}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-controls-bar{display:none!important}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-label,html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-caption{font-size:11px!important;line-height:1.4!important}
+}
+@media(max-width:390px){
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{width:min(100%,360px)!important}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage{width:100%!important}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-card-3d{width:71%!important}
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions{gap:8px!important}
+}
+@media(prefers-reduced-motion:reduce){html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>*,html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual{animation:none!important;transition:none!important;opacity:1!important;transform:none!important}}

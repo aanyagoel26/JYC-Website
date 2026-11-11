@@ -66,7 +66,6 @@ export default function FlipCard({ front, back, children, className = '', label 
             ref={frontTriggerRef}
             type="button"
             className="flip-card__front-trigger"
-            aria-label={label}
             aria-expanded={flipped}
             aria-controls={backId}
             onClick={openProfile}

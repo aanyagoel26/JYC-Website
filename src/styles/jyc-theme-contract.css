@@ -538,3 +538,4 @@ html[data-theme] .public-app :is(.jyc-history-page,.team-page) :where(h1,h2,h3,h
 html[data-theme] .public-app :is(.jyc-history-page,.team-page) :where(p,li,small,.muted,.muted-note) {
   color: var(--jyc-muted);
 }
+

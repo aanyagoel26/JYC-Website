@@ -5,6 +5,7 @@ import {normalizeSearch,matchSearchResults,isPublicSearchRecord} from '../src/li
 const source=fs.readFileSync('src/search/jyc-search.jsx','utf8');
 const main=fs.readFileSync('src/main.jsx','utf8');
 const css=fs.readFileSync('src/styles/jyc-celestial-refresh.css','utf8');
+const finalCss=fs.readFileSync('src/styles/jyc-final-refinement.css','utf8');
 const checks=[];
 const luminance=hex=>{const rgb=hex.slice(1).match(/../g).map(value=>parseInt(value,16)/255).map(value=>value<=.04045?value/12.92:((value+.055)/1.055)**2.4);return .2126*rgb[0]+.7152*rgb[1]+.0722*rgb[2]};
 const contrast=(foreground,background)=>{const [light,dark]=[luminance(foreground),luminance(background)].sort((a,b)=>b-a);return (light+.05)/(dark+.05)};
@@ -15,6 +16,12 @@ check('global navigation demand-loads the new search module only when opened',ma
 check('legacy inline search implementation is removed',!main.includes('function SearchMatch(')&&!main.includes('function Search({data,admin,close})'));
 check('Fests remains discoverable in every homepage mode',source.includes('PAGES.forEach(([title,meta,type,href,keywords],i)=>')&&!source.includes("PAGES.filter(([title])=>title!=='Fests'"));
 check('index includes all public JYC content families',source.includes('source.clubs')&&source.includes('source.events')&&source.includes('source.team')&&source.includes('source.gallery')&&source.includes('source.announcements')&&source.includes('source.updates')&&source.includes('JYC_EDITORIAL_ACHIEVEMENTS'));
+check('team search indexes title, role, biography and community metadata',source.includes('row.role||row.position||row.title')&&source.includes('row.title,row.bio,row.about,row.description')&&source.includes('row.family,row.focus'));
+check('event and club search includes location, organiser, tags and keywords',source.includes('row.organiser,row.organizer,row.host')&&source.includes('row.venue,row.location,row.address')&&source.includes('strings(row.keywords)')&&source.includes('row.summary,row.content'));
+check('curated achievement fallback remains searchable when CMS returns no published rows',source.includes('const publishedAchievements=Array.isArray(source.achievements)?source.achievements.filter(isPublicSearchRecord):[]')&&source.includes('publishedAchievements.length?publishedAchievements:JYC_EDITORIAL_ACHIEVEMENTS.filter(isVisibleRecord)'));
+check('long result sets can be expanded without hiding matches after the first 30',source.includes('[resultLimit,setResultLimit]=useState(30)')&&source.includes('filtered.slice(0,resultLimit)')&&source.includes('Show {Math.min(30,filtered.length-results.length)} more results'));
+check('keyboard ArrowDown can expand the result window at its last visible item',source.includes('active===results.length-1&&results.length<filtered.length')&&source.includes('setResultLimit(value=>Math.min(value+30,filtered.length))'));
+
 check('index excludes unpublished, archived and private records',source.includes('isPublicSearchRecord(row)')&&source.includes('source.achievements.filter(isPublicSearchRecord)')&&source.includes('JYC_EDITORIAL_ACHIEVEMENTS.filter(isVisibleRecord)')&&source.includes('record.published!==false')&&source.includes('record.private!==true'));
 check('search supports keyboard result navigation and selection',source.includes("e.key==='ArrowDown'")&&source.includes("e.key==='ArrowUp'")&&source.includes("e.key==='Enter'")&&source.includes("e.key==='Escape'")&&source.includes('Math.min(value+1,results.length-1)')&&source.includes('Math.max(value-1,0)'));
 check('search provides focus management and a modal focus trap',source.includes('returnFocusRef')&&source.includes('document.addEventListener(\'keydown\',trap)')&&source.includes('aria-modal="true"')&&source.includes('onKeyDown={onKeyDown}')&&source.includes('if(e.target!==inputRef.current)return;'));
@@ -68,3 +75,13 @@ check('constellation texture sits above the canvas but below interactive app con
 const failed=checks.filter(item=>!item.condition);
 console.log('Search + celestial refresh QA: '+(checks.length-failed.length)+'/'+checks.length+' checks passed.');
 if(failed.length)process.exit(1);
+
+const nav=main.slice(main.indexOf('function Navbar('),main.indexOf('function MobileMoreSheet'));
+const mobileMore=main.slice(main.indexOf('function MobileMoreSheet'),main.indexOf('function MotionPreferenceControl'));
+check('Search shortcut ignores editable content including contenteditable regions',nav.includes('document.activeElement?.isContentEditable'));
+check('Search opens from one capture handler without duplicate bubbling listeners',nav.includes("e.stopImmediatePropagation?.()")&&nav.includes("window.addEventListener('keydown',onKey,true)"));
+check('Search trigger exposes a stable dialog relationship and visible label',nav.includes('data-jyc-search-trigger')&&nav.includes('aria-haspopup="dialog"')&&nav.includes('aria-expanded={search}')&&nav.includes("aria-controls={search?'jyc-search-dialog':undefined}")&&nav.includes('className="search-label"'));
+check('More trigger maintains a stable dialog relationship for WebKit compatibility',nav.includes('aria-haspopup="dialog"')&&nav.includes('aria-controls="jyc-more-dialog"')&&nav.includes('aria-expanded={moreOpen}'));
+check('More sheet uses rendered geometry for its keyboard focus trap',mobileMore.includes('el.getClientRects().length>0')&&!mobileMore.includes('el.offsetParent!==null'));
+check('theme switch exposes native switch semantics and a checked state',main.includes('role="switch"')&&main.includes("aria-checked={theme==='dark'}"));
+check('search trigger and theme switch retain a 44px target floor',finalCss.includes('min-width:88px')&&finalCss.includes('--jyc-control-height:44px')&&finalCss.includes('min-height:var(--jyc-control-height)!important'));

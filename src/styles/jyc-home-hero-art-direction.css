@@ -224,3 +224,72 @@ html[data-theme="light"] .public-app .jyc-editorial-home.jyc-home .jh-hero-visua
   }
   html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy>.jh-hero-actions .jh-btn{transition:none!important}
 }
+
+
+/* The identity stage is intentionally quieter than the surrounding editorial copy. */
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual {
+  min-height:clamp(410px,44vw,600px)!important;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage {
+  width:min(100%,560px)!important; max-width:560px!important;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-card-3d {
+  width:76%!important; height:76%!important;
+}
+html[data-theme="light"] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-context {
+  background:rgba(24,27,46,.9); color:#fffaf1;
+}
+@media(max-width:760px) {
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual {
+   min-height:clamp(340px,96vw,500px)!important;
+ }
+ html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage {
+   width:min(100%,430px)!important;
+ }
+}
+
+/* Final accessibility and readability contracts from the latest browser/Lighthouse reports. */
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-overline {
+  font-size:11px!important; line-height:1.65!important;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-cyber-badge b {
+  font-size:11px!important; color:#282333!important;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .mobile-dock button b,
+html[data-theme] .public-app .mobile-dock button b {
+  font-size:11px!important; line-height:1.2!important;
+}
+html[data-theme] .public-app .footer-v6-bottom small.jyc-creator-credit,
+html[data-theme] .public-app .footer-v6-bottom small.jyc-creator-credit a {
+  font-size:11px!important; line-height:1.45!important;
+}
+html[data-theme] .public-app .jh-kicker > b,
+html[data-theme] .public-app .jh-kicker b {
+  color:#282333!important;
+}
+html[data-theme] .public-app .theme-toggle-rb {
+  min-height:44px!important; min-width:92px!important; gap:9px!important;
+  padding:6px 12px!important; border:1px solid var(--jyc-line-strong)!important;
+  border-radius:999px!important; background:var(--jyc-surface)!important;
+  box-shadow:0 8px 24px rgba(10,14,28,.09),inset 0 1px 0 rgba(255,255,255,.45)!important;
+}
+html[data-theme] .public-app .theme-toggle-rb .theme-toggle-track {
+  width:38px!important; height:22px!important; border-radius:999px!important;
+  background:linear-gradient(100deg,#d8c7a0,#8879a9)!important;
+  border:1px solid rgba(120,102,142,.24)!important; flex:0 0 38px!important;
+}
+html[data-theme] .public-app .theme-toggle-rb .theme-toggle-orb {
+  width:18px!important; height:18px!important; top:1px!important; left:1px!important;
+  display:grid!important; place-items:center!important; border-radius:50%!important;
+  background:#fffaf0!important; color:#40375d!important;
+  box-shadow:0 2px 6px rgba(10,14,28,.2)!important;
+  transition:transform .28s cubic-bezier(.2,.8,.2,1)!important;
+}
+html[data-theme] .public-app .theme-toggle-rb.is-dark .theme-toggle-orb { transform:translateX(16px)!important; }
+html[data-theme] .public-app .theme-toggle-rb .theme-toggle-copy { display:grid!important; gap:1px!important; line-height:1.05!important; }
+html[data-theme] .public-app .theme-toggle-rb .theme-toggle-copy b { font-size:11px!important; color:var(--jyc-text-strong)!important; }
+html[data-theme] .public-app .theme-toggle-rb .theme-toggle-copy small { font-size:9px!important; color:var(--jyc-muted)!important; }
+@media(max-width:680px) {
+ html[data-theme] .public-app .footer-v6-bottom small.jyc-creator-credit,
+ html[data-theme] .public-app .footer-v6-bottom small.jyc-creator-credit a { font-size:11px!important; }
+}

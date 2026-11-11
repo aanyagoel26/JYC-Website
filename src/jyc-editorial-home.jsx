@@ -17,7 +17,7 @@ import './jyc-editorial-home.css';
 import './styles/jyc-editorial-motion-system.css';
 import './styles/jyc-home-hero-finish.css';
 import './styles/jyc-home-hero-art-direction.css';
-import './styles/jyc-home-discovery-finish.css';
+
 
 function DeferredMount({ children, fallback, rootMargin = '720px 0px' }) {
   const hostRef = useRef(null);
@@ -81,8 +81,8 @@ const PILLARS = [
     id: 'technical',
     family: 'Technical',
     title: 'Technical & Innovation',
-    tag: 'AI · ROBOTICS · CP · WEB · CYBERSEC',
-    desc: 'Hackathons, open-source dev-sprints, AI research, and combat robotics across OSDC, Knuth, CICR, GDG & uCR.',
+    tag: 'AI · ROBOTICS · CODING · WEB · CYBERSECURITY',
+    desc: 'Explore coding, AI, robotics, cybersecurity and open-source projects through student-led technical communities.',
     icon: '⚡'
   },
   {
@@ -90,15 +90,15 @@ const PILLARS = [
     family: 'Cultural',
     title: 'Cultural & Performing Arts',
     tag: 'DRAMATICS · DANCE · BANDS · CLASSICAL',
-    desc: 'Street play, stage dramatics, western & classical dance, and live acoustics with Abhivyakti, Jhankaar, Fortissmo & Crescendo.',
+    desc: 'Perform in street plays and theatre, explore western and classical dance, or enjoy live music with JYC cultural communities.',
     icon: '🎭'
   },
   {
     id: 'literary',
     family: 'Literary',
-    title: 'Literary, MUN & Speaking',
+    title: 'Literary, Model UN & Speaking',
     tag: 'DEBATES · QUIZZING · MUN · WRITING',
-    desc: 'Parliamentary debates, National Model United Nations, literary journals, and inter-college quiz championships.',
+    desc: 'Take part in debates, Model United Nations, writing, public speaking and inter-college quizzes.',
     icon: '🖋️'
   },
   {
@@ -114,7 +114,7 @@ const PILLARS = [
     family: 'Sports',
     title: 'Sports & Athletics',
     tag: 'CRICKET · FOOTBALL · BASKETBALL · CHESS',
-    desc: 'High-intensity athletic tournaments, intra-college leagues, table tennis, badminton, and outdoor sports championships.',
+    desc: 'Play and compete in cricket, football, basketball, chess, table tennis, badminton and other campus sports.',
     icon: '🏆'
   },
   {
@@ -122,7 +122,7 @@ const PILLARS = [
     family: 'Creative',
     title: 'Media, Design & Outreach',
     tag: 'UI/UX · GRAPHICS · PHOTO · SOCIAL',
-    desc: 'Visual arts, graphic design, photography, campus coverage, community service, and youth social outreach.',
+    desc: 'Create visual art, design, photography and campus media, or contribute to outreach and community initiatives.',
     icon: '🎨'
   }
 ];
@@ -178,11 +178,11 @@ export function JYCEditorialHome({ data }) {
     let idleId = null;
     const delayId = window.setTimeout(() => {
       if (typeof window.requestIdleCallback === 'function') {
-        idleId = window.requestIdleCallback(() => setHeroFieldReady(true), { timeout: 1200 });
+        idleId = window.requestIdleCallback(() => setHeroFieldReady(true), { timeout: 1800 });
       } else {
         setHeroFieldReady(true);
       }
-    }, 3200);
+    }, 6200);
     return () => {
       window.clearTimeout(delayId);
       if (idleId !== null) window.cancelIdleCallback?.(idleId);
@@ -200,9 +200,7 @@ export function JYCEditorialHome({ data }) {
   const events = useMemo(() => Array.isArray(data?.events) ? data.events.filter(e => e?.published && !e?.archived).slice().sort((a, b) => dateMs(a) - dateMs(b)) : [], [data?.events]);
   const today = useMemo(() => { const d = new Date(); d.setHours(0, 0, 0, 0); return d.getTime(); }, []);
   const upcoming = events.filter(e => { const t = dateMs(e); return Number.isFinite(t) && t >= today; }).slice(0, 4);
-  const team = (data?.team || []).filter(x => x?.published === true).slice(0, 4);
-  // Only feature a genuinely upcoming, published event. Past events belong in the archive, not in the 'Next up' slot.
-  const featured = upcoming[0] || null;
+
   const featuredRegistration = registrationState(featured);
 
   const photoStories = useMemo(() => {
@@ -379,7 +377,7 @@ export function JYCEditorialHome({ data }) {
 
       {/* 3D INTERACTIVE CAMPUS EXPLORER (CICR & INNOVATION INSPIRED) */}
       <div className="jh-container">
-        <DeferredMount fallback={<div className="jh-deferred-placeholder jh-deferred-spotlight-placeholder" aria-hidden="true" />}>
+        <DeferredMount rootMargin="220px 0px" fallback={<div className="jh-deferred-placeholder jh-deferred-spotlight-placeholder" aria-hidden="true" />}>
           <Suspense fallback={<div aria-hidden="true" style={{ minHeight: 420 }} />}>
             <LazyJYCSpotlight data={data} />
           </Suspense>
@@ -387,7 +385,7 @@ export function JYCEditorialHome({ data }) {
       </div>
 
       <div className="jh-container">
-        <DeferredMount fallback={<div className="jh-deferred-placeholder jh-deferred-explorer-placeholder" aria-hidden="true" />}>
+        <DeferredMount rootMargin="180px 0px" fallback={<div className="jh-deferred-placeholder jh-deferred-explorer-placeholder" aria-hidden="true" />}>
           <Suspense fallback={<div aria-hidden="true" style={{ minHeight: 480 }} />}>
             <LazyJYC3DInteractiveExplorer />
           </Suspense>
@@ -544,6 +542,9 @@ export function JYCEditorialHome({ data }) {
               </button>
               <button type="button" className="jh-btn jh-btn-outline" onClick={() => nav('/join-jyc')}>
                 Join JYC <span>→</span>
+              </button>
+              <button type="button" className="jh-btn jh-btn-glass" onClick={() => nav('/contact')}>
+                Contact JYC <span>↗</span>
               </button>
             </div>
           </div>
