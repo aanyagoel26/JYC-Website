@@ -10,6 +10,7 @@ import { spawnSync } from 'node:child_process';
 const scripts = [
   'qa-homepage-editorial-truth.mjs',
   'qa-homepage-hero-finish.mjs',
+  'qa-homepage-discovery-finish.mjs',
   'qa-webgl-atmosphere.mjs',
   'qa-site-origin.mjs',
   'qa-readonly-fallback.mjs',
@@ -54,7 +55,8 @@ const scripts = [
   'qa-atmospheric-background.mjs',
   'qa-club-member-roster.mjs',
   'qa-team-exclusions.mjs',
-  'qa-nsoc-editorial-effects.mjs'
+  'qa-nsoc-editorial-effects.mjs',
+  'qa-public-pages-finish.mjs'
 ];
 
 for (const script of scripts) {

@@ -1,0 +1,446 @@
+/*
+ * JYC V67 — cinematic identity and release-readiness polish.
+ * Design references: React Bits' source-owned atmospheric backgrounds and
+ * lightweight shader patterns; implementation stays within the existing
+ * CSS/OGL stack and keeps a static, accessible fallback.
+ */
+
+/* A coherent site-wide canvas: deep observatory blue at night, warm champagne
+   parchment by day. The layered gradients remain useful without WebGL. */
+.app-frame {
+  background-attachment: fixed !important;
+  background-repeat: repeat, repeat, repeat, repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat !important;
+}
+html[data-theme="dark"] .app-frame {
+  background-color: #080d1c !important;
+  background-image:
+    url('/assets/jyc-grain.svg'),
+    radial-gradient(1px 1px at 7% 12%, rgba(244, 245, 255, .82) 50%, transparent 100%),
+    radial-gradient(1px 1px at 18% 68%, rgba(206, 216, 255, .72) 50%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 76% 23%, rgba(246, 222, 178, .78) 50%, transparent 100%),
+    linear-gradient(112deg, transparent 22%, rgba(92, 86, 143, .025) 38%, rgba(151, 139, 186, .09) 48%, rgba(89, 123, 161, .07) 56%, transparent 73%),
+    radial-gradient(ellipse at 48% 19%, rgba(107, 91, 167, .19), transparent 47%),
+    radial-gradient(ellipse at 88% 27%, rgba(45, 105, 151, .17), transparent 39%),
+    radial-gradient(ellipse at 17% 83%, rgba(104, 77, 139, .12), transparent 43%),
+    linear-gradient(180deg, #080d1c 0%, #0b1328 48%, #080d1c 100%) !important;
+  background-size:
+    128px 128px, 310px 290px, 370px 330px, 430px 390px,
+    100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100% !important;
+  background-position:
+    0 0, 7% 12%, 18% 68%, 76% 23%, center, 48% 19%, 88% 27%, 17% 83%, center !important;
+  background-blend-mode: soft-light, screen, screen, screen, normal, normal, normal, normal, normal !important;
+}
+html[data-theme="light"] .app-frame {
+  background-color: #f1eadb !important;
+  background-image:
+    url('/assets/jyc-grain.svg'),
+    radial-gradient(1px 1px at 8% 14%, rgba(132, 99, 48, .48) 50%, transparent 100%),
+    radial-gradient(1px 1px at 24% 72%, rgba(156, 121, 65, .38) 50%, transparent 100%),
+    radial-gradient(1.5px 1.5px at 78% 28%, rgba(181, 143, 76, .48) 50%, transparent 100%),
+    linear-gradient(112deg, transparent 23%, rgba(153, 129, 92, .018) 38%, rgba(195, 169, 123, .10) 49%, rgba(151, 135, 169, .045) 58%, transparent 74%),
+    radial-gradient(ellipse at 13% 10%, rgba(223, 193, 139, .27), transparent 40%),
+    radial-gradient(ellipse at 88% 18%, rgba(239, 216, 173, .31), transparent 40%),
+    radial-gradient(ellipse at 54% 84%, rgba(174, 153, 190, .12), transparent 44%),
+    linear-gradient(180deg, #f7f1e6 0%, #f1eadb 54%, #eee4d3 100%) !important;
+  background-size:
+    128px 128px, 310px 290px, 370px 330px, 430px 390px,
+    100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100% !important;
+  background-position:
+    0 0, 8% 14%, 24% 72%, 78% 28%, center, 13% 10%, 88% 18%, 54% 84%, center !important;
+  background-blend-mode: multiply, multiply, multiply, multiply, normal, normal, normal, normal, normal !important;
+}
+@media (max-width: 760px) {
+  .app-frame { background-attachment: scroll !important; }
+  html[data-theme="dark"] .app-frame,
+  html[data-theme="light"] .app-frame {
+    background-size: 128px 128px, 250px 240px, 300px 280px, 340px 320px, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100% !important;
+  }
+}
+
+/* Homepage art direction: let the JYC seal read as a crafted insignia inside
+   an observatory instrument, not a floating sticker. */
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual {
+  position: relative !important;
+  isolation: isolate !important;
+  overflow: visible !important;
+  min-width: 0 !important;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage {
+  position: relative !important;
+  isolation: isolate !important;
+  width: min(100%, 620px) !important;
+  max-width: 620px !important;
+  aspect-ratio: 1 / 1 !important;
+  margin-inline: auto !important;
+  filter: drop-shadow(0 24px 52px rgba(4, 7, 20, .18));
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage::before {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 7%;
+  border: 1px solid color-mix(in srgb, var(--jyc-gold) 54%, transparent);
+  border-radius: 50%;
+  transform: rotate(-18deg) scaleY(.72);
+  box-shadow:
+    0 0 0 22px color-mix(in srgb, var(--jyc-gold) 5%, transparent),
+    0 0 0 58px color-mix(in srgb, var(--jyc-accent) 5%, transparent),
+    inset 0 0 54px color-mix(in srgb, var(--jyc-accent) 7%, transparent);
+  pointer-events: none;
+  animation: jyc-v67-orbit 72s linear infinite;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: .42;
+  background-image:
+    radial-gradient(1px 1px at 12% 18%, currentColor 50%, transparent 100%),
+    radial-gradient(1px 1px at 84% 20%, currentColor 50%, transparent 100%),
+    radial-gradient(1px 1px at 90% 76%, currentColor 50%, transparent 100%),
+    radial-gradient(1px 1px at 17% 82%, currentColor 50%, transparent 100%);
+  background-size: 100% 100%;
+  color: color-mix(in srgb, var(--jyc-gold) 72%, transparent);
+  mask-image: radial-gradient(ellipse at center, #000 28%, transparent 78%);
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-card-3d {
+  position: relative !important;
+  z-index: 2 !important;
+  transition: transform .55s cubic-bezier(.2, .75, .25, 1);
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy > .jh-overline {
+  display: block !important;
+  max-width: 58ch !important;
+  font-size: 12px !important;
+  line-height: 1.55 !important;
+  letter-spacing: .075em !important;
+  color: var(--jyc-muted) !important;
+}
+html[data-theme="light"] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy > .jh-overline,
+html[data-theme="light"] .public-app .jyc-editorial-home.jyc-home .jh-section-number,
+html[data-theme="light"] .public-app .jyc-editorial-home.jyc-home .jh-about-kicker {
+  color: #594629 !important;
+}
+html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy > .jh-overline,
+html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-section-number,
+html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-about-kicker {
+  color: #e2e6f5 !important;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-cyber-badge b {
+  min-height: 20px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 12px !important;
+  line-height: 1.3 !important;
+  color: var(--jyc-text-strong) !important;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-event-meta :where(span, small, i, b),
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-stats-row :where(span, small),
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-label,
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-caption,
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-logo-caption {
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+  color: var(--jyc-muted) !important;
+}
+html .public-app .mobile-dock b {
+  min-height: 11px;
+  font-size: 11px !important;
+  line-height: 1.25 !important;
+  color: var(--jyc-muted) !important;
+}
+html .jyc-creator-credit,
+html .jyc-creator-credit a {
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+  color: var(--jyc-muted) !important;
+}
+
+/* Search and More are real, labelled controls with a stable dialog relationship. */
+html[data-theme] .nav .nav-search-trigger {
+  display: inline-flex !important;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-width: 82px;
+  min-height: 44px;
+  padding: 0 13px;
+  border: 1px solid var(--jyc-line-strong);
+  border-radius: 999px;
+  background: var(--jyc-surface);
+  color: var(--jyc-text-strong);
+  font: 700 12px/1.2 Inter, system-ui, sans-serif;
+  box-shadow: 0 8px 22px rgba(12, 15, 28, .07);
+  transition: border-color .2s ease, background-color .2s ease, transform .2s ease;
+}
+.nav .nav-search-trigger .search-label { font-size: 12px !important; }
+.nav .nav-search-trigger kbd {
+  padding: 4px 6px;
+  border: 1px solid var(--jyc-line);
+  border-radius: 6px;
+  background: var(--jyc-canvas-raised);
+  color: var(--jyc-muted);
+  font: 700 9px/1 Inter, system-ui, sans-serif;
+  white-space: nowrap;
+}
+.nav .nav-search-trigger:focus-visible {
+  outline: 3px solid var(--jyc-focus);
+  outline-offset: 3px;
+}
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .nav .nav-search-trigger:hover {
+    border-color: var(--jyc-gold);
+    background: var(--jyc-surface-strong);
+    transform: translateY(-1px);
+  }
+}
+.nav .nav-join-cta { min-height: 44px !important; }
+@media (max-width: 1024px) {
+  .nav .nav-search-trigger { min-width: 64px; padding-inline: 10px; }
+  .nav .nav-search-trigger kbd { display: none; }
+}
+@media (max-width: 680px) {
+  .nav .nav-search-trigger { min-width: 52px; min-height: 44px; padding-inline: 10px; }
+}
+
+/* Keep the hero editorial and readable at every breakpoint. */
+@media (max-width: 680px) {
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy > .jh-overline {
+    display: block !important;
+    margin: 10px 0 0 !important;
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+    letter-spacing: .045em !important;
+  }
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage {
+    width: min(88vw, 360px) !important;
+    max-width: 360px !important;
+  }
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual {
+    min-height: 0 !important;
+    height: clamp(282px, 88vw, 360px) !important;
+    max-height: 390px !important;
+  }
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy > .jh-hero-actions .jh-btn {
+    min-height: 48px !important;
+    font-size: 12px !important;
+  }
+  .nav .nav-search-trigger kbd { display: none !important; }
+}
+@media (max-width: 380px) {
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-copy > h1 {
+    font-size: clamp(34px, 10.5vw, 40px) !important;
+  }
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-visual {
+    height: clamp(282px, 88vw, 334px) !important;
+  }
+}
+@keyframes jyc-v67-orbit {
+  from { transform: rotate(-18deg) scaleY(.72); }
+  to { transform: rotate(342deg) scaleY(.72); }
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage::before {
+    animation: none !important;
+  }
+  .nav .nav-search-trigger { transition: none !important; }
+}
+html[data-jyc-motion="paused"] .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage::before {
+  animation-play-state: paused !important;
+}
+
+
+/* Final readable-text pass for unclassed editorial metadata. */
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-event-details > span,
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-event-details > span b,
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-years > span,
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-years > b {
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+  color: var(--jyc-muted) !important;
+}
+html[data-theme="light"] .public-app .jyc-editorial-home.jyc-home .jh-cyber-badge b {
+  color: #282333 !important;
+}
+html[data-theme="dark"] .public-app .jyc-editorial-home.jyc-home .jh-cyber-badge b {
+  color: #f6f2ff !important;
+}
+html[data-theme] .public-app .footer-v6-bottom .jyc-creator-credit,
+html[data-theme] .public-app .footer-v6-bottom .jyc-creator-credit a {
+  font-size: 11px !important;
+  line-height: 1.45 !important;
+}
+html[data-theme="light"] .public-app .footer-v6-bottom .jyc-creator-credit,
+html[data-theme="light"] .public-app .footer-v6-bottom .jyc-creator-credit a {
+  color: #51483f !important;
+}
+html[data-theme="dark"] .public-app .footer-v6-bottom .jyc-creator-credit,
+html[data-theme="dark"] .public-app .footer-v6-bottom .jyc-creator-credit a {
+  color: #c8cce0 !important;
+}
+
+
+/* Contrast and loading polish from the Lighthouse evidence. */
+html[data-theme] .public-app .jh-kicker,
+html[data-theme] .public-app .jh-kicker > b {
+  color: #282333 !important;
+}
+.app-frame > .connection-notice {
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: min(960px, calc(100% - 32px)) !important;
+  max-width: calc(100% - 32px) !important;
+  margin: 10px auto 12px !important;
+  padding: 10px 14px !important;
+  border-radius: 14px !important;
+  font-size: 12px !important;
+  line-height: 1.45 !important;
+}
+.app-frame > .connection-notice > span { flex: 1 1 auto; min-width: 0; }
+.app-frame > .connection-notice > button { flex: 0 0 auto; min-height: 36px; }
+@media (max-width: 680px) {
+  .app-frame > .connection-notice {
+    width: calc(100% - 24px) !important;
+    max-width: calc(100% - 24px) !important;
+    align-items: flex-start;
+    padding: 10px 12px !important;
+    border-radius: 12px !important;
+  }
+}
+
+
+/* Page-specific kicker rules carry higher specificity; override them at the route root. */
+#main-content.public-app .route-stage .jh-kicker,
+#main-content.public-app .route-stage .jh-kicker > b {
+  color: #282333 !important;
+  text-shadow: none !important;
+}
+
+
+/* Fallback for route shells that do not carry the public-app class. */
+html body #main-content .route-stage .jh-kicker,
+html body #main-content .route-stage .jh-kicker > b {
+  color: #282333 !important;
+}
+
+
+/* Final homepage crest art direction. Keep metadata outside the seal and remove
+   the obsolete status/audio panel that competed with the official mark. */
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage {
+  display:grid!important;
+  place-items:center!important;
+  width:min(100%,590px)!important;
+  max-width:590px!important;
+  height:auto!important;
+  min-height:0!important;
+  aspect-ratio:1 / 1.04!important;
+  padding:54px 10px 42px!important;
+  margin-inline:auto!important;
+  isolation:isolate!important;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-card-3d {
+  width:min(80%,450px)!important;
+  height:auto!important;
+  aspect-ratio:1!important;
+  transform:perspective(1100px) rotateX(var(--crest-tilt-x,0deg)) rotateY(var(--crest-tilt-y,0deg))!important;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-seal-container {
+  width:100%!important;
+  height:100%!important;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-orbit {
+  display:block!important;
+  z-index:0!important;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-controls-bar,
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-badge,
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-label,
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jh-hero-stage-caption {
+  display:none!important;
+}
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage .jyc-hero-identity-rail,
+html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage .jyc-hero-emblem-caption {
+  display:flex!important;
+}
+@media(max-width:760px) {
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage {
+    width:min(100%,440px)!important;
+    max-width:440px!important;
+    aspect-ratio:1 / 1.08!important;
+    padding:52px 4px 42px!important;
+  }
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-card-3d {
+    width:min(82%,340px)!important;
+  }
+}
+@media(max-width:390px) {
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-hero-emblem-stage {
+    width:100%!important;
+    padding-inline:0!important;
+  }
+  html[data-theme] .public-app .jyc-editorial-home.jyc-home .jyc-emblem-card-3d {
+    width:78%!important;
+  }
+}
+/* Navigation controls remain compact and consistent after the final theme layers. */
+html[data-theme] .public-app .nav .search-trigger {
+  min-height:44px!important;
+  min-width:112px;
+  padding:0 14px 0 38px!important;
+  border:1px solid var(--jyc-line-strong)!important;
+  border-radius:999px!important;
+  background:color-mix(in srgb,var(--jyc-surface) 88%,transparent)!important;
+  color:var(--jyc-text-strong)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.42),0 5px 18px rgba(20,18,30,.07)!important;
+}
+html[data-theme] .public-app .nav .search-trigger::before {
+  content:"";position:absolute;left:15px;width:11px;height:11px;
+  border:1.8px solid currentColor;border-radius:50%;opacity:.86;
+}
+html[data-theme] .public-app .nav .search-trigger::after {
+  content:"";position:absolute;left:27px;top:25px;width:5px;height:1.8px;
+  border-radius:2px;background:currentColor;transform:rotate(45deg);transform-origin:left center;
+}
+html[data-theme] .public-app .nav .search-trigger kbd {
+  padding:4px 6px;border:1px solid var(--jyc-line);border-radius:6px;
+  background:var(--jyc-canvas-raised);color:var(--jyc-muted);
+  font:600 9px/1 'JetBrains Mono',monospace;
+}
+html[data-theme] .public-app .nav .theme-toggle-rb {
+  min-height:44px!important;padding:5px 11px 5px 6px!important;
+  border:1px solid var(--jyc-line-strong)!important;border-radius:999px!important;
+  background:var(--jyc-surface)!important;color:var(--jyc-text-strong)!important;
+}
+html[data-theme] .public-app .nav .theme-toggle-track {
+  width:46px;height:28px;flex:0 0 46px;border:1px solid var(--jyc-line);
+  border-radius:999px;background:linear-gradient(110deg,#e9d4a5,#f7e9ca);
+}
+html[data-theme] .public-app .nav .theme-toggle-orb {
+  top:3px;left:3px;width:20px;height:20px;border-radius:50%;
+  background:#fffdf7;color:#8b632d;
+  transition:transform .24s cubic-bezier(.2,.8,.2,1);
+}
+html[data-theme="dark"] .public-app .nav .theme-toggle-track { background:linear-gradient(110deg,#17234a,#34305d); }
+html[data-theme="dark"] .public-app .nav .theme-toggle-orb { transform:translateX(18px);background:#e7d19b;color:#28233d; }
+html[data-theme] .public-app .nav :where(.search-trigger,.theme-toggle,.nav-more-trigger):focus-visible {
+  outline:3px solid var(--jyc-focus)!important;outline-offset:3px!important;
+}
+@media(max-width:900px) {
+  html[data-theme] .public-app .nav .search-trigger { width:44px;min-width:44px;padding:0!important; }
+  html[data-theme] .public-app .nav .search-trigger .search-label,
+  html[data-theme] .public-app .nav .search-trigger kbd { display:none; }
+}
+@media(max-width:760px) {
+  html[data-performance="lite"] body::before,
+  html[data-performance="lite"] body::after { animation:none!important;filter:none!important; }
+}
+@media(prefers-reduced-motion:reduce) {
+  html[data-theme] .public-app .nav :where(.search-trigger,.theme-toggle-rb,.theme-toggle-orb) { transition:none!important; }
+}

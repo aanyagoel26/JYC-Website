@@ -207,3 +207,37 @@ html[data-theme="light"] .jyc-now-head .reference-view-all {
 .public-app .footer-v6-bottom .jyc-creator-credit a { font-size: inherit !important; }
 .public-app .jyc57-page .jyc57-pill { font-size: 11px !important; }
 .public-app .jyc-editorial-home :where(.jh-overline,.jh-hero-stage-label,.jh-hero-stage-caption) { font-size: 11px !important; }
+
+
+/* Search result pagination: keep long result sets reachable on touch and keyboard. */
+.jyc-search-more {
+  display: flex;
+  width: calc(100% - 32px);
+  min-height: 46px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0 16px 14px;
+  padding: 10px 14px;
+  border: 1px solid var(--jyc-line-strong);
+  border-radius: 12px;
+  background: var(--jyc-canvas-raised);
+  color: var(--jyc-text-strong);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.3;
+  cursor: pointer;
+}
+.jyc-search-more span {
+  color: var(--jyc-muted);
+  font: 650 10px/1.3 'JetBrains Mono', monospace;
+}
+.jyc-search-more:hover,
+.jyc-search-more:focus-visible {
+  border-color: var(--jyc-gold);
+  background: var(--jyc-gold-soft);
+}
+@media (max-width: 620px) {
+  .jyc-search-more { min-height: 48px; }
+}

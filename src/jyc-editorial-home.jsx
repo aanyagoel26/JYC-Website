@@ -18,6 +18,7 @@ import './styles/jyc-editorial-motion-system.css';
 import './styles/jyc-home-hero-finish.css';
 import './styles/jyc-home-hero-art-direction.css';
 
+
 function DeferredMount({ children, fallback, rootMargin = '720px 0px' }) {
   const hostRef = useRef(null);
   const [ready, setReady] = useState(false);
@@ -80,8 +81,8 @@ const PILLARS = [
     id: 'technical',
     family: 'Technical',
     title: 'Technical & Innovation',
-    tag: 'AI · ROBOTICS · CP · WEB · CYBERSEC',
-    desc: 'Hackathons, open-source dev-sprints, AI research, and combat robotics across OSDC, Knuth, CICR, GDG & uCR.',
+    tag: 'AI · ROBOTICS · CODING · WEB · CYBERSECURITY',
+    desc: 'Explore coding, AI, robotics, cybersecurity and open-source projects through student-led technical communities.',
     icon: '⚡'
   },
   {
@@ -89,15 +90,15 @@ const PILLARS = [
     family: 'Cultural',
     title: 'Cultural & Performing Arts',
     tag: 'DRAMATICS · DANCE · BANDS · CLASSICAL',
-    desc: 'Street play, stage dramatics, western & classical dance, and live acoustics with Abhivyakti, Jhankaar, Fortissmo & Crescendo.',
+    desc: 'Perform in street plays and theatre, explore western and classical dance, or enjoy live music with JYC cultural communities.',
     icon: '🎭'
   },
   {
     id: 'literary',
     family: 'Literary',
-    title: 'Literary, MUN & Speaking',
+    title: 'Literary, Model UN & Speaking',
     tag: 'DEBATES · QUIZZING · MUN · WRITING',
-    desc: 'Parliamentary debates, National Model United Nations, literary journals, and inter-college quiz championships.',
+    desc: 'Take part in debates, Model United Nations, writing, public speaking and inter-college quizzes.',
     icon: '🖋️'
   },
   {
@@ -113,7 +114,7 @@ const PILLARS = [
     family: 'Sports',
     title: 'Sports & Athletics',
     tag: 'CRICKET · FOOTBALL · BASKETBALL · CHESS',
-    desc: 'High-intensity athletic tournaments, intra-college leagues, table tennis, badminton, and outdoor sports championships.',
+    desc: 'Play and compete in cricket, football, basketball, chess, table tennis, badminton and other campus sports.',
     icon: '🏆'
   },
   {
@@ -121,7 +122,7 @@ const PILLARS = [
     family: 'Creative',
     title: 'Media, Design & Outreach',
     tag: 'UI/UX · GRAPHICS · PHOTO · SOCIAL',
-    desc: 'Visual arts, graphic design, photography, campus coverage, community service, and youth social outreach.',
+    desc: 'Create visual art, design, photography and campus media, or contribute to outreach and community initiatives.',
     icon: '🎨'
   }
 ];
@@ -177,11 +178,11 @@ export function JYCEditorialHome({ data }) {
     let idleId = null;
     const delayId = window.setTimeout(() => {
       if (typeof window.requestIdleCallback === 'function') {
-        idleId = window.requestIdleCallback(() => setHeroFieldReady(true), { timeout: 1200 });
+        idleId = window.requestIdleCallback(() => setHeroFieldReady(true), { timeout: 1800 });
       } else {
         setHeroFieldReady(true);
       }
-    }, 3200);
+    }, 6200);
     return () => {
       window.clearTimeout(delayId);
       if (idleId !== null) window.cancelIdleCallback?.(idleId);
@@ -199,8 +200,7 @@ export function JYCEditorialHome({ data }) {
   const events = useMemo(() => Array.isArray(data?.events) ? data.events.filter(e => e?.published && !e?.archived).slice().sort((a, b) => dateMs(a) - dateMs(b)) : [], [data?.events]);
   const today = useMemo(() => { const d = new Date(); d.setHours(0, 0, 0, 0); return d.getTime(); }, []);
   const upcoming = events.filter(e => { const t = dateMs(e); return Number.isFinite(t) && t >= today; }).slice(0, 4);
-  const team = (data?.team || []).filter(x => x?.published === true).slice(0, 4);
-  const featured = upcoming[0] || events[0];
+
   const featuredRegistration = registrationState(featured);
 
   const photoStories = useMemo(() => {
@@ -268,6 +268,32 @@ export function JYCEditorialHome({ data }) {
 
       <JYCCampusMarquee />
 
+      {/* START HERE: high-intent routes surfaced immediately after the hero. */}
+      <nav className="jh-start-here jh-container" aria-label="Start exploring JYC">
+        <div className="jh-start-here-heading">
+          <span>START EXPLORING</span>
+          <p>Find the part of campus life you came for.</p>
+        </div>
+        <div className="jh-start-here-grid">
+          <button type="button" className="jh-start-link" onClick={() => nav('/clubs')}>
+            <span className="jh-start-icon" aria-hidden="true">✳</span>
+            <span className="jh-start-copy"><strong>Communities</strong><small>Find a club that fits you</small></span><b aria-hidden="true">↗</b>
+          </button>
+          <button type="button" className="jh-start-link" onClick={() => nav('/events')}>
+            <span className="jh-start-icon" aria-hidden="true">◷</span>
+            <span className="jh-start-copy"><strong>Events</strong><small>See what’s happening</small></span><b aria-hidden="true">↗</b>
+          </button>
+          <button type="button" className="jh-start-link" onClick={() => nav('/gallery')}>
+            <span className="jh-start-icon" aria-hidden="true">▧</span>
+            <span className="jh-start-copy"><strong>Gallery</strong><small>Real moments from JIIT</small></span><b aria-hidden="true">↗</b>
+          </button>
+          <button type="button" className="jh-start-link" onClick={() => nav('/team')}>
+            <span className="jh-start-icon" aria-hidden="true">◎</span>
+            <span className="jh-start-copy"><strong>People</strong><small>Meet the team behind JYC</small></span><b aria-hidden="true">↗</b>
+          </button>
+        </div>
+      </nav>
+
       {/* V1 EDITORIAL INTRO: context before the discovery content. */}
       <section className="jh-about-editorial jh-container" aria-labelledby="jh-about-title">
         <div className="jh-about-kicker">01 / MORE THAN A CLUB DIRECTORY</div>
@@ -316,6 +342,7 @@ export function JYCEditorialHome({ data }) {
                   src={story.url}
                   alt={story.alt || story.caption || `${story.association} photography`}
                   loading="lazy"
+                  fetchPriority="low"
                   decoding="async"
                   sizes={index === 0 ? '(max-width: 760px) 100vw, 58vw' : '(max-width: 760px) 100vw, 34vw'}
                   fallbackSrc="/assets/photo-unavailable.svg"
@@ -350,7 +377,7 @@ export function JYCEditorialHome({ data }) {
 
       {/* 3D INTERACTIVE CAMPUS EXPLORER (CICR & INNOVATION INSPIRED) */}
       <div className="jh-container">
-        <DeferredMount fallback={<div className="jh-deferred-placeholder jh-deferred-spotlight-placeholder" aria-hidden="true" />}>
+        <DeferredMount rootMargin="220px 0px" fallback={<div className="jh-deferred-placeholder jh-deferred-spotlight-placeholder" aria-hidden="true" />}>
           <Suspense fallback={<div aria-hidden="true" style={{ minHeight: 420 }} />}>
             <LazyJYCSpotlight data={data} />
           </Suspense>
@@ -358,7 +385,7 @@ export function JYCEditorialHome({ data }) {
       </div>
 
       <div className="jh-container">
-        <DeferredMount fallback={<div className="jh-deferred-placeholder jh-deferred-explorer-placeholder" aria-hidden="true" />}>
+        <DeferredMount rootMargin="180px 0px" fallback={<div className="jh-deferred-placeholder jh-deferred-explorer-placeholder" aria-hidden="true" />}>
           <Suspense fallback={<div aria-hidden="true" style={{ minHeight: 480 }} />}>
             <LazyJYC3DInteractiveExplorer />
           </Suspense>
@@ -366,11 +393,11 @@ export function JYCEditorialHome({ data }) {
       </div>
 
       {/* FEATURED & UPCOMING EVENTS */}
-      <section className="jh-container jh-events">
+      <section className="jh-container jh-events" aria-labelledby="jh-events-title">
         <div className="jh-section-head">
           <div>
             <div className="jh-section-number">04 / WHAT’S HAPPENING</div>
-            <h2>Next up at<br /><em className="jh-title-gradient">JIIT 128.</em></h2>
+            <h2 id="jh-events-title">Next up at<br /><em className="jh-title-gradient">JIIT 128.</em></h2>
           </div>
           <button type="button" className="jh-text-link" onClick={() => nav('/events')}>
             View event directory <span>↗</span>
@@ -413,7 +440,15 @@ export function JYCEditorialHome({ data }) {
             </div>
           </article>
         ) : (
-          <div className="jh-empty">No published upcoming events are currently available.</div>
+          <div className="jh-events-empty" role="status">
+            <span className="jh-events-empty-kicker">A LITTLE SPACE FOR WHAT’S NEXT</span>
+            <h3>Nothing announced just yet.</h3>
+            <p>There are no published upcoming events to feature right now. Check the event directory for the latest listings, or explore a community while the calendar takes shape.</p>
+            <div className="jh-actions">
+              <button type="button" className="jh-btn jh-btn-primary" onClick={() => nav('/events')}>Browse all events <span aria-hidden="true">↗</span></button>
+              <button type="button" className="jh-btn jh-btn-glass" onClick={() => nav('/clubs')}>Explore communities <span aria-hidden="true">→</span></button>
+            </div>
+          </div>
         )}
 
         {upcoming.slice(1).length > 0 && (
@@ -507,6 +542,9 @@ export function JYCEditorialHome({ data }) {
               </button>
               <button type="button" className="jh-btn jh-btn-outline" onClick={() => nav('/join-jyc')}>
                 Join JYC <span>→</span>
+              </button>
+              <button type="button" className="jh-btn jh-btn-glass" onClick={() => nav('/contact')}>
+                Contact JYC <span>↗</span>
               </button>
             </div>
           </div>

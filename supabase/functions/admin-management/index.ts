@@ -3,12 +3,8 @@ const getPublishableKey=()=>readNamedKey('SUPABASE_PUBLISHABLE_KEYS','SUPABASE_A
 const getSecretKey=()=>readNamedKey('SUPABASE_SECRET_KEYS','SUPABASE_SERVICE_ROLE_KEY');
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-const allowedOrigins = new Set(
-  (Deno.env.get('SITE_ORIGINS') || 'http://localhost:5173')
-    .split(',')
-    .map((x) => x.trim())
-    .filter(Boolean)
-)
+const configuredOrigins = (Deno.env.get('SITE_ORIGINS') || Deno.env.get('SITE_ORIGIN') || '').split(',').map((x) => x.trim()).filter(Boolean)
+const allowedOrigins = new Set(['https://www.jiityouthclub128.in', 'http://localhost:5173', ...configuredOrigins])
 
 const corsHeaders = (origin: string | null) => ({
   'Access-Control-Allow-Origin': origin && allowedOrigins.has(origin) ? origin : 'null',

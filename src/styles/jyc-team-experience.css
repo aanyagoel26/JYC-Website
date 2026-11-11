@@ -378,3 +378,15 @@ html[data-theme="dark"] .team-page .team-hub-directory>a:hover { border-color: r
     gap: 6px;
   }
 }
+
+
+/* Team directory editorial finish: anchor navigation and clear focus context. */
+.team-page #team-directory { scroll-margin-top: 112px; }
+.team-page .team-discovery-copy h2 { text-wrap: balance; }
+.team-page .team-filter-tab:focus-visible,
+.team-page .team-search-field button:focus-visible,
+.team-page .team-hub-directory a:focus-visible { outline: 3px solid var(--jyc-focus, #695d9b); outline-offset: 3px; }
+.team-page .team-hub-directory a:focus-visible { position: relative; z-index: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .team-page #team-directory { scroll-behavior: auto; }
+}

@@ -4,7 +4,7 @@ const getSecretKey=()=>readNamedKey('SUPABASE_SECRET_KEYS','SUPABASE_SERVICE_ROL
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.117.2';
 
 const configuredOrigins=(Deno.env.get('SITE_ORIGINS')||Deno.env.get('SITE_ORIGIN')||'').split(',').map(x=>x.trim()).filter(Boolean);
-const origins = new Set([...configuredOrigins,'https://jyc-website-eight.vercel.app']);
+const origins = new Set([...configuredOrigins,'https://www.jiityouthclub128.in','https://jyc-website-eight.vercel.app']);
 const allowedOrigin = (origin:string|null) => origin && (origins.has(origin) || /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)) ? origin : null;
 const json=(body:unknown,status=200,origin:string|null=null)=>new Response(JSON.stringify(body),{status,headers:{
   'Access-Control-Allow-Origin':allowedOrigin(origin)||'null',

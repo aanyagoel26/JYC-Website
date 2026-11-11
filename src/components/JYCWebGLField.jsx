@@ -170,7 +170,7 @@ export function JYCWebGLField() {
     const coarse = window.matchMedia('(pointer: coarse)').matches;
     const cores = navigator.hardwareConcurrency || 8;
     const memory = navigator.deviceMemory || 8;
-    const lowPower = Boolean(navigator.connection?.saveData) || cores <= 4 || memory < 4;
+    const lowPower = Boolean(navigator.connection?.saveData) || cores <= 4 || memory < 4 || document.documentElement.dataset.performance === 'lite';
     const reducedQuality = cores <= 8 || memory < 8;
     if (lowPower || coarse) { host.dataset.webgl = 'fallback'; return; }
     const pointer = { x: 0.5, y: 0.5, tx: 0.5, ty: 0.5 };
@@ -189,7 +189,7 @@ export function JYCWebGLField() {
     };
     const draw = timestamp => {
       if (disposed || !visible || !renderer || !program || !mesh) { frame = 0; return; }
-      const interval = reducedQuality ? 1000 / 24 : 1000 / 30;
+      const interval = reducedQuality ? 1000 / 20 : 1000 / 24;
       if (!reduced && timestamp - lastFrame < interval) { frame = requestAnimationFrame(draw); return; }
       lastFrame = timestamp;
       if (!reduced) time += interval / 1000;
@@ -214,7 +214,7 @@ export function JYCWebGLField() {
     };
     canvas.addEventListener('webglcontextlost', onContextLost, { passive: false });
     try {
-      renderer = new Renderer({ canvas, alpha: true, antialias: false, dpr: Math.min(window.devicePixelRatio || 1, reducedQuality || coarse ? 1.1 : 1.35), webgl: 2 });
+      renderer = new Renderer({ canvas, alpha: true, antialias: false, dpr: Math.min(window.devicePixelRatio || 1, reducedQuality || coarse ? 1.0 : 1.2), webgl: 2 });
       renderer.setSize(width, height);
       const gl = renderer.gl;
       program = new Program(gl, {

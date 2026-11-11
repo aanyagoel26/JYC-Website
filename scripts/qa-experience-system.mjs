@@ -26,7 +26,7 @@ const checks = [
   ['About JYC owns the combined story and legacy history route redirects to its timeline', main.includes("if(clean==='/history')return <Navigate to=\"/about#history\" replace/>;") && main.includes('id="about-history-heading"') && main.includes('className="about-history-node"') && !main.includes("if(clean==='/history')return <>{schema}<JYCHistory data={data}/></>;")],
   ['standalone history page is no longer imported as a public destination', !main.includes("import JYCHistory,") && main.includes("import {HISTORY} from './jyc-history-page.jsx';") && !main.includes('HistoryTeaser')],
   ['About JYC gets dedicated responsive editorial art direction for hero, families, programmes and source-backed timeline', css.includes('Page art direction: About JYC is one editorial story') && css.includes('.about-page .about-hero-v28') && css.includes('.about-page .about-history-node-card') && css.includes('@media(max-width:420px)') && css.includes('prefers-reduced-motion:reduce')],
-  ['About page source scope stays focused on JYC rather than general institute history', main.includes('Content scope: JYC 128 orientation material and published JYC milestones.') && !main.includes('Content scope: JYC 128 hub orientation material + current public JIIT information.')],
+  ['About page source scope stays focused on JYC rather than general institute history', main.includes('Explore published JYC milestones and the people behind them.') && main.includes('For current opportunities, visit the Events, Clubs and Team pages.') && !main.includes('Content scope: JYC 128 hub orientation material + current public JIIT information.')],
 ];
 
 let failures = 0;

@@ -44,6 +44,7 @@
     "qa:media-layout": "node scripts/qa-media-layout.mjs",
     "qa:coherence": "node scripts/qa-current-release-coherence.mjs",
     "postbuild": "node scripts/optimize-production-media.mjs && node scripts/generate-route-shells.mjs",
+    "qa:public-pages": "node scripts/qa-public-pages-finish.mjs",
     "qa:homepage-editorial": "node scripts/qa-homepage-editorial-truth.mjs",
     "qa:experience-system": "node scripts/qa-experience-system.mjs",
     "qa:dynamic-route-shells": "node scripts/qa-dynamic-route-shells.mjs",
@@ -56,6 +57,7 @@
     "qa:campus-marquee": "node scripts/qa-campus-marquee.mjs",
     "qa:search-refresh": "node scripts/qa-search-refresh.mjs",
     "qa:hero": "node scripts/qa-homepage-hero-finish.mjs",
+    "qa:homepage-discovery": "node scripts/qa-homepage-discovery-finish.mjs",
     "qa:webgl-atmosphere": "node scripts/qa-webgl-atmosphere.mjs",
     "qa:v1-public-journey": "node scripts/qa-v1-public-journey.mjs"
   },

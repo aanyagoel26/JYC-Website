@@ -3,8 +3,8 @@ import fs from 'node:fs';
 
 const config = JSON.parse(fs.readFileSync(new URL('../.lighthouserc.json', import.meta.url), 'utf8'));
 const mobileConfig = JSON.parse(fs.readFileSync(new URL('../.lighthouserc-mobile.json', import.meta.url), 'utf8'));
-assert.equal(config.ci?.collect?.url?.length, 14, 'Desktop Lighthouse must cover seven routes in both themes');
-assert.equal(mobileConfig.ci?.collect?.url?.length, 14, 'Mobile Lighthouse must cover seven routes in both themes');
+assert.equal(config.ci?.collect?.url?.length, 18, 'Desktop Lighthouse must cover nine routes in both themes');
+assert.equal(mobileConfig.ci?.collect?.url?.length, 18, 'Mobile Lighthouse must cover nine routes in both themes');
 assert.deepEqual(mobileConfig.ci.collect.url, config.ci.collect.url, 'Desktop and mobile Lighthouse must test the same route/theme matrix');
 assert.equal(mobileConfig.ci?.collect?.settings?.preset, 'mobile', 'Mobile Lighthouse config must use the mobile preset');
 const pattern = config.ci?.collect?.startServerReadyPattern;

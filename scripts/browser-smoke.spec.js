@@ -94,6 +94,29 @@ test('contact form validates required fields and email accessibly before submiss
   await expect(form.locator('.contact-form-error')).toHaveCount(0);
 });
  
+test('Contact page preserves official JYC and creator destinations', async ({ page }) => {
+  await page.goto(base + '/contact', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'contact destination integrity');
+
+  const official = [
+    'https://www.instagram.com/jiityouthclub128/',
+    'https://in.linkedin.com/in/jyc128',
+    'https://chat.whatsapp.com/BUvEqpevLr6Jp44904ysht?s=cl&p=a&mlu=4&ilr=4'
+  ];
+  for (const href of official) {
+    await expect(page.locator('a.contact-card[href="' + href + '"]')).toHaveCount(1);
+  }
+
+  await expect(page.locator('a.contact-creator-portfolio')).toHaveAttribute('href', 'https://kaustubhdua.vercel.app/');
+  await expect(page.locator('.contact-creator-card a[href="https://www.linkedin.com/in/kaustubh-dua-2b5a76416"]')).toHaveCount(1);
+  await expect(page.locator('.contact-creator-card a[href="https://github.com/kaustubhdua"]')).toHaveCount(1);
+  await expect(page.locator('.contact-creator-card a[href="mailto:kaustubhdua1991@gmail.com"]')).toHaveCount(1);
+  await expect(page.locator('input[name="name"]')).toHaveAttribute('maxlength', '80');
+  await expect(page.locator('input[name="email"]')).toHaveAttribute('maxlength', '254');
+  await expect(page.locator('textarea[name="message"]')).toHaveAttribute('maxlength', '2000');
+  await expect(page.locator('.contact-message-count')).toHaveText('0/2000 characters');
+});
+
 test('JYC Now page stays within responsive guardrails', async ({ page }) => {
   await page.goto(base + '/updates', { waitUntil: 'domcontentloaded' });
   await expect(page.getByText('The organisation, in motion.')).toBeVisible();
@@ -1421,6 +1444,29 @@ test('featured event poster uses the shared responsive image fallback contract',
 });
 
 
+
+test('Team directory search, tier filters and clear-filters recovery stay interactive', async ({ page }) => {
+  await page.goto(base + '/team', { waitUntil: 'domcontentloaded' });
+  await waitForAppMount(page, 'team directory interactions');
+
+  const search = page.getByRole('searchbox', { name: 'Search JYC team members' });
+  await expect(search).toBeVisible();
+  await expect(page.locator('.team-filter-tab[aria-pressed="true"]')).toContainText('Everyone');
+
+  await search.fill('jyc-qa-no-published-profile-should-match');
+  await expect(page.locator('.team-empty-state')).toBeVisible();
+  await expect(page.locator('.team-results-count')).toContainText('Showing 0');
+
+  await page.getByRole('button', { name: 'Clear filters' }).click();
+  await expect(search).toHaveValue('');
+  await expect(page.locator('.team-empty-state')).toHaveCount(0);
+  await expect(page.locator('.team-filter-tab[aria-pressed="true"]')).toContainText('Everyone');
+
+  const faculty = page.locator('.team-filter-tab').filter({ hasText: 'Faculty guides' });
+  await faculty.click();
+  await expect(faculty).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator('.team-results-count')).toBeVisible();
+});
 
 test('team flip-card biographies and LinkedIn links remain readable in both themes', async ({ page }) => {
   await page.goto(base + '/team', { waitUntil: 'domcontentloaded' });
