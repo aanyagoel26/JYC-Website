@@ -17,7 +17,7 @@ import './jyc-editorial-home.css';
 import './styles/jyc-editorial-motion-system.css';
 import './styles/jyc-home-hero-finish.css';
 import './styles/jyc-home-hero-art-direction.css';
-import './styles/jyc-home-final-refinement.css';
+
 
 function DeferredMount({ children, fallback, rootMargin = '720px 0px' }) {
   const hostRef = useRef(null);
@@ -200,19 +200,7 @@ export function JYCEditorialHome({ data }) {
   const events = useMemo(() => Array.isArray(data?.events) ? data.events.filter(e => e?.published && !e?.archived).slice().sort((a, b) => dateMs(a) - dateMs(b)) : [], [data?.events]);
   const today = useMemo(() => { const d = new Date(); d.setHours(0, 0, 0, 0); return d.getTime(); }, []);
   const upcoming = events.filter(e => { const t = dateMs(e); return Number.isFinite(t) && t >= today; }).slice(0, 4);
-  const team = (data?.team || []).filter(x => x?.published === true).slice().sort((a, b) => {
-    const rank = member => {
-      const role = String(member?.role || member?.position || '').toLowerCase();
-      if (/president/.test(role) && !/vice/.test(role)) return 0;
-      if (/vice president/.test(role)) return 1;
-      if (/general secretary/.test(role)) return 2;
-      if (/joint secretary/.test(role)) return 3;
-      if (/finance secretary|treasurer/.test(role)) return 4;
-      return 5;
-    };
-    return rank(a) - rank(b) || String(a?.name || '').localeCompare(String(b?.name || ''));
-  }).slice(0, 4);
-  const featured = upcoming[0];
+
   const featuredRegistration = registrationState(featured);
 
   const photoStories = useMemo(() => {
@@ -279,6 +267,32 @@ export function JYCEditorialHome({ data }) {
       </section>
 
       <JYCCampusMarquee />
+
+      {/* START HERE: high-intent routes surfaced immediately after the hero. */}
+      <nav className="jh-start-here jh-container" aria-label="Start exploring JYC">
+        <div className="jh-start-here-heading">
+          <span>START EXPLORING</span>
+          <p>Find the part of campus life you came for.</p>
+        </div>
+        <div className="jh-start-here-grid">
+          <button type="button" className="jh-start-link" onClick={() => nav('/clubs')}>
+            <span className="jh-start-icon" aria-hidden="true">✳</span>
+            <span className="jh-start-copy"><strong>Communities</strong><small>Find a club that fits you</small></span><b aria-hidden="true">↗</b>
+          </button>
+          <button type="button" className="jh-start-link" onClick={() => nav('/events')}>
+            <span className="jh-start-icon" aria-hidden="true">◷</span>
+            <span className="jh-start-copy"><strong>Events</strong><small>See what’s happening</small></span><b aria-hidden="true">↗</b>
+          </button>
+          <button type="button" className="jh-start-link" onClick={() => nav('/gallery')}>
+            <span className="jh-start-icon" aria-hidden="true">▧</span>
+            <span className="jh-start-copy"><strong>Gallery</strong><small>Real moments from JIIT</small></span><b aria-hidden="true">↗</b>
+          </button>
+          <button type="button" className="jh-start-link" onClick={() => nav('/team')}>
+            <span className="jh-start-icon" aria-hidden="true">◎</span>
+            <span className="jh-start-copy"><strong>People</strong><small>Meet the team behind JYC</small></span><b aria-hidden="true">↗</b>
+          </button>
+        </div>
+      </nav>
 
       {/* V1 EDITORIAL INTRO: context before the discovery content. */}
       <section className="jh-about-editorial jh-container" aria-labelledby="jh-about-title">
@@ -379,11 +393,11 @@ export function JYCEditorialHome({ data }) {
       </div>
 
       {/* FEATURED & UPCOMING EVENTS */}
-      <section className="jh-container jh-events">
+      <section className="jh-container jh-events" aria-labelledby="jh-events-title">
         <div className="jh-section-head">
           <div>
             <div className="jh-section-number">04 / WHAT’S HAPPENING</div>
-            <h2>Next up at<br /><em className="jh-title-gradient">JIIT 128.</em></h2>
+            <h2 id="jh-events-title">Next up at<br /><em className="jh-title-gradient">JIIT 128.</em></h2>
           </div>
           <button type="button" className="jh-text-link" onClick={() => nav('/events')}>
             View event directory <span>↗</span>
@@ -426,7 +440,15 @@ export function JYCEditorialHome({ data }) {
             </div>
           </article>
         ) : (
-          <div className="jh-empty">No published upcoming events are currently available.</div>
+          <div className="jh-events-empty" role="status">
+            <span className="jh-events-empty-kicker">A LITTLE SPACE FOR WHAT’S NEXT</span>
+            <h3>Nothing announced just yet.</h3>
+            <p>There are no published upcoming events to feature right now. Check the event directory for the latest listings, or explore a community while the calendar takes shape.</p>
+            <div className="jh-actions">
+              <button type="button" className="jh-btn jh-btn-primary" onClick={() => nav('/events')}>Browse all events <span aria-hidden="true">↗</span></button>
+              <button type="button" className="jh-btn jh-btn-glass" onClick={() => nav('/clubs')}>Explore communities <span aria-hidden="true">→</span></button>
+            </div>
+          </div>
         )}
 
         {upcoming.slice(1).length > 0 && (

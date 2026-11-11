@@ -10,6 +10,7 @@ import { spawnSync } from 'node:child_process';
 const scripts = [
   'qa-homepage-editorial-truth.mjs',
   'qa-homepage-hero-finish.mjs',
+  'qa-homepage-discovery-finish.mjs',
   'qa-webgl-atmosphere.mjs',
   'qa-site-origin.mjs',
   'qa-readonly-fallback.mjs',
