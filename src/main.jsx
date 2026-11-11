@@ -370,7 +370,7 @@ function Team({data}){
  const rawMembers=Array.isArray(data?.team)?data.team:[];
  const members=rawMembers.filter(m=>m&&m.published===true&&!['harisha','dhruv-choudhary'].includes(String(m.id||'').trim().toLowerCase())&&!['harisha','dhruv choudhary'].includes(String(m.name||'').trim().toLowerCase()));
  const roleOf=m=>[m.role,m.position,m.title].filter(Boolean).join(' ').trim();
- const faculty=members.filter(m=>/faculty|advisor|coordinator/i.test(roleOf(m)));
+ const faculty=members.filter(m=>/faculty|advisor/i.test(roleOf(m)));
  const apex=members.filter(m=>/president|vice president|general secretary|joint secretary|finance secretary|treasurer/i.test(roleOf(m))&&!/faculty|advisor/i.test(roleOf(m)));
  const core=members.filter(m=>!faculty.includes(m)&&!apex.includes(m));
  const normalizedQuery=query.trim().toLocaleLowerCase();
@@ -429,7 +429,7 @@ function Team({data}){
  return <section className="section page team-page jyc-team-page unified-public-page">
   <Breadcrumbs items={[{label:'Team'}]}/><EcosystemContextRail/>
   <header className="team-hero-panel">
-   <div className="team-hero-copy"><span className="eyebrow">JIIT YOUTH CLUB · SECTOR 128</span><h1>Meet the people<br/><em>behind the movement.</em></h1><p>Discover the faculty guides and student leaders who bring JYC's communities, programmes and campus experiences to life.</p><div className="team-hero-actions"><Button onClick={()=>nav('/clubs')}>Explore communities <span aria-hidden="true">↗</span></Button><Button secondary onClick={()=>nav('/about')}>About JYC</Button></div></div>
+   <div className="team-hero-copy"><span className="eyebrow">JIIT YOUTH CLUB · SECTOR 128</span><h1>Meet the people<br/><em>behind the movement.</em></h1><p>Discover the faculty guides and student leaders who bring JYC's communities, programmes and campus experiences to life.</p><div className="team-hero-actions"><Button onClick={()=>nav('/clubs')}>Explore communities <span aria-hidden="true">↗</span></Button><Button secondary onClick={()=>nav('/about')}>About JYC</Button><Button secondary onClick={()=>document.getElementById('team-directory')?.scrollIntoView({block:'start'})}>Browse profiles <span aria-hidden="true">↓</span></Button></div></div>
    <div className="team-hero-identity" aria-label="JIIT Youth Club identity"><div className="team-hero-logo"><LogoImage alt="JIIT Youth Club crest" width={256} height={256} fetchPriority="high"/></div><b>PEOPLE · PURPOSE · PARTICIPATION</b><span>One campus. Many communities.</span></div>
   </header>
   <div className="team-command-strip" aria-label="Published team overview">
