@@ -223,7 +223,10 @@ html[data-theme="light"] .jyc-now-head .reference-view-all {
   border-radius: 12px;
   background: var(--jyc-canvas-raised);
   color: var(--jyc-text-strong);
-  font: 700 12px/1.3 inherit;
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.3;
   cursor: pointer;
 }
 .jyc-search-more span {
